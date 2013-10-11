@@ -27,6 +27,7 @@ int main (int argc, int **argv)
 	char *container_name = NULL;
 	char *user_command   = NULL;
 	char *lxc_command    = NULL;
+	char *deploy_dir     = NULL;
 	int   max_cmd_len    = sysconf(_SC_ARG_MAX);
 
 	if (argc < 3) {
@@ -36,12 +37,13 @@ int main (int argc, int **argv)
 
 	/* Initialize */
 	container_name = gen_ct_name();
-	lxc_command = malloc (sizeof (char) * max_cmd_len);
+	lxc_command    = malloc (sizeof (char) * max_cmd_len);
+	deploy_dir     = (char *)argv[1];
 
 	/* Create container */
-	sprintf (lxc_command, "lxc-create -n %s -t pelagicontain -f "
-		              "/etc/pelagicontain > /tmp/lxc_%s.log",
-		              container_name, container_name);
+	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
+			      " -f /etc/pelagicontain > /tmp/lxc_%s.log",
+		              deploy_dir, container_name, container_name);
 	system (lxc_command);
 
 	/* Execute command in container */
