@@ -27,7 +27,7 @@ char *gen_ct_name ()
 }
 
 /* Spawn the proxy and use the supplied path for the socket */
-pid_t spawn_proxy (char *path, char *proxy_conf)
+pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 {
 	if (DEBUG)
 		printf ("Spawning proxy.. Socket: %s config: %s\n",
@@ -36,7 +36,7 @@ pid_t spawn_proxy (char *path, char *proxy_conf)
 	if (pid == 0) { /* child */
 		int exit_status = 0;
 		exit_status = execlp ("dbus-proxy", "dbus-proxy", path,
-		                      proxy_conf, NULL);
+		                      bus_type, proxy_conf, NULL);
 		printf ("Exit status of dbus proxy: %d\n", exit_status);
 		exit (0);
 	}
@@ -94,9 +94,11 @@ int main (int argc, int **argv)
 
 	/* Spawn proxy */
 	session_proxy_pid = spawn_proxy (session_proxy_socket,
-	                                 session_proxy_config);
-	system_proxy_pid = spawn_proxy (system_proxy_socket, 
-	                                system_proxy_config);
+	                                 session_proxy_config,
+	                                 "session");
+	system_proxy_pid = spawn_proxy (system_proxy_socket,
+	                                system_proxy_config,
+	                                "system");
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
