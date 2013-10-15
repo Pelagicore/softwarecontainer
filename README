@@ -15,4 +15,26 @@ pelagicontain /tmp/vim_app/ "/deployed_app/vim /deployed_app/my_text_file.txt"
 
 The above command should, if all goes well, launch vim inside a container.
 
-In order to launch programs, we need access to some standard libraries. The LXC template contains some mount bindings to standard library paths. These can be tweaked by editing the 
+In order to launch programs, we need access to some standard libraries. The LXC
+template contains some mount bindings to standard library paths. These can be
+tweaked by editing the mount points in the tamplate. Auxillary mount points can
+be added in the config.
+
+
+NOTE ON D-BUS RUNNING ON DESKTOP SYSTEMS
+
+You need to do some D-Bus magic in order to get this running. The problem is:
+Typically you need root access to start pelagicontain (since the lxc commands
+need special privileges). You might then run pelagicontain using sudo, which is
+fine, but when you do, your DBUS_SESSION_BUS_ADDRESS will not be set,
+dbus-launch has not been executed for root yet in your sudo session. What
+you'll need to do is to actually log in as root and start a dbus session prior
+to launching pelagicontain. Alternatively you can wrap pelagicontain in a bash
+script which runs dbus-launch.
+
+Example:
+
+sudo su
+eval `dbus-launch --sh-syntax`
+pelagicontain /home/myuser/deploy /deployed_app/dbus_app
+exit
