@@ -3,10 +3,12 @@
 #include "string.h"
 #include "unistd.h"
 #include "time.h"
+#include <sys/types.h>
+#include <signal.h>
 
 char *gen_ct_name ()
 {
-	struct timeval time; 
+	struct timeval time;
 	gettimeofday(&time,NULL);
 	char *name = malloc (sizeof (char) * 10);
 	int   i    = 0;
@@ -22,6 +24,23 @@ char *gen_ct_name ()
 	return name;
 }
 
+/* Spawn the proxy and use the supplied path for the socket */
+pid_t spawn_proxy (char *path, char *proxy_conf)
+{
+	printf ("Spawning proxy: %s\n", proxy_conf);
+	pid_t pid = fork();
+	if (pid == 0) { /* child */
+		int exit_status = 0;
+		exit_status = execlp ("dbus-proxy", "dbus-proxy", path,
+		                      proxy_conf, NULL);
+		printf ("Exit status of dbus proxy: %d\n", exit_status);
+		exit (0);
+	}
+	else {
+		/* parent */
+	}
+}
+
 int main (int argc, int **argv)
 {
 	char *container_name = NULL;
@@ -29,6 +48,9 @@ int main (int argc, int **argv)
 	char *lxc_command    = NULL;
 	char *deploy_dir     = NULL;
 	int   max_cmd_len    = sysconf(_SC_ARG_MAX);
+	char  proxy_socket[1024];
+	char  proxy_config[1024];
+	pid_t proxy_pid      = 0;
 
 	if (argc < 3) {
 		printf ("USAGE: %s [deploy directory] [command]\n", argv[0]);
@@ -39,6 +61,12 @@ int main (int argc, int **argv)
 	container_name = gen_ct_name();
 	lxc_command    = malloc (sizeof (char) * max_cmd_len);
 	deploy_dir     = (char *)argv[1];
+
+	snprintf (proxy_socket, 1024, "%s/%s.sock", deploy_dir, container_name);
+	snprintf (proxy_config, 1024, "%s/proxy_config", deploy_dir);
+
+	/* Spawn proxy */
+	proxy_pid = spawn_proxy (proxy_socket, proxy_config);
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
@@ -68,6 +96,10 @@ int main (int argc, int **argv)
 	/* Destroy container */
 	sprintf (lxc_command, "lxc-destroy -n %s", container_name);
 	system (lxc_command);
+
+	/* Terminate the proxy */
+	printf ("Killing proxy with pid %d\n", proxy_pid);
+	kill (proxy_pid, SIGTERM);
 
 	/* .. and we're done! */
 	free (user_command);
