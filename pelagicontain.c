@@ -82,7 +82,7 @@ int main (int argc, int **argv)
 	          "/deployed_app/sys_%s.sock", container_name);
 	snprintf (session_proxy_config, 1024, "%s/sess_proxy_config",
 	          deploy_dir);
-	snprintf (system_proxy_config, 1024, "%s/sess_proxy_config",
+	snprintf (system_proxy_config, 1024, "%s/sys_proxy_config",
 	          deploy_dir);
 
 	/* Set up an environment */

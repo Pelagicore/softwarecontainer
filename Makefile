@@ -13,3 +13,6 @@ install: pelagicontain test_app
 	install -D -m 755 test_app $(DESTDIR)$(PREFIX)/bin/pelagicontain_test_app
 	install -D lxc-pelagicontain $(DESTDIR)$(PREFIX)/share/lxc/templates/lxc-pelagicontain
 	install -D pela_lxc.conf $(DESTDIR)/etc/pelagicontain
+
+clean:
+	rm pelagicontain test_app
