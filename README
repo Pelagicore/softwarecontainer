@@ -11,7 +11,7 @@ Example usage:
 mkdir /tmp/vim_app/
 cp `which vim` /tmp/vim_app/
 echo "Hello world" > /tmp/vim_app/my_text_file.txt
-pelagicontain /tmp/vim_app/ "/deployed_app/vim /deployed_app/my_text_file.txt"
+pelagicontain /tmp/vim_app/ /deployed_app/vim /deployed_app/my_text_file.txt
 
 The above command should, if all goes well, launch vim inside a container.
 
@@ -38,3 +38,14 @@ sudo su
 eval `dbus-launch --sh-syntax`
 pelagicontain /home/myuser/deploy /deployed_app/dbus_app
 exit
+
+CONFIGURING THE DBUS PROXY
+The D-Bus proxy is launched "outside" the container, and will look for two rule
+files. One for the SESSION bus, and one for the SYSTEM bus. The configuration
+files should be placed in the directory used for app deployment, so, if you
+ran:
+pelagicontain /tmp/vim_app /deployed_app/vim
+
+.. then configs are placed in /tmp/vim_app. The configs are named:
+sess_proxy_config  -- for SESSION rules
+sys_proxy_config   -- for SYSTEM rules
