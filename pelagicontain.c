@@ -45,7 +45,7 @@ pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 	}
 }
 
-int main (int argc, int **argv)
+int main (int argc, char **argv)
 {
 	char *container_name    = NULL;
 	char *user_command      = NULL;
