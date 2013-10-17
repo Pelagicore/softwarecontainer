@@ -92,7 +92,7 @@ void pulse_startup (pulse_con_t *p, char * socket)
 
 	if ( !p->mainloop ) {
 		fprintf (stderr, "Failed to create pulse mainloop->\n");
-		exit (1);
+		return;
 	}
 
 	/* Set up connection to pulse server */
@@ -109,7 +109,6 @@ void pulse_startup (pulse_con_t *p, char * socket)
 
 	if (err != 0) {
 		fprintf (stderr, "Pulse error: %s\n",pa_strerror(err));
-		exit (1);
 	}
 	pa_threaded_mainloop_unlock (p->mainloop);
 }
