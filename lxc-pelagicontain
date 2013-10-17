@@ -146,6 +146,10 @@ esac
 exit 0
 EOF
 
+    mkdir $rootfs/etc/pulse/
+    cat <<EOF >> $rootfs/etc/pulse/client.conf
+disable-shm=yes
+EOF
     chmod 744 $rootfs/usr/share/udhcpc/default.script
 
     return $res
