@@ -5,6 +5,7 @@
 #include "time.h"
 #include <sys/types.h>
 #include <signal.h>
+#include "pulse.h"
 
 int DEBUG = 0;
 
@@ -60,17 +61,22 @@ int main (int argc, char **argv)
 	char  deployed_system_proxy_socket[1024];
 	char  session_proxy_config[1024];
 	char  system_proxy_config[1024];
-	char  env[2048];
+	char  env[4096];
+	char  pulse_socket[1024];
+	char  deployed_pulse_socket[1024];
 
-	if (argc < 3) {
-		printf ("USAGE: %s [deploy directory] [command]\n", argv[0]);
+	/* pulseaudio vars */
+	pulse_con_t pulse;
+
+	if (argc < 3 || argv[1][0] != '/') {
+		printf ("USAGE: %s [deploy directory (abs path)] [command]\n", argv[0]);
 		exit(1);
 	}
 
 	/* Initialize */
 	container_name = gen_ct_name();
 	lxc_command    = malloc (sizeof (char) * max_cmd_len);
-	deploy_dir     = (char *)argv[1];
+	deploy_dir     = argv[1];
 
 	snprintf (session_proxy_socket, 1024, "%s/sess_%s.sock", deploy_dir,
 	          container_name);
@@ -84,6 +90,13 @@ int main (int argc, char **argv)
 	          deploy_dir);
 	snprintf (system_proxy_config, 1024, "%s/sys_proxy_config",
 	          deploy_dir);
+	snprintf (pulse_socket, 1024, "%s/pulse-%s.sock", deploy_dir,
+	          container_name);
+	snprintf (deployed_pulse_socket, 1024,
+	          "/deployed_app/pulse-%s.sock", container_name);
+
+	/* Load pulseaudio module */
+	pulse_startup(&pulse, pulse_socket);
 
 	/* Set up an environment */
 	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
@@ -91,6 +104,9 @@ int main (int argc, char **argv)
 	strcat (env, " ");
 	strcat (env, "DBUS_SYSTEM_BUS_ADDRESS=unix:path=");
 	strcat (env, deployed_system_proxy_socket);
+	strcat (env, " ");
+	strcat (env, "PULSE_SERVER=");
+	strcat (env, deployed_pulse_socket);
 
 	/* Spawn proxy */
 	session_proxy_pid = spawn_proxy (session_proxy_socket,
@@ -138,8 +154,10 @@ int main (int argc, char **argv)
 	remove (session_proxy_socket);
 	remove (system_proxy_socket);
 
+	/* Unload pulseaudio module */
+	pulse_teardown(&pulse);
+
 	/* .. and we're done! */
 	free (user_command);
 	free (lxc_command);
-
 }

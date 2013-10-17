@@ -2,8 +2,8 @@ PREFIX ?= /usr
 
 all: pelagicontain test_app
 
-pelagicontain: pelagicontain.c
-	$(CC) pelagicontain.c -o pelagicontain
+pelagicontain: pelagicontain.c pulse.h pulse.c
+	$(CC) pelagicontain.c pulse.c -o pelagicontain `pkg-config --cflags --libs libpulse`
 
 test_app: test_app.c
 	$(CC) test_app.c -o test_app `pkg-config --cflags --libs dbus-glib-1`
