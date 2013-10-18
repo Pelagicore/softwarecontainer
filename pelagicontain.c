@@ -6,8 +6,51 @@
 #include <sys/types.h>
 #include <signal.h>
 #include "pulse.h"
+#include "pelagicontain_common.h"
 
-int DEBUG = 0;
+int DEBUG_main = 1;
+
+char *gen_ip_addr ()
+{
+	/* This is purely a proof of concept. Actually using this means we will
+	 * have conflicting IPs in the containers. This will mean out IPtables
+	 * rules are wrong */
+	char *ip = malloc (sizeof (char) * 20);
+	snprintf (ip, 20, "192.168.100.%d", (rand() % 253) + 1);
+	return ip;
+}
+
+char *gen_lxc_config (struct lxc_params *params)
+{
+	char cmd[1024];
+	FILE *cfg;
+	char *iface_line = malloc (sizeof (char) * 100);
+	size_t status;
+
+	if (DEBUG_main)
+		printf ("Generating config to %s for IP %s\n",
+		        params->lxc_cfg_file,
+		        params->ip_addr);
+
+	/* copy system config to temporary location */
+	snprintf (cmd, 1024, "cp %s %s", params->lxc_system_cfg,
+	                                 params->lxc_cfg_file);
+	system (cmd);
+
+	/* Add ipv4 line to config */
+	snprintf (iface_line, 100, "\nlxc.network.ipv4 = %s/24\n",
+	                           params->ip_addr);
+
+	cfg = fopen (params->lxc_cfg_file, "a+");
+	status = fwrite (iface_line,
+	                 sizeof (char) * strlen (iface_line),
+	                 1,
+	                 cfg);
+	fclose (cfg);
+
+	free (iface_line);
+}
+
 
 char *gen_ct_name ()
 {
@@ -30,7 +73,7 @@ char *gen_ct_name ()
 /* Spawn the proxy and use the supplied path for the socket */
 pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 {
-	if (DEBUG)
+	if (DEBUG_main)
 		printf ("Spawning proxy.. Socket: %s config: %s\n",
 		         path, proxy_conf);
 	pid_t pid = fork();
@@ -48,7 +91,8 @@ pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 
 int main (int argc, char **argv)
 {
-	char *container_name    = NULL;
+	struct lxc_params ct_pars;
+
 	char *user_command      = NULL;
 	char *lxc_command       = NULL;
 	char *deploy_dir        = NULL;
@@ -64,6 +108,7 @@ int main (int argc, char **argv)
 	char  env[4096];
 	char  pulse_socket[1024];
 	char  deployed_pulse_socket[1024];
+	char  lxc_config[1024];
 
 	/* pulseaudio vars */
 	pulse_con_t pulse;
@@ -74,26 +119,33 @@ int main (int argc, char **argv)
 	}
 
 	/* Initialize */
-	container_name = gen_ct_name();
+	ct_pars.lxc_system_cfg = "/etc/pelagicontain";
+	ct_pars.container_name = gen_ct_name();
 	lxc_command    = malloc (sizeof (char) * max_cmd_len);
 	deploy_dir     = argv[1];
+	ct_pars.ip_addr = gen_ip_addr();
 
 	snprintf (session_proxy_socket, 1024, "%s/sess_%s.sock", deploy_dir,
-	          container_name);
+	          ct_pars.container_name);
 	snprintf (system_proxy_socket, 1024, "%s/sys_%s.sock", deploy_dir,
-	          container_name);
+	          ct_pars.container_name);
 	snprintf (deployed_session_proxy_socket, 1024,
-	          "/deployed_app/sess_%s.sock", container_name);
+	          "/deployed_app/sess_%s.sock", ct_pars.container_name);
 	snprintf (deployed_system_proxy_socket, 1024,
-	          "/deployed_app/sys_%s.sock", container_name);
+	          "/deployed_app/sys_%s.sock", ct_pars.container_name);
 	snprintf (session_proxy_config, 1024, "%s/sess_proxy_config",
 	          deploy_dir);
 	snprintf (system_proxy_config, 1024, "%s/sys_proxy_config",
 	          deploy_dir);
 	snprintf (pulse_socket, 1024, "%s/pulse-%s.sock", deploy_dir,
-	          container_name);
+	          ct_pars.container_name);
 	snprintf (deployed_pulse_socket, 1024,
-	          "/deployed_app/pulse-%s.sock", container_name);
+	          "/deployed_app/pulse-%s.sock", ct_pars.container_name);
+	snprintf (ct_pars.lxc_cfg_file, 1024, "/tmp/lxc_config_%s", ct_pars.container_name);
+	snprintf (ct_pars.iptables_rule_file, 1024, "%s/iptables_rule_file", deploy_dir);;
+
+	gen_iptables_rules (&ct_pars);
+	gen_lxc_config (&ct_pars);
 
 	/* Load pulseaudio module */
 	pulse_startup(&pulse, pulse_socket);
@@ -118,8 +170,11 @@ int main (int argc, char **argv)
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
-			      " -f /etc/pelagicontain > /tmp/lxc_%s.log",
-		              deploy_dir, container_name, container_name);
+		              " -f %s > /tmp/lxc_%s.log",
+		              deploy_dir,
+		              ct_pars.container_name,
+		              ct_pars.lxc_cfg_file,
+		              ct_pars.container_name);
 	system (lxc_command);
 
 	/* Execute command in container */
@@ -138,21 +193,25 @@ int main (int argc, char **argv)
 	}
 
 	sprintf (lxc_command, "lxc-execute -n %s -- env %s %s",
-	                      container_name, env, user_command);
+	                      ct_pars.container_name, env, user_command);
 	system (lxc_command);
 
 	/* Destroy container */
-	sprintf (lxc_command, "lxc-destroy -n %s", container_name);
+	sprintf (lxc_command, "lxc-destroy -n %s", ct_pars.container_name);
 	system (lxc_command);
 
 	/* Terminate the proxy processes, remove sockets */
-	if (DEBUG)
+	if (DEBUG_main)
 		printf ("Killing proxies with pids %d, %d\n",
 		        session_proxy_pid, system_proxy_pid);
 	kill (session_proxy_pid, SIGTERM);
 	kill (system_proxy_pid, SIGTERM);
 	remove (session_proxy_socket);
 	remove (system_proxy_socket);
+	remove (ct_pars.lxc_cfg_file);
+
+	/* Remove IPTables rules */
+	remove_iptables_rules (&ct_pars);
 
 	/* Unload pulseaudio module */
 	pulse_teardown(&pulse);
