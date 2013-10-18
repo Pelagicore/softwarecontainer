@@ -95,20 +95,10 @@ int main (int argc, char **argv)
 
 	char *user_command      = NULL;
 	char *lxc_command       = NULL;
-	char *deploy_dir        = NULL;
 	int   max_cmd_len       = sysconf(_SC_ARG_MAX);
 	pid_t session_proxy_pid = 0;
 	pid_t system_proxy_pid  = 0;
-	char  session_proxy_socket[1024];
-	char  system_proxy_socket[1024];
-	char  deployed_session_proxy_socket[1024];
-	char  deployed_system_proxy_socket[1024];
-	char  session_proxy_config[1024];
-	char  system_proxy_config[1024];
 	char  env[4096];
-	char  pulse_socket[1024];
-	char  deployed_pulse_socket[1024];
-	char  lxc_config[1024];
 
 	/* pulseaudio vars */
 	pulse_con_t pulse;
@@ -122,56 +112,61 @@ int main (int argc, char **argv)
 	ct_pars.lxc_system_cfg = "/etc/pelagicontain";
 	ct_pars.container_name = gen_ct_name();
 	lxc_command    = malloc (sizeof (char) * max_cmd_len);
-	deploy_dir     = argv[1];
+	ct_pars.deploy_dir     = argv[1];
 	ct_pars.ip_addr = gen_ip_addr();
 
-	snprintf (session_proxy_socket, 1024, "%s/sess_%s.sock", deploy_dir,
+	snprintf (ct_pars.session_proxy_socket, 1024, "%s/sess_%s.sock",
+	          ct_pars.deploy_dir,
 	          ct_pars.container_name);
-	snprintf (system_proxy_socket, 1024, "%s/sys_%s.sock", deploy_dir,
+	snprintf (ct_pars.system_proxy_socket, 1024, "%s/sys_%s.sock",
+	          ct_pars.deploy_dir,
 	          ct_pars.container_name);
-	snprintf (deployed_session_proxy_socket, 1024,
+	snprintf (ct_pars.deployed_session_proxy_socket, 1024,
 	          "/deployed_app/sess_%s.sock", ct_pars.container_name);
-	snprintf (deployed_system_proxy_socket, 1024,
+	snprintf (ct_pars.deployed_system_proxy_socket, 1024,
 	          "/deployed_app/sys_%s.sock", ct_pars.container_name);
-	snprintf (session_proxy_config, 1024, "%s/sess_proxy_config",
-	          deploy_dir);
-	snprintf (system_proxy_config, 1024, "%s/sys_proxy_config",
-	          deploy_dir);
-	snprintf (pulse_socket, 1024, "%s/pulse-%s.sock", deploy_dir,
+	snprintf (ct_pars.session_proxy_config, 1024, "%s/sess_proxy_config",
+	          ct_pars.deploy_dir);
+	snprintf (ct_pars.system_proxy_config, 1024, "%s/sys_proxy_config",
+	          ct_pars.deploy_dir);
+	snprintf (ct_pars.pulse_socket, 1024, "%s/pulse-%s.sock",
+	          ct_pars.deploy_dir,
 	          ct_pars.container_name);
-	snprintf (deployed_pulse_socket, 1024,
+	snprintf (ct_pars.deployed_pulse_socket, 1024,
 	          "/deployed_app/pulse-%s.sock", ct_pars.container_name);
-	snprintf (ct_pars.lxc_cfg_file, 1024, "/tmp/lxc_config_%s", ct_pars.container_name);
-	snprintf (ct_pars.iptables_rule_file, 1024, "%s/iptables_rule_file", deploy_dir);;
+	snprintf (ct_pars.lxc_cfg_file, 1024, "/tmp/lxc_config_%s",
+	          ct_pars.container_name);
+	snprintf (ct_pars.iptables_rule_file, 1024, "%s/iptables_rule_file",
+	          ct_pars.deploy_dir);
 
 	gen_iptables_rules (&ct_pars);
 	gen_lxc_config (&ct_pars);
 
 	/* Load pulseaudio module */
-	pulse_startup(&pulse, pulse_socket);
+	pulse_startup(&pulse, ct_pars.pulse_socket);
 
 	/* Set up an environment */
 	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
-	strcat (env, deployed_session_proxy_socket);
+	strcat (env, ct_pars.deployed_session_proxy_socket);
 	strcat (env, " ");
 	strcat (env, "DBUS_SYSTEM_BUS_ADDRESS=unix:path=");
-	strcat (env, deployed_system_proxy_socket);
+	strcat (env, ct_pars.deployed_system_proxy_socket);
 	strcat (env, " ");
 	strcat (env, "PULSE_SERVER=");
-	strcat (env, deployed_pulse_socket);
+	strcat (env, ct_pars.deployed_pulse_socket);
 
 	/* Spawn proxy */
-	session_proxy_pid = spawn_proxy (session_proxy_socket,
-	                                 session_proxy_config,
+	session_proxy_pid = spawn_proxy (ct_pars.session_proxy_socket,
+	                                 ct_pars.session_proxy_config,
 	                                 "session");
-	system_proxy_pid = spawn_proxy (system_proxy_socket,
-	                                system_proxy_config,
+	system_proxy_pid = spawn_proxy (ct_pars.system_proxy_socket,
+	                                ct_pars.system_proxy_config,
 	                                "system");
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
 		              " -f %s > /tmp/lxc_%s.log",
-		              deploy_dir,
+		              ct_pars.deploy_dir,
 		              ct_pars.container_name,
 		              ct_pars.lxc_cfg_file,
 		              ct_pars.container_name);
@@ -206,8 +201,8 @@ int main (int argc, char **argv)
 		        session_proxy_pid, system_proxy_pid);
 	kill (session_proxy_pid, SIGTERM);
 	kill (system_proxy_pid, SIGTERM);
-	remove (session_proxy_socket);
-	remove (system_proxy_socket);
+	remove (ct_pars.session_proxy_socket);
+	remove (ct_pars.system_proxy_socket);
 	remove (ct_pars.lxc_cfg_file);
 
 	/* Remove IPTables rules */
