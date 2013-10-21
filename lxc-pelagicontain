@@ -146,6 +146,8 @@ esac
 exit 0
 EOF
 
+    cp /etc/resolv.conf $rootfs/etc/resolv.conf
+
     mkdir $rootfs/etc/pulse/
     cat <<EOF >> $rootfs/etc/pulse/client.conf
 disable-shm=yes
