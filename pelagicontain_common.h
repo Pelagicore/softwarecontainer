@@ -3,6 +3,7 @@
 
 struct lxc_params {
 	char *ip_addr;
+	char *gw_addr;
 	char *container_name;
 	char *lxc_system_cfg;
 	char *deploy_dir;

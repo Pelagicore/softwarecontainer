@@ -9,6 +9,14 @@
 #include "pelagicontain_common.h"
 
 int DEBUG_main = 1;
+char *ip_addr_net = "192.168.100.";
+
+char *gen_gw_ip_addr ()
+{
+	char *ip = malloc (sizeof (char) * 20);;
+	snprintf (ip, 20, "%s1", ip_addr_net);
+	return ip;
+}
 
 char *gen_ip_addr ()
 {
@@ -16,7 +24,7 @@ char *gen_ip_addr ()
 	 * have conflicting IPs in the containers. This will mean out IPtables
 	 * rules are wrong */
 	char *ip = malloc (sizeof (char) * 20);
-	snprintf (ip, 20, "192.168.100.%d", (rand() % 253) + 1);
+	snprintf (ip, 20, "%s%d", ip_addr_net, (rand() % 253) + 1);
 	return ip;
 }
 
@@ -38,8 +46,10 @@ char *gen_lxc_config (struct lxc_params *params)
 	system (cmd);
 
 	/* Add ipv4 line to config */
-	snprintf (iface_line, 100, "\nlxc.network.ipv4 = %s/24\n",
-	                           params->ip_addr);
+	snprintf (iface_line, 100, "\nlxc.network.ipv4 = %s/24\n"
+	                           "lxc.network.ipv4.gateway = %s\n",
+	                           params->ip_addr,
+	                           params->gw_addr);
 
 	cfg = fopen (params->lxc_cfg_file, "a+");
 	status = fwrite (iface_line,
@@ -111,9 +121,10 @@ int main (int argc, char **argv)
 	/* Initialize */
 	ct_pars.lxc_system_cfg = "/etc/pelagicontain";
 	ct_pars.container_name = gen_ct_name();
-	lxc_command    = malloc (sizeof (char) * max_cmd_len);
+	lxc_command            = malloc (sizeof (char) * max_cmd_len);
 	ct_pars.deploy_dir     = argv[1];
-	ct_pars.ip_addr = gen_ip_addr();
+	ct_pars.ip_addr        = gen_ip_addr ();
+	ct_pars.gw_addr        = gen_gw_ip_addr ();
 
 	snprintf (ct_pars.session_proxy_socket, 1024, "%s/sess_%s.sock",
 	          ct_pars.deploy_dir,
