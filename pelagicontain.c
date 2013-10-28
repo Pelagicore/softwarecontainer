@@ -11,6 +11,14 @@
 int DEBUG_main = 1;
 char *ip_addr_net = "192.168.100.";
 
+char *gen_net_iface_name ()
+{
+	char *iface = malloc (sizeof (char) * 16);
+	snprintf (iface, 20, "veth-%d", ip_addr_net, (rand() % 253) + 1);
+	return iface;
+
+}
+
 char *gen_gw_ip_addr ()
 {
 	char *ip = malloc (sizeof (char) * 20);;
@@ -32,7 +40,7 @@ char *gen_lxc_config (struct lxc_params *params)
 {
 	char cmd[1024];
 	FILE *cfg;
-	char *iface_line = malloc (sizeof (char) * 100);
+	char *iface_line = malloc (sizeof (char) * 150);
 	size_t status;
 
 	if (DEBUG_main)
@@ -45,9 +53,11 @@ char *gen_lxc_config (struct lxc_params *params)
 	                                 params->lxc_cfg_file);
 	system (cmd);
 
-	/* Add ipv4 line to config */
-	snprintf (iface_line, 100, "\nlxc.network.ipv4 = %s/24\n"
+	/* Add ipv4 config to config */
+	snprintf (iface_line, 150, "lxc.network.veth.pair = %s\n"
+	                           "lxc.network.ipv4 = %s/24\n"
 	                           "lxc.network.ipv4.gateway = %s\n",
+	                           params->net_iface_name,
 	                           params->ip_addr,
 	                           params->gw_addr);
 
@@ -125,6 +135,9 @@ int main (int argc, char **argv)
 	ct_pars.deploy_dir     = argv[1];
 	ct_pars.ip_addr        = gen_ip_addr ();
 	ct_pars.gw_addr        = gen_gw_ip_addr ();
+	ct_pars.net_iface_name = gen_net_iface_name ();
+	ct_pars.tc_rate        = 500; /*kbps*/
+	ct_pars.tc_peak_rate   = 500; /*kbps*/
 
 	snprintf (ct_pars.session_proxy_socket, 1024, "%s/sess_%s.sock",
 	          ct_pars.deploy_dir,
@@ -155,6 +168,9 @@ int main (int argc, char **argv)
 
 	/* Load pulseaudio module */
 	pulse_startup(&pulse, ct_pars.pulse_socket);
+
+	/* Limit network interface */
+	limit_iface (&ct_pars);
 
 	/* Set up an environment */
 	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
