@@ -30,7 +30,9 @@ struct lxc_params {
 	/* LXC general */
 	char *container_name;
 	char *lxc_system_cfg;
-	char *deploy_dir;
+	char *ct_dir;			/* directory specified by user */
+	char ct_conf_dir[1024];		/* $ct_dir/config/ */
+	char ct_root_dir[1024];		/* $ct_dir/rootfs */
 	char lxc_cfg_file[1024];
 
 };

@@ -1,2 +1,0 @@
-iptables -I FORWARD --src $SRC_IP --dest 10.8.36.2 -j ACCEPT
-iptables -I FORWARD --src 10.8.36.2 --dest $SRC_IP -j ACCEPT
