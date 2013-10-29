@@ -4,19 +4,45 @@
 #include "unistd.h"
 #include "iptables.h"
 #include "pelagicontain_common.h"
+#include "config.h"
 
 int DEBUG_iptables = 1;
 
 char *gen_iptables_rules (struct lxc_params *params)
 {
-	char *iptables_cmd = malloc(sizeof (char) * 1024);
+	char *iptables_cmd        = malloc(sizeof (char) * 1024);
+	char *iptables_rules      = NULL;
+	char *iptables_rules_file = strdup ("/tmp/iptables_rules_XXXXXX");
+	int   iptf                = NULL;
+	      
+	iptables_rules      = config_get_string ("iptables-rules");
+
+	if (iptables_rules == NULL) {
+		printf ("Unable to extract iptables rules from config file!\n");
+		goto cleanup;
+	}
+
+	iptf = mkstemp (iptables_rules_file);
+	if (iptf == -1) {
+		printf ("Unable to open %s\n", iptables_rules_file);
+		goto cleanup;
+	}
+
+	write (iptf, iptables_rules, sizeof (char) * strlen (iptables_rules));
+	close (iptf);
+
 	/* Execute shell script with env variable set to container IP */
 	snprintf (iptables_cmd, 1024, "env SRC_IP=%s sh %s",
-	          params->ip_addr, params->iptables_rule_file);
+	          params->ip_addr, iptables_rules_file);
 
 	printf ("Generating rules for IP: %s\n", params->ip_addr);
 	system (iptables_cmd);
+
+cleanup:
+	unlink (iptables_rules_file);
 	free (iptables_cmd);
+	free (iptables_rules);
+	free (iptables_rules_file);
 }
 
 /*
