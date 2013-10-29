@@ -95,13 +95,13 @@ static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 	snprintf (ct_pars->session_proxy_socket,
 		  1024,
 		  "%s/sess_%s.sock",
-	          ct_pars->ct_conf_dir,
+	          ct_pars->ct_root_dir,
 	          ct_pars->container_name);
 
 	snprintf (ct_pars->system_proxy_socket,
 		  1024,
 		  "%s/sys_%s.sock",
-	          ct_pars->ct_conf_dir,
+	          ct_pars->ct_root_dir,
 	          ct_pars->container_name);
 
 	snprintf (ct_pars->deployed_session_proxy_socket,
@@ -117,7 +117,7 @@ static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 	snprintf (ct_pars->pulse_socket,
 		  1024,
 		  "%s/pulse-%s.sock",
-	          ct_pars->ct_conf_dir,
+	          ct_pars->ct_root_dir,
 	          ct_pars->container_name);
 
 	snprintf (ct_pars->deployed_pulse_socket,
