@@ -9,11 +9,7 @@ struct lxc_params {
 	char *net_iface_name;
 
 	/* traffic control */
-	int  tc_rate;
-	int  tc_peak_rate;
-
-	/* iptables */
-	char iptables_rule_file[1024];
+	char *tc_rate;
 
 	/* pulse audio */
 	char pulse_socket[1024];
@@ -24,8 +20,6 @@ struct lxc_params {
 	char system_proxy_socket[1024];
 	char deployed_session_proxy_socket[1024];
 	char deployed_system_proxy_socket[1024];
-	char session_proxy_config[1024];
-	char system_proxy_config[1024];
 
 	/* LXC general */
 	char *container_name;

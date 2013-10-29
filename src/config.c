@@ -2,7 +2,7 @@
 #include "jansson.h"
 #include "errno.h"
 
-#undef DEBUGCONFIG
+#define DEBUGCONFIG
 
 #ifdef DEBUGCONFIG
 	#define debug(...) printf("DEBUG: " __VA_ARGS__)
@@ -24,6 +24,8 @@ int config_initialize (char *path) {
 		printf("error: on line %d: %s\n", error.line, error.text);
 		return -EINVAL;
 	}
+
+	debug ("Using config file %s\n", path);
 
 	return 0;
 }

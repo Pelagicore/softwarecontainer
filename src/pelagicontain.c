@@ -7,6 +7,7 @@
 #include <signal.h>
 #include "pulse.h"
 #include "pelagicontain_common.h"
+#include "config.h"
 
 int DEBUG_main = 1;
 char *ip_addr_net = "192.168.100.";
@@ -82,14 +83,11 @@ static char *gen_lxc_config (struct lxc_params *params)
 static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 {
 	/* Initialize */
-	ct_pars->lxc_system_cfg = "/etc/pelagicontain";
 	ct_pars->container_name = gen_ct_name();
 	ct_pars->ct_dir         = ct_base_dir;
 	ct_pars->ip_addr        = gen_ip_addr ();
 	ct_pars->gw_addr        = gen_gw_ip_addr ();
 	ct_pars->net_iface_name = gen_net_iface_name ();
-	ct_pars->tc_rate        = 500; /*kbps*/
-	ct_pars->tc_peak_rate   = 500; /*kbps*/
 
 	snprintf (ct_pars->ct_conf_dir, 1024, "%s/config/", ct_pars->ct_dir);
 	snprintf (ct_pars->ct_root_dir, 1024, "%s/rootfs/", ct_pars->ct_dir);
@@ -116,16 +114,6 @@ static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 	          "/deployed_app/sys_%s.sock",
 		  ct_pars->container_name);
 
-	snprintf (ct_pars->session_proxy_config,
-		  1024,
-		  "%s/pelagicontain.conf",
-	          ct_pars->ct_conf_dir);
-
-	snprintf (ct_pars->system_proxy_config,
-		  1024,
-		  "%s/pelagicontain.conf",
-	          ct_pars->ct_conf_dir);
-
 	snprintf (ct_pars->pulse_socket,
 		  1024,
 		  "%s/pulse-%s.sock",
@@ -142,17 +130,22 @@ static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 		  "/tmp/lxc_config_%s",
 	          ct_pars->container_name);
 
-	snprintf (ct_pars->iptables_rule_file,
-		  1024,
-		  "%s/pelagicontain.conf",
-	          ct_pars->ct_conf_dir);
-
 	snprintf (ct_pars->main_cfg_file,
 		  1024,
 		  "%s/pelagicontain.conf",
 	          ct_pars->ct_conf_dir);
 
 	config_initialize (ct_pars->main_cfg_file);
+
+	ct_pars->lxc_system_cfg = config_get_string ("lxc-config-template");
+	if (!ct_pars->lxc_system_cfg) {
+		printf ("Unable to read lxc-config-template from config!\n");
+	}
+
+	ct_pars->tc_rate        = config_get_string ("bandwidth-limit");
+	if (!ct_pars->tc_rate) {
+		printf ("Unable to read bandwidth-limit from config!\n");
+	}
 }
 
 static char *gen_ct_name ()
@@ -235,10 +228,10 @@ int main (int argc, char **argv)
 
 	/* Spawn proxy */
 	session_proxy_pid = spawn_proxy (ct_pars.session_proxy_socket,
-	                                 ct_pars.session_proxy_config,
+	                                 ct_pars.main_cfg_file,
 	                                 "session");
 	system_proxy_pid = spawn_proxy (ct_pars.system_proxy_socket,
-	                                ct_pars.system_proxy_config,
+	                                ct_pars.main_cfg_file,
 	                                "system");
 
 	/* Create container */

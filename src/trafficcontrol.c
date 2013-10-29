@@ -65,7 +65,7 @@ void limit_iface (struct lxc_params *params)
 					"%s "
 					"root "
 					"tbf "
-					"rate %dkbit "
+					"rate %s "
 					"burst 5kb "
 					"latency 70ms ",
 					params->net_iface_name,
