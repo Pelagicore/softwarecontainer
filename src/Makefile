@@ -2,8 +2,8 @@ PREFIX ?= /usr
 
 all: pelagicontain
 
-pelagicontain: pelagicontain.c pulse.h pulse.c iptables.c trafficcontrol.c
-	$(CC) pelagicontain.c pulse.c iptables.c trafficcontrol.c -o pelagicontain `pkg-config --cflags --libs libpulse`
+pelagicontain: pelagicontain.c pulse.h pulse.c iptables.c trafficcontrol.c config.c config.h
+	$(CC) pelagicontain.c pulse.c iptables.c trafficcontrol.c config.c -o pelagicontain `pkg-config --cflags --libs libpulse` `pkg-config --cflags --libs jansson`
 
 install: pelagicontain
 	install -D -m 755 pelagicontain $(DESTDIR)$(PREFIX)/bin/pelagicontain
