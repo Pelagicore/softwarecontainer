@@ -35,6 +35,9 @@ struct lxc_params {
 	char ct_root_dir[1024];		/* $ct_dir/rootfs */
 	char lxc_cfg_file[1024];
 
+	/* general */
+	char main_cfg_file[1024];
+
 };
 
 #endif /* PELAGICONTAIN_COMMON_H */

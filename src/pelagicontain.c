@@ -146,6 +146,13 @@ static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 		  1024,
 		  "%s/pelagicontain.conf",
 	          ct_pars->ct_conf_dir);
+
+	snprintf (ct_pars->main_cfg_file,
+		  1024,
+		  "%s/pelagicontain.conf",
+	          ct_pars->ct_conf_dir);
+
+	config_initialize (ct_pars->main_cfg_file);
 }
 
 static char *gen_ct_name ()
