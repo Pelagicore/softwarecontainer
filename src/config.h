@@ -25,8 +25,7 @@
 #include "errno.h"
 #include "debug.h"
 
-/*! \file config.h
- *  \brief Key-value configuration system.
+/*! \brief Key-value configuration system.
  *  \author Jonatan Pålsson (joantan.palsson@pelagicore.com)
  *
  * The system is used to retrieve values based
