@@ -1,22 +1,33 @@
-#include "string.h"
-#include "jansson.h"
-#include "errno.h"
+/*
+ * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301, USA.
+ */
 
-#define DEBUGCONFIG
+#include "config.h"
 
-#ifdef DEBUGCONFIG
-	#define debug(...) printf("DEBUG: " __VA_ARGS__)
-#endif
-#ifndef DEBUGCONFIG
-	#define debug(...)
-#endif
-
-
-       int     DEBUG_config = 1;
 static json_t *root         = NULL;
 
 int config_initialize (char *path) {
 	json_error_t error;
+
+	if (root) {
+		printf ("error: Attempted to re-initialize config!\n");
+		return -EINVAL;
+	}
 
 	root = json_load_file(path, 0, &error);
 
@@ -31,6 +42,10 @@ int config_initialize (char *path) {
 }
 
 void config_destroy () {
+	if (!root) {
+		printf ("error: Attempted to destroy non-initialized config\n");
+		return;
+	}
 	json_decref (root);
 }
 
