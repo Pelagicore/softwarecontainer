@@ -29,6 +29,7 @@
 #include "sys/stat.h"
 #include "sys/file.h"
 #include "fcntl.h"
+#include "ifaddrs.h"
 
 char *gen_net_iface_name (char *ip_addr_net);
 

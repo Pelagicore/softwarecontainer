@@ -23,8 +23,38 @@ const static char *iface_counter_file = "/tmp/pelc_ifc";
 
 char *gen_net_iface_name (char *ip_addr_net)
 {
-	char *iface = malloc (sizeof (char) * 16);
-	snprintf (iface, 20, "veth-%d", ip_addr_net, (rand() % 253) + 1);
+	struct  ifaddrs *ifaddr, *ifa;
+	char   *iface     = NULL;
+	int     collision = 0;
+
+	iface = malloc (sizeof (char) * 16);
+	if (!iface) {
+		printf ("Failed to malloc iface\n");
+		return NULL;
+	}
+
+	do {
+		snprintf (iface, 20, "veth-%d", ip_addr_net, (rand() % 253) + 1);
+
+		if (getifaddrs(&ifaddr) == -1) {
+			perror("getifaddrs");
+			exit(EXIT_FAILURE);
+		}
+
+		/* Iterate through the device list */
+		for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+			if (ifa->ifa_name == NULL)
+				continue;
+			else {
+				if (strcmp (ifa->ifa_name, iface) == 0) {
+					collision = 1;
+					break;
+				}
+			}
+		}
+	}
+	while (collision);
+
 	return iface;
 }
 
