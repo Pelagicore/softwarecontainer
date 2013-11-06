@@ -1,93 +1,64 @@
+/*
+ * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301, USA.
+ */
+
 #include "stdio.h"
 #include "stdlib.h"
-#include "string.h"
 #include "unistd.h"
-#include "time.h"
-#include <sys/types.h>
-#include <signal.h>
+#include "signal.h"
 #include "pulse.h"
 #include "pelagicontain_common.h"
 #include "config.h"
+#include "debug.h"
+#include "generators.h"
 
-int DEBUG_main = 1;
-char *ip_addr_net = "192.168.100.";
+/*! \brief Initialize config struct
+ *
+ * Initialize the config struct with various paths and parameters. Some of
+ * these parameters are read som $container/config/pelagicore.conf. This
+ * function verifies that all values parsed from this config file are present,
+ * and returns -EINVAL if they are not.
+ *
+ * \param  *ct_pars     Pointer to struct to initialize
+ * \param  *ct_base_dir Path to container base dir
+ * \return 0            Upon success
+ * \return -EINVAL      Upon bad/missing configuration parameters
+ */
+static int initialize_config  (struct lxc_params *,  char *);
 
-static char  *gen_net_iface_name ();
-static char  *gen_gw_ip_addr     ();
-static char  *gen_ip_addr        ();
-static char  *gen_lxc_config     (struct lxc_params *);
-static void   initialize_config  (struct lxc_params *,  char *);
-static char  *gen_ct_name        ();
-static pid_t  spawn_proxy        (char *, char *, char *);
+/*! \brief Spawn the proxy and use the supplied path for the socket
+ *
+ * \param  path       path to the socket file to use. File is created.
+ * \param  proxy_conf path to configuration file for proxy
+ * \param  bus_type   "session" or "system"
+ * \return -1         Upon failure of forking
+ * \return PID of spawned process on success
+ */
+static pid_t spawn_proxy (char *, char *, char *);
 
-static char *gen_net_iface_name ()
+
+static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 {
-	char *iface = malloc (sizeof (char) * 16);
-	snprintf (iface, 20, "veth-%d", ip_addr_net, (rand() % 253) + 1);
-	return iface;
+	char *ip_addr_net = NULL;
 
-}
-
-static char *gen_gw_ip_addr ()
-{
-	char *ip = malloc (sizeof (char) * 20);;
-	snprintf (ip, 20, "%s1", ip_addr_net);
-	return ip;
-}
-
-static char *gen_ip_addr ()
-{
-	/* This is purely a proof of concept. Actually using this means we will
-	 * have conflicting IPs in the containers. This will mean out IPtables
-	 * rules are wrong */
-	char *ip = malloc (sizeof (char) * 20);
-	snprintf (ip, 20, "%s%d", ip_addr_net, (rand() % 253) + 1);
-	return ip;
-}
-
-static char *gen_lxc_config (struct lxc_params *params)
-{
-	char cmd[1024];
-	FILE *cfg;
-	char *iface_line = malloc (sizeof (char) * 150);
-	size_t status;
-
-	if (DEBUG_main)
-		printf ("Generating config to %s for IP %s\n",
-		        params->lxc_cfg_file,
-		        params->ip_addr);
-
-	/* copy system config to temporary location */
-	snprintf (cmd, 1024, "cp %s %s", params->lxc_system_cfg,
-	                                 params->lxc_cfg_file);
-	system (cmd);
-
-	/* Add ipv4 config to config */
-	snprintf (iface_line, 150, "lxc.network.veth.pair = %s\n"
-	                           "lxc.network.ipv4 = %s/24\n"
-	                           "lxc.network.ipv4.gateway = %s\n",
-	                           params->net_iface_name,
-	                           params->ip_addr,
-	                           params->gw_addr);
-
-	cfg = fopen (params->lxc_cfg_file, "a+");
-	status = fwrite (iface_line,
-	                 sizeof (char) * strlen (iface_line),
-	                 1,
-	                 cfg);
-	fclose (cfg);
-
-	free (iface_line);
-}
-
-static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
-{
 	/* Initialize */
 	ct_pars->container_name = gen_ct_name();
 	ct_pars->ct_dir         = ct_base_dir;
-	ct_pars->ip_addr        = gen_ip_addr ();
-	ct_pars->gw_addr        = gen_gw_ip_addr ();
-	ct_pars->net_iface_name = gen_net_iface_name ();
 
 	snprintf (ct_pars->ct_conf_dir, 1024, "%s/config/", ct_pars->ct_dir);
 	snprintf (ct_pars->ct_root_dir, 1024, "%s/rootfs/", ct_pars->ct_dir);
@@ -140,38 +111,32 @@ static void initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 	ct_pars->lxc_system_cfg = config_get_string ("lxc-config-template");
 	if (!ct_pars->lxc_system_cfg) {
 		printf ("Unable to read lxc-config-template from config!\n");
+		return -EINVAL;
 	}
 
 	ct_pars->tc_rate        = config_get_string ("bandwidth-limit");
 	if (!ct_pars->tc_rate) {
 		printf ("Unable to read bandwidth-limit from config!\n");
-	}
-}
-
-static char *gen_ct_name ()
-{
-	struct timeval time;
-	gettimeofday(&time,NULL);
-	char *name = malloc (sizeof (char) * 10);
-	int   i    = 0;
-	srand((time.tv_sec * 1000) + (time.tv_usec / 1000));
-	static const char alphanum[] =
-        "abcdefghijklmnopqrstuvwxyz";
-
-	for (i = 0; i < 10; i++) {
-		name[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+		return -EINVAL;
 	}
 
-	name[9] = 0;
-	return name;
+	ip_addr_net = config_get_string ("ip-addr-net");
+	if (!ip_addr_net) {
+		printf ("Unable to read network part of IP address\n");
+		return -EINVAL;
+	}
+
+	ct_pars->ip_addr        = gen_ip_addr (ip_addr_net);
+	ct_pars->gw_addr        = gen_gw_ip_addr (ip_addr_net);
+	ct_pars->net_iface_name = gen_net_iface_name (ip_addr_net);
+
+	return 0;
 }
 
-/* Spawn the proxy and use the supplied path for the socket */
 static pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 {
-	if (DEBUG_main)
-		printf ("Spawning proxy.. Socket: %s config: %s\n",
-		         path, proxy_conf);
+	debug ("Spawning proxy.. Socket: %s config: %s\n",
+	       path, proxy_conf);
 	pid_t pid = fork();
 	if (pid == 0) { /* child */
 		int exit_status = 0;
@@ -182,6 +147,9 @@ static pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 	}
 	else {
 		/* parent */
+		if (pid == -1) 
+			printf ("Failed to spawn D-Bus proxy!\n");
+		return pid;
 	}
 }
 
@@ -201,11 +169,20 @@ int main (int argc, char **argv)
 
 	if (argc < 3 || argv[1][0] != '/') {
 		printf ("USAGE: %s [deploy directory (abs path)] [command]\n", argv[0]);
-		exit(1);
+		goto cleanup;
 	}
 
-	initialize_config (&ct_pars, argv[1]);
+	if (initialize_config (&ct_pars, argv[1])) {
+		printf ("Failed to initialize config. Exiting\n");
+		goto cleanup;
+	}
+
 	lxc_command = malloc (sizeof (char) * max_cmd_len);
+	if (!lxc_command) {
+		printf ("Failed to malloc lxc_command!\n");
+		goto cleanup;
+	}
+
 
 	gen_iptables_rules (&ct_pars);
 	gen_lxc_config (&ct_pars);
@@ -230,9 +207,18 @@ int main (int argc, char **argv)
 	session_proxy_pid = spawn_proxy (ct_pars.session_proxy_socket,
 	                                 ct_pars.main_cfg_file,
 	                                 "session");
+	if (session_proxy_pid == -1) {
+		printf ("Failed to spawn session D-Bus proxy. Exiting\n");
+		goto cleanup;
+	}
+
 	system_proxy_pid = spawn_proxy (ct_pars.system_proxy_socket,
 	                                ct_pars.main_cfg_file,
 	                                "system");
+	if (system_proxy_pid == -1) {
+		printf ("Failed to spawn system D-Bus proxy. Exiting\n");
+		goto cleanup;
+	}
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
@@ -267,9 +253,9 @@ int main (int argc, char **argv)
 	system (lxc_command);
 
 	/* Terminate the proxy processes, remove sockets */
-	if (DEBUG_main)
-		printf ("Killing proxies with pids %d, %d\n",
-		        session_proxy_pid, system_proxy_pid);
+	debug ("Killing proxies with pids %d, %d\n",
+	       session_proxy_pid, system_proxy_pid);
+
 	kill (session_proxy_pid, SIGTERM);
 	kill (system_proxy_pid, SIGTERM);
 	remove (ct_pars.session_proxy_socket);
@@ -282,7 +268,11 @@ int main (int argc, char **argv)
 	/* Unload pulseaudio module */
 	pulse_teardown(&pulse);
 
+cleanup:
 	/* .. and we're done! */
-	free (user_command);
-	free (lxc_command);
+	if (user_command)
+		free (user_command);
+
+	if (lxc_command)
+		free (lxc_command);
 }
