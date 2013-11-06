@@ -1,62 +1,86 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "unistd.h"
+/*
+ * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301, USA.
+ */
+
 #include "iptables.h"
-#include "pelagicontain_common.h"
-#include "config.h"
 
-int DEBUG_iptables = 1;
-
-char *gen_iptables_rules (struct lxc_params *params)
+int gen_iptables_rules (struct lxc_params *params)
 {
-	char *iptables_cmd        = malloc(sizeof (char) * 1024);
+	char *iptables_cmd        = NULL;
 	char *iptables_rules      = NULL;
 	char *iptables_rules_file = strdup ("/tmp/iptables_rules_XXXXXX");
 	int   iptf                = NULL;
+	int   retval              = 0;
 	      
-	iptables_rules      = config_get_string ("iptables-rules");
+	iptables_cmd = malloc(sizeof (char) * 1024);
+	if (!iptables_cmd) {
+		printf ("Unable to allocate memory for iptables_cmd\n");
+		retval = -EINVAL;
+		goto cleanup;
+	}
 
-	if (iptables_rules == NULL) {
-		printf ("Unable to extract iptables rules from config file!\n");
+	iptables_rules = config_get_string ("iptables-rules");
+	if (!iptables_rules) {
+		printf ("Unable to retrieve value for key 'iptables-rules'\n");
+		retval = -EINVAL;
 		goto cleanup;
 	}
 
 	iptf = mkstemp (iptables_rules_file);
 	if (iptf == -1) {
 		printf ("Unable to open %s\n", iptables_rules_file);
+		retval = -EIO;
 		goto cleanup;
 	}
 
-	write (iptf, iptables_rules, sizeof (char) * strlen (iptables_rules));
-	close (iptf);
+	if (write (iptf, iptables_rules,
+		   sizeof (char) * strlen (iptables_rules)) == -1) {
+		printf ("Failed to write rules file\n");
+		retval = -EIO;
+		goto cleanup;
+	}
+
+	if (close (iptf) == 1) {
+		printf ("Failed to close rules file\n");
+		retval = -EIO;
+		goto cleanup;
+	}
 
 	/* Execute shell script with env variable set to container IP */
 	snprintf (iptables_cmd, 1024, "env SRC_IP=%s sh %s",
 	          params->ip_addr, iptables_rules_file);
 
 	printf ("Generating rules for IP: %s\n", params->ip_addr);
-	system (iptables_cmd);
+	if (system (iptables_cmd) == -1) {
+		printf ("Failed to execute iptables command\n");
+		retval = -EINVAL;
+		goto cleanup;
+	}
 
 cleanup:
 	unlink (iptables_rules_file);
 	free (iptables_cmd);
 	free (iptables_rules);
 	free (iptables_rules_file);
+
+	return retval;
 }
 
-/*
- * This implementation is shady. What we do here is to look at the output of
- * iptables -L, look for our own IP, and then remove all rules matching our IP
- * from the FORWARD chain. There are several problems with this:
- *	- We don't lock the iptable to ensure the list we're comparing against
- *	  matches the actual list were removing from
- *	- We don't know whether we actually added the rules ourselves, or if
- *	  someone else did.
- * in short.. this function should be re-implemented in some other way where we
- * have atomic transactions for lookup and remove, and where we're also certain
- * we are actually the originators of the rule in question.
- */
 void remove_iptables_rules (struct lxc_params *params)
 {
 	char *iptables_command = "iptables -n -L FORWARD";
@@ -68,30 +92,38 @@ void remove_iptables_rules (struct lxc_params *params)
 	fp = popen (iptables_command, "r");
 	if (fp == NULL) {
 		printf ("Eror executing: %s\n", iptables_command);
-		return;
+		goto cleanup;
 	}
 
 	while (fgets (iptables_line, sizeof (iptables_line) - 1, fp) != NULL) {
 		if (strstr (iptables_line, params->ip_addr) != NULL) {
 			char *ipt_cmd = malloc (sizeof (char) * 100);
-			if (DEBUG_iptables)
-				printf ("%d > ", line_no);
+			if (!ipt_cmd) {
+				printf ("Failed to allocate memory "
+					"for ipt_cmd\n");
+				break; /* No memory was allocated */
+			}
+			debug ("%d > ", line_no);
 
 			/* Actual deletion */
 			snprintf(ipt_cmd, 100, 
 			         "iptables -D FORWARD %d", line_no);
-			system (ipt_cmd);
+			if (system (ipt_cmd) == -1)
+				printf ("Failed to execute '%s'\n", ipt_cmd);
+				/* We'll continue trying with the rest */
+
 			free (ipt_cmd);
 
 			line_no--; /* Removing this rule offsets the rest */
 		}
 
 		/* Print entire table */
-		if (DEBUG_iptables)
-			printf ("%s", iptables_line);
+		debug ("%s", iptables_line);
 
 		line_no++;
 	}
 
-	pclose (fp);
+cleanup:
+	if (fp)
+		pclose (fp);
 }
