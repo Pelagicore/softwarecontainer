@@ -20,13 +20,13 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-/*! If DEBUGCONFIG is defined, this will prind debug messages to STDOUT */
-#ifdef DEBUGCONFIG
+/*! If DEBUG is defined, this will print debug messages to STDOUT */
+#ifdef DEBUG
 	#define debug(...) printf("DEBUG: " __VA_ARGS__)
-#endif /* DEBUGCONFIG */
+#endif /* DEBUG */
 
-#ifndef DEBUGCONFIG
+#ifndef DEBUG
 	#define debug(...)
-#endif /* DEBUGCONFIG */
+#endif /* DEBUG */
 
 #endif /* DEBUG_H */
