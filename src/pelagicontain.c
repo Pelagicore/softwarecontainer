@@ -114,7 +114,7 @@ static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 		return -EINVAL;
 	}
 
-	ct_pars->tc_rate        = config_get_string ("bandwidth-limit");
+	ct_pars->tc_rate = config_get_string ("bandwidth-limit");
 	if (!ct_pars->tc_rate) {
 		printf ("Unable to read bandwidth-limit from config!\n");
 		return -EINVAL;
@@ -122,12 +122,17 @@ static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 
 	ip_addr_net = config_get_string ("ip-addr-net");
 	if (!ip_addr_net) {
-		printf ("Unable to read network part of IP address\n");
+		printf ("Unable to read ip-addr-net from config!\n");
+		return -EINVAL;
+	}
+
+	ct_pars->gw_addr = config_get_string ("gw-ip-addr");
+	if (!ct_pars->gw_addr) {
+		printf ("Unable to read gw-ip-addr from config!\n");
 		return -EINVAL;
 	}
 
 	ct_pars->ip_addr        = gen_ip_addr (ip_addr_net);
-	ct_pars->gw_addr        = gen_gw_ip_addr (ip_addr_net);
 	ct_pars->net_iface_name = gen_net_iface_name (ip_addr_net);
 
 	return 0;

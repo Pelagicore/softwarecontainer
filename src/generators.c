@@ -28,13 +28,6 @@ char *gen_net_iface_name (char *ip_addr_net)
 	return iface;
 }
 
-char *gen_gw_ip_addr (char *ip_addr_net)
-{
-	char *ip = malloc (sizeof (char) * 20);;
-	snprintf (ip, 20, "%s1", ip_addr_net);
-	return ip;
-}
-
 char *gen_ip_addr (char *ip_addr_net)
 {
 	char *ip    = malloc (sizeof (char) * 20);
@@ -53,7 +46,8 @@ char *gen_ip_addr (char *ip_addr_net)
 	else
 		counter = atoi (buf);
 
-	snprintf(buf, 4, "%03d", (counter % 254) + 1);
+	/* We reserve the first IP for gateway .. */
+	snprintf(buf, 4, "%03d", (counter % 254) + 2);
 
 	lseek (fd, 0, SEEK_SET);
 	write (fd, buf, 3);
