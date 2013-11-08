@@ -19,6 +19,7 @@
 
 /*! \brief  Common code for Pelagicontain
  *  \author Jonatan Pålsson (joantan.palsson@pelagicore.com)
+ *  \file pelagicontain_common.h
  *
  * Here is common code, such as shared data structures
  */

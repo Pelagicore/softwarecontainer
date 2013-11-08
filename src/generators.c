@@ -91,12 +91,18 @@ char *gen_ip_addr (char *ip_addr_net)
 	return ip;
 }
 
-char *gen_lxc_config (struct lxc_params *params)
+int gen_lxc_config (struct lxc_params *params)
 {
 	FILE  *cfg;
-	char  *iface_line = malloc (sizeof (char) * 150);
 	char   cmd[1024];
 	size_t status;
+	int    retval     = 0;
+	char  *iface_line = malloc (sizeof (char) * 150);
+	if (!iface_line) {
+		printf ("Failed to malloc iface_line in gen_lxc_config!\n");
+		retval = -ENOMEM;
+		goto cleanup_config;
+	}
 
 	debug ("Generating config to %s for IP %s\n",
 	       params->lxc_cfg_file,
@@ -105,7 +111,11 @@ char *gen_lxc_config (struct lxc_params *params)
 	/* copy system config to temporary location */
 	snprintf (cmd, 1024, "cp %s %s", params->lxc_system_cfg,
 	                                 params->lxc_cfg_file);
-	system (cmd);
+	if (system (cmd) == -1) {
+		printf ("Failed to copy config to temp location\n");
+		retval = -EINVAL;
+		goto cleanup_config;
+	}
 
 	/* Add ipv4 config to config */
 	snprintf (iface_line, 150, "lxc.network.veth.pair = %s\n"
@@ -116,29 +126,42 @@ char *gen_lxc_config (struct lxc_params *params)
 	                           params->gw_addr);
 
 	cfg    = fopen (params->lxc_cfg_file, "a+");
+	if (!cfg) {
+		printf ("Failed to open temp config file!\n");
+		retval = -EINVAL;
+		goto cleanup_config;
+	}
+
 	status = fwrite (iface_line,
 	                 sizeof (char) * strlen (iface_line),
 	                 1,
 	                 cfg);
+cleanup_config:
 	fclose (cfg);
-
 	free (iface_line);
+	return retval;
 }
 
 char *gen_ct_name ()
 {
-	struct timeval time;
-	gettimeofday(&time,NULL);
-	char *name = malloc (sizeof (char) * 10);
-	int   i    = 0;
-	srand((time.tv_sec * 1000) + (time.tv_usec / 1000));
-	static const char alphanum[] =
-        "abcdefghijklmnopqrstuvwxyz";
+	struct  timeval time;
+	char   *name;
+	int     i                    = 0;
+	static const char alphanum[] = "abcdefghijklmnopqrstuvwxyz";
+
+	name = malloc (sizeof (char) * 10);
+	if (!name) {
+		printf ("Failed to malloc name in gen_ct_name\n");
+		return NULL;
+	}
+
+	gettimeofday (&time,NULL);
+	srand ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 
 	for (i = 0; i < 10; i++) {
 		name[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 	}
 
-	name[9] = 0;
+	name[9] = '\0';
 	return name;
 }

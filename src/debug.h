@@ -17,6 +17,11 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/*! \brief Debug helpers
+ *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
+ *  \file debug.h
+ */
+
 #ifndef DEBUG_H
 #define DEBUG_H
 

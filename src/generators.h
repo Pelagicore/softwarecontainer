@@ -17,6 +17,15 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/*! \brief  Generator functions
+ *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
+ *  \file   generators.h
+ *
+ *  Various helper functions for generating things such as network interface
+ *  names, IP addresses and container names. By using these functions, unique
+ *  names are ensured
+ */
+
 #ifndef GENERATORS_H
 #define GENERATORS_H
 
@@ -30,9 +39,28 @@
 #include "sys/file.h"
 #include "fcntl.h"
 #include "ifaddrs.h"
+#include "errno.h"
 
+/*! \brief Generate a network interface name
+ *
+ * This will generate a network interface name which can be used to create new
+ * virtual network interfaces
+ *
+ * \param ip_addr_net The network portion of the IP address for the new network
+ *                    interface. Used to generate a descriptive name.
+ * \return A unique network interface name
+ * \return NULL upon error
+ */
 char *gen_net_iface_name (char *ip_addr_net);
 
+/*!  \brief Generate a gateway address
+ *
+ * Given the network portion of an IP address, this will output a suggested
+ * gateway IP address.
+ *
+ * \return A gateway IP address
+ * \return NULL upon error
+ */
 char *gen_gw_ip_addr (char *ip_addr_net);
 
 /*! \brief Generate an IP address
@@ -45,8 +73,28 @@ char *gen_gw_ip_addr (char *ip_addr_net);
  */
 char *gen_ip_addr (char *ip_addr_net);
 
-char *gen_lxc_config (struct lxc_params *params);
+/*! \brief Generate and write an LXC config
+ *
+ * Generate an LXC config file suitable for launching a container. This
+ * configuration will be tailored to the fit the IP, gateway and interface
+ * names specified in params. The configuration file can be disposed of after
+ * the container has finished running. The configuration file is written to the
+ * path specified in params.lxc_config_file
+ *
+ * \return 0       upon success
+ * \return -ENOMEM upon memory allocation failure
+ * \return -EINVAL upon file system failures
+ */
+int gen_lxc_config (struct lxc_params *params);
 
+
+/*! \brief Generate a container name
+ *
+ * Generate a container name based on the current time in milliseconds
+ *
+ * \return name upon success
+ * \return NULL upon failure
+ */
 char *gen_ct_name ();
 
 #endif /* GENERATORS_H */
