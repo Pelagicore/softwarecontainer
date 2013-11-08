@@ -81,17 +81,19 @@ cleanup:
 	return retval;
 }
 
-void remove_iptables_rules (struct lxc_params *params)
+int remove_iptables_rules (struct lxc_params *params)
 {
 	char *iptables_command = "iptables -n -L FORWARD";
 	FILE *fp               = NULL;
 	int   line_no          = -1; /* banner takes two lines. Start at 1 */
-	char iptables_line[2048];
+	int   retval           = 0;
+	char  iptables_line[2048];
 
 
 	fp = popen (iptables_command, "r");
 	if (fp == NULL) {
 		printf ("Eror executing: %s\n", iptables_command);
+		retval = -EINVAL;
 		goto cleanup;
 	}
 
@@ -126,4 +128,5 @@ void remove_iptables_rules (struct lxc_params *params)
 cleanup:
 	if (fp)
 		pclose (fp);
+	return retval;
 }

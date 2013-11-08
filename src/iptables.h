@@ -58,6 +58,6 @@ int gen_iptables_rules (struct lxc_params *params);
  * have atomic transactions for lookup and remove, and where we're also certain
  * we are actually the originators of the rule in question.
  */
-void remove_iptables_rules (struct lxc_params *params);
+int remove_iptables_rules (struct lxc_params *params);
 
 #endif /* IPTABLES_H */
