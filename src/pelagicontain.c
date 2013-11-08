@@ -140,9 +140,13 @@ static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 
 static pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
 {
+	pid_t pid;
+
 	debug ("Spawning proxy.. Socket: %s config: %s\n",
 	       path, proxy_conf);
-	pid_t pid = fork();
+
+	pid = fork();
+
 	if (pid == 0) { /* child */
 		int exit_status = 0;
 		exit_status = execlp ("dbus-proxy", "dbus-proxy", path,
@@ -237,6 +241,11 @@ int main (int argc, char **argv)
 	/* Execute command in container */
 	/* max parameter size of system */
 	user_command = malloc (sizeof (char) * max_cmd_len);
+	if (!user_command) {
+		printf("Failed to malloc user_command");
+		goto cleanup;
+	}
+
 	int i = 0;
 	for (i = 2; i < argc; i++) {
 		int clen = strlen (user_command);
@@ -249,27 +258,35 @@ int main (int argc, char **argv)
 		strcat (user_command, " ");
 	}
 
-	sprintf (lxc_command, "lxc-execute -n %s -- env %s %s",
-	                      ct_pars.container_name, env, user_command);
+	snprintf (lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
+	          ct_pars.container_name, env, user_command);
 	system (lxc_command);
 
 	/* Destroy container */
-	sprintf (lxc_command, "lxc-destroy -n %s", ct_pars.container_name);
+	snprintf (lxc_command, max_cmd_len, "lxc-destroy -n %s",
+	          ct_pars.container_name);
 	system (lxc_command);
 
 	/* Terminate the proxy processes, remove sockets */
 	debug ("Killing proxies with pids %d, %d\n",
 	       session_proxy_pid, system_proxy_pid);
 
-	kill (session_proxy_pid, SIGTERM);
-	kill (system_proxy_pid, SIGTERM);
-	remove (ct_pars.session_proxy_socket);
-	remove (ct_pars.system_proxy_socket);
-	remove (ct_pars.lxc_cfg_file);
+	if (kill (session_proxy_pid, SIGTERM) == -1)
+		printf ("Failed to kill session proxy!\n");
+	if (kill (system_proxy_pid, SIGTERM) == -1)
+		printf ("Failed to kill system proxy!\n");
+
+	if (remove (ct_pars.session_proxy_socket) == -1)
+		printf ("Failed to remove session proxy socket!\n");
+	if (remove (ct_pars.system_proxy_socket) == -1)
+		printf ("Failed to remove system proxy socket!\n");
+	if (remove (ct_pars.lxc_cfg_file) == -1)
+		printf ("Failed to remove lxc config file!\n");
 
 	/* Remove IPTables rules */
-	remove_iptables_rules (&ct_pars);
-
+	if (remove_iptables_rules (&ct_pars))
+		printf ("Failed to remove IPTables rules!\n");
+	
 	/* Unload pulseaudio module */
 	pulse_teardown(&pulse);
 
