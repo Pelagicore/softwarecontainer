@@ -1,7 +1,25 @@
+/*
+ * Copyright (C) 2013, Pelagicore AB <erik.boto@pelagicore.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301, USA.
+ */
+
 #include <stdio.h>
 #include "pulse.h"
-
-int DEBUG_pulse = 0;
+#include "debug.h"
 
 void pulse_module_load_cb (pa_context *c, uint32_t idx, void *userdata)
 {
@@ -9,8 +27,7 @@ void pulse_module_load_cb (pa_context *c, uint32_t idx, void *userdata)
 	p = (pulse_con_t*)userdata;
 
 	p->module_idx = (int)idx;
-	if (DEBUG_pulse)
-		printf ("pulse: Loaded module %d\n", (int)idx);
+	printf ("pulse: Loaded module %d\n", (int)idx);
 
 	pa_threaded_mainloop_signal (p->mainloop, 0);
 }
@@ -20,13 +37,10 @@ void pulse_module_unload_cb (pa_context *c, int success, void *userdata)
 	pulse_con_t *p;
 	p = (pulse_con_t*)userdata;
 
-	if (DEBUG_pulse)
-	{
-		if (success)
-			printf ("pulse: Unloaded module %d\n", p->module_idx);
-		else
-			printf ("pulse: Failed to unload module %d\n", p->module_idx);
-	}
+	if (success)
+		debug ("pulse: Unloaded module %d\n", p->module_idx);
+	else
+		debug ("pulse: Failed to unload module %d\n", p->module_idx);
 
 	pa_threaded_mainloop_signal (p->mainloop, 0);
 }
@@ -40,8 +54,7 @@ void pulse_context_state_cb (pa_context *context, void *userdata)
 
 	switch (pa_context_get_state(context)) {
 	case PA_CONTEXT_READY:
-		if (DEBUG_pulse)
-			printf ("Connection is up, loading module\n");
+		debug ("Connection is up, loading module\n");
 		snprintf (socket, 1031, "socket=%s", p->socket);
 		pa_context_load_module (
 			context,
@@ -51,28 +64,22 @@ void pulse_context_state_cb (pa_context *context, void *userdata)
 			p);
 		break;
 	case PA_CONTEXT_CONNECTING:
-		if (DEBUG_pulse)
-			printf ("pulse: Connecting\n");
+		debug ("pulse: Connecting\n");
 		break;
 	case PA_CONTEXT_AUTHORIZING:
-		if (DEBUG_pulse)
-			printf ("pulse: Authorizing\n");
+		debug ("pulse: Authorizing\n");
 		break;
 	case PA_CONTEXT_SETTING_NAME:
-		if (DEBUG_pulse)
-			printf ("pulse: Setting name\n");
+		debug ("pulse: Setting name\n");
 		break;
 	case PA_CONTEXT_UNCONNECTED:
-		if (DEBUG_pulse)
-			printf ("pulse: Unconnected\n");
+		debug ("pulse: Unconnected\n");
 		break;
 	case PA_CONTEXT_FAILED:
-		if (DEBUG_pulse)
-			printf ("pulse: Failed\n");
+		debug ("pulse: Failed\n");
 		break;
 	case PA_CONTEXT_TERMINATED:
-		if (DEBUG_pulse)
-			printf ("pulse: Terminated\n");
+		debug ("pulse: Terminated\n");
 		break;
 	}
 }
@@ -143,6 +150,5 @@ void pulse_teardown (pulse_con_t *p)
 	p->module_idx = -1;
 	p->socket = 0;
 
-	if (DEBUG_pulse)
-		printf ("pulse: Teardown complete\n");
+	debug ("pulse: Teardown complete\n");
 }
