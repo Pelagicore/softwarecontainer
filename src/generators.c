@@ -34,7 +34,7 @@ char *gen_net_iface_name (char *ip_addr_net)
 	}
 
 	do {
-		snprintf (iface, 20, "veth-%d", ip_addr_net, (rand() % 253) + 1);
+		snprintf (iface, 20, "veth-%d", (rand() % 1024));
 
 		if (getifaddrs(&ifaddr) == -1) {
 			perror("getifaddrs");
@@ -60,10 +60,10 @@ char *gen_net_iface_name (char *ip_addr_net)
 
 char *gen_ip_addr (char *ip_addr_net)
 {
-	char *ip    = malloc (sizeof (char) * 20);
-	char *buf   = calloc(sizeof (char), 4);
-	int fd      = open (iface_counter_file, O_CREAT | O_RDWR);
-	int counter = 0;
+	char *ip      = malloc (sizeof (char) * 20);
+	char *buf     = calloc (sizeof (char), 4);
+	int   fd      = open (iface_counter_file, O_CREAT | O_RDWR);
+	int   counter = 0;
 
 	if (fd == -1) {
 		printf ("Unable to lock interface counter\n");
@@ -79,6 +79,7 @@ char *gen_ip_addr (char *ip_addr_net)
 	/* We reserve the first IP for gateway .. */
 	snprintf(buf, 4, "%03d", (counter % 254) + 2);
 
+	/* Overwrite the first three bytes */
 	lseek (fd, 0, SEEK_SET);
 	write (fd, buf, 3);
 
@@ -92,9 +93,9 @@ char *gen_ip_addr (char *ip_addr_net)
 
 char *gen_lxc_config (struct lxc_params *params)
 {
-	char cmd[1024];
-	FILE *cfg;
-	char *iface_line = malloc (sizeof (char) * 150);
+	FILE  *cfg;
+	char  *iface_line = malloc (sizeof (char) * 150);
+	char   cmd[1024];
 	size_t status;
 
 	debug ("Generating config to %s for IP %s\n",
@@ -114,7 +115,7 @@ char *gen_lxc_config (struct lxc_params *params)
 	                           params->ip_addr,
 	                           params->gw_addr);
 
-	cfg = fopen (params->lxc_cfg_file, "a+");
+	cfg    = fopen (params->lxc_cfg_file, "a+");
 	status = fwrite (iface_line,
 	                 sizeof (char) * strlen (iface_line),
 	                 1,
