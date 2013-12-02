@@ -145,7 +145,7 @@ pelagicontain.conf.
 \c dbus-proxy-config-session and the \c
 dbus-proxy-config-system sections are used to specify the configuration of
 \c dbus-proxy. These sections allows specifying which D-Bus services the
-container should have access to. Everything not sxplicitly whitelisted is
+container should have access to. Everything not explicitly whitelisted is
 disallowed.
 
 The \c direction parameter specifies whether the rule concerns \c incoming or
