@@ -24,8 +24,14 @@ const static char *iface_counter_file = "/tmp/pelc_ifc";
 char *gen_net_iface_name (char *ip_addr_net)
 {
 	struct  ifaddrs *ifaddr, *ifa;
-	char    iface[16];
+	char   *iface     = NULL;
 	int     collision = 0;
+
+	iface = malloc (sizeof (char) * 16);
+	if (!iface) {
+		printf ("Failed to malloc iface\n");
+		return NULL;
+	}
 
 	do {
 		snprintf (iface, 20, "veth-%d", (rand() % 1024));
