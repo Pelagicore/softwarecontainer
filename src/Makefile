@@ -1,7 +1,7 @@
 PREFIX ?= /usr
 
-SOURCES = pelagicontain.c  \
-	  pulse.c          \
+SOURCES = pelagicontain.cpp \
+	  pulse.cpp \
 	  iptables.c       \
 	  trafficcontrol.c \
 	  config.c         \

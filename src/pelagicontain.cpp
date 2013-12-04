@@ -175,24 +175,21 @@ int main (int argc, char **argv)
 	pid_t system_proxy_pid  = 0;
 	char  env[4096];
 
-	/* pulseaudio vars */
-	pulse_con_t pulse;
-
 	if (argc < 3 || argv[1][0] != '/') {
 		printf ("USAGE: %s [deploy directory (abs path)] [command]\n", argv[0]);
-		goto cleanup;
+		return -1;
 	}
 
 	if (initialize_config (&ct_pars, argv[1])) {
 		printf ("Failed to initialize config. Exiting\n");
-		goto cleanup;
+		return -1;
 	}
 
 	gen_iptables_rules (&ct_pars);
 	gen_lxc_config (&ct_pars);
 
 	/* Load pulseaudio module */
-	pulse_startup(&pulse, ct_pars.pulse_socket);
+	Pulse pulse(ct_pars.pulse_socket);
 
 	/* Limit network interface */
 	limit_iface (&ct_pars);
@@ -213,7 +210,7 @@ int main (int argc, char **argv)
 	                                 "session");
 	if (session_proxy_pid == -1) {
 		printf ("Failed to spawn session D-Bus proxy. Exiting\n");
-		goto cleanup;
+		return -1;
 	}
 
 	system_proxy_pid = spawn_proxy (ct_pars.system_proxy_socket,
@@ -221,7 +218,7 @@ int main (int argc, char **argv)
 	                                "system");
 	if (system_proxy_pid == -1) {
 		printf ("Failed to spawn system D-Bus proxy. Exiting\n");
-		goto cleanup;
+		return -1;
 	}
 
 	/* Create container */
@@ -234,8 +231,8 @@ int main (int argc, char **argv)
 	system (lxc_command);
 
 	/* Execute command in container */
-
-	for (int i = 2; i < argc; i++) {
+        int i;
+	for (i = 2; i < argc; i++) {
 		int clen = strlen (user_command);
 		int nlen = strlen ((const char *) argv[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
@@ -274,15 +271,4 @@ int main (int argc, char **argv)
 	/* Remove IPTables rules */
 	if (remove_iptables_rules (&ct_pars))
 		printf ("Failed to remove IPTables rules!\n");
-	
-	/* Unload pulseaudio module */
-	pulse_teardown(&pulse);
-
-cleanup:
-	/* .. and we're done! */
-	if (user_command)
-		free (user_command);
-
-	if (lxc_command)
-		free (lxc_command);
 }
