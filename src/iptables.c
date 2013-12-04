@@ -21,19 +21,12 @@
 
 int gen_iptables_rules (struct lxc_params *params)
 {
-	char *iptables_cmd        = NULL;
-	char *iptables_rules      = NULL;
-	char *iptables_rules_file = strdup ("/tmp/iptables_rules_XXXXXX");
-	int   iptf                = NULL;
-	int   retval              = 0;
+	char iptables_cmd[1024];
+	char *iptables_rules       = NULL;
+	char iptables_rules_file[] = "/tmp/iptables_rules_XXXXXX";
+	int   iptf                 = NULL;
+	int   retval               = 0;
 	      
-	iptables_cmd = malloc(sizeof (char) * 1024);
-	if (!iptables_cmd) {
-		printf ("Unable to allocate memory for iptables_cmd\n");
-		retval = -EINVAL;
-		goto cleanup;
-	}
-
 	iptables_rules = config_get_string ("iptables-rules");
 	if (!iptables_rules) {
 		printf ("Unable to retrieve value for key 'iptables-rules'\n");
@@ -52,13 +45,13 @@ int gen_iptables_rules (struct lxc_params *params)
 		   sizeof (char) * strlen (iptables_rules)) == -1) {
 		printf ("Failed to write rules file\n");
 		retval = -EIO;
-		goto cleanup;
+		goto unlink_file;
 	}
 
 	if (close (iptf) == 1) {
 		printf ("Failed to close rules file\n");
 		retval = -EIO;
-		goto cleanup;
+		goto unlink_file;
 	}
 
 	/* Execute shell script with env variable set to container IP */
@@ -69,14 +62,12 @@ int gen_iptables_rules (struct lxc_params *params)
 	if (system (iptables_cmd) == -1) {
 		printf ("Failed to execute iptables command\n");
 		retval = -EINVAL;
-		goto cleanup;
 	}
 
-cleanup:
+unlink_file:
 	unlink (iptables_rules_file);
-	free (iptables_cmd);
+cleanup:
 	free (iptables_rules);
-	free (iptables_rules_file);
 
 	return retval;
 }
@@ -86,25 +77,17 @@ int remove_iptables_rules (struct lxc_params *params)
 	char *iptables_command = "iptables -n -L FORWARD";
 	FILE *fp               = NULL;
 	int   line_no          = -1; /* banner takes two lines. Start at 1 */
-	int   retval           = 0;
 	char  iptables_line[2048];
-
 
 	fp = popen (iptables_command, "r");
 	if (fp == NULL) {
-		printf ("Eror executing: %s\n", iptables_command);
-		retval = -EINVAL;
-		goto cleanup;
+		printf ("Error executing: %s\n", iptables_command);
+		return -EINVAL;
 	}
 
 	while (fgets (iptables_line, sizeof (iptables_line) - 1, fp) != NULL) {
 		if (strstr (iptables_line, params->ip_addr) != NULL) {
-			char *ipt_cmd = malloc (sizeof (char) * 100);
-			if (!ipt_cmd) {
-				printf ("Failed to allocate memory "
-					"for ipt_cmd\n");
-				break; /* No memory was allocated */
-			}
+			char ipt_cmd[100];
 			debug ("%d > ", line_no);
 
 			/* Actual deletion */
@@ -113,8 +96,6 @@ int remove_iptables_rules (struct lxc_params *params)
 			if (system (ipt_cmd) == -1)
 				printf ("Failed to execute '%s'\n", ipt_cmd);
 				/* We'll continue trying with the rest */
-
-			free (ipt_cmd);
 
 			line_no--; /* Removing this rule offsets the rest */
 		}
@@ -125,8 +106,7 @@ int remove_iptables_rules (struct lxc_params *params)
 		line_no++;
 	}
 
-cleanup:
-	if (fp)
-		pclose (fp);
-	return retval;
+	pclose (fp);
+
+	return 0;
 }
