@@ -24,14 +24,8 @@ const static char *iface_counter_file = "/tmp/pelc_ifc";
 char *gen_net_iface_name (char *ip_addr_net)
 {
 	struct  ifaddrs *ifaddr, *ifa;
-	char   *iface     = NULL;
+	char    iface[16];
 	int     collision = 0;
-
-	iface = malloc (sizeof (char) * 16);
-	if (!iface) {
-		printf ("Failed to malloc iface\n");
-		return NULL;
-	}
 
 	do {
 		snprintf (iface, 20, "veth-%d", (rand() % 1024));
@@ -43,25 +37,24 @@ char *gen_net_iface_name (char *ip_addr_net)
 
 		/* Iterate through the device list */
 		for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-			if (ifa->ifa_name == NULL)
+			if (ifa->ifa_name == NULL) {
 				continue;
-			else {
+			} else {
 				if (strcmp (ifa->ifa_name, iface) == 0) {
 					collision = 1;
 					break;
 				}
 			}
 		}
-	}
-	while (collision);
+	} while (collision);
 
 	return iface;
 }
 
 char *gen_ip_addr (char *ip_addr_net)
 {
-	char *ip      = malloc (sizeof (char) * 20);
-	char *buf     = calloc (sizeof (char), 4);
+	char *ip = malloc (sizeof (char) * 20);
+	char  buf[4];
 	int   fd      = open (iface_counter_file, O_CREAT | O_RDWR);
 	int   counter = 0;
 
@@ -86,7 +79,6 @@ char *gen_ip_addr (char *ip_addr_net)
 	flock(fd, LOCK_UN);
 	close (fd);
 
-	free (buf);
 	snprintf (ip, 20, "%s%d", ip_addr_net, counter);
 	return ip;
 }
@@ -97,12 +89,7 @@ int gen_lxc_config (struct lxc_params *params)
 	char   cmd[1024];
 	size_t status;
 	int    retval     = 0;
-	char  *iface_line = malloc (sizeof (char) * 150);
-	if (!iface_line) {
-		printf ("Failed to malloc iface_line in gen_lxc_config!\n");
-		retval = -ENOMEM;
-		goto cleanup_config;
-	}
+	char   iface_line[150];
 
 	debug ("Generating config to %s for IP %s\n",
 	       params->lxc_cfg_file,
@@ -138,7 +125,6 @@ int gen_lxc_config (struct lxc_params *params)
 	                 cfg);
 cleanup_config:
 	fclose (cfg);
-	free (iface_line);
 	return retval;
 }
 
