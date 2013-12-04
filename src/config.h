@@ -30,11 +30,15 @@
  *  \file   config.h
  *
  * The system is used to retrieve values based
- * on key identifiers supplied to config_get_* functions.
+ * on key identifiers supplied to Config::get* functions.
  */
 
+class Config {
+public:
+	Config();
+	~Config();
 
-/*! \brief Initialize the configuration system
+/*! \brief Read and parse the configuration file
  *
  * There can only be one of this system, which means this function should only
  * be run once. Running this function more than once is erroneous.
@@ -45,16 +49,7 @@
  * \return -EINVAL upon attempted re-initialization
  * \return -EINVAL upon malformed config
  */
-
-int   config_initialize (char *);
-
-/*! \brief Destroy the config instance
- *
- * This essentially undos the work performed by config_initialize(char *).
- * Calling this will free all memory used by the configuration system
- */
-
-void  config_destroy ();
+	int read(const char *path);
 
 /*! \brief Retrieve a string from the config
  *
@@ -65,7 +60,10 @@ void  config_destroy ();
  * \return NULL     When property does not identify a config value
  * \return          A string upon successful retrieval of config value
  */
+	char *getString(const char *property);
 
-char *config_get_string (const char *);
+private:
+	json_t *root;
+};
 
 #endif /* CONFIG_H */

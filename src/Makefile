@@ -4,7 +4,7 @@ SOURCES = pelagicontain.cpp \
 	  pulse.cpp \
 	  iptables.c       \
 	  trafficcontrol.c \
-	  config.c         \
+	  config.cpp \
 	  generators.c
 
 HEADERS = pulse.h          \

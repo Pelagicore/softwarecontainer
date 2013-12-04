@@ -35,15 +35,15 @@
 
 /*! \brief Generate and execute IPTables rules
  *
- * Read IPTables rules from the config file, using the key 'iptables-rules',
- * finally execute these rules
+ * Parse the IPTables rules from configuration and execute these rules
  *
  * \param *params  Pointer to an initialized lxc_params struct
+ * \param *rules   String containing the IPTable rules
  * \return 0       Upon success
  * \return -EINVAL Upon missing 'iptables-rules' key
  * \return -EIO    Upon Failure to read or write files
  */
-int gen_iptables_rules (struct lxc_params *params);
+int gen_iptables_rules (struct lxc_params *params, const char *rules);
 
 /*! \brief Remove IPTables rules set up for a specific network iface
  *

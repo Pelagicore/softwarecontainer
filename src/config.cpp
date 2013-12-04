@@ -19,37 +19,39 @@
 
 #include "config.h"
 
-static json_t *root         = NULL;
+Config::Config() : root(0)
+{
+}
 
-int config_initialize (char *path) {
-	json_error_t error;
-
+Config::~Config()
+{
 	if (root) {
-		printf ("error: Attempted to re-initialize config!\n");
+		json_decref(root);
+	}
+}
+
+int Config::read(const char *path)
+{
+	if (root) {
+		printf("Already loaded configuration!");
 		return -EINVAL;
 	}
 
+	json_error_t error;
+
 	root = json_load_file(path, 0, &error);
 
-	if(!root) {
+	if (!root) {
 		printf("error: on line %d: %s\n", error.line, error.text);
 		return -EINVAL;
 	}
 
-	debug ("Using config file %s\n", path);
-
+	debug("Using config file %s\n", path);
 	return 0;
 }
 
-void config_destroy () {
-	if (!root) {
-		printf ("error: Attempted to destroy non-initialized config\n");
-		return;
-	}
-	json_decref (root);
-}
-
-char *config_get_string (const char *property) {
+char *Config::getString(const char *property)
+{
 	json_t *element = NULL;
 
 	if (root == NULL) {
@@ -69,9 +71,9 @@ char *config_get_string (const char *property) {
 		char   *buf    = (char*)calloc (sizeof (char), buflen);
 
 		for (int i = 0; i < len; i++) {
-			      json_t *line    = json_array_get (element, i);
+			json_t *line    = json_array_get (element, i);
 			const char   *strline = json_string_value (line);
-			      int     linelen = 0;
+			int     linelen = 0;
 
 			/* Entire array must be strings */
 			if (!json_is_string (line)) {

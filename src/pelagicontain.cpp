@@ -41,7 +41,7 @@
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-static int initialize_config  (struct lxc_params *,  char *);
+static int initialize_config  (struct lxc_params *, char *, Config *config);
 
 /*! \brief Spawn the proxy and use the supplied path for the socket
  *
@@ -54,7 +54,8 @@ static int initialize_config  (struct lxc_params *,  char *);
 static pid_t spawn_proxy (char *, char *, const char *);
 
 
-static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
+static int initialize_config (struct lxc_params *ct_pars, char *ct_base_dir,
+	Config *config)
 {
 	char *ip_addr_net = NULL;
 
@@ -108,27 +109,27 @@ static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 		  "%s/pelagicontain.conf",
 	          ct_pars->ct_conf_dir);
 
-	config_initialize (ct_pars->main_cfg_file);
+	config->read(ct_pars->main_cfg_file);
 
-	ct_pars->lxc_system_cfg = config_get_string ("lxc-config-template");
+	ct_pars->lxc_system_cfg = config->getString("lxc-config-template");
 	if (!ct_pars->lxc_system_cfg) {
 		printf ("Unable to read lxc-config-template from config!\n");
 		return -EINVAL;
 	}
 
-	ct_pars->tc_rate = config_get_string ("bandwidth-limit");
+	ct_pars->tc_rate = config->getString("bandwidth-limit");
 	if (!ct_pars->tc_rate) {
 		printf ("Unable to read bandwidth-limit from config!\n");
 		return -EINVAL;
 	}
 
-	ip_addr_net = config_get_string ("ip-addr-net");
+	ip_addr_net = config->getString("ip-addr-net");
 	if (!ip_addr_net) {
 		printf ("Unable to read ip-addr-net from config!\n");
 		return -EINVAL;
 	}
 
-	ct_pars->gw_addr = config_get_string ("gw-ip-addr");
+	ct_pars->gw_addr = config->getString("gw-ip-addr");
 	if (!ct_pars->gw_addr) {
 		printf ("Unable to read gw-ip-addr from config!\n");
 		return -EINVAL;
@@ -180,12 +181,14 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
-	if (initialize_config (&ct_pars, argv[1])) {
+	Config config;
+
+	if (initialize_config (&ct_pars, argv[1], &config)) {
 		printf ("Failed to initialize config. Exiting\n");
 		return -1;
 	}
 
-	gen_iptables_rules (&ct_pars);
+	gen_iptables_rules (&ct_pars, config.getString("iptables-rules"));
 	gen_lxc_config (&ct_pars);
 
 	/* Load pulseaudio module */

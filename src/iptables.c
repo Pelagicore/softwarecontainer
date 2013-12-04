@@ -19,26 +19,17 @@
 
 #include "iptables.h"
 
-int gen_iptables_rules (struct lxc_params *params)
+int gen_iptables_rules (struct lxc_params *params, const char *iptables_rules)
 {
 	char iptables_cmd[1024];
-	char *iptables_rules       = NULL;
 	char iptables_rules_file[] = "/tmp/iptables_rules_XXXXXX";
 	int   iptf                 = 0;
 	int   retval               = 0;
 	      
-	iptables_rules = config_get_string ("iptables-rules");
-	if (!iptables_rules) {
-		printf ("Unable to retrieve value for key 'iptables-rules'\n");
-		retval = -EINVAL;
-		goto cleanup;
-	}
-
 	iptf = mkstemp (iptables_rules_file);
 	if (iptf == -1) {
 		printf ("Unable to open %s\n", iptables_rules_file);
-		retval = -EIO;
-		goto cleanup;
+		return -EIO;
 	}
 
 	if (write (iptf, iptables_rules,
@@ -66,8 +57,6 @@ int gen_iptables_rules (struct lxc_params *params)
 
 unlink_file:
 	unlink (iptables_rules_file);
-cleanup:
-	free (iptables_rules);
 
 	return retval;
 }
