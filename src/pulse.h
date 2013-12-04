@@ -34,9 +34,9 @@ public:
 	~Pulse();
 
 private:
-	static void loadCb(pa_context *c, uint32_t idx, void *userdata);
-	static void unloadCb(pa_context *c, int success, void *userdata);
-	static void stateCb(pa_context *c, void *userdata);
+	static void loadCallback(pa_context *c, uint32_t idx, void *userdata);
+	static void unloadCallback(pa_context *c, int success, void *userdata);
+	static void stateCallback(pa_context *c, void *userdata);
 
 	pa_mainloop_api *api;
 	pa_context *context;

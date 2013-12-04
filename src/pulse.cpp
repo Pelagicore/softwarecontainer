@@ -21,7 +21,7 @@
 #include "pulse.h"
 #include "debug.h"
 
-void Pulse::loadCb(pa_context *c, uint32_t idx, void *userdata)
+void Pulse::loadCallback(pa_context *c, uint32_t idx, void *userdata)
 {
 	Pulse *p = static_cast<Pulse*>(userdata);
 	p->module_idx = (int)idx;
@@ -30,7 +30,7 @@ void Pulse::loadCb(pa_context *c, uint32_t idx, void *userdata)
 	pa_threaded_mainloop_signal(p->mainloop, 0);
 }
 
-void Pulse::unloadCb(pa_context *c, int success, void *userdata)
+void Pulse::unloadCallback(pa_context *c, int success, void *userdata)
 {
 	Pulse *p = static_cast<Pulse*>(userdata);
 	if (success)
@@ -41,7 +41,7 @@ void Pulse::unloadCb(pa_context *c, int success, void *userdata)
 	pa_threaded_mainloop_signal(p->mainloop, 0);
 }
 
-void Pulse::stateCb(pa_context *context, void *userdata)
+void Pulse::stateCallback(pa_context *context, void *userdata)
 {
 	Pulse *p = static_cast<Pulse*>(userdata);
 	char socket[1031]; /* 1024 + 7 for "socket=" */
@@ -54,7 +54,7 @@ void Pulse::stateCb(pa_context *context, void *userdata)
 			context,
 			"module-native-protocol-unix",
 			socket,
-			loadCb,
+			loadCallback,
 			userdata);
 		break;
 	case PA_CONTEXT_CONNECTING:
@@ -89,7 +89,7 @@ Pulse::Pulse(char *socket) : api(0), context(0), socket(socket), module_idx(-1)
 		pa_threaded_mainloop_lock(mainloop);
 		api = pa_threaded_mainloop_get_api(mainloop);
 		context = pa_context_new(api, "pulsetest");
-		pa_context_set_state_callback (context, stateCb, this);
+		pa_context_set_state_callback (context, stateCallback, this);
 
 		int err = pa_context_connect (
 			context,        /* context */
@@ -116,7 +116,7 @@ Pulse::~Pulse()
 			pa_context_unload_module(
 				context,
 				module_idx,
-				unloadCb,
+				unloadCallback,
 				this);
 			pa_threaded_mainloop_wait(mainloop);
 			pa_threaded_mainloop_unlock(mainloop);
