@@ -45,9 +45,9 @@ static int wait_for_device (char *iface)
 
 		/* Iterate through the device list */
 		for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-			if (ifa->ifa_name == NULL)
+			if (ifa->ifa_name == NULL) {
 				continue;
-			else {
+			} else {
 				if (strcmp (ifa->ifa_name, iface) == 0) {
 					debug ("Device found: %s\n", 
 						 ifa->ifa_name);
@@ -81,11 +81,7 @@ int limit_iface (struct lxc_params *params)
 	/* fork */
 	pid = fork();
 	if (pid == 0) { /* child */
-		char *cmd      = malloc (sizeof (char) * 256);
-		if (!cmd) {
-			printf ("Failed to malloc cmd in limit_iface()\n");
-			goto cleanup_limit;
-		}
+		char cmd[256];
 
 		snprintf (cmd, 256, "tc qdisc "
 					"add "
@@ -110,9 +106,7 @@ int limit_iface (struct lxc_params *params)
 		debug ("issuing: %s\n", cmd);
 
 		system (cmd);
-cleanup_limit:
-		if (cmd)
-			free (cmd);
+
 		exit (0);
 
 	} else { /* parent */
@@ -131,29 +125,20 @@ cleanup_limit:
  */
 int clear_iface_limits (char *iface)
 {
-		int   retval   = 0;
-		char *cmd      = malloc (sizeof (char) * 256);
+	int retval = 0;
+	char cmd[256];
 
-		if (!cmd) {
-			printf ("Unable to malloc cmd in clear_iface_limits\n");
-			goto cleanup_clear;
-		}
+	snprintf (cmd, 256, "tc qdisc "
+				"del "
+				"dev "
+				"%s "
+				"root ",
+				iface);
 
-		snprintf (cmd, 256, "tc qdisc "
-					"del "
-					"dev "
-					"%s "
-					"root ",
-					iface);
+	if (system (cmd) == -1) {
+		printf ("Unable to execute limit clear command\n");
+		return -EINVAL;
+	}
 
-		if (system (cmd) == -1) {
-			printf ("Unable to execute limit clear command\n");
-			retval = -EINVAL;
-		}
-
-cleanup_clear:
-		if (cmd)
-			free (cmd);
-		return retval;
-
+	return retval;
 }
