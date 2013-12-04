@@ -24,7 +24,7 @@ int gen_iptables_rules (struct lxc_params *params)
 	char iptables_cmd[1024];
 	char *iptables_rules       = NULL;
 	char iptables_rules_file[] = "/tmp/iptables_rules_XXXXXX";
-	int   iptf                 = NULL;
+	int   iptf                 = 0;
 	int   retval               = 0;
 	      
 	iptables_rules = config_get_string ("iptables-rules");
@@ -74,7 +74,7 @@ cleanup:
 
 int remove_iptables_rules (struct lxc_params *params)
 {
-	char *iptables_command = "iptables -n -L FORWARD";
+	const char *iptables_command = "iptables -n -L FORWARD";
 	FILE *fp               = NULL;
 	int   line_no          = -1; /* banner takes two lines. Start at 1 */
 	char  iptables_line[2048];

@@ -36,5 +36,6 @@ typedef struct pulse_con {
 } pulse_con_t;
 
 void pulse_startup(pulse_con_t *p, char * socket);
+void pulse_teardown (pulse_con_t *p);
 
 #endif /* _pulse_h_*/

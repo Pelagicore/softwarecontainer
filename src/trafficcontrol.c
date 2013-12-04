@@ -17,6 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
+#include <unistd.h>
 #include "trafficcontrol.h"
 
 /*! \brief Poll for a device

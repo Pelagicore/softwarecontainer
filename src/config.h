@@ -66,6 +66,6 @@ void  config_destroy ();
  * \return          A string upon successful retrieval of config value
  */
 
-char *config_get_string (char *);
+char *config_get_string (const char *);
 
 #endif /* CONFIG_H */

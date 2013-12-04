@@ -49,7 +49,7 @@ void config_destroy () {
 	json_decref (root);
 }
 
-char *config_get_string (char *property) {
+char *config_get_string (const char *property) {
 	json_t *element = NULL;
 
 	if (root == NULL) {
@@ -65,11 +65,10 @@ char *config_get_string (char *property) {
 		debug ("%s is called on an array\n", __FUNCTION__);
 		size_t  len    = json_array_size (element);
 		size_t  buflen = 100;
-		int     i      = 0;
 		int     j      = 0;
-		char   *buf    = calloc (sizeof (char), buflen);
+		char   *buf    = (char*)calloc (sizeof (char), buflen);
 
-		for (i = 0; i < len; i++) {
+		for (int i = 0; i < len; i++) {
 			      json_t *line    = json_array_get (element, i);
 			const char   *strline = json_string_value (line);
 			      int     linelen = 0;
@@ -86,7 +85,7 @@ char *config_get_string (char *property) {
 			if (j + linelen > buflen) {
 				debug ("buf is %d, and line is %d\n", buflen, linelen);
 				buflen = (j + strlen (strline)) * 2;
-				char *newbuf = calloc (sizeof (char), buflen);
+				char *newbuf = (char*)calloc (sizeof (char), buflen);
 
 				strncpy (newbuf, buf, buflen);
 				free (buf);

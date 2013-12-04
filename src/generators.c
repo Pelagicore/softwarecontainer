@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301, USA.
  */
 
+#include <unistd.h>
+#include <sys/time.h>
 #include "generators.h"
 
 const static char *iface_counter_file = "/tmp/pelc_ifc";
@@ -27,7 +29,7 @@ char *gen_net_iface_name (char *ip_addr_net)
 	char   *iface     = NULL;
 	int     collision = 0;
 
-	iface = malloc (sizeof (char) * 16);
+	iface = (char*)malloc (sizeof (char) * 16);
 	if (!iface) {
 		printf ("Failed to malloc iface\n");
 		return NULL;
@@ -59,7 +61,7 @@ char *gen_net_iface_name (char *ip_addr_net)
 
 char *gen_ip_addr (char *ip_addr_net)
 {
-	char *ip = malloc (sizeof (char) * 20);
+	char *ip = (char*)malloc (sizeof (char) * 20);
 	char  buf[4];
 	int   fd      = open (iface_counter_file, O_CREAT | O_RDWR);
 	int   counter = 0;
@@ -141,13 +143,13 @@ char *gen_ct_name ()
 	int     i                    = 0;
 	static const char alphanum[] = "abcdefghijklmnopqrstuvwxyz";
 
-	name = malloc (sizeof (char) * 10);
+	name = (char*)malloc (sizeof (char) * 10);
 	if (!name) {
 		printf ("Failed to malloc name in gen_ct_name\n");
 		return NULL;
 	}
 
-	gettimeofday (&time,NULL);
+	gettimeofday (&time, NULL);
 	srand ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 
 	for (i = 0; i < 10; i++) {

@@ -18,7 +18,7 @@ CFLAGS += `pkg-config --cflags --libs libpulse jansson`
 all: pelagicontain
 
 pelagicontain: $(SOURCES) $(HEADERS)
-	$(CC) $(SOURCES) -o pelagicontain $(CFLAGS)
+	$(CXX) $(SOURCES) -o pelagicontain $(CFLAGS)
 
 install: pelagicontain
 	install -D -m 755 pelagicontain $(DESTDIR)$(PREFIX)/bin/pelagicontain

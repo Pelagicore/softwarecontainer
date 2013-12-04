@@ -17,15 +17,17 @@
  * Boston, MA  02110-1301, USA.
  */
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "unistd.h"
-#include "signal.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
 #include "pulse.h"
 #include "pelagicontain_common.h"
 #include "config.h"
 #include "debug.h"
 #include "generators.h"
+#include "iptables.h"
+#include "trafficcontrol.h"
 
 /*! \brief Initialize config struct
  *
@@ -49,7 +51,7 @@ static int initialize_config  (struct lxc_params *,  char *);
  * \return -1         Upon failure of forking
  * \return PID of spawned process on success
  */
-static pid_t spawn_proxy (char *, char *, char *);
+static pid_t spawn_proxy (char *, char *, const char *);
 
 
 static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
@@ -138,7 +140,7 @@ static int initialize_config (struct lxc_params *ct_pars,  char *ct_base_dir)
 	return 0;
 }
 
-static pid_t spawn_proxy (char *path, char *proxy_conf, char *bus_type)
+static pid_t spawn_proxy (char *path, char *proxy_conf, const char *bus_type)
 {
 	pid_t pid;
 
@@ -166,9 +168,9 @@ int main (int argc, char **argv)
 {
 	struct lxc_params ct_pars;
 
-	char *user_command      = NULL;
-	char *lxc_command       = NULL;
 	int   max_cmd_len       = sysconf(_SC_ARG_MAX);
+	char  user_command[max_cmd_len];
+	char  lxc_command[max_cmd_len];
 	pid_t session_proxy_pid = 0;
 	pid_t system_proxy_pid  = 0;
 	char  env[4096];
@@ -185,13 +187,6 @@ int main (int argc, char **argv)
 		printf ("Failed to initialize config. Exiting\n");
 		goto cleanup;
 	}
-
-	lxc_command = malloc (sizeof (char) * max_cmd_len);
-	if (!lxc_command) {
-		printf ("Failed to malloc lxc_command!\n");
-		goto cleanup;
-	}
-
 
 	gen_iptables_rules (&ct_pars);
 	gen_lxc_config (&ct_pars);
@@ -239,15 +234,8 @@ int main (int argc, char **argv)
 	system (lxc_command);
 
 	/* Execute command in container */
-	/* max parameter size of system */
-	user_command = malloc (sizeof (char) * max_cmd_len);
-	if (!user_command) {
-		printf("Failed to malloc user_command");
-		goto cleanup;
-	}
 
-	int i = 0;
-	for (i = 2; i < argc; i++) {
+	for (int i = 2; i < argc; i++) {
 		int clen = strlen (user_command);
 		int nlen = strlen ((const char *) argv[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
