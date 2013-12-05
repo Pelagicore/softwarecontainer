@@ -23,7 +23,7 @@
 
 const static char *iface_counter_file = "/tmp/pelc_ifc";
 
-char *gen_net_iface_name (char *ip_addr_net)
+char *gen_net_iface_name (const char *ip_addr_net)
 {
 	struct  ifaddrs *ifaddr, *ifa;
 	char   *iface     = NULL;
@@ -72,6 +72,7 @@ char *gen_ip_addr (char *ip_addr_net)
 	}
 	flock (fd, LOCK_EX);
 
+	buf[3] = 0;
 	if (read (fd, buf, 3) == 0)
 		counter = 1;
 	else
@@ -120,7 +121,7 @@ int gen_lxc_config (struct lxc_params *params)
 	                           params->ip_addr,
 	                           params->gw_addr);
 
-	cfg    = fopen (params->lxc_cfg_file, "a+");
+	cfg = fopen (params->lxc_cfg_file, "a+");
 	if (!cfg) {
 		printf ("Failed to open temp config file!\n");
 		retval = -EINVAL;

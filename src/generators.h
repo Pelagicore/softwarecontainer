@@ -51,7 +51,7 @@
  * \return A unique network interface name
  * \return NULL upon error
  */
-char *gen_net_iface_name (char *ip_addr_net);
+char *gen_net_iface_name(const char *ip_addr_net);
 
 /*!  \brief Generate a gateway address
  *
