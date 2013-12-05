@@ -13,12 +13,12 @@ HEADERS = pulse.h          \
 	  config.h         \
 	  generators.h
 
-CFLAGS += `pkg-config --cflags --libs libpulse jansson`
+CXXFLAGS += `pkg-config --cflags --libs libpulse jansson`
 
 all: pelagicontain
 
 pelagicontain: $(SOURCES) $(HEADERS)
-	$(CXX) $(SOURCES) -o pelagicontain $(CFLAGS)
+	$(CXX) $(SOURCES) -o pelagicontain $(CXXFLAGS)
 
 install: pelagicontain
 	install -D -m 755 pelagicontain $(DESTDIR)$(PREFIX)/bin/pelagicontain
