@@ -271,13 +271,15 @@ if [ -z "$path" ]; then
 fi
 
 # detect rootfs
-if [ -z "$rootfs" ]; then
-    config="$path/config"
-    if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
-        rootfs=`grep 'lxc.rootfs =' $config | awk -F= '{ print $2 }'`
-    else
-        rootfs=$path/rootfs
-    fi
+if [ -n "$rootfs" ]; then
+    echo "'rootfs' was defined, ignoring"
+fi
+
+config="$path/config"
+if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
+    rootfs=`grep 'lxc.rootfs =' $config | awk -F= '{ print $2 }'`
+else
+    rootfs=$path/rootfs
 fi
 
 install_busybox $rootfs $name
