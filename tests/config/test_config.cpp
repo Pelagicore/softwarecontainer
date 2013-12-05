@@ -1,6 +1,6 @@
 #include <glib.h>
+#include <stdlib.h>
 #include "config.h"
-#include "stdlib.h"
 
 static void test_initialize ()
 {

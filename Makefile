@@ -14,4 +14,3 @@ install: all
 doc:
 	doxygen Doxyfile
 	cd doc/latex/ ; make
-
