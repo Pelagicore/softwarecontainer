@@ -53,7 +53,6 @@ static int initialize_config  (struct lxc_params *, char *, Config *config);
  */
 static pid_t spawn_proxy (char *, char *, const char *);
 
-
 static int initialize_config (struct lxc_params *ct_pars, char *ct_base_dir,
 	Config *config)
 {
@@ -165,16 +164,61 @@ static pid_t spawn_proxy (char *path, char *proxy_conf, const char *bus_type)
 	}
 }
 
+static int run_container(int argc, char **argv, struct lxc_params *ct_pars)
+{
+	int   max_cmd_len       = sysconf(_SC_ARG_MAX);
+	char  lxc_command[max_cmd_len];
+	char  user_command[max_cmd_len];
+	char  env[4096];
+
+	/* Set up an environment */
+	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
+	strcat (env, ct_pars->deployed_session_proxy_socket);
+	strcat (env, " ");
+	strcat (env, "DBUS_SYSTEM_BUS_ADDRESS=unix:path=");
+	strcat (env, ct_pars->deployed_system_proxy_socket);
+	strcat (env, " ");
+	strcat (env, "PULSE_SERVER=");
+	strcat (env, ct_pars->deployed_pulse_socket);
+
+	/* Create container */
+	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
+		              " -f %s > /tmp/lxc_%s.log",
+		              ct_pars->ct_root_dir,
+		              ct_pars->container_name,
+		              ct_pars->lxc_cfg_file,
+		              ct_pars->container_name);
+	int ret = system (lxc_command);
+	printf("%s returned %d\n", lxc_command, ret);
+
+	/* Execute command in container */
+        int i;
+	for (i = 2; i < argc; i++) {
+		int clen = strlen (user_command);
+		int nlen = strlen ((const char *) argv[i]);
+		if (nlen + clen >= max_cmd_len - 256) {
+			printf ("Parameter list too long\n");
+			exit (1);
+		}
+		strcat (user_command, (const char *)argv[i]);
+		strcat (user_command, " ");
+	}
+
+	snprintf (lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
+	          ct_pars->container_name, env, user_command);
+	system (lxc_command);
+
+	/* Destroy container */
+	snprintf (lxc_command, max_cmd_len, "lxc-destroy -n %s",
+	          ct_pars->container_name);
+	system (lxc_command);
+}
+
 int main (int argc, char **argv)
 {
 	struct lxc_params ct_pars;
-
-	int   max_cmd_len       = sysconf(_SC_ARG_MAX);
-	char  user_command[max_cmd_len];
-	char  lxc_command[max_cmd_len];
 	pid_t session_proxy_pid = 0;
 	pid_t system_proxy_pid  = 0;
-	char  env[4096];
 
 	if (argc < 3 || argv[1][0] != '/') {
 		printf ("USAGE: %s [deploy directory (abs path)] [command]\n", argv[0]);
@@ -197,16 +241,6 @@ int main (int argc, char **argv)
 	/* Limit network interface */
 	limit_iface (&ct_pars);
 
-	/* Set up an environment */
-	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
-	strcat (env, ct_pars.deployed_session_proxy_socket);
-	strcat (env, " ");
-	strcat (env, "DBUS_SYSTEM_BUS_ADDRESS=unix:path=");
-	strcat (env, ct_pars.deployed_system_proxy_socket);
-	strcat (env, " ");
-	strcat (env, "PULSE_SERVER=");
-	strcat (env, ct_pars.deployed_pulse_socket);
-
 	/* Spawn proxy */
 	session_proxy_pid = spawn_proxy (ct_pars.session_proxy_socket,
 	                                 ct_pars.main_cfg_file,
@@ -224,36 +258,7 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
-	/* Create container */
-	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
-		              " -f %s > /tmp/lxc_%s.log",
-		              ct_pars.ct_root_dir,
-		              ct_pars.container_name,
-		              ct_pars.lxc_cfg_file,
-		              ct_pars.container_name);
-	system (lxc_command);
-
-	/* Execute command in container */
-        int i;
-	for (i = 2; i < argc; i++) {
-		int clen = strlen (user_command);
-		int nlen = strlen ((const char *) argv[i]);
-		if (nlen + clen >= max_cmd_len - 256) {
-			printf ("Parameter list too long\n");
-			exit (1);
-		}
-		strcat (user_command, (const char *)argv[i]);
-		strcat (user_command, " ");
-	}
-
-	snprintf (lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-	          ct_pars.container_name, env, user_command);
-	system (lxc_command);
-
-	/* Destroy container */
-	snprintf (lxc_command, max_cmd_len, "lxc-destroy -n %s",
-	          ct_pars.container_name);
-	system (lxc_command);
+	run_container(argc, argv, &ct_pars);
 
 	/* Terminate the proxy processes, remove sockets */
 	debug ("Killing proxies with pids %d, %d\n",
