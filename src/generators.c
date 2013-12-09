@@ -17,9 +17,12 @@
  * Boston, MA  02110-1301, USA.
  */
 
+#include <fstream>
 #include <unistd.h>
 #include <sys/time.h>
 #include "generators.h"
+
+using namespace std;
 
 const static char *iface_counter_file = "/tmp/pelc_ifc";
 
@@ -94,47 +97,24 @@ char *gen_ip_addr (char *ip_addr_net)
 
 int gen_lxc_config (struct lxc_params *params)
 {
-	FILE  *cfg;
-	char   cmd[1024];
-	size_t status;
-	int    retval     = 0;
-	char   iface_line[150];
-
 	debug ("Generating config to %s for IP %s\n",
 	       params->lxc_cfg_file,
 	       params->ip_addr);
 
-	/* copy system config to temporary location */
-	snprintf (cmd, 1024, "cp %s %s", params->lxc_system_cfg,
-	                                 params->lxc_cfg_file);
-	if (system (cmd) == -1) {
-		printf ("Failed to copy config to temp location\n");
-		retval = -EINVAL;
-		goto cleanup_config;
-	}
+	/* Copy system config to temporary location */
+	ifstream source(params->lxc_system_cfg, ios::binary);
+	ofstream dest(params->lxc_cfg_file, ios::binary);
+	dest << source.rdbuf();
+	source.close();
 
-	/* Add ipv4 config to config */
-	snprintf (iface_line, 150, "lxc.network.veth.pair = %s\n"
-	                           "lxc.network.ipv4 = %s/24\n"
-	                           "lxc.network.ipv4.gateway = %s\n",
-	                           params->net_iface_name,
-	                           params->ip_addr,
-	                           params->gw_addr);
+	/* Add ipv4 parameters to config */
+	dest << "lxc.network.veth.pair = " << params->net_iface_name << endl;
+	dest << "lxc.network.ipv4 = " << params->ip_addr << "/24" << endl;
+	dest << "lxc.network.ipv4.gateway = " << params->gw_addr << endl;
 
-	cfg = fopen (params->lxc_cfg_file, "a+");
-	if (!cfg) {
-		printf ("Failed to open temp config file!\n");
-		retval = -EINVAL;
-		goto cleanup_config;
-	}
+	dest.close();
 
-	status = fwrite (iface_line,
-	                 sizeof (char) * strlen (iface_line),
-	                 1,
-	                 cfg);
-cleanup_config:
-	fclose (cfg);
-	return retval;
+	return 0;
 }
 
 char *gen_ct_name ()
