@@ -29,11 +29,11 @@
  * \return 0       if the device is not found
  * \return -EINVAL if getifaddrs fails
  */
-static int wait_for_device (char *iface) 
+static int wait_for_device (const char *iface) 
 {
 	struct ifaddrs *ifaddr, *ifa;
 	int   max_poll    = 10;
-	char *found_iface = NULL;
+	const char *found_iface = NULL;
 	int   i           = 0;
 	int retval        = 0;
 
@@ -75,7 +75,7 @@ cleanup_wait:
  * This is a wrapper around the tc command. This function will issue system ()
  * calls to tc.
  * */
-int limit_iface (struct lxc_params *params)
+int limit_iface (const char *net_iface_name, const char *tc_rate)
 {
 	pid_t pid = 0;
 
@@ -93,11 +93,11 @@ int limit_iface (struct lxc_params *params)
 					"rate %s "
 					"burst 5kb "
 					"latency 70ms ",
-					params->net_iface_name,
-					params->tc_rate);
+					net_iface_name,
+					tc_rate);
 
 		/* poll for device */
-		if (!wait_for_device (params->net_iface_name)) {
+		if (!wait_for_device (net_iface_name)) {
 			printf ("Device never showed up. Not setting TC.\n");
 			/* We're forked, so just exit */
 			exit (0);

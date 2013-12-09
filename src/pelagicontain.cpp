@@ -189,7 +189,8 @@ static int run_container(int argc, char **argv, struct lxc_params *ct_pars)
 		              ct_pars->lxc_cfg_file,
 		              ct_pars->container_name);
 	int ret = system (lxc_command);
-	printf("%s returned %d\n", lxc_command, ret);
+	if (ret)
+		printf("%s returned %d\n", lxc_command, ret);
 
 	/* Execute command in container */
         int i;
@@ -206,12 +207,16 @@ static int run_container(int argc, char **argv, struct lxc_params *ct_pars)
 
 	snprintf (lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
 	          ct_pars->container_name, env, user_command);
-	system (lxc_command);
+	ret = system (lxc_command);
+	if (ret)
+		printf("%s returned %d\n", lxc_command, ret);
 
 	/* Destroy container */
 	snprintf (lxc_command, max_cmd_len, "lxc-destroy -n %s",
 	          ct_pars->container_name);
-	system (lxc_command);
+	ret = system (lxc_command);
+	if (ret)
+		printf("%s returned %d\n", lxc_command, ret);
 }
 
 int main (int argc, char **argv)
@@ -232,16 +237,22 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
-	gen_iptables_rules (&ct_pars, config.getString("iptables-rules"));
+	debug("Generate iptables rules\n");
+	gen_iptables_rules (ct_pars.ip_addr,
+		config.getString("iptables-rules"));
+	debug("Generate LXC config\n");
 	gen_lxc_config (&ct_pars);
 
 	/* Load pulseaudio module */
+	debug("Load pulseaudio module\n");
 	Pulse pulse(ct_pars.pulse_socket);
 
 	/* Limit network interface */
-	limit_iface (&ct_pars);
+	debug("Limit network interface\n");
+	limit_iface (ct_pars.net_iface_name, ct_pars.tc_rate);
 
 	/* Spawn proxy */
+	debug("Spawn dbus proxy\n");
 	session_proxy_pid = spawn_proxy (ct_pars.session_proxy_socket,
 	                                 ct_pars.main_cfg_file,
 	                                 "session");
@@ -277,6 +288,6 @@ int main (int argc, char **argv)
 		printf ("Failed to remove lxc config file!\n");
 
 	/* Remove IPTables rules */
-	if (remove_iptables_rules (&ct_pars))
+	if (remove_iptables_rules (ct_pars.ip_addr))
 		printf ("Failed to remove IPTables rules!\n");
 }

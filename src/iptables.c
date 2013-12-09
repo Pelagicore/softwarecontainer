@@ -19,7 +19,7 @@
 
 #include "iptables.h"
 
-int gen_iptables_rules (struct lxc_params *params, const char *iptables_rules)
+int gen_iptables_rules (const char *ip_addr, const char *iptables_rules)
 {
 	char iptables_cmd[1024];
 	char iptables_rules_file[] = "/tmp/iptables_rules_XXXXXX";
@@ -47,9 +47,9 @@ int gen_iptables_rules (struct lxc_params *params, const char *iptables_rules)
 
 	/* Execute shell script with env variable set to container IP */
 	snprintf (iptables_cmd, 1024, "env SRC_IP=%s sh %s",
-	          params->ip_addr, iptables_rules_file);
+	          ip_addr, iptables_rules_file);
 
-	printf ("Generating rules for IP: %s\n", params->ip_addr);
+	printf ("Generating rules for IP: %s\n", ip_addr);
 	if (system (iptables_cmd) == -1) {
 		printf ("Failed to execute iptables command\n");
 		retval = -EINVAL;
@@ -61,7 +61,7 @@ unlink_file:
 	return retval;
 }
 
-int remove_iptables_rules (struct lxc_params *params)
+int remove_iptables_rules (const char *ip_addr)
 {
 	const char *iptables_command = "iptables -n -L FORWARD";
 	FILE *fp               = NULL;
@@ -75,7 +75,7 @@ int remove_iptables_rules (struct lxc_params *params)
 	}
 
 	while (fgets (iptables_line, sizeof (iptables_line) - 1, fp) != NULL) {
-		if (strstr (iptables_line, params->ip_addr) != NULL) {
+		if (strstr (iptables_line, ip_addr) != NULL) {
 			char ipt_cmd[100];
 			debug ("%d > ", line_no);
 

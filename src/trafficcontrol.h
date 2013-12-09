@@ -46,12 +46,12 @@
  * This function forks an observing process in order to detect the availability
  * of the network interface.
  *
- * \param params   An initialized lxc_params struct, specifically tc_rate and
- *                 net_iface_name must be set
+ * \param net_iface_name Network interface name
+ * \param tc_rate        TC rate 
  * \return 0       Upon success
  * \return -EINVAL Upon failure
  */
-int limit_iface (struct lxc_params *params);
+int limit_iface (const char *net_iface_name, const char *tc_rate);
 
 
 /*! \brief Remove the limits set by limit_iface()
