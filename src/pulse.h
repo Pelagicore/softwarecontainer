@@ -30,7 +30,7 @@
 class Pulse
 {
 public:
-	Pulse(char *socket);
+	Pulse(const char *socket);
 	~Pulse();
 
 private:
@@ -41,7 +41,7 @@ private:
 	pa_mainloop_api *api;
 	pa_context *context;
 	pa_threaded_mainloop *mainloop;
-	char *socket;
+	const char *socket;
 	int module_idx;
 };
 

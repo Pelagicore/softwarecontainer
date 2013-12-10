@@ -78,7 +78,8 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 	}
 }
 
-Pulse::Pulse(char *socket) : api(0), context(0), socket(socket), module_idx(-1)
+Pulse::Pulse(const char *socket):
+	api(0), context(0), socket(socket), module_idx(-1)
 {
 	/* Create mainloop */
 	mainloop = pa_threaded_mainloop_new();
