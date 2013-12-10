@@ -30,7 +30,7 @@
 #include "pulse.h"
 #include "trafficcontrol.h"
 
-/*! \brief Initialize config struct
+/*! Initialize config struct
  *
  * Initialize the config struct with various paths and parameters. Some of
  * these parameters are read som $container/config/pelagicore.conf. This
@@ -43,9 +43,6 @@
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-static int initialize_config  (struct lxc_params *ct_pars,
-	const char *ct_base_dir, Config *config);
-
 static int initialize_config (struct lxc_params *ct_pars,
 	const char *ct_base_dir, Config *config)
 {
@@ -97,8 +94,6 @@ static int initialize_config (struct lxc_params *ct_pars,
 int main (int argc, char **argv)
 {
 	struct lxc_params ct_pars;
-	pid_t session_proxy_pid = 0;
-	pid_t system_proxy_pid  = 0;
 
 	if (argc < 3 || argv[1][0] != '/') {
 		printf ("USAGE: %s [deploy directory (abs path)] [command]\n", argv[0]);
