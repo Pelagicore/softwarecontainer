@@ -33,17 +33,11 @@ using namespace std;
 
 const static char *iface_counter_file = "/tmp/pelc_ifc";
 
-char *gen_net_iface_name (const char *ip_addr_net)
+std::string gen_net_iface_name (const char *ip_addr_net)
 {
 	struct  ifaddrs *ifaddr, *ifa;
-	char   *iface     = NULL;
-	int     collision = 0;
-
-	iface = (char*)malloc (sizeof (char) * 16);
-	if (!iface) {
-		printf ("Failed to malloc iface\n");
-		return NULL;
-	}
+	int collision = 0;
+	char iface[16];
 
 	do {
 		snprintf (iface, 20, "veth-%d", (rand() % 1024));
@@ -66,7 +60,7 @@ char *gen_net_iface_name (const char *ip_addr_net)
 		}
 	} while (collision);
 
-	return iface;
+	return std::string(iface);
 }
 
 /*

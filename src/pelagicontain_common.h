@@ -39,7 +39,7 @@ struct lxc_params {
 
 	/*! External interface name for the networking interface of the
 	 * container */
-	char *net_iface_name; 
+	std::string net_iface_name; 
 
 
 	/* traffic control */

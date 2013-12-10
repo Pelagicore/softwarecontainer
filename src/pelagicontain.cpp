@@ -249,7 +249,7 @@ int main (int argc, char **argv)
 
 	/* Limit network interface */
 	debug("Limit network interface\n");
-	limit_iface (ct_pars.net_iface_name, ct_pars.tc_rate);
+	limit_iface (ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 
 	/* Spawn proxy */
 	debug("Spawn dbus proxy\n");

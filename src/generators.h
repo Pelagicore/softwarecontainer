@@ -42,7 +42,7 @@
  * \return A unique network interface name
  * \return NULL upon error
  */
-char *gen_net_iface_name(const char *ip_addr_net);
+std::string gen_net_iface_name(const char *ip_addr_net);
 
 /*!  \brief Generate a gateway address
  *
