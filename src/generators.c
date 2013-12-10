@@ -65,12 +65,12 @@ char *gen_net_iface_name (const char *ip_addr_net)
 /* Read the counter value from iface_counter_file and increase it to
  * find the next ip. Naively assumes no ip collisions occur at the moment.
  */
-char *gen_ip_addr (char *ip_addr_net)
+char *gen_ip_addr (const char *ip_addr_net)
 {
-	char *ip = (char*)malloc (sizeof (char) * 20);
 	int   fd = open (iface_counter_file, O_CREAT | O_RDWR);
 	int   counter = 0;
 	char  buf[4];
+	char *ip;
 
 	if (fd == -1) {
 		printf ("Unable to lock interface counter\n");
@@ -97,7 +97,9 @@ char *gen_ip_addr (char *ip_addr_net)
 	flock(fd, LOCK_UN);
 	close (fd);
 
-	snprintf (ip, 20, "%s%d", ip_addr_net, counter);
+	ip = (char*)malloc (sizeof (char) * 20);
+	snprintf(ip, 20, "%s%d", ip_addr_net, counter);
+
 	return ip;
 }
 

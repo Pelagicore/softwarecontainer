@@ -71,7 +71,7 @@ char *gen_gw_ip_addr (char *ip_addr_net);
  * \param *ip_addr_net A 24 bit network portion of an IP address
  * \return A string representing an IP address
  */
-char *gen_ip_addr (char *ip_addr_net);
+char *gen_ip_addr (const char *ip_addr_net);
 
 /*! \brief Generate and write an LXC config
  *
