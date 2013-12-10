@@ -62,12 +62,15 @@ char *gen_net_iface_name (const char *ip_addr_net)
 	return iface;
 }
 
+/* Read the counter value from iface_counter_file and increase it to
+ * find the next ip. Naively assumes no ip collisions occur at the moment.
+ */
 char *gen_ip_addr (char *ip_addr_net)
 {
 	char *ip = (char*)malloc (sizeof (char) * 20);
-	char  buf[4];
-	int   fd      = open (iface_counter_file, O_CREAT | O_RDWR);
+	int   fd = open (iface_counter_file, O_CREAT | O_RDWR);
 	int   counter = 0;
+	char  buf[4];
 
 	if (fd == -1) {
 		printf ("Unable to lock interface counter\n");
@@ -76,13 +79,16 @@ char *gen_ip_addr (char *ip_addr_net)
 	flock (fd, LOCK_EX);
 
 	buf[3] = 0;
-	if (read (fd, buf, 3) == 0)
-		counter = 1;
-	else
-		counter = atoi (buf);
-
 	/* We reserve the first IP for gateway .. */
-	snprintf(buf, 4, "%03d", (counter % 254) + 2);
+	if (read (fd, buf, 3) == 0) {
+		counter = 2;
+	} else {
+		counter = atoi(buf) + 1;
+		if (counter < 2 || counter > 254)
+			counter = 2;
+	}
+	
+	snprintf(buf, 4, "%03d", counter);
 
 	/* Overwrite the first three bytes */
 	lseek (fd, 0, SEEK_SET);
