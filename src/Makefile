@@ -1,17 +1,24 @@
 PREFIX ?= /usr
 
-SOURCES = pelagicontain.cpp \
-	  pulse.cpp \
-	  iptables.c       \
-	  trafficcontrol.c \
-	  config.cpp \
-	  generators.cpp
+SOURCES = \
+	config.cpp \
+	container.cpp \
+	dbusproxy.cpp \
+	generators.cpp \
+	iptables.c       \
+	pelagicontain.cpp \
+	pulse.cpp \
+	trafficcontrol.c
 
-HEADERS = pulse.h          \
-	  iptables.h       \
-	  trafficcontrol.h \
-	  config.h         \
-	  generators.h
+HEADERS = \
+	config.h \
+	container.h \
+	dbusproxy.h \
+	generators.h \
+	iptables.h \
+	pelagicontain_common.h \
+	pulse.h \
+	trafficcontrol.h
 
 CXXFLAGS += `pkg-config --cflags --libs libpulse jansson`
 

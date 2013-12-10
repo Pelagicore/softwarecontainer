@@ -74,13 +74,10 @@ struct lxc_params {
 
 	/* LXC general */
 	/*! Unique name of the container, used to identify it in LXC */
-	char *container_name;
+	std::string container_name;
 
 	/*! Path to the LXC system config, as seen from the host */
 	char *lxc_system_cfg;
-
-	/*! Path to the directory being deployed, as seen from the host */
-	char *ct_dir;
 
 	/*! lxc_params#ct_dir  + "/config/" */
 	char ct_conf_dir[1024];

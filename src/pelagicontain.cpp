@@ -21,12 +21,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
-#include "pulse.h"
-#include "pelagicontain_common.h"
 #include "config.h"
+#include "container.h"
+#include "dbusproxy.h"
 #include "debug.h"
 #include "generators.h"
 #include "iptables.h"
+#include "pulse.h"
 #include "trafficcontrol.h"
 
 /*! \brief Initialize config struct
@@ -36,72 +37,25 @@
  * function verifies that all values parsed from this config file are present,
  * and returns -EINVAL if they are not.
  *
- * \param  *ct_pars     Pointer to struct to initialize
- * \param  *ct_base_dir Path to container base dir
+ * \param  ct_pars      Pointer to struct to initialize
+ * \param  ct_base_dir  Path to container base dir
+ * \param  config       Configuration parser
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-static int initialize_config  (struct lxc_params *, char *, Config *config);
+static int initialize_config  (struct lxc_params *ct_pars,
+	const char *ct_base_dir, Config *config);
 
-/*! \brief Spawn the proxy and use the supplied path for the socket
- *
- * \param  path       path to the socket file to use. File is created.
- * \param  proxy_conf path to configuration file for proxy
- * \param  bus_type   "session" or "system"
- * \return -1         Upon failure of forking
- * \return PID of spawned process on success
- */
-static pid_t spawn_proxy (char *, char *, const char *);
-
-static int initialize_config (struct lxc_params *ct_pars, char *ct_base_dir,
-	Config *config)
+static int initialize_config (struct lxc_params *ct_pars,
+	const char *ct_base_dir, Config *config)
 {
-	char *ip_addr_net = NULL;
+	char *ip_addr_net;
 
 	/* Initialize */
 	ct_pars->container_name = gen_ct_name();
-	ct_pars->ct_dir         = ct_base_dir;
 
-	snprintf (ct_pars->ct_conf_dir, 1024, "%s/config/", ct_pars->ct_dir);
-	snprintf (ct_pars->ct_root_dir, 1024, "%s/rootfs/", ct_pars->ct_dir);
-
-	snprintf (ct_pars->session_proxy_socket,
-		  1024,
-		  "%s/sess_%s.sock",
-	          ct_pars->ct_root_dir,
-	          ct_pars->container_name);
-
-	snprintf (ct_pars->system_proxy_socket,
-		  1024,
-		  "%s/sys_%s.sock",
-	          ct_pars->ct_root_dir,
-	          ct_pars->container_name);
-
-	snprintf (ct_pars->deployed_session_proxy_socket,
-		  1024,
-	          "/deployed_app/sess_%s.sock",
-		  ct_pars->container_name);
-
-	snprintf (ct_pars->deployed_system_proxy_socket,
-		  1024,
-	          "/deployed_app/sys_%s.sock",
-		  ct_pars->container_name);
-
-	snprintf (ct_pars->pulse_socket,
-		  1024,
-		  "%s/pulse-%s.sock",
-	          ct_pars->ct_root_dir,
-	          ct_pars->container_name);
-
-	snprintf (ct_pars->deployed_pulse_socket,
-		  1024,
-	          "/deployed_app/pulse-%s.sock",
-		  ct_pars->container_name);
-
-	snprintf (ct_pars->lxc_cfg_file,
-		  1024,
-		  "/tmp/lxc_config_%s",
-	          ct_pars->container_name);
+	snprintf (ct_pars->ct_conf_dir, 1024, "%s/config/", ct_base_dir);
+	snprintf (ct_pars->ct_root_dir, 1024, "%s/rootfs/", ct_base_dir);
 
 	snprintf (ct_pars->main_cfg_file,
 		  1024,
@@ -140,85 +94,6 @@ static int initialize_config (struct lxc_params *ct_pars, char *ct_base_dir,
 	return 0;
 }
 
-static pid_t spawn_proxy (char *path, char *proxy_conf, const char *bus_type)
-{
-	pid_t pid;
-
-	debug ("Spawning proxy.. Socket: %s config: %s\n",
-	       path, proxy_conf);
-
-	pid = fork();
-
-	if (pid == 0) { /* child */
-		int exit_status = 0;
-		exit_status = execlp ("dbus-proxy", "dbus-proxy", path,
-		                      bus_type, proxy_conf, NULL);
-		printf ("Exit status of dbus proxy: %d\n", exit_status);
-		exit (0);
-	}
-	else {
-		/* parent */
-		if (pid == -1) 
-			printf ("Failed to spawn D-Bus proxy!\n");
-		return pid;
-	}
-}
-
-static int run_container(int argc, char **argv, struct lxc_params *ct_pars)
-{
-	int   max_cmd_len       = sysconf(_SC_ARG_MAX);
-	char  lxc_command[max_cmd_len];
-	char  user_command[max_cmd_len];
-	char  env[4096];
-
-	/* Set up an environment */
-	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
-	strcat (env, ct_pars->deployed_session_proxy_socket);
-	strcat (env, " ");
-	strcat (env, "DBUS_SYSTEM_BUS_ADDRESS=unix:path=");
-	strcat (env, ct_pars->deployed_system_proxy_socket);
-	strcat (env, " ");
-	strcat (env, "PULSE_SERVER=");
-	strcat (env, ct_pars->deployed_pulse_socket);
-
-	/* Create container */
-	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
-		              " -f %s > /tmp/lxc_%s.log",
-		              ct_pars->ct_root_dir,
-		              ct_pars->container_name,
-		              ct_pars->lxc_cfg_file,
-		              ct_pars->container_name);
-	int ret = system (lxc_command);
-	if (ret)
-		printf("%s returned %d\n", lxc_command, ret);
-
-	/* Execute command in container */
-        int i;
-	for (i = 2; i < argc; i++) {
-		int clen = strlen (user_command);
-		int nlen = strlen ((const char *) argv[i]);
-		if (nlen + clen >= max_cmd_len - 256) {
-			printf ("Parameter list too long\n");
-			exit (1);
-		}
-		strcat (user_command, (const char *)argv[i]);
-		strcat (user_command, " ");
-	}
-
-	snprintf (lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-	          ct_pars->container_name, env, user_command);
-	ret = system (lxc_command);
-	if (ret)
-		printf("%s returned %d\n", lxc_command, ret);
-
-	/* Destroy container */
-	snprintf (lxc_command, max_cmd_len, "lxc-destroy -n %s",
-	          ct_pars->container_name);
-	ret = system (lxc_command);
-	if (ret)
-		printf("%s returned %d\n", lxc_command, ret);
-}
-
 int main (int argc, char **argv)
 {
 	struct lxc_params ct_pars;
@@ -237,6 +112,8 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
+	Container container(&ct_pars);
+
 	debug("Generate iptables rules\n");
 	gen_iptables_rules (ct_pars.ip_addr.c_str(),
 		config.getString("iptables-rules"));
@@ -252,38 +129,15 @@ int main (int argc, char **argv)
 	limit_iface (ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 
 	/* Spawn proxy */
-	debug("Spawn dbus proxy\n");
-	session_proxy_pid = spawn_proxy (ct_pars.session_proxy_socket,
-	                                 ct_pars.main_cfg_file,
-	                                 "session");
-	if (session_proxy_pid == -1) {
-		printf ("Failed to spawn session D-Bus proxy. Exiting\n");
-		return -1;
-	}
+	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
+	                   ct_pars.main_cfg_file,
+	                   "session");
+	DBusProxy systemProxy(ct_pars.system_proxy_socket,
+	                  ct_pars.main_cfg_file,
+	                  "system");
 
-	system_proxy_pid = spawn_proxy (ct_pars.system_proxy_socket,
-	                                ct_pars.main_cfg_file,
-	                                "system");
-	if (system_proxy_pid == -1) {
-		printf ("Failed to spawn system D-Bus proxy. Exiting\n");
-		return -1;
-	}
+	container.run(argc, argv, &ct_pars);
 
-	run_container(argc, argv, &ct_pars);
-
-	/* Terminate the proxy processes, remove sockets */
-	debug ("Killing proxies with pids %d, %d\n",
-	       session_proxy_pid, system_proxy_pid);
-
-	if (kill (session_proxy_pid, SIGTERM) == -1)
-		printf ("Failed to kill session proxy!\n");
-	if (kill (system_proxy_pid, SIGTERM) == -1)
-		printf ("Failed to kill system proxy!\n");
-
-	if (remove (ct_pars.session_proxy_socket) == -1)
-		printf ("Failed to remove session proxy socket!\n");
-	if (remove (ct_pars.system_proxy_socket) == -1)
-		printf ("Failed to remove system proxy socket!\n");
 	if (remove (ct_pars.lxc_cfg_file) == -1)
 		printf ("Failed to remove lxc config file!\n");
 

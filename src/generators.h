@@ -86,6 +86,6 @@ int gen_lxc_config (struct lxc_params *params);
  * \return name upon success
  * \return NULL upon failure
  */
-char *gen_ct_name ();
+std::string gen_ct_name();
 
 #endif /* GENERATORS_H */

@@ -126,26 +126,19 @@ int gen_lxc_config (struct lxc_params *params)
 	return 0;
 }
 
-char *gen_ct_name ()
+std::string gen_ct_name()
 {
-	struct  timeval time;
-	char   *name;
-	int     i                    = 0;
 	static const char alphanum[] = "abcdefghijklmnopqrstuvwxyz";
-
-	name = (char*)malloc (sizeof (char) * 10);
-	if (!name) {
-		printf ("Failed to malloc name in gen_ct_name\n");
-		return NULL;
-	}
+	struct timeval time;
+	char name[10];
 
 	gettimeofday (&time, NULL);
 	srand ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 
-	for (i = 0; i < 10; i++) {
+	for (int i = 0; i < 9; i++) {
 		name[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
 	}
 
 	name[9] = '\0';
-	return name;
+	return std::string(name);
 }
