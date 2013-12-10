@@ -18,3 +18,7 @@ install: all
 doc:
 	doxygen Doxyfile
 	cd doc/latex/ ; make
+
+run_tests:
+	tests/config/test_config
+	tests/generators/test_generators
