@@ -26,11 +26,13 @@
 #ifndef PELAGICONTAIN_COMMON_H
 #define PELAGICONTAIN_COMMON_H
 
+#include <string>
+
 struct lxc_params {
 
 	/* networking */
 	/*! IPv4 address for this container */
-	char *ip_addr;
+	std::string ip_addr;
 
 	/*! IPv4 address for the default GW of this container */
 	char *gw_addr; 

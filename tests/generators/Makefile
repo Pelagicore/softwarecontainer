@@ -1,4 +1,4 @@
-SOURCES = ../../src/generators.c test_generators.cpp
+SOURCES = ../../src/generators.cpp test_generators.cpp
 CXXFLAGS += `pkg-config --cflags --libs glib-2.0`
 CXXFLAGS += -I ../../src
 

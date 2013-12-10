@@ -6,24 +6,19 @@ static void test_gen_ip()
 {
 	const char ip_addr_net[] = "192.168.0.";
 	system ("rm -f /tmp/pelc_ifc");
-	char *ip = gen_ip_addr(ip_addr_net);
-	g_assert (ip);
-
-	g_assert (!g_strcmp0 (ip, "192.168.0.2"));
-	free(ip);
+	std::string ip = gen_ip_addr(ip_addr_net);
+	g_assert (!ip.empty());
+	g_assert (!g_strcmp0 (ip.c_str(), "192.168.0.2"));
 
 	ip = gen_ip_addr(ip_addr_net);
-	g_assert (!g_strcmp0 (ip, "192.168.0.3"));
-	free(ip);
+	g_assert (!g_strcmp0 (ip.c_str(), "192.168.0.3"));
 
 	system("echo 253 > /tmp/pelc_ifc");
 	ip = gen_ip_addr(ip_addr_net);
-	g_assert (!g_strcmp0 (ip, "192.168.0.254"));
-	free(ip);
+	g_assert (!g_strcmp0 (ip.c_str(), "192.168.0.254"));
 
 	ip = gen_ip_addr(ip_addr_net);
-	g_assert (!g_strcmp0 (ip, "192.168.0.2"));
-	free(ip);
+	g_assert (!g_strcmp0 (ip.c_str(), "192.168.0.2"));
 }
 
 int main (int argc, char **argv)

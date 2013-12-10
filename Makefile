@@ -1,10 +1,14 @@
 all:
-	cd src ; make
+	make -C src
+	make -C tests/config
+	make -C tests/generators
 
 .PHONY: doc
 
 clean:
-	cd src; make clean
+	make -C src clean
+	make -C tests/config clean
+	make -C tests/generators clean
 
 install: all
 	install -D -m 755 src/pelagicontain $(DESTDIR)$(PREFIX)/bin/pelagicontain

@@ -29,17 +29,8 @@
 #ifndef GENERATORS_H
 #define GENERATORS_H
 
-#include "stdio.h"
-#include "stdlib.h"
+#include <string>
 #include "pelagicontain_common.h"
-#include "debug.h"
-#include "string.h"
-#include "sys/types.h"
-#include "sys/stat.h"
-#include "sys/file.h"
-#include "fcntl.h"
-#include "ifaddrs.h"
-#include "errno.h"
 
 /*! \brief Generate a network interface name
  *
@@ -68,10 +59,10 @@ char *gen_gw_ip_addr (char *ip_addr_net);
  * Calling this function will generate a new IP address. A counter is kept in
  * /tmp to minimize the risk of collissons
  *
- * \param *ip_addr_net A 24 bit network portion of an IP address
+ * \param ip_addr_net A 24 bit network portion of an IP address
  * \return A string representing an IP address
  */
-char *gen_ip_addr (const char *ip_addr_net);
+std::string gen_ip_addr (const char *ip_addr_net);
 
 /*! \brief Generate and write an LXC config
  *

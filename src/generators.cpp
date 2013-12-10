@@ -18,9 +18,16 @@
  */
 
 #include <fstream>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/file.h>
+#include <sys/stat.h>
 #include <sys/time.h>
 #include "generators.h"
+#include "trafficcontrol.h"
+#include "debug.h"
 
 using namespace std;
 
@@ -62,19 +69,20 @@ char *gen_net_iface_name (const char *ip_addr_net)
 	return iface;
 }
 
-/* Read the counter value from iface_counter_file and increase it to
+/*
+ * Read the counter value from iface_counter_file and increase it to
  * find the next ip. Naively assumes no ip collisions occur at the moment.
  */
-char *gen_ip_addr (const char *ip_addr_net)
+std::string gen_ip_addr (const char *ip_addr_net)
 {
-	int   fd = open (iface_counter_file, O_CREAT | O_RDWR);
-	int   counter = 0;
-	char  buf[4];
-	char *ip;
+	int  fd = open (iface_counter_file, O_CREAT | O_RDWR);
+	int  counter = 0;
+	char buf[4];
+	char ip[20];
 
 	if (fd == -1) {
 		printf ("Unable to lock interface counter\n");
-		return NULL;
+		return std::string();
 	}
 	flock (fd, LOCK_EX);
 
@@ -97,10 +105,9 @@ char *gen_ip_addr (const char *ip_addr_net)
 	flock(fd, LOCK_UN);
 	close (fd);
 
-	ip = (char*)malloc (sizeof (char) * 20);
 	snprintf(ip, 20, "%s%d", ip_addr_net, counter);
 
-	return ip;
+	return std::string(ip);
 }
 
 int gen_lxc_config (struct lxc_params *params)
