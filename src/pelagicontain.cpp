@@ -110,7 +110,7 @@ int main (int argc, char **argv)
 	Container container(&ct_pars);
 
 	debug("Generate iptables rules\n");
-	gen_iptables_rules (ct_pars.ip_addr.c_str(),
+	IpTables rules(ct_pars.ip_addr.c_str(),
 		config.getString("iptables-rules"));
 	debug("Generate LXC config\n");
 	gen_lxc_config (&ct_pars);
@@ -135,8 +135,4 @@ int main (int argc, char **argv)
 
 	if (remove (ct_pars.lxc_cfg_file) == -1)
 		printf ("Failed to remove lxc config file!\n");
-
-	/* Remove IPTables rules */
-	if (remove_iptables_rules (ct_pars.ip_addr.c_str()))
-		printf ("Failed to remove IPTables rules!\n");
 }

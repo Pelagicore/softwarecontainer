@@ -19,6 +19,7 @@
 
 #ifndef IPTABLES_H
 #define IPTABLES_H
+
 /*! \brief  IPTables capabilities for Pelagicontain
  *  \author Jonatan Pålsson (joantan.palsson@pelagicore.com)
  *  \file   iptables.h
@@ -32,20 +33,19 @@
 #include "pelagicontain_common.h"
 #include "config.h"
 
-
-/*! \brief Generate and execute IPTables rules
+class IpTables
+{
+public:
+/*! Generate and execute IPTables rules
  *
  * Parse the IPTables rules from configuration and execute these rules
  *
  * \param ip_addr  The IP address of the system
  * \param rules    String containing the IPTable rules
- * \return 0       Upon success
- * \return -EINVAL Upon missing 'iptables-rules' key
- * \return -EIO    Upon Failure to read or write files
  */
-int gen_iptables_rules (const char *ip_addr, const char *rules);
+	IpTables(const char *ip_addr, const char *rules);
 
-/*! \brief Remove IPTables rules set up for a specific network iface
+/*! Remove IPTables rules set up for a specific network iface
  *
  * This implementation is shady. What we do here is to look at the output of
  * iptables -L, look for our own IP, and then remove all rules matching our IP
@@ -58,6 +58,11 @@ int gen_iptables_rules (const char *ip_addr, const char *rules);
  * have atomic transactions for lookup and remove, and where we're also certain
  * we are actually the originators of the rule in question.
  */
-int remove_iptables_rules (const char *ip_addr);
+	~IpTables();
+
+private:
+	const char *m_ip;
+};
+
 
 #endif /* IPTABLES_H */

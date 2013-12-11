@@ -5,7 +5,7 @@ SOURCES = \
 	container.cpp \
 	dbusproxy.cpp \
 	generators.cpp \
-	iptables.c       \
+	iptables.cpp \
 	pelagicontain.cpp \
 	pulse.cpp \
 	trafficcontrol.c

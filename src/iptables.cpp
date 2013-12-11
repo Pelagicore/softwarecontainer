@@ -19,49 +19,44 @@
 
 #include "iptables.h"
 
-int gen_iptables_rules (const char *ip_addr, const char *iptables_rules)
+IpTables::IpTables(const char *ip_addr, const char *iptables_rules) :
+	m_ip(ip_addr)
 {
 	char iptables_cmd[1024];
 	char iptables_rules_file[] = "/tmp/iptables_rules_XXXXXX";
-	int   iptf                 = 0;
-	int   retval               = 0;
+	int  iptf = 0;
 	      
 	iptf = mkstemp (iptables_rules_file);
 	if (iptf == -1) {
 		printf ("Unable to open %s\n", iptables_rules_file);
-		return -EIO;
+		return;
 	}
 
 	if (write (iptf, iptables_rules,
-		   sizeof (char) * strlen (iptables_rules)) == -1) {
+	  	   sizeof (char) * strlen (iptables_rules)) == -1) {
 		printf ("Failed to write rules file\n");
-		retval = -EIO;
 		goto unlink_file;
 	}
 
 	if (close (iptf) == 1) {
 		printf ("Failed to close rules file\n");
-		retval = -EIO;
 		goto unlink_file;
 	}
 
 	/* Execute shell script with env variable set to container IP */
 	snprintf (iptables_cmd, 1024, "env SRC_IP=%s sh %s",
-	          ip_addr, iptables_rules_file);
+	          m_ip, iptables_rules_file);
 
-	printf ("Generating rules for IP: %s\n", ip_addr);
+	printf ("Generating rules for IP: %s\n", m_ip);
 	if (system (iptables_cmd) == -1) {
 		printf ("Failed to execute iptables command\n");
-		retval = -EINVAL;
 	}
 
 unlink_file:
 	unlink (iptables_rules_file);
-
-	return retval;
 }
 
-int remove_iptables_rules (const char *ip_addr)
+IpTables::~IpTables()
 {
 	const char *iptables_command = "iptables -n -L FORWARD";
 	FILE *fp               = NULL;
@@ -70,18 +65,18 @@ int remove_iptables_rules (const char *ip_addr)
 
 	fp = popen (iptables_command, "r");
 	if (fp == NULL) {
-		printf ("Error executing: %s\n", iptables_command);
-		return -EINVAL;
+		printf("Error executing: %s\n", iptables_command);
+		return;
 	}
 
 	while (fgets (iptables_line, sizeof (iptables_line) - 1, fp) != NULL) {
-		if (strstr (iptables_line, ip_addr) != NULL) {
+		if (strstr (iptables_line, m_ip) != NULL) {
 			char ipt_cmd[100];
 			debug ("%d > ", line_no);
 
 			/* Actual deletion */
 			snprintf(ipt_cmd, 100, 
-			         "iptables -D FORWARD %d", line_no);
+				 "iptables -D FORWARD %d", line_no);
 			if (system (ipt_cmd) == -1)
 				printf ("Failed to execute '%s'\n", ipt_cmd);
 				/* We'll continue trying with the rest */
@@ -94,8 +89,5 @@ int remove_iptables_rules (const char *ip_addr)
 
 		line_no++;
 	}
-
 	pclose (fp);
-
-	return 0;
 }
