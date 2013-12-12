@@ -126,16 +126,10 @@ Container::Container(struct lxc_params *ct_pars)
 		"%s/sess_%s.sock", ct_pars->ct_root_dir, name());
 	snprintf(ct_pars->system_proxy_socket, 1024,
 		"%s/sys_%s.sock", ct_pars->ct_root_dir, name());
-	snprintf(ct_pars->deployed_session_proxy_socket, 1024,
-		"/deployed_app/sess_%s.sock", name());
-	snprintf(ct_pars->deployed_system_proxy_socket, 1024,
-		"/deployed_app/sys_%s.sock", name());
 
 	/* Initialize pulse socket paths */
 	snprintf(ct_pars->pulse_socket, 1024,
 		"%s/pulse-%s.sock", ct_pars->ct_root_dir, name());
-	snprintf(ct_pars->deployed_pulse_socket, 1024,
-		"/deployed_app/pulse-%s.sock", name());
 
 	writeConfiguration(ct_pars);
 }

@@ -51,10 +51,6 @@ struct lxc_params {
 	/*! Path to the Pulse Audio socket as seen from the host system */
 	char pulse_socket[1024]; 
 
-	/*! Path to the  Pulse Audio socket as seen from within the container
-	 * */
-	char deployed_pulse_socket[1024];
-
 
 	/* D-Bus */
 	/*! Path to the D-Bus session proxy socket as seen from the host */
@@ -62,14 +58,6 @@ struct lxc_params {
 
 	/*! Path to the D-Bus system proxy socket as seen from the host */
 	char system_proxy_socket[1024];
-
-	/*! Path to the D-Bus session proxy socket as seen from within the
-	 * container */
-	char deployed_session_proxy_socket[1024];
-
-	/*! Path to the D-Bus system proxy socket as seen from within the
-	 * container */
-	char deployed_system_proxy_socket[1024];
 
 
 	/* LXC general */
