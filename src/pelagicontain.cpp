@@ -112,8 +112,6 @@ int main (int argc, char **argv)
 	debug("Generate iptables rules\n");
 	IpTables rules(ct_pars.ip_addr.c_str(),
 		config.getString("iptables-rules"));
-	debug("Generate LXC config\n");
-	gen_lxc_config (&ct_pars);
 
 	/* Load pulseaudio module */
 	debug("Load pulseaudio module\n");
@@ -123,7 +121,7 @@ int main (int argc, char **argv)
 	debug("Limit network interface\n");
 	limit_iface (ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 
-	/* Spawn proxy */
+	/* Spawn proxies */
 	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
 	                   ct_pars.main_cfg_file,
 	                   DBusProxy::SessionProxy);
@@ -132,7 +130,4 @@ int main (int argc, char **argv)
 	                  DBusProxy::SystemProxy);
 
 	container.run(argc, argv, &ct_pars);
-
-	if (remove (ct_pars.lxc_cfg_file) == -1)
-		printf ("Failed to remove lxc config file!\n");
 }

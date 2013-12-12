@@ -17,9 +17,12 @@
  * Boston, MA  02110-1301, USA.
  */
 
+#include <fstream>
 #include <unistd.h>
 #include "container.h"
 #include "generators.h"
+
+using namespace std;
 
 const char *Container::name()
 {
@@ -80,6 +83,34 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
                 printf("%s returned %d\n", lxc_command, ret);
 }
 
+const char *Container::configFile()
+{
+	std::string path("/tmp/lxc_config_");
+	path += m_name;
+	return path.c_str();
+}
+
+int Container::writeConfiguration(struct lxc_params *params)
+{
+        debug ("Generating config to %s for IP %s\n",
+		configFile(), params->ip_addr.c_str());
+
+	/* Copy system config to temporary location */
+	ifstream source(params->lxc_system_cfg, ios::binary);
+	ofstream dest(configFile(), ios::binary);
+	dest << source.rdbuf();
+	source.close();
+
+	/* Add ipv4 parameters to config */
+	dest << "lxc.network.veth.pair = " << params->net_iface_name << endl;
+	dest << "lxc.network.ipv4 = " << params->ip_addr << "/24" << endl;
+	dest << "lxc.network.ipv4.gateway = " << params->gw_addr << endl;
+
+	dest.close();
+
+	return 0;
+}
+
 Container::Container(struct lxc_params *ct_pars)
 {
 	m_name = ct_pars->container_name;
@@ -100,11 +131,12 @@ Container::Container(struct lxc_params *ct_pars)
 	snprintf(ct_pars->deployed_pulse_socket, 1024,
 		"/deployed_app/pulse-%s.sock", name());
 
-	/* Initialize LXC configuration file name */
-	snprintf(ct_pars->lxc_cfg_file, 1024,
-		"/tmp/lxc_config_%s", name());
+	writeConfiguration(ct_pars);
 }
 
 Container::~Container()
 {
+	if (remove(configFile()) == -1) {
+		printf("Failed to remove lxc config file!\n");
+	}
 }

@@ -17,7 +17,6 @@
  * Boston, MA  02110-1301, USA.
  */
 
-#include <fstream>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -102,28 +101,6 @@ std::string gen_ip_addr (const char *ip_addr_net)
 	snprintf(ip, 20, "%s%d", ip_addr_net, counter);
 
 	return std::string(ip);
-}
-
-int gen_lxc_config (struct lxc_params *params)
-{
-	debug ("Generating config to %s for IP %s\n",
-	       params->lxc_cfg_file,
-	       params->ip_addr);
-
-	/* Copy system config to temporary location */
-	ifstream source(params->lxc_system_cfg, ios::binary);
-	ofstream dest(params->lxc_cfg_file, ios::binary);
-	dest << source.rdbuf();
-	source.close();
-
-	/* Add ipv4 parameters to config */
-	dest << "lxc.network.veth.pair = " << params->net_iface_name << endl;
-	dest << "lxc.network.ipv4 = " << params->ip_addr << "/24" << endl;
-	dest << "lxc.network.ipv4.gateway = " << params->gw_addr << endl;
-
-	dest.close();
-
-	return 0;
 }
 
 std::string gen_ct_name()

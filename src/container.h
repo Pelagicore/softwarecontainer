@@ -41,6 +41,9 @@ public:
 	int run(int argc, char **argv, struct lxc_params *ct_pars);
 
 private:
+	const char *configFile();
+	int writeConfiguration(struct lxc_params *params);
+
 	std::string m_name;
 };
 
