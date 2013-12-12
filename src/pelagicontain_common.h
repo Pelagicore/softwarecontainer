@@ -73,14 +73,9 @@ struct lxc_params {
 	/*! lxc_params#ct_dir + "/rootfs/" */
 	char ct_root_dir[1024];
 
-	/*! Path to temporary LXC config used to launch this instance of this
-	 * container, as seen from host */
-	char lxc_cfg_file[1024];
-
 	/* general */
 	/*! Path to Pelagicontain config file, as seen from host */
 	char main_cfg_file[1024];
-
 };
 
 #endif /* PELAGICONTAIN_COMMON_H */
