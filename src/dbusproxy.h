@@ -27,24 +27,31 @@
 #ifndef DBUSPROXY_H
 #define DBUSPROXY_H
 
+#include <string>
 #include <unistd.h>
 
 class DBusProxy
 {
 public:
+	enum ProxyType {SessionProxy, SystemProxy};
+
 /*! Spawn the proxy and use the supplied path for the socket
  *
  * \param  socket     path to the socket file to use. File is created.
  * \param  config     path to configuration file for proxy
- * \param  type       "session" or "system"
+ * \param  type       SessionProxy or SystemProxy
  */
-	DBusProxy(const char *socket, const char *config, const char *type);
+	DBusProxy(const char *socket, const char *config, ProxyType type);
 	~DBusProxy();
 
+	std::string environment();
+
 private:
+	const char *typeString();
+
 	pid_t m_pid;
 	const char *m_socket;
-	const char *m_type;
+	ProxyType m_type;
 };
 
 #endif /* DBUSPROXY_H */

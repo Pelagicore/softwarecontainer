@@ -126,10 +126,10 @@ int main (int argc, char **argv)
 	/* Spawn proxy */
 	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
 	                   ct_pars.main_cfg_file,
-	                   "session");
+	                   DBusProxy::SessionProxy);
 	DBusProxy systemProxy(ct_pars.system_proxy_socket,
 	                  ct_pars.main_cfg_file,
-	                  "system");
+	                  DBusProxy::SystemProxy);
 
 	container.run(argc, argv, &ct_pars);
 
