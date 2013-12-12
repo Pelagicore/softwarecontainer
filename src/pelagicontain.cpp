@@ -116,6 +116,7 @@ int main (int argc, char **argv)
 	/* Load pulseaudio module */
 	debug("Load pulseaudio module\n");
 	Pulse pulse(ct_pars.pulse_socket);
+	container.addGateway(&pulse);
 
 	/* Limit network interface */
 	debug("Limit network interface\n");
@@ -128,6 +129,8 @@ int main (int argc, char **argv)
 	DBusProxy systemProxy(ct_pars.system_proxy_socket,
 	                  ct_pars.main_cfg_file,
 	                  DBusProxy::SystemProxy);
+	container.addGateway(&sessionProxy);
+	container.addGateway(&systemProxy);
 
 	container.run(argc, argv, &ct_pars);
 }

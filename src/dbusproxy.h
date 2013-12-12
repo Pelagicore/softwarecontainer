@@ -29,8 +29,9 @@
 
 #include <string>
 #include <unistd.h>
+#include "gateway.h"
 
-class DBusProxy
+class DBusProxy : public Gateway
 {
 public:
 	enum ProxyType {SessionProxy, SystemProxy};
@@ -48,6 +49,7 @@ public:
 
 private:
 	const char *typeString();
+	const char *socketName();
 
 	pid_t m_pid;
 	const char *m_socket;

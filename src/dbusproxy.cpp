@@ -32,23 +32,42 @@ const char *DBusProxy::typeString()
 	}
 }
 
+const char *DBusProxy::socketName()
+{
+	// Return the filename after stripping directory info
+	std::string socket(m_socket);
+	return socket.substr(socket.rfind('/') + 1).c_str();
+}
+
 std::string DBusProxy::environment()
 {
-	printf("Requesting environment for %s with socket %s\n",
+	debug("Requesting environment for %s with socket %s\n",
 		typeString(), m_socket);
-	return std::string("DBUS_SESSION_BUS_ADDRESS=unix:path=");
+
+	std::string env;
+	env += "DBUS_";
+	if (m_type == SessionProxy) {
+		env += "SESSION";
+	} else {
+		env += "SYSTEM";
+	}
+	env += "_BUS_ADDRESS=unix:path=";
+	env += "/deployed_app/";
+	env += socketName();
+
+	return env;
 }
 
 DBusProxy::DBusProxy(const char *socket, const char *config, ProxyType type):
 	m_socket(socket), m_type(type)
 {
 	debug("Spawning %s proxy, socket: %s, config: %s\n",
-		type, socket, config);
+		typeString(), m_socket, config);
 
 	m_pid = fork();
 	if (m_pid == 0) { /* child */
 		/* This call never returns... */
-		execlp ("dbus-proxy", "dbus-proxy", socket, typeString(),
+		execlp ("dbus-proxy", "dbus-proxy", m_socket, typeString(),
 			config, NULL);
 	} else {
 		if (m_pid == -1)

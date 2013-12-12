@@ -28,8 +28,10 @@
 #define CONTAINER_H
 
 #include <string>
+#include <vector>
 #include "pelagicontain_common.h"
 #include "config.h"
+#include "gateway.h"
 
 class Container
 {
@@ -38,6 +40,7 @@ public:
 	~Container();
 
 	const char *name();
+	void addGateway(Gateway *gw);
 	int run(int argc, char **argv, struct lxc_params *ct_pars);
 
 private:
@@ -45,6 +48,7 @@ private:
 	int writeConfiguration(struct lxc_params *params);
 
 	std::string m_name;
+	std::vector<Gateway *> m_gateways;
 };
 
 #endif /* CONTAINER_H */

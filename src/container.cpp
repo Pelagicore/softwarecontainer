@@ -29,33 +29,39 @@ const char *Container::name()
 	return m_name.c_str();
 }
 
+void Container::addGateway(Gateway *gw)
+{
+	m_gateways.push_back(gw);
+}
+
 int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 {
 	int  max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
 	char user_command[max_cmd_len];
-	char env[4096];
+	std::string environment;
 
 	/* Set up an environment */
-	strcat (env, "DBUS_SESSION_BUS_ADDRESS=unix:path=");
-	strcat (env, ct_pars->deployed_session_proxy_socket);
-	strcat (env, " ");
-	strcat (env, "DBUS_SYSTEM_BUS_ADDRESS=unix:path=");
-	strcat (env, ct_pars->deployed_system_proxy_socket);
-	strcat (env, " ");
-	strcat (env, "PULSE_SERVER=");
-	strcat (env, ct_pars->deployed_pulse_socket);
+	for (std::vector<Gateway *>::iterator it = m_gateways.begin();
+		it != m_gateways.end(); ++it) {
+		std::string env = (*it)->environment();
+		if (!env.empty()) {
+			environment += env + " ";
+		}
+	}
+	debug("Using environment: %s\n", environment.c_str());
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
                               " -f %s > /tmp/lxc_%s.log",
-                              ct_pars->ct_root_dir,
-                              name(),
-                              ct_pars->lxc_cfg_file,
-                              name());
+                              ct_pars->ct_root_dir, name(),
+			      configFile(), name());
 	int ret = system (lxc_command);
-	if (ret)
+	if (ret) {
 		printf("%s returned %d\n", lxc_command, ret);
+	} else {
+		debug("%s returned %d\n", lxc_command, ret);
+	}
 
 	/* Execute command in container */
 	int i;
@@ -71,7 +77,7 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	}
 
 	snprintf (lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-		  name(), env, user_command);
+		  name(), environment.c_str(), user_command);
 	ret = system (lxc_command);
 	if (ret)
 		printf("%s returned %d\n", lxc_command, ret);
