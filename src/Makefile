@@ -20,6 +20,7 @@ HEADERS = \
 	pulse.h \
 	trafficcontrol.h
 
+CXXFLAGS += -Wall
 CXXFLAGS += `pkg-config --cflags --libs libpulse jansson`
 
 all: pelagicontain

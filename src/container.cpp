@@ -36,9 +36,10 @@ void Container::addGateway(Gateway *gw)
 
 int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 {
-	int  max_cmd_len = sysconf(_SC_ARG_MAX);
-	char lxc_command[max_cmd_len];
-	char user_command[max_cmd_len];
+	int         max_cmd_len = sysconf(_SC_ARG_MAX);
+	char        lxc_command[max_cmd_len];
+	char        user_command[max_cmd_len];
+	int         retval = 0;
 	std::string environment;
 
 	/* Set up an environment */
@@ -64,8 +65,7 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	}
 
 	/* Execute command in container */
-	int i;
-	for (i = 2; i < argc; i++) {
+	for (int i = 2; i < argc; i++) {
 		int clen = strlen (user_command);
 		int nlen = strlen ((const char *) argv[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
@@ -87,6 +87,8 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	ret = system (lxc_command);
         if (ret)
                 printf("%s returned %d\n", lxc_command, ret);
+
+	return retval;
 }
 
 const char *Container::configFile()

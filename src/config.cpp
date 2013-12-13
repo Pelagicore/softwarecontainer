@@ -66,11 +66,11 @@ char *Config::getString(const char *property)
 	} else if (json_is_array (element)) {
 		debug ("%s is called on an array\n", __FUNCTION__);
 		size_t  len    = json_array_size (element);
-		int  buflen = 100;
+		int     buflen = 100;
 		int     j      = 0;
 		char   *buf    = (char*)calloc (sizeof (char), buflen);
 
-		for (int i = 0; i < len; i++) {
+		for (size_t i = 0; i < len; i++) {
 			json_t *line    = json_array_get (element, i);
 			const char *strline = json_string_value (line);
 			int     linelen = 0;
