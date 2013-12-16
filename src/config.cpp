@@ -33,7 +33,7 @@ Config::~Config()
 int Config::read(const char *path)
 {
 	if (root) {
-		printf("Already loaded configuration!");
+		log_error("Already loaded configuration!");
 		return -EINVAL;
 	}
 
@@ -42,11 +42,11 @@ int Config::read(const char *path)
 	root = json_load_file(path, 0, &error);
 
 	if (!root) {
-		printf("error: on line %d: %s\n", error.line, error.text);
+		log_error("error: on line %d: %s", error.line, error.text);
 		return -EINVAL;
 	}
 
-	debug("Using config file %s\n", path);
+	debug("Using config file %s", path);
 	return 0;
 }
 
@@ -61,10 +61,10 @@ char *Config::getString(const char *property)
 
 	element = json_object_get(root, property);
 	if (json_is_string (element)) {
-		debug ("%s is called on a string\n", __FUNCTION__);
+		debug ("%s is called on a string");
 		return strdup (json_string_value (element));
 	} else if (json_is_array (element)) {
-		debug ("%s is called on an array\n", __FUNCTION__);
+		debug ("%s is called on an array");
 		size_t  len    = json_array_size (element);
 		int     buflen = 100;
 		int     j      = 0;
@@ -77,7 +77,7 @@ char *Config::getString(const char *property)
 
 			/* Entire array must be strings */
 			if (!json_is_string (line)) {
-				debug ("line %d is not a string!\n", i);
+				debug ("line %d is not a string!", i);
 				free (buf);
 				return NULL;
 			}
@@ -85,7 +85,7 @@ char *Config::getString(const char *property)
 			/* Ensure new string fits in buffer */
 			linelen = strlen (strline);
 			if (j + linelen > buflen) {
-				debug ("buf is %d, and line is %d\n", buflen, linelen);
+				debug ("buf is %d, and line is %d", buflen, linelen);
 				buflen = (j + strlen (strline)) * 2;
 				char *newbuf = (char*)calloc (sizeof (char), buflen);
 
@@ -105,6 +105,6 @@ char *Config::getString(const char *property)
 		return buf;
 	}
 
-	debug ("%s is called on an unknown type\n", __FUNCTION__);
+	debug ("Called on an unknown type");
 	return NULL;
 }

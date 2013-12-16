@@ -40,7 +40,7 @@ void Pulse::loadCallback(pa_context *c, uint32_t index, void *userdata)
 {
 	Pulse *p = static_cast<Pulse*>(userdata);
 	p->m_index = (int)index;
-	printf("pulse: Loaded module %d\n", p->m_index);
+	log_error("pulse: Loaded module %d", p->m_index);
 
 	pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
@@ -49,9 +49,9 @@ void Pulse::unloadCallback(pa_context *c, int success, void *userdata)
 {
 	Pulse *p = static_cast<Pulse*>(userdata);
 	if (success)
-		debug ("pulse: Unloaded module %d\n", p->m_index);
+		debug ("pulse: Unloaded module %d", p->m_index);
 	else
-		debug ("pulse: Failed to unload module %d\n", p->m_index);
+		debug ("pulse: Failed to unload module %d", p->m_index);
 
 	pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
@@ -63,8 +63,8 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 
 	switch (pa_context_get_state(context)) {
 	case PA_CONTEXT_READY:
-		debug ("Connection is up, loading module\n");
-		snprintf (socket, 1031, "socket=%s", p->m_socket);
+		debug ("Connection is up, loading module");
+		snprintf (socket, sizeof(socket), "socket=%s", p->m_socket);
 		pa_context_load_module (
 			context,
 			"module-native-protocol-unix",
@@ -73,22 +73,22 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 			userdata);
 		break;
 	case PA_CONTEXT_CONNECTING:
-		debug ("pulse: Connecting\n");
+		debug ("pulse: Connecting");
 		break;
 	case PA_CONTEXT_AUTHORIZING:
-		debug ("pulse: Authorizing\n");
+		debug ("pulse: Authorizing");
 		break;
 	case PA_CONTEXT_SETTING_NAME:
-		debug ("pulse: Setting name\n");
+		debug ("pulse: Setting name");
 		break;
 	case PA_CONTEXT_UNCONNECTED:
-		debug ("pulse: Unconnected\n");
+		debug ("pulse: Unconnected");
 		break;
 	case PA_CONTEXT_FAILED:
-		debug ("pulse: Failed\n");
+		debug ("pulse: Failed");
 		break;
 	case PA_CONTEXT_TERMINATED:
-		debug ("pulse: Terminated\n");
+		debug ("pulse: Terminated");
 		break;
 	}
 }
@@ -114,11 +114,11 @@ Pulse::Pulse(const char *socket):
 			NULL );            /* use default spawn api */
 
 		if (err != 0) {
-			fprintf (stderr, "Pulse error: %s\n", pa_strerror(err));
+			log_error ("Pulse error: %s", pa_strerror(err));
 		}
 		pa_threaded_mainloop_unlock (m_mainloop);
 	} else {
-		fprintf (stderr, "Failed to create pulse mainloop->\n");
+		log_error ("Failed to create pulse mainloop->");
 	}
 }
 
@@ -147,5 +147,5 @@ Pulse::~Pulse()
 		pa_threaded_mainloop_stop(m_mainloop);
 		pa_threaded_mainloop_free(m_mainloop);
 	}
-	debug ("pulse: Teardown complete\n");
+	debug ("pulse: Teardown complete");
 }

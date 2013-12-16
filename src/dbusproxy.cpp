@@ -41,7 +41,7 @@ const char *DBusProxy::socketName()
 
 std::string DBusProxy::environment()
 {
-	debug("Requesting environment for %s with socket %s\n",
+	debug("Requesting environment for %s with socket %s",
 		typeString(), m_socket);
 
 	std::string env;
@@ -61,7 +61,7 @@ std::string DBusProxy::environment()
 DBusProxy::DBusProxy(const char *socket, const char *config, ProxyType type):
 	m_socket(socket), m_type(type)
 {
-	debug("Spawning %s proxy, socket: %s, config: %s\n",
+	debug("Spawning %s proxy, socket: %s, config: %s",
 		typeString(), m_socket, config);
 
 	m_pid = fork();
@@ -71,21 +71,21 @@ DBusProxy::DBusProxy(const char *socket, const char *config, ProxyType type):
 			config, NULL);
 	} else {
 		if (m_pid == -1)
-			printf("Failed to spawn DBus proxy!\n");
+			log_error("Failed to spawn DBus proxy!");
 	}
 }
 
 DBusProxy::~DBusProxy()
 {
 	if (kill (m_pid, SIGTERM) == -1) {
-		printf("Failed to kill %s proxy!\n", typeString());
+		log_error("Failed to kill %s proxy!", typeString());
 	} else {
-		debug("Killed %s proxy!\n", typeString());
+		debug("Killed %s proxy!", typeString());
 	}
 
 	if (remove (m_socket) == -1) {
-		printf("Failed to remove %s proxy socket!\n", typeString());
+		log_error("Failed to remove %s proxy socket!", typeString());
 	} else {
-		debug("Removed %s proxy socket!\n", typeString());
+		debug("Removed %s proxy socket!", typeString());
 	}
 }

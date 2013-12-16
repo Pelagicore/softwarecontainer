@@ -84,7 +84,7 @@ int limit_iface (const char *net_iface_name, const char *tc_rate)
 	if (pid == 0) { /* child */
 		char cmd[256];
 
-		snprintf (cmd, 256, "tc qdisc "
+		snprintf (cmd, sizeof(cmd), "tc qdisc "
 					"add "
 					"dev "
 					"%s "
@@ -98,7 +98,7 @@ int limit_iface (const char *net_iface_name, const char *tc_rate)
 
 		/* poll for device */
 		if (!wait_for_device (net_iface_name)) {
-			printf ("Device never showed up. Not setting TC.\n");
+			log_error ("Device never showed up. Not setting TC.\n");
 			/* We're forked, so just exit */
 			exit (0);
 		}
@@ -112,7 +112,7 @@ int limit_iface (const char *net_iface_name, const char *tc_rate)
 
 	} else { /* parent */
 		if (pid == -1) {
-			printf ("Unable to fork interface observer!\n");
+			log_error ("Unable to fork interface observer!\n");
 			return -EINVAL;
 		}
 		return 0;
@@ -129,7 +129,7 @@ int clear_iface_limits (char *iface)
 	int retval = 0;
 	char cmd[256];
 
-	snprintf (cmd, 256, "tc qdisc "
+	snprintf (cmd, sizeof(cmd), "tc qdisc "
 				"del "
 				"dev "
 				"%s "
@@ -137,7 +137,7 @@ int clear_iface_limits (char *iface)
 				iface);
 
 	if (system (cmd) == -1) {
-		printf ("Unable to execute limit clear command\n");
+		log_error ("Unable to execute limit clear command\n");
 		return -EINVAL;
 	}
 

@@ -30,6 +30,11 @@
 #include "pulse.h"
 #include "trafficcontrol.h"
 
+#include "CommandLineParser.h"
+
+LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
+LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
+
 /*! Initialize config struct
  *
  * Initialize the config struct with various paths and parameters. Some of
@@ -51,11 +56,11 @@ static int initialize_config (struct lxc_params *ct_pars,
 	/* Initialize */
 	ct_pars->container_name = gen_ct_name();
 
-	snprintf (ct_pars->ct_conf_dir, 1024, "%s/config/", ct_base_dir);
-	snprintf (ct_pars->ct_root_dir, 1024, "%s/rootfs/", ct_base_dir);
+	snprintf (ct_pars->ct_conf_dir, sizeof(ct_pars->ct_conf_dir), "%s/config/", ct_base_dir);
+	snprintf (ct_pars->ct_root_dir, sizeof(ct_pars->ct_root_dir), "%s/rootfs/", ct_base_dir);
 
 	snprintf (ct_pars->main_cfg_file,
-		  1024,
+		  sizeof(ct_pars->main_cfg_file),
 		  "%s/pelagicontain.conf",
 	          ct_pars->ct_conf_dir);
 
@@ -63,25 +68,25 @@ static int initialize_config (struct lxc_params *ct_pars,
 
 	ct_pars->lxc_system_cfg = config->getString("lxc-config-template");
 	if (!ct_pars->lxc_system_cfg) {
-		printf ("Unable to read lxc-config-template from config!\n");
+		log_error ("Unable to read lxc-config-template from config!");
 		return -EINVAL;
 	}
 
 	ct_pars->tc_rate = config->getString("bandwidth-limit");
 	if (!ct_pars->tc_rate) {
-		printf ("Unable to read bandwidth-limit from config!\n");
+		log_error ("Unable to read bandwidth-limit from config!");
 		return -EINVAL;
 	}
 
 	ip_addr_net = config->getString("ip-addr-net");
 	if (!ip_addr_net) {
-		printf ("Unable to read ip-addr-net from config!\n");
+		log_error ("Unable to read ip-addr-net from config!");
 		return -EINVAL;
 	}
 
 	ct_pars->gw_addr = config->getString("gw-ip-addr");
 	if (!ct_pars->gw_addr) {
-		printf ("Unable to read gw-ip-addr from config!\n");
+		log_error ("Unable to read gw-ip-addr from config!");
 		return -EINVAL;
 	}
 
@@ -93,33 +98,42 @@ static int initialize_config (struct lxc_params *ct_pars,
 
 int main (int argc, char **argv)
 {
+	CommandLineParser commandLineParser("Pelagicore container utility\n", "[deploy directory (abs path)] [command]", PACKAGE_VERSION, "This tool ......");
+	int myOptionValue = 0;
+	commandLineParser.addArgument(myOptionValue, "myoption", 'o', "An option");
+
+	if ( commandLineParser.parse(argc, argv) ) {
+		exit(-1);
+	}
+
 	struct lxc_params ct_pars;
 
 	if (argc < 3 || argv[1][0] != '/') {
-		printf ("USAGE: %s [deploy directory (abs path)] [command]\n", argv[0]);
+		log_error("Invalid arguments");
+		commandLineParser.printHelp();
 		return -1;
 	}
 
 	Config config;
 
 	if (initialize_config (&ct_pars, argv[1], &config)) {
-		printf ("Failed to initialize config. Exiting\n");
+		log_error ("Failed to initialize config. Exiting");
 		return -1;
 	}
 
 	Container container(&ct_pars);
 
-	debug("Generate iptables rules\n");
+	debug("Generate iptables rules");
 	IpTables rules(ct_pars.ip_addr.c_str(),
 		config.getString("iptables-rules"));
 
 	/* Load pulseaudio module */
-	debug("Load pulseaudio module\n");
+	debug("Load pulseaudio module");
 	Pulse pulse(ct_pars.pulse_socket);
 	container.addGateway(&pulse);
 
 	/* Limit network interface */
-	debug("Limit network interface\n");
+	debug("Limit network interface");
 	limit_iface (ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 
 	/* Spawn proxies */

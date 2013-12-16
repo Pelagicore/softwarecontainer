@@ -39,7 +39,7 @@ std::string gen_net_iface_name (const char *ip_addr_net)
 	char iface[16];
 
 	do {
-		snprintf (iface, 20, "veth-%d", (rand() % 1024));
+		snprintf (iface, sizeof(iface), "veth-%d", (rand() % 1024));
 
 		if (getifaddrs(&ifaddr) == -1) {
 			perror("getifaddrs");
@@ -74,7 +74,7 @@ std::string gen_ip_addr (const char *ip_addr_net)
 	char ip[20];
 
 	if (fd == -1) {
-		printf ("Unable to lock interface counter\n");
+		log_error ("Unable to lock interface counter");
 		return std::string();
 	}
 	flock (fd, LOCK_EX);
@@ -89,7 +89,7 @@ std::string gen_ip_addr (const char *ip_addr_net)
 			counter = 2;
 	}
 	
-	snprintf(buf, 4, "%03d", counter);
+	snprintf(buf, sizeof(buf), "%03d", counter);
 
 	/* Overwrite the first three bytes */
 	lseek (fd, 0, SEEK_SET);
@@ -98,7 +98,7 @@ std::string gen_ip_addr (const char *ip_addr_net)
 	flock(fd, LOCK_UN);
 	close (fd);
 
-	snprintf(ip, 20, "%s%d", ip_addr_net, counter);
+	snprintf(ip, sizeof(ip), "%s%d", ip_addr_net, counter);
 
 	return std::string(ip);
 }

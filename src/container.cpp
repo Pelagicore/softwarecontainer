@@ -50,7 +50,7 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 			environment += env + " ";
 		}
 	}
-	debug("Using environment: %s\n", environment.c_str());
+	debug("Using environment: %s", environment.c_str());
 
 	/* Create container */
 	sprintf (lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
@@ -59,9 +59,9 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 			      configFile(), name());
 	int ret = system (lxc_command);
 	if (ret) {
-		printf("%s returned %d\n", lxc_command, ret);
+		log_error("%s returned %d", lxc_command, ret);
 	} else {
-		debug("%s returned %d\n", lxc_command, ret);
+		debug("%s returned %d", lxc_command, ret);
 	}
 
 	/* Execute command in container */
@@ -69,10 +69,10 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 		int clen = strlen (user_command);
 		int nlen = strlen ((const char *) argv[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
-			printf ("Parameter list too long\n");
+			log_error ("Parameter list too long");
 			exit (1);
 		}
-		strcat (user_command, (const char *)argv[i]);
+		strcat (user_command, argv[i]);
 		strcat (user_command, " ");
 	}
 
@@ -80,13 +80,13 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 		  name(), environment.c_str(), user_command);
 	ret = system (lxc_command);
 	if (ret)
-		printf("%s returned %d\n", lxc_command, ret);
+		log_error("%s returned %d\n", lxc_command, ret);
 
 	/* Destroy container */
 	snprintf (lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
 	ret = system (lxc_command);
         if (ret)
-                printf("%s returned %d\n", lxc_command, ret);
+                log_error("%s returned %d", lxc_command, ret);
 
 	return retval;
 }
@@ -100,7 +100,7 @@ const char *Container::configFile()
 
 int Container::writeConfiguration(struct lxc_params *params)
 {
-        debug ("Generating config to %s for IP %s\n",
+        debug ("Generating config to %s for IP %s",
 		configFile(), params->ip_addr.c_str());
 
 	/* Copy system config to temporary location */
@@ -124,13 +124,13 @@ Container::Container(struct lxc_params *ct_pars)
 	m_name = ct_pars->container_name;
 
 	/* Initialize DBus socket paths */
-	snprintf(ct_pars->session_proxy_socket, 1024,
+	snprintf(ct_pars->session_proxy_socket, sizeof(ct_pars->session_proxy_socket),
 		"%s/sess_%s.sock", ct_pars->ct_root_dir, name());
-	snprintf(ct_pars->system_proxy_socket, 1024,
+	snprintf(ct_pars->system_proxy_socket, sizeof(ct_pars->system_proxy_socket),
 		"%s/sys_%s.sock", ct_pars->ct_root_dir, name());
 
 	/* Initialize pulse socket paths */
-	snprintf(ct_pars->pulse_socket, 1024,
+	snprintf(ct_pars->pulse_socket, sizeof(ct_pars->pulse_socket),
 		"%s/pulse-%s.sock", ct_pars->ct_root_dir, name());
 
 	writeConfiguration(ct_pars);
@@ -139,6 +139,6 @@ Container::Container(struct lxc_params *ct_pars)
 Container::~Container()
 {
 	if (remove(configFile()) == -1) {
-		printf("Failed to remove lxc config file!\n");
+		log_error("Failed to remove lxc config file!");
 	}
 }

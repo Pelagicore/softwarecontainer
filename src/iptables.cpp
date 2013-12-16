@@ -25,31 +25,31 @@ IpTables::IpTables(const char *ip_addr, const char *iptables_rules) :
 	char iptables_cmd[1024];
 	char iptables_rules_file[] = "/tmp/iptables_rules_XXXXXX";
 	int  iptf = 0;
-	      
+
 	iptf = mkstemp (iptables_rules_file);
 	if (iptf == -1) {
-		printf ("Unable to open %s\n", iptables_rules_file);
+		log_error ("Unable to open %s", iptables_rules_file);
 		return;
 	}
 
 	if (write (iptf, iptables_rules,
 	  	   sizeof (char) * strlen (iptables_rules)) == -1) {
-		printf ("Failed to write rules file\n");
+		log_error ("Failed to write rules file");
 		goto unlink_file;
 	}
 
 	if (close (iptf) == 1) {
-		printf ("Failed to close rules file\n");
+		log_error ("Failed to close rules file");
 		goto unlink_file;
 	}
 
 	/* Execute shell script with env variable set to container IP */
-	snprintf (iptables_cmd, 1024, "env SRC_IP=%s sh %s",
+	snprintf (iptables_cmd, sizeof(iptables_cmd), "env SRC_IP=%s sh %s",
 	          m_ip, iptables_rules_file);
 
-	printf ("Generating rules for IP: %s\n", m_ip);
+	log_error ("Generating rules for IP: %s", m_ip);
 	if (system (iptables_cmd) == -1) {
-		printf ("Failed to execute iptables command\n");
+		log_error ("Failed to execute iptables command");
 	}
 
 unlink_file:
@@ -65,7 +65,7 @@ IpTables::~IpTables()
 
 	fp = popen (iptables_command, "r");
 	if (fp == NULL) {
-		printf("Error executing: %s\n", iptables_command);
+		log_error("Error executing: %s", iptables_command);
 		return;
 	}
 
@@ -75,10 +75,10 @@ IpTables::~IpTables()
 			debug ("%d > ", line_no);
 
 			/* Actual deletion */
-			snprintf(ipt_cmd, 100, 
+			snprintf(ipt_cmd, sizeof(ipt_cmd),
 				 "iptables -D FORWARD %d", line_no);
 			if (system (ipt_cmd) == -1)
-				printf ("Failed to execute '%s'\n", ipt_cmd);
+				log_error ("Failed to execute '%s'", ipt_cmd);
 				/* We'll continue trying with the rest */
 
 			line_no--; /* Removing this rule offsets the rest */

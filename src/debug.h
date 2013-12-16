@@ -18,20 +18,14 @@
  */
 
 /*! \brief Debug helpers
- *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
+ *  \author Jonatan P��lsson (jonatan.palsson@pelagicore.com)
  *  \file debug.h
  */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#pragma once
 
-/*! If DEBUG is defined, this will print debug messages to STDOUT */
-#ifdef DEBUG
-	#define debug(...) printf("DEBUG: " __VA_ARGS__)
-#endif /* DEBUG */
+#include "pelagicore-log.h"
 
-#ifndef DEBUG
-	#define debug(...)
-#endif /* DEBUG */
+LOG_IMPORT_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext)
 
-#endif /* DEBUG_H */
+#define debug(args ...) log_debug(args)
