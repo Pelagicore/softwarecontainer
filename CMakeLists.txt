@@ -15,3 +15,4 @@ ENDIF()
 MESSAGE("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 
 add_subdirectory(src)
+add_subdirectory(doc)
