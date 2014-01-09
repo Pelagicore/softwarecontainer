@@ -2,7 +2,7 @@ pkg_check_modules(DEPENDENCIES REQUIRED libpulse jansson)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
 link_directories(
-	${DEPENDENCIES_DIRS}
+	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS}
 )
 
 add_executable( pelagicontain
