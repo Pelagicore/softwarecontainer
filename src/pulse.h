@@ -18,7 +18,6 @@
  */
 
 /*! \brief Pulse functionality
- *  \author Erik Botö (erik.boto@pelagicore.com)
  *  \file pulse.h
  *
  *  Pulse audio functionality for Pelagicontain
@@ -30,7 +29,8 @@
 #include <pulse/pulseaudio.h>
 #include "gateway.h"
 
-class Pulse : public Gateway
+class Pulse :
+	public Gateway
 {
 public:
 	Pulse(const char *socket);

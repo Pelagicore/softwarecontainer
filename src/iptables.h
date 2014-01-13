@@ -21,7 +21,6 @@
 #define IPTABLES_H
 
 /*! \brief  IPTables capabilities for Pelagicontain
- *  \author Jonatan Pålsson (joantan.palsson@pelagicore.com)
  *  \file   iptables.h
  *
  * This file contains helpers for setting up and tearing down IPTables rules
@@ -30,34 +29,34 @@
 #include "stdlib.h"
 #include "string.h"
 #include "unistd.h"
-#include "pelagicontain_common.h"
+#include "pelagicontaincommon.h"
 #include "config.h"
 
 class IpTables
 {
 public:
-/*! Generate and execute IPTables rules
- *
- * Parse the IPTables rules from configuration and execute these rules
- *
- * \param ip_addr  The IP address of the system
- * \param rules    String containing the IPTable rules
- */
+	/*! Generate and execute IPTables rules
+	*
+	* Parse the IPTables rules from configuration and execute these rules
+	*
+	* \param ip_addr  The IP address of the system
+	* \param rules    String containing the IPTable rules
+	*/
 	IpTables(const char *ip_addr, const char *rules);
 
-/*! Remove IPTables rules set up for a specific network iface
- *
- * This implementation is shady. What we do here is to look at the output of
- * iptables -L, look for our own IP, and then remove all rules matching our IP
- * from the FORWARD chain. There are several problems with this:
- *	- We don't lock the iptable to ensure the list we're comparing against
- *	  matches the actual list were removing from
- *	- We don't know whether we actually added the rules ourselves, or if
- *	  someone else did.
- * in short.. this function should be re-implemented in some other way where we
- * have atomic transactions for lookup and remove, and where we're also certain
- * we are actually the originators of the rule in question.
- */
+	/*! Remove IPTables rules set up for a specific network iface
+	*
+	* This implementation is shady. What we do here is to look at the output of
+	* iptables -L, look for our own IP, and then remove all rules matching our IP
+	* from the FORWARD chain. There are several problems with this:
+	*	- We don't lock the iptable to ensure the list we're comparing against
+	*	  matches the actual list were removing from
+	*	- We don't know whether we actually added the rules ourselves, or if
+	*	  someone else did.
+	* in short.. this function should be re-implemented in some other way where we
+	* have atomic transactions for lookup and remove, and where we're also certain
+	* we are actually the originators of the rule in question.
+	*/
 	~IpTables();
 
 private:
@@ -65,4 +64,4 @@ private:
 };
 
 
-#endif /* IPTABLES_H */
+#endif //IPTABLES_H

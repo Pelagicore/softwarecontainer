@@ -21,6 +21,63 @@
 #include "pulse.h"
 #include "debug.h"
 
+Pulse::Pulse(const char *socket):
+	m_api(0), m_context(0), m_socket(socket), m_index(-1)
+{
+	/* Create mainloop */
+	m_mainloop = pa_threaded_mainloop_new();
+	pa_threaded_mainloop_start(m_mainloop);
+
+	if (m_mainloop) {
+		/* Set up connection to pulse server */
+		pa_threaded_mainloop_lock(m_mainloop);
+		m_api = pa_threaded_mainloop_get_api(m_mainloop);
+		m_context = pa_context_new(m_api, "pulsetest");
+		pa_context_set_state_callback (m_context, stateCallback, this);
+
+		int err = pa_context_connect(
+			m_context,        /* context */
+			NULL,              /* default server */
+			PA_CONTEXT_NOFAIL, /* keep reconnection on failure */
+			NULL );            /* use default spawn api */
+
+		if (err != 0)
+			log_error("Pulse error: %s", pa_strerror(err));
+
+		pa_threaded_mainloop_unlock (m_mainloop);
+	} else {
+		log_error("Failed to create pulse mainloop->");
+	}
+}
+
+Pulse::~Pulse()
+{
+	if (m_mainloop) {
+		/* Unload module if module loaded successfully on startup */
+		if (m_index != -1)
+		{
+			pa_threaded_mainloop_lock(m_mainloop);
+			pa_context_unload_module(
+				m_context,
+				m_index,
+				unloadCallback,
+				this);
+			pa_threaded_mainloop_wait(m_mainloop);
+			pa_threaded_mainloop_unlock(m_mainloop);
+		}
+
+		/* Release pulse */
+		pa_threaded_mainloop_lock(m_mainloop);
+		pa_context_disconnect(m_context);
+		pa_context_unref(m_context);
+		pa_threaded_mainloop_unlock(m_mainloop);
+
+		pa_threaded_mainloop_stop(m_mainloop);
+		pa_threaded_mainloop_free(m_mainloop);
+	}
+	debug("pulse: Teardown complete");
+}
+
 const char *Pulse::socketName()
 {
 	std::string socket(m_socket);
@@ -63,9 +120,9 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 
 	switch (pa_context_get_state(context)) {
 	case PA_CONTEXT_READY:
-		debug ("Connection is up, loading module");
-		snprintf (socket, sizeof(socket), "socket=%s", p->m_socket);
-		pa_context_load_module (
+		debug("Connection is up, loading module");
+		snprintf(socket, sizeof(socket), "socket=%s", p->m_socket);
+		pa_context_load_module(
 			context,
 			"module-native-protocol-unix",
 			socket,
@@ -73,79 +130,22 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 			userdata);
 		break;
 	case PA_CONTEXT_CONNECTING:
-		debug ("pulse: Connecting");
+		debug("pulse: Connecting");
 		break;
 	case PA_CONTEXT_AUTHORIZING:
-		debug ("pulse: Authorizing");
+		debug("pulse: Authorizing");
 		break;
 	case PA_CONTEXT_SETTING_NAME:
-		debug ("pulse: Setting name");
+		debug("pulse: Setting name");
 		break;
 	case PA_CONTEXT_UNCONNECTED:
-		debug ("pulse: Unconnected");
+		debug("pulse: Unconnected");
 		break;
 	case PA_CONTEXT_FAILED:
-		debug ("pulse: Failed");
+		debug("pulse: Failed");
 		break;
 	case PA_CONTEXT_TERMINATED:
-		debug ("pulse: Terminated");
+		debug("pulse: Terminated");
 		break;
 	}
-}
-
-Pulse::Pulse(const char *socket):
-	m_api(0), m_context(0), m_socket(socket), m_index(-1)
-{
-	/* Create mainloop */
-	m_mainloop = pa_threaded_mainloop_new();
-	pa_threaded_mainloop_start(m_mainloop);
-
-	if (m_mainloop) {
-		/* Set up connection to pulse server */
-		pa_threaded_mainloop_lock(m_mainloop);
-		m_api = pa_threaded_mainloop_get_api(m_mainloop);
-		m_context = pa_context_new(m_api, "pulsetest");
-		pa_context_set_state_callback (m_context, stateCallback, this);
-
-		int err = pa_context_connect (
-			m_context,        /* context */
-			NULL,              /* default server */ 
-			PA_CONTEXT_NOFAIL, /* keep reconnection on failure */
-			NULL );            /* use default spawn api */
-
-		if (err != 0) {
-			log_error ("Pulse error: %s", pa_strerror(err));
-		}
-		pa_threaded_mainloop_unlock (m_mainloop);
-	} else {
-		log_error ("Failed to create pulse mainloop->");
-	}
-}
-
-Pulse::~Pulse()
-{
-	if (m_mainloop) {
-		/* Unload module if module loaded successfully on startup */
-		if (m_index != -1)
-		{
-			pa_threaded_mainloop_lock(m_mainloop);
-			pa_context_unload_module(
-				m_context,
-				m_index,
-				unloadCallback,
-				this);
-			pa_threaded_mainloop_wait(m_mainloop);
-			pa_threaded_mainloop_unlock(m_mainloop);
-		}
-
-		/* Release pulse */
-		pa_threaded_mainloop_lock(m_mainloop);
-		pa_context_disconnect(m_context);
-		pa_context_unref(m_context);
-		pa_threaded_mainloop_unlock(m_mainloop);
-
-		pa_threaded_mainloop_stop(m_mainloop);
-		pa_threaded_mainloop_free(m_mainloop);
-	}
-	debug ("pulse: Teardown complete");
 }

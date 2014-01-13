@@ -18,7 +18,6 @@
  */
 
 /*! \brief Traffic control functionality
- *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
  *  \file trafficcontrol.h
  *
  *  Traffic control functionality for Pelagicontain. Allows interfacing with
@@ -28,7 +27,7 @@
 #ifndef TRAFFICCONTROL_H
 #define TRAFFICCONTROL_H
 
-#include "pelagicontain_common.h"
+#include "pelagicontaincommon.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "sys/types.h"
@@ -65,4 +64,4 @@ int limit_iface (const char *net_iface_name, const char *tc_rate);
  */
 int clear_iface_limits (char *iface);
 
-#endif /* TRAFFICCONTROL_H */
+#endif //TRAFFICCONTROL_H

@@ -48,18 +48,24 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-static int initialize_config (struct lxc_params *ct_pars,
-	const char *ct_base_dir, Config *config)
+static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config)
 {
 	char *ip_addr_net;
 
 	/* Initialize */
 	ct_pars->container_name = gen_ct_name();
 
-	snprintf (ct_pars->ct_conf_dir, sizeof(ct_pars->ct_conf_dir), "%s/config/", ct_base_dir);
-	snprintf (ct_pars->ct_root_dir, sizeof(ct_pars->ct_root_dir), "%s/rootfs/", ct_base_dir);
+	snprintf(ct_pars->ct_conf_dir,
+		sizeof(ct_pars->ct_conf_dir),
+		"%s/config/",
+		ct_base_dir);
+	
+	snprintf(ct_pars->ct_root_dir,
+		sizeof(ct_pars->ct_root_dir),
+		 "%s/rootfs/",
+		ct_base_dir);
 
-	snprintf (ct_pars->main_cfg_file,
+	snprintf(ct_pars->main_cfg_file,
 		  sizeof(ct_pars->main_cfg_file),
 		  "%s/pelagicontain.conf",
 	          ct_pars->ct_conf_dir);
@@ -68,43 +74,46 @@ static int initialize_config (struct lxc_params *ct_pars,
 
 	ct_pars->lxc_system_cfg = config->getString("lxc-config-template");
 	if (!ct_pars->lxc_system_cfg) {
-		log_error ("Unable to read lxc-config-template from config!");
+		log_error("Unable to read lxc-config-template from config!");
 		return -EINVAL;
 	}
 
 	ct_pars->tc_rate = config->getString("bandwidth-limit");
 	if (!ct_pars->tc_rate) {
-		log_error ("Unable to read bandwidth-limit from config!");
+		log_error("Unable to read bandwidth-limit from config!");
 		return -EINVAL;
 	}
 
 	ip_addr_net = config->getString("ip-addr-net");
 	if (!ip_addr_net) {
-		log_error ("Unable to read ip-addr-net from config!");
+		log_error("Unable to read ip-addr-net from config!");
 		return -EINVAL;
 	}
 
 	ct_pars->gw_addr = config->getString("gw-ip-addr");
 	if (!ct_pars->gw_addr) {
-		log_error ("Unable to read gw-ip-addr from config!");
+		log_error("Unable to read gw-ip-addr from config!");
 		return -EINVAL;
 	}
 
-	ct_pars->ip_addr        = gen_ip_addr (ip_addr_net);
-	ct_pars->net_iface_name = gen_net_iface_name (ip_addr_net);
+	ct_pars->ip_addr = gen_ip_addr(ip_addr_net);
+	ct_pars->net_iface_name = gen_net_iface_name(ip_addr_net);
 
 	return 0;
 }
 
 int main (int argc, char **argv)
 {
-	CommandLineParser commandLineParser("Pelagicore container utility\n", "[deploy directory (abs path)] [command]", PACKAGE_VERSION, "This tool ......");
+	CommandLineParser commandLineParser("Pelagicore container utility\n",
+		"[deploy directory (abs path)] [command]",
+		PACKAGE_VERSION,
+		"This tool ......");
+	
 	int myOptionValue = 0;
 	commandLineParser.addArgument(myOptionValue, "myoption", 'o', "An option");
 
-	if ( commandLineParser.parse(argc, argv) ) {
+	if (commandLineParser.parse(argc, argv))
 		exit(-1);
-	}
 
 	struct lxc_params ct_pars;
 
@@ -116,16 +125,15 @@ int main (int argc, char **argv)
 
 	Config config;
 
-	if (initialize_config (&ct_pars, argv[1], &config)) {
-		log_error ("Failed to initialize config. Exiting");
+	if (initializeConfig(&ct_pars, argv[1], &config)) {
+		log_error("Failed to initialize config. Exiting");
 		return -1;
 	}
 
 	Container container(&ct_pars);
 
 	debug("Generate iptables rules");
-	IpTables rules(ct_pars.ip_addr.c_str(),
-		config.getString("iptables-rules"));
+	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
 
 	/* Load pulseaudio module */
 	debug("Load pulseaudio module");
@@ -134,15 +142,17 @@ int main (int argc, char **argv)
 
 	/* Limit network interface */
 	debug("Limit network interface");
-	limit_iface (ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
+	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 
 	/* Spawn proxies */
 	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
 	                   ct_pars.main_cfg_file,
 	                   DBusProxy::SessionProxy);
+	
 	DBusProxy systemProxy(ct_pars.system_proxy_socket,
 	                  ct_pars.main_cfg_file,
 	                  DBusProxy::SystemProxy);
+	
 	container.addGateway(&sessionProxy);
 	container.addGateway(&systemProxy);
 

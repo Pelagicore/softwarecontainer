@@ -18,8 +18,7 @@
  */
 
 /*! \brief Container base class
- *  \author Tomas Hallenberg (tomas.hallenberg@pelagicore.com)
- *  \file container.h
+*  \file container.h
  *
  *  Container base class for Pelagicontain
  */
@@ -29,7 +28,7 @@
 
 #include <string>
 #include <vector>
-#include "pelagicontain_common.h"
+#include "pelagicontaincommon.h"
 #include "config.h"
 #include "gateway.h"
 
@@ -51,4 +50,4 @@ private:
 	std::vector<Gateway *> m_gateways;
 };
 
-#endif /* CONTAINER_H */
+#endif //CONTAINER_H

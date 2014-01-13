@@ -18,14 +18,16 @@
  */
 
 /*! \brief Debug helpers
- *  \author Jonatan P��lsson (jonatan.palsson@pelagicore.com)
  *  \file debug.h
  */
 
-#pragma once
+#ifndef DEBUG_H
+#define DEBUG_H
 
 #include "pelagicore-log.h"
 
 LOG_IMPORT_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext)
 
 #define debug(args ...) log_debug(args)
+
+#endif //DEBUG_H

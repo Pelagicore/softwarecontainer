@@ -18,7 +18,6 @@
  */
 
 /*! \brief  Generator functions
- *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
  *  \file   generators.h
  *
  *  Various helper functions for generating things such as network interface
@@ -30,7 +29,7 @@
 #define GENERATORS_H
 
 #include <string>
-#include "pelagicontain_common.h"
+#include "pelagicontaincommon.h"
 
 /*! \brief Generate a network interface name
  *
@@ -88,4 +87,4 @@ int gen_lxc_config (struct lxc_params *params);
  */
 std::string gen_ct_name();
 
-#endif /* GENERATORS_H */
+#endif //GENERATORS_H

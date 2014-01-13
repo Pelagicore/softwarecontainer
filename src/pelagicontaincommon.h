@@ -18,13 +18,12 @@
  */
 
 /*! \brief  Common code for Pelagicontain
- *  \author Jonatan Pålsson (joantan.palsson@pelagicore.com)
- *  \file pelagicontain_common.h
+ *  \file pelagicontaincommon.h
  *
  * Here is common code, such as shared data structures
  */
-#ifndef PELAGICONTAIN_COMMON_H
-#define PELAGICONTAIN_COMMON_H
+#ifndef PELAGICONTAINCOMMON_H
+#define PELAGICONTAINCOMMON_H
 
 #include <string>
 
@@ -78,4 +77,4 @@ struct lxc_params {
 	char main_cfg_file[1024];
 };
 
-#endif /* PELAGICONTAIN_COMMON_H */
+#endif //PELAGICONTAINCOMMON_H

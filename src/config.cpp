@@ -19,15 +19,15 @@
 
 #include "config.h"
 
-Config::Config() : root(0)
+Config::Config() :
+	root(0)
 {
 }
 
 Config::~Config()
 {
-	if (root) {
+	if (root)
 		json_decref(root);
-	}
 }
 
 int Config::read(const char *path)
@@ -60,51 +60,51 @@ char *Config::getString(const char *property)
 	}
 
 	element = json_object_get(root, property);
-	if (json_is_string (element)) {
+	if (json_is_string(element)) {
 		debug ("%s is called on a string");
-		return strdup (json_string_value (element));
-	} else if (json_is_array (element)) {
-		debug ("%s is called on an array");
-		size_t  len    = json_array_size (element);
-		int     buflen = 100;
-		int     j      = 0;
-		char   *buf    = (char*)calloc (sizeof (char), buflen);
+		return strdup(json_string_value(element));
+	} else if (json_is_array(element)) {
+		debug("%s is called on an array");
+		size_t len = json_array_size(element);
+		int buflen = 100;
+		int j = 0;
+		char *buf = (char*)calloc(sizeof(char), buflen);
 
 		for (size_t i = 0; i < len; i++) {
-			json_t *line    = json_array_get (element, i);
-			const char *strline = json_string_value (line);
-			int     linelen = 0;
+			json_t *line = json_array_get(element, i);
+			const char *strline = json_string_value(line);
+			int linelen = 0;
 
 			/* Entire array must be strings */
-			if (!json_is_string (line)) {
-				debug ("line %d is not a string!", i);
-				free (buf);
+			if (!json_is_string(line)) {
+				debug("line %d is not a string!", i);
+				free(buf);
 				return NULL;
 			}
 
 			/* Ensure new string fits in buffer */
-			linelen = strlen (strline);
+			linelen = strlen(strline);
 			if (j + linelen > buflen) {
-				debug ("buf is %d, and line is %d", buflen, linelen);
-				buflen = (j + strlen (strline)) * 2;
-				char *newbuf = (char*)calloc (sizeof (char), buflen);
+				debug("buf is %d, and line is %d", buflen, linelen);
+				buflen = (j + strlen(strline)) * 2;
+				char *newbuf = (char*)calloc(sizeof(char), buflen);
 
-				strncpy (newbuf, buf, buflen);
-				free (buf);
+				strncpy(newbuf, buf, buflen);
+				free(buf);
 				buf = newbuf;
 			}
 			j += linelen;
 
 			/* We already ensured this fits */
 			if (i > 0)
-				strcat (buf, "\n");
+				strcat(buf, "\n");
 
-			strcat (buf, strline);
+			strcat(buf, strline);
 		}
 
 		return buf;
 	}
 
-	debug ("Called on an unknown type");
+	debug("Called on an unknown type");
 	return NULL;
 }

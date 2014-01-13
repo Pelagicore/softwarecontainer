@@ -23,6 +23,38 @@
 #include "dbusproxy.h"
 #include "debug.h"
 
+DBusProxy::DBusProxy(const char *socket, const char *config, ProxyType type):
+	m_socket(socket), m_type(type)
+{
+	debug("Spawning %s proxy, socket: %s, config: %s",
+		typeString(), m_socket, config);
+
+	m_pid = fork();
+	if (m_pid == 0) { /* child */
+		/* This call never returns... */
+		execlp("dbus-proxy", "dbus-proxy", m_socket, typeString(),
+			config, NULL);
+	} else {
+		if (m_pid == -1)
+			log_error("Failed to spawn DBus proxy!");
+	}
+}
+
+DBusProxy::~DBusProxy()
+{
+	if (kill (m_pid, SIGTERM) == -1) {
+		log_error("Failed to kill %s proxy!", typeString());
+	} else {
+		debug("Killed %s proxy!", typeString());
+	}
+
+	if (remove (m_socket) == -1) {
+		log_error("Failed to remove %s proxy socket!", typeString());
+	} else {
+		debug("Removed %s proxy socket!", typeString());
+	}
+}
+
 const char *DBusProxy::typeString()
 {
 	if (m_type == SessionProxy) {
@@ -56,36 +88,4 @@ std::string DBusProxy::environment()
 	env += socketName();
 
 	return env;
-}
-
-DBusProxy::DBusProxy(const char *socket, const char *config, ProxyType type):
-	m_socket(socket), m_type(type)
-{
-	debug("Spawning %s proxy, socket: %s, config: %s",
-		typeString(), m_socket, config);
-
-	m_pid = fork();
-	if (m_pid == 0) { /* child */
-		/* This call never returns... */
-		execlp ("dbus-proxy", "dbus-proxy", m_socket, typeString(),
-			config, NULL);
-	} else {
-		if (m_pid == -1)
-			log_error("Failed to spawn DBus proxy!");
-	}
-}
-
-DBusProxy::~DBusProxy()
-{
-	if (kill (m_pid, SIGTERM) == -1) {
-		log_error("Failed to kill %s proxy!", typeString());
-	} else {
-		debug("Killed %s proxy!", typeString());
-	}
-
-	if (remove (m_socket) == -1) {
-		log_error("Failed to remove %s proxy socket!", typeString());
-	} else {
-		debug("Removed %s proxy socket!", typeString());
-	}
 }

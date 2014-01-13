@@ -18,7 +18,6 @@
  */
 
 /*! \brief Gateway base class
- *  \author Tomas Hallenberg (tomas.hallenberg@pelagicore.com)
  *  \file gateway.h
  *
  * Gateway abstract base class for Pelagicontain
@@ -35,4 +34,4 @@ public:
 	virtual std::string environment() = 0;
 };
 
-#endif /* GATEWAY_H */
+#endif //GATEWAY_H

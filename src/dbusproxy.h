@@ -18,7 +18,6 @@
  */
 
 /*! \brief DBus Proxy
- *  \author Tomas Hallenberg (tomas.hallenberg@pelagicore.com)
  *  \file dbusproxy.h
  *
  *  Takes care of spawning and killing the DBus proxis
@@ -36,12 +35,12 @@ class DBusProxy : public Gateway
 public:
 	enum ProxyType {SessionProxy, SystemProxy};
 
-/*! Spawn the proxy and use the supplied path for the socket
- *
- * \param  socket     path to the socket file to use. File is created.
- * \param  config     path to configuration file for proxy
- * \param  type       SessionProxy or SystemProxy
- */
+	/*! Spawn the proxy and use the supplied path for the socket
+	*
+	* \param  socket     path to the socket file to use. File is created.
+	* \param  config     path to configuration file for proxy
+	* \param  type       SessionProxy or SystemProxy
+	*/
 	DBusProxy(const char *socket, const char *config, ProxyType type);
 	~DBusProxy();
 
@@ -56,4 +55,4 @@ private:
 	ProxyType m_type;
 };
 
-#endif /* DBUSPROXY_H */
+#endif //DBUSPROXY_H
