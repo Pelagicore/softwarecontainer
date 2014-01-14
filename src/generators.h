@@ -18,7 +18,6 @@
  */
 
 /*! \brief  Generator functions
- *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
  *  \file   generators.h
  *
  *  Various helper functions for generating things such as network interface
@@ -29,17 +28,8 @@
 #ifndef GENERATORS_H
 #define GENERATORS_H
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "pelagicontain_common.h"
-#include "debug.h"
-#include "string.h"
-#include "sys/types.h"
-#include "sys/stat.h"
-#include "sys/file.h"
-#include "fcntl.h"
-#include "ifaddrs.h"
-#include "errno.h"
+#include <string>
+#include "pelagicontaincommon.h"
 
 /*! \brief Generate a network interface name
  *
@@ -51,7 +41,7 @@
  * \return A unique network interface name
  * \return NULL upon error
  */
-char *gen_net_iface_name (char *ip_addr_net);
+std::string gen_net_iface_name(const char *ip_addr_net);
 
 /*!  \brief Generate a gateway address
  *
@@ -68,10 +58,10 @@ char *gen_gw_ip_addr (char *ip_addr_net);
  * Calling this function will generate a new IP address. A counter is kept in
  * /tmp to minimize the risk of collissons
  *
- * \param *ip_addr_net A 24 bit network portion of an IP address
+ * \param ip_addr_net A 24 bit network portion of an IP address
  * \return A string representing an IP address
  */
-char *gen_ip_addr (char *ip_addr_net);
+std::string gen_ip_addr (const char *ip_addr_net);
 
 /*! \brief Generate and write an LXC config
  *
@@ -95,6 +85,6 @@ int gen_lxc_config (struct lxc_params *params);
  * \return name upon success
  * \return NULL upon failure
  */
-char *gen_ct_name ();
+std::string gen_ct_name();
 
-#endif /* GENERATORS_H */
+#endif //GENERATORS_H

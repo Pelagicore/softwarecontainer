@@ -1,49 +1,44 @@
-#include "glib.h"
+#include <glib.h>
+#include <stdlib.h>
 #include "config.h"
-#include "stdlib.h"
-
-
 
 static void test_initialize ()
 {
 	system ("rm -f /tmp/config");
-	g_assert (config_initialize ("/tmp/config") != 0);
-	config_destroy ();
+	Config config1;
+	g_assert (config1.read("/tmp/config") != 0);
 
+	Config config2;
 	system ("echo '{ }' > /tmp/config");
-	g_assert (config_initialize ("/tmp/config") == 0);
-	config_destroy ();
+	g_assert (config2.read("/tmp/config") == 0);
 }
 
 static void test_read_simple_string ()
 {
 	gchar *value = NULL;
 	system ("echo '{ \"test\": \"testvalue\" }' > /tmp/config");
-	config_initialize ("/tmp/config");
+	Config config;
+	g_assert (config.read("/tmp/config") == 0);
 
-	value = config_get_string ("test");
+	value = config.getString("test");
 	g_assert (value != NULL);
 	g_assert (g_strcmp0 (value, "testvalue") == 0);
-
-	config_destroy ();
 }
 
 static void test_read_multiline_string ()
 {
 	gchar *value = NULL;
 	system ("echo '{ \"test\": [\"row1\", \"row2\"] }' > /tmp/config");
-	config_initialize ("/tmp/config");
+	Config config;
+	config.read("/tmp/config");
 
-	value = config_get_string ("test");
+	value = config.getString("test");
 	g_assert (value != NULL);
-
-	config_destroy ();
-
 }
 
-int main (int argc, int **argv)
+int main (int argc, char **argv)
 {
-	g_test_init (&argc, (char ***)&argv, NULL);
+	g_test_init (&argc, &argv, NULL);
 	g_test_add_func ("/config/initialize",       test_initialize);
 	g_test_add_func ("/config/simple_string",    test_read_simple_string);
 	g_test_add_func ("/config/multiline_string", test_read_multiline_string);

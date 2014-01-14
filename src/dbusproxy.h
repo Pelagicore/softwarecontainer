@@ -17,39 +17,42 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/*! \brief Pulse functionality
- *  \file pulse.h
+/*! \brief DBus Proxy
+ *  \file dbusproxy.h
  *
- *  Pulse audio functionality for Pelagicontain
+ *  Takes care of spawning and killing the DBus proxis
  */
 
-#ifndef PULSE_H
-#define PULSE_H
+#ifndef DBUSPROXY_H
+#define DBUSPROXY_H
 
-#include <pulse/pulseaudio.h>
+#include <string>
+#include <unistd.h>
 #include "gateway.h"
 
-class Pulse :
-	public Gateway
+class DBusProxy : public Gateway
 {
 public:
-	Pulse(const char *socket);
-	~Pulse();
+	enum ProxyType {SessionProxy, SystemProxy};
+
+	/*! Spawn the proxy and use the supplied path for the socket
+	*
+	* \param  socket     path to the socket file to use. File is created.
+	* \param  config     path to configuration file for proxy
+	* \param  type       SessionProxy or SystemProxy
+	*/
+	DBusProxy(const char *socket, const char *config, ProxyType type);
+	~DBusProxy();
 
 	std::string environment();
 
 private:
-	static void loadCallback(pa_context *c, uint32_t idx, void *userdata);
-	static void unloadCallback(pa_context *c, int success, void *userdata);
-	static void stateCallback(pa_context *c, void *userdata);
-
+	const char *typeString();
 	const char *socketName();
 
-	pa_mainloop_api *m_api;
-	pa_context *m_context;
-	pa_threaded_mainloop *m_mainloop;
+	pid_t m_pid;
 	const char *m_socket;
-	int m_index;
+	ProxyType m_type;
 };
 
-#endif /* PULSE_H */
+#endif //DBUSPROXY_H

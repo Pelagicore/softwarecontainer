@@ -17,39 +17,37 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/*! \brief Pulse functionality
- *  \file pulse.h
+/*! \brief Container base class
+*  \file container.h
  *
- *  Pulse audio functionality for Pelagicontain
+ *  Container base class for Pelagicontain
  */
 
-#ifndef PULSE_H
-#define PULSE_H
+#ifndef CONTAINER_H
+#define CONTAINER_H
 
-#include <pulse/pulseaudio.h>
+#include <string>
+#include <vector>
+#include "pelagicontaincommon.h"
+#include "config.h"
 #include "gateway.h"
 
-class Pulse :
-	public Gateway
+class Container
 {
 public:
-	Pulse(const char *socket);
-	~Pulse();
+	Container(struct lxc_params *ct_pars);
+	~Container();
 
-	std::string environment();
+	const char *name();
+	void addGateway(Gateway *gw);
+	int run(int argc, char **argv, struct lxc_params *ct_pars);
 
 private:
-	static void loadCallback(pa_context *c, uint32_t idx, void *userdata);
-	static void unloadCallback(pa_context *c, int success, void *userdata);
-	static void stateCallback(pa_context *c, void *userdata);
+	const char *configFile();
+	int writeConfiguration(struct lxc_params *params);
 
-	const char *socketName();
-
-	pa_mainloop_api *m_api;
-	pa_context *m_context;
-	pa_threaded_mainloop *m_mainloop;
-	const char *m_socket;
-	int m_index;
+	std::string m_name;
+	std::vector<Gateway *> m_gateways;
 };
 
-#endif /* PULSE_H */
+#endif //CONTAINER_H

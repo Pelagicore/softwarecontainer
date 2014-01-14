@@ -18,7 +18,6 @@
  */
 
 /*! \brief Traffic control functionality
- *  \author Jonatan Pålsson (jonatan.palsson@pelagicore.com)
  *  \file trafficcontrol.h
  *
  *  Traffic control functionality for Pelagicontain. Allows interfacing with
@@ -28,7 +27,7 @@
 #ifndef TRAFFICCONTROL_H
 #define TRAFFICCONTROL_H
 
-#include "pelagicontain_common.h"
+#include "pelagicontaincommon.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "sys/types.h"
@@ -46,12 +45,12 @@
  * This function forks an observing process in order to detect the availability
  * of the network interface.
  *
- * \param params   An initialized lxc_params struct, specifically tc_rate and
- *                 net_iface_name must be set
+ * \param net_iface_name Network interface name
+ * \param tc_rate        TC rate 
  * \return 0       Upon success
  * \return -EINVAL Upon failure
  */
-int limit_iface (struct lxc_params *params);
+int limit_iface (const char *net_iface_name, const char *tc_rate);
 
 
 /*! \brief Remove the limits set by limit_iface()
@@ -65,4 +64,4 @@ int limit_iface (struct lxc_params *params);
  */
 int clear_iface_limits (char *iface);
 
-#endif /* TRAFFICCONTROL_H */
+#endif //TRAFFICCONTROL_H

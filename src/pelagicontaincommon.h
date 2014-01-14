@@ -18,26 +18,27 @@
  */
 
 /*! \brief  Common code for Pelagicontain
- *  \author Jonatan Pålsson (joantan.palsson@pelagicore.com)
- *  \file pelagicontain_common.h
+ *  \file pelagicontaincommon.h
  *
  * Here is common code, such as shared data structures
  */
-#ifndef PELAGICONTAIN_COMMON_H
-#define PELAGICONTAIN_COMMON_H
+#ifndef PELAGICONTAINCOMMON_H
+#define PELAGICONTAINCOMMON_H
+
+#include <string>
 
 struct lxc_params {
 
 	/* networking */
 	/*! IPv4 address for this container */
-	char *ip_addr;
+	std::string ip_addr;
 
 	/*! IPv4 address for the default GW of this container */
 	char *gw_addr; 
 
 	/*! External interface name for the networking interface of the
 	 * container */
-	char *net_iface_name; 
+	std::string net_iface_name; 
 
 
 	/* traffic control */
@@ -49,10 +50,6 @@ struct lxc_params {
 	/*! Path to the Pulse Audio socket as seen from the host system */
 	char pulse_socket[1024]; 
 
-	/*! Path to the  Pulse Audio socket as seen from within the container
-	 * */
-	char deployed_pulse_socket[1024];
-
 
 	/* D-Bus */
 	/*! Path to the D-Bus session proxy socket as seen from the host */
@@ -61,24 +58,13 @@ struct lxc_params {
 	/*! Path to the D-Bus system proxy socket as seen from the host */
 	char system_proxy_socket[1024];
 
-	/*! Path to the D-Bus session proxy socket as seen from within the
-	 * container */
-	char deployed_session_proxy_socket[1024];
-
-	/*! Path to the D-Bus system proxy socket as seen from within the
-	 * container */
-	char deployed_system_proxy_socket[1024];
-
 
 	/* LXC general */
 	/*! Unique name of the container, used to identify it in LXC */
-	char *container_name;
+	std::string container_name;
 
 	/*! Path to the LXC system config, as seen from the host */
 	char *lxc_system_cfg;
-
-	/*! Path to the directory being deployed, as seen from the host */
-	char *ct_dir;
 
 	/*! lxc_params#ct_dir  + "/config/" */
 	char ct_conf_dir[1024];
@@ -86,14 +72,9 @@ struct lxc_params {
 	/*! lxc_params#ct_dir + "/rootfs/" */
 	char ct_root_dir[1024];
 
-	/*! Path to temporary LXC config used to launch this instance of this
-	 * container, as seen from host */
-	char lxc_cfg_file[1024];
-
 	/* general */
 	/*! Path to Pelagicontain config file, as seen from host */
 	char main_cfg_file[1024];
-
 };
 
-#endif /* PELAGICONTAIN_COMMON_H */
+#endif //PELAGICONTAINCOMMON_H

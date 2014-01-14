@@ -17,8 +17,8 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/*! 
-\mainpage 
+/*!
+\mainpage
 
 <h2>Introduction</h2>
 Pelagicontain is a tool for launching contained Linux applications.
@@ -104,7 +104,7 @@ IPTables, bandwidth limitations and D-Bus access limitations.
 
 <h3>Sample configuration</h3>
 The following configuration illustrates the most important concepts of
-pelagicontain.conf. 
+pelagicontain.conf.
 
 \verbatim
 {
@@ -198,4 +198,3 @@ configured to be installed. On a Debian machine it is typically located in \c
 /usr/share/lxc/templates/lxc-pelagicontain
 
 */
-

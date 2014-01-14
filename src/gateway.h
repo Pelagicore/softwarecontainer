@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <erik.boto@pelagicore.com>
+ * Copyright (C) 2013, Pelagicore AB <tomas.hallenberg@pelagicore.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,39 +17,21 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/*! \brief Pulse functionality
- *  \file pulse.h
+/*! \brief Gateway base class
+ *  \file gateway.h
  *
- *  Pulse audio functionality for Pelagicontain
+ * Gateway abstract base class for Pelagicontain
  */
 
-#ifndef PULSE_H
-#define PULSE_H
+#ifndef GATEWAY_H
+#define GATEWAY_H
 
-#include <pulse/pulseaudio.h>
-#include "gateway.h"
+#include <string>
 
-class Pulse :
-	public Gateway
+class Gateway
 {
 public:
-	Pulse(const char *socket);
-	~Pulse();
-
-	std::string environment();
-
-private:
-	static void loadCallback(pa_context *c, uint32_t idx, void *userdata);
-	static void unloadCallback(pa_context *c, int success, void *userdata);
-	static void stateCallback(pa_context *c, void *userdata);
-
-	const char *socketName();
-
-	pa_mainloop_api *m_api;
-	pa_context *m_context;
-	pa_threaded_mainloop *m_mainloop;
-	const char *m_socket;
-	int m_index;
+	virtual std::string environment() = 0;
 };
 
-#endif /* PULSE_H */
+#endif //GATEWAY_H
