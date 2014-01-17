@@ -14,7 +14,9 @@ cat > $CONFIGDIR/pelagicontain.conf << EOF
 	"iptables -I FORWARD --dest \$SRC_IP -j ACCEPT"
     ],
     "lxc-config-template": "/etc/pelagicontain",
-    "bandwidth-limit": "500kbps"
+    "bandwidth-limit": "500kbps",
+    "ip-addr-net": "192.168.1.",
+    "gw-ip-addr": "192.168.1.1"
 }
 EOF
 
