@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 2.6)
+
+PROJECT(pelagicontaintestapp)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../../cmake_modules)
+
+find_package(DBusCpp             REQUIRED)
+
+add_definitions(-DPACKAGE_VERSION="0.1")
+
+IF(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
+	SET(SYS_CONFIG_DIR /etc)
+ELSE()
+	SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
+ENDIF()
+
+INCLUDE_DIRECTORIES (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
+
+add_executable( pelagicontaintestapp
+	dbustestapp.cpp
+)
+
+TARGET_LINK_LIBRARIES( pelagicontaintestapp
+	${PELAGICORE_UTILS_LIBRARIES}
+	${DEPENDENCIES_LIBRARIES}
+	${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
+)
