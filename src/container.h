@@ -35,6 +35,7 @@
 class Container
 {
 public:
+	Container ();
 	Container(struct lxc_params *ct_pars);
 	~Container();
 

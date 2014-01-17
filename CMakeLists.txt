@@ -2,8 +2,11 @@ cmake_minimum_required(VERSION 2.6)
 
 PROJECT(pelagicontain)
 
-FIND_PACKAGE(PkgConfig REQUIRED)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake_modules)
+
+FIND_PACKAGE(PkgConfig           REQUIRED)
 FIND_PACKAGE(PelagicoreUtilities REQUIRED)
+find_package(DBusCpp             REQUIRED)
 
 add_definitions(-DPACKAGE_VERSION="0.1")
 
@@ -13,6 +16,8 @@ ELSE()
 	SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
 ENDIF()
 MESSAGE("Configuration files will be installed in " ${SYS_CONFIG_DIR})
+
+INCLUDE_DIRECTORIES (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
 
 add_subdirectory(src)
 add_subdirectory(doc)

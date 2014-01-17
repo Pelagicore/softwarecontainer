@@ -24,6 +24,8 @@
 
 using namespace std;
 
+Container::Container ()
+{}
 Container::Container(struct lxc_params *ct_pars)
 {
 	m_name = ct_pars->container_name;

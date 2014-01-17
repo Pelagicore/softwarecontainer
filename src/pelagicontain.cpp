@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/types.h>
+
 #include "config.h"
 #include "container.h"
 #include "dbusproxy.h"
@@ -29,8 +31,9 @@
 #include "iptables.h"
 #include "pulse.h"
 #include "trafficcontrol.h"
+#include "pelagicontain.h"
 
-#include "CommandLineParser.h"
+
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -48,7 +51,7 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config)
+int Pelagicontain::initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config)
 {
 	char *ip_addr_net;
 
@@ -102,59 +105,49 @@ static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir,
 	return 0;
 }
 
-int main (int argc, char **argv)
+/*! Initialize the Pelagicpontain object before usage */
+int Pelagicontain::initialize (struct lxc_params &ct_pars, Config &config)
 {
-	CommandLineParser commandLineParser("Pelagicore container utility\n",
-		"[deploy directory (abs path)] [command]",
-		PACKAGE_VERSION,
-		"This tool ......");
-	
-	int myOptionValue = 0;
-	commandLineParser.addArgument(myOptionValue, "myoption", 'o', "An option");
+	m_container = Container(&ct_pars);
 
-	if (commandLineParser.parse(argc, argv))
-		exit(-1);
+//	debug("Generate iptables rules");
+//	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
+//
+//	// Load pulseaudio module
+//	debug("Load pulseaudio module");
+//	Pulse pulse(ct_pars.pulse_socket);
+//	m_container.addGateway(&pulse);
+//
+//	// Limit network interface
+//	debug("Limit network interface");
+//	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 
-	struct lxc_params ct_pars;
-
-	if (argc < 3 || argv[1][0] != '/') {
-		log_error("Invalid arguments");
-		commandLineParser.printHelp();
-		return -1;
-	}
-
-	Config config;
-
-	if (initializeConfig(&ct_pars, argv[1], &config)) {
-		log_error("Failed to initialize config. Exiting");
-		return -1;
-	}
-
-	Container container(&ct_pars);
-
-	debug("Generate iptables rules");
-	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
-
-	/* Load pulseaudio module */
-	debug("Load pulseaudio module");
-	Pulse pulse(ct_pars.pulse_socket);
-	container.addGateway(&pulse);
-
-	/* Limit network interface */
-	debug("Limit network interface");
-	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
-
-	/* Spawn proxies */
-	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
-	                   ct_pars.main_cfg_file,
-	                   DBusProxy::SessionProxy);
-	
-	DBusProxy systemProxy(ct_pars.system_proxy_socket,
-	                  ct_pars.main_cfg_file,
-	                  DBusProxy::SystemProxy);
-	
-	container.addGateway(&sessionProxy);
-	container.addGateway(&systemProxy);
-
-	container.run(argc, argv, &ct_pars);
+	// Spawn proxies
+//	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
+//	                   ct_pars.main_cfg_file,
+//	                   DBusProxy::SessionProxy);
+//	
+//	DBusProxy systemProxy(ct_pars.system_proxy_socket,
+//	                  ct_pars.main_cfg_file,
+//	                  DBusProxy::SystemProxy);
+//	
+//	m_container.addGateway(&sessionProxy);
+//	m_container.addGateway(&systemProxy);
+	return 0;
 }
+
+/*! Launch the container. This is a non-blocking operation */
+pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars)
+{
+	pid_t pid = fork();
+	if (pid == 0) { //child
+		m_container.run(numParameters, parameters, ct_pars);
+		exit(0);
+	} // Parent
+	return pid;
+
+}
+
+Pelagicontain::Pelagicontain () {};
+Pelagicontain::~Pelagicontain () {};
+

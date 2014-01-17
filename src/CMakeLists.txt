@@ -2,10 +2,11 @@ pkg_check_modules(DEPENDENCIES REQUIRED libpulse jansson)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
 link_directories(
-	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS}
-)
+	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS})
 
 add_executable( pelagicontain
+	pelagicontaintodbusadapter.cpp
+	main.cpp
 	config.cpp
 	container.cpp
 	dbusproxy.cpp
@@ -19,6 +20,7 @@ add_executable( pelagicontain
 TARGET_LINK_LIBRARIES( pelagicontain
 	${PELAGICORE_UTILS_LIBRARIES}
 	${DEPENDENCIES_LIBRARIES}
+	${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
 )
 
 install(TARGETS pelagicontain RUNTIME DESTINATION bin)
