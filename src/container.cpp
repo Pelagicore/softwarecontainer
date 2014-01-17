@@ -45,8 +45,8 @@ Container::Container(struct lxc_params *ct_pars)
 
 Container::~Container()
 {
-	if (remove(configFile()) == -1)
-		log_error("Failed to remove lxc config file!");
+// 	if (remove(configFile()) == -1)
+// 		log_error("Failed to remove lxc config file!");
 }
 
 const char *Container::name()
@@ -100,8 +100,8 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 		strcat(user_command, " ");
 	}
 
-	snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-		  name(), environment.c_str(), user_command);
+       snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
+                 name(), environment.c_str(), user_command);
 	ret = system(lxc_command);
 	if (ret)
 		log_error("%s returned %d\n", lxc_command, ret);
@@ -109,8 +109,8 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	/* Destroy container */
 	snprintf(lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
 	ret = system(lxc_command);
-        if (ret)
-                log_error("%s returned %d", lxc_command, ret);
+       if (ret)
+               log_error("%s returned %d", lxc_command, ret);
 
 	return retval;
 }

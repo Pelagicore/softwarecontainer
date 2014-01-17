@@ -141,11 +141,21 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 {
 	pid_t pid = fork();
 	if (pid == 0) { //child
+		/**
+		 * lxc-execute inherits file descriptors from parent which seems to cause
+		 * a crash, so we close a bunch to avoid that, fd 0, 1, and 2 are
+		 * kept because they are standard fd's that we want (e.g. see output
+		 * on stdout). (the number 30 is arbitrary)
+		 */
+		for (int i = 3; i < 30; i++){
+			close (i);
+		}
 		m_container.run(numParameters, parameters, ct_pars);
-		exit(0);
-	} // Parent
-	return pid;
+ 		exit(0);
+ 	} // Parent
+ 	return pid;
 
+	return 5;
 }
 
 Pelagicontain::Pelagicontain () {};

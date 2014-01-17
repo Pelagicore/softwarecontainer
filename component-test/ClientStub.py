@@ -110,7 +110,7 @@ def test_can_find_app_on_dbus ():
 def test_register_was_called ():
 	print pam_iface
 	iterations = 0
-	while (not pam_iface.test_register_called() and iterations < 5):
+	while (not pam_iface.test_register_called()):# and iterations < 5):
 		time.sleep(1)
 		iterations = iterations + 1
 	print "PASS: Register called!"
