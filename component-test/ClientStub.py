@@ -21,11 +21,18 @@ pelagicontain_binary = "pelagicontain"
 # start pelagicontain via system (), set unique cookie using --cookie
 # good example is a UUID
 remote_object     = None
+pam_remote_object = None
 pelagicontain_pid = None
 iface             = None
+pam_iface         = None
 cookie_uuid = commands.getoutput("uuidgen").strip()
-uuid2 = commands.getoutput("uuidgen").strip()
-print "Generated CookieUUID = %s, UUID2 = %s" % (cookie_uuid, uuid2)
+app_uuid = commands.getoutput("uuidgen").strip()
+print "Generated CookieUUID = %s, AppUUID = %s" % (cookie_uuid, app_uuid)
+
+
+pam_remote_object = bus.get_object("com.pelagicore.PAM",
+			       "/com/pelagicore/PAM")
+pam_iface = dbus.Interface (pam_remote_object, "com.pelagicore.PAM")
 
 def cleanup():
 	print "Clean up and exit!"
@@ -33,8 +40,8 @@ def cleanup():
 
 def find_app_on_dbus ():
 	try:
-		remote_object2 = bus.get_object("com.pelagicore.PAM", #TODO: This should be pelagicontain's app!!
-					       "/com/pelagicore/PAM") #TODO: This should be pelagicontain's app!!
+		remote_object2 = bus.get_object("com.pelagicore.test.pelagicontaintestapp", #TODO: This should be pelagicontain's app!!
+					       "/com/pelagicore/test/pelagicontaintestapp") #TODO: This should be pelagicontain's app!!
 		return True
 	except:
 		return False
@@ -58,8 +65,8 @@ def test_pelagicontain_found_on_bus ():
 	found = False
 	while (not found and tries < 1):
 		try:
-			remote_object = bus.get_object("com.pelagicore.PAM", #TODO: This should be pelagicontain!!
-						       "/com/pelagicore/PAM") #TODO: This should be pelagicontain!!
+			remote_object = bus.get_object("com.pelagicore.Pelagicontain",
+						       "/com/pelagicore/Pelagicontain")
 			found = True
 		except:
 			pass
@@ -74,9 +81,9 @@ def test_pelagicontain_found_on_bus ():
 
 def test_can_find_and_run_Launch_in_pelagicontain_on_dbus ():
 	global iface
-	iface = dbus.Interface (remote_object, "com.pelagicore.PAM")
+	iface = dbus.Interface (remote_object, "com.pelagicore.Pelagicontain")
 	try:
-		iface.PelagicontainLaunch("hej")
+		iface.Launch(app_uuid)
 		print "PASS: Found Launch in Pelagicontain on D-Bus"
 	except Exception as e:
 		print "Fail: Failed to find Launch in Pelagicontain on D-Bus"
@@ -101,29 +108,30 @@ def test_can_find_app_on_dbus ():
 # ----------------------------- Shutdown
 
 def test_register_was_called ():
+	print pam_iface
 	iterations = 0
-	while (not iface.test_register_called()):# and iterations < 5):
+	while (not pam_iface.test_register_called() and iterations < 5):
 		time.sleep(1)
 		iterations = iterations + 1
 	print "PASS: Register called!"
 
 def test_updatefinished_was_called ():
 	iterations = 0
-	while (not iface.test_updatefinished_called()):# and iterations < 5):
+	while (not pam_iface.test_updatefinished_called()):# and iterations < 5):
 		time.sleep(1)
 		iterations = iterations + 1
 	print "PASS: Register called!"
 
 # --------------- Run tests for startup
+pam_iface.test_reset_values ()
+
 test_can_start_pelagicontain_via_Popen ()
 test_pelagicontain_found_on_bus ()
-#test_cant_find_app_on_dbus ()
+test_cant_find_app_on_dbus ()
 test_can_find_and_run_Launch_in_pelagicontain_on_dbus ()
 test_register_was_called ()
 test_can_find_app_on_dbus ()
 
-# TODO: Do this before test.....
-iface.test_reset_values ()
 
 
 # --------------- Run tests for shutdown
