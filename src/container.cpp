@@ -25,7 +25,10 @@
 using namespace std;
 
 Container::Container ()
-{}
+{
+
+}
+
 Container::Container(struct lxc_params *ct_pars)
 {
 	m_name = ct_pars->container_name;
@@ -64,7 +67,6 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	int max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
 	char user_command[max_cmd_len];
-	int retval = 0;
 	std::string environment;
 
 	/* Set up an environment */
@@ -74,7 +76,7 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 		if (!env.empty())
 			environment += env + " ";
 	}
-	debug("Using environment: %s", environment.c_str());
+	log_debug("Using environment: %s", environment.c_str());
 
 	/* Create container */
 	sprintf(lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
@@ -85,7 +87,7 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	if (ret) {
 		log_error("%s returned %d", lxc_command, ret);
 	} else {
-		debug("%s returned %d", lxc_command, ret);
+		log_debug("%s returned %d", lxc_command, ret);
 	}
 
 	/* Execute command in container */
@@ -100,19 +102,21 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 		strcat(user_command, " ");
 	}
 
-       snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-                 name(), environment.c_str(), user_command);
+	snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
+		name(), environment.c_str(), user_command);
+	log_debug(lxc_command);
 	ret = system(lxc_command);
 	if (ret)
 		log_error("%s returned %d\n", lxc_command, ret);
 
 	/* Destroy container */
 	snprintf(lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
+	log_debug(lxc_command);
 	ret = system(lxc_command);
-       if (ret)
-               log_error("%s returned %d", lxc_command, ret);
+	if (ret)
+		log_error("%s returned %d", lxc_command, ret);
 
-	return retval;
+	return 0;
 }
 
 const char *Container::configFile()
@@ -124,8 +128,7 @@ const char *Container::configFile()
 
 int Container::writeConfiguration(struct lxc_params *params)
 {
-        debug("Generating config to %s for IP %s",
-		configFile(), params->ip_addr.c_str());
+        debug("Generating config to %s for IP %s", configFile(), params->ip_addr.c_str());
 
 	/* Copy system config to temporary location */
 	ifstream source(params->lxc_system_cfg, ios::binary);

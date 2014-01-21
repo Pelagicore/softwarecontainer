@@ -20,7 +20,7 @@
 /*! \brief DBus Proxy
  *  \file dbusproxy.h
  *
- *  Takes care of spawning and killing the DBus proxis
+ *  Takes care of spawning and killing the DBus proxies
  */
 
 #ifndef DBUSPROXY_H
@@ -44,7 +44,9 @@ public:
 	DBusProxy(const char *socket, const char *config, ProxyType type);
 	~DBusProxy();
 
-	std::string environment();
+	/*! Implements Gateway::environment
+	 */
+	virtual std::string environment();
 
 private:
 	const char *typeString();

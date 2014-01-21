@@ -1,3 +1,4 @@
+
 #include "CommandLineParser.h"
 
 #include "pelagicontain.h"
@@ -11,10 +12,9 @@ int main (int argc, char **argv)
 
 	DBus::default_dispatcher = &dispatcher;
 	DBus::Connection bus = DBus::Connection::SessionBus();
-	PelagicontainToDBusAdapter pcAdapter (bus, pelagicontain);
+	PelagicontainToDBusAdapter pcAdapter(bus, pelagicontain);
 
 	bus.request_name("com.pelagicore.Pelagicontain");
-
 
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
 		"[deploy directory (abs path)] [command]",
@@ -25,9 +25,7 @@ int main (int argc, char **argv)
 	commandLineParser.addArgument(myOptionValue, "myoption", 'o', "An option");
 
 	if (commandLineParser.parse(argc, argv))
-		exit(-1);
-
-	struct lxc_params ct_pars;
+		return -1;
 
 	if (argc < 3 || argv[1][0] != '/') {
 		log_error("Invalid arguments");
@@ -35,6 +33,7 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
+	struct lxc_params ct_pars;
 	Config config;
 
 	if (Pelagicontain::initializeConfig(&ct_pars, argv[1], &config)) {
@@ -42,7 +41,7 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
-	pelagicontain.initialize (ct_pars, config);
-	log_debug("Started Pelagicontain with PID: %d", pelagicontain.run (argc, argv, &ct_pars));
+	pelagicontain.initialize(ct_pars, config);
+	log_debug("Started Pelagicontain with PID: %d", pelagicontain.run(argc, argv, &ct_pars));
 	dispatcher.enter();
 }

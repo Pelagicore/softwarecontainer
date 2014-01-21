@@ -6,6 +6,7 @@ PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connect
 {
 	
 }
+
 std::string PelagicontainToDBusAdapter::Echo(const std::string& argument) {
 	return "Hello from Echo";
 }
