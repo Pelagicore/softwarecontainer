@@ -1,3 +1,4 @@
+
 #include "pelagicontaintodbusadapter.h"
 
 PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connection, Pelagicontain &pelagicontain) :
@@ -12,5 +13,9 @@ std::string PelagicontainToDBusAdapter::Echo(const std::string& argument) {
 }
 
 void PelagicontainToDBusAdapter::Launch(const std::string& appId) {
+	// We should call PAM::register(appId, gwId) here.
 }
 
+void PelagicontainToDBusAdapter::Update(const std::vector<std::string> &config) {
+	// PAM will call this method when we have called PAM::Register()
+}

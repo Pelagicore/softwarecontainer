@@ -22,6 +22,7 @@ public:
     {
         register_method(Pelagicontain_adaptor, Echo, _Echo_stub);
         register_method(Pelagicontain_adaptor, Launch, _Launch_stub);
+        register_method(Pelagicontain_adaptor, Update, _Update_stub);
     }
 
     ::DBus::IntrospectedInterface *introspect() const 
@@ -37,10 +38,16 @@ public:
             { "appId", "s", true },
             { 0, 0, 0 }
         };
+        static ::DBus::IntrospectedArgument Update_args[] = 
+        {
+            { "config", "as", true },
+            { 0, 0, 0 }
+        };
         static ::DBus::IntrospectedMethod Pelagicontain_adaptor_methods[] = 
         {
             { "Echo", Echo_args },
             { "Launch", Launch_args },
+            { "Update", Update_args },
             { 0, 0 }
         };
         static ::DBus::IntrospectedMethod Pelagicontain_adaptor_signals[] = 
@@ -74,6 +81,7 @@ public:
      */
     virtual std::string Echo(const std::string& argument) = 0;
     virtual void Launch(const std::string& appId) = 0;
+    virtual void Update(const std::vector< std::string >& config) = 0;
 
 public:
 
@@ -101,6 +109,15 @@ private:
 
         std::string argin1; ri >> argin1;
         Launch(argin1);
+        ::DBus::ReturnMessage reply(call);
+        return reply;
+    }
+    ::DBus::Message _Update_stub(const ::DBus::CallMessage &call)
+    {
+        ::DBus::MessageIter ri = call.reader();
+
+        std::vector< std::string > argin1; ri >> argin1;
+        Update(argin1);
         ::DBus::ReturnMessage reply(call);
         return reply;
     }

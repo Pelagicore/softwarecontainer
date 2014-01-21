@@ -1,3 +1,4 @@
+
 #include <dbus-c++/dbus.h>
 
 #include "dbusadaptor.h"
@@ -9,9 +10,10 @@ class PelagicontainToDBusAdapter :
 	public DBus::ObjectAdaptor
 {
 public:
-	PelagicontainToDBusAdapter (DBus::Connection &conn, Pelagicontain &pc);
+	PelagicontainToDBusAdapter(DBus::Connection &conn, Pelagicontain &pc);
 	virtual std::string Echo(const std::string& argument);
 	virtual void Launch(const std::string& appId);
+	virtual void Update(const std::vector<std::string> &config);
 
 private:
 	Pelagicontain m_pelagicontain;

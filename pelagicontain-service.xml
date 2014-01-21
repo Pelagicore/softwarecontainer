@@ -8,5 +8,8 @@
 		<method name="Launch">
 			<arg direction="in" type="s" name="appId"/>
 		</method>
+		<method name="Update">
+			<arg direction="in" type="as" name="config"/>
+		</method>
 	</interface>
 </node>
