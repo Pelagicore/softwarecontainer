@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<node name="/com/pelagicore/test/pelagicontaintestapp">
-	<interface name="com.pelagicore.test.pelagicontaintestapp">
-		<method name="Echo">
-			<arg direction="in" type="s" name="argument"/>
-			<arg direction="out" type="s"/>
-		</method>
-	</interface>
-</node>
