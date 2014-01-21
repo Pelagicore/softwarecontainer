@@ -36,8 +36,8 @@ def cleanup():
 
 def find_app_on_dbus():
     try:
-        remote_object2 = bus.get_object("com.pelagicore.test.pelagicontaintestapp", #TODO: This should be pelagicontain's app!!
-                "/com/pelagicore/test/pelagicontaintestapp") #TODO: This should be pelagicontain's app!!
+        remote_object2 = bus.get_object("com.pelagicore.test.ContainedApp",
+                "/com/pelagicore/test/ContainedApp")
         return True
     except:
         return False
@@ -146,10 +146,3 @@ test_can_find_app_on_dbus()
 # Verify that PAM receives PAM.unregister($UUID2)
 
 # Verify that PELAGICONTAIN_PID is no longer running
-
-# Create an object that will proxy for a particular remote object.
-#remote_object = bus.get_object("com.pelagicore.PAM", # Connection name
-#                               "/com/pelagicore/PAM" # Object's path
-#                              )
-#iface = dbus.Interface (remote_object, "com.pelagicore.PAM")
-

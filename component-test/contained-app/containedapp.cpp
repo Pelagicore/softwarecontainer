@@ -2,14 +2,14 @@
 
 #include "dbusadaptor.h"
 
-class DBusTestApp : 
-	public com::pelagicore::test::pelagicontaintestapp_adaptor,
+class ContainedApp : 
+	public com::pelagicore::test::ContainedApp_adaptor,
 	public DBus::IntrospectableAdaptor,
 	public DBus::ObjectAdaptor
 {
 public:
-	DBusTestApp (DBus::Connection &conn) : 
-		DBus::ObjectAdaptor(conn, "/com/pelagicore/test/pelagicontaintestapp")
+	ContainedApp (DBus::Connection &conn) : 
+		DBus::ObjectAdaptor(conn, "/com/pelagicore/test/ContainedApp")
 	{
 	
 	}
@@ -24,9 +24,9 @@ int main (int argc, char **argv)
 
 	DBus::default_dispatcher = &dispatcher;
 	DBus::Connection bus = DBus::Connection::SessionBus();
-	DBusTestApp testapp(bus);
+	ContainedApp app(bus);
 
-	bus.request_name("com.pelagicore.test.pelagicontaintestapp");
+	bus.request_name("com.pelagicore.test.ContainedApp");
 
 	dispatcher.enter();
 }
