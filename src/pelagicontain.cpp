@@ -36,6 +36,16 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
+
+Pelagicontain::Pelagicontain(const PAMInterface &pamInterface):
+	m_pamInterface(pamInterface)
+{
+}
+
+Pelagicontain::~Pelagicontain()
+{
+}
+
 /*! Initialize config struct
  *
  * Initialize the config struct with various paths and parameters. Some of
@@ -108,27 +118,27 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 {
 	m_container = Container(&ct_pars);
 
-	debug("Generate iptables rules");
-	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
-
-	// Load pulseaudio module
-	debug("Load pulseaudio module");
-	Pulse pulse(ct_pars.pulse_socket);
-	m_container.addGateway(&pulse);
-
-	// Limit network interface
-	debug("Limit network interface");
-	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
-
-	//Spawn proxies
-	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
-		ct_pars.main_cfg_file, DBusProxy::SessionProxy);
-	
-	DBusProxy systemProxy(ct_pars.system_proxy_socket,
-		ct_pars.main_cfg_file, DBusProxy::SystemProxy);
-	
-	m_container.addGateway(&sessionProxy);
-	m_container.addGateway(&systemProxy);
+// 	debug("Generate iptables rules");
+// 	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
+// 
+// 	// Load pulseaudio module
+// 	debug("Load pulseaudio module");
+// 	Pulse pulse(ct_pars.pulse_socket);
+// 	m_container.addGateway(&pulse);
+// 
+// 	// Limit network interface
+// 	debug("Limit network interface");
+// 	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
+// 
+// 	//Spawn proxies
+// 	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
+// 		ct_pars.main_cfg_file, DBusProxy::SessionProxy);
+// 	
+// 	DBusProxy systemProxy(ct_pars.system_proxy_socket,
+// 		ct_pars.main_cfg_file, DBusProxy::SystemProxy);
+// 	
+// 	m_container.addGateway(&sessionProxy);
+// 	m_container.addGateway(&systemProxy);
 	
 	return 0;
 }
@@ -153,6 +163,11 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 	return pid;
 }
 
-Pelagicontain::Pelagicontain () {};
-Pelagicontain::~Pelagicontain () {};
+void Pelagicontain::launch(const std::string &appId) {
+	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, appId);
+}
 
+void Pelagicontain::update(const std::vector<std::string> &config)
+{
+	log_debug("######### PAM called Update");
+}

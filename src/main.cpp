@@ -1,21 +1,13 @@
 
 #include "CommandLineParser.h"
 
+#include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaincommon.h"
 #include "pelagicontaintodbusadapter.h"
 
 int main (int argc, char **argv)
 {
-	DBus::BusDispatcher dispatcher;
-	Pelagicontain pelagicontain;
-
-	DBus::default_dispatcher = &dispatcher;
-	DBus::Connection bus = DBus::Connection::SessionBus();
-	PelagicontainToDBusAdapter pcAdapter(bus, pelagicontain);
-
-	bus.request_name("com.pelagicore.Pelagicontain");
-
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
 		"[deploy directory (abs path)] [command]",
 		PACKAGE_VERSION,
@@ -32,6 +24,16 @@ int main (int argc, char **argv)
 		commandLineParser.printHelp();
 		return -1;
 	}
+
+	DBus::BusDispatcher dispatcher;
+	DBus::default_dispatcher = &dispatcher;
+	DBus::Connection bus = DBus::Connection::SessionBus();
+
+	bus.request_name("com.pelagicore.Pelagicontain");
+
+	PAMInterface pamInterface(bus);
+	Pelagicontain pelagicontain(pamInterface);
+	PelagicontainToDBusAdapter pcAdapter(bus, pelagicontain);
 
 	struct lxc_params ct_pars;
 	Config config;

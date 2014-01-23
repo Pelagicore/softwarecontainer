@@ -129,8 +129,8 @@ test_can_start_pelagicontain()
 test_pelagicontain_found_on_bus()
 test_cant_find_app_on_dbus()
 test_can_find_and_run_Launch_in_pelagicontain_on_dbus()
-test_register_was_called()
-test_can_find_app_on_dbus()
+#test_register_was_called()
+#test_can_find_app_on_dbus()
 
 # --------------- Run tests for shutdown
 

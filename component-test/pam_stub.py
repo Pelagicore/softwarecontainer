@@ -17,19 +17,23 @@ class PAMStub(dbus.service.Object):
         request = self.bus.request_name(self.BUS_NAME, dbus.bus.NAME_FLAG_REPLACE_EXISTING)
         bus_name = dbus.service.BusName(self.BUS_NAME, bus=self.bus)
         dbus.service.Object.__init__(self, bus_name, "/com/pelagicore/PAM")
+        
+    @dbus.service.method(BUS_NAME, in_signature="s", out_signature="s", 
+        sender_keyword="sender")
+    def Echo(self, message, sender=None):
+        return message
 
     @dbus.service.method(BUS_NAME, in_signature="ss", out_signature="", 
         sender_keyword="sender")
-    def Register(self, appId, gwId, sender=None):
-        print sender + " called Register() with args " + "\"" + appId + "\", \"" + gwId + "\""
+    def RegisterClient(self, appId, gwId, sender=None):
+        print sender + " called RegisterClient() with args " + "\"" + appId + "\", \"" + gwId + "\""
         self.register_called = True
-        print "ATTENTION!! Now update should be called, but PAM is a stub!"
         # Call Pelagicontain::update here
         pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain",
             "/com/pelagicore/Pelagicontain")
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
             "com.pelagicore.Pelagicontain")
-        pelagicontain_iface.Update("appId", "gwId")
+        pelagicontain_iface.Update(["GatewayConfig1", "GatewayConfig2"])
 
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="")
     def Unregister(self, appId):
