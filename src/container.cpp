@@ -62,14 +62,16 @@ void Container::addGateway(Gateway *gw)
 	m_gateways.push_back(gw);
 }
 
-int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
+std::vector<std::string> Container::commands(int numParams, char **params,
+	struct lxc_params *ct_pars)
 {
 	int max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
 	char user_command[max_cmd_len];
 	std::string environment;
+	std::vector<std::string> commands;
 
-	/* Set up an environment */
+	// Set up an environment
 	for (std::vector<Gateway *>::iterator it = m_gateways.begin();
 		it != m_gateways.end(); ++it) {
 		std::string env = (*it)->environment();
@@ -78,45 +80,35 @@ int Container::run(int argc, char **argv, struct lxc_params *ct_pars)
 	}
 	log_debug("Using environment: %s", environment.c_str());
 
-	/* Create container */
+	// Command to create container
 	sprintf(lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
 				" -f %s > /tmp/lxc_%s.log",
 				ct_pars->ct_root_dir, name(),
 				configFile(), name());
-	int ret = system(lxc_command);
-	if (ret) {
-		log_error("%s returned %d", lxc_command, ret);
-	} else {
-		log_debug("%s returned %d", lxc_command, ret);
-	}
+	commands.push_back(std::string(lxc_command));
 
-	/* Execute command in container */
-	for (int i = 2; i < argc; i++) {
+	// Create command to execute inside container
+	for (int i = 2; i < numParams; i++) {
 		int clen = strlen(user_command);
-		int nlen = strlen((const char *)argv[i]);
+		int nlen = strlen((const char *)params[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
 			log_error ("Parameter list too long");
 			exit(1);
 		}
-		strcat(user_command, argv[i]);
+		strcat(user_command, params[i]);
 		strcat(user_command, " ");
 	}
 
+	// Command to execute inside container
 	snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
 		name(), environment.c_str(), user_command);
-	log_debug(lxc_command);
-	ret = system(lxc_command);
-	if (ret)
-		log_error("%s returned %d\n", lxc_command, ret);
+	commands.push_back(std::string(lxc_command));
 
-	/* Destroy container */
+	// Command to destroy container
 	snprintf(lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
-	log_debug(lxc_command);
-	ret = system(lxc_command);
-	if (ret)
-		log_error("%s returned %d", lxc_command, ret);
+	commands.push_back(std::string(lxc_command));
 
-	return 0;
+	return commands;
 }
 
 const char *Container::configFile()

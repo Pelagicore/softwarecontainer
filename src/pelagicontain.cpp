@@ -146,6 +146,10 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 /*! Launch the container. This is a non-blocking operation */
 pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars)
 {
+	// Get the commands to run in a separate process
+	std::vector<std::string> commands;
+	commands = m_container.commands(numParameters, parameters, ct_pars);
+
 	pid_t pid = fork();
 	if (pid == 0) { //child
 		/**
@@ -157,7 +161,16 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 		for (int i = 3; i < 30; i++)
 			close (i);
 
-		m_container.run(numParameters, parameters, ct_pars);
+
+		// Run all commands from the Container in the child process
+		for (std::vector<std::string>::iterator it = commands.begin();
+			it != commands.end(); ++it) {
+			int ret = system((*it).c_str());
+			if (ret)
+				log_error("%s returned %d", (*it).c_str(), ret);
+			else
+				log_debug("%s returned %d", (*it).c_str(), ret);
+		}
 		exit(0);
 	} // Parent
 	return pid;

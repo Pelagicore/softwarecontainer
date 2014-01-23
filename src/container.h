@@ -41,7 +41,8 @@ public:
 
 	const char *name();
 	void addGateway(Gateway *gw);
-	int run(int argc, char **argv, struct lxc_params *ct_pars);
+	std::vector<std::string> commands(int numParams, char **params,
+		struct lxc_params *ct_pars);
 
 private:
 	const char *configFile();
