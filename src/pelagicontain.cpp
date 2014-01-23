@@ -161,15 +161,15 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 		for (int i = 3; i < 30; i++)
 			close (i);
 
-
 		// Run all commands from the Container in the child process
 		for (std::vector<std::string>::iterator it = commands.begin();
 			it != commands.end(); ++it) {
-			int ret = system((*it).c_str());
+			const char *command = (*it).c_str();
+			int ret = system(command);
 			if (ret)
-				log_error("%s returned %d", (*it).c_str(), ret);
+				log_error("%s returned %d", command, ret);
 			else
-				log_debug("%s returned %d", (*it).c_str(), ret);
+				log_debug("%s returned %d", command, ret);
 		}
 		exit(0);
 	} // Parent
