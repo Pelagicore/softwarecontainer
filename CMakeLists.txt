@@ -21,3 +21,4 @@ INCLUDE_DIRECTORIES (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
 
 add_subdirectory(src)
 add_subdirectory(doc)
+add_subdirectory(controller)

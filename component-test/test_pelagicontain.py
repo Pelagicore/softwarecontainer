@@ -44,16 +44,14 @@ def find_app_on_dbus():
 
 # ----------------------- Tests
 
-def test_can_start_pelagicontain():
+def test_can_start_pelagicontain(command):
     global pelagicontain_pid
     try:
         # The intention is to pass a cookie to Pelagicontain which it will use to
         # destinguish itself on D-Bus (as we will potentially have multiple instances
         # running in the system
-        #pelagicontain_pid = Popen([pelagicontain_binary, "--cookie=%s" % cookie_uuid]).pid
-        
-        # Just run 'ls' inside the container for now
-        pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", "ls"]).pid
+        #pelagicontain_pid = Popen([pelagicontain_binary, "--cookie=%s" % cookie_uuid]).pid        
+        pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command]).pid
     except:
         print "FAIL: Could not start pelagicontain (%s)" % pelagicontain_binary
         cleanup()
@@ -125,7 +123,7 @@ def test_updatefinished_was_called():
 pam_iface.test_reset_values()
 
 # --------------- Run tests for startup
-test_can_start_pelagicontain()
+test_can_start_pelagicontain("/deployed_app/controller")
 test_pelagicontain_found_on_bus()
 test_cant_find_app_on_dbus()
 test_can_find_and_run_Launch_in_pelagicontain_on_dbus()

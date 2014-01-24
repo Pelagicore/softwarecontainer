@@ -21,6 +21,7 @@ public:
 private:
 	Container m_container;
 	PAMInterface m_pamInterface;
+	int m_fd[2];
 };
 
 #endif // PELAGICONTAIN_H

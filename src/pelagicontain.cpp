@@ -23,6 +23,11 @@
 #include <signal.h>
 #include <sys/types.h>
 
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <fcntl.h>
+
+
 #include "config.h"
 #include "container.h"
 #include "dbusproxy.h"
@@ -40,6 +45,7 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 Pelagicontain::Pelagicontain(const PAMInterface &pamInterface):
 	m_pamInterface(pamInterface)
 {
+	pipe (m_fd);
 }
 
 Pelagicontain::~Pelagicontain()
@@ -159,7 +165,7 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 		 * on stdout). (the number 30 is arbitrary)
 		 */
 		for (int i = 3; i < 30; i++)
-			close (i);
+			close(i);
 
 		// Run all commands from the Container in the child process
 		for (std::vector<std::string>::iterator it = commands.begin();
@@ -173,14 +179,21 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 		}
 		exit(0);
 	} // Parent
+
 	return pid;
 }
 
 void Pelagicontain::launch(const std::string &appId) {
 	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, appId);
+	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
+	std::cout << "--->" << write(fd, "abc\r\n", 5) << std::endl;
 }
 
 void Pelagicontain::update(const std::vector<std::string> &config)
 {
 	log_debug("######### PAM called Update");
+	// Set configurations on all gateways we got a config for
+	// Call PAM::UpdateFinished
+	// Activate all gateways, when all have responded:
+	// Run app inside container
 }
