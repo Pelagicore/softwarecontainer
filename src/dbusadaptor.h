@@ -23,6 +23,7 @@ public:
         register_method(Pelagicontain_adaptor, Echo, _Echo_stub);
         register_method(Pelagicontain_adaptor, Launch, _Launch_stub);
         register_method(Pelagicontain_adaptor, Update, _Update_stub);
+        register_method(Pelagicontain_adaptor, Shutdown, _Shutdown_stub);
     }
 
     ::DBus::IntrospectedInterface *introspect() const 
@@ -43,11 +44,17 @@ public:
             { "config", "as", true },
             { 0, 0, 0 }
         };
+        static ::DBus::IntrospectedArgument Shutdown_args[] = 
+        {
+            { 0, "b", false },
+            { 0, 0, 0 }
+        };
         static ::DBus::IntrospectedMethod Pelagicontain_adaptor_methods[] = 
         {
             { "Echo", Echo_args },
             { "Launch", Launch_args },
             { "Update", Update_args },
+            { "Shutdown", Shutdown_args },
             { 0, 0 }
         };
         static ::DBus::IntrospectedMethod Pelagicontain_adaptor_signals[] = 
@@ -82,6 +89,7 @@ public:
     virtual std::string Echo(const std::string& argument) = 0;
     virtual void Launch(const std::string& appId) = 0;
     virtual void Update(const std::vector< std::string >& config) = 0;
+    virtual bool Shutdown() = 0;
 
 public:
 
@@ -119,6 +127,14 @@ private:
         std::vector< std::string > argin1; ri >> argin1;
         Update(argin1);
         ::DBus::ReturnMessage reply(call);
+        return reply;
+    }
+    ::DBus::Message _Shutdown_stub(const ::DBus::CallMessage &call)
+    {
+        bool argout1 = Shutdown();
+        ::DBus::ReturnMessage reply(call);
+        ::DBus::MessageIter wi = reply.writer();
+        wi << argout1;
         return reply;
     }
 };
