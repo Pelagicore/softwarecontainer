@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import commands, os, time, sys
-from subprocess import Popen
+import commands, os, time, sys, signal
+from subprocess import Popen, call
 
 # You must initialize the gobject/dbus support for threading
 # before doing anything.
@@ -51,6 +51,7 @@ def test_can_start_pelagicontain(command):
         # destinguish itself on D-Bus (as we will potentially have multiple instances
         # running in the system
         #pelagicontain_pid = Popen([pelagicontain_binary, "--cookie=%s" % cookie_uuid]).pid        
+        print "### Will start pelagicontain with the command: " + command
         pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command]).pid
     except:
         print "FAIL: Could not start pelagicontain (%s)" % pelagicontain_binary
@@ -102,41 +103,132 @@ def test_can_find_app_on_dbus():
         print "FAIL: App not present on D-Bus"
         cleanup()
 
-def test_register_was_called():
+def test_registerclient_was_called():
     iterations = 0
     while not pam_iface.test_register_called():# and iterations < 5):
         time.sleep(1)
         iterations = iterations + 1
-    print "PASS: Register called!"
-
-# ----------------------------- Shutdown
+    print "PASS: Register was called!"
 
 def test_updatefinished_was_called():
     iterations = 0
     while not pam_iface.test_updatefinished_called():# and iterations < 5):
         time.sleep(1)
         iterations = iterations + 1
-    print "PASS: Register called!"
+    print "PASS: UpdateFinished was called!"
 
 
-# --------------- Reset PAM mock
+# ----------------------------- Shutdown
+
+""" NOTE: This is not doing what is eventually intended, see notes below where
+    this function is called.
+"""
+def shutdown_pelagicontain():
+    try:
+        pelagicontain_iface.Shutdown()
+        print "Shutting down Pelagicontain"
+    except Exception as e:
+        print "FAIL: Failed to call Shutdown on Pelagicontain (over D-Bus)"
+        print e
+        cleanup()
+    # Currently we communicate with Controller by a FIFO file, '3' means exit
+    with open("/tmp/test/rootfs/in_fifo", "w+") as fh:
+        fh.write("3")
+
+""" NOTE: This should be a part of shutting down Pelagicontain properly and
+    should not be needed when all functionality is there.
+"""
+def kill_pelagicontain():
+    os.kill(pelagicontain_pid, signal.SIGINT)
+
+
+""" Pelagicontain component tests
+
+    The test requires a PAM-stub to be running on the system, and on the same
+    bus as the tests. The stub is implemented as component-test/pam_stub.py. The
+    stub exposes an API that mirrors the real PAM and helper methods that the tests
+    uses to assert how Pelagicontain interacted with the PAM-stub.
+
+    The test procedure is as follows:
+    * Start Pelagicontain, pass the command to be executed in the container
+    * Assert Pelagicontain can be found on D-Bus
+    * Assert Pelagicontain::Launch can be called
+    * Assert the expected call to PAM::RegisterClient was made
+    * Assert the expected call to PAM::UpdateFinished was made
+
+    After this, the rest is shutdown. When we have a proper D-Bus service
+    running as an app inside the container we can assert more things during
+    shutdown as well.
+"""
+
+
+# --------------- Reset PAM stub
 pam_iface.test_reset_values()
 
+
 # --------------- Run tests for startup
+
+""" Start Pelagicontain, test is passed if Popen succeeds.
+    The command to execute inside the container is passed to the test function.
+"""
 test_can_start_pelagicontain("/deployed_app/controller")
+
+""" Assert the Pelagicontain remote object can be found on the bus
+"""
 test_pelagicontain_found_on_bus()
-test_cant_find_app_on_dbus()
+
+""" NOTE: This test is disabled as we currently are not starting a D-Bus service
+    inside the container as intended. Should be enabled when that works
+"""
+#test_cant_find_app_on_dbus()
+
+""" Call Launch on Pelagicontain over D-Bus and assert the call goes well.
+    This will trigger a call to PAM::RegisterClient over D-Bus which we will
+    assert later.
+"""
 test_can_find_and_run_Launch_in_pelagicontain_on_dbus()
-#test_register_was_called()
+
+""" Assert against the PAM-stub that RegisterClient was called by Pelagicontain
+"""
+test_registerclient_was_called()
+
+""" NOTE: Same as above, there's currently no support to test if an app was
+    actually started (should be checked by finding it on D-Bus).
+"""
 #test_can_find_app_on_dbus()
+
+""" The call by Pelagicontain to PAM::RegisterClient would have triggered
+    a call by PAM to Pelagicontain::Update which in turn should result in
+    a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
+    made by Pelagicontain.
+"""
+test_updatefinished_was_called()
+
 
 # --------------- Run tests for shutdown
 
+""" NOTE: Currently this only makes Pelagicontain tell Controller to shut down
+    the app inside the container, to actually shut down Controller as well we need
+    to write a '3' to the FIFO file we use to communicate with Controller. After that
+    only Pelagicontain should remain (lxc-execute should have returned when Controller
+    exited), and currently we have to kill Pelagicontain explicitly (see next function
+    call below).
+"""
+shutdown_pelagicontain()
+
+""" This should not be needed later as Pelagicontain shoud shut down nicely after
+    the call to Shutdown.
+"""
+# Without a sleep here the terminal tends to be screwed up after the test
+time.sleep(1)
+kill_pelagicontain()
 
 
 
 
-
+""" NOTE: Possible assertions that should be made when Pelagicontain is more
+    complete:
+"""
 # Issue pelagicontain.Shutdown()
 
 # Verify that com.pelagicore.pelagicontain.test_app disappears from bus
