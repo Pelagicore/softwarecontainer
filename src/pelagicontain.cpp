@@ -224,7 +224,9 @@ bool Pelagicontain::shutdown()
 	// Shut down (clean up) all Gateways
 	// When all Gateways are finished:
 
-	// Call PAM::Unregister(appId)
+	// Call PAM::UnregisterClient(appId)
+	//TODO: The real appId should be used!
+	m_pamInterface.UnregisterClient("the-app-ID");
 
 	// Shut down LXC and exit Pelagicontain
 	// NOTE: Actually lxc-destroy is run as soon as Controller shuts down as

@@ -8,7 +8,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 
 class PAMStub(dbus.service.Object):
     register_called = False
-    unregister_called = False
+    unregisterclient_called = False
     updatefinished_called = False
     BUS_NAME = "com.pelagicore.PAM"
     
@@ -41,9 +41,11 @@ class PAMStub(dbus.service.Object):
         self.updatefinished_called = True
         print sender + " called UpdateFinished()"
 
-    @dbus.service.method(BUS_NAME, in_signature="s", out_signature="")
-    def Unregister(self, appId):
-        self.unregister_called = True
+    @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",
+        sender_keyword="sender")
+    def UnregisterClient(self, appId, sender=None):
+        self.unregisterclient_called = True
+        print sender + " called UnregisterClient()"
 
 
     """ Methods below are used by the component test to verify the expected
@@ -54,8 +56,8 @@ class PAMStub(dbus.service.Object):
         return self.register_called
 
     @dbus.service.method(BUS_NAME, out_signature="b")
-    def test_unregister_called(self):
-        return self.unregister_called
+    def test_unregisterclient_called(self):
+        return self.unregisterclient_called
 
     @dbus.service.method(BUS_NAME, out_signature="b")
     def test_updatefinished_called(self):
@@ -64,7 +66,7 @@ class PAMStub(dbus.service.Object):
     @dbus.service.method(BUS_NAME)
     def test_reset_values(self):
         self.register_called = False
-        self.unregister_called = False
+        self.unregisterclient_called = False
         self.updatefinished_called = False
 
 

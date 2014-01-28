@@ -74,6 +74,18 @@ public:
         invoke_method_noreply (call);
     }
 
+    void UnregisterClient(const std::string& appId)
+    {
+        ::DBus::CallMessage call;
+        ::DBus::MessageIter wi = call.writer();
+
+        wi << appId;
+        call.member("UnregisterClient");
+
+        // This method call has been changed manually to be non-blocking
+        invoke_method_noreply (call);
+    }
+
     void UpdateFinished()
     {
         ::DBus::CallMessage call;

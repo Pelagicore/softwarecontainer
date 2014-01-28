@@ -108,7 +108,7 @@ def test_registerclient_was_called():
     while not pam_iface.test_register_called():# and iterations < 5):
         time.sleep(1)
         iterations = iterations + 1
-    print "PASS: Register was called!"
+    print "PASS: RegisterClient was called!"
 
 def test_updatefinished_was_called():
     iterations = 0
@@ -116,6 +116,14 @@ def test_updatefinished_was_called():
         time.sleep(1)
         iterations = iterations + 1
     print "PASS: UpdateFinished was called!"
+
+def test_unregisterclient_was_called():
+    iterations = 0
+    while not pam_iface.test_unregisterclient_called():# and iterations < 5):
+        time.sleep(1)
+        iterations = iterations + 1
+    print "PASS: UnregisterClient was called!"
+
 
 
 # ----------------------------- Shutdown
@@ -155,6 +163,8 @@ def kill_pelagicontain():
     * Assert Pelagicontain::Launch can be called
     * Assert the expected call to PAM::RegisterClient was made
     * Assert the expected call to PAM::UpdateFinished was made
+    * Issue 'shutdown' of Pelagicontain
+    * Assert the expected call to PAM::UnregisterClient was made
 
     After this, the rest is shutdown. When we have a proper D-Bus service
     running as an app inside the container we can assert more things during
@@ -215,6 +225,11 @@ test_updatefinished_was_called()
     call below).
 """
 shutdown_pelagicontain()
+
+""" The call to Pelagicontain::Shutdown should have triggered a call to
+    PAM::UnregisterClient
+"""
+test_unregisterclient_was_called()
 
 """ This should not be needed later as Pelagicontain shoud shut down nicely after
     the call to Shutdown.

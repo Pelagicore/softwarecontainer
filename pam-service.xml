@@ -22,6 +22,12 @@
 			<arg direction="in" type="s" name="cookie"/>
 			<arg direction="in" type="s" name="appId"/>
 		</method>
+		<!-- UnregisterClient(string appId):
+			This method wraps PlatformAccessManager::unregisterClient
+			available in platformaccessmanager.h !-->
+		<method name="UnregisterClient">
+			<arg direction="in" type="s" name="appId"/>
+		</method>
 		<method name="UpdateFinished">
 		</method>
 	</interface>
