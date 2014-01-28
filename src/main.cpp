@@ -1,4 +1,6 @@
 
+#include <signal.h>
+
 #include "CommandLineParser.h"
 
 #include "paminterface.h"
@@ -6,8 +8,21 @@
 #include "pelagicontaincommon.h"
 #include "pelagicontaintodbusadapter.h"
 
-int main (int argc, char **argv)
+void myHandler(int s){
+	log_debug("Caught signal %s", s);
+	exit(0);
+}
+
+int main(int argc, char **argv)
 {
+	struct sigaction sigIntHandler;
+
+	sigIntHandler.sa_handler = myHandler;
+	sigemptyset(&sigIntHandler.sa_mask);
+	sigIntHandler.sa_flags = 0;
+
+	sigaction(SIGINT, &sigIntHandler, NULL);
+
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
 		"[deploy directory (abs path)] [command]",
 		PACKAGE_VERSION,
