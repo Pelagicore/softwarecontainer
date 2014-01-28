@@ -22,5 +22,7 @@
 			<arg direction="in" type="s" name="cookie"/>
 			<arg direction="in" type="s" name="appId"/>
 		</method>
+		<method name="UpdateFinished">
+		</method>
 	</interface>
 </node>

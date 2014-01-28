@@ -70,7 +70,14 @@ public:
         wi << appId;
         call.member("RegisterClient");
 
-	// This method call has been changed manually to be non-blocking
+        // This method call has been changed manually to be non-blocking
+        invoke_method_noreply (call);
+    }
+
+    void UpdateFinished()
+    {
+        ::DBus::CallMessage call;
+        call.member("UpdateFinished");
         invoke_method_noreply (call);
     }
 
