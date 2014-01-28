@@ -17,16 +17,15 @@
  * Boston, MA  02110-1301, USA.
  */
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
-#include <sys/types.h>
+#include <fcntl.h>
 
-       #include <sys/types.h>
-       #include <sys/stat.h>
-       #include <fcntl.h>
-
+#include <cstdlib>
 
 #include "config.h"
 #include "container.h"
@@ -41,11 +40,10 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
-
 Pelagicontain::Pelagicontain(const PAMInterface &pamInterface):
 	m_pamInterface(pamInterface)
 {
-	pipe (m_fd);
+	pipe(m_fd);
 }
 
 Pelagicontain::~Pelagicontain()
@@ -126,26 +124,26 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 
 // 	debug("Generate iptables rules");
 // 	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
-// 
+//
 // 	// Load pulseaudio module
 // 	debug("Load pulseaudio module");
 // 	Pulse pulse(ct_pars.pulse_socket);
 // 	m_container.addGateway(&pulse);
-// 
+//
 // 	// Limit network interface
 // 	debug("Limit network interface");
 // 	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
-// 
-// 	//Spawn proxies
+//
+// 	Spawn proxies
 // 	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
 // 		ct_pars.main_cfg_file, DBusProxy::SessionProxy);
-// 	
+
 // 	DBusProxy systemProxy(ct_pars.system_proxy_socket,
 // 		ct_pars.main_cfg_file, DBusProxy::SystemProxy);
-// 	
+
 // 	m_container.addGateway(&sessionProxy);
 // 	m_container.addGateway(&systemProxy);
-	
+
 	return 0;
 }
 
@@ -155,6 +153,13 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 	// Get the commands to run in a separate process
 	std::vector<std::string> commands;
 	commands = m_container.commands(numParameters, parameters, ct_pars);
+
+	std::string createCommand = commands[0];
+	std::string executeCommand = commands[1];
+	std::string destroyCommand = commands[2];
+
+	log_debug(createCommand.c_str());
+	system(createCommand.c_str());
 
 	pid_t pid = fork();
 	if (pid == 0) { //child
@@ -167,16 +172,15 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 		for (int i = 3; i < 30; i++)
 			close(i);
 
-		// Run all commands from the Container in the child process
-		for (std::vector<std::string>::iterator it = commands.begin();
-			it != commands.end(); ++it) {
-			const char *command = (*it).c_str();
-			int ret = system(command);
-			if (ret)
-				log_error("%s returned %d", command, ret);
-			else
-				log_debug("%s returned %d", command, ret);
-		}
+		//TODO: Is there any way to get the pid of the Controller so we
+		// can use that to tell it to shut down nicely. Currently we can only
+		// tell lxc-execute to shut down but then we don't know if Controller
+		// was actually shut down properly.
+		log_debug(executeCommand.c_str());
+		system(executeCommand.c_str());
+
+		log_debug(destroyCommand.c_str());
+		system(destroyCommand.c_str());
 		exit(0);
 	} // Parent
 
@@ -185,15 +189,47 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 
 void Pelagicontain::launch(const std::string &appId) {
 	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, appId);
-	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
-	std::cout << "--->" << write(fd, "abc\r\n", 5) << std::endl;
 }
+
+//TODO: Put all the below Controller stuff behind a class interface
 
 void Pelagicontain::update(const std::vector<std::string> &config)
 {
-	log_debug("######### PAM called Update");
-	// Set configurations on all gateways we got a config for
+// 	log_debug("######### PAM called Update");
+	// TODO: Set configurations on all gateways we got a config for
+
 	// Call PAM::UpdateFinished
-	// Activate all gateways, when all have responded:
+	m_pamInterface.UpdateFinished();
+
+	// TODO: Activate all gateways, when all have responded:
+
 	// Run app inside container
+	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
+	write(fd, "1\n", 2);
+}
+
+bool Pelagicontain::shutdown()
+{
+	// Tell Controller to shut down the app
+	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
+	write(fd, "2\n", 2);
+
+	// When controller is finished:
+	// Shutdown Controller
+	// NOTE: There seems to be a problem here, we tell Controller to shut down
+	// the App and then go ahead and kill Controller. Should we wait for the
+	// Controller to confirm the App is shut down?
+// 	write(fd, "3\n", 2);
+
+	// Shut down (clean up) all Gateways
+	// When all Gateways are finished:
+
+	// Call PAM::Unregister(appId)
+
+	// Shut down LXC and exit Pelagicontain
+	// NOTE: Actually lxc-destroy is run as soon as Controller shuts down as
+	// the call is placed in the fork after lxc-execute returns... a better
+	// question is how we should return a value from here and still exit here
+// 	exit(0);
+	return true;
 }
