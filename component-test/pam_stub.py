@@ -35,13 +35,15 @@ class PAMStub(dbus.service.Object):
             "com.pelagicore.Pelagicontain")
         pelagicontain_iface.Update(["GatewayConfig1", "GatewayConfig2"])
 
+    @dbus.service.method(BUS_NAME, in_signature="", out_signature="",
+        sender_keyword="sender")
+    def UpdateFinished(self, sender=None):
+        self.updatefinished_called = True
+        print sender + " called UpdateFinished()"
+
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="")
     def Unregister(self, appId):
         self.unregister_called = True
-
-    @dbus.service.method(BUS_NAME, in_signature="s", out_signature="")
-    def UpdateFinished(self, appId):
-        self.updatefinished_called = True
 
 
     """ Methods below are used by the component test to verify the expected
