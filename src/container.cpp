@@ -92,11 +92,12 @@ std::vector<std::string> Container::commands(int numParams, char **params,
 		int clen = strlen(user_command);
 		int nlen = strlen((const char *)params[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
-			log_error ("Parameter list too long");
+			log_error("Parameter list too long");
 			exit(1);
 		}
 		strcat(user_command, params[i]);
 		strcat(user_command, " ");
+		log_debug("User command: %s", user_command);
 	}
 
 	// Command to execute inside container
