@@ -32,6 +32,8 @@ class Gateway
 {
 public:
 	virtual std::string environment() = 0;
+	virtual bool setConfig(const std::string &config) = 0;
+	virtual bool activate() = 0;
 };
 
 #endif //GATEWAY_H
