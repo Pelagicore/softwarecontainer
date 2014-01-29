@@ -18,9 +18,10 @@ void PelagicontainToDBusAdapter::Launch(const std::string &appId)
 	m_pelagicontain->launch(appId);
 }
 
-void PelagicontainToDBusAdapter::Update(const std::vector<std::string> &config)
+void PelagicontainToDBusAdapter::Update(const std::map<std::string, std::string> &configs)
+
 {
-	m_pelagicontain->update(config);
+	m_pelagicontain->update(configs);
 }
 
 void PelagicontainToDBusAdapter::Shutdown()

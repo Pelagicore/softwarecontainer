@@ -194,7 +194,7 @@ void Pelagicontain::launch(const std::string &appId) {
 
 //TODO: Put all the below Controller stuff behind a class interface
 
-void Pelagicontain::update(const std::vector<std::string> &config)
+void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
 // 	log_debug("######### PAM called Update");
 	// TODO: Set configurations on all gateways we got a config for

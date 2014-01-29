@@ -13,7 +13,7 @@ public:
 	PelagicontainToDBusAdapter(DBus::Connection &conn, Pelagicontain &pc);
 	virtual std::string Echo(const std::string& argument);
 	virtual void Launch(const std::string& appId);
-	virtual void Update(const std::vector<std::string> &config);
+	virtual void Update(const std::map<std::string, std::string> &configs);
 	virtual void Shutdown();
 
 private:

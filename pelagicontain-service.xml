@@ -9,7 +9,7 @@
 			<arg direction="in" type="s" name="appId"/>
 		</method>
 		<method name="Update">
-			<arg direction="in" type="as" name="config"/>
+			<arg direction="in" type="a{ss}" name="configs"/>
 		</method>
 		<method name="Shutdown">
 		</method>

@@ -41,7 +41,7 @@ public:
         };
         static ::DBus::IntrospectedArgument Update_args[] = 
         {
-            { "config", "as", true },
+            { "configs", "a{ss}", true },
             { 0, 0, 0 }
         };
         static ::DBus::IntrospectedArgument Shutdown_args[] = 
@@ -87,7 +87,7 @@ public:
      */
     virtual std::string Echo(const std::string& argument) = 0;
     virtual void Launch(const std::string& appId) = 0;
-    virtual void Update(const std::vector< std::string >& config) = 0;
+    virtual void Update(const std::map< std::string, std::string >& configs) = 0;
     virtual void Shutdown() = 0;
 
 public:
@@ -123,7 +123,7 @@ private:
     {
         ::DBus::MessageIter ri = call.reader();
 
-        std::vector< std::string > argin1; ri >> argin1;
+        std::map< std::string, std::string > argin1; ri >> argin1;
         Update(argin1);
         ::DBus::ReturnMessage reply(call);
         return reply;

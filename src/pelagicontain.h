@@ -16,7 +16,7 @@ public:
 	int initialize(struct lxc_params &ct_pars, Config &config);
 	pid_t run(int numParameters, char **parameters, struct lxc_params *ct_pars);
 	void launch(const std::string &appId);
-	void update(const std::vector<std::string> &config);
+	void update(const std::map<std::string, std::string> &configs);
 	void shutdown();
 
 private:

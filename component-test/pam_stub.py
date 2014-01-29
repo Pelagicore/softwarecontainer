@@ -25,15 +25,16 @@ class PAMStub(dbus.service.Object):
 
     @dbus.service.method(BUS_NAME, in_signature="ss", out_signature="", 
         sender_keyword="sender")
-    def RegisterClient(self, appId, gwId, sender=None):
-        print sender + " called RegisterClient() with args " + "\"" + appId + "\", \"" + gwId + "\""
+    def RegisterClient(self, cookie, appId, sender=None):
+        print sender + " called RegisterClient() with args " + "\"" + cookie + "\", \"" + appId + "\""
         self.register_called = True
         # Call Pelagicontain::update here
         pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain",
             "/com/pelagicore/Pelagicontain")
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
             "com.pelagicore.Pelagicontain")
-        pelagicontain_iface.Update(["GatewayConfig1", "GatewayConfig2"])
+        configs = {"Gateway1": "GatewayConfig1", "Gateway2": "GatewayConfig2"}
+        pelagicontain_iface.Update(configs)
 
     @dbus.service.method(BUS_NAME, in_signature="", out_signature="",
         sender_keyword="sender")
