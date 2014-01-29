@@ -6,15 +6,6 @@
 			<arg direction="in" type="s" name="argument"/>
 			<arg direction="out" type="s"/>
 		</method>
-
-		<!-- Config(string appId, string gwId):
-			This method wraps PlatformAccessManager::config,
-			available in platformaccessmanager.h !-->
-		<method name="Config">
-			<arg direction="in" type="s" name="appId"/>
-			<arg direction="in" type="s" name="gwId"/>
-			<arg direction="out" type="s"/>
-		</method>
 		<!-- RegisterClient(string cookie, string appId):
 			This method wraps PlatformAccessManager::registerClient
 			available in platformaccessmanager.h !-->

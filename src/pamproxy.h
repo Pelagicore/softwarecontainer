@@ -45,22 +45,6 @@ public:
         return argout;
     }
 
-    std::string Config(const std::string& appId, const std::string& gwId)
-    {
-        ::DBus::CallMessage call;
-        ::DBus::MessageIter wi = call.writer();
-
-        wi << appId;
-        wi << gwId;
-        call.member("Config");
-        ::DBus::Message ret = invoke_method (call);
-        ::DBus::MessageIter ri = ret.reader();
-
-        std::string argout;
-        ri >> argout;
-        return argout;
-    }
-
     void RegisterClient(const std::string& cookie, const std::string& appId)
     {
         ::DBus::CallMessage call;
