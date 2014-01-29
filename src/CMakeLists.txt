@@ -15,6 +15,7 @@ add_executable( pelagicontain
 	pelagicontain.cpp
 	pulse.cpp
 	trafficcontrol.cpp
+	controllerinterface.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain

@@ -189,8 +189,6 @@ void Pelagicontain::launch(const std::string &appId) {
 	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, m_appId);
 }
 
-//TODO: Put all the below Controller stuff behind a class interface
-
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
 	setGatewayConfigs(configs);
@@ -200,9 +198,7 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 	// TODO: Should we check if gateways have been activated already?
 	activateGateways();
 
-	// Run app inside container
-	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
-	write(fd, "1\n", 2);
+	m_controller.startApp();
 }
 
 void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
@@ -233,20 +229,13 @@ void Pelagicontain::activateGateways()
 void Pelagicontain::shutdown()
 {
 	// Tell Controller to shut down the app
-	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
-	write(fd, "2\n", 2);
-
 	// Controller will exit when the app has shut down and then
 	// lxc-execute will return and lxc-destroy be run (see above
 	// code in the forked child)
+	m_controller.shutdown();
 
 	// Shut down (clean up) all Gateways
-	for (std::vector<Gateway *>::iterator it = m_gateways.begin();
-		it != m_gateways.end(); ++it) {
-		if (!(*it)->teardown())
-			warning("Could not teardown gateway cleanly");
-		delete (*it);
-	}
+	shutdownGateways();
 
 	m_pamInterface.UnregisterClient(m_appId);
 
@@ -254,4 +243,14 @@ void Pelagicontain::shutdown()
 	// TODO: Is there a problem with exiting here without konowing if
 	// Controller has exited?
 	raise(SIGINT);
+}
+
+void Pelagicontain::shutdownGateways()
+{
+	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+		gateway != m_gateways.end(); ++gateway) {
+		if (!(*gateway)->teardown())
+			warning("Could not teardown gateway cleanly");
+		delete (*gateway);
+	}
 }

@@ -7,6 +7,7 @@
 #include "config.h"
 #include "container.h"
 #include "paminterface.h"
+#include "controllerinterface.h"
 
 class Pelagicontain {
 public:
@@ -22,7 +23,9 @@ public:
 private:
 	void setGatewayConfigs(const std::map<std::string, std::string> &configs);
 	void activateGateways();
+	void shutdownGateways();
 
+	ControllerInterface m_controller;
 	Container m_container;
 	PAMInterface m_pamInterface;
 	std::vector<Gateway *> m_gateways;
