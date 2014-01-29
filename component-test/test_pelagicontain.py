@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import commands, os, time, sys, signal
-from subprocess import Popen, call
+from subprocess import Popen
 
 # You must initialize the gobject/dbus support for threading
 # before doing anything.
@@ -17,18 +17,31 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 bus = dbus.SessionBus()
 
-pelagicontain_binary = "/home/joakim/code/pelagicore/pelagicontain/build/src/pelagicontain"
+# Check if user pointed out a path to Pelagicontain
+pelagicontain_binary = ""
+if os.environ.has_key("PC_BINARY"):
+    pelagicontain_binary = str(os.environ["PC_BINARY"])
+    if not pelagicontain_binary.endswith("pelagicontain"):
+        if not pelagicontain_binary.endswith("/"):
+            pelagicontain_binary += "/"
+        pelagicontain_binary += "pelagicontain"
+else:
+    pelagicontain_binary = "pelagicontain"
 
+# Some globals used throughout the tests
 pelagicontain_remote_object = None
 pam_remote_object = None
 pelagicontain_pid = None
 pelagicontain_iface = None
 cookie_uuid = commands.getoutput("uuidgen").strip()
 app_uuid = commands.getoutput("uuidgen").strip()
-print "Generated CookieUUID = %s, AppUUID = %s" % (cookie_uuid, app_uuid)
+print "Generated Cookie = %s, appId = %s" % (cookie_uuid, app_uuid)
 
+# Get the PAM-stub
 pam_remote_object = bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
 pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
+
+# ----------------------- Helper functions
 
 def cleanup():
     print "Clean up and exit!"
@@ -42,7 +55,7 @@ def find_app_on_dbus():
     except:
         return False
 
-# ----------------------- Tests
+# ----------------------- Test functions
 
 def test_can_start_pelagicontain(command):
     global pelagicontain_pid
@@ -152,23 +165,39 @@ def kill_pelagicontain():
 
 """ Pelagicontain component tests
 
+    The test requires root privileges or some other user with rights to run
+    e.g lxc-execute.
+
+    The test requires a FIFO file to be created in the rootfs of the deployed
+    app. For example if the second command to Pelagicontain is "/tmp/test",
+    a FIFO file named "in_fifo" should be created in "/tmp/test/rootfs/".
+    NOTE: This is not the desired final solution, there should be a better
+    way for Pelagicontain and the Controller to communicate.
+
     The test requires a PAM-stub to be running on the system, and on the same
     bus as the tests. The stub is implemented as component-test/pam_stub.py. The
     stub exposes an API that mirrors the real PAM and helper methods that the tests
     uses to assert how Pelagicontain interacted with the PAM-stub.
 
     The test procedure is as follows:
+
+    (Reset PAM-stub from any previous tests)
+
+    (Startup, preloading - Controller is started, gateways are created)
     * Start Pelagicontain, pass the command to be executed in the container
     * Assert Pelagicontain can be found on D-Bus
+
+    (Launching App - Gateways gets configured and activated, Controller starts App)
     * Assert Pelagicontain::Launch can be called
     * Assert the expected call to PAM::RegisterClient was made
     * Assert the expected call to PAM::UpdateFinished was made
+
+    (Shutdown, teardown - Bring down gateways and Controller)
     * Issue 'shutdown' of Pelagicontain
     * Assert the expected call to PAM::UnregisterClient was made
 
-    After this, the rest is shutdown. When we have a proper D-Bus service
-    running as an app inside the container we can assert more things during
-    shutdown as well.
+    NOTE: When we have a proper D-Bus service running as an app inside the container
+    we can assert more things during shutdown as well.
 """
 
 
@@ -243,12 +272,13 @@ kill_pelagicontain()
 
 """ NOTE: Possible assertions that should be made when Pelagicontain is more
     complete:
+
+    * Issue pelagicontain.Shutdown()
+
+    * Verify that com.pelagicore.pelagicontain.test_app disappears from bus
+    and that PAM has not been requested to unregister
+
+    * Verify that PAM receives PAM.unregister($UUID2)
+
+    * Verify that PELAGICONTAIN_PID is no longer running
 """
-# Issue pelagicontain.Shutdown()
-
-# Verify that com.pelagicore.pelagicontain.test_app disappears from bus
-# and that PAM has not been requested to unregister
-
-# Verify that PAM receives PAM.unregister($UUID2)
-
-# Verify that PELAGICONTAIN_PID is no longer running
