@@ -135,14 +135,14 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 // 	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
 //
 // 	Spawn proxies
-// 	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
-// 		ct_pars.main_cfg_file, DBusProxy::SessionProxy);
+	m_gateways.push_back(new DBusProxy(ct_pars.session_proxy_socket,
+		ct_pars.main_cfg_file, DBusProxy::SessionProxy));
 
-// 	DBusProxy systemProxy(ct_pars.system_proxy_socket,
-// 		ct_pars.main_cfg_file, DBusProxy::SystemProxy);
+	m_gateways.push_back(new DBusProxy(ct_pars.system_proxy_socket,
+		ct_pars.main_cfg_file, DBusProxy::SystemProxy));
 
-// 	m_container.addGateway(&sessionProxy);
-// 	m_container.addGateway(&systemProxy);
+// 	m_container.addGateway(sessionProxy);
+// 	m_container.addGateway(systemProxy);
 
 	return 0;
 }
@@ -152,7 +152,8 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 {
 	// Get the commands to run in a separate process
 	std::vector<std::string> commands;
-	commands = m_container.commands(numParameters, parameters, ct_pars);
+
+	commands = m_container.commands(numParameters, parameters, ct_pars, m_gateways);
 
 	std::string createCommand = commands[0];
 	std::string executeCommand = commands[1];
@@ -208,30 +209,32 @@ void Pelagicontain::update(const std::vector<std::string> &config)
 	write(fd, "1\n", 2);
 }
 
-bool Pelagicontain::shutdown()
+
+void Pelagicontain::shutdown()
 {
 	// Tell Controller to shut down the app
 	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
 	write(fd, "2\n", 2);
 
-	// When controller is finished:
-	// Shutdown Controller
-	// NOTE: There seems to be a problem here, we tell Controller to shut down
-	// the App and then go ahead and kill Controller. Should we wait for the
-	// Controller to confirm the App is shut down?
-// 	write(fd, "3\n", 2);
+	// Controller will exit when the app has shut down and then
+	// lxc-execute will return and lxc-destroy be run (see above
+	// code in the forked child)
 
 	// Shut down (clean up) all Gateways
+	for (std::vector<Gateway *>::iterator it = m_gateways.begin();
+		it != m_gateways.end(); ++it) {
+		if (!(*it)->teardown())
+			warning("Could not teardown gateway cleanly");
+		delete (*it);
+	}
 	// When all Gateways are finished:
 
 	// Call PAM::UnregisterClient(appId)
 	//TODO: The real appId should be used!
 	m_pamInterface.UnregisterClient("the-app-ID");
 
-	// Shut down LXC and exit Pelagicontain
-	// NOTE: Actually lxc-destroy is run as soon as Controller shuts down as
-	// the call is placed in the fork after lxc-execute returns... a better
-	// question is how we should return a value from here and still exit here
-// 	exit(0);
-	return true;
+	// exit Pelagicontain
+	// TODO: Is there a problem with exiting here without konowing if
+	// Controller has exited?
+	raise(SIGINT);
 }

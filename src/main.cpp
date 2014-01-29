@@ -1,6 +1,8 @@
 
 #include <signal.h>
 
+#include <iostream>
+
 #include "CommandLineParser.h"
 
 #include "paminterface.h"
@@ -9,7 +11,7 @@
 #include "pelagicontaintodbusadapter.h"
 
 void myHandler(int s){
-	log_debug("Caught signal %s", s);
+	log_debug("Caught signal %d", s);
 	exit(0);
 }
 

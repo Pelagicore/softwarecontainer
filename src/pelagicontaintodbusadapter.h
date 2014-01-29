@@ -14,8 +14,8 @@ public:
 	virtual std::string Echo(const std::string& argument);
 	virtual void Launch(const std::string& appId);
 	virtual void Update(const std::vector<std::string> &config);
-	virtual bool Shutdown();
+	virtual void Shutdown();
 
 private:
-	Pelagicontain m_pelagicontain;
+	Pelagicontain *m_pelagicontain;
 };

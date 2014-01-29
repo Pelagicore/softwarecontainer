@@ -151,10 +151,10 @@ def shutdown_pelagicontain():
     except Exception as e:
         print "FAIL: Failed to call Shutdown on Pelagicontain (over D-Bus)"
         print e
-        cleanup()
+        #cleanup()
     # Currently we communicate with Controller by a FIFO file, '3' means exit
-    with open("/tmp/test/rootfs/in_fifo", "w+") as fh:
-        fh.write("3")
+    #with open("/tmp/test/rootfs/in_fifo", "w+") as fh:
+        #fh.write("3")
 
 """ NOTE: This should be a part of shutting down Pelagicontain properly and
     should not be needed when all functionality is there.
@@ -264,8 +264,8 @@ test_unregisterclient_was_called()
     the call to Shutdown.
 """
 # Without a sleep here the terminal tends to be screwed up after the test
-time.sleep(1)
-kill_pelagicontain()
+#time.sleep(1)
+#kill_pelagicontain()
 
 
 

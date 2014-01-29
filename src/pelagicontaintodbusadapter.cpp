@@ -3,7 +3,7 @@
 
 PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connection, Pelagicontain &pelagicontain) :
 	DBus::ObjectAdaptor(connection, "/com/pelagicore/Pelagicontain"),
-	m_pelagicontain(pelagicontain)
+	m_pelagicontain(&pelagicontain)
 {
 
 }
@@ -15,15 +15,15 @@ std::string PelagicontainToDBusAdapter::Echo(const std::string &argument)
 
 void PelagicontainToDBusAdapter::Launch(const std::string &appId)
 {
-	m_pelagicontain.launch(appId);
+	m_pelagicontain->launch(appId);
 }
 
 void PelagicontainToDBusAdapter::Update(const std::vector<std::string> &config)
 {
-	m_pelagicontain.update(config);
+	m_pelagicontain->update(config);
 }
 
-bool PelagicontainToDBusAdapter::Shutdown()
+void PelagicontainToDBusAdapter::Shutdown()
 {
-	return m_pelagicontain.shutdown();
+	m_pelagicontain->shutdown();
 }

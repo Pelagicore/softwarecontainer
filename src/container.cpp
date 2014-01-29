@@ -57,13 +57,8 @@ const char *Container::name()
 	return m_name.c_str();
 }
 
-void Container::addGateway(Gateway *gw)
-{
-	m_gateways.push_back(gw);
-}
-
 std::vector<std::string> Container::commands(int numParams, char **params,
-	struct lxc_params *ct_pars)
+	struct lxc_params *ct_pars, const std::vector<Gateway *> &gateways)
 {
 	int max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
@@ -72,8 +67,8 @@ std::vector<std::string> Container::commands(int numParams, char **params,
 	std::vector<std::string> commands;
 
 	// Set up an environment
-	for (std::vector<Gateway *>::iterator it = m_gateways.begin();
-		it != m_gateways.end(); ++it) {
+	for (std::vector<Gateway *>::const_iterator it = gateways.begin();
+		it != gateways.end(); ++it) {
 		std::string env = (*it)->environment();
 		if (!env.empty())
 			environment += env + " ";

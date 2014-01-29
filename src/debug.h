@@ -29,5 +29,6 @@
 LOG_IMPORT_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext)
 
 #define debug(args ...) log_debug(args)
+#define warning(args ...) log_warning(args)
 
 #endif //DEBUG_H

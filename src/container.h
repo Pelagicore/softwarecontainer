@@ -40,16 +40,14 @@ public:
 	~Container();
 
 	const char *name();
-	void addGateway(Gateway *gw);
 	std::vector<std::string> commands(int numParams, char **params,
-		struct lxc_params *ct_pars);
+		struct lxc_params *ct_pars, const std::vector<Gateway *> &gateways);
 
 private:
 	const char *configFile();
 	int writeConfiguration(struct lxc_params *params);
 
 	std::string m_name;
-	std::vector<Gateway *> m_gateways;
 };
 
 #endif //CONTAINER_H

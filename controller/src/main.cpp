@@ -46,9 +46,6 @@ int main(int argc, char **argv)
 			case '2':
 				killApp();
 				continue;
-			case '3':
-				shutdown();
-				continue;
 			case '\n':
 				// Ignore newline
 				continue;
@@ -83,6 +80,7 @@ void killApp()
 	if (WIFEXITED(status)) {
 		std::cout << "Wait status for pid " << pid << ": " << WEXITSTATUS(status) << std::endl;
 	}
+	shutdown();
 }
 
 void shutdown()

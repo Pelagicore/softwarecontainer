@@ -12,7 +12,6 @@
 			<arg direction="in" type="as" name="config"/>
 		</method>
 		<method name="Shutdown">
-			<arg direction="out" type="b"/>
 		</method>
 
 	</interface>

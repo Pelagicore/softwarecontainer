@@ -46,7 +46,6 @@ public:
         };
         static ::DBus::IntrospectedArgument Shutdown_args[] = 
         {
-            { 0, "b", false },
             { 0, 0, 0 }
         };
         static ::DBus::IntrospectedMethod Pelagicontain_adaptor_methods[] = 
@@ -89,7 +88,7 @@ public:
     virtual std::string Echo(const std::string& argument) = 0;
     virtual void Launch(const std::string& appId) = 0;
     virtual void Update(const std::vector< std::string >& config) = 0;
-    virtual bool Shutdown() = 0;
+    virtual void Shutdown() = 0;
 
 public:
 
@@ -131,10 +130,8 @@ private:
     }
     ::DBus::Message _Shutdown_stub(const ::DBus::CallMessage &call)
     {
-        bool argout1 = Shutdown();
+        Shutdown();
         ::DBus::ReturnMessage reply(call);
-        ::DBus::MessageIter wi = reply.writer();
-        wi << argout1;
         return reply;
     }
 };
