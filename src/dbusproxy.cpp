@@ -55,6 +55,21 @@ DBusProxy::~DBusProxy()
 	}
 }
 
+std::string DBusProxy::id()
+{
+	return "dbus-proxy";
+}
+
+bool DBusProxy::setConfig(const std::string &config)
+{
+	return true;
+}
+
+bool DBusProxy::activate()
+{
+	return true;
+}
+
 const char *DBusProxy::typeString()
 {
 	if (m_type == SessionProxy) {

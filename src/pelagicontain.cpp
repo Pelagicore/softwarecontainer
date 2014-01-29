@@ -43,7 +43,6 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 Pelagicontain::Pelagicontain(const PAMInterface &pamInterface):
 	m_pamInterface(pamInterface)
 {
-	pipe(m_fd);
 }
 
 Pelagicontain::~Pelagicontain()
@@ -141,9 +140,6 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 	m_gateways.push_back(new DBusProxy(ct_pars.system_proxy_socket,
 		ct_pars.main_cfg_file, DBusProxy::SystemProxy));
 
-// 	m_container.addGateway(sessionProxy);
-// 	m_container.addGateway(systemProxy);
-
 	return 0;
 }
 
@@ -189,26 +185,50 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 }
 
 void Pelagicontain::launch(const std::string &appId) {
-	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, appId);
+	m_appId = appId;
+	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, m_appId);
 }
 
 //TODO: Put all the below Controller stuff behind a class interface
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
-// 	log_debug("######### PAM called Update");
-	// TODO: Set configurations on all gateways we got a config for
+	setGatewayConfigs(configs);
 
-	// Call PAM::UpdateFinished
 	m_pamInterface.UpdateFinished();
 
-	// TODO: Activate all gateways, when all have responded:
+	// TODO: Should we check if gateways have been activated already?
+	activateGateways();
 
 	// Run app inside container
 	int fd = open("/tmp/test/rootfs/in_fifo", O_WRONLY);
 	write(fd, "1\n", 2);
 }
 
+void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
+{
+	// Go through the received configs and see if they match any of
+	// the running gateways, if so: set their respective config
+	std::string config;
+	std::string gatewayId;
+
+	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+		gateway != m_gateways.end(); ++gateway) {
+		gatewayId = (*gateway)->id();
+		if (configs.count(gatewayId) != 0) {
+			config = configs.at(gatewayId);
+			(*gateway)->setConfig(config);
+		}
+	}
+}
+
+void Pelagicontain::activateGateways()
+{
+	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+		gateway != m_gateways.end(); ++gateway) {
+		(*gateway)->activate();
+	}
+}
 
 void Pelagicontain::shutdown()
 {
@@ -227,11 +247,8 @@ void Pelagicontain::shutdown()
 			warning("Could not teardown gateway cleanly");
 		delete (*it);
 	}
-	// When all Gateways are finished:
 
-	// Call PAM::UnregisterClient(appId)
-	//TODO: The real appId should be used!
-	m_pamInterface.UnregisterClient("the-app-ID");
+	m_pamInterface.UnregisterClient(m_appId);
 
 	// exit Pelagicontain
 	// TODO: Is there a problem with exiting here without konowing if

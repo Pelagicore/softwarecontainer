@@ -44,6 +44,21 @@ public:
 	DBusProxy(const char *socket, const char *config, ProxyType type);
 	~DBusProxy();
 
+	/*!
+	 *  Implements Gateway::id
+	 */
+	virtual std::string id();
+
+	/*!
+	 *  Implements Gateway::setConfig
+	 */
+	virtual bool setConfig(const std::string &config);
+
+	/*!
+	 *  Implements Gateway::activate
+	 */
+	virtual bool activate();
+
 	/*! Implements Gateway::environment
 	 */
 	virtual std::string environment();

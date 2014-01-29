@@ -36,8 +36,9 @@ public:
 	virtual ~Gateway() {};
 
 	virtual std::string environment() = 0;
-// 	virtual bool setConfig(const std::string &config) = 0;
-// 	virtual bool activate() = 0;
+	virtual std::string id() = 0;
+	virtual bool setConfig(const std::string &config) = 0;
+	virtual bool activate() = 0;
 	virtual bool teardown() {return true;}
 };
 

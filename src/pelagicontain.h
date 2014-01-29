@@ -20,10 +20,13 @@ public:
 	void shutdown();
 
 private:
+	void setGatewayConfigs(const std::map<std::string, std::string> &configs);
+	void activateGateways();
+
 	Container m_container;
 	PAMInterface m_pamInterface;
-	int m_fd[2];
 	std::vector<Gateway *> m_gateways;
+	std::string m_appId;
 };
 
 #endif // PELAGICONTAIN_H
