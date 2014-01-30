@@ -143,14 +143,14 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 	return 0;
 }
 
-/*! Launch the container. This is a non-blocking operation */
+// Launch the container. This is a non-blocking operation
 pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars,
 	const std::string &cookie)
 {
 	m_cookie = cookie;
+
 	// Get the commands to run in a separate process
 	std::vector<std::string> commands;
-
 	commands = m_container.commands(numParameters, parameters, ct_pars, m_gateways);
 
 	std::string createCommand = commands[0];

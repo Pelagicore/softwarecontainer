@@ -1,11 +1,12 @@
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
 #ifndef PAMINTERFACE_H
 #define PAMINTERFACE_H
 
 #include "pamproxy.h"
 #include "pamabstractinterface.h"
-
-/*!
- */
 
 class PAMInterface :
 	public com::pelagicore::PAM_proxy,
@@ -13,7 +14,6 @@ class PAMInterface :
 	public DBus::ObjectProxy,
 	public PAMAbstractInterface
 {
-
 public:
 	PAMInterface(DBus::Connection &connection);
 
@@ -34,4 +34,4 @@ public:
 	virtual void updateFinished();
 };
 
-#endif //PAMINTERFACE_H
+#endif /* PAMINTERFACE_H */

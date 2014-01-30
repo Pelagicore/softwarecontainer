@@ -1,3 +1,9 @@
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
+#ifndef PAMABSTRACTINTERFACE_H
+#define PAMABSTRACTINTERFACE_H
 
 #include <string>
 
@@ -9,3 +15,5 @@ public:
 	virtual void unregisterClient(const std::string &appId) = 0;
 	virtual void updateFinished() = 0;
 };
+
+#endif /* PAMABSTRACTINTERFACE_H */

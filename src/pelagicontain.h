@@ -1,4 +1,7 @@
-
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
 #ifndef PELAGICONTAIN_H
 #define PELAGICONTAIN_H
 
@@ -34,4 +37,4 @@ private:
 	std::string m_cookie;
 };
 
-#endif // PELAGICONTAIN_H
+#endif /* PELAGICONTAIN_H */

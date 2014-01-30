@@ -1,3 +1,9 @@
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
+#ifndef PELAGICONTAINTODBUSADAPTER_H
+#define PELAGICONTAINTODBUSADAPTER_H
 
 #include <dbus-c++/dbus.h>
 
@@ -20,3 +26,5 @@ public:
 private:
 	Pelagicontain *m_pelagicontain;
 };
+
+#endif /* PELAGICONTAINTODBUSADAPTER_H */

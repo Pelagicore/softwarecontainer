@@ -1,29 +1,7 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
-
-/*! \brief Traffic control functionality
- *  \file trafficcontrol.h
- *
- *  Traffic control functionality for Pelagicontain. Allows interfacing with
- *  the linux tc tool, allows things such as bandwidth limiting
- */
-
 #ifndef TRAFFICCONTROL_H
 #define TRAFFICCONTROL_H
 
@@ -35,6 +13,13 @@
 #include "string.h"
 #include "errno.h"
 #include "debug.h"
+
+/*! \brief Traffic control functionality
+ *  \file trafficcontrol.h
+ *
+ *  Traffic control functionality for Pelagicontain. Allows interfacing with
+ *  the linux tc tool, allows things such as bandwidth limiting
+ */
 
 /*! \brief Place a bandwidth limitation on a network interface
  *
@@ -64,4 +49,4 @@ int limit_iface (const char *net_iface_name, const char *tc_rate);
  */
 int clear_iface_limits (char *iface);
 
-#endif //TRAFFICCONTROL_H
+#endif /* TRAFFICCONTROL_H */
