@@ -152,16 +152,6 @@ def shutdown_pelagicontain():
     except Exception as e:
         print "FAIL: Failed to call Shutdown on Pelagicontain (over D-Bus)"
         print e
-        #cleanup()
-    # Currently we communicate with Controller by a FIFO file, '3' means exit
-    #with open("/tmp/test/rootfs/in_fifo", "w+") as fh:
-        #fh.write("3")
-
-""" NOTE: This should be a part of shutting down Pelagicontain properly and
-    should not be needed when all functionality is there.
-"""
-def kill_pelagicontain():
-    os.kill(pelagicontain_pid, signal.SIGINT)
 
 
 """ Pelagicontain component tests
@@ -260,14 +250,6 @@ shutdown_pelagicontain()
     PAM::UnregisterClient
 """
 test_unregisterclient_was_called()
-
-""" This should not be needed later as Pelagicontain shoud shut down nicely after
-    the call to Shutdown.
-"""
-# Without a sleep here the terminal tends to be screwed up after the test
-#time.sleep(1)
-#kill_pelagicontain()
-
 
 
 
