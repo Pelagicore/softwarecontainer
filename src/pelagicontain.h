@@ -11,7 +11,7 @@
 
 class Pelagicontain {
 public:
-	Pelagicontain(const PAMInterface &pamInterface);
+	Pelagicontain(PAMAbstractInterface *pamInterface);
 	~Pelagicontain();
 	static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config);
 	int initialize(struct lxc_params &ct_pars, Config &config);
@@ -28,7 +28,7 @@ private:
 
 	ControllerInterface m_controller;
 	Container m_container;
-	PAMInterface m_pamInterface;
+	PAMAbstractInterface *m_pamInterface;
 	std::vector<Gateway *> m_gateways;
 	std::string m_appId;
 	std::string m_cookie;

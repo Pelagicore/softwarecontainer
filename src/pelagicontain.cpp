@@ -40,7 +40,7 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
-Pelagicontain::Pelagicontain(const PAMInterface &pamInterface):
+Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface):
 	m_pamInterface(pamInterface)
 {
 }
@@ -188,14 +188,14 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 
 void Pelagicontain::launch(const std::string &appId) {
 	m_appId = appId;
-	m_pamInterface.RegisterClient(m_cookie, m_appId);
+	m_pamInterface->registerClient(m_cookie, m_appId);
 }
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
 	setGatewayConfigs(configs);
 
-	m_pamInterface.UpdateFinished();
+	m_pamInterface->updateFinished();
 
 	// TODO: Should we check if gateways have been activated already?
 	activateGateways();
@@ -239,7 +239,7 @@ void Pelagicontain::shutdown()
 	// Shut down (clean up) all Gateways
 	shutdownGateways();
 
-	m_pamInterface.UnregisterClient(m_appId);
+	m_pamInterface->unregisterClient(m_appId);
 
 	// exit Pelagicontain
 	// TODO: Is there a problem with exiting here without konowing if
