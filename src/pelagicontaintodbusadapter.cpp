@@ -1,8 +1,9 @@
 
 #include "pelagicontaintodbusadapter.h"
 
-PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connection, Pelagicontain &pelagicontain) :
-	DBus::ObjectAdaptor(connection, "/com/pelagicore/Pelagicontain"),
+PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connection,
+		const std::string &objPath, Pelagicontain &pelagicontain) :
+	DBus::ObjectAdaptor(connection, objPath),
 	m_pelagicontain(&pelagicontain)
 {
 

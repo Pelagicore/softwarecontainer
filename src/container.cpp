@@ -83,7 +83,8 @@ std::vector<std::string> Container::commands(int numParams, char **params,
 	commands.push_back(std::string(lxc_command));
 
 	// Create command to execute inside container
-	for (int i = 2; i < numParams; i++) {
+	// The last parameter is the cookie and should not be used here
+	for (int i = 2; i < numParams-1; i++) {
 		int clen = strlen(user_command);
 		int nlen = strlen((const char *)params[i]);
 		if (nlen + clen >= max_cmd_len - 256) {
@@ -92,7 +93,6 @@ std::vector<std::string> Container::commands(int numParams, char **params,
 		}
 		strcat(user_command, params[i]);
 		strcat(user_command, " ");
-		log_debug("User command: %s", user_command);
 	}
 
 	// Command to execute inside container

@@ -15,7 +15,8 @@ public:
 	~Pelagicontain();
 	static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config);
 	int initialize(struct lxc_params &ct_pars, Config &config);
-	pid_t run(int numParameters, char **parameters, struct lxc_params *ct_pars);
+	pid_t run(int numParameters, char **parameters, struct lxc_params *ct_pars,
+		const std::string &cookie);
 	void launch(const std::string &appId);
 	void update(const std::map<std::string, std::string> &configs);
 	void shutdown();
@@ -30,6 +31,7 @@ private:
 	PAMInterface m_pamInterface;
 	std::vector<Gateway *> m_gateways;
 	std::string m_appId;
+	std::string m_cookie;
 };
 
 #endif // PELAGICONTAIN_H

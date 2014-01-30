@@ -30,7 +30,7 @@ class PAMStub(dbus.service.Object):
         self.register_called = True
         # Call Pelagicontain::update here
         pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain",
-            "/com/pelagicore/Pelagicontain")
+            "/com/pelagicore/Pelagicontain/" + cookie)
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
             "com.pelagicore.Pelagicontain")
         configs = {"Gateway1": "GatewayConfig1", "Gateway2": "GatewayConfig2"}

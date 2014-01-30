@@ -144,8 +144,10 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 }
 
 /*! Launch the container. This is a non-blocking operation */
-pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars)
+pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars,
+	const std::string &cookie)
 {
+	m_cookie = cookie;
 	// Get the commands to run in a separate process
 	std::vector<std::string> commands;
 
@@ -186,7 +188,7 @@ pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params
 
 void Pelagicontain::launch(const std::string &appId) {
 	m_appId = appId;
-	m_pamInterface.RegisterClient("cookie" /* This comes from the launcher*/, m_appId);
+	m_pamInterface.RegisterClient(m_cookie, m_appId);
 }
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
@@ -242,6 +244,13 @@ void Pelagicontain::shutdown()
 	// exit Pelagicontain
 	// TODO: Is there a problem with exiting here without konowing if
 	// Controller has exited?
+	int status = 0;
+	wait(&status);
+	log_debug("Wait status: %d", status);
+	if (WIFEXITED(status))
+		log_debug("#### child exited");
+	if (WIFSIGNALED(status))
+		log_debug("#### child exited by signal: %d", WTERMSIG(status));
 	raise(SIGINT);
 }
 

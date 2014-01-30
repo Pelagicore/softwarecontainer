@@ -10,7 +10,8 @@ class PelagicontainToDBusAdapter :
 	public DBus::ObjectAdaptor
 {
 public:
-	PelagicontainToDBusAdapter(DBus::Connection &conn, Pelagicontain &pc);
+	PelagicontainToDBusAdapter(DBus::Connection &conn, const std::string &objPath,
+		Pelagicontain &pc);
 	virtual std::string Echo(const std::string& argument);
 	virtual void Launch(const std::string& appId);
 	virtual void Update(const std::map<std::string, std::string> &configs);

@@ -22,7 +22,6 @@ int main(int argc, char **argv)
 	sigIntHandler.sa_handler = myHandler;
 	sigemptyset(&sigIntHandler.sa_mask);
 	sigIntHandler.sa_flags = 0;
-
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
@@ -50,7 +49,12 @@ int main(int argc, char **argv)
 
 	PAMInterface pamInterface(bus);
 	Pelagicontain pelagicontain(pamInterface);
-	PelagicontainToDBusAdapter pcAdapter(bus, pelagicontain);
+
+	std::string cookie(argv[3]);
+	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
+	std::string fullObjPath = baseObjPath + cookie;
+
+	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
 	struct lxc_params ct_pars;
 	Config config;
@@ -61,6 +65,6 @@ int main(int argc, char **argv)
 	}
 
 	pelagicontain.initialize(ct_pars, config);
-	log_debug("Started Pelagicontain with PID: %d", pelagicontain.run(argc, argv, &ct_pars));
+	log_debug("Started Pelagicontain with PID: %d", pelagicontain.run(argc, argv, &ct_pars, cookie));
 	dispatcher.enter();
 }

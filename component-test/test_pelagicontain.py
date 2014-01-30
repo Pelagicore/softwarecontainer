@@ -33,9 +33,10 @@ pelagicontain_remote_object = None
 pam_remote_object = None
 pelagicontain_pid = None
 pelagicontain_iface = None
-cookie_uuid = commands.getoutput("uuidgen").strip()
+# Only use the last part, hyphens are not allowed in D-Bus object paths
+cookie = commands.getoutput("uuidgen").strip().split("-").pop()
 app_uuid = commands.getoutput("uuidgen").strip()
-print "Generated Cookie = %s, appId = %s" % (cookie_uuid, app_uuid)
+print "Generated Cookie = %s, appId = %s" % (cookie, app_uuid)
 
 # Get the PAM-stub
 pam_remote_object = bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
@@ -63,9 +64,9 @@ def test_can_start_pelagicontain(command):
         # The intention is to pass a cookie to Pelagicontain which it will use to
         # destinguish itself on D-Bus (as we will potentially have multiple instances
         # running in the system
-        #pelagicontain_pid = Popen([pelagicontain_binary, "--cookie=%s" % cookie_uuid]).pid        
+        pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command, cookie]).pid
         print "### Will start pelagicontain with the command: " + command
-        pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command]).pid
+        #pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command]).pid
     except:
         print "FAIL: Could not start pelagicontain (%s)" % pelagicontain_binary
         cleanup()
@@ -78,7 +79,7 @@ def test_pelagicontain_found_on_bus():
     while not found and tries < 2:
         try:
             pelagicontain_remote_object = bus.get_object("com.pelagicore.Pelagicontain",
-                    "/com/pelagicore/Pelagicontain")
+                    "/com/pelagicore/Pelagicontain/" + cookie)
             found = True
         except:
             pass
