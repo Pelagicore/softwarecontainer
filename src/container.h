@@ -2,7 +2,6 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-
 #ifndef CONTAINER_H
 #define CONTAINER_H
 

@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
 #include <dbus-c++/dbus.h>
 
 #include "dbusadaptor.h"

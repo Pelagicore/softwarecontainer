@@ -1,4 +1,7 @@
-
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
 #include "pelagicontaintodbusadapter.h"
 
 PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connection,
