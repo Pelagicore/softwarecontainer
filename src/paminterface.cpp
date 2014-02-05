@@ -1,4 +1,7 @@
-
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
 #include "paminterface.h"
 
 PAMInterface::PAMInterface(DBus::Connection &connection):

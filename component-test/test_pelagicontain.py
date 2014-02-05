@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""
+    Copyright (C) 2014 Pelagicore AB
+    All rights reserved.
+"""
+
+
 import commands, os, time, sys, signal
 from subprocess import Popen
 
