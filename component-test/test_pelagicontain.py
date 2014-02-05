@@ -142,16 +142,17 @@ def test_unregisterclient_was_called():
 
 # ----------------------------- Shutdown
 
-""" NOTE: This is not doing what is eventually intended, see notes below where
-    this function is called.
+""" Calling Shutdown will raise a D-Bus error since Pelagicontain shuts down
+    without sending a reply. D-Bus seems to consider it an error that there is
+    no reply even if the method itself is not supposed to return anything. We
+    catch the exception and ignore it.
 """
 def shutdown_pelagicontain():
     try:
         pelagicontain_iface.Shutdown()
         print "Shutting down Pelagicontain"
-    except Exception as e:
-        print "FAIL: Failed to call Shutdown on Pelagicontain (over D-Bus)"
-        print e
+    except:
+        pass
 
 
 """ Pelagicontain component tests
@@ -237,13 +238,6 @@ test_updatefinished_was_called()
 
 # --------------- Run tests for shutdown
 
-""" NOTE: Currently this only makes Pelagicontain tell Controller to shut down
-    the app inside the container, to actually shut down Controller as well we need
-    to write a '3' to the FIFO file we use to communicate with Controller. After that
-    only Pelagicontain should remain (lxc-execute should have returned when Controller
-    exited), and currently we have to kill Pelagicontain explicitly (see next function
-    call below).
-"""
 shutdown_pelagicontain()
 
 """ The call to Pelagicontain::Shutdown should have triggered a call to
