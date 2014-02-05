@@ -42,17 +42,32 @@ DBusProxy::DBusProxy(const char *socket, const char *config, ProxyType type):
 
 DBusProxy::~DBusProxy()
 {
-	if (kill (m_pid, SIGTERM) == -1) {
+	if (kill(m_pid, SIGTERM) == -1) {
 		log_error("Failed to kill %s proxy!", typeString());
 	} else {
 		debug("Killed %s proxy!", typeString());
 	}
 
-	if (remove (m_socket) == -1) {
+	if (remove(m_socket) == -1) {
 		log_error("Failed to remove %s proxy socket!", typeString());
 	} else {
 		debug("Removed %s proxy socket!", typeString());
 	}
+}
+
+std::string DBusProxy::id()
+{
+	return "dbus-proxy";
+}
+
+bool DBusProxy::setConfig(const std::string &config)
+{
+	return true;
+}
+
+bool DBusProxy::activate()
+{
+	return true;
 }
 
 const char *DBusProxy::typeString()

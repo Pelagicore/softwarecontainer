@@ -61,10 +61,8 @@ char *Config::getString(const char *property)
 
 	element = json_object_get(root, property);
 	if (json_is_string(element)) {
-		debug ("%s is called on a string");
 		return strdup(json_string_value(element));
 	} else if (json_is_array(element)) {
-		debug("%s is called on an array");
 		size_t len = json_array_size(element);
 		int buflen = 100;
 		int j = 0;
@@ -85,7 +83,6 @@ char *Config::getString(const char *property)
 			/* Ensure new string fits in buffer */
 			linelen = strlen(strline);
 			if (j + linelen > buflen) {
-				debug("buf is %d, and line is %d", buflen, linelen);
 				buflen = (j + strlen(strline)) * 2;
 				char *newbuf = (char*)calloc(sizeof(char), buflen);
 

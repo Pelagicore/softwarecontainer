@@ -157,6 +157,12 @@ EOF
     return $res
 }
 
+    # Create an uuid for D-Bus
+    cat <<EOF >> $rootfs/etc/machine-id
+`dbus-uuidgen`
+EOF
+
+
 configure_busybox()
 {
     rootfs=$1

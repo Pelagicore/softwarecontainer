@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/com/pelagicore/Pelagicontain">
+	<interface name="com.pelagicore.Pelagicontain">
+		<method name="Echo">
+			<arg direction="in" type="s" name="argument"/>
+			<arg direction="out" type="s"/>
+		</method>
+		<method name="Launch">
+			<arg direction="in" type="s" name="appId"/>
+		</method>
+		<method name="Update">
+			<arg direction="in" type="a{ss}" name="configs"/>
+		</method>
+		<method name="Shutdown">
+		</method>
+
+	</interface>
+</node>
