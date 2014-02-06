@@ -24,7 +24,7 @@ public:
 	~Container();
 
 	const char *name();
-	std::vector<std::string> commands(int numParams, char **params,
+	std::vector<std::string> commands(const std::string &containedCommand,
 		struct lxc_params *ct_pars, const std::vector<Gateway *> &gateways);
 
 private:

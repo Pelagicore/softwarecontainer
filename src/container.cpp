@@ -43,12 +43,11 @@ const char *Container::name()
 	return m_name.c_str();
 }
 
-std::vector<std::string> Container::commands(int numParams, char **params,
+std::vector<std::string> Container::commands(const std::string &containedCommand,
 	struct lxc_params *ct_pars, const std::vector<Gateway *> &gateways)
 {
 	int max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
-	char user_command[max_cmd_len];
 	std::string environment;
 	std::vector<std::string> commands;
 
@@ -69,21 +68,8 @@ std::vector<std::string> Container::commands(int numParams, char **params,
 	commands.push_back(std::string(lxc_command));
 
 	// Create command to execute inside container
-	// The last parameter is the cookie and should not be used here
-	for (int i = 2; i < numParams-1; i++) {
-		int clen = strlen(user_command);
-		int nlen = strlen((const char *)params[i]);
-		if (nlen + clen >= max_cmd_len - 256) {
-			log_error("Parameter list too long");
-			exit(1);
-		}
-		strcat(user_command, params[i]);
-		strcat(user_command, " ");
-	}
-
-	// Command to execute inside container
 	snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-		name(), environment.c_str(), user_command);
+		name(), environment.c_str(), containedCommand.c_str());
 	commands.push_back(std::string(lxc_command));
 
 	// Command to destroy container

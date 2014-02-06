@@ -47,7 +47,7 @@ using namespace pelagicore;
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-int Pelagicontain::initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config)
+int Pelagicontain::initializeConfig(struct lxc_params *ct_pars, const std::string &ct_base_dir, Config *config)
 {
 	char *ip_addr_net;
 
@@ -57,12 +57,12 @@ int Pelagicontain::initializeConfig(struct lxc_params *ct_pars, const char *ct_b
 	snprintf(ct_pars->ct_conf_dir,
 		sizeof(ct_pars->ct_conf_dir),
 		"%s/config/",
-		ct_base_dir);
+		ct_base_dir.c_str());
 	
 	snprintf(ct_pars->ct_root_dir,
 		sizeof(ct_pars->ct_root_dir),
 		 "%s/rootfs/",
-		ct_base_dir);
+		ct_base_dir.c_str());
 
 	snprintf(ct_pars->main_cfg_file,
 		  sizeof(ct_pars->main_cfg_file),
@@ -129,14 +129,14 @@ int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 }
 
 // Launch the container. This is a non-blocking operation
-pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars,
-	const std::string &cookie)
+pid_t Pelagicontain::run(const std::string &containedCommand,
+	struct lxc_params *ct_pars, const std::string &cookie)
 {
 	m_cookie = cookie;
 
 	// Get the commands to run in a separate process
 	std::vector<std::string> commands;
-	commands = m_container.commands(numParameters, parameters, ct_pars, m_gateways);
+	commands = m_container.commands(containedCommand, ct_pars, m_gateways);
 
 	std::string createCommand = commands[0];
 	std::string executeCommand = commands[1];

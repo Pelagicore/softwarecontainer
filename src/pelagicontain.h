@@ -16,10 +16,10 @@ class Pelagicontain {
 public:
 	Pelagicontain(PAMAbstractInterface *pamInterface);
 	~Pelagicontain();
-	static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config);
+	static int initializeConfig(struct lxc_params *ct_pars, const std::string &ct_base_dir, Config *config);
 	int initialize(struct lxc_params &ct_pars, Config &config);
-	pid_t run(int numParameters, char **parameters, struct lxc_params *ct_pars,
-		const std::string &cookie);
+	pid_t run(const std::string &containedCommand,
+		struct lxc_params *ct_pars, const std::string &cookie);
 	void launch(const std::string &appId);
 	void update(const std::map<std::string, std::string> &configs);
 	void shutdown();
