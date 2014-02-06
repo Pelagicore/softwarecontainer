@@ -53,8 +53,8 @@ public:
         wi << appId;
         call.member("RegisterClient");
 
-        // This method call has been changed manually to be non-blocking
-        invoke_method_noreply (call);
+	// This method call has been changed manually to be non-blocking
+	invoke_method_noreply (call);
     }
 
     void UnregisterClient(const std::string& appId)
@@ -65,15 +65,20 @@ public:
         wi << appId;
         call.member("UnregisterClient");
 
-        // This method call has been changed manually to be non-blocking
-        invoke_method_noreply (call);
+	// This method call has been changed manually to be non-blocking
+	invoke_method_noreply (call);
     }
 
-    void UpdateFinished()
+    void UpdateFinished(const std::string& appId)
     {
         ::DBus::CallMessage call;
+        ::DBus::MessageIter wi = call.writer();
+
+        wi << appId;
         call.member("UpdateFinished");
-        invoke_method_noreply (call);
+
+	// This method call has been changed manually to be non-blocking
+	invoke_method_noreply (call);
     }
 
 

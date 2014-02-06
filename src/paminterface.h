@@ -31,7 +31,7 @@ public:
 	/*!
 	 * Implements PAMAbstractInterface::updateFinished
 	 */
-	virtual void updateFinished();
+	virtual void updateFinished(const std::string &appId);
 };
 
 #endif /* PAMINTERFACE_H */

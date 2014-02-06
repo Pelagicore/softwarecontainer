@@ -180,7 +180,7 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
 	setGatewayConfigs(configs);
 
-	m_pamInterface->updateFinished();
+	m_pamInterface->updateFinished(m_appId);
 
 	// TODO: Should we check if gateways have been activated already?
 	activateGateways();
