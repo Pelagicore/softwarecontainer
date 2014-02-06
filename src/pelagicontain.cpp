@@ -22,8 +22,6 @@
 #include "trafficcontrol.h"
 #include "pelagicontain.h"
 
-LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
-LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface):
 	m_pamInterface(pamInterface)
@@ -244,7 +242,7 @@ void Pelagicontain::shutdownGateways()
 	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
 		gateway != m_gateways.end(); ++gateway) {
 		if (!(*gateway)->teardown())
-			warning("Could not teardown gateway cleanly");
+			log_warning("Could not teardown gateway cleanly");
 		delete (*gateway);
 	}
 }

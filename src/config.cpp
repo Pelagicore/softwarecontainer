@@ -2,6 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+#include "debug.h"
 #include "config.h"
 
 Config::Config() :
@@ -31,7 +32,7 @@ int Config::read(const char *path)
 		return -EINVAL;
 	}
 
-	debug("Using config file %s", path);
+	log_debug("Using config file %s", path);
 	return 0;
 }
 
@@ -40,7 +41,7 @@ char *Config::getString(const char *property)
 	json_t *element = NULL;
 
 	if (root == NULL) {
-		debug ("Root JSON object is not initialized");
+		log_debug("Root JSON object is not initialized");
 		return NULL;
 	}
 
@@ -60,7 +61,7 @@ char *Config::getString(const char *property)
 
 			/* Entire array must be strings */
 			if (!json_is_string(line)) {
-				debug("line %d is not a string!", i);
+				log_debug("line %d is not a string!", i);
 				free(buf);
 				return NULL;
 			}
@@ -87,6 +88,6 @@ char *Config::getString(const char *property)
 		return buf;
 	}
 
-	debug("Called on an unknown type");
+	log_debug("Called on an unknown type");
 	return NULL;
 }

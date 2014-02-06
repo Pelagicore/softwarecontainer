@@ -7,13 +7,9 @@
 
 #include "pelagicore-log.h"
 
-/*! \brief Debug helpers
- *  \file debug.h
+/*! Imports the default log context
  */
 
-LOG_IMPORT_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext)
-
-#define debug(args ...) log_debug(args)
-#define warning(args ...) log_warning(args)
+LOG_IMPORT_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext);
 
 #endif /* DEBUG_H */

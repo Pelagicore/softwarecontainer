@@ -8,7 +8,6 @@
 #include "string.h"
 #include "jansson.h"
 #include "errno.h"
-#include "debug.h"
 
 /*! \brief  Key-value configuration system.
  *  \file   config.h
