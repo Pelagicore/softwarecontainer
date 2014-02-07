@@ -1,26 +1,17 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <fcntl.h>
+
+#include <cstdlib>
+
 #include "config.h"
 #include "container.h"
 #include "dbusproxy.h"
@@ -29,18 +20,24 @@
 #include "iptables.h"
 #include "pulse.h"
 #include "trafficcontrol.h"
+#include "pelagicontain.h"
 
-#include "CommandLineParser.h"
 
-LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
-LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
+Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface):
+	m_pamInterface(pamInterface)
+{
+}
+
+Pelagicontain::~Pelagicontain()
+{
+}
 
 using namespace pelagicore;
 
 /*! Initialize config struct
  *
  * Initialize the config struct with various paths and parameters. Some of
- * these parameters are read som $container/config/pelagicore.conf. This
+ * these parameters are read from $container/config/pelagicore.conf. This
  * function verifies that all values parsed from this config file are present,
  * and returns -EINVAL if they are not.
  *
@@ -50,7 +47,7 @@ using namespace pelagicore;
  * \return 0            Upon success
  * \return -EINVAL      Upon bad/missing configuration parameters
  */
-static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config)
+int Pelagicontain::initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config)
 {
 	char *ip_addr_net;
 
@@ -104,59 +101,150 @@ static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir,
 	return 0;
 }
 
-int main (int argc, char **argv)
+/*! Initialize the Pelagicpontain object before usage */
+int Pelagicontain::initialize(struct lxc_params &ct_pars, Config &config)
 {
-	CommandLineParser commandLineParser("Pelagicore container utility\n",
-		"[deploy directory (abs path)] [command]",
-		PACKAGE_VERSION,
-		"This tool ......");
-	
-	int myOptionValue = 0;
-	commandLineParser.addArgument(myOptionValue, "myoption", 'o', "An option");
+	m_container = Container(&ct_pars);
 
-	if (commandLineParser.parse(argc, argv))
-		exit(-1);
+// 	debug("Generate iptables rules");
+// 	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
+//
+// 	// Load pulseaudio module
+// 	debug("Load pulseaudio module");
+// 	Pulse pulse(ct_pars.pulse_socket);
+// 	m_container.addGateway(&pulse);
+//
+// 	// Limit network interface
+// 	debug("Limit network interface");
+// 	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
+//
+// 	Spawn proxies
+	m_gateways.push_back(new DBusProxy(ct_pars.session_proxy_socket,
+		ct_pars.main_cfg_file, DBusProxy::SessionProxy));
 
-	struct lxc_params ct_pars;
+	m_gateways.push_back(new DBusProxy(ct_pars.system_proxy_socket,
+		ct_pars.main_cfg_file, DBusProxy::SystemProxy));
 
-	if (argc < 3 || argv[1][0] != '/') {
-		log_error("Invalid arguments");
-		commandLineParser.printHelp();
-		return -1;
+	return 0;
+}
+
+// Launch the container. This is a non-blocking operation
+pid_t Pelagicontain::run(int numParameters, char **parameters, struct lxc_params *ct_pars,
+	const std::string &cookie)
+{
+	m_cookie = cookie;
+
+	// Get the commands to run in a separate process
+	std::vector<std::string> commands;
+	commands = m_container.commands(numParameters, parameters, ct_pars, m_gateways);
+
+	std::string createCommand = commands[0];
+	std::string executeCommand = commands[1];
+	std::string destroyCommand = commands[2];
+
+	log_debug(createCommand.c_str());
+	system(createCommand.c_str());
+
+	pid_t pid = fork();
+	if (pid == 0) { //child
+		/**
+		 * lxc-execute inherits file descriptors from parent which seems to cause
+		 * a crash, so we close a bunch to avoid that, fd 0, 1, and 2 are
+		 * kept because they are standard fd's that we want (e.g. see output
+		 * on stdout). (the number 30 is arbitrary)
+		 */
+		for (int i = 3; i < 30; i++)
+			close(i);
+
+		//TODO: Is there any way to get the pid of the Controller so we
+		// can use that to tell it to shut down nicely. Currently we can only
+		// tell lxc-execute to shut down but then we don't know if Controller
+		// was actually shut down properly.
+		log_debug(executeCommand.c_str());
+		system(executeCommand.c_str());
+
+		log_debug(destroyCommand.c_str());
+		system(destroyCommand.c_str());
+		exit(0);
+	} // Parent
+
+	return pid;
+}
+
+void Pelagicontain::launch(const std::string &appId) {
+	m_appId = appId;
+	m_pamInterface->registerClient(m_cookie, m_appId);
+}
+
+void Pelagicontain::update(const std::map<std::string, std::string> &configs)
+{
+	setGatewayConfigs(configs);
+
+	m_pamInterface->updateFinished(m_appId);
+
+	// TODO: Should we check if gateways have been activated already?
+	activateGateways();
+
+	m_controller.startApp();
+}
+
+void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
+{
+	// Go through the received configs and see if they match any of
+	// the running gateways, if so: set their respective config
+	std::string config;
+	std::string gatewayId;
+
+	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+		gateway != m_gateways.end(); ++gateway) {
+		gatewayId = (*gateway)->id();
+		if (configs.count(gatewayId) != 0) {
+			config = configs.at(gatewayId);
+			(*gateway)->setConfig(config);
+		}
 	}
+}
 
-	Config config;
-
-	if (initializeConfig(&ct_pars, argv[1], &config)) {
-		log_error("Failed to initialize config. Exiting");
-		return -1;
+void Pelagicontain::activateGateways()
+{
+	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+		gateway != m_gateways.end(); ++gateway) {
+		(*gateway)->activate();
 	}
+}
 
-	Container container(&ct_pars);
+void Pelagicontain::shutdown()
+{
+	// Tell Controller to shut down the app
+	// Controller will exit when the app has shut down and then
+	// lxc-execute will return and lxc-destroy be run (see above
+	// code in the forked child)
+	m_controller.shutdown();
 
-	debug("Generate iptables rules");
-	IpTables rules(ct_pars.ip_addr.c_str(), config.getString("iptables-rules"));
+	// Shut down (clean up) all Gateways
+	shutdownGateways();
 
-	/* Load pulseaudio module */
-	debug("Load pulseaudio module");
-	Pulse pulse(ct_pars.pulse_socket);
-	container.addGateway(&pulse);
+	m_pamInterface->unregisterClient(m_appId);
 
-	/* Limit network interface */
-	debug("Limit network interface");
-	limit_iface(ct_pars.net_iface_name.c_str(), ct_pars.tc_rate);
+	// exit Pelagicontain
+	// TODO: Is there a problem with exiting here without konowing if
+	// Controller has exited?
+	int status = 0;
+	wait(&status);
+	log_debug("Wait status: %d", status);
+	if (WIFEXITED(status))
+		log_debug("#### child exited");
+	if (WIFSIGNALED(status))
+		log_debug("#### child exited by signal: %d", WTERMSIG(status));
+	raise(SIGINT);
+}
 
-	/* Spawn proxies */
-	DBusProxy sessionProxy(ct_pars.session_proxy_socket,
-	                   ct_pars.main_cfg_file,
-	                   DBusProxy::SessionProxy);
-	
-	DBusProxy systemProxy(ct_pars.system_proxy_socket,
-	                  ct_pars.main_cfg_file,
-	                  DBusProxy::SystemProxy);
-	
-	container.addGateway(&sessionProxy);
-	container.addGateway(&systemProxy);
-
-	container.run(argc, argv, &ct_pars);
+void Pelagicontain::shutdownGateways()
+{
+	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+		gateway != m_gateways.end(); ++gateway) {
+		if (!(*gateway)->teardown())
+			log_warning("Could not teardown gateway cleanly");
+		delete (*gateway);
+	}
 }

@@ -1,21 +1,12 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
+#ifndef GENERATORS_H
+#define GENERATORS_H
+
+#include <string>
+#include "pelagicontaincommon.h"
 
 /*! \brief  Generator functions
  *  \file   generators.h
@@ -24,12 +15,6 @@
  *  names, IP addresses and container names. By using these functions, unique
  *  names are ensured
  */
-
-#ifndef GENERATORS_H
-#define GENERATORS_H
-
-#include <string>
-#include "pelagicontaincommon.h"
 
 /*! \brief Generate a network interface name
  *
@@ -87,4 +72,4 @@ int gen_lxc_config (struct lxc_params *params);
  */
 std::string gen_ct_name();
 
-#endif //GENERATORS_H
+#endif /* GENERATORS_H */

@@ -1,30 +1,10 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
-
 #ifndef IPTABLES_H
 #define IPTABLES_H
 
-/*! \brief  IPTables capabilities for Pelagicontain
- *  \file   iptables.h
- *
- * This file contains helpers for setting up and tearing down IPTables rules
- */
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -32,6 +12,11 @@
 #include "pelagicontaincommon.h"
 #include "config.h"
 
+/*! \brief  IPTables capabilities for Pelagicontain
+ *  \file   iptables.h
+ *
+ * This file contains helpers for setting up and tearing down IPTables rules
+ */
 class IpTables
 {
 public:
@@ -64,4 +49,4 @@ private:
 };
 
 
-#endif //IPTABLES_H
+#endif /* IPTABLES_H */

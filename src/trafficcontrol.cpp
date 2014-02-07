@@ -1,22 +1,7 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
-
 #include <unistd.h>
 #include "trafficcontrol.h"
 
@@ -50,7 +35,7 @@ static int wait_for_device (const char *iface)
 				continue;
 			} else {
 				if (strcmp(ifa->ifa_name, iface) == 0) {
-					debug("Device found: %s\n", ifa->ifa_name);
+					log_debug("Device found: %s\n", ifa->ifa_name);
 					found_iface = iface;
 					break;
 				}
@@ -58,7 +43,7 @@ static int wait_for_device (const char *iface)
 		}
 
 		if (!iface)
-			debug("Device unavailable");
+			log_debug("Device unavailable");
 
 		/* Give the device some time to show up */
 		usleep(250000);
@@ -103,7 +88,7 @@ int limit_iface(const char *net_iface_name, const char *tc_rate)
 		}
 
 		/* issue command */
-		debug("issuing: %s\n", cmd);
+		log_debug("issuing: %s\n", cmd);
 		system(cmd);
 		exit(0);
 

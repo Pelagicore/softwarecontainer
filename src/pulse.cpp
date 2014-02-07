@@ -1,22 +1,7 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <erik.boto@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
-
 #include <stdio.h>
 #include "pulse.h"
 #include "debug.h"
@@ -75,7 +60,7 @@ Pulse::~Pulse()
 		pa_threaded_mainloop_stop(m_mainloop);
 		pa_threaded_mainloop_free(m_mainloop);
 	}
-	debug("pulse: Teardown complete");
+	log_debug("pulse: Teardown complete");
 }
 
 const char *Pulse::socketName()
@@ -106,9 +91,9 @@ void Pulse::unloadCallback(pa_context *c, int success, void *userdata)
 {
 	Pulse *p = static_cast<Pulse*>(userdata);
 	if (success)
-		debug ("pulse: Unloaded module %d", p->m_index);
+		log_debug("pulse: Unloaded module %d", p->m_index);
 	else
-		debug ("pulse: Failed to unload module %d", p->m_index);
+		log_debug("pulse: Failed to unload module %d", p->m_index);
 
 	pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
@@ -120,7 +105,7 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 
 	switch (pa_context_get_state(context)) {
 	case PA_CONTEXT_READY:
-		debug("Connection is up, loading module");
+		log_debug("Connection is up, loading module");
 		snprintf(socket, sizeof(socket), "socket=%s", p->m_socket);
 		pa_context_load_module(
 			context,
@@ -130,22 +115,22 @@ void Pulse::stateCallback(pa_context *context, void *userdata)
 			userdata);
 		break;
 	case PA_CONTEXT_CONNECTING:
-		debug("pulse: Connecting");
+		log_debug("pulse: Connecting");
 		break;
 	case PA_CONTEXT_AUTHORIZING:
-		debug("pulse: Authorizing");
+		log_debug("pulse: Authorizing");
 		break;
 	case PA_CONTEXT_SETTING_NAME:
-		debug("pulse: Setting name");
+		log_debug("pulse: Setting name");
 		break;
 	case PA_CONTEXT_UNCONNECTED:
-		debug("pulse: Unconnected");
+		log_debug("pulse: Unconnected");
 		break;
 	case PA_CONTEXT_FAILED:
-		debug("pulse: Failed");
+		log_debug("pulse: Failed");
 		break;
 	case PA_CONTEXT_TERMINATED:
-		debug("pulse: Terminated");
+		log_debug("pulse: Terminated");
 		break;
 	}
 }
