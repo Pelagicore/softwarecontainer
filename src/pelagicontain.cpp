@@ -35,6 +35,8 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
+using namespace pelagicore;
+
 /*! Initialize config struct
  *
  * Initialize the config struct with various paths and parameters. Some of
