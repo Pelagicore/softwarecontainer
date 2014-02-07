@@ -17,6 +17,7 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
+using namespace pelagicore;
 
 void myHandler(int s){
 	log_debug("Caught signal %d", s);
