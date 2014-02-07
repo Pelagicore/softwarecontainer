@@ -8,10 +8,15 @@
 
 #include "CommandLineParser.h"
 
+#include "debug.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaincommon.h"
 #include "pelagicontaintodbusadapter.h"
+
+LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
+LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
+
 
 void myHandler(int s){
 	log_debug("Caught signal %d", s);

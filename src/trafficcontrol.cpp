@@ -35,7 +35,7 @@ static int wait_for_device (const char *iface)
 				continue;
 			} else {
 				if (strcmp(ifa->ifa_name, iface) == 0) {
-					debug("Device found: %s\n", ifa->ifa_name);
+					log_debug("Device found: %s\n", ifa->ifa_name);
 					found_iface = iface;
 					break;
 				}
@@ -43,7 +43,7 @@ static int wait_for_device (const char *iface)
 		}
 
 		if (!iface)
-			debug("Device unavailable");
+			log_debug("Device unavailable");
 
 		/* Give the device some time to show up */
 		usleep(250000);
@@ -88,7 +88,7 @@ int limit_iface(const char *net_iface_name, const char *tc_rate)
 		}
 
 		/* issue command */
-		debug("issuing: %s\n", cmd);
+		log_debug("issuing: %s\n", cmd);
 		system(cmd);
 		exit(0);
 

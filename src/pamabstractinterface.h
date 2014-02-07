@@ -13,7 +13,7 @@ public:
 	virtual void registerClient(const std::string &cookie,
 		const std::string &appId) = 0;
 	virtual void unregisterClient(const std::string &appId) = 0;
-	virtual void updateFinished() = 0;
+	virtual void updateFinished(const std::string &appId) = 0;
 };
 
 #endif /* PAMABSTRACTINTERFACE_H */

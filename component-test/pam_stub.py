@@ -41,9 +41,9 @@ class PAMStub(dbus.service.Object):
         configs = {"Gateway1": "GatewayConfig1", "Gateway2": "GatewayConfig2"}
         pelagicontain_iface.Update(configs)
 
-    @dbus.service.method(BUS_NAME, in_signature="", out_signature="",
+    @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",
         sender_keyword="sender")
-    def UpdateFinished(self, sender=None):
+    def UpdateFinished(self, appId, sender=None):
         self.updatefinished_called = True
         print sender + " called UpdateFinished()"
 

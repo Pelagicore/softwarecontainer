@@ -20,7 +20,7 @@ void PAMInterface::unregisterClient(const std::string &appId)
 	UnregisterClient(appId);
 }
 
-void PAMInterface::updateFinished()
+void PAMInterface::updateFinished(const std::string &appId)
 {
-	UpdateFinished();
+	UpdateFinished(appId);
 }

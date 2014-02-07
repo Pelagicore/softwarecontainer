@@ -7,7 +7,6 @@
 
 #include <string>
 #include <iostream>
-#include "debug.h"
 
 /*! \brief Gateway base class
  *  \file gateway.h

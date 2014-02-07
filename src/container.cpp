@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "container.h"
 #include "generators.h"
+#include "debug.h"
 
 using namespace std;
 
@@ -101,7 +102,7 @@ const char *Container::configFile()
 
 int Container::writeConfiguration(struct lxc_params *params)
 {
-        debug("Generating config to %s for IP %s", configFile(), params->ip_addr.c_str());
+        log_debug("Generating config to %s for IP %s", configFile(), params->ip_addr.c_str());
 
 	/* Copy system config to temporary location */
 	ifstream source(params->lxc_system_cfg, ios::binary);

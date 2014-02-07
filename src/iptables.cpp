@@ -2,6 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+#include "debug.h"
 #include "iptables.h"
 
 IpTables::IpTables(const char *ip_addr, const char *iptables_rules) :
@@ -55,7 +56,7 @@ IpTables::~IpTables()
 	while (fgets(iptables_line, sizeof(iptables_line) - 1, fp) != NULL) {
 		if (strstr(iptables_line, m_ip) != NULL) {
 			char ipt_cmd[100];
-			debug("%d > ", line_no);
+			log_debug("%d > ", line_no);
 
 			/* Actual deletion */
 			snprintf(ipt_cmd, sizeof(ipt_cmd), "iptables -D FORWARD %d", line_no);
@@ -67,7 +68,7 @@ IpTables::~IpTables()
 		}
 
 		/* Print entire table */
-		debug("%s", iptables_line);
+		log_debug("%s", iptables_line);
 
 		line_no++;
 	}
