@@ -6,7 +6,6 @@
 #define GENERATORS_H
 
 #include <string>
-#include "pelagicontaincommon.h"
 
 /*! \brief  Generator functions
  *  \file   generators.h
@@ -47,21 +46,6 @@ char *gen_gw_ip_addr (char *ip_addr_net);
  * \return A string representing an IP address
  */
 std::string gen_ip_addr (const char *ip_addr_net);
-
-/*! \brief Generate and write an LXC config
- *
- * Generate an LXC config file suitable for launching a container. This
- * configuration will be tailored to the fit the IP, gateway and interface
- * names specified in params. The configuration file can be disposed of after
- * the container has finished running. The configuration file is written to the
- * path specified in params.lxc_config_file
- *
- * \return 0       upon success
- * \return -ENOMEM upon memory allocation failure
- * \return -EINVAL upon file system failures
- */
-int gen_lxc_config (struct lxc_params *params);
-
 
 /*! \brief Generate a container name
  *

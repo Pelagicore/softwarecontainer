@@ -5,7 +5,6 @@
 #include <fstream>
 #include <unistd.h>
 #include "container.h"
-#include "generators.h"
 #include "debug.h"
 
 using namespace std;
@@ -15,21 +14,11 @@ Container::Container ()
 
 }
 
-Container::Container(struct lxc_params *ct_pars)
+Container::Container(const std::string &name)
 {
-	m_name = ct_pars->container_name;
+	m_name = name;
 
-	/* Initialize DBus socket paths */
-	snprintf(ct_pars->session_proxy_socket, sizeof(ct_pars->session_proxy_socket),
-		"%s/sess_%s.sock", ct_pars->ct_root_dir, name());
-	snprintf(ct_pars->system_proxy_socket, sizeof(ct_pars->system_proxy_socket),
-		"%s/sys_%s.sock", ct_pars->ct_root_dir, name());
-
-	/* Initialize pulse socket paths */
-	snprintf(ct_pars->pulse_socket, sizeof(ct_pars->pulse_socket),
-		"%s/pulse-%s.sock", ct_pars->ct_root_dir, name());
-
-	writeConfiguration(ct_pars);
+	writeConfiguration();
 }
 
 Container::~Container()
@@ -44,7 +33,8 @@ const char *Container::name()
 }
 
 std::vector<std::string> Container::commands(const std::string &containedCommand,
-	struct lxc_params *ct_pars, const std::vector<Gateway *> &gateways)
+	const std::vector<Gateway *> &gateways,
+	const std::string &appRoot)
 {
 	int max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
@@ -61,10 +51,13 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 	log_debug("Using environment: %s", environment.c_str());
 
 	// Command to create container
-	sprintf(lxc_command, "DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
-				" -f %s > /tmp/lxc_%s.log",
-				ct_pars->ct_root_dir, name(),
-				configFile(), name());
+	sprintf(lxc_command,
+		"DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
+		" -f %s > /tmp/lxc_%s.log",
+		appRoot.c_str(),
+		name(),
+		configFile(),
+		name());
 	commands.push_back(std::string(lxc_command));
 
 	// Create command to execute inside container
@@ -86,21 +79,23 @@ const char *Container::configFile()
 	return path.c_str();
 }
 
-int Container::writeConfiguration(struct lxc_params *params)
+int Container::writeConfiguration()
 {
-        log_debug("Generating config to %s for IP %s", configFile(), params->ip_addr.c_str());
+	/* NOTE: Previously there were additions written to the config file
+	 * here. Currently the system config is just copied and not ameneded
+	 * with more information, which means this flow is pretty useless at the
+	 * moment. If there's no use for this option to amend the config, this
+	 * code can be removed and the rest of the flow cleaned up so the
+	 * "lxc_config_<container-name>" is not used at all. In that case the
+	 * "system config" copied below could be used as it is.
+	 */
+        log_debug("Generating config to %s", configFile());
 
 	/* Copy system config to temporary location */
-	ifstream source(params->lxc_system_cfg, ios::binary);
+	ifstream source("/etc/pelagicontain", ios::binary);
 	ofstream dest(configFile(), ios::binary);
 	dest << source.rdbuf();
 	source.close();
-
-	/* Add ipv4 parameters to config */
-	dest << "lxc.network.veth.pair = " << params->net_iface_name << endl;
-	dest << "lxc.network.ipv4 = " << params->ip_addr << "/24" << endl;
-	dest << "lxc.network.ipv4.gateway = " << params->gw_addr << endl;
-
 	dest.close();
 
 	return 0;

@@ -2,31 +2,27 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#ifndef DBUSPROXY_H
-#define DBUSPROXY_H
+#ifndef DBUSGATEWAY_H
+#define DBUSGATEWAY_H
 
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
 
-/*! \brief DBus Proxy
- *  \file dbusproxy.h
- *
- *  Takes care of spawning and killing the DBus proxies
+/*! DBus Gateway takes care of spawning and killing the DBus proxies
  */
-class DBusProxy : public Gateway
+class DBusGateway : public Gateway
 {
 public:
 	enum ProxyType {SessionProxy, SystemProxy};
 
 	/*! Spawn the proxy and use the supplied path for the socket
 	*
-	* \param  socket     path to the socket file to use. File is created.
-	* \param  config     path to configuration file for proxy
 	* \param  type       SessionProxy or SystemProxy
 	*/
-	DBusProxy(const char *socket, const char *config, ProxyType type);
-	~DBusProxy();
+	DBusGateway(ProxyType type, const std::string &containerRoot,
+		const std::string &name);
+	~DBusGateway();
 
 	/*!
 	 *  Implements Gateway::id
@@ -52,8 +48,8 @@ private:
 	const char *socketName();
 
 	pid_t m_pid;
-	const char *m_socket;
+	std::string m_socket;
 	ProxyType m_type;
 };
 
-#endif /* DBUSPROXY_H */
+#endif /* DBUSGATEWAY_H */

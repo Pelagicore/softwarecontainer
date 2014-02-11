@@ -7,16 +7,15 @@ link_directories(
 add_executable( pelagicontain
 	pelagicontaintodbusadapter.cpp
 	main.cpp
-	config.cpp
+	configparser.cpp
 	container.cpp
-	dbusproxy.cpp
+	dbusgateway.cpp
 	generators.cpp
-	iptables.cpp
 	pelagicontain.cpp
-	pulse.cpp
-	trafficcontrol.cpp
+	pulsegateway.cpp
 	controllerinterface.cpp
 	paminterface.cpp
+	networkgateway.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain

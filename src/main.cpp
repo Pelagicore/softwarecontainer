@@ -11,7 +11,6 @@
 #include "debug.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
-#include "pelagicontaincommon.h"
 #include "pelagicontaintodbusadapter.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
@@ -33,7 +32,7 @@ int main(int argc, char **argv)
 	sigIntHandler.sa_flags = 0;
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
-	CommandLineParser commandLineParser("Pelagicore container utility\n",
+	pelagicore::CommandLineParser commandLineParser("Pelagicore container utility\n",
 		"[deploy directory (abs path)] [command]",
 		PACKAGE_VERSION,
 		"This tool ......");
@@ -69,18 +68,11 @@ int main(int argc, char **argv)
 
 	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
-	struct lxc_params ct_pars;
-	Config config;
 	std::string containerRoot(argv[1]);
 
-	if (Pelagicontain::initializeConfig(&ct_pars, containerRoot, &config)) {
-		log_error("Failed to initialize config. Exiting");
-		return -1;
-	}
-
-	pelagicontain.initialize(ct_pars, config);
+	pelagicontain.initialize(containerRoot);
 	std::string containedCommand(argv[2]);
-	pid_t pcPid = pelagicontain.run(containedCommand, &ct_pars, cookie);
+	pid_t pcPid = pelagicontain.run(containedCommand, cookie);
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
 	dispatcher.enter();
 }
