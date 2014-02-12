@@ -16,8 +16,6 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
-using namespace pelagicore;
-
 void myHandler(int s){
 	log_debug("Caught signal %d", s);
 	exit(0);
@@ -32,7 +30,7 @@ int main(int argc, char **argv)
 	sigIntHandler.sa_flags = 0;
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
-	pelagicore::CommandLineParser commandLineParser("Pelagicore container utility\n",
+	CommandLineParser commandLineParser("Pelagicore container utility\n",
 		"[deploy directory (abs path)] [command]",
 		PACKAGE_VERSION,
 		"This tool ......");

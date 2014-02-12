@@ -21,8 +21,6 @@ Pelagicontain::~Pelagicontain()
 {
 }
 
-using namespace pelagicore;
-
 /* Initialize the Pelagicpontain object before usage
  * TODO: What to return from this method? Do we need to have return values
  * for errors?
