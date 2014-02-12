@@ -4,7 +4,7 @@ add_definitions(${DEPENDENCIES_CFLAGS})
 link_directories(
 	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS})
 
-add_definitions(-DCONFIG="${SYS_CONFIG_DIR}/pelagicontain")
+add_definitions(-DCONFIG="${SYS_CONFIG_DIR}/pelagicontain.conf")
 
 add_executable( pelagicontain
 	pelagicontaintodbusadapter.cpp
@@ -28,5 +28,5 @@ TARGET_LINK_LIBRARIES( pelagicontain
 
 install(TARGETS pelagicontain RUNTIME DESTINATION bin)
 
-install(FILES lxc-pelagicontain DESTINATION share/lxc/templates/lxc-pelagicontain)
-install(FILES pela_lxc.conf DESTINATION ${SYS_CONFIG_DIR}/pelagicontain)
+install(FILES lxc-pelagicontain DESTINATION share/lxc/templates)
+install(FILES pelagicontain.conf DESTINATION ${SYS_CONFIG_DIR})
