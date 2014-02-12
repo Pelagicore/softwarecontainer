@@ -7,8 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "pelagicontaincommon.h"
-#include "config.h"
+
 #include "gateway.h"
 
 /*! \brief Container base class
@@ -20,18 +19,16 @@ class Container
 {
 public:
 	Container ();
-	Container(struct lxc_params *ct_pars);
+	Container(const std::string &name, const std::string &configFile);
 	~Container();
 
 	const char *name();
-	std::vector<std::string> commands(int numParams, char **params,
-		struct lxc_params *ct_pars, const std::vector<Gateway *> &gateways);
-
-private:
-	const char *configFile();
-	int writeConfiguration(struct lxc_params *params);
+	std::vector<std::string> commands(const std::string &containedCommand,
+		const std::vector<Gateway *> &gateways,
+		const std::string &appRoot);
 
 	std::string m_name;
+    std::string m_configFile;
 };
 
 #endif //CONTAINER_H

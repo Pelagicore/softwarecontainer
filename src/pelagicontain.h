@@ -7,7 +7,6 @@
 
 #include <sys/types.h>
 
-#include "config.h"
 #include "container.h"
 #include "paminterface.h"
 #include "controllerinterface.h"
@@ -16,12 +15,66 @@ class Pelagicontain {
 public:
 	Pelagicontain(PAMAbstractInterface *pamInterface);
 	~Pelagicontain();
-	static int initializeConfig(struct lxc_params *ct_pars, const char *ct_base_dir, Config *config);
-	int initialize(struct lxc_params &ct_pars, Config &config);
-	pid_t run(int numParameters, char **parameters, struct lxc_params *ct_pars,
-		const std::string &cookie);
+
+	/*! Creates a container and all gateways.
+	 *
+	 * \param containerRoot The path to where e.g. config/ and rootfs/ are
+     * \param containerConfig Path to the global config (/etc/pelagicontain
+     *                       commonly)
+	 * 	located.
+	 *
+	 * \return 0 (see TODO in code...)
+	 */
+	int initialize(const std::string &containerRoot,
+                   const std::string &containerConfig);
+
+	/*! Starts the container preloading phase.
+	 *
+	 * The three phases, 'preload', 'launch', and 'shutdown' are initiated
+	 * by calling this method. The preload phase is started directly as
+	 * a result of calling this method. The launch and shotdown phases are
+	 * initiated by the client calling Pelagicontain::launch and
+	 * Pelagicontain::shutdown respectively as separate events, but those
+	 * must be preceeded by a call to this method. The call to this method
+	 * should be done as part of starting the whole Pelagicontain component.
+	 *
+	 * \param containedCommand The command to be executed inside the container
+	 * \param cookie A unique identifier used to distinguish unique instances
+	 * 	of Pelagicontain
+	 *
+	 * \return The PID of the container
+	 */
+	pid_t run(const std::string &containedCommand, const std::string &cookie);
+
+	/*! Initiates the 'launch' phase.
+	 *
+	 * Registers Pelagicontain with Platform Access Manager and awaits the
+	 * gateway configurations. This is the initial stage of the launch phase.
+	 *
+	 * \param appId An application identifier used to fetch what capabilities
+	 * 	the application wants access to
+	 */
 	void launch(const std::string &appId);
+
+	/*! Continues the 'launch' phase by allowing gateway configurations to
+	 * 	be set.
+	 *
+	 * Platform Access Manager calls this method after Pelagicontain has
+	 * registered as a client, and passes all gateway configurations as
+	 * argument. Pelagicontain sets the gateway configurations and activates
+	 * all gateways as a result of this call. The contained application
+	 * is then started.
+	 *
+	 * \param configs A map of gateway IDs and their respective configurations
+	 */
 	void update(const std::map<std::string, std::string> &configs);
+
+	/*! Initiates the 'shutdown' phase.
+	 *
+	 * Shuts down the contained application, all gateways, then unregisters
+	 * as a client with Platform Access Manager, and finaly shuts down
+	 * the Pelagicontain component.
+	 */
 	void shutdown();
 
 private:
@@ -35,6 +88,7 @@ private:
 	std::vector<Gateway *> m_gateways;
 	std::string m_appId;
 	std::string m_cookie;
+	std::string m_containerRoot;
 };
 
 #endif /* PELAGICONTAIN_H */

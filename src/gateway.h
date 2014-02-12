@@ -6,10 +6,8 @@
 #define GATEWAY_H
 
 #include <string>
-#include <iostream>
 
-/*! \brief Gateway base class
- *  \file gateway.h
+/*! Gateway base class
  *
  * Gateway abstract base class for Pelagicontain
  */

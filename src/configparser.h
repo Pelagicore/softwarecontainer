@@ -2,8 +2,8 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIGPARSER_H
+#define CONFIGPARSER_H
 
 #include "string.h"
 #include "jansson.h"
@@ -13,13 +13,13 @@
  *  \file   config.h
  *
  * The system is used to retrieve values based
- * on key identifiers supplied to Config::get* functions.
+ * on key identifiers supplied to ConfigParser::get* functions.
  */
 
-class Config {
+class ConfigParser {
 public:
-	Config();
-	~Config();
+	ConfigParser();
+	~ConfigParser();
 
 	/*! \brief Read and parse the configuration file
 	*
@@ -49,4 +49,4 @@ private:
 	json_t *root;
 };
 
-#endif /* CONFIG_H */
+#endif /* CONFIGPARSER_H */

@@ -11,6 +11,26 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 
 
+DBUS_GW_CONFIG = """
+[{
+    "config-session": [],
+    "config-system": [
+        {
+            "direction": "*",
+            "interface": "*",
+            "object-path": "/org/bluez/*",
+            "method": "*"
+        },
+        {
+            "direction": "*",
+            "interface": "org.bluez.Manager",
+            "object-path": "/",
+            "method": "*"
+        }
+    ]
+}]
+"""
+
 class PAMStub(dbus.service.Object):
     register_called = False
     unregisterclient_called = False
@@ -38,7 +58,7 @@ class PAMStub(dbus.service.Object):
             "/com/pelagicore/Pelagicontain/" + cookie)
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
             "com.pelagicore.Pelagicontain")
-        configs = {"Gateway1": "GatewayConfig1", "Gateway2": "GatewayConfig2"}
+        configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": "GatewayConfig2"}
         pelagicontain_iface.Update(configs)
 
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",

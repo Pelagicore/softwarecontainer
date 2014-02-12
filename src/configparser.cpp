@@ -3,20 +3,20 @@
  *   All rights reserved.
  */
 #include "debug.h"
-#include "config.h"
+#include "configparser.h"
 
-Config::Config() :
+ConfigParser::ConfigParser() :
 	root(0)
 {
 }
 
-Config::~Config()
+ConfigParser::~ConfigParser()
 {
 	if (root)
 		json_decref(root);
 }
 
-int Config::read(const char *path)
+int ConfigParser::read(const char *path)
 {
 	if (root) {
 		log_error("Already loaded configuration!");
@@ -36,7 +36,7 @@ int Config::read(const char *path)
 	return 0;
 }
 
-char *Config::getString(const char *property)
+char *ConfigParser::getString(const char *property)
 {
 	json_t *element = NULL;
 

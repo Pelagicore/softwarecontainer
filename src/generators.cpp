@@ -9,8 +9,10 @@
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+
+#include "ifaddrs.h"
+
 #include "generators.h"
-#include "trafficcontrol.h"
 #include "debug.h"
 
 using namespace std;

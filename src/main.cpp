@@ -11,13 +11,14 @@
 #include "debug.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
-#include "pelagicontaincommon.h"
 #include "pelagicontaintodbusadapter.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
-using namespace pelagicore;
+#ifndef CONFIG
+    #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
+#endif
 
 void myHandler(int s){
 	log_debug("Caught signal %d", s);
@@ -27,6 +28,7 @@ void myHandler(int s){
 int main(int argc, char **argv)
 {
 	struct sigaction sigIntHandler;
+    std::string containerConfig(CONFIG);
 
 	sigIntHandler.sa_handler = myHandler;
 	sigemptyset(&sigIntHandler.sa_mask);
@@ -34,7 +36,7 @@ int main(int argc, char **argv)
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
-		"[deploy directory (abs path)] [command]",
+		"[deploy directory (abs path)] [command] [cookie]",
 		PACKAGE_VERSION,
 		"This tool ......");
 
@@ -44,7 +46,11 @@ int main(int argc, char **argv)
 	if (commandLineParser.parse(argc, argv))
 		return -1;
 
-	if (argc < 3 || argv[1][0] != '/') {
+	/* argv[1] = container root directory
+	 * argv[2] = command to run inside container
+	 * argv[3] = cookie to append to object path
+	 */
+	if (argc < 4 || argv[1][0] != '/') {
 		log_error("Invalid arguments");
 		commandLineParser.printHelp();
 		return -1;
@@ -65,15 +71,11 @@ int main(int argc, char **argv)
 
 	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
-	struct lxc_params ct_pars;
-	Config config;
+	std::string containerRoot(argv[1]);
 
-	if (Pelagicontain::initializeConfig(&ct_pars, argv[1], &config)) {
-		log_error("Failed to initialize config. Exiting");
-		return -1;
-	}
-
-	pelagicontain.initialize(ct_pars, config);
-	log_debug("Started Pelagicontain with PID: %d", pelagicontain.run(argc, argv, &ct_pars, cookie));
+	pelagicontain.initialize(containerRoot, containerConfig);
+	std::string containedCommand(argv[2]);
+	pid_t pcPid = pelagicontain.run(containedCommand, cookie);
+	log_debug("Started Pelagicontain with PID: %d", pcPid);
 	dispatcher.enter();
 }

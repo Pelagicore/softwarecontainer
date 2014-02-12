@@ -4,19 +4,20 @@ add_definitions(${DEPENDENCIES_CFLAGS})
 link_directories(
 	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS})
 
+add_definitions(-DCONFIG="${SYS_CONFIG_DIR}/pelagicontain")
+
 add_executable( pelagicontain
 	pelagicontaintodbusadapter.cpp
 	main.cpp
-	config.cpp
+	configparser.cpp
 	container.cpp
-	dbusproxy.cpp
+	dbusgateway.cpp
 	generators.cpp
-	iptables.cpp
 	pelagicontain.cpp
-	pulse.cpp
-	trafficcontrol.cpp
+	pulsegateway.cpp
 	controllerinterface.cpp
 	paminterface.cpp
+	networkgateway.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain
