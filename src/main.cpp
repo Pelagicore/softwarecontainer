@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
-		"[deploy directory (abs path)] [command]",
+		"[deploy directory (abs path)] [command] [cookie]",
 		PACKAGE_VERSION,
 		"This tool ......");
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	 * argv[2] = command to run inside container
 	 * argv[3] = cookie to append to object path
 	 */
-	if (argc < 3 || argv[1][0] != '/') {
+	if (argc < 4 || argv[1][0] != '/') {
 		log_error("Invalid arguments");
 		commandLineParser.printHelp();
 		return -1;
