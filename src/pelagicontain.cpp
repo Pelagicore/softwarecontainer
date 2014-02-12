@@ -25,12 +25,13 @@ Pelagicontain::~Pelagicontain()
  * TODO: What to return from this method? Do we need to have return values
  * for errors?
  */
-int Pelagicontain::initialize(const std::string &containerRoot)
+int Pelagicontain::initialize(const std::string &containerRoot,
+                              const std::string &containerConfig)
 {
 	std::string containerName = gen_ct_name();
 	m_containerRoot = containerRoot;
 
-	m_container = Container(containerName);
+	m_container = Container(containerName, containerConfig);
 
 	m_gateways.push_back(new NetworkGateway);
 

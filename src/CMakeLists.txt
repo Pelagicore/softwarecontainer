@@ -4,6 +4,8 @@ add_definitions(${DEPENDENCIES_CFLAGS})
 link_directories(
 	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS})
 
+add_definitions(-DCONFIG="${SYS_CONFIG_DIR}/pelagicontain")
+
 add_executable( pelagicontain
 	pelagicontaintodbusadapter.cpp
 	main.cpp

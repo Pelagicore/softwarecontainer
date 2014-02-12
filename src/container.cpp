@@ -14,12 +14,8 @@ Container::Container ()
 
 }
 
-Container::Container(const std::string &name)
-{
-	m_name = name;
-
-	writeConfiguration();
-}
+Container::Container(const std::string &name, const std::string &configFile) :
+    m_name(name), m_configFile(configFile) {}
 
 Container::~Container()
 {
@@ -56,7 +52,7 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 		" -f %s > /tmp/lxc_%s.log",
 		appRoot.c_str(),
 		name(),
-		configFile(),
+		m_configFile.c_str(),
 		name());
 	commands.push_back(std::string(lxc_command));
 
@@ -70,33 +66,4 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 	commands.push_back(std::string(lxc_command));
 
 	return commands;
-}
-
-const char *Container::configFile()
-{
-	std::string path("/tmp/lxc_config_");
-	path += m_name;
-	return path.c_str();
-}
-
-int Container::writeConfiguration()
-{
-	/* NOTE: Previously there were additions written to the config file
-	 * here. Currently the system config is just copied and not ameneded
-	 * with more information, which means this flow is pretty useless at the
-	 * moment. If there's no use for this option to amend the config, this
-	 * code can be removed and the rest of the flow cleaned up so the
-	 * "lxc_config_<container-name>" is not used at all. In that case the
-	 * "system config" copied below could be used as it is.
-	 */
-        log_debug("Generating config to %s", configFile());
-
-	/* Copy system config to temporary location */
-	ifstream source("/etc/pelagicontain", ios::binary);
-	ofstream dest(configFile(), ios::binary);
-	dest << source.rdbuf();
-	source.close();
-	dest.close();
-
-	return 0;
 }

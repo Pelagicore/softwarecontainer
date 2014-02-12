@@ -19,7 +19,7 @@ class Container
 {
 public:
 	Container ();
-	Container(const std::string &name);
+	Container(const std::string &name, const std::string &configFile);
 	~Container();
 
 	const char *name();
@@ -27,11 +27,8 @@ public:
 		const std::vector<Gateway *> &gateways,
 		const std::string &appRoot);
 
-private:
-	const char *configFile();
-	int writeConfiguration();
-
 	std::string m_name;
+    std::string m_configFile;
 };
 
 #endif //CONTAINER_H

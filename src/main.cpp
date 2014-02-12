@@ -16,6 +16,10 @@
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
+#ifndef CONFIG
+    #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
+#endif
+
 void myHandler(int s){
 	log_debug("Caught signal %d", s);
 	exit(0);
@@ -24,6 +28,7 @@ void myHandler(int s){
 int main(int argc, char **argv)
 {
 	struct sigaction sigIntHandler;
+    std::string containerConfig(CONFIG);
 
 	sigIntHandler.sa_handler = myHandler;
 	sigemptyset(&sigIntHandler.sa_mask);
@@ -68,7 +73,7 @@ int main(int argc, char **argv)
 
 	std::string containerRoot(argv[1]);
 
-	pelagicontain.initialize(containerRoot);
+	pelagicontain.initialize(containerRoot, containerConfig);
 	std::string containedCommand(argv[2]);
 	pid_t pcPid = pelagicontain.run(containedCommand, cookie);
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
