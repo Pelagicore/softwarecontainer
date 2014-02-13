@@ -10,15 +10,17 @@
 
 #include "gateway.h"
 
-/*! \brief Container base class
- *  \file container.h
+/*! Container is an abstraction of the specific containment technology used.
  *
- *  Container base class for Pelagicontain
+ * The Container class is meant to be an abstraction of the containment
+ * technology, so that Pelagicontain can view it as a generic concept that
+ * implements the specifics behind the conceptual phases of 'Pereload', 'Launch',
+ * and 'Shutdown'.
  */
 class Container
 {
 public:
-	Container ();
+	Container();
 	Container(const std::string &name, const std::string &configFile);
 	~Container();
 

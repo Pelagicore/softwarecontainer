@@ -12,8 +12,9 @@
 #include "dbusgateway.h"
 #include "pelagicontain.h"
 
-Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface):
-	m_pamInterface(pamInterface)
+Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
+	MainloopAbstractInterface *mainloopInterface):
+	m_pamInterface(pamInterface), m_mainloopInterface(mainloopInterface)
 {
 }
 
@@ -21,10 +22,7 @@ Pelagicontain::~Pelagicontain()
 {
 }
 
-/* Initialize the Pelagicpontain object before usage
- * TODO: What to return from this method? Do we need to have return values
- * for errors?
- */
+/* Initialize the Pelagicpontain object before usage */
 int Pelagicontain::initialize(const std::string &containerRoot,
                               const std::string &containerConfig)
 {
@@ -56,9 +54,6 @@ pid_t Pelagicontain::run(const std::string &containedCommand, const std::string 
 	std::string appRoot = m_containerRoot + "/rootfs/";
 	commands = m_container.commands(containedCommand, m_gateways, appRoot);
 
-	/* TODO: Make sure no command is longer than what is allowed before
-	 * we pass this to be run on the system
-	 */
 	std::string createCommand = commands[0];
 	std::string executeCommand = commands[1];
 	std::string destroyCommand = commands[2];
@@ -84,11 +79,6 @@ pid_t Pelagicontain::run(const std::string &containedCommand, const std::string 
 		for (int i = 3; i < 30; i++)
 			close(i);
 
-		/* TODO: Is there any way to get the pid of the Controller so we
-		 * can use that to tell it to shut down nicely. Currently we can only
-		 * tell lxc-execute to shut down but then we don't know if Controller
-		 * was actually shut down properly.
-		 */
 		log_debug(executeCommand.c_str());
 		system(executeCommand.c_str());
 
@@ -111,7 +101,6 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 
 	m_pamInterface->updateFinished(m_appId);
 
-	/* TODO: Should we check if gateways have been activated already? */
 	activateGateways();
 
 	m_controller.startApp();
@@ -157,18 +146,15 @@ void Pelagicontain::shutdown()
 
 	m_pamInterface->unregisterClient(m_appId);
 
-	/* exit Pelagicontain
-	 * TODO: Is there a problem with exiting here without konowing if
-	 * Controller has exited?
-	 */
+	/* Wait for Controller */
 	int status = 0;
 	wait(&status);
-	log_debug("Wait status: %d", status);
 	if (WIFEXITED(status))
-		log_debug("#### child exited");
+		log_debug("Child exited");
 	if (WIFSIGNALED(status))
-		log_debug("#### child exited by signal: %d", WTERMSIG(status));
-	raise(SIGINT);
+		log_debug("Child exited by signal: %d", WTERMSIG(status));
+
+	m_mainloopInterface->leave();
 }
 
 void Pelagicontain::shutdownGateways()
