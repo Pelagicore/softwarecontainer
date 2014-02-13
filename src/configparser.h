@@ -9,8 +9,7 @@
 #include "jansson.h"
 #include "errno.h"
 
-/*! \brief  Key-value configuration system.
- *  \file   config.h
+/*! Key-value configuration system.
  *
  * The system is used to retrieve values based
  * on key identifiers supplied to ConfigParser::get* functions.

@@ -20,15 +20,20 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
 
+/* When Pelagicontain::shutdown has been called we should eventually exit
+ * but if we just exit at that point the unit tests for Pelagicontain (the class)
+ * will be messed up. Using a signal handler allows us to handle (and ignore)
+ * the signal in the tests.
+ */
 void myHandler(int s){
-	log_debug("Caught signal %d", s);
+	log_debug("Caught signal %d, Pelagicontain will exit now.", s);
 	exit(0);
 }
 
 int main(int argc, char **argv)
 {
 	struct sigaction sigIntHandler;
-    std::string containerConfig(CONFIG);
+	std::string containerConfig(CONFIG);
 
 	sigIntHandler.sa_handler = myHandler;
 	sigemptyset(&sigIntHandler.sa_mask);

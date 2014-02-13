@@ -25,5 +25,6 @@ add_subdirectory(controller)
 
 option(BUILD_TESTS "Enables unit testing" OFF)
 if(BUILD_TESTS)
+	add_subdirectory(unit-test)
 	enable_testing()
 endif(BUILD_TESTS)

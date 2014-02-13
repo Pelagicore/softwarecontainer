@@ -7,20 +7,17 @@
 #include "container.h"
 #include "debug.h"
 
-using namespace std;
-
-Container::Container ()
+Container::Container()
 {
-
 }
 
 Container::Container(const std::string &name, const std::string &configFile) :
-    m_name(name), m_configFile(configFile) {}
+    m_name(name), m_configFile(configFile)
+{
+}
 
 Container::~Container()
 {
-// 	if (remove(configFile()) == -1)
-// 		log_error("Failed to remove lxc config file!");
 }
 
 const char *Container::name()

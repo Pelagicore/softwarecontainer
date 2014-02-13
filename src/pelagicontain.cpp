@@ -21,10 +21,7 @@ Pelagicontain::~Pelagicontain()
 {
 }
 
-/* Initialize the Pelagicpontain object before usage
- * TODO: What to return from this method? Do we need to have return values
- * for errors?
- */
+/* Initialize the Pelagicpontain object before usage */
 int Pelagicontain::initialize(const std::string &containerRoot,
                               const std::string &containerConfig)
 {
@@ -84,11 +81,6 @@ pid_t Pelagicontain::run(const std::string &containedCommand, const std::string 
 		for (int i = 3; i < 30; i++)
 			close(i);
 
-		/* TODO: Is there any way to get the pid of the Controller so we
-		 * can use that to tell it to shut down nicely. Currently we can only
-		 * tell lxc-execute to shut down but then we don't know if Controller
-		 * was actually shut down properly.
-		 */
 		log_debug(executeCommand.c_str());
 		system(executeCommand.c_str());
 
@@ -111,7 +103,6 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 
 	m_pamInterface->updateFinished(m_appId);
 
-	/* TODO: Should we check if gateways have been activated already? */
 	activateGateways();
 
 	m_controller.startApp();
@@ -157,10 +148,7 @@ void Pelagicontain::shutdown()
 
 	m_pamInterface->unregisterClient(m_appId);
 
-	/* exit Pelagicontain
-	 * TODO: Is there a problem with exiting here without konowing if
-	 * Controller has exited?
-	 */
+	/* exit Pelagicontain */
 	int status = 0;
 	wait(&status);
 	log_debug("Wait status: %d", status);

@@ -19,11 +19,9 @@ public:
 	/*! Creates a container and all gateways.
 	 *
 	 * \param containerRoot The path to where e.g. config/ and rootfs/ are
-     * \param containerConfig Path to the global config (/etc/pelagicontain
-     *                       commonly)
-	 * 	located.
+	 * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
 	 *
-	 * \return 0 (see TODO in code...)
+	 * \return 0
 	 */
 	int initialize(const std::string &containerRoot,
                    const std::string &containerConfig);
