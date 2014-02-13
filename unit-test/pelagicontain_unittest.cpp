@@ -7,6 +7,7 @@
 
 #include "pelagicontain.h"
 #include "pamabstractinterface.h"
+#include "mainloopabstractinterface.h"
 #include "debug.h"
 #include "log_console.h"
 
@@ -14,6 +15,18 @@ LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 using namespace pelagicore;
+
+class StubMainloop :
+	public MainloopAbstractInterface
+{
+	virtual void enter()
+	{
+	}
+
+	virtual void leave()
+	{
+	}
+};
 
 /* Mock the PAMAbstractInterface class */
 class MockPAMAbstractInterface :
@@ -43,7 +56,8 @@ TEST(PelagicontainTest, TestInteractionWithPAM) {
 	std::string appId = "the-app-id";
 
 	MockPAMAbstractInterface pam;
-	Pelagicontain pc(&pam);
+	StubMainloop mainloop;
+	Pelagicontain pc(&pam, &mainloop);
 
 	/* The calls should be made in the specific order as below: */
 	{
@@ -54,26 +68,11 @@ TEST(PelagicontainTest, TestInteractionWithPAM) {
 	}
 
 	pc.launch(appId);
-
 	pc.update(std::map<std::string, std::string>({{"", ""}}));
-
 	pc.shutdown();
 }
 
-/* Pelagicontain raises a SIGINT signal when it has completed the shutdown
- * phase. We need to register a handle for that signal so we can ignore it.
- */
-void myHandler(int s)
-{
-}
-
 int main(int argc, char **argv) {
-	struct sigaction sigIntHandler;
-	sigIntHandler.sa_handler = myHandler;
-	sigemptyset(&sigIntHandler.sa_mask);
-	sigIntHandler.sa_flags = 0;
-	sigaction(SIGINT, &sigIntHandler, NULL);
-
 	ConsoleLogOutput logOuput("/dev/null");
 	ConsoleLogOutput::setInstance(logOuput);
 

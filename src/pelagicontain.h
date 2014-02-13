@@ -10,10 +10,18 @@
 #include "container.h"
 #include "paminterface.h"
 #include "controllerinterface.h"
+#include "mainloopabstractinterface.h"
 
 class Pelagicontain {
 public:
-	Pelagicontain(PAMAbstractInterface *pamInterface);
+	/*! Constructor
+	 * 
+	 * \param pamInterface A pointer to the Platform Access Manager interface
+	 * \param mainloopInterface A pointer to the mainloop interface
+	 */
+	Pelagicontain(PAMAbstractInterface *pamInterface,
+		MainloopAbstractInterface *mainloopInterface);
+
 	~Pelagicontain();
 
 	/*! Creates a container and all gateways.
@@ -24,7 +32,7 @@ public:
 	 * \return 0
 	 */
 	int initialize(const std::string &containerRoot,
-                   const std::string &containerConfig);
+		const std::string &containerConfig);
 
 	/*! Starts the container preloading phase.
 	 *
@@ -83,6 +91,7 @@ private:
 	ControllerInterface m_controller;
 	Container m_container;
 	PAMAbstractInterface *m_pamInterface;
+	MainloopAbstractInterface *m_mainloopInterface;
 	std::vector<Gateway *> m_gateways;
 	std::string m_appId;
 	std::string m_cookie;

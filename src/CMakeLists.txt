@@ -8,6 +8,7 @@ add_definitions(-DCONFIG="${SYS_CONFIG_DIR}/pelagicontain.conf")
 
 add_executable( pelagicontain
 	pelagicontaintodbusadapter.cpp
+	dbusmainloop.cpp
 	main.cpp
 	configparser.cpp
 	container.cpp

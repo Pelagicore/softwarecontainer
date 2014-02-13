@@ -2,16 +2,12 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#include <signal.h>
-
-#include <iostream>
-
 #include "CommandLineParser.h"
-
 #include "debug.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
+#include "dbusmainloop.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -20,25 +16,9 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
 
-/* When Pelagicontain::shutdown has been called we should eventually exit
- * but if we just exit at that point the unit tests for Pelagicontain (the class)
- * will be messed up. Using a signal handler allows us to handle (and ignore)
- * the signal in the tests.
- */
-void myHandler(int s){
-	log_debug("Caught signal %d, Pelagicontain will exit now.", s);
-	exit(0);
-}
-
 int main(int argc, char **argv)
 {
-	struct sigaction sigIntHandler;
 	std::string containerConfig(CONFIG);
-
-	sigIntHandler.sa_handler = myHandler;
-	sigemptyset(&sigIntHandler.sa_mask);
-	sigIntHandler.sa_flags = 0;
-	sigaction(SIGINT, &sigIntHandler, NULL);
 
 	CommandLineParser commandLineParser("Pelagicore container utility\n",
 		"[deploy directory (abs path)] [command] [cookie]",
@@ -65,10 +45,15 @@ int main(int argc, char **argv)
 	DBus::default_dispatcher = &dispatcher;
 	DBus::Connection bus = DBus::Connection::SessionBus();
 
+	/* Pelagicontain needs an interface to the mainloop so it can
+	 * exit it when we are to clean up and shut down
+	 */
+	DBusMainloop dbusmainloop(&dispatcher);
+
 	bus.request_name("com.pelagicore.Pelagicontain");
 
 	PAMInterface pamInterface(bus);
-	Pelagicontain pelagicontain(&pamInterface);
+	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop);
 
 	std::string cookie(argv[3]);
 	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
@@ -82,5 +67,6 @@ int main(int argc, char **argv)
 	std::string containedCommand(argv[2]);
 	pid_t pcPid = pelagicontain.run(containedCommand, cookie);
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
-	dispatcher.enter();
+
+	dbusmainloop.enter();
 }
