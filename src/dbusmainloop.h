@@ -9,11 +9,21 @@
 
 #include "mainloopabstractinterface.h"
 
+/*! A libdbus-c++ specific implementation of the mainloop interface
+ */
 class DBusMainloop :
 	public MainloopAbstractInterface
 {
 public:
+	/*! Constructor
+	 *
+	 * Takes a pointer to the DBusDispatcher which is used to enter
+	 * and leave the mainloop.
+	 *
+	 * \param dispatcher A pointer to the DBusDispatcher
+	 */
 	DBusMainloop(DBus::BusDispatcher *dispatcher);
+
 	~DBusMainloop();
 
 	/*! Implements MainloopAbstractInterface::enter
