@@ -8,6 +8,10 @@
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
 #include "dbusmainloop.h"
+#include "generators.h" /* used for gen_ct_name */
+#include "pulsegateway.h"
+#include "networkgateway.h"
+#include "dbusgateway.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -62,10 +66,25 @@ int main(int argc, char **argv)
 	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
 	std::string containerRoot(argv[1]);
+	std::string containerName = gen_ct_name();
 
-	pelagicontain.initialize(containerRoot, containerConfig);
+	std::vector<Gateway *> gateways;
+
+	gateways.push_back(new NetworkGateway);
+
+	gateways.push_back(new PulseGateway(containerRoot, containerName));
+
+	gateways.push_back(new DBusGateway(DBusGateway::SessionProxy,
+		containerRoot, containerName));
+
+	gateways.push_back(new DBusGateway(DBusGateway::SystemProxy,
+		containerRoot, containerName));
+
+	pelagicontain.initialize(gateways, containerName, containerConfig);
+
 	std::string containedCommand(argv[2]);
-	pid_t pcPid = pelagicontain.run(containedCommand, cookie);
+	pid_t pcPid = pelagicontain.run(containerRoot, containedCommand, cookie);
+
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
 
 	dbusmainloop.enter();

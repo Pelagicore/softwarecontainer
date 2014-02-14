@@ -3,13 +3,10 @@
  *   All rights reserved.
  */
 #include <sys/wait.h>
+#include <unistd.h>
 
 #include "container.h"
 #include "debug.h"
-#include "generators.h" /* used for gen_ct_name */
-#include "pulsegateway.h"
-#include "networkgateway.h"
-#include "dbusgateway.h"
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
@@ -23,35 +20,26 @@ Pelagicontain::~Pelagicontain()
 }
 
 /* Initialize the Pelagicpontain object before usage */
-int Pelagicontain::initialize(const std::string &containerRoot,
-                              const std::string &containerConfig)
+int Pelagicontain::initialize(const std::vector<Gateway *> &gateways,
+	const std::string &containerName,
+	const std::string &containerConfig)
 {
-	std::string containerName = gen_ct_name();
-	m_containerRoot = containerRoot;
-
+	m_gateways = gateways;
 	m_container = Container(containerName, containerConfig);
-
-	m_gateways.push_back(new NetworkGateway);
-
-	m_gateways.push_back(new PulseGateway(m_containerRoot, containerName));
-
-	m_gateways.push_back(new DBusGateway(DBusGateway::SessionProxy,
-		m_containerRoot, containerName));
-
-	m_gateways.push_back(new DBusGateway(DBusGateway::SystemProxy,
-		m_containerRoot, containerName));
 
 	return 0;
 }
 
 /* Launch the container. This is a non-blocking operation */
-pid_t Pelagicontain::run(const std::string &containedCommand, const std::string &cookie)
+pid_t Pelagicontain::run(const std::string &containerRoot,
+	const std::string &containedCommand,
+	const std::string &cookie)
 {
 	m_cookie = cookie;
 
 	/* Get the commands to run in a separate process */
 	std::vector<std::string> commands;
-	std::string appRoot = m_containerRoot + "/rootfs/";
+	std::string appRoot = containerRoot + "/rootfs/";
 	commands = m_container.commands(containedCommand, m_gateways, appRoot);
 
 	std::string createCommand = commands[0];
