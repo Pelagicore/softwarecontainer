@@ -20,7 +20,7 @@ Pelagicontain::~Pelagicontain()
 }
 
 /* Initialize the Pelagicpontain object before usage */
-int Pelagicontain::initialize(const std::vector<Gateway *> &gateways,
+int Pelagicontain::initialize(std::vector<Gateway *> &gateways,
 	const std::string &containerName,
 	const std::string &containerConfig)
 {
@@ -148,9 +148,12 @@ void Pelagicontain::shutdown()
 void Pelagicontain::shutdownGateways()
 {
 	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-		gateway != m_gateways.end(); ++gateway) {
+		gateway != m_gateways.end(); ++gateway)
+	{
 		if (!(*gateway)->teardown())
 			log_warning("Could not teardown gateway cleanly");
 		delete (*gateway);
 	}
+
+	m_gateways.clear();
 }

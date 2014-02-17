@@ -32,7 +32,7 @@ public:
 	 *
 	 * \return 0
 	 */
-	int initialize(const std::vector<Gateway *> &gateways,
+	int initialize(std::vector<Gateway *> &gateways,
 		const std::string &containerRoot,
 		const std::string &containerConfig);
 
