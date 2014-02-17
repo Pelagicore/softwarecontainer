@@ -24,14 +24,16 @@ public:
 
 	~Pelagicontain();
 
-	/*! Creates a container and all gateways.
+	/*! Creates a container.
 	 *
+	 * \param gateways A list of all gateways to be used
 	 * \param containerRoot The path to where e.g. config/ and rootfs/ are
 	 * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
 	 *
 	 * \return 0
 	 */
-	int initialize(const std::string &containerRoot,
+	int initialize(const std::vector<Gateway *> &gateways,
+		const std::string &containerRoot,
 		const std::string &containerConfig);
 
 	/*! Starts the container preloading phase.
@@ -44,13 +46,17 @@ public:
 	 * must be preceeded by a call to this method. The call to this method
 	 * should be done as part of starting the whole Pelagicontain component.
 	 *
+	 * \param containerRoot A path to the root of the container, i.e. the base
+	 * 	path to e.g. the configurations and application root
 	 * \param containedCommand The command to be executed inside the container
 	 * \param cookie A unique identifier used to distinguish unique instances
 	 * 	of Pelagicontain
 	 *
 	 * \return The PID of the container
 	 */
-	pid_t run(const std::string &containedCommand, const std::string &cookie);
+	pid_t run(const std::string &containerRoot,
+		const std::string &containedCommand,
+		const std::string &cookie);
 
 	/*! Initiates the 'launch' phase.
 	 *
@@ -95,7 +101,6 @@ private:
 	std::vector<Gateway *> m_gateways;
 	std::string m_appId;
 	std::string m_cookie;
-	std::string m_containerRoot;
 };
 
 #endif /* PELAGICONTAIN_H */
