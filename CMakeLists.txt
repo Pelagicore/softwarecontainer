@@ -19,12 +19,10 @@ MESSAGE("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 
 INCLUDE_DIRECTORIES (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
 
-add_subdirectory(src)
-add_subdirectory(doc)
+add_subdirectory(pelagicontain)
 add_subdirectory(controller)
 
 option(BUILD_TESTS "Enables unit testing" OFF)
 if(BUILD_TESTS)
-	add_subdirectory(unit-test)
 	enable_testing()
 endif(BUILD_TESTS)
