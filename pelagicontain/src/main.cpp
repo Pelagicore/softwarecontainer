@@ -22,25 +22,37 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 int main(int argc, char **argv)
 {
-	std::string containerConfig(CONFIG);
+	const char *summary = "Pelagicore container utility. "
+		"Requires an absolute path to the container root, "
+		"the command to run inside the container and "
+		"an alphanumerical cookie string as first, second and third "
+		"argument respectively";
+	const char *paramsDescription = "[container root directory (abs path)] "
+		"[command] [cookie]";
 
-	CommandLineParser commandLineParser("Pelagicore container utility\n",
-		"[deploy directory (abs path)] [command] [cookie]",
+	CommandLineParser commandLineParser(summary,
+		paramsDescription,
 		PACKAGE_VERSION,
-		"This tool ......");
-
-	int myOptionValue = 0;
-	commandLineParser.addArgument(myOptionValue, "myoption", 'o', "An option");
+		"");
 
 	if (commandLineParser.parse(argc, argv))
 		return -1;
 
-	/* argv[1] = container root directory
-	 * argv[2] = command to run inside container
-	 * argv[3] = cookie to append to object path
-	 */
-	if (argc < 4 || argv[1][0] != '/') {
+	std::string containerRoot;
+	std::string containedCommand;
+	std::string cookie;
+	if (argc < 4) {
 		log_error("Invalid arguments");
+		commandLineParser.printHelp();
+		return -1;
+	} else {
+		containerRoot = std::string(argv[1]);
+		containedCommand = std::string(argv[2]);
+		cookie = std::string(argv[3]);
+	}
+
+	if (containerRoot.c_str()[0] != '/') {
+		log_error("Path to container root must be absolute");
 		commandLineParser.printHelp();
 		return -1;
 	}
@@ -59,13 +71,11 @@ int main(int argc, char **argv)
 	PAMInterface pamInterface(bus);
 	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop);
 
-	std::string cookie(argv[3]);
 	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
 	std::string fullObjPath = baseObjPath + cookie;
 
 	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
-	std::string containerRoot(argv[1]);
 	std::string containerName = gen_ct_name();
 
 	std::vector<Gateway *> gateways;
@@ -80,9 +90,9 @@ int main(int argc, char **argv)
 	gateways.push_back(new DBusGateway(DBusGateway::SystemProxy,
 		containerRoot, containerName));
 
+	std::string containerConfig(CONFIG);
 	pelagicontain.initialize(gateways, containerName, containerConfig);
 
-	std::string containedCommand(argv[2]);
 	pid_t pcPid = pelagicontain.run(containerRoot, containedCommand, cookie);
 
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
