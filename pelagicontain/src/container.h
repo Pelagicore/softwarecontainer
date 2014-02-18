@@ -21,16 +21,23 @@ class Container
 {
 public:
 	Container();
+
+	/*!
+	 * \param configFile A path to the configuration file (including the file name)
+	 */
 	Container(const std::string &name, const std::string &configFile);
+
 	~Container();
 
 	const char *name();
+
 	std::vector<std::string> commands(const std::string &containedCommand,
 		const std::vector<Gateway *> &gateways,
 		const std::string &appRoot);
 
 	std::string m_name;
-    std::string m_configFile;
+
+	std::string m_configFile;
 };
 
 #endif //CONTAINER_H

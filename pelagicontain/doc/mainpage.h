@@ -1,33 +1,15 @@
 /*
- * Copyright (C) 2013, Pelagicore AB <jonatan.palsson@pelagicore.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA  02110-1301, USA.
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
  */
-
 /*!
 \mainpage
 
 <h2>Introduction</h2>
 Pelagicontain is a tool for launching contained Linux applications.
-Pelagicontain makes use of LXC to contain applications in separate
-environments, and acts much as a configuration layer on top of LXC. With
-Pelagicontain, there is a single configuration file to control all aspects of
-the containment, this document will detail how to configure a container
-properly, how to structure the contents of the container and finally detail the
-API of Pelagicontain.
+The API provided by Pelagicontain is an abstraction on top of the specific
+containment implementation and provides an abstraction of the conceptual
+phases 'preload', 'launch', and 'shutdown'. 
 
 Applications run within a container are executed in a chrooted environment with
 limited access to devices and files. A good rule of thumb is to assume all
@@ -42,20 +24,50 @@ are not visible from within another.
 Resources such as memory, CPU and network can be restricted and portioned on a
 per-container basis.
 
+Restrictions and access is controlled by gateways. Each gateway is started
+together with the container during the preload phase. The full gateway functionality
+is enabled during the launch pahse when each respective gateway gets its
+configuration from Platform Access Manager. When gateways have been configured,
+they are enabled and the contained application is launched in a fully contained
+environment. 
+
+The preload phase is normally initiated by the launcher, e.g. Application Manager.
+As part of this phase, Pelagicontain sets up a container by launching the
+Controller inside it, and preloads the gateways.
+
+The launch pahse is also normally initiated by the launcher. During this phase
+Pelagicontain registers as a client with Platform Access Manager to get the
+relevant gateway configurations based on what capabilities the application
+to be launched has. When all gateway configurations are set and the gateways
+are enabled, Pelagicontain tells Controller to launch the application which is
+the end of the launch phase.
+
+During the shutdown phase which also normally is initiated by the launcher,
+Pelagicontain tells Controller to shut down the application, brings down all
+gateways, and unregisters as a client with Platform Access Manager. Pelagicontain
+shuts down itself after this is completed.
+
 <h2>Running Pelagicontain</h2>
-The main program of Pelagicontain is called \c pelagicontain, and this used to
+The main program of Pelagicontain is called \c pelagicontain, and is used to
 launch contained applications. \c pelagicontain is invoked with the base
-directory of the container as the first parameter and the application to launch
-within the container as the second parameter.
+directory of the container as the first parameter and the command to run
+within the container as the second parameter, and a unique cookie string as
+a third argument. Pelagicontain's functionality in general assumes the command
+to run is to start Controller inside the container. 
 
-\c pelagicontain \c ~/mycontainer \c mycommand
+\c pelagicontain \c containerRoot \c myCommand \c cookie
 
-will invoke the \c ls command in the container \c ~/mycontainer. It is
+will invoke the \c myCommand in a container which will be created with
+\c containerRoot as root directory. It is
 important to note that all commands and libraries needed in the container must
-be deployed to the \c $container_base_dir/rootfs/ directory.
+be deployed to a directory named \c rootfs in the \c containerRoot directory,
+i.e. a binary that should be executed inside the container should be placed
+in \c containerRoot/rootfs/. This directory will be mounted as \c /deployed_app
+inside the container.
 
-The \c $container_base_dir/rootfs/ directory is mounted to the \c
-/deployed_app/  mount point inside the container.
+In the normal case where Pelagicontain is run as part of the platform, the
+binary to run inside the container will be the \c controller which will later
+start the contained application.
 
 <h2>The structure of a container</h2>
 A \c $container_base_dir must contain the following directories:
@@ -67,12 +79,6 @@ A \c $container_base_dir must contain the following directories:
 		execution, but also other resources such as graphics and
 		audio.
 		</li></ul>
-	<li> \c config/ </li>
-		<ul><li>
-		This directory contains the configuration files
-		specific for each container. These files are described
-		below.
-		</li></ul>
 </ul>
 
 In \c rootfs/ the following files are created, and cleaned up on exit:
@@ -80,8 +86,7 @@ In \c rootfs/ the following files are created, and cleaned up on exit:
 	<li>Session D-Bus proxy socket</li>
 		<ul><li>
 		This is the socket for communicating with the D-Bus session
-		bus. Traffic is filtered through the rules specified in
-		pelagicore.conf
+		bus. Traffic is filtered by the DBusGateway
 		</ul></li>
 	<li>System D-Bus proxy socket</li>
 		<ul><li>
@@ -97,10 +102,7 @@ written here are only applied to the current container.
 
 This file is written in JSON format and is parsed internally by the
 pelagicontain program. Pelagicontain interprets the configuration parameters
-and configures underlying systems such as LXC and iptables in appropriate ways.
-
-This container allows specifying properties such as network access rules using
-IPTables, bandwidth limitations and D-Bus access limitations.
+and configures underlying systems such as e.g. LXC.
 
 <h3>Sample configuration</h3>
 The following configuration illustrates the most important concepts of
