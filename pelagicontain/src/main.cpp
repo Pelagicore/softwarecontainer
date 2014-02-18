@@ -66,6 +66,9 @@ int main(int argc, char **argv)
 	 */
 	DBusMainloop dbusmainloop(&dispatcher);
 
+	/* The request_name call does not return anything but raises an
+	 * exception if the name cannot be requested.
+	 */
 	bus.request_name("com.pelagicore.Pelagicontain");
 
 	PAMInterface pamInterface(bus);
@@ -77,6 +80,7 @@ int main(int argc, char **argv)
 	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
 	std::string containerName = gen_ct_name();
+	std::string containerConfig(CONFIG);
 
 	std::vector<Gateway *> gateways;
 
@@ -85,12 +89,11 @@ int main(int argc, char **argv)
 	gateways.push_back(new PulseGateway(containerRoot, containerName));
 
 	gateways.push_back(new DBusGateway(DBusGateway::SessionProxy,
-		containerRoot, containerName));
+		containerRoot, containerName, containerConfig));
 
 	gateways.push_back(new DBusGateway(DBusGateway::SystemProxy,
-		containerRoot, containerName));
+		containerRoot, containerName, containerConfig));
 
-	std::string containerConfig(CONFIG);
 	pelagicontain.initialize(gateways, containerName, containerConfig);
 
 	pid_t pcPid = pelagicontain.run(containerRoot, containedCommand, cookie);

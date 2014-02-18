@@ -21,7 +21,7 @@ public:
 	* \param  type       SessionProxy or SystemProxy
 	*/
 	DBusGateway(ProxyType type, const std::string &containerRoot,
-		const std::string &name);
+		const std::string &name, const std::string &containerConfig);
 	~DBusGateway();
 
 	/*!

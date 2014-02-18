@@ -9,7 +9,7 @@
 #include "debug.h"
 
 DBusGateway::DBusGateway(ProxyType type, const std::string &containerRoot,
-	const std::string &name):
+	const std::string &name, const std::string &containerConfig):
 	m_type(type)
 {
 	/* TODO: The config should not be set here, it should be set
@@ -19,8 +19,6 @@ DBusGateway::DBusGateway(ProxyType type, const std::string &containerRoot,
 	 * should somehow get the config set as a result of the call
 	 * to setConfig()
 	 */
-	std::string configPath = containerRoot + "/config/pelagicontain.conf";
-
 	if (m_type == SessionProxy) {
 		m_socket = containerRoot
 			+ std::string("/sess_")
@@ -34,13 +32,13 @@ DBusGateway::DBusGateway(ProxyType type, const std::string &containerRoot,
 	}
 
 	log_debug("Spawning %s proxy, socket: %s, config: %s",
-		typeString(), m_socket.c_str(), configPath.c_str());
+		typeString(), m_socket.c_str(), containerConfig.c_str());
 
 	m_pid = fork();
 	if (m_pid == 0) { /* child */
 		/* This call never returns... */
 		execlp("dbus-proxy", "dbus-proxy", m_socket.c_str(), typeString(),
-			configPath.c_str(), NULL);
+			containerConfig.c_str(), NULL);
 	} else {
 		if (m_pid == -1)
 			log_error("Failed to spawn DBus proxy!");
