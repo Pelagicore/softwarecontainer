@@ -30,8 +30,8 @@ int Pelagicontain::initialize(std::vector<Gateway *> &gateways,
 	return 0;
 }
 
-/* Launch the container. This is a non-blocking operation */
-pid_t Pelagicontain::run(const std::string &containerRoot,
+/* Preload the container. This is a non-blocking operation */
+pid_t Pelagicontain::preload(const std::string &containerRoot,
 	const std::string &containedCommand,
 	const std::string &cookie)
 {

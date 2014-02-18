@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
 	pelagicontain.initialize(gateways, containerName, containerConfig);
 
-	pid_t pcPid = pelagicontain.run(containerRoot, containedCommand, cookie);
+	pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
 
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
 

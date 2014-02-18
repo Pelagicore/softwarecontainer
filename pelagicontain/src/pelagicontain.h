@@ -54,7 +54,7 @@ public:
 	 *
 	 * \return The PID of the container
 	 */
-	pid_t run(const std::string &containerRoot,
+	pid_t preload(const std::string &containerRoot,
 		const std::string &containedCommand,
 		const std::string &cookie);
 
