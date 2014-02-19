@@ -7,7 +7,8 @@
 
 
 import commands, os, time, sys, signal
-from subprocess import Popen
+from subprocess import Popen, call
+import os
 
 # You must initialize the gobject/dbus support for threading
 # before doing anything.
@@ -44,6 +45,13 @@ cookie = commands.getoutput("uuidgen").strip().split("-").pop()
 app_uuid = commands.getoutput("uuidgen").strip()
 print "Generated Cookie = %s, appId = %s" % (cookie, app_uuid)
 
+container_root_dir = "/tmp/test/"
+
+#Setup the FIFO file used by Pelagicontain and Controller
+fifo_path = container_root_dir + "rootfs/in_fifo"
+if not os.path.exists(fifo_path):
+    call(["mkfifo", fifo_path])
+
 # Get the PAM-stub
 pam_remote_object = bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
 pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
@@ -70,9 +78,9 @@ def test_can_start_pelagicontain(command):
         # The intention is to pass a cookie to Pelagicontain which it will use to
         # destinguish itself on D-Bus (as we will potentially have multiple instances
         # running in the system
-        pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command, cookie]).pid
+        pelagicontain_pid = Popen([pelagicontain_binary, container_root_dir,
+            command, cookie]).pid
         print "### Will start pelagicontain with the command: " + command
-        #pelagicontain_pid = Popen([pelagicontain_binary, "/tmp/test/", command]).pid
     except:
         print "FAIL: Could not start pelagicontain (%s)" % pelagicontain_binary
         cleanup()
@@ -166,9 +174,8 @@ def shutdown_pelagicontain():
     The test requires root privileges or some other user with rights to run
     e.g lxc-execute.
 
-    The test requires a FIFO file to be created in the rootfs of the deployed
-    app. For example if the second command to Pelagicontain is "/tmp/test",
-    a FIFO file named "in_fifo" should be created in "/tmp/test/rootfs/".
+    The test creates the required FIFO file in the rootfs of the deployed
+    app.
     NOTE: This is not the desired final solution, there should be a better
     way for Pelagicontain and the Controller to communicate.
 
@@ -261,7 +268,7 @@ test_unregisterclient_was_called()
     * Verify that com.pelagicore.pelagicontain.test_app disappears from bus
     and that PAM has not been requested to unregister
 
-    * Verify that PAM receives PAM.unregister($UUID2)
+    * Verify that PAM receives PAM.unregister() with the correct appId
 
     * Verify that PELAGICONTAIN_PID is no longer running
 """
