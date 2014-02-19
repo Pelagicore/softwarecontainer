@@ -12,65 +12,42 @@ containment implementation and provides an abstraction of the conceptual
 phases 'preload', 'launch', and 'shutdown'. 
 
 Applications run within a container are executed in a chrooted environment with
-limited access to devices and files. A good rule of thumb is to assume all
-files and devices not specifically given access to are inaccessible.
+limited access to devices, files, and D-Bus. A good rule of thumb is to assume all
+access is closed unless explicitly opened.
 
 In contrast to full virtualization, applications run in a container all access
 the same kernel and have access (when configured) to the <i>real</i> devices of
 the system. Just as in a fully virtualized environment, applications executing
 in different environments cannot access each other and pids from one container
-are not visible from within another.
-
-Resources such as memory, CPU and network can be restricted and portioned on a
+are not visible from within another. Resources such as memory, CPU and network can be restricted and portioned on a
 per-container basis.
 
 Restrictions and access is controlled by gateways. Each gateway is started
 together with the container during the preload phase. The full gateway functionality
 is enabled during the launch pahse when each respective gateway gets its
-configuration from Platform Access Manager. When gateways have been configured,
-they are enabled and the contained application is launched in a fully contained
-environment. 
+configuration from Platform Access Manager. When gateways have been configured and
+enabled the application is launched in a fully contained environment. 
 
-The preload phase is normally initiated by the launcher, e.g. Application Manager.
-As part of this phase, Pelagicontain sets up a container by launching the
-Controller inside it, and preloads the gateways.
+The preload and launch phases are normally initiated by the launcher, e.g.
+Application Manager. As part of preloading, Pelagicontain sets up a container
+and executes the Controller inside it, and preloads the gateways by starting
+them without any configuration, i.e up and running but completely closed.
 
-The launch pahse is also normally initiated by the launcher. During this phase
-Pelagicontain registers as a client with Platform Access Manager to get the
-relevant gateway configurations based on what capabilities the application
-to be launched has. When all gateway configurations are set and the gateways
-are enabled, Pelagicontain tells Controller to launch the application which is
-the end of the launch phase.
+During launch Pelagicontain registers as a client with Platform Access Manager
+to get the relevant gateway configurations based on what capabilities the
+application to be launched has. When all gateway configurations are set and the
+gateways are enabled, Pelagicontain tells Controller to launch the application.
 
 During the shutdown phase which also normally is initiated by the launcher,
 Pelagicontain tells Controller to shut down the application, brings down all
 gateways, and unregisters as a client with Platform Access Manager. Pelagicontain
 shuts down itself after this is completed.
 
-<h2>Running Pelagicontain</h2>
-The main program of Pelagicontain is called \c pelagicontain, and is used to
-launch contained applications. \c pelagicontain is invoked with the base
-directory of the container as the first parameter and the command to run
-within the container as the second parameter, and a unique cookie string as
-a third argument. Pelagicontain's functionality in general assumes the command
-to run is to start Controller inside the container. 
-
-\c pelagicontain \c containerRoot \c myCommand \c cookie
-
-will invoke the \c myCommand in a container which will be created with
-\c containerRoot as root directory. It is
-important to note that all commands and libraries needed in the container must
-be deployed to a directory named \c rootfs in the \c containerRoot directory,
-i.e. a binary that should be executed inside the container should be placed
-in \c containerRoot/rootfs/. This directory will be mounted as \c /deployed_app
-inside the container.
-
-In the normal case where Pelagicontain is run as part of the platform, the
-binary to run inside the container will be the \c controller which will later
-start the contained application.
-
 <h2>The structure of a container</h2>
-A \c $container_base_dir must contain the following directories:
+Assuming the container location (i.e. the contaier root directory) is called
+\c $containerRoot
+
+\c $containerRoot must contain the following directories:
 <ul>
 	<li> \c rootfs/ </li>
 		<ul><li>
@@ -81,7 +58,8 @@ A \c $container_base_dir must contain the following directories:
 		</li></ul>
 </ul>
 
-In \c rootfs/ the following files are created, and cleaned up on exit:
+In \c $containerRoot the following files are automatically created,
+and cleaned up on exit:
 <ul>
 	<li>Session D-Bus proxy socket</li>
 		<ul><li>
@@ -96,7 +74,59 @@ In \c rootfs/ the following files are created, and cleaned up on exit:
 
 </ul>
 
+<h2>Running Pelagicontain</h2>
+The main program of Pelagicontain is called \c pelagicontain, and is used to
+launch contained applications. \c pelagicontain is invoked with the base
+directory of the container as the first parameter and the command to run
+within the container as the second parameter, and a unique cookie string as
+a third argument.
+
+Before running \c pelagicontain a location for the container should be created
+which will be the container root directory (\c $containerRoot). Currently
+a FIFO file is used for communication between Pelagicontain and Controller,
+this FIFO file should be named \c in_fifo and placed in
+\c $containerRoot/rootfs. A network bridge should be set up as well:
+brctl addbr br0
+
+Running:
+
+\c pelagicontain \c $containerRoot \c myCommand \c cookie
+
+will invoke the \c myCommand in a container which will be created with
+\c $containerRoot as root directory. It is
+important to note that all commands and libraries needed in the container must
+be deployed to a directory named \c rootfs in the \c $containerRoot directory,
+i.e. a binary that should be executed inside the container should be placed
+in \c $containerRoot/rootfs/. This directory will be mounted and visible as
+\c /deployed_app inside the container.
+
+In the normal case where Pelagicontain is run as part of the platform, the
+binary to run inside the container will be the \c controller which will later
+start the contained application. The possibility to pass
+another command is kept as it makes some component testing easier.
+
+<h2>Running the Pelagicontain component tests</h2>
+<code>mkdir -p /tmp/test/rootfs</code>
+
+Copy \c controller to <code>/tmp/test/rootfs/</code>
+
+Copy \c containedapp to <code>/tmp/test/rootfs/</code> (containedapp is
+built separately from the pelagicontain project and is found in
+pelagicontain/component-test/)
+
+Start pam_stub.py (found in pelagicontain/component-test/)
+
+Run \c test_pelagicontain and point out where the \c pelagicontain binary is
+(assuming we are in the git repo root and build is done in \c build):
+
+<code>PC_BINARY=build/pelagicontain/src/pelagicontain ./pelagicontain/component-test/test_pelagicontain.py</code>
+
+Remember that pam_stub and the test must have access to the same D-Bus bus,
+and the test requires root privilegies.
+
 <h2>Per-container Configuration using pelagicontain.conf</h2>
+\deprecated This needs to be reviewed and updated, only partially relevant
+
 pelagicontain.conf is the main configuration file for a container. Settings
 written here are only applied to the current container.
 
@@ -104,89 +134,17 @@ This file is written in JSON format and is parsed internally by the
 pelagicontain program. Pelagicontain interprets the configuration parameters
 and configures underlying systems such as e.g. LXC.
 
-<h3>Sample configuration</h3>
-The following configuration illustrates the most important concepts of
-pelagicontain.conf.
-
-\verbatim
-{
-    "dbus-proxy-config-session": [
-        {
-            "direction": "*",
-            "interface": "*",
-            "object-path": "*",
-            "method": "*"
-        }
-    ],
-    "dbus-proxy-config-system": [
-        {
-           "direction": "*",
-           "interface": "*",
-           "object-path": "/org/bluez/*",
-           "method": "*"
-        },
-        {
-           "direction": "*",
-           "interface": "org.bluez.Manager",
-           "object-path": "/",
-           "method": "*"
-        }
-    ],
-    "iptables-rules": [
-	"iptables -I FORWARD --src $SRC_IP  -j ACCEPT",
-	"iptables -I FORWARD --dest $SRC_IP -j ACCEPT"
-    ],
-    "lxc-config-template": "/etc/pelagicontain",
-    "bandwidth-limit":     "500kbps",
-    "ip-addr-net":         "192.168.100.",
-    "gw-ip-addr":          "192.168.100.1"
-}
-\endverbatim
-
-<h4>D-Bus restrictions</h4>
-\c dbus-proxy-config-session and the \c
-dbus-proxy-config-system sections are used to specify the configuration of
-\c dbus-proxy. These sections allows specifying which D-Bus services the
-container should have access to. Everything not explicitly whitelisted is
-disallowed.
-
-The \c direction parameter specifies whether the rule concerns \c incoming or
-\c outgoing traffic.
-
-The rest of the parameters have the same meaning as in any other D-Bus
-application.
-
-<h3>IP restrictions</h3>
-The \c iptables-rules section allows specifying IPTables rules which will be
-executed upon setup of the container. The special variable $SRC_IP is provided
-with the IP of the container.
-
-<h3>General networking</h3>
-\c bandwith-limit specifies the incoming and outgoing bandwidth separately.
-Allowed suffixes here are the same as for the \c tc command, kbps and mbps are
-believed to be sufficient for most users.
-
-\c ip-addr-net specifies the 24-bit network part of the IP address of the
-container. The remaining bits are randomized upon startup of the container.
-
-\c gw-ip-addr specifies the defaul gateway for the container.
-
-<h3>Other</h3>
-\c lxc-config-template specifies the path to the system-wide LXC configuration
-file. This file is used as a template for further configuration. Anything added
-to this file will be applied to all containers.
-
 <h2>System-wide configuration using /etc/pelagicontain</h2>
-There are two system-wide configuration files for Pelagicontain, \c
-/etc/pelagicontain and \c lxc-pelagicontain. These two files directly influence
-the underlying LXC system. \c /etc/pelagicontain is an LXC configuration file
-which is used as a template for all container-specific configurations. This
-file is essentially pre-pended to all container configs.
+\deprecated This needs to be reviewed and updated, only partially relevant
 
-This is a good place to store LXC configuration parameters global to all
-containers.
+There are two system-wide configuration files for Pelagicontain,
+\c /etc/pelagicontain and \c lxc-pelagicontain. These two files directly influence
+the underlying LXC system. \c /etc/pelagicontain is an LXC configuration file
+which path is passed to LXC on creation.
 
 <h2>System-wide configuration using the lxc-pelagicontain template</h2>
+\deprecated This needs to be reviewed and updated, only partially relevant
+
 Prior to starting a container some initialization of the environment has to be
 made. This includes creating the root file system to be exposed to the
 container. A minimal root filesystem needs to contain the directories used for

@@ -1,24 +1,11 @@
-This package consists of a LXC template and a launcher script.
+This package includes the Pelagicontain component
 
-The template is used by lxc-create to create an LXC container. The busybox
-template was used as a basis. The template will mount a "deploy dir" on
-$rootfs/deployed_app, where $rootfs is the path to the containers rootfs. This
-deploy dir is bind-mounted to a directory of your choice, and is basically a
-quick way to inject random stuff into the container.
+To build the project documentation set -DENABLE_DOC=1 when running cmake.
 
-Example usage:
+The project Doxygen docs contain info about Pelagicontain in general,
+how to run Pelagicontain and how to run the component tests.
 
-mkdir /tmp/vim_app/
-cp `which vim` /tmp/vim_app/
-echo "Hello world" > /tmp/vim_app/my_text_file.txt
-pelagicontain /tmp/vim_app/ /deployed_app/vim /deployed_app/my_text_file.txt
-
-The above command should, if all goes well, launch vim inside a container.
-
-In order to launch programs, we need access to some standard libraries. The LXC
-template contains some mount bindings to standard library paths. These can be
-tweaked by editing the mount points in the tamplate. Auxillary mount points can
-be added in the config.
+To run the unit-tests build the project with -DENABLE_COVERAGE=1 -DBUILD_TESTS=ON
 
 
 NOTE ON D-BUS RUNNING ON DESKTOP SYSTEMS
