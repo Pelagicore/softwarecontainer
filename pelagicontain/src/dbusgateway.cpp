@@ -39,7 +39,7 @@ DBusGateway::DBusGateway(ProxyType type, const std::string &containerRoot,
 		/* execlp only returns on errors */
 		execlp("dbus-proxy", "dbus-proxy", m_socket.c_str(), typeString(),
 			containerConfig.c_str(), NULL);
-		log_error("Unable to spawn DBus proxy!");
+		log_error("Unable to spawn %s proxy!", typeString());
 		/* Kill our clone, otherwise we get multiple running processes */
 		exit(1);
 	} else if (m_pid == -1) {
