@@ -36,12 +36,14 @@ DBusGateway::DBusGateway(ProxyType type, const std::string &containerRoot,
 
 	m_pid = fork();
 	if (m_pid == 0) { /* child */
-		/* This call never returns... */
+		/* execlp only returns on errors */
 		execlp("dbus-proxy", "dbus-proxy", m_socket.c_str(), typeString(),
 			containerConfig.c_str(), NULL);
-	} else {
-		if (m_pid == -1)
-			log_error("Failed to spawn DBus proxy!");
+		log_error("Unable to spawn DBus proxy!");
+		/* Kill our clone, otherwise we get multiple running processes */
+		exit(1);
+	} else if (m_pid == -1) {
+		log_error("Failed to fork!");
 	}
 }
 
