@@ -28,6 +28,3 @@ TARGET_LINK_LIBRARIES( pelagicontain
 )
 
 install(TARGETS pelagicontain RUNTIME DESTINATION bin)
-
-install(FILES lxc-pelagicontain DESTINATION share/lxc/templates)
-install(FILES pelagicontain.conf DESTINATION ${SYS_CONFIG_DIR})
