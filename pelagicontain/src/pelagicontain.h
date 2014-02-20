@@ -27,15 +27,19 @@ public:
 
 	/*! Creates a container.
 	 *
-	 * \param gateways A list of all gateways to be used
 	 * \param containerRoot The path to where e.g. config/ and rootfs/ are
 	 * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
 	 *
 	 * \return 0
 	 */
-	int initialize(std::vector<Gateway *> &gateways,
-		const std::string &containerRoot,
+	int initialize(const std::string &containerRoot,
 		const std::string &containerConfig);
+
+	/*! Add a gateway.
+	 *
+	 * \param gateway A gateway that will be used by the container
+	 */
+	void addGateway(Gateway *gateway);
 
 	/*! Starts the container preloading phase.
 	 *

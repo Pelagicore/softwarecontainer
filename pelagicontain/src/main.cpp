@@ -83,19 +83,17 @@ int main(int argc, char **argv)
 	std::string containerName = gen_ct_name();
 	std::string containerConfig(CONFIG);
 
-	std::vector<Gateway *> gateways;
+	pelagicontain.addGateway(new NetworkGateway);
 
-	gateways.push_back(new NetworkGateway);
+	pelagicontain.addGateway(new PulseGateway(containerRoot, containerName));
 
-	gateways.push_back(new PulseGateway(containerRoot, containerName));
-
-	gateways.push_back(new DBusGateway(DBusGateway::SessionProxy,
+	pelagicontain.addGateway(new DBusGateway(DBusGateway::SessionProxy,
 		containerRoot, containerName, containerConfig));
 
-	gateways.push_back(new DBusGateway(DBusGateway::SystemProxy,
+	pelagicontain.addGateway(new DBusGateway(DBusGateway::SystemProxy,
 		containerRoot, containerName, containerConfig));
 
-	pelagicontain.initialize(gateways, containerName, containerConfig);
+	pelagicontain.initialize(containerName, containerConfig);
 
 	pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
 

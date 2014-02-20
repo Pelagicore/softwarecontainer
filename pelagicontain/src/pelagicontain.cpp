@@ -22,15 +22,18 @@ Pelagicontain::~Pelagicontain()
 {
 }
 
-/* Initialize the Pelagicpontain object before usage */
-int Pelagicontain::initialize(std::vector<Gateway *> &gateways,
-	const std::string &containerName,
+/* Initialize the Pelagicontain object before usage */
+int Pelagicontain::initialize(const std::string &containerName,
 	const std::string &containerConfig)
 {
-	m_gateways = gateways;
 	m_container = Container(containerName, containerConfig);
 
 	return 0;
+}
+
+void Pelagicontain::addGateway(Gateway *gateway)
+{
+	m_gateways.push_back(gateway);
 }
 
 /* Preload the container. This is a non-blocking operation */
