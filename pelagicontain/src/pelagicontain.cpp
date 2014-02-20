@@ -10,8 +10,11 @@
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
-	MainloopAbstractInterface *mainloopInterface):
-	m_pamInterface(pamInterface), m_mainloopInterface(mainloopInterface)
+	MainloopAbstractInterface *mainloopInterface,
+	ControllerAbstractInterface *controllerInterface):
+	m_pamInterface(pamInterface),
+	m_mainloopInterface(mainloopInterface),
+	m_controllerInterface(controllerInterface)
 {
 }
 
@@ -91,7 +94,7 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 
 	activateGateways();
 
-	m_controller.startApp();
+	m_controllerInterface->startApp();
 }
 
 void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
@@ -127,7 +130,7 @@ void Pelagicontain::shutdown()
 	 * lxc-execute will return and lxc-destroy be run (see above
 	 * code in the forked child)
 	 */
-	m_controller.shutdown();
+	m_controllerInterface->shutdown();
 
 	/* Shut down (clean up) all Gateways */
 	shutdownGateways();

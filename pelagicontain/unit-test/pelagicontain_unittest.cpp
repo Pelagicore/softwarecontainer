@@ -8,6 +8,7 @@
 #include "pelagicontain.h"
 #include "pamabstractinterface.h"
 #include "mainloopabstractinterface.h"
+#include "controllerabstractinterface.h"
 #include "debug.h"
 #include "log_console.h"
 
@@ -27,6 +28,21 @@ public:
 
 	virtual void leave()
 	{
+	}
+};
+
+/* We use this stub to let Pelagicontain work with it but ignore the calls */
+class StubController :
+	public ControllerAbstractInterface
+{
+	virtual bool startApp()
+	{
+		return true;
+	}
+
+	virtual bool shutdown()
+	{
+		return true;
 	}
 };
 
@@ -77,7 +93,8 @@ TEST(PelagicontainTest, TestInteractionWithPAM) {
 
 	MockPAMAbstractInterface pam;
 	StubMainloop mainloop;
-	Pelagicontain pc(&pam, &mainloop);
+	StubController controller;
+	Pelagicontain pc(&pam, &mainloop, &controller);
 
 	/* The calls should be made in the specific order as below: */
 	{
@@ -105,6 +122,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
 	/* Nice mock, i.e. don't warn about uninteresting calls on this mock */
 	NiceMock<MockPAMAbstractInterface> pam;
 	StubMainloop mainloop;
+	StubController controller;
 
 	MockGateway gw1, gw2, gw3;
 
@@ -130,7 +148,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
 
 	std::vector<Gateway *> gateways {&gw1, &gw2, &gw3};
 
-	Pelagicontain pc(&pam, &mainloop);
+	Pelagicontain pc(&pam, &mainloop, &controller);
 
 	pc.initialize(gateways, "unimportant-name", "unimportant-config");
 
@@ -150,6 +168,7 @@ TEST(PelagicontainTest, TestCallShutdownShouldTearDownGateways) {
 	/* "Nice mock", i.e. don't warn about uninteresting calls on this mock */
 	NiceMock<MockPAMAbstractInterface> pam;
 	StubMainloop mainloop;
+	StubController controller;
 
 	/* If we don't use pointers, there will be a crash when Pelagicontain
 	 * calls delete on the Gateway object
@@ -168,7 +187,7 @@ TEST(PelagicontainTest, TestCallShutdownShouldTearDownGateways) {
 
 	std::vector<Gateway *> gateways {gw1, gw2, gw3};
 
-	Pelagicontain pc(&pam, &mainloop);
+	Pelagicontain pc(&pam, &mainloop, &controller);
 
 	pc.initialize(gateways, "unimportant-name", "unimportant-config");
 

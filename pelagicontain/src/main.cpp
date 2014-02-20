@@ -72,7 +72,8 @@ int main(int argc, char **argv)
 	bus.request_name("com.pelagicore.Pelagicontain");
 
 	PAMInterface pamInterface(bus);
-	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop);
+	ControllerInterface controllerInterface(containerRoot);
+	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface);
 
 	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
 	std::string fullObjPath = baseObjPath + cookie;
