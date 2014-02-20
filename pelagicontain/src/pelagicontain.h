@@ -20,7 +20,8 @@ public:
 	 * \param mainloopInterface A pointer to the mainloop interface
 	 */
 	Pelagicontain(PAMAbstractInterface *pamInterface,
-		MainloopAbstractInterface *mainloopInterface);
+		MainloopAbstractInterface *mainloopInterface,
+		ControllerAbstractInterface *controllerInterface);
 
 	~Pelagicontain();
 
@@ -94,10 +95,10 @@ private:
 	void activateGateways();
 	void shutdownGateways();
 
-	ControllerInterface m_controller;
 	Container m_container;
 	PAMAbstractInterface *m_pamInterface;
 	MainloopAbstractInterface *m_mainloopInterface;
+	ControllerAbstractInterface *m_controllerInterface;
 	std::vector<Gateway *> m_gateways;
 	std::string m_appId;
 	std::string m_cookie;
