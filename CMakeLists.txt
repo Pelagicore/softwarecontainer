@@ -34,3 +34,8 @@ option(BUILD_TESTS "Enables unit testing" OFF)
 if(BUILD_TESTS)
 	enable_testing()
 endif(BUILD_TESTS)
+
+option(BUILD_COMPONENT_TESTS "Build test app used by the component test " OFF)
+if(BUILD_COMPONENT_TESTS)
+	add_subdirectory(pelagicontain/component-test/contained-app)
+endif(BUILD_COMPONENT_TESTS)
