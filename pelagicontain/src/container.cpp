@@ -7,6 +7,10 @@
 #include "container.h"
 #include "debug.h"
 
+#ifndef LXCTEMPLATE
+	#error Must define LXCTEMPLATE as path to lxc-pelagicontain
+#endif
+
 Container::Container()
 {
 }
@@ -45,10 +49,11 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 
 	// Command to create container
 	sprintf(lxc_command,
-		"DEPLOY_DIR=%s lxc-create -n %s -t pelagicontain"
+		"DEPLOY_DIR=%s lxc-create -n %s -t %s"
 		" -f %s > /tmp/lxc_%s.log",
 		appRoot.c_str(),
 		name(),
+		LXCTEMPLATE,
 		m_configFile.c_str(),
 		name());
 	commands.push_back(std::string(lxc_command));
