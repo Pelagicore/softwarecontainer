@@ -2,6 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+#include <cstring>
 #include "ifaddrs.h"
 #include "unistd.h"
 #include "debug.h"
