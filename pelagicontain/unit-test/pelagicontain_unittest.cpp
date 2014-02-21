@@ -146,11 +146,13 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
 		EXPECT_CALL(gw3, activate()).Times(1);
 	}
 
-	std::vector<Gateway *> gateways {&gw1, &gw2, &gw3};
-
 	Pelagicontain pc(&pam, &mainloop, &controller);
 
-	pc.initialize(gateways, "unimportant-name", "unimportant-config");
+	pc.addGateway(&gw1);
+	pc.addGateway(&gw2);
+	pc.addGateway(&gw3);
+
+	pc.initialize("unimportant-name", "unimportant-config");
 
 	std::map<std::string, std::string> configs
 		{{gw1Id, ""}, {gw2Id, ""}, {gw3Id, ""}};
@@ -185,11 +187,13 @@ TEST(PelagicontainTest, TestCallShutdownShouldTearDownGateways) {
 	EXPECT_CALL(*gw2, teardown()).Times(1);
 	EXPECT_CALL(*gw3, teardown()).Times(1);
 
-	std::vector<Gateway *> gateways {gw1, gw2, gw3};
-
 	Pelagicontain pc(&pam, &mainloop, &controller);
 
-	pc.initialize(gateways, "unimportant-name", "unimportant-config");
+	pc.addGateway(gw1);
+	pc.addGateway(gw2);
+	pc.addGateway(gw3);
+
+	pc.initialize("unimportant-name", "unimportant-config");
 
 	pc.shutdown();
 }
