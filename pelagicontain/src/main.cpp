@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 	const char *paramsDescription = "[container root directory (abs path)] "
 		"[command] [cookie]";
 
-	CommandLineParser commandLineParser(summary,
+	pelagicore::CommandLineParser commandLineParser(summary,
 		paramsDescription,
 		PACKAGE_VERSION,
 		"");
