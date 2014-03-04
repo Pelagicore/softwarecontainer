@@ -114,10 +114,14 @@ Copy \c containedapp to <code>/tmp/test/rootfs/</code> (containedapp is
 built separately from the pelagicontain project and is found in
 pelagicontain/component-test/)
 
-Start pam_stub.py (found in pelagicontain/component-test/)
+Add a br0 bridge:
+<code>brctl addbr br0</code>
 
-Run \c test_pelagicontain and point out where the \c pelagicontain binary is
-(assuming we are in the git repo root and build is done in \c build):
+With root privilegies start \c pam_stub.py (found in pelagicontain/component-test/)
+
+Run \c test_pelagicontain (also with root privilegies) and point out where the
+ \c pelagicontain binary is (assuming we are in the git repo root and build is
+ done in \c build):
 
 <code>PC_BINARY=build/pelagicontain/src/pelagicontain ./pelagicontain/component-test/test_pelagicontain.py</code>
 
