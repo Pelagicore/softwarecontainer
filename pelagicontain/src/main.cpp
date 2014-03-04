@@ -35,12 +35,15 @@ int main(int argc, char **argv)
 		PACKAGE_VERSION,
 		"");
 
+        std::string containerRoot;
+        std::string containedCommand;
+        std::string cookie;
+        const char* configFilePath = CONFIG;
+        commandLineParser.addOption(configFilePath, "with-config-file", 'c', "Config file");
+
 	if (commandLineParser.parse(argc, argv))
 		return -1;
 
-	std::string containerRoot;
-	std::string containedCommand;
-	std::string cookie;
 	if (argc < 4) {
 		log_error("Invalid arguments");
 		commandLineParser.printHelp();
@@ -81,7 +84,7 @@ int main(int argc, char **argv)
 	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
 	std::string containerName = gen_ct_name();
-	std::string containerConfig(CONFIG);
+	std::string containerConfig(configFilePath);
 
 	pelagicontain.addGateway(new NetworkGateway);
 
