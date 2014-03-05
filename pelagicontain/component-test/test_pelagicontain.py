@@ -47,11 +47,6 @@ print "Generated Cookie = %s, appId = %s" % (cookie, app_uuid)
 
 container_root_dir = "/tmp/test/"
 
-#Setup the FIFO file used by Pelagicontain and Controller
-fifo_path = container_root_dir + "rootfs/in_fifo"
-if not os.path.exists(fifo_path):
-    call(["mkfifo", fifo_path])
-
 # Get the PAM-stub
 pam_remote_object = bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
 pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")

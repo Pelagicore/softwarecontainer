@@ -16,23 +16,27 @@
  *  implementation.
  */
 class ControllerInterface :
-	public ControllerAbstractInterface
+    public ControllerAbstractInterface
 {
 public:
-	ControllerInterface(const std::string &containerRoot);
+    ControllerInterface(const std::string &containerRoot);
 
-	~ControllerInterface();
+    ~ControllerInterface();
 
-	/*! Implements ControllerAbstractInterface::startApp
-	 */
-	virtual bool startApp();
+    /*! Implements ControllerAbstractInterface::startApp
+    */
+    virtual bool startApp();
 
-	/*! Implements ControllerAbstractInterface::shutdown
-	 */
-	virtual bool shutdown();
+    /*! Implements ControllerAbstractInterface::shutdown
+    */
+    virtual bool shutdown();
 
 private:
-	std::string m_containerRoot;
+    bool fifoExist();
+    void openFifo();
+
+    int m_fifo;
+    std::string m_fifoPath;
 };
 
 #endif /* CONTROLLERINTERFACE_H */

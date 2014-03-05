@@ -5,10 +5,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#include "debug.h"
 #include "controllerinterface.h"
 
 ControllerInterface::ControllerInterface(const std::string &containerRoot):
-	m_containerRoot(containerRoot)
+    m_fifo(0), m_fifoPath(containerRoot + "rootfs/in_fifo")
 {
 }
 
@@ -18,18 +19,33 @@ ControllerInterface::~ControllerInterface()
 
 bool ControllerInterface::startApp()
 {
-	std::string fifoPath = m_containerRoot + "rootfs/in_fifo";
-	int fd = open(fifoPath.c_str(), O_WRONLY);
-	write(fd, "1\n", 2);
+    if (!fifoExist())
+        openFifo();
 
-	return true;
+    write(m_fifo, "1\n", 2);
+
+    return true;
 }
 
 bool ControllerInterface::shutdown()
 {
-	std::string fifoPath = m_containerRoot + "rootfs/in_fifo";
-	int fd = open(fifoPath.c_str(), O_WRONLY);
-	write(fd, "2\n", 2);
+    if (!fifoExist())
+        openFifo();
 
-	return true;
+    write(m_fifo, "2\n", 2);
+
+    return true;
+}
+
+bool ControllerInterface::fifoExist()
+{
+    if (m_fifo == 0)
+        return false;
+    else
+        return true;
+}
+
+void ControllerInterface::openFifo()
+{
+    m_fifo = open(m_fifoPath.c_str(), O_WRONLY);
 }
