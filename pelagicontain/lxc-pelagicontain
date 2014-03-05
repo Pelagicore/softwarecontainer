@@ -222,7 +222,7 @@ fi
 
 if [ -n "$DEPLOY_DIR" ]; then
 cat <<EOF >> $path/config
-lxc.mount.entry = $DEPLOY_DIR deployed_app none ro,bind 0 0
+lxc.mount.entry = $DEPLOY_DIR deployed_app none rw,bind 0 0
 EOF
 fi
 
