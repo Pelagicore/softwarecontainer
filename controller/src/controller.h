@@ -11,8 +11,7 @@ public:
     bool initialize(const std::string &fifoPath);
 
 private:
-    void loop();
-    bool fifoExists();
+    bool loop();
     bool createFifo();
     int runApp();
     void killApp();

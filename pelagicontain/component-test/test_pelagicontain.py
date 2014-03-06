@@ -51,19 +51,22 @@ container_root_dir = "/tmp/test/"
 pam_remote_object = bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
 pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
 
+# Result flag is set to non zero on failure. Return value is set as exit
+# status and is used by e.g. ctest to determine test results.
+result = 0
+
 # ----------------------- Helper functions
 
-def cleanup():
-    print "Clean up and exit!"
-    sys.exit()
+def cleanup_and_finish():
+    global result
+    if not pelagicontain_pid == 0:
+        call(["kill", "-9", str(pelagicontain_pid)])
+    if result == 0:
+        print "\n-=< All tests passed >=-\n"
+    else:
+        print "\n-=< Failure >=-\n"
+    exit(result)
 
-def find_app_on_dbus():
-    try:
-        bus.get_object("com.pelagicore.test.ContainedApp",
-            "/com/pelagicore/test/ContainedApp")
-        return True
-    except:
-        return False
 
 # ----------------------- Test functions
 
@@ -75,11 +78,9 @@ def test_can_start_pelagicontain(command):
         # running in the system
         pelagicontain_pid = Popen([pelagicontain_binary, container_root_dir,
             command, cookie]).pid
-        print "### Will start pelagicontain with the command: " + command
     except:
-        print "FAIL: Could not start pelagicontain (%s)" % pelagicontain_binary
-        cleanup()
-    print "PASS: Started Pelagicontain with PID = %s" % pelagicontain_pid
+        return False
+    return True
 
 def test_pelagicontain_found_on_bus():
     global pelagicontain_remote_object
@@ -95,58 +96,29 @@ def test_pelagicontain_found_on_bus():
         time.sleep(1)
         tries = tries + 1
     if found:
-        print "PASS: Found Pelagicontain on D-Bus"
+        return True
     else:
-        print "FAIL: Could not find Pelagicontain on D-Bus"
-        cleanup()
+        return False
 
-def test_cant_find_app_on_dbus():
-    if not find_app_on_dbus():
-        print "PASS: App not present on D-Bus"
-    else:
-        print "FAIL: App already present on D-Bus"
-        cleanup()
-
-def test_can_find_and_run_Launch_in_pelagicontain_on_dbus():
+def test_can_find_and_run_Launch_on_pelagicontain_on_dbus():
     global pelagicontain_iface
     pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
         "com.pelagicore.Pelagicontain")
     try:
         pelagicontain_iface.Launch(app_uuid)
-        print "PASS: Found Launch in Pelagicontain on D-Bus"
+        return True
     except Exception as e:
-        print "Fail: Failed to find Launch in Pelagicontain on D-Bus"
         print e
-        cleanup()
-
-def test_can_find_app_on_dbus():
-    if find_app_on_dbus():
-        print "PASS: App present on D-Bus"
-    else:
-        print "FAIL: App not present on D-Bus"
-        cleanup()
+        return False
 
 def test_registerclient_was_called():
-    iterations = 0
-    while not pam_iface.test_register_called():# and iterations < 5):
-        time.sleep(1)
-        iterations = iterations + 1
-    print "PASS: RegisterClient was called!"
+    return pam_iface.test_register_called()
 
 def test_updatefinished_was_called():
-    iterations = 0
-    while not pam_iface.test_updatefinished_called():# and iterations < 5):
-        time.sleep(1)
-        iterations = iterations + 1
-    print "PASS: UpdateFinished was called!"
+    return pam_iface.test_updatefinished_called()
 
 def test_unregisterclient_was_called():
-    iterations = 0
-    while not pam_iface.test_unregisterclient_called():# and iterations < 5):
-        time.sleep(1)
-        iterations = iterations + 1
-    print "PASS: UnregisterClient was called!"
-
+    return pam_iface.test_unregisterclient_called()
 
 
 # ----------------------------- Shutdown
@@ -168,11 +140,6 @@ def shutdown_pelagicontain():
 
     The test requires root privileges or some other user with rights to run
     e.g lxc-execute.
-
-    The test creates the required FIFO file in the rootfs of the deployed
-    app.
-    NOTE: This is not the desired final solution, there should be a better
-    way for Pelagicontain and the Controller to communicate.
 
     The test requires a PAM-stub to be running on the system, and on the same
     bus as the tests. The stub is implemented as component-test/pam_stub.py. The
@@ -210,11 +177,23 @@ pam_iface.test_reset_values()
 """ Start Pelagicontain, test is passed if Popen succeeds.
     The command to execute inside the container is passed to the test function.
 """
-test_can_start_pelagicontain("/deployed_app/controller")
+if test_can_start_pelagicontain("/deployed_app/controller") == False:
+    print "FAIL: Could not start Pelagicontain"
+    result = 1
+    cleanup_and_finish()
+else:
+    print "PASS: Started Pelagicontain"
 
 """ Assert the Pelagicontain remote object can be found on the bus
 """
-test_pelagicontain_found_on_bus()
+if test_pelagicontain_found_on_bus() == False:
+    print "FAIL: Could not find Pelagicontain on D-Bus"
+    result = 1
+    cleanup_and_finish()
+else:
+    print "PASS: Found Pelagicontain on D-Bus"
+
+
 
 """ NOTE: This test is disabled as we currently are not starting a D-Bus service
     inside the container as intended. Should be enabled when that works
@@ -225,11 +204,23 @@ test_pelagicontain_found_on_bus()
     This will trigger a call to PAM::RegisterClient over D-Bus which we will
     assert later.
 """
-test_can_find_and_run_Launch_in_pelagicontain_on_dbus()
+if test_can_find_and_run_Launch_on_pelagicontain_on_dbus() == False:
+    print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
+    result = 1
+    cleanup_and_finish()
+else:
+    print "PASS: Found Launch in Pelagicontain on D-Bus"
+
 
 """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
 """
-test_registerclient_was_called()
+if test_registerclient_was_called() == False:
+    print "FAIL: RegisterClient was not called!"
+    result = 1
+    cleanup_and_finish()
+else:
+    print "PASS: RegisterClient was called!"
+
 
 """ NOTE: Same as above, there's currently no support to test if an app was
     actually started (should be checked by finding it on D-Bus).
@@ -241,7 +232,12 @@ test_registerclient_was_called()
     a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
     made by Pelagicontain.
 """
-test_updatefinished_was_called()
+if test_updatefinished_was_called() == False:
+    print "FAIL: UpdateFinished was not called!"
+    result = 1
+    cleanup_and_finish()
+else:
+    print "PASS: UpdateFinished was called!"
 
 
 # --------------- Run tests for shutdown
@@ -251,9 +247,15 @@ shutdown_pelagicontain()
 """ The call to Pelagicontain::Shutdown should have triggered a call to
     PAM::UnregisterClient
 """
-test_unregisterclient_was_called()
+if test_unregisterclient_was_called() == False:
+    print "FAIL: UnregisterClient was not called!"
+    result = 1
+    cleanup_and_finish()
+else:
+    print "PASS: UnregisterClient was called!"
 
 
+cleanup_and_finish()
 
 """ NOTE: Possible assertions that should be made when Pelagicontain is more
     complete:
