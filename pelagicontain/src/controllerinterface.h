@@ -31,6 +31,10 @@ public:
     */
     virtual bool shutdown();
 
+    /*! Implements ControllerAbstractInterface::systemCall
+     */
+    virtual bool systemCall(const std::string &cmd);
+
 private:
     void openFifo();
 

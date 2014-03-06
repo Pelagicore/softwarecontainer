@@ -38,6 +38,11 @@ bool ControllerInterface::shutdown()
     return true;
 }
 
+bool ControllerInterface::systemCall(const std::string &cmd)
+{
+    return true;
+}
+
 void ControllerInterface::openFifo()
 {
     m_fifo = open(m_fifoPath.c_str(), O_WRONLY);
