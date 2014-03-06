@@ -27,13 +27,15 @@ message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
 include_directories (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
 
-add_subdirectory(pelagicontain)
-add_subdirectory(controller)
-
 option(BUILD_TESTS "Enables unit testing" OFF)
 if(BUILD_TESTS)
 	enable_testing()
+	add_gmock()
+	add_coverage()
 endif(BUILD_TESTS)
+
+add_subdirectory(pelagicontain)
+add_subdirectory(controller)
 
 option(BUILD_COMPONENT_TESTS "Build test app used by the component test " OFF)
 if(BUILD_COMPONENT_TESTS)
