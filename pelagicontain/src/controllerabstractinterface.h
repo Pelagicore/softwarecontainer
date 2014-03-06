@@ -27,6 +27,13 @@ public:
 	 * \return True if all went well, false if not
 	 */
 	virtual bool shutdown() = 0;
+
+	/*! Notifies the controller to issue the system call
+	 *  defined in the cmd argument.
+	 *
+	 * \return True if all went well, false if not
+	 */
+	virtual bool systemCall(const std::string &cmd) = 0;
 };
 
 #endif /* CONTROLLERABSTRACTINTERFACE_H */

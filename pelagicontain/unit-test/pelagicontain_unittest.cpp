@@ -44,6 +44,11 @@ class StubController :
 	{
 		return true;
 	}
+
+    virtual bool systemCall(const std::string &cmd)
+	{
+		return true;
+	}
 };
 
 /* Mock the PAMAbstractInterface class */
