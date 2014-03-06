@@ -33,7 +33,7 @@ public:
 	 *
 	 * \return True if all went well, false if not
 	 */
-	virtual bool systemCall(const std::string &cmd) = 0;
+	virtual bool systemCall(const std::string &cmd) const = 0;
 };
 
 #endif /* CONTROLLERABSTRACTINTERFACE_H */

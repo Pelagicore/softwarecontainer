@@ -33,7 +33,7 @@ public:
 
     /*! Implements ControllerAbstractInterface::systemCall
      */
-    virtual bool systemCall(const std::string &cmd);
+    virtual bool systemCall(const std::string &cmd) const;
 
 private:
     void openFifo();
