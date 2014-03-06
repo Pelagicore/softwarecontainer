@@ -4,6 +4,7 @@ add_definitions(${DEPENDENCIES_CFLAGS})
 # Compile an executable that will run your unit tests and link it with gtest and gtest_main:
 add_executable(runUnitTestsPelagicontain
     pelagicontain_unittest.cpp
+    networkgateway_unittest.cpp
     ../src/pelagicontain.cpp
     ../src/container.cpp
     ../src/networkgateway.cpp
