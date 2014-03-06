@@ -32,7 +32,6 @@ public:
     virtual bool shutdown();
 
 private:
-    bool fifoExist();
     void openFifo();
 
     int m_fifo;

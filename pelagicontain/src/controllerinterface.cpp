@@ -4,6 +4,7 @@
  */
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include "debug.h"
 #include "controllerinterface.h"
@@ -19,7 +20,7 @@ ControllerInterface::~ControllerInterface()
 
 bool ControllerInterface::startApp()
 {
-    if (!fifoExist())
+    if (m_fifo == 0)
         openFifo();
 
     write(m_fifo, "1\n", 2);
@@ -29,7 +30,7 @@ bool ControllerInterface::startApp()
 
 bool ControllerInterface::shutdown()
 {
-    if (!fifoExist())
+    if (m_fifo == 0)
         openFifo();
 
     write(m_fifo, "2\n", 2);
@@ -37,15 +38,9 @@ bool ControllerInterface::shutdown()
     return true;
 }
 
-bool ControllerInterface::fifoExist()
-{
-    if (m_fifo == 0)
-        return false;
-    else
-        return true;
-}
-
 void ControllerInterface::openFifo()
 {
     m_fifo = open(m_fifoPath.c_str(), O_WRONLY);
+    if (m_fifo == -1)
+        log_error("Error opening fifo: %s", strerror(errno));
 }
