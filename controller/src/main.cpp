@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "controller.h"
+#include "fifoipc.h"
 
 /**
  * "Controller" is meant to be the interface Pelagicontain uses to reach the
@@ -17,9 +18,9 @@ int main(int argc, char **argv)
     std::cout << "In Controller" << std::endl;
 
     /** The first command line arg to controller can be the path to where the
-     *  FIFO file is. This is set to /deployed_app/ if it is launched with no
-     *  argument (e.g. called by Pelagicontain), but for testing reasons it's
-     *  convenient if the real path can be specified instead.
+     *  FIFO file will be created. This is set to /deployed_app/ if it is
+     *  launched with no argument (e.g. called by Pelagicontain), but for
+     *  testing reasons it's convenient if the real path can be specified instead.
      */
     std::string path;
     if (argc == 2)
@@ -29,7 +30,8 @@ int main(int argc, char **argv)
     path += "in_fifo";
 
     Controller controller;
-    controller.initialize(path);
+    FifoIPC ipc(&controller);
+    ipc.initialize(path);
 
     return 0;
 }

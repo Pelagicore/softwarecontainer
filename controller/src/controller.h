@@ -2,21 +2,23 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-class Controller {
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
+#include "abstractcontroller.h"
+
+class Controller:
+    public AbstractController
+{
 public:
     Controller();
     ~Controller();
 
-    bool initialize(const std::string &fifoPath);
+    virtual int runApp();
+    virtual void killApp();
 
 private:
-    bool loop();
-    bool createFifo();
-    int runApp();
-    void killApp();
-
     pid_t m_pid;
-    std::string m_fifoPath;
-    int m_fifo;
 };
+
+#endif //CONTROLLER_H

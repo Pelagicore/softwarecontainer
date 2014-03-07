@@ -5,6 +5,7 @@ link_directories(
 add_executable(controller
 	main.cpp
 	controller.cpp
+	fifoipc.cpp
 )
 
 TARGET_LINK_LIBRARIES(controller
