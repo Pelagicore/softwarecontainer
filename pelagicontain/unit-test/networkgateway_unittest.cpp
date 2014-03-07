@@ -65,6 +65,6 @@ TEST(NetworkGatewayTest, TestActivateNoConfig) {
     NetworkGateway gw(&controllerInterface);
 
     bool success = gw.activate();
-    ASSERT_TRUE(!success);
+    ASSERT_TRUE(success);
 }
 
