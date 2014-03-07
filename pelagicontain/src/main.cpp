@@ -86,15 +86,17 @@ int main(int argc, char **argv)
 	std::string containerName = gen_ct_name();
 	std::string containerConfig(configFilePath);
 
-	pelagicontain.addGateway(new NetworkGateway);
+	pelagicontain.addGateway(new NetworkGateway(&controllerInterface));
 
 	pelagicontain.addGateway(new PulseGateway(containerRoot, containerName));
 
-	pelagicontain.addGateway(new DBusGateway(DBusGateway::SessionProxy,
-		containerRoot, containerName, containerConfig));
+	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
+		DBusGateway::SessionProxy, containerRoot, containerName,
+		containerConfig));
 
-	pelagicontain.addGateway(new DBusGateway(DBusGateway::SystemProxy,
-		containerRoot, containerName, containerConfig));
+	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
+		DBusGateway::SystemProxy, containerRoot, containerName,
+		containerConfig));
 
 	pelagicontain.initialize(containerName, containerConfig);
 

@@ -8,8 +8,10 @@
 #include "dbusgateway.h"
 #include "debug.h"
 
-DBusGateway::DBusGateway(ProxyType type, const std::string &containerRoot,
+DBusGateway::DBusGateway(const ControllerAbstractInterface *controllerInterface,
+	ProxyType type, const std::string &containerRoot,
 	const std::string &name, const std::string &containerConfig):
+	Gateway(controllerInterface),
 	m_type(type)
 {
 	/* TODO: The config should not be set here, it should be set

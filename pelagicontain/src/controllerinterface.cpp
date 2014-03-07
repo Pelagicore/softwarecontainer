@@ -38,7 +38,7 @@ bool ControllerInterface::shutdown()
     return true;
 }
 
-bool ControllerInterface::systemCall(const std::string &cmd)
+bool ControllerInterface::systemCall(const std::string &cmd) const
 {
     return true;
 }

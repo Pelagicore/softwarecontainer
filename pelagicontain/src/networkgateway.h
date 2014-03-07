@@ -6,11 +6,12 @@
 #define NETWORKGATEWAY_H
 
 #include "gateway.h"
+#include "controllerinterface.h"
 
 class NetworkGateway : public Gateway
 {
 public:
-	NetworkGateway();
+	NetworkGateway(ControllerAbstractInterface *controllerInterface);
 	~NetworkGateway();
 
 	/*!
@@ -33,6 +34,15 @@ public:
 	virtual std::string environment();
 
 private:
+
+        /*! Set container IP address
+	*
+	* Set the IP address of the container via the controller.
+	*
+	* \param ip	The IP address of the container
+	*/
+	bool setContainerIP(const std::string &ip);
+
 	/*! Generate and execute IPTables rules
 	*
 	* Parse the IPTables rules from configuration and execute these rules
