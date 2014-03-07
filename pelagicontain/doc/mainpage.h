@@ -82,10 +82,9 @@ within the container as the second parameter, and a unique cookie string as
 a third argument.
 
 Before running \c pelagicontain a location for the container should be created
-which will be the container root directory (\c $containerRoot). Currently
-a FIFO file is used for communication between Pelagicontain and Controller,
-this FIFO file should be named \c in_fifo and placed in
-\c $containerRoot/rootfs. A network bridge should be set up as well:
+which will be the container root directory (\c $containerRoot), with the
+application root directory in it (\c $containerRoot/rootfs). A network bridge
+should be set up as well:
 brctl addbr br0
 
 Running:
