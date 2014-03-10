@@ -49,7 +49,8 @@ bool FifoIPC::loop()
     char buf[1024];
     for (;;) {
         memset(buf, 0, sizeof(buf));
-        int status = read(fd, buf, sizeof(buf));
+        // Leave the last element for null termination
+        int status = read(fd, buf, sizeof(buf)-1);
         if (status > 0) {
             std::cout << buf << std::endl;
             if (buf[0] == '1') {
@@ -64,6 +65,7 @@ bool FifoIPC::loop()
                 // Ignore newlines
                 continue;
             } else {
+                buf[1023] = '\0';
                 m_controller->systemCall(std::string(buf));
             }
         }

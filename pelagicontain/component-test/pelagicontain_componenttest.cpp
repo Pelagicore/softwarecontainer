@@ -17,9 +17,8 @@
  * actual Controller for example.
  *
  * These tests assumes there is a container root set up in '/tmp/pc-component-test/'
- * i.e. there should be a 'rootfs' directory there with a 'containedapp' executable
- * as well as the 'controller' executable there. The network bridge needs to be
- * set up as well.
+ * i.e. there should be a 'rootfs' directory there with a 'controller' executable
+ * inside. The network bridge needs to be set up as well.
  */
 
 namespace {
@@ -72,16 +71,16 @@ protected:
     std::string m_outputFile = "/tmp/pc-component-test-output";
 };
 
-/*! Test that controller executes an 'echo' command inside the container.
+/*! Test that controller executes an 'echo' command.
  *
  * The test calls ControllerInterface::systemCall with a command to echo
  * a string to a file. The file content is used to verify that controller
  * actually called the echo command.
  */
 TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
-    std::string theString = "this is my echo test";
+    std::string echoedString = "this is my echo test";
     // The '-n' is to not add a newline to the string echoed
-    std::string command = "echo -n \"" + theString + "\" > " + m_outputFile;
+    std::string command = "echo -n \"" + echoedString + "\" > " + m_outputFile;
     m_controllerInterface->systemCall(command);
 
     // Make sure the call has been executed
@@ -95,20 +94,19 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
         perror("open: ");
     }
 
-    // Read the file content echoed from inside the contaier
-    std::string content;
+    // Read the file content echoed from controller
+    std::string fileContent;
     char buf[1024];
     int status = 0;
     for (;;) {
         memset(buf, 0, sizeof(buf));
         status = read(fh, buf, sizeof(buf));
-        if (status > 0) {
-            content = std::string(buf);
+        if (status == -1) {
+            perror("read: ");
+        } else if (status > 0) {
+            fileContent = std::string(buf);
             break;
         }
-    }
-    if (status == -1) {
-        perror("read: ");
     }
 
     int ret = close(fh);
@@ -116,7 +114,7 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
         perror("close: ");
     }
 
-    EXPECT_EQ(std::string(theString), content);
+    EXPECT_EQ(echoedString, fileContent);
 }
 
 } // namespace
