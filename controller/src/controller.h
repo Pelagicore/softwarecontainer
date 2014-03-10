@@ -16,6 +16,7 @@ public:
 
     virtual int runApp();
     virtual void killApp();
+    virtual void systemCall(const std::string &command);
 
 private:
     pid_t m_pid;

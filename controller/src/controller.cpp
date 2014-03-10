@@ -57,3 +57,9 @@ void Controller::killApp()
         waitpid(m_pid, &status, 0);
     }
 }
+
+void Controller::systemCall(const std::string &command)
+{
+    system(command.c_str());
+    std::cout << "Controller executed command: " << command << std::endl;
+}

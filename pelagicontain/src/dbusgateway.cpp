@@ -8,7 +8,7 @@
 #include "dbusgateway.h"
 #include "debug.h"
 
-DBusGateway::DBusGateway(const ControllerAbstractInterface *controllerInterface,
+DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
 	ProxyType type, const std::string &containerRoot,
 	const std::string &name, const std::string &containerConfig):
 	Gateway(controllerInterface),

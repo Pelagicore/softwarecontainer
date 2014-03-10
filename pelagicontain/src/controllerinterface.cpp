@@ -38,8 +38,17 @@ bool ControllerInterface::shutdown()
     return true;
 }
 
-bool ControllerInterface::systemCall(const std::string &cmd) const
+bool ControllerInterface::systemCall(const std::string &cmd)
 {
+    if (m_fifo == 0)
+        openFifo();
+
+    int ret = write(m_fifo, cmd.c_str(), cmd.size());
+    if (ret == -1) {
+        perror("write: ");
+        return false;
+    }
+
     return true;
 }
 

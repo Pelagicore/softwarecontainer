@@ -38,7 +38,7 @@ class StubController :
         return true;
     }
 
-    virtual bool systemCall(const std::string &cmd) const
+    virtual bool systemCall(const std::string &cmd)
     {
         return true;
     }
