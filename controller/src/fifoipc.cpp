@@ -65,7 +65,7 @@ bool FifoIPC::loop()
                 // Ignore newlines
                 continue;
             } else {
-                buf[1023] = '\0';
+                buf[sizeof(buf)-1] = '\0';
                 m_controller->systemCall(std::string(buf));
             }
         }
