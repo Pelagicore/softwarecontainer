@@ -7,6 +7,7 @@ add_subdirectory(doc)
 
 if(BUILD_TESTS)
 	add_subdirectory(unit-test)
+	add_subdirectory(component-test)
 endif(BUILD_TESTS)
 
 install(PROGRAMS lxc-pelagicontain DESTINATION ${LXC_TEMPLATE_DIR})

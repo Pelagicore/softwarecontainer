@@ -25,6 +25,12 @@ public:
      * Controller
      */
     virtual void killApp() = 0;
+
+    /*! Invoke the string passed as a system call inside the container
+     *
+     * \param command A string with the command to execute inside the container
+     */
+    virtual void systemCall(const std::string &command) = 0;
 };
 
 #endif //ABSTRACTCONTROLLER_H

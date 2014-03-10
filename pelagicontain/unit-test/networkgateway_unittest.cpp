@@ -18,16 +18,16 @@ public:
 
     virtual bool startApp()
     {
-	    return true;
-    }
-    
-    virtual bool shutdown()
-    {
-	return true;
+            return true;
     }
 
-    MOCK_CONST_METHOD1(systemCall,
-		 bool(const std::string &cmd));
+    virtual bool shutdown()
+    {
+        return true;
+    }
+
+    MOCK_METHOD1(systemCall,
+        bool(const std::string &cmd));
 };
 
 using ::testing::InSequence;

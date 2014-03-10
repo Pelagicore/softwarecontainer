@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include "errno.h"
+#include <cstring>
 
 #include "fifoipc.h"
 
@@ -45,24 +46,27 @@ bool FifoIPC::loop()
         return false;
     }
 
-    char c;
+    char buf[1024];
     for (;;) {
-        int status = read(fd, &c, 1);
+        memset(buf, 0, sizeof(buf));
+        // Leave the last element for null termination
+        int status = read(fd, buf, sizeof(buf)-1);
         if (status > 0) {
-            std::cout << c << std::endl;
-            if (c == '1') {
+            std::cout << buf << std::endl;
+            if (buf[0] == '1') {
                 m_controller->runApp();
                 continue;
-            } else if (c == '2') {
+            } else if (buf[0] == '2') {
                 m_controller->killApp();
                 // When app is shut down, we exit the loop and return
                 // all the way back to main where we exit the program
                 break;
-            } else if (c == '\n') {
+            } else if (buf[0] == '\n') {
                 // Ignore newlines
                 continue;
             } else {
-                std::cout << "Controller didn't understand that: " << c << std::endl;
+                buf[sizeof(buf)-1] = '\0';
+                m_controller->systemCall(std::string(buf));
             }
         }
     }

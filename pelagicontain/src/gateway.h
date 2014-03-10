@@ -16,7 +16,7 @@ class Gateway
 {
 public:
 
-	Gateway(const ControllerAbstractInterface *controllerInterface):
+	Gateway(ControllerAbstractInterface *controllerInterface):
 		m_controllerInterface(controllerInterface){};
 	Gateway() {};
 	virtual ~Gateway() {};
@@ -28,7 +28,7 @@ public:
 	virtual bool teardown() {return true;}
 
 protected:
-        const ControllerAbstractInterface *m_controllerInterface;
+        ControllerAbstractInterface *m_controllerInterface;
 };
 
 #endif /* GATEWAY_H */
