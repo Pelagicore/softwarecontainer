@@ -9,13 +9,6 @@
 #include "pamabstractinterface.h"
 #include "mainloopabstractinterface.h"
 #include "controllerabstractinterface.h"
-#include "debug.h"
-#include "log_console.h"
-
-LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
-LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
-
-using namespace pelagicore;
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
 class StubMainloop :
@@ -37,17 +30,17 @@ class StubController :
 {
     virtual bool startApp()
     {
-	return true;
+        return true;
     }
 
     virtual bool shutdown()
     {
-	return true;
+        return true;
     }
 
     virtual bool systemCall(const std::string &cmd) const
     {
-	return true;
+        return true;
     }
 };
 
@@ -72,7 +65,7 @@ class MockGateway :
 public:
     virtual std::string environment()
     {
-	return "";
+        return "";
     }
 
     MOCK_METHOD0(id, std::string());
@@ -201,12 +194,4 @@ TEST(PelagicontainTest, TestCallShutdownShouldTearDownGateways) {
     pc.initialize("unimportant-name", "unimportant-config");
 
     pc.shutdown();
-}
-
-int main(int argc, char **argv) {
-    ConsoleLogOutput logOuput("/dev/null");
-    ConsoleLogOutput::setInstance(logOuput);
-
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }
