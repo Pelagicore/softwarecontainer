@@ -18,7 +18,7 @@
  *
  * These tests assumes there is a container root set up in '/tmp/pc-component-test/'
  * i.e. there should be a 'rootfs' directory there with a 'controller' executable
- * inside. The network bridge needs to be set up as well.
+ * inside.
  */
 
 namespace {
@@ -26,24 +26,33 @@ namespace {
 class PelagicontainComponentTest : public ::testing::Test {
 
 protected:
+    std::string m_containerRoot = "/tmp/pc-component-test/";
+    std::string m_appRoot = m_containerRoot + "rootfs/";
+    std::string m_fifo = m_containerRoot + "rootfs/in_fifo";
+    std::string m_outputFile = "/tmp/pc-component-test-output";
+
     /*! Start the controller in a separate process, wait for controller IPC
      * mechanism to set up the pipe and then create an instance of the
      * ControllerInterface.
      */
     PelagicontainComponentTest()
     {
+        // Check that the controller is where we expect it, otherwise we fail now
+        std::string controller = m_appRoot + "controller";
+        struct stat st;
+        if (stat(controller.c_str(), &st) != 0) {
+            std::cout << "Error: test did not find controller at: " << controller << std::endl;
+            exit(1);
+        }
+
         m_pid = fork();
         if (m_pid == 0) { //Child
-            std::string controllerCommand = m_appRoot + "controller";
-            std::string command = controllerCommand + " " + m_appRoot;
-
+            std::string command = controller + " " + m_appRoot;
             system(command.c_str());
-
             exit(0);
         }
 
         // The Controller should have opened the fifo before we try to use it
-        struct stat st;
         while (stat(m_fifo.c_str(), &st) != 0) {
             ;
         }
@@ -59,16 +68,11 @@ protected:
         int status;
         waitpid(m_pid, &status, 0);
         delete m_controllerInterface;
-        unlink("/tmp/pc-component-test-output");
+        unlink(m_outputFile.c_str());
     }
 
     ControllerInterface *m_controllerInterface;
     pid_t m_pid;
-
-    std::string m_containerRoot = "/tmp/pc-component-test/";
-    std::string m_appRoot = m_containerRoot + "rootfs/";
-    std::string m_fifo = m_containerRoot + "rootfs/in_fifo";
-    std::string m_outputFile = "/tmp/pc-component-test-output";
 };
 
 /*! Test that controller executes an 'echo' command.
