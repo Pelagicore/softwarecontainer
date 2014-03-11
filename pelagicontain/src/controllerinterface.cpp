@@ -74,7 +74,8 @@ bool ControllerInterface::systemCall(const std::string &cmd)
         if (openFifo() == false)
             return false;
 
-    int ret = write(m_fifo, cmd.c_str(), cmd.size() + 1);
+    std::string command = "4 " + cmd;
+    int ret = write(m_fifo, command.c_str(), command.size() + 1);
     if (ret == -1) {
         log_error("write: %s", strerror(errno));
         return false;

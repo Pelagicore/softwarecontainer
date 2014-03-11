@@ -11,6 +11,9 @@
 
 #include "fifoipc.h"
 
+// The IPC protocol prefixes messages with two chars not part of the message
+static const int OFFSET = 2;
+
 FifoIPC::FifoIPC(AbstractController *controller):
     m_controller(controller), m_fifoPath(""), m_fifo(0)
 {
@@ -28,8 +31,7 @@ bool FifoIPC::initialize(const std::string &fifoPath)
     m_fifoPath = fifoPath;
 
     if (m_fifo == 0) {
-        bool created = createFifo();
-        if (!created) {
+        if (createFifo() == false) {
             std::cout << "Could not create FIFO!" << std::endl;
             return false;
         }
@@ -75,29 +77,34 @@ bool FifoIPC::loop()
             char value[1024];
             memset(value, 0, sizeof(value));
 
-            // Skip '3' and space
-            int offset = 2;
             // Find the variable and the value
-            for (unsigned i = offset; i < sizeof(buf); ++i) {
+            for (unsigned i = OFFSET; i < sizeof(buf); ++i) {
                 if (buf[i] == ' ') {
                     // We're between the variable and the value
                     int separator = i;
-                    strncpy(variable, buf + offset, separator - offset);
-                    strncpy(value, buf + offset + separator - 1, sizeof(buf));
+                    strncpy(variable, buf + OFFSET, separator - OFFSET);
+                    strncpy(value, buf + OFFSET + separator - 1, sizeof(buf));
                     break;
                 }
             }
 
+            variable[sizeof(variable) - 1] = '\0';
             std::string variableString(variable);
+
+            value[sizeof(value) - 1] = '\0';
             std::string valueString(value);
 
             m_controller->setEnvironmentVariable(variableString, valueString);
-        } else if (buf[0] == '\n') {
-            // Ignore newlines
-            continue;
+        } else if (buf[0] == '4') {
+            char command[1024];
+            memset(command, 0, sizeof(command));
+
+            strncpy(command, buf + OFFSET, sizeof(buf));
+
+            command[sizeof(command) - 1] = '\0';
+            m_controller->systemCall(std::string(command));
         } else {
-            buf[sizeof(buf)-1] = '\0';
-            m_controller->systemCall(std::string(buf));
+            return false;
         }
     }
 
