@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <iostream>
 
 #include "debug.h"
 #include "controllerinterface.h"
@@ -21,9 +22,15 @@ ControllerInterface::~ControllerInterface()
 bool ControllerInterface::startApp()
 {
     if (m_fifo == 0)
-        openFifo();
+        if (openFifo() == false)
+            return false;
 
-    write(m_fifo, "1\n", 2);
+    char msg[] = {'1', '\0'};
+    int ret = write(m_fifo, msg, sizeof(msg));
+    if (ret == -1) {
+        log_error("write: %s", strerror(errno));
+        return false;
+    }
 
     return true;
 }
@@ -31,9 +38,15 @@ bool ControllerInterface::startApp()
 bool ControllerInterface::shutdown()
 {
     if (m_fifo == 0)
-        openFifo();
+        if (openFifo() == false)
+            return false;
 
-    write(m_fifo, "2\n", 2);
+    char msg[] = {'2', '\0'};
+    int ret = write(m_fifo, msg, sizeof(msg));
+    if (ret == -1) {
+        log_error("write: %s", strerror(errno));
+        return false;
+    }
 
     return true;
 }
@@ -42,10 +55,15 @@ bool ControllerInterface::setEnvironmentVariable(const std::string &variable,
     const std::string &value)
 {
     if (m_fifo == 0)
-        openFifo();
+        if (openFifo() == false)
+            return false;
 
     std::string command = "3 " + variable + " " + value;
-    write(m_fifo, command.c_str(), command.size());
+    int ret = write(m_fifo, command.c_str(), command.size() + 1);
+    if (ret == -1) {
+        log_error("write: %s", strerror(errno));
+        return false;
+    }
 
     return true;
 }
@@ -53,20 +71,25 @@ bool ControllerInterface::setEnvironmentVariable(const std::string &variable,
 bool ControllerInterface::systemCall(const std::string &cmd)
 {
     if (m_fifo == 0)
-        openFifo();
+        if (openFifo() == false)
+            return false;
 
-    int ret = write(m_fifo, cmd.c_str(), cmd.size());
+    int ret = write(m_fifo, cmd.c_str(), cmd.size() + 1);
     if (ret == -1) {
-        perror("write: ");
+        log_error("write: %s", strerror(errno));
         return false;
     }
 
     return true;
 }
 
-void ControllerInterface::openFifo()
+bool ControllerInterface::openFifo()
 {
     m_fifo = open(m_fifoPath.c_str(), O_WRONLY);
-    if (m_fifo == -1)
-        log_error("Error opening fifo: %s", strerror(errno));
+    if (m_fifo == -1) {
+        log_error("open: %s", strerror(errno));
+        return false;
+    }
+
+    return true;
 }

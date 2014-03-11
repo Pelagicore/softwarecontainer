@@ -134,11 +134,6 @@ TEST_F(PelagicontainComponentTest, TestControllerSetsEnvironmentVariable) {
     std::string value = "tested";
     m_controllerInterface->setEnvironmentVariable(envVar, value);
 
-    // We currently need to wait for the previous command to have finished
-    // before attempting the next, this should be considered (and fixed)
-    // with a more robust IPC mechanism.
-    sleep(1);
-
     // Make system call to echo it to file
     std::string echoCommand = "echo -n $" + envVar + " > " + m_outputFile;
     m_controllerInterface->systemCall(echoCommand);

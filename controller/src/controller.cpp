@@ -45,7 +45,7 @@ void Controller::killApp()
 {
     std::cout << "Trying to kill: " << m_pid << std::endl;
     if (m_pid == 0) {
-        std::cout << "Error: Trying to kill an app without previously having started one" << std::endl;
+        std::cout << "Warning: Trying to kill an app without previously having started one" << std::endl;
         return;
     }
 

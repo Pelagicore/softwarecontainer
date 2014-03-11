@@ -41,7 +41,7 @@ public:
     virtual bool systemCall(const std::string &cmd);
 
 private:
-    void openFifo();
+    bool openFifo();
 
     int m_fifo;
     std::string m_fifoPath;
