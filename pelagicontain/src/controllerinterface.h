@@ -31,6 +31,11 @@ public:
     */
     virtual bool shutdown();
 
+    /*! Implements ControllerAbstractInterface::setEnvironmentVariable
+    */
+    virtual bool setEnvironmentVariable(const std::string &variable,
+        const std::string &value);
+
     /*! Implements ControllerAbstractInterface::systemCall
      */
     virtual bool systemCall(const std::string &cmd);

@@ -26,6 +26,14 @@ public:
      */
     virtual void killApp() = 0;
 
+    /*! Set the specified environment variable to the specified value
+     *
+     * \param variable A string with the environment variable name
+     * \param value A string with the value to set on the environment variable
+     */
+    virtual void setEnvironmentVariable(const std::string &variable,
+        const std::string &value) = 0;
+
     /*! Invoke the string passed as a system call inside the container
      *
      * \param command A string with the command to execute inside the container

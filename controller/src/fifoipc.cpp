@@ -61,6 +61,30 @@ bool FifoIPC::loop()
                 // When app is shut down, we exit the loop and return
                 // all the way back to main where we exit the program
                 break;
+            } else if (buf[0] == '3') {
+                char variable[1024];
+                memset(variable, 0, sizeof(variable));
+
+                char value[1024];
+                memset(value, 0, sizeof(value));
+
+                // Skip '3' and space
+                int offset = 2;
+                // Find the variable and the value
+                for (unsigned i = offset; i < sizeof(buf); ++i) {
+                    if (buf[i] == ' ') {
+                        // We're between the variable and the value
+                        int separator = i;
+                        strncpy(variable, buf + offset, separator - offset);
+                        strncpy(value, buf + offset + separator - 1, sizeof(buf));
+                        break;
+                    }
+                }
+
+                std::string variableString(variable);
+                std::string valueString(value);
+
+                m_controller->setEnvironmentVariable(variableString, valueString);
             } else if (buf[0] == '\n') {
                 // Ignore newlines
                 continue;

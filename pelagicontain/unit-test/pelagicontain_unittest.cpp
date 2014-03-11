@@ -38,6 +38,12 @@ class StubController :
         return true;
     }
 
+    virtual bool setEnvironmentVariable(const std::string &variable,
+        const std::string &value)
+    {
+        return true;
+    }
+
     virtual bool systemCall(const std::string &cmd)
     {
         return true;

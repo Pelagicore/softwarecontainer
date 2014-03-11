@@ -26,6 +26,12 @@ public:
         return true;
     }
 
+    virtual bool setEnvironmentVariable(const std::string &variable,
+        const std::string &value)
+    {
+        return true;
+    }
+
     MOCK_METHOD1(systemCall,
         bool(const std::string &cmd));
 };

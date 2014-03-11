@@ -13,27 +13,37 @@
 class ControllerAbstractInterface {
 
 public:
-	virtual ~ControllerAbstractInterface() {};
+    virtual ~ControllerAbstractInterface() {};
 
-	/*! Starts the application inside the container
-	 *
-	 * \return True if all went well, false if not
-	 */
-	virtual bool startApp() = 0;
+    /*! Starts the application inside the container
+     *
+     * \return True if all went well, false if not
+     */
+    virtual bool startApp() = 0;
 
-	/*! Stops the application running inside the container and also
-	 *  stops Controller.
-	 *
-	 * \return True if all went well, false if not
-	 */
-	virtual bool shutdown() = 0;
+    /*! Stops the application running inside the container and also
+     *  stops Controller.
+     *
+     * \return True if all went well, false if not
+     */
+    virtual bool shutdown() = 0;
 
-	/*! Notifies the controller to issue the system call
-	 *  defined in the cmd argument.
-	 *
-	 * \return True if all went well, false if not
-	 */
-	virtual bool systemCall(const std::string &cmd) = 0;
+    /*! Tells controller to set the specified environment variable
+     * to the specified value. If the variable does not exist, it is
+     * created.
+     *
+     * \param variable A string with the environment variable name
+     * \param value A string with the value to set on the environment variable
+     */
+    virtual bool setEnvironmentVariable(const std::string &variable,
+        const std::string &value) = 0;
+
+    /*! Notifies the controller to issue the system call
+     *  defined in the cmd argument.
+     *
+     * \return True if all went well, false if not
+     */
+    virtual bool systemCall(const std::string &cmd) = 0;
 };
 
 #endif /* CONTROLLERABSTRACTINTERFACE_H */

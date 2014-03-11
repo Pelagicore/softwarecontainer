@@ -61,10 +61,10 @@ protected:
         delete m_controllerInterface;
         unlink("/tmp/pc-component-test-output");
     }
-    
+
     ControllerInterface *m_controllerInterface;
     pid_t m_pid;
-    
+
     std::string m_containerRoot = "/tmp/pc-component-test/";
     std::string m_appRoot = m_containerRoot + "rootfs/";
     std::string m_fifo = m_containerRoot + "rootfs/in_fifo";
@@ -115,6 +115,62 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
     }
 
     EXPECT_EQ(echoedString, fileContent);
+}
+
+/*! Test that controller sets an environment variable.
+ *
+ * The test calls ControllerInterface::setEnvironmentVariable and then
+ * makes controller echo the value of the variable to a file by calling
+ * ControllerInterface::systemCall, the content of the file is used to
+ * assert the variable value is set as expected.
+ */
+TEST_F(PelagicontainComponentTest, TestControllerSetsEnvironmentVariable) {
+    // Set environment variable
+    std::string envVar = "PC_COMP_TEST";
+    std::string value = "tested";
+    m_controllerInterface->setEnvironmentVariable(envVar, value);
+
+    // We currently need to wait for the previous command to have finished
+    // before attempting the next, this should be considered (and fixed)
+    // with a more robust IPC mechanism.
+    sleep(1);
+
+    // Make system call to echo it to file
+    std::string echoCommand = "echo -n $" + envVar + " > " + m_outputFile;
+    m_controllerInterface->systemCall(echoCommand);
+
+    // Make sure the echo call has been executed so the file is there
+    struct stat st;
+    while (stat(m_outputFile.c_str(), &st) != 0) {
+        ;
+    }
+
+    int fh = open(m_outputFile.c_str(), O_RDONLY);
+    if (fh == -1) {
+        perror("open: ");
+    }
+
+    // Read file content and assert it's the same as the variable was set to
+    std::string fileContent;
+    char buf[1024];
+    int status = 0;
+    for (;;) {
+        memset(buf, 0, sizeof(buf));
+        status = read(fh, buf, sizeof(buf));
+        if (status == -1) {
+            perror("read: ");
+        } else if (status > 0) {
+            fileContent = std::string(buf);
+            break;
+        }
+    }
+
+    int ret = close(fh);
+    if (ret == -1) {
+        perror("close: ");
+    }
+
+    EXPECT_EQ(value, fileContent);
 }
 
 } // namespace

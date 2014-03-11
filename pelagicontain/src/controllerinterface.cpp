@@ -38,6 +38,18 @@ bool ControllerInterface::shutdown()
     return true;
 }
 
+bool ControllerInterface::setEnvironmentVariable(const std::string &variable,
+    const std::string &value)
+{
+    if (m_fifo == 0)
+        openFifo();
+
+    std::string command = "3 " + variable + " " + value;
+    write(m_fifo, command.c_str(), command.size());
+
+    return true;
+}
+
 bool ControllerInterface::systemCall(const std::string &cmd)
 {
     if (m_fifo == 0)

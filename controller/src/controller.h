@@ -16,6 +16,8 @@ public:
 
     virtual int runApp();
     virtual void killApp();
+    virtual void setEnvironmentVariable(const std::string &variable,
+        const std::string &value);
     virtual void systemCall(const std::string &command);
 
 private:
