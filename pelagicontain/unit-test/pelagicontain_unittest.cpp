@@ -94,6 +94,7 @@ using ::testing::NiceMock;
  */
 TEST(PelagicontainTest, TestInteractionWithPAM) {
     std::string appId = "the-app-id";
+    std::string cookie = "mycookie";
 
     MockPAMAbstractInterface pam;
     StubMainloop mainloop;
@@ -103,9 +104,9 @@ TEST(PelagicontainTest, TestInteractionWithPAM) {
     /* The calls should be made in the specific order as below: */
     {
         InSequence sequence;
-        EXPECT_CALL(pam, registerClient("", appId)).Times(1);
-        EXPECT_CALL(pam, updateFinished(appId)).Times(1);
-        EXPECT_CALL(pam, unregisterClient(appId)).Times(1);
+        EXPECT_CALL(pam, registerClient(cookie, appId)).Times(1);
+        EXPECT_CALL(pam, updateFinished(cookie)).Times(1);
+        EXPECT_CALL(pam, unregisterClient(cookie)).Times(1);
     }
 
     pc.launch(appId);

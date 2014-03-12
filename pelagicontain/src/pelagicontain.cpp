@@ -73,9 +73,6 @@ pid_t Pelagicontain::preload(const std::string &containerRoot,
 		for (int i = 3; i < 30; i++)
 			close(i);
 
-                /* This will not return until the Controller (or whatever is 
-                 * executed in the container) exits.
-                 */
 		log_debug(executeCommand.c_str());
 		system(executeCommand.c_str());
 
@@ -96,7 +93,7 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
 	setGatewayConfigs(configs);
 
-	m_pamInterface->updateFinished(m_appId);
+	m_pamInterface->updateFinished(m_cookie);
 
 	activateGateways();
 
@@ -138,18 +135,18 @@ void Pelagicontain::shutdown()
 	 */
 	m_controllerInterface->shutdown();
 
-	/* Wait for Controller to finish and exit */
+	/* Shut down (clean up) all Gateways */
+	shutdownGateways();
+
+	m_pamInterface->unregisterClient(m_cookie);
+
+	/* Wait for Controller */
 	int status = 0;
 	wait(&status);
 	if (WIFEXITED(status))
 		log_debug("Child exited");
 	if (WIFSIGNALED(status))
 		log_debug("Child exited by signal: %d", WTERMSIG(status));
-
-        /* Shut down (clean up) all Gateways */
-        shutdownGateways();
-
-        m_pamInterface->unregisterClient(m_appId);
 
 	m_mainloopInterface->leave();
 }
