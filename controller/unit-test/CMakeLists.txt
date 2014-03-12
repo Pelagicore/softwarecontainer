@@ -4,6 +4,8 @@ add_definitions(${DEPENDENCIES_CFLAGS})
 # Compile an executable that will run your unit tests and link it with gtest and gtest_main:
 add_executable(runUnitTestsController
     main.cpp
+    fifoipc_unittest.cpp
+    ../src/fifoipc.cpp
 )
 
 link_directories(

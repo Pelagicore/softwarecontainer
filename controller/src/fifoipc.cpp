@@ -23,7 +23,7 @@ FifoIPC::~FifoIPC()
 {
     int ret = unlink(m_fifoPath.c_str());
     if (ret == -1)
-        std::cout << "Error removing fifo!" << std::endl;
+        perror("unlink: ");
 }
 
 bool FifoIPC::initialize(const std::string &fifoPath)
