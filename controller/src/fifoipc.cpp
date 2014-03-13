@@ -11,6 +11,8 @@
 
 #include "fifoipc.h"
 
+static const int BUF_SIZE = 1024;
+
 FifoIPC::FifoIPC(IPCMessage *message):
     m_message(message), m_fifoPath(""), m_fifo(0)
 {
@@ -46,13 +48,14 @@ bool FifoIPC::loop()
         return false;
     }
 
-    char buf[1024];
+    char buf[BUF_SIZE];
     char c;
     int i = 0;
     bool shouldContinue = false;
     for (;;) {
         memset(buf, 0, sizeof(buf));
         i = 0;
+        // Read next message in pipe, it should be null terminated
         do {
             int status = read(fd, &c, 1);
             if (status > 0) {
@@ -69,9 +72,11 @@ bool FifoIPC::loop()
         int status;
         shouldContinue = m_message->send(messageString, &status);
         if (status == -1) {
+            // The receved message was not understood by IPCMessage
             std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
         }
         if (shouldContinue == false) {
+            // Controller is shutting down
             break;
         }
     }

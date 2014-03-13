@@ -33,6 +33,9 @@ public:
     bool send(const std::string &message, int *statusFlag);
 
 private:
+    void callSetEnvironmentVariable(const char *buf, int messageLength);
+    void callSystemCall(const char *buf, int messageLength);
+
     AbstractController *m_controller;
 };
 
