@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "abstractcontroller.h"
+#include "ipcmessage.h"
 
 /*! FifoIPC is an implementation of an IPC based on a named pipe.
  *
@@ -16,7 +16,7 @@
 class FifoIPC
 {
 public:
-    FifoIPC(AbstractController *controller);
+    FifoIPC(IPCMessage *message);
     ~FifoIPC();
 
     /*! This call makes FifoIPC create a fifo and enter a loop to wait for
@@ -39,7 +39,7 @@ private:
 
     bool createFifo();
 
-    AbstractController *m_controller;
+    IPCMessage *m_message;
     std::string m_fifoPath;
     int m_fifo;
 };

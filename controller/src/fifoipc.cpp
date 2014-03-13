@@ -11,19 +11,17 @@
 
 #include "fifoipc.h"
 
-// The IPC protocol prefixes messages with two chars not part of the message
-static const int OFFSET = 2;
-
-FifoIPC::FifoIPC(AbstractController *controller):
-    m_controller(controller), m_fifoPath(""), m_fifo(0)
+FifoIPC::FifoIPC(IPCMessage *message):
+    m_message(message), m_fifoPath(""), m_fifo(0)
 {
 }
 
 FifoIPC::~FifoIPC()
 {
     int ret = unlink(m_fifoPath.c_str());
-    if (ret == -1)
+    if (ret == -1) {
         perror("unlink: ");
+    }
 }
 
 bool FifoIPC::initialize(const std::string &fifoPath)
@@ -51,6 +49,7 @@ bool FifoIPC::loop()
     char buf[1024];
     char c;
     int i = 0;
+    bool shouldContinue = false;
     for (;;) {
         memset(buf, 0, sizeof(buf));
         i = 0;
@@ -59,52 +58,21 @@ bool FifoIPC::loop()
             if (status > 0) {
                 buf[i] = c;
                 ++i;
-            }
-        } while (c != '\0');
-
-        if (buf[0] == '1') {
-            m_controller->runApp();
-            continue;
-        } else if (buf[0] == '2') {
-            m_controller->killApp();
-            // When app is shut down, we exit the loop and return
-            // all the way back to main where we exit the program
-            break;
-        } else if (buf[0] == '3') {
-            char variable[1024];
-            memset(variable, 0, sizeof(variable));
-
-            char value[1024];
-            memset(value, 0, sizeof(value));
-
-            // Find the variable and the value
-            for (unsigned i = OFFSET; i < sizeof(buf); ++i) {
-                if (buf[i] == ' ') {
-                    // We're between the variable and the value
-                    int separator = i;
-                    strncpy(variable, buf + OFFSET, separator - OFFSET);
-                    strncpy(value, buf + OFFSET + separator - 1, sizeof(buf));
+                if (i == sizeof(buf) - 1) {
                     break;
                 }
             }
+        } while (c != '\0');
 
-            variable[sizeof(variable) - 1] = '\0';
-            std::string variableString(variable);
-
-            value[sizeof(value) - 1] = '\0';
-            std::string valueString(value);
-
-            m_controller->setEnvironmentVariable(variableString, valueString);
-        } else if (buf[0] == '4') {
-            char command[1024];
-            memset(command, 0, sizeof(command));
-
-            strncpy(command, buf + OFFSET, sizeof(buf));
-
-            command[sizeof(command) - 1] = '\0';
-            m_controller->systemCall(std::string(command));
-        } else {
-            return false;
+        buf[sizeof(buf) - 1] = '\0';
+        std::string messageString(buf);
+        int status;
+        shouldContinue = m_message->send(messageString, &status);
+        if (status == -1) {
+            std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
+        }
+        if (shouldContinue == false) {
+            break;
         }
     }
 

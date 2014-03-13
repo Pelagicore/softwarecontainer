@@ -61,11 +61,11 @@ void Controller::killApp()
 void Controller::setEnvironmentVariable(const std::string &variable,
     const std::string &value)
 {
-    std::cout << "Controller will set \"" << variable << "\" to \"" << value << "\"" << std::endl;
     std::string command = variable + "=" + value;
     int ret = putenv((char *)command.c_str());
     if (ret != 0)
         perror("putenv: ");
+    std::cout << "Controller set \"" << variable << "\" to \"" << value << "\"" << std::endl;
 }
 
 void Controller::systemCall(const std::string &command)
