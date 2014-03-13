@@ -25,9 +25,4 @@ TARGET_LINK_LIBRARIES(runComponentTestsPelagicontain
 )
 include_directories(../src)
 
-add_test(
-    NAME runComponentTestsPelagicontain
-    COMMAND runComponentTestsPelagicontain
-)
-
 add_definitions(-DTESTDATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test-data")
