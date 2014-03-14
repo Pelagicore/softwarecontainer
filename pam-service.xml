@@ -12,18 +12,21 @@
 		<method name="RegisterClient">
 			<arg direction="in" type="s" name="cookie"/>
 			<arg direction="in" type="s" name="appId"/>
+			<annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
 		</method>
 		<!-- UnregisterClient(string appId):
 			This method wraps PlatformAccessManager::unregisterClient
 			available in platformaccessmanager.h !-->
 		<method name="UnregisterClient">
-			<arg direction="in" type="s" name="appId"/>
+			<arg direction="in" type="s" name="cookie"/>
+			<annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
 		</method>
 		<!-- UpdateFinished(string appId):
 			This method wraps PlatformAccessManager::updateFinished
 			available in platformaccessmanager.h !-->
 		<method name="UpdateFinished">
-			<arg direction="in" type="s" name="appId"/>
+			<arg direction="in" type="s" name="cookie"/>
+			<annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
 		</method>
 	</interface>
 </node>
