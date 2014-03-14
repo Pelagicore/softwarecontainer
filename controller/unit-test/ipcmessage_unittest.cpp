@@ -24,6 +24,9 @@ using ::testing::InSequence;
 using ::testing::Return;
 using ::testing::NiceMock;
 
+/*! Test that Controller::runApp and Controller::killApp are called by IPCMessage
+ * when the corresponding messages are passed to IPCMessage
+ */
 TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
     MockAbstractController controller;
     IPCMessage message(controller);
@@ -43,6 +46,9 @@ TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
     message.handleMessage(killAppCmd, &status);
 }
 
+/*! Test that Controller::systemCall is called with the expected argument
+ * by IPCMessage.
+ */
 TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
     MockAbstractController controller;
     IPCMessage message(controller);
@@ -56,6 +62,9 @@ TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
     message.handleMessage(systemCallCmd, &status);
 }
 
+/*! Test that Controller::setEnvironmentVariable is called with the expected
+ * arguments by IPCMessage.
+ */
 TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
     MockAbstractController controller;
     IPCMessage message(controller);
@@ -70,6 +79,9 @@ TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
     message.handleMessage(setEnvironmentVariableCmd, &status);
 }
 
+/*! Test that IPCMessage sets status flag as expeced on a valid message and
+ * an invalid message.
+ */
 TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
     NiceMock<MockAbstractController> controller;
     IPCMessage message(controller);
@@ -83,6 +95,10 @@ TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
     EXPECT_EQ(status, -1);
 }
 
+/*! Test that IPCMessage returns the expected value. Valid and invalid messages
+ * should get 'true' as a response, while a call to Controller::killApp should
+ * result in 'false' as it means the IPC should stop sending more messages.
+ */
 TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
     NiceMock<MockAbstractController> controller;
     IPCMessage message(controller);
