@@ -50,34 +50,25 @@ bool FifoIPC::loop()
 
     char buf[BUF_SIZE];
     char c;
-    int i = 0;
-    bool shouldContinue = false;
-    for (;;) {
-        memset(buf, 0, sizeof(buf));
-        i = 0;
+    bool shouldContinue = true;
+    while (shouldContinue) {
         // Read next message in pipe, it should be null terminated
+        int i = 0;
         do {
             int status = read(fd, &c, 1);
             if (status > 0) {
-                buf[i] = c;
-                ++i;
-                if (i == sizeof(buf) - 1) {
-                    break;
-                }
+                buf[i++] = c;
             }
-        } while (c != '\0');
+            // Look for end of message or end of storage buffer
+        } while ((c != '\0') && (i != sizeof(buf) - 1));
 
-        buf[sizeof(buf) - 1] = '\0';
+        buf[i] = '\0';
         std::string messageString(buf);
         int status;
-        shouldContinue = m_message->send(messageString, &status);
+        shouldContinue = m_message->handleMessage(messageString, &status);
         if (status == -1) {
-            // The receved message was not understood by IPCMessage
+            // The message was not understood by IPCMessage
             std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
-        }
-        if (shouldContinue == false) {
-            // Controller is shutting down
-            break;
         }
     }
 

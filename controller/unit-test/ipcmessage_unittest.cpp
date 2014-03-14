@@ -39,8 +39,8 @@ TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
     }
 
     int status;
-    message.send(runAppCmd, &status);
-    message.send(killAppCmd, &status);
+    message.handleMessage(runAppCmd, &status);
+    message.handleMessage(killAppCmd, &status);
 }
 
 TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
@@ -53,7 +53,7 @@ TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
     EXPECT_CALL(controller, systemCall(expectedArgument)).Times(1);
 
     int status;
-    message.send(systemCallCmd, &status);
+    message.handleMessage(systemCallCmd, &status);
 }
 
 TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
@@ -67,7 +67,7 @@ TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
     EXPECT_CALL(controller, setEnvironmentVariable(expectedVariable, expectedValue)).Times(1);
 
     int status;
-    message.send(setEnvironmentVariableCmd, &status);
+    message.handleMessage(setEnvironmentVariableCmd, &status);
 }
 
 TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
@@ -75,11 +75,11 @@ TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
     IPCMessage message(&controller);
 
     int status = 123;
-    message.send(std::string("4 valid message"), &status);
+    message.handleMessage(std::string("4 valid message"), &status);
     EXPECT_EQ(status, 0);
 
     status = 123;
-    message.send(std::string("invalid message"), &status);
+    message.handleMessage(std::string("invalid message"), &status);
     EXPECT_EQ(status, -1);
 }
 
@@ -94,12 +94,12 @@ TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
     int status;
     bool returnVal;
 
-    returnVal = message.send(validMessage, &status);
+    returnVal = message.handleMessage(validMessage, &status);
     EXPECT_EQ(returnVal, true);
 
-    returnVal = message.send(invalidMessage, &status);
+    returnVal = message.handleMessage(invalidMessage, &status);
     EXPECT_EQ(returnVal, true);
 
-    returnVal = message.send(killAppMessage, &status);
+    returnVal = message.handleMessage(killAppMessage, &status);
     EXPECT_EQ(returnVal, false);
 }

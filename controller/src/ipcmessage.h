@@ -30,7 +30,7 @@ public:
      * \param statusFlag A flag set to 0 on success and -1 if the message
      *          was not understood and could not be passed to Controller
      */
-    bool send(const std::string &message, int *statusFlag);
+    bool handleMessage(const std::string &message, int *statusFlag);
 
 private:
     void callSetEnvironmentVariable(const char *buf, int messageLength);

@@ -27,31 +27,43 @@ IPCMessage::~IPCMessage()
 {
 }
 
-bool IPCMessage::send(const std::string &message, int *statusFlag)
+bool IPCMessage::handleMessage(const std::string &message, int *statusFlag)
 {
     const char *buf = message.c_str();
+    bool retVal = false;
 
-    if (buf[PROTOCOL_INDEX] == RUN_APP) {
+    // Flag is set to ERROR only when the message was not understood
+    *statusFlag = SUCCESS;
+
+    switch (buf[PROTOCOL_INDEX]) {
+    case RUN_APP:
         m_controller->runApp();
-    } else if (buf[PROTOCOL_INDEX] == KILL_APP) {
+        retVal = true;
+        break;
+    case KILL_APP:
         m_controller->killApp();
-        // When app is shut down, we exit the loop and return
-        // all the way back to main where we exit the program
-        *statusFlag = SUCCESS;
-        return false;
-    } else if (buf[PROTOCOL_INDEX] == SET_ENV_VAR) {
+        // When app is shut down, we return 'false' to indicate controller
+        // should go on shutting down and the IPC should not pass any more
+        // messages.
+        retVal = false;
+        break;
+    case SET_ENV_VAR:
         callSetEnvironmentVariable(buf, message.size());
-    } else if (buf[PROTOCOL_INDEX] == SYS_CALL) {
+        retVal = true;
+        break;
+    case SYS_CALL:
         callSystemCall(buf, message.size());
-    } else {
+        retVal = true;
+        break;
+    default:
         // The message had no meaning to us, this is an error but the IPC
         // should continue to pass messages.
         *statusFlag = ERROR;
-        return true;
+        retVal = true;
+        break;
     }
 
-    *statusFlag = SUCCESS;
-    return true;
+    return retVal;
 }
 
 void IPCMessage::callSetEnvironmentVariable(const char *buf, int messageLength)
