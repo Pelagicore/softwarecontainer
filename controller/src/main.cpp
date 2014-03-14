@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     path += "in_fifo";
 
     Controller controller;
-    IPCMessage message(&controller);
-    FifoIPC ipc(&message);
+    IPCMessage message(controller);
+    FifoIPC ipc(message);
     ipc.initialize(path);
 
     return 0;

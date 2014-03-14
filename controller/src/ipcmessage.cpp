@@ -18,7 +18,7 @@ static const char SET_ENV_VAR = '3';
 static const char SYS_CALL = '4';
 static const char VAR_VAL_DELIMITER = ' ';
 
-IPCMessage::IPCMessage(AbstractController *controller) :
+IPCMessage::IPCMessage(AbstractController &controller) :
     m_controller(controller)
 {
 }
@@ -91,16 +91,16 @@ void IPCMessage::callSetEnvironmentVariable(const char *buf, int messageLength)
     value[sizeof(value) - 1] = '\0';
     std::string valueString(value);
 
-    m_controller->setEnvironmentVariable(variableString, valueString);
+    m_controller.setEnvironmentVariable(variableString, valueString);
 }
 
 void IPCMessage::callSystemCall(const char *buf, int messageLength)
 {
-        char command[BUF_SIZE];
-        memset(command, 0, sizeof(command));
+    char command[BUF_SIZE];
+    memset(command, 0, sizeof(command));
 
-        strncpy(command, buf + OFFSET, messageLength);
+    strncpy(command, buf + OFFSET, messageLength);
 
-        command[sizeof(command) - 1] = '\0';
-        m_controller->systemCall(std::string(command));
+    command[sizeof(command) - 1] = '\0';
+    m_controller.systemCall(std::string(command));
 }

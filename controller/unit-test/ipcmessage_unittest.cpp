@@ -26,7 +26,7 @@ using ::testing::NiceMock;
 
 TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
     MockAbstractController controller;
-    IPCMessage message(&controller);
+    IPCMessage message(controller);
 
     std::string runAppCmd("1");
     std::string killAppCmd("2");
@@ -45,7 +45,7 @@ TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
 
 TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
     MockAbstractController controller;
-    IPCMessage message(&controller);
+    IPCMessage message(controller);
 
     std::string systemCallCmd("4 this is a system call");
 
@@ -58,7 +58,7 @@ TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
 
 TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
     MockAbstractController controller;
-    IPCMessage message(&controller);
+    IPCMessage message(controller);
 
     std::string setEnvironmentVariableCmd("3 THE_VARIABLE this is the value");
 
@@ -72,7 +72,7 @@ TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
 
 TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
     NiceMock<MockAbstractController> controller;
-    IPCMessage message(&controller);
+    IPCMessage message(controller);
 
     int status = 123;
     message.handleMessage(std::string("4 valid message"), &status);
@@ -85,7 +85,7 @@ TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
 
 TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
     NiceMock<MockAbstractController> controller;
-    IPCMessage message(&controller);
+    IPCMessage message(controller);
 
     std::string validMessage("4 valid message");
     std::string invalidMessage("invalid message");

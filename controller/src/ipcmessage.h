@@ -11,7 +11,7 @@
 
 class IPCMessage {
 public:
-    IPCMessage(AbstractController *controller);
+    IPCMessage(AbstractController &controller);
     ~IPCMessage();
 
     /*! Call the appropriate method on Controller.
@@ -36,7 +36,7 @@ private:
     void callSetEnvironmentVariable(const char *buf, int messageLength);
     void callSystemCall(const char *buf, int messageLength);
 
-    AbstractController *m_controller;
+    AbstractController &m_controller;
 };
 
 #endif // IPCMESSAGE_H

@@ -13,7 +13,7 @@
 
 static const int BUF_SIZE = 1024;
 
-FifoIPC::FifoIPC(IPCMessage *message):
+FifoIPC::FifoIPC(IPCMessage &message):
     m_message(message), m_fifoPath(""), m_fifoCreated(false)
 {
 }
@@ -65,7 +65,7 @@ bool FifoIPC::loop()
         buf[i] = '\0';
         std::string messageString(buf);
         int status;
-        shouldContinue = m_message->handleMessage(messageString, &status);
+        shouldContinue = m_message.handleMessage(messageString, &status);
         if (status == -1) {
             // The message was not understood by IPCMessage
             std::cout << "Warning: IPC message to Controller was not sent" << std::endl;

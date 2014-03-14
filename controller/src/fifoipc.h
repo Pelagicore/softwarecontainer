@@ -16,7 +16,7 @@
 class FifoIPC
 {
 public:
-    FifoIPC(IPCMessage *message);
+    FifoIPC(IPCMessage &message);
     ~FifoIPC();
 
     /*! This call makes FifoIPC create a fifo and enter a loop to wait for
@@ -39,7 +39,7 @@ private:
 
     bool createFifo();
 
-    IPCMessage *m_message;
+    IPCMessage &m_message;
     std::string m_fifoPath;
     bool m_fifoCreated;
 };
