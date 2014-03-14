@@ -6,6 +6,7 @@ add_executable(controller
 	main.cpp
 	controller.cpp
 	fifoipc.cpp
+	ipcmessage.cpp
 )
 
 TARGET_LINK_LIBRARIES(controller
