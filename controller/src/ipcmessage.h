@@ -29,6 +29,10 @@ public:
      *          the IPC mechanism.
      * \param statusFlag A flag set to 0 on success and -1 if the message
      *          was not understood and could not be passed to Controller
+     *
+     * \return true if controller can receive more messages, false if
+     *          the controller is shutting down and won't accept any more
+     *          messages.
      */
     bool handleMessage(const std::string &message, int *statusFlag);
 
