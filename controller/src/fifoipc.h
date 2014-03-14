@@ -41,7 +41,7 @@ private:
 
     IPCMessage *m_message;
     std::string m_fifoPath;
-    int m_fifo;
+    bool m_fifoCreated;
 };
 
 #endif //FIFOIPC_H

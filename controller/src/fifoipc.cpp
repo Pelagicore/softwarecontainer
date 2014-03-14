@@ -14,7 +14,7 @@
 static const int BUF_SIZE = 1024;
 
 FifoIPC::FifoIPC(IPCMessage *message):
-    m_message(message), m_fifoPath(""), m_fifo(0)
+    m_message(message), m_fifoPath(""), m_fifoCreated(false)
 {
 }
 
@@ -30,7 +30,7 @@ bool FifoIPC::initialize(const std::string &fifoPath)
 {
     m_fifoPath = fifoPath;
 
-    if (m_fifo == 0) {
+    if (m_fifoCreated == false) {
         if (createFifo() == false) {
             std::cout << "Could not create FIFO!" << std::endl;
             return false;
@@ -84,7 +84,7 @@ bool FifoIPC::createFifo()
         return false;
     }
 
-    m_fifo = 1;
+    m_fifoCreated = true;
 
     return true;
 }
