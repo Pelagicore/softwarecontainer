@@ -63,13 +63,13 @@ class PAMStub(dbus.service.Object):
 
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",
         sender_keyword="sender")
-    def UpdateFinished(self, appId, sender=None):
+    def UpdateFinished(self, cookie, sender=None):
         self.updatefinished_called = True
         print sender + " called UpdateFinished()"
 
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",
         sender_keyword="sender")
-    def UnregisterClient(self, appId, sender=None):
+    def UnregisterClient(self, cookie, sender=None):
         self.unregisterclient_called = True
         print sender + " called UnregisterClient()"
 

@@ -26,11 +26,11 @@ public:
 
 	/*! Implements PAMAbstractInterface::unregisterClient
 	 */
-	virtual void unregisterClient(const std::string &appId);
+	virtual void unregisterClient(const std::string &cookie);
 
 	/*! Implements PAMAbstractInterface::updateFinished
 	 */
-	virtual void updateFinished(const std::string &appId);
+	virtual void updateFinished(const std::string &cookie);
 };
 
 #endif /* PAMINTERFACE_H */

@@ -69,12 +69,12 @@ public:
 	invoke_method_noreply (call);
     }
 
-    void UpdateFinished(const std::string& appId)
+    void UpdateFinished(const std::string& cookie)
     {
         ::DBus::CallMessage call;
         ::DBus::MessageIter wi = call.writer();
 
-        wi << appId;
+        wi << cookie;
         call.member("UpdateFinished");
 
 	// This method call has been changed manually to be non-blocking

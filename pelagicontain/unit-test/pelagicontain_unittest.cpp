@@ -94,18 +94,19 @@ using ::testing::NiceMock;
  */
 TEST(PelagicontainTest, TestInteractionWithPAM) {
     std::string appId = "the-app-id";
+    const std::string cookie = "mycookie";
 
     MockPAMAbstractInterface pam;
     StubMainloop mainloop;
     StubController controller;
-    Pelagicontain pc(&pam, &mainloop, &controller);
+    Pelagicontain pc(&pam, &mainloop, &controller, cookie);
 
     /* The calls should be made in the specific order as below: */
     {
         InSequence sequence;
-        EXPECT_CALL(pam, registerClient("", appId)).Times(1);
-        EXPECT_CALL(pam, updateFinished(appId)).Times(1);
-        EXPECT_CALL(pam, unregisterClient(appId)).Times(1);
+        EXPECT_CALL(pam, registerClient(cookie, appId)).Times(1);
+        EXPECT_CALL(pam, updateFinished(cookie)).Times(1);
+        EXPECT_CALL(pam, unregisterClient(cookie)).Times(1);
     }
 
     pc.launch(appId);
@@ -150,13 +151,12 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
         EXPECT_CALL(gw3, activate()).Times(1);
     }
 
-    Pelagicontain pc(&pam, &mainloop, &controller);
+    const std::string cookie = "unimportant-cookie";
+    Pelagicontain pc(&pam, &mainloop, &controller, cookie);
 
     pc.addGateway(&gw1);
     pc.addGateway(&gw2);
     pc.addGateway(&gw3);
-
-    pc.initialize("unimportant-name", "unimportant-config");
 
     std::map<std::string, std::string> configs
     {{gw1Id, ""}, {gw2Id, ""}, {gw3Id, ""}};
@@ -191,13 +191,12 @@ TEST(PelagicontainTest, TestCallShutdownShouldTearDownGateways) {
     EXPECT_CALL(*gw2, teardown()).Times(1);
     EXPECT_CALL(*gw3, teardown()).Times(1);
 
-    Pelagicontain pc(&pam, &mainloop, &controller);
+    const std::string cookie = "unimportant-cookie";
+    Pelagicontain pc(&pam, &mainloop, &controller, cookie);
 
     pc.addGateway(gw1);
     pc.addGateway(gw2);
     pc.addGateway(gw3);
-
-    pc.initialize("unimportant-name", "unimportant-config");
 
     pc.shutdown();
 }
