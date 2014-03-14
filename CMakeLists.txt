@@ -27,7 +27,7 @@ message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
 include_directories (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
 
-option(BUILD_TESTS "Enables unit testing" OFF)
+option(BUILD_TESTS "Enables unit testing" ON)
 if(BUILD_TESTS)
 	enable_testing()
 	add_gmock()
