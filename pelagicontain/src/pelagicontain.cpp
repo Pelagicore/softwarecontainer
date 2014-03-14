@@ -11,12 +11,12 @@
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
 	MainloopAbstractInterface *mainloopInterface,
-    ControllerAbstractInterface *controllerInterface,
-    const std::string &cookie):
+	ControllerAbstractInterface *controllerInterface,
+	const std::string &cookie):
 	m_pamInterface(pamInterface),
 	m_mainloopInterface(mainloopInterface),
 	m_controllerInterface(controllerInterface),
-    m_cookie(cookie)
+	m_cookie(cookie)
 {
 }
 
@@ -31,11 +31,10 @@ void Pelagicontain::addGateway(Gateway *gateway)
 
 /* Preload the container. This is a non-blocking operation */
 pid_t Pelagicontain::preload(const std::string &containerName,
-    const std::string &containerConfig,
-    const std::string &containerRoot,
-    const std::string &containedCommand)
+	const std::string &containerConfig,
+	const std::string &containerRoot,
+	const std::string &containedCommand)
 {
-    /* Initialize the Pelagicontain object before usage */
 	m_container = Container(containerName, containerConfig);
 
 	/* Get the commands to run in a separate process */
