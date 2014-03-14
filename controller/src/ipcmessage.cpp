@@ -37,11 +37,11 @@ bool IPCMessage::handleMessage(const std::string &message, int *statusFlag)
 
     switch (buf[PROTOCOL_INDEX]) {
     case RUN_APP:
-        m_controller->runApp();
+        m_controller.runApp();
         retVal = true;
         break;
     case KILL_APP:
-        m_controller->killApp();
+        m_controller.killApp();
         // When app is shut down, we return 'false' to indicate controller
         // should go on shutting down and the IPC should not pass any more
         // messages.
