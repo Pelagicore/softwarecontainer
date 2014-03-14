@@ -53,14 +53,30 @@ TEST(NetworkGatewayTest, TestSetConfig) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
     NiceMock<MockController> controllerInterface;
     NetworkGateway gw(&controllerInterface);
-    std::string cmd = "ifconfig eth0 192.168.1.5 netmask 255.255.255.0 up";
+
+    bool success = gw.setConfig("foo");
+    ASSERT_TRUE(success);
+}
+
+/*! Test NetworkGateway::activate is successful.
+ */
+TEST(NetworkGatewayTest, TestActivate) {
+    NiceMock<MockController> controllerInterface;
+    NetworkGateway gw(&controllerInterface);
+
+    std::string cmd_1 = "ifconfig eth0 10.0.3.42 netmask 255.255.255.0 up";
+    std::string cmd_2 = "route add default gw 10.0.3.1";
+    std::string cmd_3 = "ping www.google.com";
 
     {
 	InSequence sequence;
-	EXPECT_CALL(controllerInterface, systemCall(cmd)).Times(1);
+	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+	EXPECT_CALL(controllerInterface, systemCall(cmd_3)).Times(1);
     }
 
-    bool success = gw.setConfig("foo");
+    ASSERT_TRUE(gw.setConfig("foo"));
+    bool success = gw.activate();
     ASSERT_TRUE(success);
 }
 
@@ -73,4 +89,3 @@ TEST(NetworkGatewayTest, TestActivateNoConfig) {
     bool success = gw.activate();
     ASSERT_TRUE(success);
 }
-

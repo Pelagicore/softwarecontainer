@@ -37,11 +37,44 @@ private:
 
         /*! Set container IP address
 	*
-	* Set the IP address of the container via the controller.
+	* Retrieves an IP from DHCP and sets the IP address.
 	*
-	* \param ip	The IP address of the container
+	* Note that a file on the system acts as a placeholder for the DHCP server.
+	* The file keeps track of the highest used IP address.
+	*
+	* \return true  Upon success
+	* \return false Upon failure
 	*/
-	bool setContainerIP(const std::string &ip);
+	bool setContainerIP();
+
+        /*! Set route to default gateway
+	*
+	* Sets the route to the default gateway. The gateway IP address was parsed
+	* during the setConfig() step.
+	* To be able to access anything outside the container, this method must be
+	* called after the network interface has been enabled. This is also true for
+	* cases when a network interface that was previously enabled has been disabled
+	* and then enabled again.
+	*
+	* \return true  Upon success
+	* \return false Upon failure
+	*/
+	bool setDefaultGateway();
+
+        /*! Enable the default network interface.
+	*
+	* Enables the network interface and calls setDefaultGateway().
+	*
+	* When this is done for the first time, i.e. during the first call to activate()
+	* the IP and netmask are also set. During subsequent calls, this merely brings
+	* up the existing network interface and calls setDefaultGateway().
+	*
+	* \return true  Upon success
+	* \return false Upon failure
+	*/
+	bool up();
+
+	bool down();
 
 	/*! Generate and execute IPTables rules
 	*
@@ -95,6 +128,18 @@ private:
 	int clearIfaceLimits(char *iface);
 
 	static int waitForDevice(const std::string &iface);
+
+	std::string m_ip;
+	std::string m_gateway;
+	bool m_internetAccess;
+	bool m_activatedOnce;
+
+	bool printIfconfig();
+	bool ping(const std::string &ip);
+	std::string parseConfig(const std::string &config, const std::string &key);
+	bool checkBridgeAvailability();
+
+	bool selfTest();
 };
 
 #endif /* NETWORKGATEWAY_H */
