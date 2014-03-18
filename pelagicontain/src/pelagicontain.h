@@ -99,7 +99,7 @@ private:
 	void activateGateways();
 	void shutdownGateways();
 
-	Container m_container;
+	Container *m_container;
 	PAMAbstractInterface *m_pamInterface;
 	MainloopAbstractInterface *m_mainloopInterface;
 	ControllerAbstractInterface *m_controllerInterface;

@@ -12,6 +12,7 @@
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
 	MainloopAbstractInterface *mainloopInterface,
 	ControllerAbstractInterface *controllerInterface):
+	m_container(NULL),
 	m_pamInterface(pamInterface),
 	m_mainloopInterface(mainloopInterface),
 	m_controllerInterface(controllerInterface)
@@ -20,13 +21,17 @@ Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
 
 Pelagicontain::~Pelagicontain()
 {
+	if (m_container)
+	{
+		delete m_container;
+	}
 }
 
 /* Initialize the Pelagicontain object before usage */
 int Pelagicontain::initialize(const std::string &containerName,
 	const std::string &containerConfig)
 {
-	m_container = Container(containerName, containerConfig);
+	m_container = new Container(containerName, containerConfig);
 
 	return 0;
 }
@@ -41,12 +46,16 @@ pid_t Pelagicontain::preload(const std::string &containerRoot,
 	const std::string &containedCommand,
 	const std::string &cookie)
 {
+	if (!m_container)
+	{
+		log_error("initialize() has not been called prior to preload.");
+	}
 	m_cookie = cookie;
 
 	/* Get the commands to run in a separate process */
 	std::vector<std::string> commands;
 	std::string appRoot = containerRoot + "/rootfs/";
-	commands = m_container.commands(containedCommand, m_gateways, appRoot);
+	commands = m_container->commands(containedCommand, m_gateways, appRoot);
 
 	std::string createCommand = commands[0];
 	std::string executeCommand = commands[1];
@@ -89,6 +98,11 @@ pid_t Pelagicontain::preload(const std::string &containerRoot,
 
 void Pelagicontain::launch(const std::string &appId) {
 	m_appId = appId;
+	if (m_container)
+	{
+		// this should always be true except when unit-testing.
+		m_container->setApplication(appId);
+	}
 	m_pamInterface->registerClient(m_cookie, m_appId);
 }
 

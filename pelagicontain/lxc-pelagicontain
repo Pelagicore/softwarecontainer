@@ -48,6 +48,8 @@ $rootfs/usr/lib \
 $rootfs/lib64 \
 $rootfs/usr/lib64 \
 $rootfs/deployed_app \
+$rootfs/appbin \
+$rootfs/appshared \
 "
 
     mkdir -p $tree || return 1
@@ -225,7 +227,12 @@ cat <<EOF >> $path/config
 lxc.mount.entry = $DEPLOY_DIR deployed_app none rw,bind 0 0
 EOF
 fi
-
+if [ -n "$MOUNT_DIR" ]; then
+cat <<EOF >> $path/config
+lxc.mount.entry = $MOUNT_DIR/$name/bin appbin none ro,bind 0 0
+lxc.mount.entry = $MOUNT_DIR/$name/shared appshared none rw,bind 0 0
+EOF
+fi
     libdirs="\
         lib \
         usr/lib \
