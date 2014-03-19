@@ -19,7 +19,7 @@ class ControllerInterface :
     public ControllerAbstractInterface
 {
 public:
-    ControllerInterface(const std::string &containerRoot);
+    ControllerInterface(const std::string &gatewayDir);
 
     ~ControllerInterface();
 

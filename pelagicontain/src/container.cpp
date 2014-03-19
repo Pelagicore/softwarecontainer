@@ -16,44 +16,44 @@
 #endif
 
 /*
- * This directory need to exist and be set up in a special way.
+ * A directory need to exist and be set up in a special way.
  *
  * Basically something like:
- * mkdir -p /var/am/late_mounts
- * mount --bind /var/am/late_mounts /var/am/late_mounts
- * mount --make-unbindable /var/am/late_mounts
- * mount --make-shared /var/am/late_mounts
+ * mkdir -p <containerRoot>/late_mounts
+ * mount --bind <containerRoot>/late_mounts <containerRoot>/late_mounts
+ * mount --make-unbindable <containerRoot>/late_mounts
+ * mount --make-shared <containerRoot>/late_mounts
  *
  */
-static std::string mountDir = "/var/am/late_mounts";
 
-Container::Container(const std::string &name, const std::string &configFile) :
-    m_name(name), m_configFile(configFile)
+
+Container::Container(const std::string &name,
+                     const std::string &configFile,
+                     const std::string &containerRoot) :
+    m_name(name),
+    m_configFile(configFile),
+    m_containerRoot(containerRoot),
+    m_mountDir(containerRoot + "/late_mounts")
 {
-	// Make sure base_dir exist
-	if (!isDirectory(mountDir.c_str()))
+	// Make sure m_mountDir exist
+	if (!isDirectory(m_mountDir.c_str()))
 	{
-		log_error("Directory %s does not exist.", mountDir.c_str());
+		log_error("Directory %s does not exist, shutting down.", m_mountDir.c_str());
 		exit(-1);
 	}
 
 	// Create directories needed for mounting, will be removed in dtor
-	std::string runDir = mountDir + "/" + m_name;
-	if (!createDirectory(runDir.c_str()))
-	{
-		log_error("Could not create directory %s", runDir.c_str());
-		exit(-1);
-	}
+	std::string runDir = m_mountDir + "/" + m_name;
 
-	if (!createDirectory((runDir + "/bin").c_str()))
-	{
-		log_error("Could not create directory %s", (runDir + "/bin").c_str());
-		exit(-1);
-	}
+	bool allOk = true;
+	allOk = allOk && createDirectory(runDir.c_str());
+	allOk = allOk && createDirectory((runDir + "/bin").c_str());
+	allOk = allOk && createDirectory((runDir + "/shared").c_str());
+	allOk = allOk && createDirectory((runDir + "/home").c_str());
 
-	if (!createDirectory((runDir + "/shared").c_str()))
+	if (!allOk)
 	{
-		log_error("Could not create directory %s", (runDir + "/shared").c_str());
+		log_error("Could not set up all needed directories, shutting down.");
 		exit(-1);
 	}
 }
@@ -62,6 +62,7 @@ bool Container::createDirectory(const std::string &path)
 {
 	if (mkdir(path.c_str(), S_IRWXU) == -1)
 	{
+		log_error("Could not create directory %s, %s.", path.c_str(), strerror(errno));
 		return false;
 	}
 	m_dirs.insert(m_dirs.begin(), path);
@@ -113,8 +114,7 @@ const char *Container::name()
 }
 
 std::vector<std::string> Container::commands(const std::string &containedCommand,
-	const std::vector<Gateway *> &gateways,
-	const std::string &appRoot)
+	const std::vector<Gateway *> &gateways)
 {
 	int max_cmd_len = sysconf(_SC_ARG_MAX);
 	char lxc_command[max_cmd_len];
@@ -131,15 +131,16 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 	log_debug("Using environment: %s", environment.c_str());
 
 	// Command to create container
-	sprintf(lxc_command,
-		"MOUNT_DIR=%s DEPLOY_DIR=%s lxc-create -n %s -t %s"
-		" -f %s > /tmp/lxc_%s.log",
-		mountDir.c_str(),
-		appRoot.c_str(),
-		name(),
-		LXCTEMPLATE,
-		m_configFile.c_str(),
-		name());
+    sprintf(lxc_command,
+            "CONTROLLER_DIR=%s GATEWAY_DIR=%s MOUNT_DIR=%s lxc-create -n %s -t %s"
+            " -f %s > /tmp/lxc_%s.log",
+            (m_containerRoot + "/bin").c_str(),
+            (m_containerRoot + name() + "/gateways/").c_str(),
+            m_mountDir.c_str(),
+            name(),
+            LXCTEMPLATE,
+            m_configFile.c_str(),
+            name());
 	commands.push_back(std::string(lxc_command));
 
 	// Create command to execute inside container
@@ -195,4 +196,5 @@ void Container::setApplication(const std::string &appId)
 	std::string dstDirBase = "/var/am/late_mounts/" + m_name;
 	bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
 	bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
+	bindMountDir(appDirBase + "/home", dstDirBase + "/home");
 }

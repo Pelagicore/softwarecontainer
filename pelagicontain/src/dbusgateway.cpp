@@ -9,7 +9,7 @@
 #include "debug.h"
 
 DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
-	ProxyType type, const std::string &containerRoot,
+	ProxyType type, const std::string &gatewayDir,
 	const std::string &name, const std::string &containerConfig):
 	Gateway(controllerInterface),
 	m_type(type)
@@ -22,12 +22,12 @@ DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
 	 * to setConfig()
 	 */
 	if (m_type == SessionProxy) {
-		m_socket = containerRoot
+		m_socket = gatewayDir
 			+ std::string("/sess_")
 			+ name
 			+ std::string(".sock");
 	} else {
-		m_socket = containerRoot
+		m_socket = gatewayDir
 			+ std::string("/sys_")
 			+ name
 			+ std::string(".sock");
@@ -108,7 +108,7 @@ std::string DBusGateway::environment()
 		env += "SYSTEM";
 	}
 	env += "_BUS_ADDRESS=unix:path=";
-	env += "/deployed_app/";
+	env += "/gateways/";
 	env += socketName();
 
 	return env;

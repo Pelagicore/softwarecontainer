@@ -31,7 +31,7 @@ int Controller::runApp()
 
     if (m_pid == 0) { // Child
         // This path to containedapp makes sense inside the container
-        int ret = execlp("/deployed_app/containedapp", "containedapp", NULL);
+        int ret = execlp("/appbin/containedapp", "containedapp", NULL);
         if (ret == -1)
             perror("exec error: ");
         exit(1);

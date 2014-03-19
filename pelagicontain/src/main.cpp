@@ -12,6 +12,7 @@
 #include "pulsegateway.h"
 #include "networkgateway.h"
 #include "dbusgateway.h"
+#include <sys/stat.h>
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -60,49 +61,81 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	DBus::BusDispatcher dispatcher;
-	DBus::default_dispatcher = &dispatcher;
-	DBus::Connection bus = DBus::Connection::SessionBus();
-
-	/* Pelagicontain needs an interface to the mainloop so it can
-	 * exit it when we are to clean up and shut down
-	 */
-	DBusMainloop dbusmainloop(&dispatcher);
-
-	/* The request_name call does not return anything but raises an
-	 * exception if the name cannot be requested.
-	 */
-	bus.request_name("com.pelagicore.Pelagicontain");
-
-	PAMInterface pamInterface(bus);
-	ControllerInterface controllerInterface(containerRoot);
-	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface);
-
-	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
-	std::string fullObjPath = baseObjPath + cookie;
-
-	PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
-
 	std::string containerName = gen_ct_name();
 	std::string containerConfig(configFilePath);
 
-	pelagicontain.addGateway(new NetworkGateway(&controllerInterface));
+	// Create gateway directory for container in containerRoot/gateways.
+	// This dir will contain various sockets etc acting as gateways
+	// in/out of the container.
+	std::string containerDir = containerRoot + "/" + containerName;
+	std::string gatewayDir = containerDir + "/gateways";
+	if (mkdir(containerDir.c_str(), S_IRWXU) == -1)
+	{
+		log_error("Could not create gateway directory %s, %s.",
+				  containerDir.c_str(),
+				  strerror(errno));
+		exit(-1);
+	}
+	if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1)
+	{
+		log_error("Could not create gateway directory %s, %s.",
+				  gatewayDir.c_str(),
+				  strerror(errno));
+		exit(-1);
+	}
 
-	pelagicontain.addGateway(new PulseGateway(containerRoot, containerName));
+    { // Create a new scope so that we can du clean up after dtors
+        DBus::BusDispatcher dispatcher;
+        DBus::default_dispatcher = &dispatcher;
+        DBus::Connection bus = DBus::Connection::SessionBus();
 
-	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-		DBusGateway::SessionProxy, containerRoot, containerName,
-		containerConfig));
+        /* Pelagicontain needs an interface to the mainloop so it can
+         * exit it when we are to clean up and shut down
+         */
+        DBusMainloop dbusmainloop(&dispatcher);
 
-	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-		DBusGateway::SystemProxy, containerRoot, containerName,
-		containerConfig));
+        /* The request_name call does not return anything but raises an
+         * exception if the name cannot be requested.
+         */
+        bus.request_name("com.pelagicore.Pelagicontain");
 
-	pelagicontain.initialize(containerName, containerConfig);
+        PAMInterface pamInterface(bus);
+        ControllerInterface controllerInterface(gatewayDir);
+        Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface);
 
-	pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
+        std::string baseObjPath("/com/pelagicore/Pelagicontain/");
+        std::string fullObjPath = baseObjPath + cookie;
 
-	log_debug("Started Pelagicontain with PID: %d", pcPid);
+        PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
-	dbusmainloop.enter();
+        pelagicontain.addGateway(new NetworkGateway(&controllerInterface));
+
+        pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
+
+        pelagicontain.addGateway(new DBusGateway(&controllerInterface,
+            DBusGateway::SessionProxy, gatewayDir, containerName,
+            containerConfig));
+
+        pelagicontain.addGateway(new DBusGateway(&controllerInterface,
+            DBusGateway::SystemProxy, gatewayDir, containerName,
+            containerConfig));
+
+        pelagicontain.initialize(containerName, containerConfig, containerRoot);
+
+        pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
+
+        log_debug("Started Pelagicontain with PID: %d", pcPid);
+
+        dbusmainloop.enter();
+    }
+
+    // remove instance specific dirs again
+    if (rmdir(gatewayDir.c_str()) == -1)
+    {
+        log_error("Cannot delete dir %s, %s", gatewayDir.c_str(), strerror(errno));
+    }
+    if (rmdir(containerDir.c_str()) == -1)
+    {
+        log_error("Cannot delete dir %s, %s", gatewayDir.c_str(), strerror(errno));
+    }
 }

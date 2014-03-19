@@ -29,9 +29,9 @@ Pelagicontain::~Pelagicontain()
 
 /* Initialize the Pelagicontain object before usage */
 int Pelagicontain::initialize(const std::string &containerName,
-	const std::string &containerConfig)
+	const std::string &containerConfig, const std::string &containerRoot)
 {
-	m_container = new Container(containerName, containerConfig);
+	m_container = new Container(containerName, containerConfig, containerRoot);
 
 	return 0;
 }
@@ -54,8 +54,7 @@ pid_t Pelagicontain::preload(const std::string &containerRoot,
 
 	/* Get the commands to run in a separate process */
 	std::vector<std::string> commands;
-	std::string appRoot = containerRoot + "/rootfs/";
-	commands = m_container->commands(containedCommand, m_gateways, appRoot);
+	commands = m_container->commands(containedCommand, m_gateways);
 
 	std::string createCommand = commands[0];
 	std::string executeCommand = commands[1];

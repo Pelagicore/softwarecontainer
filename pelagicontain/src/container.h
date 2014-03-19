@@ -24,15 +24,14 @@ public:
 	/*!
 	 * \param configFile A path to the configuration file (including the file name)
 	 */
-	Container(const std::string &name, const std::string &configFile);
+	Container(const std::string &name, const std::string &configFile, const std::string &containerRoot);
 
 	~Container();
 
 	const char *name();
 
 	std::vector<std::string> commands(const std::string &containedCommand,
-		const std::vector<Gateway *> &gateways,
-		const std::string &appRoot);
+		const std::vector<Gateway *> &gateways);
 
 	/*
 	 * Setup the container for a specific app
@@ -82,6 +81,9 @@ private:
 	 * should be deleted in the destructor.
 	 */
 	std::vector<std::string> m_dirs;
+
+	std::string m_containerRoot;
+	std::string m_mountDir;
 };
 
 #endif //CONTAINER_H

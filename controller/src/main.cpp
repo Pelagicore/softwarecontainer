@@ -18,15 +18,15 @@ int main(int argc, char **argv)
     std::cout << "In Controller" << std::endl;
 
     /** The first command line arg to controller can be the path to where the
-     *  FIFO file will be created. This is set to /deployed_app/ if it is
+     *  FIFO file will be created. This is set to /gateways/ if it is
      *  launched with no argument (e.g. called by Pelagicontain), but for
      *  testing reasons it's convenient if the real path can be specified instead.
      */
     std::string path;
     if (argc == 2)
-            path = std::string(argv[1]);
+        path = std::string(argv[1]);
     else
-            path = std::string("/deployed_app/");
+        path = std::string("/gateways/");
     path += "in_fifo";
 
     Controller controller;

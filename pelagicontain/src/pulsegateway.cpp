@@ -6,10 +6,10 @@
 #include "pulsegateway.h"
 #include "debug.h"
 
-PulseGateway::PulseGateway(const std::string &containerRoot, const std::string &containerName):
+PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName):
 	m_api(0), m_context(0), m_index(-1)
 {
-	m_socket = containerRoot + "/pulse-" + containerName + ".sock";
+	m_socket = gatewayDir + "/pulse-" + containerName + ".sock";
 }
 
 PulseGateway::~PulseGateway()
@@ -89,7 +89,7 @@ std::string PulseGateway::environment()
 {
 	std::string env;
 	env += "PULSE_SERVER=";
-	env += "/deployed_app/";
+	env += "/gateways/";
 	env += socketName();
 	return env;
 }

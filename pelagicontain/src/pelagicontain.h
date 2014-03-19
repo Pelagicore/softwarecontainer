@@ -32,8 +32,8 @@ public:
 	 *
 	 * \return 0
 	 */
-	int initialize(const std::string &containerRoot,
-		const std::string &containerConfig);
+	int initialize(const std::string &containerName,
+		const std::string &containerConfig, const std::string &containerRoot);
 
 	/*! Add a gateway.
 	 *
