@@ -1,0 +1,8 @@
+#!/bin/sh
+
+#ping -c 2 10.0.3.1 # bridge
+#ping -c 2 10.8.36.2 # srv0
+#ping -c 2 74.125.224.72 # Google
+echo "########## APP STARTED #########"
+ping -c 2 www.google.com > /deployed_app/ping_log
+echo "########## APP DONE #########"
