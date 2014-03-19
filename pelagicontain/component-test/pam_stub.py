@@ -31,6 +31,18 @@ DBUS_GW_CONFIG = """
 }]
 """
 
+NETWORK_GW_CONFIG = """
+{
+    "internet-access": "true",
+    "gateway": "10.0.3.1",
+    "iptables-rules": [
+        "iptables -I FORWARD --src $SRC_IP  -j ACCEPT",
+        "iptables -I FORWARD --dest $SRC_IP -j ACCEPT"
+    ],
+    "bandwidth-limit": "500kbps"
+}
+"""
+
 class PAMStub(dbus.service.Object):
     register_called = False
     unregisterclient_called = False
@@ -58,7 +70,7 @@ class PAMStub(dbus.service.Object):
             "/com/pelagicore/Pelagicontain/" + cookie)
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
             "com.pelagicore.Pelagicontain")
-        configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": "GatewayConfig2"}
+        configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": NETWORK_GW_CONFIG}
         pelagicontain_iface.Update(configs)
 
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",

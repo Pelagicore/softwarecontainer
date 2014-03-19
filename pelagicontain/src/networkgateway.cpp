@@ -7,9 +7,16 @@
 #include "unistd.h"
 #include "debug.h"
 #include "networkgateway.h"
+#include "jansson.h"
+#include "generators.h"
+
 
 NetworkGateway::NetworkGateway(ControllerAbstractInterface *controllerInterface):
-    Gateway(controllerInterface)
+    Gateway(controllerInterface),
+    m_ip(""),
+    m_gateway(""),
+    m_internetAccess(false),
+    m_activatedOnce(false)
 {
 }
 
@@ -22,36 +29,168 @@ std::string NetworkGateway::id()
     return "networking";
 }
 
-bool NetworkGateway::setConfig(const std::string &config)
-{
-    // TODO: Parse JSON configuration
-    // TODO: Set the configuration
-    // TODO: Start iptables
-
-    std::string bandwithLimit = "500kbps";
-    std::string ip = "10.8.36.2";
-    std::string src = "iptables -I FORWARD --src 10.8.36.2  -j ACCEPT";
-    std::string dest = "iptables -I FORWARD --dest 10.8.36.2  -j ACCEPT";
-    setContainerIP(ip);
-
-    return true;
-}
-
-bool NetworkGateway::activate()
-{
-    return true;
-}
-
 std::string NetworkGateway::environment()
 {
     return "";
 }
 
-bool NetworkGateway::setContainerIP(const std::string &ip)
+bool NetworkGateway::setConfig(const std::string &config)
 {
-    /* Command to be sent to the controller */
-    std::string cmd = "ifconfig eth0 192.168.1.5 netmask 255.255.255.0 up";
+    bool success = true;
+    
+    /* Check the value of the internet-access key of the config*/
+    std::string value = parseConfig(config.c_str(), "internet-access");
+    if (value.compare("true") == 0)
+    {
+	log_debug("Internet access will be enabled\n");
+	m_internetAccess = true;
+    }
+    else
+    {
+	log_debug("Internet access disabled\n");
+	m_internetAccess = false;
+    }
+
+    /* Retrieve the gateway IP */
+    m_gateway = parseConfig(config.c_str(), "gateway");
+    if (m_gateway.compare("") != 0)
+    {
+	success = checkBridgeAvailability();
+	log_debug("Default gateway set to %s\n", m_gateway.c_str());
+
+	if (!setContainerIP())
+	{
+	    success = false;
+	}
+    }
+    else
+    {
+	log_error("Bad gateway setting in configuration file\n");
+	m_internetAccess = false;
+	success = false;
+    }
+
+    return success;
+}
+
+bool NetworkGateway::activate()
+{
+    bool success = false;
+
+    if (m_internetAccess)
+    {
+	success = up();
+    }
+    
+    return success;
+}
+
+bool NetworkGateway::setContainerIP()
+{
+    const char * ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
+    
+    m_ip = gen_ip_addr(ipAddrNet);
+    log_debug("IP set to %s\n", m_ip.c_str());
+
+    return true;
+}
+
+bool NetworkGateway::setDefaultGateway()
+{
+    std::string cmd = "route add default gw ";
+    m_controllerInterface->systemCall(cmd + m_gateway);
+
+    return true;
+}
+
+bool NetworkGateway::up()
+{
+    bool ret;
+    std::string cmd;
+
+    if (!m_activatedOnce)
+    {
+	cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
+    }
+    else
+    {
+	cmd = "ifconfig eth0 up";
+    }
+    
     m_controllerInterface->systemCall(cmd);
+
+    /* The route to the default gateway must be added
+       each time the interface is brought up again */
+    if (setDefaultGateway())
+    {
+	ret = true;
+    }
+    else
+    {
+	ret = false;
+    }
+
+    return ret;
+}
+
+bool NetworkGateway::down()
+{
+    std::string cmd = "ifconfig eth0 down";
+    m_controllerInterface->systemCall(cmd);
+
+    return true;
+}
+
+bool NetworkGateway::ping(const std::string &ip)
+{
+    std::string cmd = "ping -c 2 ";
+    m_controllerInterface->systemCall(cmd + ip);
+
+    return true;
+}
+
+bool NetworkGateway::checkBridgeAvailability()
+{
+    bool ret = false;
+    std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep \"" + m_gateway + "\"";
+
+    if (system(cmd.c_str()) == 0)
+    {
+	ret = true;
+    }
+    else
+    {
+	log_error("No network bridge configured");
+    }
+
+    return ret;
+    
+}
+
+bool NetworkGateway::printIfconfig()
+{
+    std::string cmd = "ifconfig";
+    m_controllerInterface->systemCall(cmd);
+
+    return true;
+}
+
+bool NetworkGateway::selfTest()  
+{
+    ping(m_ip);
+    ping(m_gateway);
+    ping("www.google.com");
+    printIfconfig(); 
+
+    log_debug("----------------- Disabling if");
+    down(); 
+    printIfconfig();
+    ping("www.google.com");
+
+    log_debug("----------------- Enabling if again");
+    up();
+    printIfconfig();
+    ping("www.google.com");
 
     return true;
 }
@@ -240,4 +379,36 @@ bool NetworkGateway::teardownIptables(const std::string &ipAddress)
     pclose(fp);
 
     return true;
+}
+
+std::string NetworkGateway::parseConfig(const std::string &config, const std::string &key) {
+    json_error_t  error;
+    json_t       *root, *value;
+
+    /* Get root JSON object */
+    root = json_loads(config.c_str(), 0, &error);
+
+    if (!root) {
+	log_error("Error on line %d: %s\n", error.line, error.text);
+	goto cleanup_parse_json;
+    }
+
+    log_debug("Gateway configuration is: %s\n", json_dumps(root, 0));
+
+    // Get string
+    value = json_object_get(root, key.c_str());
+
+    if (!json_is_string(value)) {
+	log_error("Value for internet is not a string.");
+	log_error("error: on line %d: %s\n", error.line, error.text);
+	json_decref (value);
+	goto cleanup_parse_json;
+    }
+
+    log_debug("Value for %s is: %s\n", key.c_str(), json_string_value(value));
+
+    return std::string(json_string_value(value));
+
+cleanup_parse_json:
+    return NULL;
 }
