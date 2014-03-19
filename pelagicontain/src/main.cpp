@@ -123,11 +123,12 @@ int main(int argc, char **argv)
         //pelagicontain.initialize(containerName, containerConfig, containerRoot);
 
         //pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
-	pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
+        pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
 
         log_debug("Started Pelagicontain with PID: %d", pcPid);
 
         dbusmainloop.enter();
+        log_debug("Exited dbusmainloop.");
     }
 
     // remove instance specific dirs again
