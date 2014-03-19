@@ -11,45 +11,14 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 
 
-DBUS_GW_CONFIG = """
-[{
-    "config-session": [],
-    "config-system": [
-        {
-            "direction": "*",
-            "interface": "*",
-            "object-path": "/org/bluez/*",
-            "method": "*"
-        },
-        {
-            "direction": "*",
-            "interface": "org.bluez.Manager",
-            "object-path": "/",
-            "method": "*"
-        }
-    ]
-}]
-"""
-
-NETWORK_GW_CONFIG = """
-{
-    "internet-access": "true",
-    "gateway": "10.0.3.1",
-    "iptables-rules": [
-        "iptables -I FORWARD --src $SRC_IP  -j ACCEPT",
-        "iptables -I FORWARD --dest $SRC_IP -j ACCEPT"
-    ],
-    "bandwidth-limit": "500kbps"
-}
-"""
-
 class PAMStub(dbus.service.Object):
     register_called = False
     unregisterclient_called = False
     updatefinished_called = False
     BUS_NAME = "com.pelagicore.PAM"
-    
+
     def __init__(self):
+        self.configs = {}
         self.bus = dbus.SessionBus()
         request = self.bus.request_name(self.BUS_NAME, dbus.bus.NAME_FLAG_REPLACE_EXISTING)
         bus_name = dbus.service.BusName(self.BUS_NAME, bus=self.bus)
@@ -65,13 +34,7 @@ class PAMStub(dbus.service.Object):
     def RegisterClient(self, cookie, appId, sender=None):
         print sender + " called RegisterClient() with args " + "\"" + cookie + "\", \"" + appId + "\""
         self.register_called = True
-        # Call Pelagicontain::update here
-        pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain",
-            "/com/pelagicore/Pelagicontain/" + cookie)
-        pelagicontain_iface = dbus.Interface(pelagicontain_remote_object, 
-            "com.pelagicore.Pelagicontain")
-        configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": NETWORK_GW_CONFIG}
-        pelagicontain_iface.Update(configs)
+        self.call_pelagicontain_update(cookie, self.configs)
 
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="",
         sender_keyword="sender")
@@ -85,6 +48,19 @@ class PAMStub(dbus.service.Object):
         self.unregisterclient_called = True
         print sender + " called UnregisterClient()"
 
+    """ Helper methods available on D-Bus. These does not mirror the actual
+        API of PAM.
+    """
+    @dbus.service.method(BUS_NAME, in_signature="sa{ss}", out_signature="",
+        sender_keyword="sender")
+    def helper_trigger_update(self, cookie, configs, sender=None):
+        print sender + " called helper_trigger_update with args " + "\"" + str(configs) + "\""
+        self.call_pelagicontain_update(cookie, configs)
+
+    @dbus.service.method(BUS_NAME, in_signature="a{ss}", out_signature="",
+        sender_keyword="sender")
+    def helper_set_configs(self, configs, sender=None):
+        self.set_configs(configs)
 
     """ Methods below are used by the component test to verify the expected
         methods have been called on this object by Pelagicontain
@@ -106,6 +82,18 @@ class PAMStub(dbus.service.Object):
         self.register_called = False
         self.unregisterclient_called = False
         self.updatefinished_called = False
+
+    """ Non-DBus methods.
+    """
+    def set_configs(self, configs):
+        self.configs = configs
+
+    def call_pelagicontain_update(self, cookie, configs):
+        pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain",
+            "/com/pelagicore/Pelagicontain/" + cookie)
+        pelagicontain_iface = dbus.Interface(pelagicontain_remote_object,
+            "com.pelagicore.Pelagicontain")
+        pelagicontain_iface.Update(configs)
 
 
 DBusGMainLoop(set_as_default=True)

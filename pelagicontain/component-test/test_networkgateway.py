@@ -27,18 +27,25 @@ DBUS_GW_CONFIG = """
 }]
 """
 
-NETWORK_GW_CONFIG = """
+CONFIG_NETWORK_ENABLED = """
 {
     "internet-access": "true",
     "gateway": "10.0.3.1"
 }
 """
 
+CONFIG_NETWORK_DISABLED = """
+{
+    "internet-access": "false",
+    "gateway": ""
+}
+"""
+
 helper = ComponentTestHelper()
-configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": NETWORK_GW_CONFIG}
+configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": CONFIG_NETWORK_DISABLED}
 helper.pam_iface.helper_set_configs(configs)
 
-# ----------------------- Test functions
+# ----------------------- Setup and tear-down tests
 
 def test_can_start_pelagicontain(command):
     return helper.start_pelagicontain(command)
@@ -58,6 +65,17 @@ def test_updatefinished_was_called():
 def test_unregisterclient_was_called():
     return helper.pam_iface.test_unregisterclient_called()
 
+def test_enabling_internet_access():
+    success = True
+    configs = {"networking": CONFIG_NETWORK_ENABLED}
+    helper.pam_iface.helper_trigger_update(helper.cookie, configs)
+
+    rootfs = helper.container_root_dir + "rootfs/"
+    success = helper.make_system_call(["cat", rootfs + "ping_log" ])
+    print success[0]
+    print success[1]
+
+    return success
 
 """ Pelagicontain component tests
 
@@ -90,7 +108,6 @@ def test_unregisterclient_was_called():
     we can assert more things during shutdown as well.
 """
 
-
 # --------------- Reset PAM stub
 helper.pam_iface.test_reset_values()
 
@@ -116,24 +133,17 @@ if test_pelagicontain_found_on_bus() == False:
 else:
     print "PASS: Found Pelagicontain on D-Bus"
 
-
-
-""" NOTE: This test is disabled as we currently are not starting a D-Bus service
-    inside the container as intended. Should be enabled when that works
-"""
-#test_cant_find_app_on_dbus()
-
 """ Call Launch on Pelagicontain over D-Bus and assert the call goes well.
     This will trigger a call to PAM::RegisterClient over D-Bus which we will
     assert later.
 """
+
 if test_can_find_and_run_Launch_on_pelagicontain_on_dbus() == False:
     print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
     result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Found Launch in Pelagicontain on D-Bus"
-
 
 """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
 """
@@ -144,11 +154,6 @@ if test_registerclient_was_called() == False:
 else:
     print "PASS: RegisterClient was called!"
 
-
-""" NOTE: Same as above, there's currently no support to test if an app was
-    actually started (should be checked by finding it on D-Bus).
-"""
-#test_can_find_app_on_dbus()
 
 """ The call by Pelagicontain to PAM::RegisterClient would have triggered
     a call by PAM to Pelagicontain::Update which in turn should result in
@@ -162,6 +167,19 @@ if test_updatefinished_was_called() == False:
 else:
     print "PASS: UpdateFinished was called!"
 
+# --------------- Run tests for the actual NetworkGateway
+""" NetworkGateway specific tests start here. The entry point for the test
+    is NetworkGateway::setConfig() which is called via calls to
+    Pelagicontain::Update.
+"""
+
+
+if test_enabling_internet_access() == False:
+    print "FAIL: Container has no internet access!"
+    result = 1
+    helper.cleanup_and_finish()
+else:
+    print "PASS: Container internet access successfully enabled!"
 
 # --------------- Run tests for shutdown
 
@@ -192,3 +210,4 @@ helper.cleanup_and_finish()
 
     * Verify that PELAGICONTAIN_PID is no longer running
 """
+
