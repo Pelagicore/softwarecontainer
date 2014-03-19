@@ -34,7 +34,7 @@ class ComponentTestHelper:
         self.pelagicontain_iface = None
 
         self.cookie = self.generate_cookie()
-        self.app_uuid = self.generate_app_uuid()
+        self.app_uuid = "com.pelagicore.comptest"
         print "Generated Cookie = %s, appId = %s" % (self.cookie, self.app_uuid)
 
         self.bus = self.create_session_bus()
@@ -103,8 +103,6 @@ class ComponentTestHelper:
 
     def cleanup_and_finish(self):
         global result
-        if not self.pelagicontain_pid == 0:
-            call(["kill", "-9", str(self.pelagicontain_pid)])
         if result == 0:
             print "\n-=< All tests passed >=-\n"
         else:

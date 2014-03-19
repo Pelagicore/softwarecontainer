@@ -100,7 +100,7 @@ helper.pam_iface.test_reset_values()
 """ Start Pelagicontain, test is passed if Popen succeeds.
     The command to execute inside the container is passed to the test function.
 """
-if test_can_start_pelagicontain("/deployed_app/controller") == False:
+if test_can_start_pelagicontain("/controller/controller") == False:
     print "FAIL: Could not start Pelagicontain"
     result = 1
     helper.cleanup_and_finish()

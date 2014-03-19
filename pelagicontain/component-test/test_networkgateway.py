@@ -70,7 +70,7 @@ def test_enabling_internet_access():
     configs = {"networking": CONFIG_NETWORK_ENABLED}
     helper.pam_iface.helper_trigger_update(helper.cookie, configs)
 
-    rootfs = helper.container_root_dir + "rootfs/"
+    rootfs = helper.container_root_dir + "/com.pelagicore.comptest/shared/"
     success = helper.make_system_call(["cat", rootfs + "ping_log" ])
     print success[0]
     print success[1]
@@ -117,7 +117,7 @@ helper.pam_iface.test_reset_values()
 """ Start Pelagicontain, test is passed if Popen succeeds.
     The command to execute inside the container is passed to the test function.
 """
-if test_can_start_pelagicontain("/deployed_app/controller") == False:
+if test_can_start_pelagicontain("/controller/controller") == False:
     print "FAIL: Could not start Pelagicontain"
     result = 1
     helper.cleanup_and_finish()
