@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
-        Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface);
+        Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
 
         std::string baseObjPath("/com/pelagicore/Pelagicontain/");
         std::string fullObjPath = baseObjPath + cookie;
@@ -120,9 +120,10 @@ int main(int argc, char **argv)
             DBusGateway::SystemProxy, gatewayDir, containerName,
             containerConfig));
 
-        pelagicontain.initialize(containerName, containerConfig, containerRoot);
+        //pelagicontain.initialize(containerName, containerConfig, containerRoot);
 
-        pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
+        //pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
+	pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
 
         log_debug("Started Pelagicontain with PID: %d", pcPid);
 

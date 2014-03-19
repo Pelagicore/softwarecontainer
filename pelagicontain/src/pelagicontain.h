@@ -18,22 +18,15 @@ public:
 	 * 
 	 * \param pamInterface A pointer to the Platform Access Manager interface
 	 * \param mainloopInterface A pointer to the mainloop interface
+	 * \param cookie A unique identifier used to distinguish unique instances
+	 * 	of Pelagicontain
 	 */
 	Pelagicontain(PAMAbstractInterface *pamInterface,
 		MainloopAbstractInterface *mainloopInterface,
-		ControllerAbstractInterface *controllerInterface);
+        ControllerAbstractInterface *controllerInterface,
+        const std::string &cookie);
 
 	~Pelagicontain();
-
-	/*! Creates a container.
-	 *
-	 * \param containerRoot The path to where e.g. config/ and rootfs/ are
-	 * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
-	 *
-	 * \return 0
-	 */
-	int initialize(const std::string &containerName,
-		const std::string &containerConfig, const std::string &containerRoot);
 
 	/*! Add a gateway.
 	 *
@@ -51,17 +44,18 @@ public:
 	 * must be preceeded by a call to this method. The call to this method
 	 * should be done as part of starting the whole Pelagicontain component.
 	 *
+	 * \param containerName Name of the container
+	 * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
 	 * \param containerRoot A path to the root of the container, i.e. the base
 	 * 	path to e.g. the configurations and application root
 	 * \param containedCommand The command to be executed inside the container
-	 * \param cookie A unique identifier used to distinguish unique instances
-	 * 	of Pelagicontain
 	 *
 	 * \return The PID of the container
 	 */
-	pid_t preload(const std::string &containerRoot,
-		const std::string &containedCommand,
-		const std::string &cookie);
+	pid_t preload(const std::string &containerName,
+        const std::string &containerConfig,
+        const std::string &containerRoot,
+		const std::string &containedCommand);
 
 	/*! Initiates the 'launch' phase.
 	 *

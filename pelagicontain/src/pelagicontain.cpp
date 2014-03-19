@@ -10,12 +10,14 @@
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
-	MainloopAbstractInterface *mainloopInterface,
-	ControllerAbstractInterface *controllerInterface):
+		MainloopAbstractInterface *mainloopInterface,
+		ControllerAbstractInterface *controllerInterface,
+		const std::string &cookie):
 	m_container(NULL),
 	m_pamInterface(pamInterface),
 	m_mainloopInterface(mainloopInterface),
-	m_controllerInterface(controllerInterface)
+	m_controllerInterface(controllerInterface),
+	m_cookie(cookie)
 {
 }
 
@@ -27,30 +29,18 @@ Pelagicontain::~Pelagicontain()
 	}
 }
 
-/* Initialize the Pelagicontain object before usage */
-int Pelagicontain::initialize(const std::string &containerName,
-	const std::string &containerConfig, const std::string &containerRoot)
-{
-	m_container = new Container(containerName, containerConfig, containerRoot);
-
-	return 0;
-}
-
 void Pelagicontain::addGateway(Gateway *gateway)
 {
 	m_gateways.push_back(gateway);
 }
 
 /* Preload the container. This is a non-blocking operation */
-pid_t Pelagicontain::preload(const std::string &containerRoot,
-	const std::string &containedCommand,
-	const std::string &cookie)
+pid_t Pelagicontain::preload(const std::string &containerName,
+	const std::string &containerConfig,
+	const std::string &containerRoot,
+	const std::string &containedCommand)
 {
-	if (!m_container)
-	{
-		log_error("initialize() has not been called prior to preload.");
-	}
-	m_cookie = cookie;
+	m_container = new Container(containerName, containerConfig, containerRoot);
 
 	/* Get the commands to run in a separate process */
 	std::vector<std::string> commands;
@@ -81,9 +71,6 @@ pid_t Pelagicontain::preload(const std::string &containerRoot,
 		for (int i = 3; i < 30; i++)
 			close(i);
 
-                /* This will not return until the Controller (or whatever is 
-                 * executed in the container) exits.
-                 */
 		log_debug(executeCommand.c_str());
 		system(executeCommand.c_str());
 
@@ -109,7 +96,7 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
 	setGatewayConfigs(configs);
 
-	m_pamInterface->updateFinished(m_appId);
+	m_pamInterface->updateFinished(m_cookie);
 
 	activateGateways();
 
@@ -151,18 +138,18 @@ void Pelagicontain::shutdown()
 	 */
 	m_controllerInterface->shutdown();
 
-	/* Wait for Controller to finish and exit */
+	/* Shut down (clean up) all Gateways */
+	shutdownGateways();
+
+	m_pamInterface->unregisterClient(m_cookie);
+
+	/* Wait for Controller */
 	int status = 0;
 	wait(&status);
 	if (WIFEXITED(status))
 		log_debug("Child exited");
 	if (WIFSIGNALED(status))
 		log_debug("Child exited by signal: %d", WTERMSIG(status));
-
-        /* Shut down (clean up) all Gateways */
-        shutdownGateways();
-
-        m_pamInterface->unregisterClient(m_appId);
 
 	m_mainloopInterface->leave();
 }
