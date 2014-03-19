@@ -71,41 +71,41 @@ bool Container::createDirectory(const std::string &path)
 
 bool Container::isDirectory(const std::string &path)
 {
-	bool isDir = false;
-	struct stat st;
-	if (stat(path.c_str(), &st) == 0)
-	{
-		if ((st.st_mode & S_IFDIR) != 0)
-		{
-			isDir = true;
-		}
-	}
-	return isDir;
+    bool isDir = false;
+    struct stat st;
+    if (stat(path.c_str(), &st) == 0)
+    {
+        if ((st.st_mode & S_IFDIR) != 0)
+        {
+            isDir = true;
+        }
+    }
+    return isDir;
 }
 
 Container::~Container()
 {
-	// Unmount all mounted dirs
-	for (std::vector<std::string>::const_iterator it = m_mounts.begin();
-		 it != m_mounts.end();
-		 ++it)
-	{
-		if (umount((*it).c_str()) == -1)
-		{
-			log_error("Could not unmount %s, %s", (*it).c_str(), strerror(errno));
-		}
-	}
+    // Unmount all mounted dirs
+    for (std::vector<std::string>::const_iterator it = m_mounts.begin();
+         it != m_mounts.end();
+         ++it)
+    {
+        if (umount((*it).c_str()) == -1)
+        {
+            log_error("Could not unmount %s, %s", (*it).c_str(), strerror(errno));
+        }
+    }
 
-	// Clean up all created directories
-	for (std::vector<std::string>::const_iterator it = m_dirs.begin();
-		 it != m_dirs.end();
-		 ++it)
-	{
-		if (rmdir((*it).c_str()) == -1)
-		{
-			log_error("Could not remove dir %s, %s", (*it).c_str(), strerror(errno));
-		}
-	}
+    // Clean up all created directories
+    for (std::vector<std::string>::const_iterator it = m_dirs.begin();
+         it != m_dirs.end();
+         ++it)
+    {
+        if (rmdir((*it).c_str()) == -1)
+        {
+            log_error("Could not remove dir %s, %s", (*it).c_str(), strerror(errno));
+        }
+    }
 }
 
 const char *Container::name()
@@ -185,16 +185,16 @@ bool Container::bindMountDir(const std::string &src, const std::string &dst)
  */
 void Container::setApplication(const std::string &appId)
 {
-	// The directory(ies) to be mounted is known by convention, e.g.
-	// /var/am/<appId>/bin/ and /var/am/<appId>/shared/
+    // The directory(ies) to be mounted is known by convention, e.g.
+    // /var/am/<appId>/bin/ and /var/am/<appId>/shared/
 
 
-	// bind mount /var/am/<appId>/bin/ into /var/am/late_mounts/<contid>/bin
-	// this directory will be accessible in container as according to
-	// the lxc-pelagicontain template
-	std::string appDirBase = "/var/am/" + appId;
-	std::string dstDirBase = "/var/am/late_mounts/" + m_name;
-	bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
-	bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
-	bindMountDir(appDirBase + "/home", dstDirBase + "/home");
+    // bind mount /var/am/<appId>/bin/ into /var/am/late_mounts/<contid>/bin
+    // this directory will be accessible in container as according to
+    // the lxc-pelagicontain template
+    std::string appDirBase = m_containerRoot + "/" + appId;
+    std::string dstDirBase = m_mountDir + "/" + m_name;
+    bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
+    bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
+    bindMountDir(appDirBase + "/home", dstDirBase + "/home");
 }
