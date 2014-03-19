@@ -15,12 +15,12 @@ void PAMInterface::registerClient(const std::string &cookie,
 	RegisterClient(cookie, appId);
 }
 
-void PAMInterface::unregisterClient(const std::string &appId)
+void PAMInterface::unregisterClient(const std::string &cookie)
 {
-	UnregisterClient(appId);
+	UnregisterClient(cookie);
 }
 
-void PAMInterface::updateFinished(const std::string &appId)
+void PAMInterface::updateFinished(const std::string &cookie)
 {
-	UpdateFinished(appId);
+	UpdateFinished(cookie);
 }

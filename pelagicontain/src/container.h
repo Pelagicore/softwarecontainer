@@ -23,6 +23,7 @@ public:
 	Container();
 
 	/*!
+	 * \param name The name of the container
 	 * \param configFile A path to the configuration file (including the file name)
 	 */
 	Container(const std::string &name, const std::string &configFile);
