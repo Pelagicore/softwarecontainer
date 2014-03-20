@@ -55,11 +55,11 @@ else
 fi
 
 # Create directory structure
-echo "Setting up environment in $rootfsdir..."
+echo "Setting up environment in $ROOTFSDIR"
 ROOTFSDIR=$deploydir/rootfs/
 mkdir -p $ROOTFSDIR
 
 # Deploy files in rootfs/
 for file in $@; do
-    cp $file $ROOTFSDIR
+    cp -a $file $ROOTFSDIR
 done
