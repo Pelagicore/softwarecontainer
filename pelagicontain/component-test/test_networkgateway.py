@@ -6,6 +6,7 @@
 """
 
 from common import ComponentTestHelper
+import time
 
 DBUS_GW_CONFIG = """
 [{
@@ -41,9 +42,14 @@ CONFIG_NETWORK_DISABLED = """
 }
 """
 
+CONFIG_NETWORK_NO_GATEWAY = """
+{
+    "internet-access": "true",
+    "gateway": ""
+}
+"""
+
 helper = ComponentTestHelper()
-configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": CONFIG_NETWORK_DISABLED}
-helper.pam_iface.helper_set_configs(configs)
 
 # ----------------------- Setup and tear-down tests
 
@@ -65,16 +71,30 @@ def test_updatefinished_was_called():
 def test_unregisterclient_was_called():
     return helper.pam_iface.test_unregisterclient_called()
 
-def test_enabling_internet_access():
-    success = True
-    configs = {"networking": CONFIG_NETWORK_ENABLED}
-    helper.pam_iface.helper_trigger_update(helper.cookie, configs)
+def test_has_internet_access(config):
+    configs = {"networking": config}
+    helper.pam_iface.helper_set_configs(configs)
+    if not setup():
+        print "FAIL: Setup failed!"
+        return False
+    if not teardown():
+        print "FAIL: Teardown failed!"
+        return False
+    return ping_successful()
 
-    rootfs = helper.container_root_dir + "rootfs/"
-    success = helper.make_system_call(["cat", rootfs + "ping_log" ])
-    print success[0]
-    print success[1]
+def ping_successful():
+    success = False
+    file_path = helper.container_root_dir + "rootfs/ping_log"
 
+    with open(file_path, "r") as ping_log:
+        print "opened file"
+        import time
+        time.sleep(3)
+        lines = ping_log.readlines()
+        for line in lines:
+            if "0% packet loss" in line:
+                success = True
+                break
     return success
 
 """ Pelagicontain component tests
@@ -108,106 +128,132 @@ def test_enabling_internet_access():
     we can assert more things during shutdown as well.
 """
 
-# --------------- Reset PAM stub
-helper.pam_iface.test_reset_values()
+def setup():
+    success = True
+    # --------------- Reset PAM stub
+    helper.pam_iface.test_reset_values()    
+
+    # --------------- Run tests for startup
+
+    """ Start Pelagicontain, test is passed if Popen succeeds.
+        The command to execute inside the container is passed to the test function.
+    """
+    if test_can_start_pelagicontain("/deployed_app/controller") == False:
+        print "FAIL: Could not start Pelagicontain"
+        result = 1
+        helper.cleanup_and_finish()
+        success = False
+    else:
+        print "PASS: Started Pelagicontain"
+
+    """ Assert the Pelagicontain remote object can be found on the bus
+    """
+    if test_pelagicontain_found_on_bus() == False:
+        print "FAIL: Could not find Pelagicontain on D-Bus"
+        result = 1
+        helper.cleanup_and_finish()
+        success = False
+    else:
+        print "PASS: Found Pelagicontain on D-Bus"
+
+    """ Call Launch on Pelagicontain over D-Bus and assert the call goes well.
+        This will trigger a call to PAM::RegisterClient over D-Bus which we will
+        assert later.
+    """
+
+    if test_can_find_and_run_Launch_on_pelagicontain_on_dbus() == False:
+        print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
+        result = 1
+        helper.cleanup_and_finish()
+        success = False
+    else:
+        print "PASS: Found Launch in Pelagicontain on D-Bus"
+
+    """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
+    """
+    if test_registerclient_was_called() == False:
+        print "FAIL: RegisterClient was not called!"
+        result = 1
+        helper.cleanup_and_finish()
+        success = False
+    else:
+        print "PASS: RegisterClient was called!"
+
+    """ The call by Pelagicontain to PAM::RegisterClient would have triggered
+        a call by PAM to Pelagicontain::Update which in turn should result in
+        a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
+        made by Pelagicontain.
+    """
+    if test_updatefinished_was_called() == False:
+        print "FAIL: UpdateFinished was not called!"
+        result = 1
+        helper.cleanup_and_finish()
+        success = False
+    else:
+        print "PASS: UpdateFinished was called!"
+
+    return success
+
+def teardown():
+    success = True
+    # --------------- Run tests for shutdown
+    helper.shutdown_pelagicontain()
+
+    """ The call to Pelagicontain::Shutdown should have triggered a call to
+        PAM::UnregisterClient
+    """
+    if test_unregisterclient_was_called() == False:
+        print "FAIL: UnregisterClient was not called!"
+        result = 1
+        helper.cleanup_and_finish()
+        success = False
+    else:
+        print "PASS: UnregisterClient was called!"
+
+    """ NOTE: Possible assertions that should be made when Pelagicontain is more
+        complete:
+
+        * Issue pelagicontain.Shutdown()
+
+        * Verify that com.pelagicore.pelagicontain.test_app disappears from bus
+          and that PAM has not been requested to unregister
+
+        * Verify that PAM receives PAM.unregister() with the correct appId
+
+        * Verify that PELAGICONTAIN_PID is no longer running
+    """
+    return success
 
 
-# --------------- Run tests for startup
-
-""" Start Pelagicontain, test is passed if Popen succeeds.
-    The command to execute inside the container is passed to the test function.
-"""
-if test_can_start_pelagicontain("/deployed_app/controller") == False:
-    print "FAIL: Could not start Pelagicontain"
-    result = 1
-    helper.cleanup_and_finish()
-else:
-    print "PASS: Started Pelagicontain"
-
-""" Assert the Pelagicontain remote object can be found on the bus
-"""
-if test_pelagicontain_found_on_bus() == False:
-    print "FAIL: Could not find Pelagicontain on D-Bus"
-    result = 1
-    helper.cleanup_and_finish()
-else:
-    print "PASS: Found Pelagicontain on D-Bus"
-
-""" Call Launch on Pelagicontain over D-Bus and assert the call goes well.
-    This will trigger a call to PAM::RegisterClient over D-Bus which we will
-    assert later.
-"""
-
-if test_can_find_and_run_Launch_on_pelagicontain_on_dbus() == False:
-    print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
-    result = 1
-    helper.cleanup_and_finish()
-else:
-    print "PASS: Found Launch in Pelagicontain on D-Bus"
-
-""" Assert against the PAM-stub that RegisterClient was called by Pelagicontain
-"""
-if test_registerclient_was_called() == False:
-    print "FAIL: RegisterClient was not called!"
-    result = 1
-    helper.cleanup_and_finish()
-else:
-    print "PASS: RegisterClient was called!"
-
-
-""" The call by Pelagicontain to PAM::RegisterClient would have triggered
-    a call by PAM to Pelagicontain::Update which in turn should result in
-    a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
-    made by Pelagicontain.
-"""
-if test_updatefinished_was_called() == False:
-    print "FAIL: UpdateFinished was not called!"
-    result = 1
-    helper.cleanup_and_finish()
-else:
-    print "PASS: UpdateFinished was called!"
 
 # --------------- Run tests for the actual NetworkGateway
 """ NetworkGateway specific tests start here. The entry point for the test
     is NetworkGateway::setConfig() which is called via calls to
     Pelagicontain::Update.
 """
+print "Running network gateway test 1/3"
+if test_has_internet_access(CONFIG_NETWORK_DISABLED) == True:
+    print "FAIL: Container has internet access!"
+    result = 1
+    helper.cleanup_and_finish()
+else:
+    print "PASS: Container internet access disabled!"
 
-
-if test_enabling_internet_access() == False:
+time.sleep(2)
+print "\nRunning network gateway test 2/3"
+if test_has_internet_access(CONFIG_NETWORK_ENABLED) == False:
     print "FAIL: Container has no internet access!"
     result = 1
     helper.cleanup_and_finish()
 else:
-    print "PASS: Container internet access successfully enabled!"
+    print "PASS: Container internet access enabled!"
 
-# --------------- Run tests for shutdown
-
-helper.shutdown_pelagicontain()
-
-""" The call to Pelagicontain::Shutdown should have triggered a call to
-    PAM::UnregisterClient
-"""
-if test_unregisterclient_was_called() == False:
-    print "FAIL: UnregisterClient was not called!"
+time.sleep(2)
+print "\nRunning network gateway test 3/3"
+if test_has_internet_access(CONFIG_NETWORK_NO_GATEWAY) == True:
+    print "FAIL: Container has internet access!"
     result = 1
     helper.cleanup_and_finish()
 else:
-    print "PASS: UnregisterClient was called!"
-
-
-helper.cleanup_and_finish()
-
-""" NOTE: Possible assertions that should be made when Pelagicontain is more
-    complete:
-
-    * Issue pelagicontain.Shutdown()
-
-    * Verify that com.pelagicore.pelagicontain.test_app disappears from bus
-    and that PAM has not been requested to unregister
-
-    * Verify that PAM receives PAM.unregister() with the correct appId
-
-    * Verify that PELAGICONTAIN_PID is no longer running
-"""
+    print "PASS: Container internet access disabled!"
 

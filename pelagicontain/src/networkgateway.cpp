@@ -16,7 +16,7 @@ NetworkGateway::NetworkGateway(ControllerAbstractInterface *controllerInterface)
     m_ip(""),
     m_gateway(""),
     m_internetAccess(false),
-    m_activatedOnce(false)
+    m_interfaceInitialized(false)
 {
 }
 
@@ -55,6 +55,7 @@ bool NetworkGateway::setConfig(const std::string &config)
 
     /* Retrieve the gateway IP */
     m_gateway = parseConfig(config.c_str(), "gateway");
+
     if (m_gateway.compare("") != 0)
     {
 	success = isBridgeAvailable();
@@ -92,6 +93,11 @@ bool NetworkGateway::activate()
     return success;
 }
 
+std::string NetworkGateway::ip()
+{
+    return m_ip;
+}
+
 bool NetworkGateway::setContainerIP()
 {
     const char * ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
@@ -114,9 +120,10 @@ bool NetworkGateway::up()
 {
     std::string cmd;
 
-    if (!m_activatedOnce)
+    if (!m_interfaceInitialized)
     {
 	cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
+	m_interfaceInitialized = true;
     }
     else
     {
@@ -149,7 +156,7 @@ bool NetworkGateway::ping(const std::string &ip)
 bool NetworkGateway::isBridgeAvailable()
 {
     bool ret = false;
-    std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep \"" + m_gateway + "\"";
+    std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
     if (system(cmd.c_str()) == 0)
     {
@@ -379,5 +386,5 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
     return std::string(json_string_value(value));
 
 cleanup_parse_json:
-    return NULL;
+    return "";
 }

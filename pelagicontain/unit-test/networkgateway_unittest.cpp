@@ -50,34 +50,71 @@ using ::testing::NiceMock;
  * address.
  */
 TEST(NetworkGatewayTest, TestSetConfig) {
+
+    std::string config = "{\"internet-access\": \"false\", \"gateway\":\"\"}";
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
     NiceMock<MockController> controllerInterface;
     NetworkGateway gw(&controllerInterface);
 
-    bool success = gw.setConfig("foo");
+    bool success = gw.setConfig(config);
     ASSERT_TRUE(success);
 }
 
 /*! Test NetworkGateway::activate is successful.
  */
 TEST(NetworkGatewayTest, TestActivate) {
+    std::string config = "{\"internet-access\": \"true\", \"gateway\":\"10.0.3.1\"}";
     NiceMock<MockController> controllerInterface;
     NetworkGateway gw(&controllerInterface);
+    ASSERT_TRUE(gw.setConfig(config));
 
-    std::string cmd_1 = "ifconfig eth0 10.0.3.42 netmask 255.255.255.0 up";
+    std::string ip = gw.ip();
+
+    std::string cmd_1 = "ifconfig eth0 " + ip + " netmask 255.255.255.0 up";
     std::string cmd_2 = "route add default gw 10.0.3.1";
-    std::string cmd_3 = "ping www.google.com";
 
     {
 	InSequence sequence;
 	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
 	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_3)).Times(1);
     }
 
-    ASSERT_TRUE(gw.setConfig("foo"));
     bool success = gw.activate();
     ASSERT_TRUE(success);
+}
+
+/*! Test NetworkGateway::activate is successful.
+ */
+TEST(NetworkGatewayTest, TestActivateTwice) {
+    std::string config = "{\"internet-access\": \"true\", \"gateway\":\"10.0.3.1\"}";
+    NiceMock<MockController> controllerInterface;
+    NetworkGateway gw(&controllerInterface);
+    ASSERT_TRUE(gw.setConfig(config));
+
+    std::string ip = gw.ip();
+
+    std::string cmd_1 = "ifconfig eth0 " + ip + " netmask 255.255.255.0 up";
+    std::string cmd_2 = "route add default gw 10.0.3.1";
+    std::string cmd_3 = "ifconfig eth0 up";
+
+    {
+	InSequence sequence;
+	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+    }
+
+    bool success = gw.activate();
+    ASSERT_TRUE(success);
+
+    {
+	InSequence sequence;
+	EXPECT_CALL(controllerInterface, systemCall(cmd_3)).Times(1);
+	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+    }
+
+    success = gw.activate();
+    ASSERT_TRUE(success);
+
 }
 
 /*! Test NetworkGateway::activate is successful.
@@ -85,6 +122,32 @@ TEST(NetworkGatewayTest, TestActivate) {
 TEST(NetworkGatewayTest, TestActivateNoConfig) {
     NiceMock<MockController> controllerInterface;
     NetworkGateway gw(&controllerInterface);
+
+    std::string cmd_1 = "ifconfig eth0 down";
+
+    {
+	InSequence sequence;
+	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+    }
+
+    bool success = gw.activate();
+    ASSERT_TRUE(success);
+}
+
+/*! Test NetworkGateway::activate is successful.
+ */
+TEST(NetworkGatewayTest, TestActivateBadConfig) {
+    std::string config = "{\"internet-access\": \"true\"}";
+    NiceMock<MockController> controllerInterface;
+    NetworkGateway gw(&controllerInterface);
+    ASSERT_TRUE(gw.setConfig(config));
+
+    std::string cmd_1 = "ifconfig eth0 down";
+
+    {
+	InSequence sequence;
+	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+    }
 
     bool success = gw.activate();
     ASSERT_TRUE(success);

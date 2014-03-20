@@ -33,6 +33,9 @@ public:
 	 */
 	virtual std::string environment();
 
+	/*! Returns the IP of the container
+	 */
+	std::string ip();
 private:
 
         /*! Set container IP address
@@ -160,7 +163,7 @@ private:
 	* \param config The JSON string containing the configuration
 	* \param key The key to look up.
 	* \return std::string  Value belonging to key
-	* \return NULL  Upon failure
+	* \return Empty string  Upon failure
 	*/
 	std::string parseConfig(const std::string &config, const std::string &key);
 
@@ -169,7 +172,7 @@ private:
 	std::string m_ip;
 	std::string m_gateway;
 	bool m_internetAccess;
-	bool m_activatedOnce;
+	bool m_interfaceInitialized;
 
 };
 
