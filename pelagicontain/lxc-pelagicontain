@@ -69,6 +69,8 @@ $rootfs/deployed_app \
     chmod 666 null        || res=1
     mknod urandom c 1 9   || res=1
     chmod 666 urandom     || res=1
+    mknod galcore 199 0   || res=1
+    chmod 666 galcore     || res=1
 
     popd > /dev/null
 
