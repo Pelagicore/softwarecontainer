@@ -140,7 +140,7 @@ def setup():
     """
     if test_can_start_pelagicontain("/deployed_app/controller") == False:
         print "FAIL: Could not start Pelagicontain"
-        result = 1
+        helper.result = 1
         helper.cleanup_and_finish()
         success = False
     else:
@@ -150,7 +150,7 @@ def setup():
     """
     if test_pelagicontain_found_on_bus() == False:
         print "FAIL: Could not find Pelagicontain on D-Bus"
-        result = 1
+        helper.result = 1
         helper.cleanup_and_finish()
         success = False
     else:
@@ -163,7 +163,7 @@ def setup():
 
     if test_can_find_and_run_Launch_on_pelagicontain_on_dbus() == False:
         print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
-        result = 1
+        helper.result = 1
         helper.cleanup_and_finish()
         success = False
     else:
@@ -173,7 +173,7 @@ def setup():
     """
     if test_registerclient_was_called() == False:
         print "FAIL: RegisterClient was not called!"
-        result = 1
+        helper.result = 1
         helper.cleanup_and_finish()
         success = False
     else:
@@ -186,7 +186,7 @@ def setup():
     """
     if test_updatefinished_was_called() == False:
         print "FAIL: UpdateFinished was not called!"
-        result = 1
+        helper.result = 1
         helper.cleanup_and_finish()
         success = False
     else:
@@ -204,7 +204,7 @@ def teardown():
     """
     if test_unregisterclient_was_called() == False:
         print "FAIL: UnregisterClient was not called!"
-        result = 1
+        helper.result = 1
         helper.cleanup_and_finish()
         success = False
     else:
@@ -234,7 +234,7 @@ def teardown():
 print "Running network gateway test 1/3"
 if test_has_internet_access(CONFIG_NETWORK_DISABLED) == True:
     print "FAIL: Container has internet access!"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Container internet access disabled!"
@@ -243,7 +243,7 @@ time.sleep(2)
 print "\nRunning network gateway test 2/3"
 if test_has_internet_access(CONFIG_NETWORK_ENABLED) == False:
     print "FAIL: Container has no internet access!"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Container internet access enabled!"
@@ -252,8 +252,10 @@ time.sleep(2)
 print "\nRunning network gateway test 3/3"
 if test_has_internet_access(CONFIG_NETWORK_NO_GATEWAY) == True:
     print "FAIL: Container has internet access!"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Container internet access disabled!"
+
+helper.cleanup_and_finish()
 
