@@ -143,7 +143,7 @@ another command is kept as it makes some component testing easier.
 
 <h2>Running the Pelagicontain component tests</h2>
 <code>mkdir -p /tmp/test/</code><br>
-<code>cp -R \<component-testdir\>/test-data/comptest/\* /tmp/test/</code>
+<code>cp -R pelagicontain/component-test/test-data/comptest/\* /tmp/test/</code>
 
 Copy \c controller to <code>/tmp/test/bin/</code><br>
 Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/</code> (containedapp is
