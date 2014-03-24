@@ -40,6 +40,11 @@ public:
      */
     virtual bool setConfig(const std::string &config) = 0;
 
+    /*! Applies any configuration set by setConfig()
+     *
+     * \returns true upon successful application of configuration
+     *          false otherwise
+     */
     virtual bool activate() = 0;
     virtual bool teardown() {return true;}
 
