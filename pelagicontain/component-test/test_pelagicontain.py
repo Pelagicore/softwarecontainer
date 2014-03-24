@@ -102,7 +102,7 @@ helper.pam_iface.test_reset_values()
 """
 if test_can_start_pelagicontain("/controller/controller") == False:
     print "FAIL: Could not start Pelagicontain"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Started Pelagicontain"
@@ -111,7 +111,7 @@ else:
 """
 if test_pelagicontain_found_on_bus() == False:
     print "FAIL: Could not find Pelagicontain on D-Bus"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Found Pelagicontain on D-Bus"
@@ -129,7 +129,7 @@ else:
 """
 if test_can_find_and_run_Launch_on_pelagicontain_on_dbus() == False:
     print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: Found Launch in Pelagicontain on D-Bus"
@@ -139,7 +139,7 @@ else:
 """
 if test_registerclient_was_called() == False:
     print "FAIL: RegisterClient was not called!"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: RegisterClient was called!"
@@ -157,7 +157,7 @@ else:
 """
 if test_updatefinished_was_called() == False:
     print "FAIL: UpdateFinished was not called!"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: UpdateFinished was called!"
@@ -172,7 +172,7 @@ helper.shutdown_pelagicontain()
 """
 if test_unregisterclient_was_called() == False:
     print "FAIL: UnregisterClient was not called!"
-    result = 1
+    helper.result = 1
     helper.cleanup_and_finish()
 else:
     print "PASS: UnregisterClient was called!"

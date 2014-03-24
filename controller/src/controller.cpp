@@ -6,7 +6,9 @@
 #include <unistd.h>
 #include <sys/signal.h>
 #include <sys/wait.h>
-#include "errno.h"
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "controller.h"
 

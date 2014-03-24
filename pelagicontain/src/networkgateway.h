@@ -33,6 +33,9 @@ public:
 	 */
 	virtual std::string environment();
 
+	/*! Returns the IP of the container
+	 */
+	std::string ip();
 private:
 
         /*! Set container IP address
@@ -61,9 +64,9 @@ private:
 	*/
 	bool setDefaultGateway();
 
-        /*! Enable the default network interface.
+        /*! Enable the default network interface
 	*
-	* Enables the network interface and calls setDefaultGateway().
+	* Enables the network interface and calls NetworkGateway::setDefaultGateway().
 	*
 	* When this is done for the first time, i.e. during the first call to activate()
 	* the IP and netmask are also set. During subsequent calls, this merely brings
@@ -74,7 +77,33 @@ private:
 	*/
 	bool up();
 
+        /*! Disable the default network interface
+	*
+	* Disables the network interface.
+	*
+	* \return true  Upon success
+	* \return false Upon failure
+	*/
 	bool down();
+
+        /*! Ping the supplied IP (two times)
+	*
+	* Pings the IP passed as argument to the method. The IP is pinged two times.
+	*
+	* \param ip The IP to ping
+	* \return true  When the call to the controller is successfully carried out
+	* \return false When the call to the controller fails
+	*/
+	bool ping(const std::string &ip);
+
+        /*! Check the availability of the network bridge on the host
+	*
+	* Checks the availability of the required network bridge on the host.
+	*
+	* \return true  If bridge interface is available
+	* \return false If bridge interface is not available
+	*/
+	bool isBridgeAvailable();
 
 	/*! Generate and execute IPTables rules
 	*
@@ -127,19 +156,24 @@ private:
 	*/
 	int clearIfaceLimits(char *iface);
 
+        /*! Parse the JSON configuration passed down from Platform Access Manager
+	*
+	* Parses the configuration and looks up the value for the key passed as argument.
+	*
+	* \param config The JSON string containing the configuration
+	* \param key The key to look up.
+	* \return std::string  Value belonging to key
+	* \return Empty string  Upon failure
+	*/
+	std::string parseConfig(const std::string &config, const std::string &key);
+
 	static int waitForDevice(const std::string &iface);
 
 	std::string m_ip;
 	std::string m_gateway;
 	bool m_internetAccess;
-	bool m_activatedOnce;
+	bool m_interfaceInitialized;
 
-	bool printIfconfig();
-	bool ping(const std::string &ip);
-	std::string parseConfig(const std::string &config, const std::string &key);
-	bool checkBridgeAvailability();
-
-	bool selfTest();
 };
 
 #endif /* NETWORKGATEWAY_H */

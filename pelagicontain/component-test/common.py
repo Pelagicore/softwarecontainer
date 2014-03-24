@@ -23,15 +23,15 @@ from dbus import glib
 glib.init_threads()
 
 
-# Result flag is set to non zero on failure. Return value is set as exit
-# status and is used by e.g. ctest to determine test results.
-result = 0
-
 class ComponentTestHelper:
     def __init__(self):
         # Some globals used throughout the tests
         self.pelagicontain_pid = None
         self.pelagicontain_iface = None
+
+        # Result flag is set to non zero on failure. Return value is set as exit
+        # status and is used by e.g. ctest to determine test results.
+        self.result = 0
 
         self.cookie = self.generate_cookie()
         self.app_uuid = "com.pelagicore.comptest"
@@ -102,12 +102,13 @@ class ComponentTestHelper:
             return False
 
     def cleanup_and_finish(self):
-        global result
-        if result == 0:
+        if not self.pelagicontain_pid == 0:
+            call(["kill", "-9", str(self.pelagicontain_pid)])
+        if self.result == 0:
             print "\n-=< All tests passed >=-\n"
         else:
             print "\n-=< Failure >=-\n"
-        exit(result)
+        exit(self.result)
 
     def find_and_run_Launch_on_pelagicontain_on_dbus(self):
         self.pelagicontain_iface = dbus.Interface(self.pelagicontain_remote_object, 

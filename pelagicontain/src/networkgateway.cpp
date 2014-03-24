@@ -16,7 +16,7 @@ NetworkGateway::NetworkGateway(ControllerAbstractInterface *controllerInterface)
     m_ip(""),
     m_gateway(""),
     m_internetAccess(false),
-    m_activatedOnce(false)
+    m_interfaceInitialized(false)
 {
 }
 
@@ -36,6 +36,8 @@ std::string NetworkGateway::environment()
 
 bool NetworkGateway::setConfig(const std::string &config)
 {
+    log_debug("NetworkGateway::setConfig called\n");
+
     bool success = true;
     
     /* Check the value of the internet-access key of the config*/
@@ -53,9 +55,10 @@ bool NetworkGateway::setConfig(const std::string &config)
 
     /* Retrieve the gateway IP */
     m_gateway = parseConfig(config.c_str(), "gateway");
+
     if (m_gateway.compare("") != 0)
     {
-	success = checkBridgeAvailability();
+	success = isBridgeAvailable();
 	log_debug("Default gateway set to %s\n", m_gateway.c_str());
 
 	if (!setContainerIP())
@@ -65,9 +68,9 @@ bool NetworkGateway::setConfig(const std::string &config)
     }
     else
     {
-	log_error("Bad gateway setting in configuration file\n");
+	log_debug("No gateway setting in configuration file\n");
+	log_debug("Network access will be disabled\n");
 	m_internetAccess = false;
-	success = false;
     }
 
     return success;
@@ -81,8 +84,18 @@ bool NetworkGateway::activate()
     {
 	success = up();
     }
+
+    else
+    {
+	success = down();
+    }
     
     return success;
+}
+
+std::string NetworkGateway::ip()
+{
+    return m_ip;
 }
 
 bool NetworkGateway::setContainerIP()
@@ -105,12 +118,12 @@ bool NetworkGateway::setDefaultGateway()
 
 bool NetworkGateway::up()
 {
-    bool ret;
     std::string cmd;
 
-    if (!m_activatedOnce)
+    if (!m_interfaceInitialized)
     {
 	cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
+	m_interfaceInitialized = true;
     }
     else
     {
@@ -121,16 +134,7 @@ bool NetworkGateway::up()
 
     /* The route to the default gateway must be added
        each time the interface is brought up again */
-    if (setDefaultGateway())
-    {
-	ret = true;
-    }
-    else
-    {
-	ret = false;
-    }
-
-    return ret;
+    return setDefaultGateway();
 }
 
 bool NetworkGateway::down()
@@ -149,10 +153,10 @@ bool NetworkGateway::ping(const std::string &ip)
     return true;
 }
 
-bool NetworkGateway::checkBridgeAvailability()
+bool NetworkGateway::isBridgeAvailable()
 {
     bool ret = false;
-    std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep \"" + m_gateway + "\"";
+    std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
     if (system(cmd.c_str()) == 0)
     {
@@ -164,36 +168,8 @@ bool NetworkGateway::checkBridgeAvailability()
     }
 
     return ret;
-    
 }
 
-bool NetworkGateway::printIfconfig()
-{
-    std::string cmd = "ifconfig";
-    m_controllerInterface->systemCall(cmd);
-
-    return true;
-}
-
-bool NetworkGateway::selfTest()  
-{
-    ping(m_ip);
-    ping(m_gateway);
-    ping("www.google.com");
-    printIfconfig(); 
-
-    log_debug("----------------- Disabling if");
-    down(); 
-    printIfconfig();
-    ping("www.google.com");
-
-    log_debug("----------------- Enabling if again");
-    up();
-    printIfconfig();
-    ping("www.google.com");
-
-    return true;
-}
 
 /*
  * This is a wrapper around the tc command. This function will issue system ()
@@ -399,7 +375,7 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
     value = json_object_get(root, key.c_str());
 
     if (!json_is_string(value)) {
-	log_error("Value for internet is not a string.");
+	log_error("Value is not a string.");
 	log_error("error: on line %d: %s\n", error.line, error.text);
 	json_decref (value);
 	goto cleanup_parse_json;
@@ -410,5 +386,5 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
     return std::string(json_string_value(value));
 
 cleanup_parse_json:
-    return NULL;
+    return "";
 }
