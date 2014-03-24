@@ -32,6 +32,7 @@ add_executable( pelagicontain
     dbusadaptor.h
     dbusgateway.cpp
     dbusmainloop.cpp
+    devicenodegateway.cpp
     generators.cpp
     main.cpp
     networkgateway.cpp
