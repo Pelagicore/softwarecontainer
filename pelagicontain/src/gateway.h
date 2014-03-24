@@ -46,6 +46,12 @@ public:
      *          false otherwise
      */
     virtual bool activate() = 0;
+
+    /*! Restore system to the state prior to launching of gateway. Any cleanup
+     * code (removal of files, virtual interfaces, etc) should be placed here.
+     *
+     * \returns true upon successful clean-up, false otherwise
+     */
     virtual bool teardown() {return true;}
 
 protected:
