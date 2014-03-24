@@ -28,14 +28,14 @@ public:
      */
     virtual std::string environment() = 0;
 
-	virtual std::string environment() = 0;
-	virtual std::string id() = 0;
-	virtual bool setConfig(const std::string &config) = 0;
-	virtual bool activate() = 0;
-	virtual bool teardown() {return true;}
+    /*! Human readable identifier of this gateway */
+    virtual std::string id() = 0;
+    virtual bool setConfig(const std::string &config) = 0;
+    virtual bool activate() = 0;
+    virtual bool teardown() {return true;}
 
 protected:
-        ControllerAbstractInterface *m_controllerInterface;
+    ControllerAbstractInterface *m_controllerInterface;
 };
 
 #endif /* GATEWAY_H */
