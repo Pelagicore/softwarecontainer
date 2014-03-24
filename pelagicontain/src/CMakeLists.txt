@@ -26,20 +26,20 @@ endif(DBUSBINDINGTOOL)
 
 
 add_executable( pelagicontain
-    pelagicontaintodbusadapter.cpp
-    dbusmainloop.cpp
-    main.cpp
     configparser.cpp
     container.cpp
-    dbusgateway.cpp
-    generators.cpp
-    pelagicontain.cpp
-    pulsegateway.cpp
     controllerinterface.cpp
-    paminterface.cpp
-    networkgateway.cpp
-    pamproxy.h
     dbusadaptor.h
+    dbusgateway.cpp
+    dbusmainloop.cpp
+    generators.cpp
+    main.cpp
+    networkgateway.cpp
+    paminterface.cpp
+    pamproxy.h
+    pelagicontain.cpp
+    pelagicontaintodbusadapter.cpp
+    pulsegateway.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain
