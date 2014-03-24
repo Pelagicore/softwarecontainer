@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	std::string gatewayDir = containerDir + "/gateways";
 	if (mkdir(containerDir.c_str(), S_IRWXU) == -1)
 	{
-		log_error("Could not create gateway directory %s, %s.",
+		log_error("Could not create container directory %s, %s.",
 				  containerDir.c_str(),
 				  strerror(errno));
 		exit(-1);
