@@ -15,11 +15,18 @@
 class Gateway
 {
 public:
+    Gateway(ControllerAbstractInterface *controllerInterface):
+        m_controllerInterface(controllerInterface){};
+    Gateway() {};
+    virtual ~Gateway() {};
 
-	Gateway(ControllerAbstractInterface *controllerInterface):
-		m_controllerInterface(controllerInterface){};
-	Gateway() {};
-	virtual ~Gateway() {};
+    /*! Additions to the environment relevant to this gateway. The string
+     * returned by this function must be usable with the 'env' util of
+     * coreutils
+     *
+     * \returns Core-utils compatible environment
+     */
+    virtual std::string environment() = 0;
 
 	virtual std::string environment() = 0;
 	virtual std::string id() = 0;
