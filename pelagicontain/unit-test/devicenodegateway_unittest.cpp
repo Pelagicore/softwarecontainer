@@ -57,3 +57,21 @@ TEST(DeviceNodeGatewayTest, TestHasNoEnvironment) {
 
     ASSERT_STREQ(gw.environment().c_str(), "");
 }
+
+TEST(DeviceNodeGatewayTest, TestCanParseValidConfig) {
+    /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
+    NiceMock<MockController> controllerInterface;
+    DeviceNodeGateway gw(&controllerInterface);
+
+    std::string config = "{\"devices\": ["
+                         "                  \"{"
+                         "                      \"name\":  \"tty0\","
+                         "                      \"major\": \"4\","
+                         "                      \"minor\": \"0\","
+                         "                      \"perm\":  \"666\""
+                         "                  \"}"
+                         "              ]"
+                         "}";
+
+    ASSERT_TRUE(gw.setConfig(config));
+}
