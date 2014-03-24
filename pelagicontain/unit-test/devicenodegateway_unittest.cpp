@@ -41,6 +41,8 @@ using ::testing::InSequence;
 using ::testing::_;
 using ::testing::Return;
 using ::testing::NiceMock;
+using ::testing::StrictMock;
+using ::testing::StrEq;
 
 TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
@@ -59,21 +61,23 @@ TEST(DeviceNodeGatewayTest, TestHasNoEnvironment) {
 }
 
 TEST(DeviceNodeGatewayTest, TestCanParseValidConfig) {
-    /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
-    NiceMock<MockController> controllerInterface;
+    StrictMock<MockController> controllerInterface;
     DeviceNodeGateway gw(&controllerInterface);
 
     std::string config = "{\"devices\": ["
-                         "                  \"{"
+                         "                  {"
                          "                      \"name\":  \"tty0\","
                          "                      \"major\": \"4\","
                          "                      \"minor\": \"0\","
-                         "                      \"perm\":  \"666\""
-                         "                  \"}"
+                         "                      \"mode\":  \"666\""
+                         "                  }"
                          "              ]"
                          "}";
 
     ASSERT_TRUE(gw.setConfig(config));
+    EXPECT_CALL(controllerInterface, systemCall(StrEq("mknod tty0 4 0")));
+    EXPECT_CALL(controllerInterface, systemCall(StrEq("chmod tty0 666")));
+    gw.activate();
 }
 
 TEST(DeviceNodeGatewayTest, TestFailsToParseInvalidConfig) {
@@ -86,7 +90,7 @@ TEST(DeviceNodeGatewayTest, TestFailsToParseInvalidConfig) {
                          "                      \"name\":  \"tty0\","
                          "                      \"major\": \"4\","
                          "                      \"minor\": \"0\","
-                         "                      \"perm\":  \"666\""
+                         "                      \"mode\":  \"666\""
                          "                  \"}"
                          "}";
 

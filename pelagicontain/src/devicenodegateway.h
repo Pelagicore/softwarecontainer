@@ -5,6 +5,8 @@
 #ifndef DEVICENODEGATEWAY_H
 #define DEVICENODEGATEWAY_H
 
+#include "jansson.h"
+
 #include "gateway.h"
 #include "controllerinterface.h"
 
@@ -34,6 +36,18 @@ public:
 	virtual std::string environment();
 
 private:
+    struct Device {
+        std::string name;
+        std::string major;
+        std::string minor;
+        std::string mode;
+    };
+
+    std::vector<struct DeviceNodeGateway::Device> m_devList;
+
+    std::vector<struct Device> parseDeviceList(json_t *list, bool &ok);
+
+    ControllerAbstractInterface  *m_controllerIface;
 };
 
 #endif /* DEVICENODEGATEWAY_H */
