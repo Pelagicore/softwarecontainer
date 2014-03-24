@@ -10,7 +10,7 @@
 # Example: ./setup_environment.sh -d /tmp/container -c yes -- /etc/passwod
 
 BRCTL_CMD="/sbin/brctl"
-BRIDGE="br0"
+BRIDGE="container-br0"
 
 
 # Parse command line arguments
@@ -52,11 +52,13 @@ if [[ -n $($BRCTL_CMD show | grep $BRIDGE) ]]; then
 else
     echo "$BRIDGE was NOT FOUND, attempting to add..."
     sudo brctl addbr $BRIDGE
+    sudo brctl setfd $BRIDGE 0
+    sudo ifconfig $BRIDGE 10.0.3.1 netmask 255.255.255.0 promisc up
 fi
 
 # Create directory structure
-echo "Setting up environment in $ROOTFSDIR"
 ROOTFSDIR=$deploydir/rootfs/
+echo "Setting up environment in $ROOTFSDIR"
 mkdir -p $ROOTFSDIR
 
 # Deploy files in rootfs/
