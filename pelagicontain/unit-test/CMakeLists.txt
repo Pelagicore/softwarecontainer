@@ -6,9 +6,11 @@ add_executable(runUnitTestsPelagicontain
     main.cpp
     pelagicontain_unittest.cpp
     networkgateway_unittest.cpp
+    devicenodegateway_unittest.cpp
     ../src/pelagicontain.cpp
     ../src/container.cpp
     ../src/networkgateway.cpp
+    ../src/devicenodegateway.cpp
     ../src/dbusgateway.cpp
     ../src/pulsegateway.cpp
     ../src/controllerinterface.cpp
