@@ -49,3 +49,11 @@ TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
 
     ASSERT_STREQ(gw.id().c_str(), "devicenode");
 }
+
+TEST(DeviceNodeGatewayTest, TestHasNoEnvironment) {
+    /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
+    NiceMock<MockController> controllerInterface;
+    DeviceNodeGateway gw(&controllerInterface);
+
+    ASSERT_STREQ(gw.environment().c_str(), "");
+}
