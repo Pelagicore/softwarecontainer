@@ -47,7 +47,7 @@ shuts down itself after this is completed.
 Assuming the container location (i.e. the contanier root directory) is called
 \c $containerRoot
 
-\c $containerRoot must contain the following directories:
+\c $containerRoot/\<appId\> must contain the following directories:
 <ul>
 	<li> \c bin/ </li>
 		<ul><li>
@@ -68,8 +68,14 @@ Assuming the container location (i.e. the contanier root directory) is called
 		</li></ul>		
 </ul>
 
-In \c $containerRoot the following files are automatically created,
-and cleaned up on exit:
+When launching an instance of pelagicontain a random containerId will be generated
+ which is valid only for that session. 
+
+In \c $containerRoot/$containerId/gateways/ the different gateways can create e.g.
+sockets used to communicate in and out of the container. This directory is available
+inside the container as /gateways/. These files and directory
+and automatically cleaned up on exit. An examples of files in /gateways/ is:
+
 <ul>
 	<li>Session D-Bus proxy socket</li>
 		<ul><li>
@@ -92,25 +98,27 @@ within the container as the second parameter, and a unique cookie string as
 a third argument.
 
 Before running \c pelagicontain a "runtime directory" needs to be created and
-set up. The run-time directory should look like this:
-.
-├── bin
-│   └── controller
-├── \<appId\>
-│   ├── bin
-│   │   └── containedapp
-│   ├── home
-│   └── shared
-└── late_mounts
+set up. The run-time directory should look like this: <br>
+
+<code>
+├── bin<br>
+│   └── controller<br>
+├── \<appId\><br>
+│   ├── bin<br>
+│   │   └── containedapp<br>
+│   ├── home<br>
+│   └── shared<br>
+└── late_mounts<br>
+</code>
 
 The directory late_mounts needs to be set up in a specific way in order to 
 allow propagation of mount points into a already started container. This 
 is done in the following way (as root):
 
-<code>mkdir -p <runtime dir>/late_mounts</code>
-<code>mount --bind \<runtime dir\>/late_mounts \<runtime dir\>/late_mounts</code>
-<code>mount --make-unbindable \<runtime dir\>/late_mounts</code>
-<code>mount --make-shared \<runtime dir\>/late_mounts</code>
+<code>mkdir -p \<runtime dir\>/late_mounts</code><br>
+<code>mount --bind \<runtime dir\>/late_mounts \<runtime dir\>/late_mounts</code><br>
+<code>mount --make-unbindable \<runtime dir\>/late_mounts</code><br>
+<code>mount --make-shared \<runtime dir\>/late_mounts</code><br>
 
 As listed in the overview of the runtime directory above, a \<appId\> directory
 containing three sub-directories needs to be created. The bin directory should
@@ -119,7 +127,7 @@ and will be available as /appbin/ inside the container. Shared and home will
 also be available inside the container as /appshared/ and /apphome/.
 
 A network bridge should be set up as well:
-brctl addbr container-br0
+<code>brctl addbr container-br0</code>
 
 Running:
 
@@ -134,14 +142,14 @@ start the contained application. The possibility to pass
 another command is kept as it makes some component testing easier.
 
 <h2>Running the Pelagicontain component tests</h2>
-<code>mkdir -p /tmp/test/</code>
-<code>cp -R \<component-testdir\>/test-data/comptest/* /tmp/test/</code>
+<code>mkdir -p /tmp/test/</code><br>
+<code>cp -R \<component-testdir\>/test-data/comptest/\* /tmp/test/</code>
 
-Copy \c controller to <code>/tmp/test/bin/</code>
-
+Copy \c controller to <code>/tmp/test/bin/</code><br>
 Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/</code> (containedapp is
 built separately from the pelagicontain project and is found in
-pelagicontain/component-test/)
+pelagicontain/component-test/)<br>
+Set up <code>/tmp/test/late_mounts</code> the same way described under "Running Pelagicontain".
 
 Add a container-br0 bridge:
 <code>brctl addbr container-br0</code>
@@ -150,8 +158,7 @@ With root privilegies start \c pam_stub.py (found in pelagicontain/component-tes
 
 Run \c test_pelagicontain (also with root privilegies) and point out where the
  \c pelagicontain binary is (assuming we are in the git repo root and build is
- done in \c build):
-
+ done in \c build):<br>
 <code>PC_BINARY=build/pelagicontain/src/pelagicontain ./pelagicontain/component-test/test_pelagicontain.py</code>
 
 Remember that pam_stub and the test must have access to the same D-Bus bus,
