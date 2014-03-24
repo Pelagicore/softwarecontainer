@@ -28,7 +28,7 @@ public:
      */
     virtual std::string environment() = 0;
 
-    /*! Human readable identifier of this gateway */
+    /*! Used by pelagicontain to map configurations to gateways */
     virtual std::string id() = 0;
 
     /*! Configure this gateway according to the supplied JSON configuration
