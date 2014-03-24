@@ -57,6 +57,11 @@ void Controller::killApp()
     } else {
         int status;
         waitpid(m_pid, &status, 0);
+        if (WIFEXITED(status))
+            std::cout << "Controller: wait: app exited (WIFEXITED)" << std::endl;
+        if (WIFSIGNALED(status))
+            std::cout << "Controller: wait: app shut down by signal: " <<
+                WTERMSIG(status) << " (WIFSIGNALED)" << std::endl;
     }
 }
 
