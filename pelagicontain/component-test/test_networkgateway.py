@@ -77,6 +77,7 @@ def test_has_internet_access(config):
     if not setup():
         print "FAIL: Setup failed!"
         return False
+    time.sleep(2)
     if not teardown():
         print "FAIL: Teardown failed!"
         return False
@@ -88,7 +89,6 @@ def ping_successful():
 
     with open(file_path, "r") as ping_log:
         print "opened file"
-        import time
         time.sleep(3)
         lines = ping_log.readlines()
         for line in lines:
