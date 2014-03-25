@@ -111,15 +111,21 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
 
 bool DeviceNodeGateway::activate()
 {
-    bool success = false;
+    bool success = true;
 
     for (uint i = 0; i < m_devList.size(); i++)
     {
         struct DeviceNodeGateway::Device dev;
         dev = m_devList.at(i);
-        m_controllerIface->systemCall("mknod " + dev.name + " " + 
+        success &= m_controllerIface->systemCall("mknod " + dev.name + " " + 
                                        dev.major + " " + dev.minor);
-        m_controllerIface->systemCall("chmod " + dev.name + " " + dev.mode);
+        if (success) {
+            success &= m_controllerIface->systemCall("chmod " + dev.name +
+            " " + dev.mode);
+        } else {
+            log_debug (std::string("Failed to create device " + dev.name)
+                            .c_str());
+        }
     }
 
     return success;

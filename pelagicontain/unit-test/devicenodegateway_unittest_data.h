@@ -1,6 +1,12 @@
+#include <vector>
+
 struct testData {
     const char *title;
     const char *data;
+    const std::vector<std::string> names;
+    const std::vector<std::string> majors;
+    const std::vector<std::string> minors;
+    const std::vector<std::string> modes;
 };
 
 void PrintTo(const testData& d, ::std::ostream* os) {
@@ -63,8 +69,77 @@ const struct testData invalidConfigs[] = {
     {
         "'Devices' is a string?!",
         "{\"devices\": \"hej\" }"
-    }
+    },
+    {
+        "Last device malformed",
+        "{\"devices\": ["
+        "                  {"
+        "                      \"name\":  \"tty0\","
+        "                      \"major\": \"4\","
+        "                      \"minor\": \"0\","
+        "                      \"mode\":  \"666\""
+        "                  },"
+        "                  {"
+        "                      \"major\": \"4\","
+        "                      \"minor\": \"0\","
+        "                      \"mode\":  \"666\""
+        "                  }"
+        "              ]"
+        "}"
+    },
+};
 
-
-
+const struct testData validConfigs[] = {
+    {
+        "Correct 1",
+        "{\"devices\": ["
+        "                  {"
+        "                      \"name\":  \"tty0\","
+        "                      \"major\": \"4\","
+        "                      \"minor\": \"0\","
+        "                      \"mode\":  \"666\""
+        "                  }"
+        "              ]"
+        "}",
+        {"tty0"},
+        {"4"},
+        {"0"},
+        {"666"}
+    },
+    {
+        "Correct 2",
+        "{\"devices\": [ ]}",
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        "Correct 2",
+        "{\"devices\": ["
+        "                  {"
+        "                      \"name\":  \"tty0\","
+        "                      \"major\": \"4\","
+        "                      \"minor\": \"0\","
+        "                      \"mode\":  \"666\""
+        "                  },"
+        "                  {"
+        "                      \"name\":  \"tty1\","
+        "                      \"major\": \"4\","
+        "                      \"minor\": \"0\","
+        "                      \"mode\":  \"400\""
+        "                  },"
+        "                  {"
+        "                      \"name\":  \"/dev/galcore\","
+        "                      \"major\": \"199\","
+        "                      \"minor\": \"0\","
+        "                      \"mode\":  \"666\""
+        "                  }"
+        "              ]"
+        "}",
+        {"tty0", "tty1", "/dev/galcore"},
+        {"4",    "4",    "199"},
+        {"0",    "0",    "0"},
+        {"666",  "400",  "666"}
+    },
 };

@@ -44,6 +44,7 @@ using ::testing::Return;
 using ::testing::NiceMock;
 using ::testing::StrictMock;
 using ::testing::StrEq;
+using ::testing::DefaultValue;
 
 TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
@@ -61,24 +62,35 @@ TEST(DeviceNodeGatewayTest, TestHasNoEnvironment) {
     ASSERT_STREQ(gw.environment().c_str(), "");
 }
 
-TEST(DeviceNodeGatewayTest, TestCanParseValidConfig) {
+class DeviceNodeGatewayValidConfig : 
+    public testing::TestWithParam<testData> {};
+
+INSTANTIATE_TEST_CASE_P (InstantiationName, DeviceNodeGatewayValidConfig,
+    ::testing::ValuesIn(validConfigs));
+
+TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     StrictMock<MockController> controllerInterface;
     DeviceNodeGateway gw(&controllerInterface);
 
-    std::string config = "{\"devices\": ["
-                         "                  {"
-                         "                      \"name\":  \"tty0\","
-                         "                      \"major\": \"4\","
-                         "                      \"minor\": \"0\","
-                         "                      \"mode\":  \"666\""
-                         "                  }"
-                         "              ]"
-                         "}";
+    struct testData config = GetParam();
 
-    ASSERT_TRUE(gw.setConfig(config));
-    EXPECT_CALL(controllerInterface, systemCall(StrEq("mknod tty0 4 0")));
-    EXPECT_CALL(controllerInterface, systemCall(StrEq("chmod tty0 666")));
+    ASSERT_TRUE(gw.setConfig(config.data));
+
+    DefaultValue<bool>::Set(true);
+    for (uint i = 0; i < config.names.size(); i++) {
+        std::string name = config.names.at(i);
+        std::string major = config.majors.at(i);
+        std::string minor = config.minors.at(i);
+        std::string mode = config.modes.at(i);
+
+        std::string mknodCmd = "mknod " + name + " " + major + " " + minor;
+        std::string chmodCmd = "chmod " + name + " " + mode;
+
+        EXPECT_CALL(controllerInterface, systemCall(StrEq(mknodCmd.c_str())));
+        EXPECT_CALL(controllerInterface, systemCall(StrEq(chmodCmd.c_str())));
+    }
     gw.activate();
+    DefaultValue<bool>::Clear();
 }
 
 class DeviceNodeGatewayInvalidConfig : 
@@ -92,5 +104,5 @@ TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
     DeviceNodeGateway gw(&controllerInterface);
 
     struct testData config = GetParam();
-    ASSERT_FALSE(gw.setConfig(config.data)) << "hej" << config.title;
+    ASSERT_FALSE(gw.setConfig(config.data));
 }
