@@ -9,6 +9,7 @@
 #include "log_console.h"
 
 #include "devicenodegateway.h"
+#include "devicenodegateway_unittest_data.h"
 
 using namespace pelagicore;
 
@@ -80,19 +81,16 @@ TEST(DeviceNodeGatewayTest, TestCanParseValidConfig) {
     gw.activate();
 }
 
-TEST(DeviceNodeGatewayTest, TestFailsToParseInvalidConfig) {
-    /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
-    NiceMock<MockController> controllerInterface;
+class DeviceNodeGatewayInvalidConfig : 
+    public testing::TestWithParam<testData> {};
+
+INSTANTIATE_TEST_CASE_P (InstantiationName, DeviceNodeGatewayInvalidConfig,
+    ::testing::ValuesIn(invalidConfigs));
+
+TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
+    StrictMock<MockController> controllerInterface;
     DeviceNodeGateway gw(&controllerInterface);
 
-    std::string config = "{\"devices\": ["
-                         "                  \"{"
-                         "                      \"name\":  \"tty0\","
-                         "                      \"major\": \"4\","
-                         "                      \"minor\": \"0\","
-                         "                      \"mode\":  \"666\""
-                         "                  \"}"
-                         "}";
-
-    ASSERT_FALSE(gw.setConfig(config));
+    struct testData config = GetParam();
+    ASSERT_FALSE(gw.setConfig(config.data)) << "hej" << config.title;
 }

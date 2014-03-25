@@ -91,14 +91,20 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
                            "' is not a member of device object!").c_str());
                 ok = false;
             }
-            *fields[j] = std::string(json_string_value(value));
+            if (json_string_value(value)) {
+                *fields[j] = std::string(json_string_value(value));
+                ok = true;
+            } else {
+                ok = false;
+                break;
+            }
         }
 
-        if (!ok) {
+        if (ok) {
+            dev_list.push_back(dev);
+        } else {
             break;
         }
-
-        dev_list.push_back(dev);
     }
     return dev_list;
 }
