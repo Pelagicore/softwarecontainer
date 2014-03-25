@@ -84,7 +84,7 @@ def test_has_internet_access(config):
 
 def ping_successful():
     success = False
-    file_path = helper.container_root_dir + "/com.pelagicore.comptest/ping_log"
+    file_path = helper.container_root_dir + "/com.pelagicore.comptest/shared/ping_log"
 
     with open(file_path, "r") as ping_log:
         print "opened file"
