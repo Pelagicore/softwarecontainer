@@ -23,66 +23,66 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 int main(int argc, char **argv)
 {
-	const char *summary = "Pelagicore container utility. "
-		"Requires an absolute path to the container root, "
-		"the command to run inside the container and "
-		"an alphanumerical cookie string as first, second and third "
-		"argument respectively";
-	const char *paramsDescription = "[container root directory (abs path)] "
-		"[command] [cookie]";
+    const char *summary = "Pelagicore container utility. "
+            "Requires an absolute path to the container root, "
+            "the command to run inside the container and "
+            "an alphanumerical cookie string as first, second and third "
+            "argument respectively";
+    const char *paramsDescription = "[container root directory (abs path)] "
+            "[command] [cookie]";
 
-	pelagicore::CommandLineParser commandLineParser(summary,
-		paramsDescription,
-		PACKAGE_VERSION,
-		"");
+    pelagicore::CommandLineParser commandLineParser(summary,
+                                                    paramsDescription,
+                                                    PACKAGE_VERSION,
+                                                    "");
 
-        std::string containerRoot;
-        std::string containedCommand;
-        std::string cookie;
-        const char* configFilePath = CONFIG;
-        commandLineParser.addOption(configFilePath, "with-config-file", 'c', "Config file");
+    std::string containerRoot;
+    std::string containedCommand;
+    std::string cookie;
+    const char* configFilePath = CONFIG;
+    commandLineParser.addOption(configFilePath, "with-config-file", 'c', "Config file");
 
-	if (commandLineParser.parse(argc, argv))
-		return -1;
+    if (commandLineParser.parse(argc, argv))
+        return -1;
 
-	if (argc < 4) {
-		log_error("Invalid arguments");
-		commandLineParser.printHelp();
-		return -1;
-	} else {
-		containerRoot = std::string(argv[1]);
-		containedCommand = std::string(argv[2]);
-		cookie = std::string(argv[3]);
-	}
+    if (argc < 4) {
+        log_error("Invalid arguments");
+        commandLineParser.printHelp();
+        return -1;
+    } else {
+        containerRoot = std::string(argv[1]);
+        containedCommand = std::string(argv[2]);
+        cookie = std::string(argv[3]);
+    }
 
-	if (containerRoot.c_str()[0] != '/') {
-		log_error("Path to container root must be absolute");
-		commandLineParser.printHelp();
-		return -1;
-	}
+    if (containerRoot.c_str()[0] != '/') {
+        log_error("Path to container root must be absolute");
+        commandLineParser.printHelp();
+        return -1;
+    }
 
-	std::string containerName = gen_ct_name();
-	std::string containerConfig(configFilePath);
+    std::string containerName = gen_ct_name();
+    std::string containerConfig(configFilePath);
 
-	// Create gateway directory for container in containerRoot/gateways.
-	// This dir will contain various sockets etc acting as gateways
-	// in/out of the container.
-	std::string containerDir = containerRoot + "/" + containerName;
-	std::string gatewayDir = containerDir + "/gateways";
-	if (mkdir(containerDir.c_str(), S_IRWXU) == -1)
-	{
-		log_error("Could not create container directory %s, %s.",
-				  containerDir.c_str(),
-				  strerror(errno));
-		exit(-1);
-	}
-	if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1)
-	{
-		log_error("Could not create gateway directory %s, %s.",
-				  gatewayDir.c_str(),
-				  strerror(errno));
-		exit(-1);
-	}
+    // Create gateway directory for container in containerRoot/gateways.
+    // This dir will contain various sockets etc acting as gateways
+    // in/out of the container.
+    std::string containerDir = containerRoot + "/" + containerName;
+    std::string gatewayDir = containerDir + "/gateways";
+    if (mkdir(containerDir.c_str(), S_IRWXU) == -1)
+    {
+        log_error("Could not create container directory %s, %s.",
+                  containerDir.c_str(),
+                  strerror(errno));
+        exit(-1);
+    }
+    if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1)
+    {
+        log_error("Could not create gateway directory %s, %s.",
+                  gatewayDir.c_str(),
+                  strerror(errno));
+        exit(-1);
+    }
 
     { // Create a new scope so that we can du clean up after dtors
         DBus::BusDispatcher dispatcher;
@@ -113,16 +113,13 @@ int main(int argc, char **argv)
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-            DBusGateway::SessionProxy, gatewayDir, containerName,
-            containerConfig));
+                                                 DBusGateway::SessionProxy, gatewayDir, containerName,
+                                                 containerConfig));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-            DBusGateway::SystemProxy, gatewayDir, containerName,
-            containerConfig));
+                                                 DBusGateway::SystemProxy, gatewayDir, containerName,
+                                                 containerConfig));
 
-        //pelagicontain.initialize(containerName, containerConfig, containerRoot);
-
-        //pid_t pcPid = pelagicontain.preload(containerRoot, containedCommand, cookie);
         pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
 
         log_debug("Started Pelagicontain with PID: %d", pcPid);
