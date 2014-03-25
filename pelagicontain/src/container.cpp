@@ -35,38 +35,38 @@ Container::Container(const std::string &name,
     m_containerRoot(containerRoot),
     m_mountDir(containerRoot + "/late_mounts")
 {
-	// Make sure m_mountDir exist
-	if (!isDirectory(m_mountDir.c_str()))
-	{
-		log_error("Directory %s does not exist, shutting down.", m_mountDir.c_str());
-		exit(-1);
-	}
+    // Make sure m_mountDir exist
+    if (!isDirectory(m_mountDir.c_str()))
+    {
+        log_error("Directory %s does not exist, shutting down.", m_mountDir.c_str());
+        exit(-1);
+    }
 
-	// Create directories needed for mounting, will be removed in dtor
-	std::string runDir = m_mountDir + "/" + m_name;
+    // Create directories needed for mounting, will be removed in dtor
+    std::string runDir = m_mountDir + "/" + m_name;
 
-	bool allOk = true;
-	allOk = allOk && createDirectory(runDir.c_str());
-	allOk = allOk && createDirectory((runDir + "/bin").c_str());
-	allOk = allOk && createDirectory((runDir + "/shared").c_str());
-	allOk = allOk && createDirectory((runDir + "/home").c_str());
+    bool allOk = true;
+    allOk = allOk && createDirectory(runDir.c_str());
+    allOk = allOk && createDirectory((runDir + "/bin").c_str());
+    allOk = allOk && createDirectory((runDir + "/shared").c_str());
+    allOk = allOk && createDirectory((runDir + "/home").c_str());
 
-	if (!allOk)
-	{
-		log_error("Could not set up all needed directories, shutting down.");
-		exit(-1);
-	}
+    if (!allOk)
+    {
+        log_error("Could not set up all needed directories, shutting down.");
+        exit(-1);
+    }
 }
 
 bool Container::createDirectory(const std::string &path)
 {
-	if (mkdir(path.c_str(), S_IRWXU) == -1)
-	{
-		log_error("Could not create directory %s, %s.", path.c_str(), strerror(errno));
-		return false;
-	}
-	m_dirs.insert(m_dirs.begin(), path);
-	return true;
+    if (mkdir(path.c_str(), S_IRWXU) == -1)
+    {
+        log_error("Could not create directory %s, %s.", path.c_str(), strerror(errno));
+        return false;
+    }
+    m_dirs.insert(m_dirs.begin(), path);
+    return true;
 }
 
 bool Container::isDirectory(const std::string &path)
@@ -110,27 +110,27 @@ Container::~Container()
 
 const char *Container::name()
 {
-	return m_name.c_str();
+    return m_name.c_str();
 }
 
 std::vector<std::string> Container::commands(const std::string &containedCommand,
-	const std::vector<Gateway *> &gateways)
+                                             const std::vector<Gateway *> &gateways)
 {
-	int max_cmd_len = sysconf(_SC_ARG_MAX);
-	char lxc_command[max_cmd_len];
-	std::string environment;
-	std::vector<std::string> commands;
+    int max_cmd_len = sysconf(_SC_ARG_MAX);
+    char lxc_command[max_cmd_len];
+    std::string environment;
+    std::vector<std::string> commands;
 
-	// Set up an environment
-	for (std::vector<Gateway *>::const_iterator it = gateways.begin();
-		it != gateways.end(); ++it) {
-		std::string env = (*it)->environment();
-		if (!env.empty())
-			environment += env + " ";
-	}
-	log_debug("Using environment: %s", environment.c_str());
+    // Set up an environment
+    for (std::vector<Gateway *>::const_iterator it = gateways.begin();
+         it != gateways.end(); ++it) {
+        std::string env = (*it)->environment();
+        if (!env.empty())
+            environment += env + " ";
+    }
+    log_debug("Using environment: %s", environment.c_str());
 
-	// Command to create container
+    // Command to create container
     sprintf(lxc_command,
             "CONTROLLER_DIR=%s GATEWAY_DIR=%s MOUNT_DIR=%s lxc-create -n %s -t %s"
             " -f %s > /tmp/lxc_%s.log",
@@ -141,41 +141,41 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
             LXCTEMPLATE,
             m_configFile.c_str(),
             name());
-	commands.push_back(std::string(lxc_command));
+    commands.push_back(std::string(lxc_command));
 
-	// Create command to execute inside container
-	snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-		name(), environment.c_str(), containedCommand.c_str());
-	commands.push_back(std::string(lxc_command));
+    // Create command to execute inside container
+    snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
+             name(), environment.c_str(), containedCommand.c_str());
+    commands.push_back(std::string(lxc_command));
 
-	// Command to destroy container
-	snprintf(lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
-	commands.push_back(std::string(lxc_command));
+    // Command to destroy container
+    snprintf(lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
+    commands.push_back(std::string(lxc_command));
 
-	return commands;
+    return commands;
 }
 
 bool Container::bindMountDir(const std::string &src, const std::string &dst)
 {
-	int mount_res = mount(src.c_str(), // source
-						  dst.c_str(), // target
-						  "",			  // fstype
-						  MS_BIND,		  // flags
-						  NULL);		  // data
+    int mount_res = mount(src.c_str(), // source
+                          dst.c_str(), // target
+                          "",			  // fstype
+                          MS_BIND,		  // flags
+                          NULL);		  // data
 
-	if (mount_res == 0)
-	{
-		// Success
-		m_mounts.push_back(dst);
-	} else {
-		// Failure
-		log_error("Could not mount dir into container: src=%s, dst=%s err=%s",
-				  src.c_str(),
-				  dst.c_str(),
-				  strerror(errno));
-	}
+    if (mount_res == 0)
+    {
+        // Success
+        m_mounts.push_back(dst);
+    } else {
+        // Failure
+        log_error("Could not mount dir into container: src=%s, dst=%s err=%s",
+                  src.c_str(),
+                  dst.c_str(),
+                  strerror(errno));
+    }
 
-	return (mount_res == 0);
+    return (mount_res == 0);
 }
 
 /*
