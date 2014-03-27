@@ -11,7 +11,7 @@
 #include "controllerinterface.h"
 
 ControllerInterface::ControllerInterface(const std::string &containerRoot):
-    m_fifo(0), m_fifoPath(containerRoot + "rootfs/in_fifo")
+    m_fifo(0), m_fifoPath(containerRoot + "/rootfs/in_fifo")
 {
 }
 
