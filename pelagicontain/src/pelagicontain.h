@@ -89,7 +89,7 @@ public:
 	void shutdown();
 
 private:
-	void setGatewayConfigs(const std::map<std::string, std::string> &configs);
+	void setGatewayConfigs(std::map<std::string, std::string> configs);
 	void activateGateways();
 	void shutdownGateways();
 

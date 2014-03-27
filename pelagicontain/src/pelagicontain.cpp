@@ -94,22 +94,31 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 	m_controllerInterface->startApp();
 }
 
-void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
+void Pelagicontain::setGatewayConfigs(std::map<std::string, std::string> configs)
 {
-	/* Go through the received configs and see if they match any of
-	 * the running gateways, if so: set their respective config
-	 */
-	std::string config;
-	std::string gatewayId;
+    /* Go through the received configs and see if they match any of
+     * the running gateways, if so: set their respective config
+     */
+    std::string config;
+    std::string gatewayId;
 
-	for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-		gateway != m_gateways.end(); ++gateway) {
-		gatewayId = (*gateway)->id();
-		if (configs.count(gatewayId) != 0) {
-			config = configs.at(gatewayId);
-			(*gateway)->setConfig(config);
-		}
-	}
+    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+            gateway != m_gateways.end(); ++gateway) {
+        gatewayId = (*gateway)->id();
+        if (configs.count(gatewayId) != 0) {
+            config = configs.at(gatewayId);
+            configs.erase(gatewayId);
+            log_debug (std::string("Setting config " + config + " for " + gatewayId).c_str());
+            (*gateway)->setConfig(config);
+        }
+    }
+
+    for (std::map<std::string, std::string>::iterator it=configs.begin();
+            it != configs.end(); it++)
+    {
+        log_warning (std::string("Superflous config for " + it->first + ": " +
+                     it->second).c_str());
+    }
 }
 
 void Pelagicontain::activateGateways()
