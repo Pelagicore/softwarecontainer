@@ -12,6 +12,7 @@
 #include "pulsegateway.h"
 #include "networkgateway.h"
 #include "dbusgateway.h"
+#include "systemcallinterface.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -76,6 +77,7 @@ int main(int argc, char **argv)
 
 	PAMInterface pamInterface(bus);
 	ControllerInterface controllerInterface(containerRoot);
+	SystemCallInterface systemCallInterface;
 	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
 
 	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
@@ -86,7 +88,8 @@ int main(int argc, char **argv)
 	std::string containerName = gen_ct_name();
 	std::string containerConfig(configFilePath);
 
-	pelagicontain.addGateway(new NetworkGateway(&controllerInterface));
+	pelagicontain.addGateway(new NetworkGateway(&controllerInterface, 
+		&systemCallInterface));
 
 	pelagicontain.addGateway(new PulseGateway(containerRoot, containerName));
 
