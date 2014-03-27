@@ -20,9 +20,18 @@ public:
 
     /*! Issues a call to system() with the command passed as argument
      *
+     * \param cmd The command sent to system().
      * \return True if the command was successfully executed.
      */
-    virtual int makeCall(const std::string &cmd) = 0;
+    virtual bool makeCall(const std::string &cmd) = 0;
+
+    /*! Issues a call to system() with the command passed as argument
+     *
+     * \param cmd The command sent to system().
+     * \param exitCode Stores the exit code returned by the call to system()
+     * \return True if the command was successfully executed.
+     */
+    virtual bool makeCall(const std::string &cmd, int &exitCode) = 0;
 
 };
 

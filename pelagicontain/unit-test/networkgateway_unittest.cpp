@@ -42,12 +42,17 @@ class SystemCallInterfaceStub :
 {
 public:
 
-    virtual int makeCall(const std::string &cmd)
+    virtual bool makeCall(const std::string &cmd)
     {
-	return 0;
+	return true;
     }
 
-    //MOCK_METHOD1(makeCall, bool(std::string cmd));
+    virtual bool makeCall(const std::string &cmd, int &exitCode)
+    {
+	exitCode = 0;
+	return true;
+    }
+
 };
 
 using ::testing::InSequence;

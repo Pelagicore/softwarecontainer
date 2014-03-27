@@ -17,10 +17,23 @@ class SystemCallInterface :
     public SystemCallAbstractInterface
 {
 public:
-    SystemCallInterface() {}
-    ~SystemCallInterface() {}
+    SystemCallInterface();
+    ~SystemCallInterface();
 
-    virtual int makeCall(const std::string &cmd) { return system(cmd.c_str()); }
+    /*! Implements abstract method makeCall on SystemCallAbstractInterface
+     *
+     * \param cmd The command sent to system().
+     * \return True if the command was successfully executed.
+     */
+    virtual bool makeCall(const std::string &cmd);
+
+    /*! Implements abstract method makeCall on SystemCallAbstractInterface
+     *
+     * \param cmd The command sent to system().
+     * \param exitCode Stores the exit code returned by the call to system()
+     * \return True if the command was successfully executed.
+     */
+    virtual bool makeCall(const std::string &cmd, int &exitCode);
 };
 
 #endif /* SYSTEMCALLINTERFACE_H */

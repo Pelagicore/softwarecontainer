@@ -168,7 +168,7 @@ bool NetworkGateway::isBridgeAvailable()
     bool ret = false;
     std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
-    if (m_systemCallInterface->makeCall(cmd) == 0)
+    if (m_systemCallInterface->makeCall(cmd))
     {
 	ret = true;
     }
