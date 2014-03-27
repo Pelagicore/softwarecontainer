@@ -117,11 +117,11 @@ bool DeviceNodeGateway::activate()
     {
         struct DeviceNodeGateway::Device dev;
         dev = m_devList.at(i);
-        success &= m_controllerIface->systemCall("mknod " + dev.name + " " + 
+        success &= m_controllerIface->systemCall("mknod " + dev.name + " c " + 
                                        dev.major + " " + dev.minor);
         if (success) {
-            success &= m_controllerIface->systemCall("chmod " + dev.name +
-            " " + dev.mode);
+            success &= m_controllerIface->systemCall("chmod " +
+            dev.mode + " " + dev.name );
         } else {
             log_debug (std::string("Failed to create device " + dev.name)
                             .c_str());
