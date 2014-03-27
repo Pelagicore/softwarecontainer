@@ -12,6 +12,7 @@
 #include "pulsegateway.h"
 #include "networkgateway.h"
 #include "dbusgateway.h"
+#include "devicenodegateway.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -97,6 +98,8 @@ int main(int argc, char **argv)
 	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
 		DBusGateway::SystemProxy, containerRoot, containerName,
 		containerConfig));
+
+    pelagicontain.addGateway(new DeviceNodeGateway(&controllerInterface));
 
 	pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
 
