@@ -83,8 +83,8 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
         std::string minor = config.minors.at(i);
         std::string mode = config.modes.at(i);
 
-        std::string mknodCmd = "mknod " + name + " " + major + " " + minor;
-        std::string chmodCmd = "chmod " + name + " " + mode;
+        std::string mknodCmd = "mknod " + name + " c " + major + " " + minor;
+        std::string chmodCmd = "chmod " + mode + " " + name;
 
         EXPECT_CALL(controllerInterface, systemCall(StrEq(mknodCmd.c_str())));
         EXPECT_CALL(controllerInterface, systemCall(StrEq(chmodCmd.c_str())));
