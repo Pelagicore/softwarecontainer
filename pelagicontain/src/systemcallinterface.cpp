@@ -5,21 +5,21 @@
 
 #include "systemcallinterface.h"
 
-SystemCallInterface::SystemCallInterface()
+SystemcallInterface::SystemcallInterface()
 {
 }
 
-SystemCallInterface::~SystemCallInterface()
+SystemcallInterface::~SystemcallInterface()
 {
 }
 
-bool SystemCallInterface::makeCall(const std::string &cmd)
+bool SystemcallInterface::makeCall(const std::string &cmd)
 {
     bool success = (system(cmd.c_str()) == 0);
     return success;
 }
 
-bool SystemCallInterface::makeCall(const std::string &cmd, int &exitCode)
+bool SystemcallInterface::makeCall(const std::string &cmd, int &exitCode)
 {
     exitCode = system(cmd.c_str());
     bool success = (exitCode == 0);

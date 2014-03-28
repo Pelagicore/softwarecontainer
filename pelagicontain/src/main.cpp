@@ -40,7 +40,8 @@ int main(int argc, char **argv)
         std::string containedCommand;
         std::string cookie;
         const char* configFilePath = CONFIG;
-        commandLineParser.addOption(configFilePath, "with-config-file", 'c', "Config file");
+        commandLineParser.addOption(configFilePath, "with-config-file", 'c',
+                                    "Config file");
 
 	if (commandLineParser.parse(argc, argv))
 		return -1;
@@ -77,8 +78,9 @@ int main(int argc, char **argv)
 
 	PAMInterface pamInterface(bus);
 	ControllerInterface controllerInterface(containerRoot);
-	SystemCallInterface systemCallInterface;
-	Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
+	SystemcallInterface systemCallInterface;
+    Pelagicontain pelagicontain(&pamInterface, &dbusmainloop,
+                                &controllerInterface, cookie);
 
 	std::string baseObjPath("/com/pelagicore/Pelagicontain/");
 	std::string fullObjPath = baseObjPath + cookie;
@@ -88,7 +90,7 @@ int main(int argc, char **argv)
 	std::string containerName = gen_ct_name();
 	std::string containerConfig(configFilePath);
 
-	pelagicontain.addGateway(new NetworkGateway(&controllerInterface, 
+	pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
 		&systemCallInterface));
 
 	pelagicontain.addGateway(new PulseGateway(containerRoot, containerName));
@@ -101,7 +103,8 @@ int main(int argc, char **argv)
 		DBusGateway::SystemProxy, containerRoot, containerName,
 		containerConfig));
 
-	pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
+    pid_t pcPid = pelagicontain.preload(containerName, containerConfig,
+                                        containerRoot, containedCommand);
 
 	log_debug("Started Pelagicontain with PID: %d", pcPid);
 

@@ -11,8 +11,10 @@
 #include "generators.h"
 
 
-NetworkGateway::NetworkGateway(ControllerAbstractInterface *controllerInterface, 
-			       SystemCallAbstractInterface *systemCallInterface):
+NetworkGateway::NetworkGateway(ControllerAbstractInterface
+                               *controllerInterface,
+                               SystemcallAbstractInterface
+                               *systemCallInterface):
     Gateway(controllerInterface),
     m_ip(""),
     m_gateway(""),

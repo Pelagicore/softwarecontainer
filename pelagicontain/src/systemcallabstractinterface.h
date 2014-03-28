@@ -7,16 +7,16 @@
 
 #include <string>
 
-/*! SystemCallAbstractInterface provides an abstract interface to the system.
+/*! SystemcallAbstractInterface provides an abstract interface to the system.
  *
  *  This class is used by Pelagicontain to communicate with the host system
  *  and is intended to be an abstraction of the acutal implementation.
  */
-class SystemCallAbstractInterface {
+class SystemcallAbstractInterface {
 
 public:
 
-    virtual ~SystemCallAbstractInterface() {};
+    virtual ~SystemcallAbstractInterface() {};
 
     /*! Issues a call to system() with the command passed as argument
      *

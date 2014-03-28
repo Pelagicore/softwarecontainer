@@ -8,26 +8,26 @@
 #include <string>
 #include "systemcallabstractinterface.h"
 
-/*! SystemCallInterface provides an interface to the host system.
+/*! SystemcallInterface provides an interface to the host system.
  *
  *  This class is used by Pelagicontain to communicate with the host system
  *  and is intended to be an abstraction of the acutal implementation.
  */
-class SystemCallInterface :
-    public SystemCallAbstractInterface
+class SystemcallInterface :
+    public SystemcallAbstractInterface
 {
 public:
-    SystemCallInterface();
-    ~SystemCallInterface();
+    SystemcallInterface();
+    ~SystemcallInterface();
 
-    /*! Implements abstract method makeCall on SystemCallAbstractInterface
+    /*! Implements abstract method makeCall on SystemcallAbstractInterface
      *
      * \param cmd The command sent to system().
      * \return True if the command was successfully executed.
      */
     virtual bool makeCall(const std::string &cmd);
 
-    /*! Implements abstract method makeCall on SystemCallAbstractInterface
+    /*! Implements abstract method makeCall on SystemcallAbstractInterface
      *
      * \param cmd The command sent to system().
      * \param exitCode Stores the exit code returned by the call to system()

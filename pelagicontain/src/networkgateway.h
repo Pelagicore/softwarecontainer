@@ -13,7 +13,7 @@ class NetworkGateway : public Gateway
 {
 public:
         NetworkGateway(ControllerAbstractInterface *controllerInterface,
-		       SystemCallAbstractInterface *systemCallInterface);
+		       SystemcallAbstractInterface *systemCallInterface);
 	~NetworkGateway();
 
 	/*!
@@ -175,7 +175,7 @@ private:
 	std::string m_gateway;
 	bool m_internetAccess;
 	bool m_interfaceInitialized;
-	SystemCallAbstractInterface *m_systemCallInterface;
+	SystemcallAbstractInterface *m_systemCallInterface;
 
 };
 
