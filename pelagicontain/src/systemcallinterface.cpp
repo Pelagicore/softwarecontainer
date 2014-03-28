@@ -22,6 +22,5 @@ bool SystemcallInterface::makeCall(const std::string &cmd)
 bool SystemcallInterface::makeCall(const std::string &cmd, int &exitCode)
 {
     exitCode = system(cmd.c_str());
-    bool success = (exitCode == 0);
-    return success;
+    return (exitCode == 0);
 }
