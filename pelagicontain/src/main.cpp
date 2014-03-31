@@ -13,6 +13,7 @@
 #include "networkgateway.h"
 #include "dbusgateway.h"
 #include <sys/stat.h>
+#include "systemcallinterface.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -40,7 +41,8 @@ int main(int argc, char **argv)
     std::string containedCommand;
     std::string cookie;
     const char* configFilePath = CONFIG;
-    commandLineParser.addOption(configFilePath, "with-config-file", 'c', "Config file");
+    commandLineParser.addOption(configFilePath, "with-config-file", 'c',
+                                "Config file");
 
     if (commandLineParser.parse(argc, argv))
         return -1;
@@ -101,6 +103,7 @@ int main(int argc, char **argv)
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
+	SystemCallInterface systemCallInterface;
         Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
 
         std::string baseObjPath("/com/pelagicore/Pelagicontain/");
@@ -108,7 +111,8 @@ int main(int argc, char **argv)
 
         PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
-        pelagicontain.addGateway(new NetworkGateway(&controllerInterface));
+	pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
+		&systemCallInterface));
 
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
 

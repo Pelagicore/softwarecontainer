@@ -46,7 +46,7 @@ bool FifoIPC::loop()
 {
     int fd = open(m_fifoPath.c_str(), O_RDONLY);
     if (fd == -1) {
-        perror("Error opening fifo: ");
+        perror("FifoIPC open: ");
         return false;
     }
 
@@ -60,18 +60,28 @@ bool FifoIPC::loop()
             int status = read(fd, &c, 1);
             if (status > 0) {
                 buf[i++] = c;
+            } else if (status == 0) {
+                // We've read 'end of file', just ignore it
+                break;
+            } else if (status == -1) {
+                perror("FifoIPC read: ");
+                return false;
+            } else {
+                std::cout << "Error: Unknown problem reading fifo" << std::endl;
+                return false;
             }
-            // Look for end of message or end of storage buffer
+        // Look for end of message or end of storage buffer
         } while ((c != '\0') && (i != sizeof(buf) - 1));
 
         buf[i] = '\0';
         std::string messageString(buf);
-        int status;
-        shouldContinue = m_message.handleMessage(messageString, &status);
-        if (status == -1) {
+        int messageStatus = 0;
+        // If message is empty we don't need to handle it
+        if (messageString.size() > 0)
+            shouldContinue = m_message.handleMessage(messageString, &messageStatus);
+        if (messageStatus == -1)
             // The message was not understood by IPCMessage
             std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
-        }
     }
 
     return true;

@@ -36,6 +36,25 @@ public:
         bool(const std::string &cmd));
 };
 
+
+class SystemcallInterfaceStub :
+    public SystemcallAbstractInterface
+{
+public:
+
+    virtual bool makeCall(const std::string &cmd)
+    {
+	return true;
+    }
+
+    virtual bool makeCall(const std::string &cmd, int &exitCode)
+    {
+	exitCode = 0;
+	return true;
+    }
+
+};
+
 using ::testing::InSequence;
 using ::testing::_;
 using ::testing::Return;
@@ -54,7 +73,8 @@ TEST(NetworkGatewayTest, TestSetConfig) {
     std::string config = "{\"internet-access\": \"false\", \"gateway\":\"\"}";
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
     NiceMock<MockController> controllerInterface;
-    NetworkGateway gw(&controllerInterface);
+    SystemcallInterfaceStub systemCallInterface;
+    NetworkGateway gw(&controllerInterface, &systemCallInterface);
 
     bool success = gw.setConfig(config);
     ASSERT_TRUE(success);
@@ -65,7 +85,8 @@ TEST(NetworkGatewayTest, TestSetConfig) {
 TEST(NetworkGatewayTest, TestActivate) {
     std::string config = "{\"internet-access\": \"true\", \"gateway\":\"10.0.3.1\"}";
     NiceMock<MockController> controllerInterface;
-    NetworkGateway gw(&controllerInterface);
+    SystemcallInterfaceStub systemCallInterface;
+    NetworkGateway gw(&controllerInterface, &systemCallInterface);
     ASSERT_TRUE(gw.setConfig(config));
 
     std::string ip = gw.ip();
@@ -88,7 +109,8 @@ TEST(NetworkGatewayTest, TestActivate) {
 TEST(NetworkGatewayTest, TestActivateTwice) {
     std::string config = "{\"internet-access\": \"true\", \"gateway\":\"10.0.3.1\"}";
     NiceMock<MockController> controllerInterface;
-    NetworkGateway gw(&controllerInterface);
+    SystemcallInterfaceStub systemCallInterface;
+    NetworkGateway gw(&controllerInterface, &systemCallInterface);
     ASSERT_TRUE(gw.setConfig(config));
 
     std::string ip = gw.ip();
@@ -121,7 +143,8 @@ TEST(NetworkGatewayTest, TestActivateTwice) {
  */
 TEST(NetworkGatewayTest, TestActivateNoConfig) {
     NiceMock<MockController> controllerInterface;
-    NetworkGateway gw(&controllerInterface);
+    SystemcallInterfaceStub systemCallInterface;
+    NetworkGateway gw(&controllerInterface, &systemCallInterface);
 
     std::string cmd_1 = "ifconfig eth0 down";
 
@@ -139,7 +162,8 @@ TEST(NetworkGatewayTest, TestActivateNoConfig) {
 TEST(NetworkGatewayTest, TestActivateBadConfig) {
     std::string config = "{\"internet-access\": \"true\"}";
     NiceMock<MockController> controllerInterface;
-    NetworkGateway gw(&controllerInterface);
+    SystemcallInterfaceStub systemCallInterface;
+    NetworkGateway gw(&controllerInterface, &systemCallInterface);
     ASSERT_TRUE(gw.setConfig(config));
 
     std::string cmd_1 = "ifconfig eth0 down";

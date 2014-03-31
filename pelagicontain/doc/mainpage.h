@@ -151,6 +151,8 @@ an existing network bridge on the host. To set up a network bridge on the host:
 <code>brctl addbr container-br0</code> <br />
 <code>brctl setfd container-br0 0</code> <br />
 <code>ifconfig container-br0 10.0.3.1 netmask 255.255.255.0 promisc up</code> <br />
+<code>iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE</code> <br />
+<code>echo 1 > /proc/sys/net/ipv4/ip_forward</code> <br />
 
 A minimal configuration would then look like: <br />
 <code>{ <br />
@@ -173,6 +175,8 @@ Add a container-br0 bridge: <br />
 <code>brctl addbr container-br0</code> <br />
 <code>brctl setfd container-br0 0</code> <br />
 <code>ifconfig container-br0 10.0.3.1 netmask 255.255.255.0 promisc up</code> <br />
+<code>iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE</code> <br />
+<code>echo 1 > /proc/sys/net/ipv4/ip_forward</code> <br />
 
 With root privilegies start \c pam_stub.py (found in pelagicontain/component-test/)
 

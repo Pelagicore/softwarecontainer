@@ -7,11 +7,13 @@
 
 #include "gateway.h"
 #include "controllerinterface.h"
+#include "systemcallinterface.h"
 
 class NetworkGateway : public Gateway
 {
 public:
-	NetworkGateway(ControllerAbstractInterface *controllerInterface);
+        NetworkGateway(ControllerAbstractInterface *controllerInterface,
+		       SystemcallAbstractInterface *systemCallInterface);
 	~NetworkGateway();
 
 	/*!
@@ -38,9 +40,9 @@ public:
 	std::string ip();
 private:
 
-        /*! Set container IP address
+        /*! Generate IP address for the container
 	*
-	* Retrieves an IP from DHCP and sets the IP address.
+	* Retrieves an IP from DHCP.
 	*
 	* Note that a file on the system acts as a placeholder for the DHCP server.
 	* The file keeps track of the highest used IP address.
@@ -48,7 +50,7 @@ private:
 	* \return true  Upon success
 	* \return false Upon failure
 	*/
-	bool setContainerIP();
+	bool generateIP();
 
         /*! Set route to default gateway
 	*
@@ -173,6 +175,7 @@ private:
 	std::string m_gateway;
 	bool m_internetAccess;
 	bool m_interfaceInitialized;
+	SystemcallAbstractInterface *m_systemCallInterface;
 
 };
 

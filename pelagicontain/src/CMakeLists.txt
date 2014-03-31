@@ -40,6 +40,7 @@ add_executable( pelagicontain
     networkgateway.cpp
     pamproxy.h
     dbusadaptor.h
+    systemcallinterface.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain
