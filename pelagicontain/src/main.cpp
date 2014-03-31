@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
-	SystemCallInterface systemCallInterface;
+	SystemcallInterface systemCallInterface;
         Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
 
         std::string baseObjPath("/com/pelagicore/Pelagicontain/");
