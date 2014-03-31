@@ -40,11 +40,6 @@ public:
      */
     void setApplication(const std::string &appId);
 
-
-    /*
-     * The LXC configuration file for this container
-     */
-    std::string m_configFile;
 private:
     /*
      * Check if path is a directory
@@ -76,6 +71,11 @@ private:
      * should be deleted in the destructor.
      */
     std::vector<std::string> m_dirs;
+
+    /*
+     * The LXC configuration file for this container
+     */
+    std::string m_configFile;
 
     /*
      * The unique name of the LXC container
