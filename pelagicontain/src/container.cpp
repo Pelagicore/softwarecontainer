@@ -30,8 +30,8 @@
 Container::Container(const std::string &name,
                      const std::string &configFile,
                      const std::string &containerRoot) :
-    m_name(name),
     m_configFile(configFile),
+    m_name(name),
     m_containerRoot(containerRoot),
     m_mountDir(containerRoot + "/late_mounts")
 {

@@ -29,8 +29,6 @@ public:
 
     ~Container();
 
-    const char *name();
-
     std::vector<std::string> commands(const std::string &containedCommand,
                                       const std::vector<Gateway *> &gateways);
 
@@ -42,10 +40,6 @@ public:
      */
     void setApplication(const std::string &appId);
 
-    /*
-     * The unique name of the LXC container
-     */
-    std::string m_name;
 
     /*
      * The LXC configuration file for this container
@@ -82,6 +76,12 @@ private:
      * should be deleted in the destructor.
      */
     std::vector<std::string> m_dirs;
+
+    /*
+     * The unique name of the LXC container
+     */
+    std::string m_name;
+    const char *name();
 
     std::string m_containerRoot;
     std::string m_mountDir;
