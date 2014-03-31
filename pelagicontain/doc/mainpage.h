@@ -162,14 +162,12 @@ A minimal configuration would then look like: <br />
 </code>
 
 <h2>Running the Pelagicontain component tests</h2>
-<code>mkdir -p /tmp/test/</code><br>
-<code>cp -R pelagicontain/component-test/test-data/comptest/\* /tmp/test/</code>
+<code>./setup-dirs.sh /tmp/test/</code><br>
 
 Copy \c controller to <code>/tmp/test/bin/</code><br>
 Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/</code> (containedapp is
 built separately from the pelagicontain project and is found in
 pelagicontain/component-test/)<br>
-Set up <code>/tmp/test/late_mounts</code> the same way described under "Running Pelagicontain".
 
 Add a container-br0 bridge: <br />
 <code>brctl addbr container-br0</code> <br />
