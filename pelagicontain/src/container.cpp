@@ -157,13 +157,13 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 
 bool Container::bindMountDir(const std::string &src, const std::string &dst)
 {
-    int mount_res = mount(src.c_str(), // source
+    int mountRes = mount(src.c_str(), // source
                           dst.c_str(), // target
                           "",			  // fstype
                           MS_BIND,		  // flags
                           NULL);		  // data
 
-    if (mount_res == 0)
+    if (mountRes == 0)
     {
         // Success
         m_mounts.push_back(dst);
@@ -175,7 +175,7 @@ bool Container::bindMountDir(const std::string &src, const std::string &dst)
                   strerror(errno));
     }
 
-    return (mount_res == 0);
+    return (mountRes == 0);
 }
 
 /*
