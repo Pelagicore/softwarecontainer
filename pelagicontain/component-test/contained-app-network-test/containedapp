@@ -1,5 +1,5 @@
 #!/bin/sh
 
 echo "########## APP STARTED #########"
-ping -c 1 www.google.com > /deployed_app/ping_log
+ping -c 1 www.google.com > /shared/ping_log
 echo "########### APP DONE ##########"

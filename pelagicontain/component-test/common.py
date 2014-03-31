@@ -34,7 +34,7 @@ class ComponentTestHelper:
         self.result = 0
 
         self.cookie = self.generate_cookie()
-        self.app_uuid = self.generate_app_uuid()
+        self.app_uuid = "com.pelagicore.comptest"
         print "Generated Cookie = %s, appId = %s" % (self.cookie, self.app_uuid)
 
         self.bus = self.create_session_bus()

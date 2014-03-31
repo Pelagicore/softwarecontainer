@@ -44,22 +44,38 @@ gateways, and unregisters as a client with Platform Access Manager. Pelagicontai
 shuts down itself after this is completed.
 
 <h2>The structure of a container</h2>
-Assuming the container location (i.e. the contaier root directory) is called
+Assuming the container location (i.e. the contanier root directory) is called
 \c $containerRoot
 
-\c $containerRoot must contain the following directories:
+\c $containerRoot/\<appId\> must contain the following directories:
 <ul>
-	<li> \c rootfs/ </li>
+	<li> \c bin/ </li>
 		<ul><li>
-		This is where the data exposed to the container should
-		be placed. This includes binaries and libraries required for
-		execution, but also other resources such as graphics and
-		audio.
+		This is where the binaries exposed to the container should
+		be placed. This includes libraries required for execution.
 		</li></ul>
+	<li> \c shared/ </li>
+		<ul><li>
+		This is where shared data exposed to the container should
+		be placed, files that should be shared between all instances
+		of a running application.
+		</li></ul>
+	<li> \c home/ </li>
+		<ul><li>
+		This is where shared data exposed to the container should
+		be placed, files that should be shared between all instances
+		of a running application.
+		</li></ul>		
 </ul>
 
-In \c $containerRoot the following files are automatically created,
-and cleaned up on exit:
+When launching an instance of pelagicontain a random containerId will be generated
+ which is valid only for that session. 
+
+In \c $containerRoot/$containerId/gateways/ the different gateways can create e.g.
+sockets used to communicate in and out of the container. This directory is available
+inside the container as /gateways/. These files and directory
+and automatically cleaned up on exit. An examples of files in /gateways/ is:
+
 <ul>
 	<li>Session D-Bus proxy socket</li>
 		<ul><li>
@@ -77,27 +93,48 @@ and cleaned up on exit:
 <h2>Running Pelagicontain</h2>
 The main program of Pelagicontain is called \c pelagicontain, and is used to
 launch contained applications. \c pelagicontain is invoked with the base
-directory of the container as the first parameter and the command to run
+directory of the launcher as the first parameter and the command to run
 within the container as the second parameter, and a unique cookie string as
 a third argument.
 
-Before running \c pelagicontain a location for the container should be created
-which will be the container root directory (\c $containerRoot), with the
-application root directory in it (\c $containerRoot/rootfs). A network bridge
-should be set up as well:
-brctl addbr br0
+Before running \c pelagicontain a "runtime directory" needs to be created and
+set up. The run-time directory should look like this: <br>
+
+<code>
+├── bin<br>
+│   └── controller<br>
+├── \<appId\><br>
+│   ├── bin<br>
+│   │   └── containedapp<br>
+│   ├── home<br>
+│   └── shared<br>
+└── late_mounts<br>
+</code>
+
+The directory late_mounts needs to be set up in a specific way in order to 
+allow propagation of mount points into a already started container. This 
+is done in the following way (as root):
+
+<code>mkdir -p \<runtime dir\>/late_mounts</code><br>
+<code>mount --bind \<runtime dir\>/late_mounts \<runtime dir\>/late_mounts</code><br>
+<code>mount --make-unbindable \<runtime dir\>/late_mounts</code><br>
+<code>mount --make-shared \<runtime dir\>/late_mounts</code><br>
+
+As listed in the overview of the runtime directory above, a \<appId\> directory
+containing three sub-directories needs to be created. The bin directory should
+contain the actual application that will be started and any libraries needed,
+and will be available as /appbin/ inside the container. Shared and home will
+also be available inside the container as /appshared/ and /apphome/.
+
+A network bridge should be set up as well:
+<code>brctl addbr container-br0</code>
 
 Running:
 
 \c pelagicontain \c $containerRoot \c myCommand \c cookie
 
 will invoke the \c myCommand in a container which will be created with
-\c $containerRoot as root directory. It is
-important to note that all commands and libraries needed in the container must
-be deployed to a directory named \c rootfs in the \c $containerRoot directory,
-i.e. a binary that should be executed inside the container should be placed
-in \c $containerRoot/rootfs/. This directory will be mounted and visible as
-\c /deployed_app inside the container.
+\c $containerRoot as root directory. 
 
 In the normal case where Pelagicontain is run as part of the platform, the
 binary to run inside the container will be the \c controller which will later
@@ -125,13 +162,12 @@ A minimal configuration would then look like: <br />
 </code>
 
 <h2>Running the Pelagicontain component tests</h2>
-<code>mkdir -p /tmp/test/rootfs</code>
+<code>./setup-dirs.sh /tmp/test/</code><br>
 
-Copy \c controller to <code>/tmp/test/rootfs/</code>
-
-Copy \c containedapp to <code>/tmp/test/rootfs/</code> (containedapp is
+Copy \c controller to <code>/tmp/test/bin/</code><br>
+Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/</code> (containedapp is
 built separately from the pelagicontain project and is found in
-pelagicontain/component-test/)
+pelagicontain/component-test/)<br>
 
 Add a container-br0 bridge: <br />
 <code>brctl addbr container-br0</code> <br />
@@ -144,8 +180,7 @@ With root privilegies start \c pam_stub.py (found in pelagicontain/component-tes
 
 Run \c test_pelagicontain (also with root privilegies) and point out where the
  \c pelagicontain binary is (assuming we are in the git repo root and build is
- done in \c build):
-
+ done in \c build):<br>
 <code>PC_BINARY=build/pelagicontain/src/pelagicontain ./pelagicontain/component-test/test_pelagicontain.py</code>
 
 Remember that pam_stub and the test must have access to the same D-Bus bus,

@@ -11,6 +11,7 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 find_package(PkgConfig           REQUIRED)
 find_package(PelagicoreUtilities REQUIRED)
+find_package(PelagicoreLogging   REQUIRED)
 find_package(DBusCpp             REQUIRED)
 
 add_definitions(-DPACKAGE_VERSION="0.1")

@@ -14,7 +14,7 @@ class PulseGateway :
 	public Gateway
 {
 public:
-	PulseGateway(const std::string &containerRoot, const std::string &containerName);
+	PulseGateway(const std::string &gatewayDir, const std::string &containerName);
 	~PulseGateway();
 
 	/*!
