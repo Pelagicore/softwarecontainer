@@ -4,10 +4,14 @@
 # -c: clean, this means the directory specified with -d should be removed
 #     before creating it again
 # -d: deployment directory, where to place container files
+# -x: Path to controller binary
+# -a: Application ID (as identified in PAM)
 #
-# Additional arguments: Files to put in directory specified with -d
+# Additional arguments: Files to put in <deployment dir>/<appId>/bin/
 #
-# Example: ./setup_environment.sh -d /tmp/container -c yes -- /etc/passwod
+# Example: ./setup_environment.sh -d /tmp/container -d /tmp/container/
+#                                 -a com.pelagicore.myApp -c yes
+#                                 -- /etc/password
 
 BRCTL_CMD="/sbin/brctl"
 BRIDGE="container-br0"
