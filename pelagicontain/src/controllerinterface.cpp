@@ -86,10 +86,11 @@ bool ControllerInterface::systemCall(const std::string &cmd)
 
 bool ControllerInterface::openFifo()
 {
+    /*
     while (access (m_fifoPath.c_str(), F_OK) == -1) {
         log_error (std::string("FIFO ("+m_fifoPath+") not available.."
         " Spinning..").c_str());
-    }
+    }*/
 
     m_fifo = open(m_fifoPath.c_str(), O_WRONLY);
     if (m_fifo == -1) {

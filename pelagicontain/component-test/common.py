@@ -76,11 +76,21 @@ class ComponentTestHelper:
         # The intention is to pass a cookie to Pelagicontain which it will use to
         # destinguish itself on D-Bus (as we will potentially have multiple instances
         # running in the system
+        return self.start_pelagicontain2(self.pelagicontain_binary,
+                                         self.container_root_dir, command)
+
+    def start_pelagicontain2(self, pelagicontain_bin, container_root, cmd):
+        # @param  pelagicontain_bin path to pelagicontain binary
+        # @param  container_root    path to container root
+        # @param  cmd               command to execute in container
+        # @return true if pelagicontain started successfully
+        #         false otherwise
         try:
-            self.pelagicontain_pid = Popen([self.pelagicontain_binary, self.container_root_dir,
-                                       command, self.cookie]).pid
-        except:
+            self.pelagicontain_pid = Popen([pelagicontain_bin, container_root,
+                                            cmd, self.cookie]).pid
+        except OSError as e:
             return False
+
         return True
 
     def find_pelagicontain_on_dbus(self):
@@ -91,6 +101,9 @@ class ComponentTestHelper:
                 self.pelagicontain_remote_object = \
                     self.bus.get_object("com.pelagicore.Pelagicontain",
                                    "/com/pelagicore/Pelagicontain/" + self.cookie)
+                self.pelagicontain_iface =\
+                    dbus.Interface(self.pelagicontain_remote_object, 
+                                   "com.pelagicore.Pelagicontain")
                 found = True
             except:
                 pass
@@ -134,8 +147,12 @@ class ComponentTestHelper:
         catch the exception and ignore it.
     """
     def shutdown_pelagicontain(self):
-        try:
-            self.pelagicontain_iface.Shutdown()
-            print "Shutting down Pelagicontain"
-        except:
-            pass
+        if not self.pelagicontain_iface:
+            self.find_pelagicontain_on_dbus()
+            if not self.pelagicontain_iface:
+                print "Failed to find pelagicontain on D-Bus.."
+                return False
+        self.pelagicontain_iface.Shutdown()
+        print "Shutting down Pelagicontain"
+
+        return True

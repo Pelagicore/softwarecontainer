@@ -14,6 +14,7 @@
 #include "dbusgateway.h"
 #include <sys/stat.h>
 #include "systemcallinterface.h"
+#include "devicenodegateway.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -115,6 +116,8 @@ int main(int argc, char **argv)
 		&systemCallInterface));
 
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
+
+        pelagicontain.addGateway(new DeviceNodeGateway(&controllerInterface));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
                                                  DBusGateway::SessionProxy, gatewayDir, containerName,
