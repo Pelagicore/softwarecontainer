@@ -19,7 +19,7 @@ public:
      * \param pamInterface A pointer to the Platform Access Manager interface
      * \param mainloopInterface A pointer to the mainloop interface
      * \param cookie A unique identifier used to distinguish unique instances
-     * 	of Pelagicontain
+     *  of Pelagicontain
      */
     Pelagicontain(PAMAbstractInterface *pamInterface,
                   MainloopAbstractInterface *mainloopInterface,
@@ -47,7 +47,7 @@ public:
      * \param containerName Name of the container
      * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
      * \param containerRoot A path to the root of the container, i.e. the base
-     * 	path to e.g. the configurations and application root
+     *  path to e.g. the configurations and application root
      * \param containedCommand The command to be executed inside the container
      *
      * \return The PID of the container
@@ -63,12 +63,12 @@ public:
      * gateway configurations. This is the initial stage of the launch phase.
      *
      * \param appId An application identifier used to fetch what capabilities
-     * 	the application wants access to
+     *  the application wants access to
      */
     void launch(const std::string &appId);
 
     /*! Continues the 'launch' phase by allowing gateway configurations to
-     * 	be set.
+     *  be set.
      *
      * Platform Access Manager calls this method after Pelagicontain has
      * registered as a client, and passes all gateway configurations as

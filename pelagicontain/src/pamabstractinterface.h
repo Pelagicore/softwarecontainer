@@ -10,14 +10,15 @@
 class PAMAbstractInterface {
 
 public:
-	virtual ~PAMAbstractInterface() {};
+    virtual ~PAMAbstractInterface() {
+    };
 
-	virtual void registerClient(const std::string &cookie,
-		const std::string &appId) = 0;
+    virtual void registerClient(const std::string &cookie,
+                                const std::string &appId) = 0;
 
-	virtual void unregisterClient(const std::string &cookie) = 0;
+    virtual void unregisterClient(const std::string &cookie) = 0;
 
-	virtual void updateFinished(const std::string &cookie) = 0;
+    virtual void updateFinished(const std::string &cookie) = 0;
 };
 
 #endif /* PAMABSTRACTINTERFACE_H */

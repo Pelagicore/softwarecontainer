@@ -13,7 +13,7 @@
  *  This class is used by Pelagicontain to communicate with the host system
  *  and is intended to be an abstraction of the acutal implementation.
  */
-class SystemcallInterface :
+class SystemcallInterface:
     public SystemcallAbstractInterface
 {
 public:

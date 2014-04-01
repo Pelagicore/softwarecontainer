@@ -13,14 +13,14 @@
 
 using namespace pelagicore;
 
-class MockController :
+class MockController:
     public ControllerAbstractInterface
 {
 public:
 
     virtual bool startApp()
     {
-            return true;
+        return true;
     }
 
     virtual bool shutdown()
@@ -29,13 +29,13 @@ public:
     }
 
     virtual bool setEnvironmentVariable(const std::string &variable,
-        const std::string &value)
+                                        const std::string &value)
     {
         return true;
     }
 
     MOCK_METHOD1(systemCall,
-        bool(const std::string &cmd));
+                 bool(const std::string &cmd));
 };
 
 using ::testing::InSequence;
@@ -62,11 +62,11 @@ TEST(DeviceNodeGatewayTest, TestHasNoEnvironment) {
     ASSERT_STREQ(gw.environment().c_str(), "");
 }
 
-class DeviceNodeGatewayValidConfig : 
+class DeviceNodeGatewayValidConfig:
     public testing::TestWithParam<testData> {};
 
-INSTANTIATE_TEST_CASE_P (InstantiationName, DeviceNodeGatewayValidConfig,
-    ::testing::ValuesIn(validConfigs));
+INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayValidConfig,
+                        ::testing::ValuesIn(validConfigs));
 
 TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     StrictMock<MockController> controllerInterface;
@@ -93,11 +93,11 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     DefaultValue<bool>::Clear();
 }
 
-class DeviceNodeGatewayInvalidConfig : 
+class DeviceNodeGatewayInvalidConfig:
     public testing::TestWithParam<testData> {};
 
-INSTANTIATE_TEST_CASE_P (InstantiationName, DeviceNodeGatewayInvalidConfig,
-    ::testing::ValuesIn(invalidConfigs));
+INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayInvalidConfig,
+                        ::testing::ValuesIn(invalidConfigs));
 
 TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
     StrictMock<MockController> controllerInterface;

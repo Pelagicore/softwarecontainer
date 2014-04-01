@@ -46,13 +46,13 @@ bool NetworkGateway::setConfig(const std::string &config)
     std::string value = parseConfig(config.c_str(), "internet-access");
     if (value.compare("true") == 0)
     {
-	log_debug("Internet access will be enabled\n");
-	m_internetAccess = true;
+        log_debug("Internet access will be enabled\n");
+        m_internetAccess = true;
     }
     else
     {
-	log_debug("Internet access disabled\n");
-	m_internetAccess = false;
+        log_debug("Internet access disabled\n");
+        m_internetAccess = false;
     }
 
     /* Retrieve the gateway IP */
@@ -60,18 +60,18 @@ bool NetworkGateway::setConfig(const std::string &config)
 
     if (m_gateway.compare("") != 0)
     {
-	log_debug("Default gateway set to %s\n", m_gateway.c_str());
+        log_debug("Default gateway set to %s\n", m_gateway.c_str());
     }
     else
     {
-	m_internetAccess = false;
-	log_debug("No gateway. Network access will be disabled\n");
+        m_internetAccess = false;
+        log_debug("No gateway. Network access will be disabled\n");
 
-	if (m_internetAccess)
-	{
-	    log_error("Bad gateway setting in configuration file\n");
-	    success = false;
-	}
+        if (m_internetAccess)
+        {
+            log_error("Bad gateway setting in configuration file\n");
+            success = false;
+        }
     }
 
     return success;
@@ -84,22 +84,22 @@ bool NetworkGateway::activate()
 
     if (isBridgeAvailable())
     {
-	if (generateIP())
-	{
-	    ready = true;
-	}
+        if (generateIP())
+        {
+            ready = true;
+        }
     }
 
     if (ready)
     {
-	if (m_internetAccess)
-	{
-	    success = up();
-	}
-	else
-	{
-	    success = down();
-	}
+        if (m_internetAccess)
+        {
+            success = up();
+        }
+        else
+        {
+            success = down();
+        }
     }
 
     return success;
@@ -113,7 +113,7 @@ std::string NetworkGateway::ip()
 bool NetworkGateway::generateIP()
 {
     const char * ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
-    
+
     m_ip = gen_ip_addr(ipAddrNet);
     log_debug("IP set to %s\n", m_ip.c_str());
 
@@ -134,14 +134,14 @@ bool NetworkGateway::up()
 
     if (!m_interfaceInitialized)
     {
-	cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
-	m_interfaceInitialized = true;
+        cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
+        m_interfaceInitialized = true;
     }
     else
     {
-	cmd = "ifconfig eth0 up";
+        cmd = "ifconfig eth0 up";
     }
-    
+
     m_controllerInterface->systemCall(cmd);
 
     /* The route to the default gateway must be added
@@ -172,11 +172,11 @@ bool NetworkGateway::isBridgeAvailable()
 
     if (m_systemCallInterface->makeCall(cmd))
     {
-	ret = true;
+        ret = true;
     }
     else
     {
-	log_error("No network bridge configured");
+        log_error("No network bridge configured");
     }
 
     return ret;
@@ -353,7 +353,7 @@ bool NetworkGateway::teardownIptables(const std::string &ipAddress)
             /* Actual deletion */
             snprintf(ipt_cmd, sizeof(ipt_cmd), "iptables -D FORWARD %d", line_no);
             if (system(ipt_cmd) == -1)
-                log_error ("Failed to execute '%s'", ipt_cmd);
+                log_error("Failed to execute '%s'", ipt_cmd);
             /* We'll continue trying with the rest */
 
             line_no--; /* Removing this rule offsets the rest */
@@ -370,7 +370,7 @@ bool NetworkGateway::teardownIptables(const std::string &ipAddress)
 }
 
 std::string NetworkGateway::parseConfig(const std::string &config, const std::string &key) {
-    json_error_t  error;
+    json_error_t error;
     json_t       *root, *value;
     std::string ret = "";
 
@@ -378,18 +378,18 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
     root = json_loads(config.c_str(), 0, &error);
 
     if (!root) {
-	log_error("Error on line %d: %s\n", error.line, error.text);
-	goto cleanup_parse_json;
+        log_error("Error on line %d: %s\n", error.line, error.text);
+        goto cleanup_parse_json;
     }
 
     // Get string
     value = json_object_get(root, key.c_str());
 
     if (!json_is_string(value)) {
-	log_error("Value is not a string.");
-	log_error("error: on line %d: %s\n", error.line, error.text);
-	json_decref(value);
-	goto cleanup_parse_json;
+        log_error("Value is not a string.");
+        log_error("error: on line %d: %s\n", error.line, error.text);
+        json_decref(value);
+        goto cleanup_parse_json;
     }
 
     ret = std::string(json_string_value(value));
@@ -399,7 +399,7 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
 cleanup_parse_json:
     if (root)
     {
-	json_decref(root);
+        json_decref(root);
     }
 
     return ret;
