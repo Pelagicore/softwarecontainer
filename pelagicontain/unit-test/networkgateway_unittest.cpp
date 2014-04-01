@@ -11,14 +11,14 @@
 
 using namespace pelagicore;
 
-class MockController :
+class MockController:
     public ControllerAbstractInterface
 {
 public:
 
     virtual bool startApp()
     {
-            return true;
+        return true;
     }
 
     virtual bool shutdown()
@@ -27,24 +27,24 @@ public:
     }
 
     virtual bool setEnvironmentVariable(const std::string &variable,
-        const std::string &value)
+                                        const std::string &value)
     {
         return true;
     }
 
     MOCK_METHOD1(systemCall,
-        bool(const std::string &cmd));
+                 bool(const std::string &cmd));
 };
 
 
-class MockSystemcallInterface :
+class MockSystemcallInterface:
     public SystemcallAbstractInterface
 {
 public:
     virtual bool makeCall(const std::string &cmd, int &exitCode)
     {
-	exitCode = 0;
-	return true;
+        exitCode = 0;
+        return true;
     }
 
     MOCK_METHOD1(makeCall, bool(const std::string &cmd));
@@ -57,19 +57,19 @@ using ::testing::_;
 using ::testing::Return;
 using ::testing::NiceMock;
 
-class NetworkGatewayTest :
+class NetworkGatewayTest:
     public ::testing::Test
 {
 protected:
     virtual void SetUp()
     {
-	DefaultValue<bool>::Set(true);
+        DefaultValue<bool>::Set(true);
     }
 
     virtual void TearDown()
     {
-	using ::testing::DefaultValue;
-	DefaultValue<bool>::Clear();
+        using ::testing::DefaultValue;
+        DefaultValue<bool>::Clear();
     }
 
     NiceMock<MockController> controllerInterface;
@@ -107,10 +107,10 @@ TEST_F(NetworkGatewayTest, TestActivate) {
     std::string cmd_2 = "route add default gw 10.0.3.1";
 
     {
-	InSequence sequence;
-	EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+        InSequence sequence;
+        EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
     }
 
     bool success = gw.activate();
@@ -134,20 +134,20 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
     std::string cmd_3 = "ifconfig eth0 up";
 
     {
-	InSequence sequence;
-	EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+        InSequence sequence;
+        EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
     }
 
     bool success = gw.activate();
     ASSERT_TRUE(success);
 
     {
-	InSequence sequence;
-	EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_3)).Times(1);
-	EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+        InSequence sequence;
+        EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_3)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
     }
 
     success = gw.activate();
@@ -164,8 +164,8 @@ TEST_F(NetworkGatewayTest, TestActivateNoConfig) {
     std::string cmd_1 = "ifconfig eth0 down";
 
     {
-	InSequence sequence;
-	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+        InSequence sequence;
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     bool success = gw.activate();
@@ -184,8 +184,8 @@ TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
     std::string cmd_1 = "ifconfig eth0 down";
 
     {
-	InSequence sequence;
-	EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
+        InSequence sequence;
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     bool success = gw.activate();

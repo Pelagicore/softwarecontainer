@@ -15,7 +15,7 @@
  *  and is intended to hide the details of the communication mechanism
  *  implementation.
  */
-class ControllerInterface :
+class ControllerInterface:
     public ControllerAbstractInterface
 {
 public:
@@ -24,17 +24,17 @@ public:
     ~ControllerInterface();
 
     /*! Implements ControllerAbstractInterface::startApp
-    */
+     */
     virtual bool startApp();
 
     /*! Implements ControllerAbstractInterface::shutdown
-    */
+     */
     virtual bool shutdown();
 
     /*! Implements ControllerAbstractInterface::setEnvironmentVariable
-    */
+     */
     virtual bool setEnvironmentVariable(const std::string &variable,
-        const std::string &value);
+                                        const std::string &value);
 
     /*! Implements ControllerAbstractInterface::systemCall
      */

@@ -14,38 +14,38 @@ namespace pelagicore {
 namespace test {
 
 class ContainedApp_adaptor
-: public ::DBus::InterfaceAdaptor
+    : public ::DBus::InterfaceAdaptor
 {
 public:
 
     ContainedApp_adaptor()
-    : ::DBus::InterfaceAdaptor("com.pelagicore.test.ContainedApp")
+        : ::DBus::InterfaceAdaptor("com.pelagicore.test.ContainedApp")
     {
         register_method(ContainedApp_adaptor, Echo, _Echo_stub);
     }
 
-    ::DBus::IntrospectedInterface *introspect() const 
+    ::DBus::IntrospectedInterface *introspect() const
     {
-        static ::DBus::IntrospectedArgument Echo_args[] = 
+        static ::DBus::IntrospectedArgument Echo_args[] =
         {
             { "argument", "s", true },
             { 0, "s", false },
             { 0, 0, 0 }
         };
-        static ::DBus::IntrospectedMethod ContainedApp_adaptor_methods[] = 
+        static ::DBus::IntrospectedMethod ContainedApp_adaptor_methods[] =
         {
             { "Echo", Echo_args },
             { 0, 0 }
         };
-        static ::DBus::IntrospectedMethod ContainedApp_adaptor_signals[] = 
+        static ::DBus::IntrospectedMethod ContainedApp_adaptor_signals[] =
         {
             { 0, 0 }
         };
-        static ::DBus::IntrospectedProperty ContainedApp_adaptor_properties[] = 
+        static ::DBus::IntrospectedProperty ContainedApp_adaptor_properties[] =
         {
             { 0, 0, 0, 0 }
         };
-        static ::DBus::IntrospectedInterface ContainedApp_adaptor_interface = 
+        static ::DBus::IntrospectedInterface ContainedApp_adaptor_interface =
         {
             "com.pelagicore.test.ContainedApp",
             ContainedApp_adaptor_methods,
@@ -90,5 +90,7 @@ private:
     }
 };
 
-} } } 
+}
+}
+}
 #endif //__dbusxx__dbusadaptor_h__ADAPTOR_MARSHAL_H

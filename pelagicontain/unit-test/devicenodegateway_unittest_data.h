@@ -10,8 +10,8 @@ struct testData {
 };
 
 void PrintTo(const testData& d, ::std::ostream* os) {
-  *os << "Title: " << d.title;
-  *os << "\nData: " << d.data;
+    *os << "Title: " << d.title;
+    *os << "\nData: " << d.data;
 }
 
 const struct testData invalidConfigs[] = {
@@ -27,7 +27,7 @@ const struct testData invalidConfigs[] = {
         "}"
     },
     {
-    "Bad top level key",
+        "Bad top level key",
         "{\"wrongKey\": ["
         "                  {"
         "                      \"name\":  \"tty0\","

@@ -16,9 +16,12 @@ class Gateway
 {
 public:
     Gateway(ControllerAbstractInterface *controllerInterface):
-        m_controllerInterface(controllerInterface){};
-    Gateway() {};
-    virtual ~Gateway() {};
+        m_controllerInterface(controllerInterface){
+    };
+    Gateway() {
+    };
+    virtual ~Gateway() {
+    };
 
     /*! Additions to the environment relevant to this gateway. The string
      * returned by this function must be usable with the 'env' util of
@@ -52,7 +55,9 @@ public:
      *
      * \returns true upon successful clean-up, false otherwise
      */
-    virtual bool teardown() {return true;}
+    virtual bool teardown() {
+        return true;
+    }
 
 protected:
     ControllerAbstractInterface *m_controllerInterface;

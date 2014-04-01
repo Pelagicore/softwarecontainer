@@ -11,7 +11,7 @@
 #include "controllerabstractinterface.h"
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
-class StubMainloop :
+class StubMainloop:
     public MainloopAbstractInterface
 {
 public:
@@ -25,7 +25,7 @@ public:
 };
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
-class StubController :
+class StubController:
     public ControllerAbstractInterface
 {
     virtual bool startApp()
@@ -39,7 +39,7 @@ class StubController :
     }
 
     virtual bool setEnvironmentVariable(const std::string &variable,
-        const std::string &value)
+                                        const std::string &value)
     {
         return true;
     }
@@ -51,7 +51,7 @@ class StubController :
 };
 
 /* Mock the PAMAbstractInterface class */
-class MockPAMAbstractInterface :
+class MockPAMAbstractInterface:
     public PAMAbstractInterface
 {
 public:
@@ -65,7 +65,7 @@ public:
                  void(const std::string &appId));
 };
 
-class MockGateway :
+class MockGateway:
     public Gateway
 {
 public:
