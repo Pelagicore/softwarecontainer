@@ -95,13 +95,11 @@ int main(int argc, char **argv)
 
 	pelagicontain.addGateway(new PulseGateway(containerRoot, containerName));
 
-	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-		DBusGateway::SessionProxy, containerRoot, containerName,
-		containerConfig));
+	pelagicontain.addGateway(new DBusGateway(&controllerInterface, &systemCallInterface,
+		DBusGateway::SessionProxy, containerRoot, containerName));
 
-	pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-		DBusGateway::SystemProxy, containerRoot, containerName,
-		containerConfig));
+	pelagicontain.addGateway(new DBusGateway(&controllerInterface, &systemCallInterface,
+		DBusGateway::SystemProxy, containerRoot, containerName));
 
     pid_t pcPid = pelagicontain.preload(containerName, containerConfig,
                                         containerRoot, containedCommand);

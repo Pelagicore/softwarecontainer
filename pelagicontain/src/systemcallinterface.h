@@ -34,6 +34,23 @@ public:
      * \return True if the command was successfully executed.
      */
     virtual bool makeCall(const std::string &cmd, int &exitCode);
+
+    /*! Implements abstract method popen on SystemcallAbstractInterface
+	 *
+     * \param command The command send to popen().
+	 * \param type The type send to popen().
+     * \param fd A pointer to the file descriptor stream.
+	 * \return True if the command was successfully executed.
+     */
+    virtual bool makePopenCall(const std::string &command, const std::string &type, FILE **fd);
+
+    /*! Implements abstract method pclose on SystemcallAbstractInterface
+     *
+     * \param fd A pointer to the file descriptor stream.
+     * \param exitCode Stores the exit code returned by the call to pclose()
+     * \return True if the command was successfully executed.
+     */
+    virtual bool makePcloseCall(FILE **fd, int &exitCode);
 };
 
 #endif /* SYSTEMCALLINTERFACE_H */

@@ -6,6 +6,7 @@ add_executable(runUnitTestsPelagicontain
     main.cpp
     pelagicontain_unittest.cpp
     networkgateway_unittest.cpp
+    dbusgateway_unittest.cpp
     ../src/pelagicontain.cpp
     ../src/container.cpp
     ../src/networkgateway.cpp
