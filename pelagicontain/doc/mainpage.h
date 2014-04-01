@@ -165,7 +165,7 @@ A minimal configuration would then look like: <br />
 <code>./setup-dirs.sh /tmp/test/</code><br>
 
 Copy \c controller to <code>/tmp/test/bin/</code><br>
-Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/</code> (containedapp is
+Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/bin/</code> (containedapp is
 built separately from the pelagicontain project and is found in
 pelagicontain/component-test/)<br>
 
