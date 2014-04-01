@@ -64,7 +64,7 @@ Assuming the container location (i.e. the contanier root directory) is called
 		<ul><li>
 		This is where shared data exposed to the container should
 		be placed, files that should be shared between all instances
-		of a running application.
+		of a running application as a certain user.
 		</li></ul>		
 </ul>
 
