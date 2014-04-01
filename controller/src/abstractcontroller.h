@@ -13,7 +13,8 @@
 class AbstractController {
 
 public:
-    virtual ~AbstractController() {};
+    virtual ~AbstractController() {
+    };
 
     /*! Starts the application inside the container
      *
@@ -32,7 +33,7 @@ public:
      * \param value A string with the value to set on the environment variable
      */
     virtual void setEnvironmentVariable(const std::string &variable,
-        const std::string &value) = 0;
+                                        const std::string &value) = 0;
 
     /*! Invoke the string passed as a system call inside the container
      *

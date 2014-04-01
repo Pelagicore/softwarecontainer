@@ -10,7 +10,7 @@
 #include "debug.h"
 
 DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
-	SystemcallAbstractInterface *systemcallInterface,
+    SystemcallAbstractInterface *systemcallInterface,
     ProxyType type,
     const std::string &containerRoot,
     const std::string &name):
@@ -21,22 +21,38 @@ DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
 {
     if (m_type == SessionProxy) {
         m_socket = containerRoot
-            + std::string("/sess_")
+		    + std::string("/gateways/sess_")
             + name
             + std::string(".sock");
     } else {
         m_socket = containerRoot
-            + std::string("/sys_")
+            + std::string("/gateways/sys_")
             + name
             + std::string(".sock");
     }
+
+    std::string variable;
+    variable += "DBUS_";
+    if (m_type == SessionProxy) {
+        variable += "SESSION";
+    } else {
+        variable += "SYSTEM";
+    }
+    variable += "_BUS_ADDRESS";
+
+    std::string value;
+    value += "unix:path=";
+    value += "/gateways/";
+    value += socketName();
+
+    controllerInterface->setEnvironmentVariable(variable, value);
 }
 
 DBusGateway::~DBusGateway()
 {
     if(m_fp != NULL) {
         int exitCode;
-        if(m_systemcallInterface->makePcloseCall(&m_fp, exitCode)) {
+        if(!m_systemcallInterface->makePcloseCall(&m_fp, exitCode)) {
             log_error("pclose() returned error: %i\n", exitCode);
         }
     }
@@ -94,6 +110,7 @@ const char *DBusGateway::socketName()
 
 std::string DBusGateway::environment()
 {
+  /*
     log_debug("Requesting environment for %s with socket %s",
         typeString(), m_socket.c_str());
 
@@ -107,6 +124,6 @@ std::string DBusGateway::environment()
     env += "_BUS_ADDRESS=unix:path=";
     env += "/deployed_app/";
     env += socketName();
-
-    return env;
+  */
+    return "";
 }

@@ -85,7 +85,7 @@ def test_has_internet_access(config):
 
 def ping_successful():
     success = False
-    file_path = helper.container_root_dir + "rootfs/ping_log"
+    file_path = helper.container_root_dir + "/com.pelagicore.comptest/shared/ping_log"
 
     with open(file_path, "r") as ping_log:
         print "opened file"
@@ -138,7 +138,7 @@ def setup():
     """ Start Pelagicontain, test is passed if Popen succeeds.
         The command to execute inside the container is passed to the test function.
     """
-    if test_can_start_pelagicontain("/deployed_app/controller") == False:
+    if test_can_start_pelagicontain("/controller/controller") == False:
         print "FAIL: Could not start Pelagicontain"
         helper.result = 1
         helper.cleanup_and_finish()

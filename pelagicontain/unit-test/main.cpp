@@ -11,8 +11,8 @@ LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 int main(int argc, char **argv) {
-    pelagicore::ConsoleLogOutput logOuput("/dev/null");
-    pelagicore::ConsoleLogOutput::setInstance(logOuput);
+    //    ConsoleLogOutput logOuput("/dev/null");
+    //    ConsoleLogOutput::setInstance(logOuput);
 
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

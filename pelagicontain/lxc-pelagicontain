@@ -48,6 +48,11 @@ $rootfs/usr/lib \
 $rootfs/lib64 \
 $rootfs/usr/lib64 \
 $rootfs/deployed_app \
+$rootfs/appbin \
+$rootfs/appshared \
+$rootfs/apphome \
+$rootfs/gateways \
+$rootfs/controller \
 "
 
     mkdir -p $tree || return 1
@@ -220,9 +225,23 @@ lxc.mount.entry = /usr/lib $rootfs/usr/lib none ro,bind 0 0
 EOF
 fi
 
-if [ -n "$DEPLOY_DIR" ]; then
+if [ -n "$GATEWAY_DIR" ]; then
 cat <<EOF >> $path/config
-lxc.mount.entry = $DEPLOY_DIR deployed_app none rw,bind 0 0
+lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0
+EOF
+fi
+
+if [ -n "$MOUNT_DIR" ]; then
+cat <<EOF >> $path/config
+lxc.mount.entry = $MOUNT_DIR/$name/bin appbin none ro,bind 0 0
+lxc.mount.entry = $MOUNT_DIR/$name/shared appshared none rw,bind 0 0
+lxc.mount.entry = $MOUNT_DIR/$name/home apphome none rw,bind 0 0
+EOF
+fi
+
+if [ -n "$CONTROLLER_DIR" ]; then
+cat <<EOF >> $path/config
+lxc.mount.entry = $CONTROLLER_DIR controller none rw,bind 0 0
 EOF
 fi
 

@@ -23,7 +23,7 @@
 
 namespace {
 
-class PelagicontainComponentTest : public ::testing::Test {
+class PelagicontainComponentTest: public ::testing::Test {
 
 protected:
     std::string m_containerRoot = "/tmp/pc-component-test/";
@@ -102,7 +102,7 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
     std::string fileContent;
     char buf[1024];
     int status = 0;
-    for (;;) {
+    for (;; ) {
         memset(buf, 0, sizeof(buf));
         status = read(fh, buf, sizeof(buf));
         if (status == -1) {
@@ -153,7 +153,7 @@ TEST_F(PelagicontainComponentTest, TestControllerSetsEnvironmentVariable) {
     std::string fileContent;
     char buf[1024];
     int status = 0;
-    for (;;) {
+    for (;; ) {
         memset(buf, 0, sizeof(buf));
         status = read(fh, buf, sizeof(buf));
         if (status == -1) {

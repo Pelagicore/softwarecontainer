@@ -167,7 +167,7 @@ TEST_F(DBusGatewayTest, TestActivateCall) {
         InSequence sequence;
         EXPECT_CALL(
             systemcallInterfaceMock,
-            makePopenCall("dbus-proxy /tmp/dbusgateway-unit-test/sess_test.sock session", "w", _)
+            makePopenCall("dbus-proxy /tmp/dbusgateway-unit-test/gateways/sess_test.sock session", "w", _)
         ).WillOnce(DoAll(::testing::SetArgPointee<2>(tmp), Return(true)));
 
         EXPECT_CALL(

@@ -16,7 +16,8 @@ class SystemcallAbstractInterface {
 
 public:
 
-    virtual ~SystemcallAbstractInterface() {};
+    virtual ~SystemcallAbstractInterface() {
+    };
 
     /*! Issues a call to system() with the command passed as argument
      *

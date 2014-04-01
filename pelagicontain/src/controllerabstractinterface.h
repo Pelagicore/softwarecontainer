@@ -13,7 +13,8 @@
 class ControllerAbstractInterface {
 
 public:
-    virtual ~ControllerAbstractInterface() {};
+    virtual ~ControllerAbstractInterface() {
+    };
 
     /*! Starts the application inside the container
      *
@@ -36,7 +37,7 @@ public:
      * \param value A string with the value to set on the environment variable
      */
     virtual bool setEnvironmentVariable(const std::string &variable,
-        const std::string &value) = 0;
+                                        const std::string &value) = 0;
 
     /*! Notifies the controller to issue the system call
      *  defined in the cmd argument.

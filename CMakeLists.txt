@@ -11,6 +11,7 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 find_package(PkgConfig           REQUIRED)
 find_package(PelagicoreUtilities REQUIRED)
+find_package(PelagicoreLogging   REQUIRED)
 find_package(DBusCpp             REQUIRED)
 
 add_definitions(-DPACKAGE_VERSION="0.1")
@@ -41,3 +42,6 @@ option(BUILD_COMPONENT_TESTS "Build test app used by the component test " OFF)
 if(BUILD_COMPONENT_TESTS)
 	add_subdirectory(pelagicontain/component-test/contained-app)
 endif(BUILD_COMPONENT_TESTS)
+
+execute_process(COMMAND git submodule init)
+execute_process(COMMAND git submodule update)
