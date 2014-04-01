@@ -19,47 +19,47 @@
  */
 
 // class ContainedApp :
-// 	public com::pelagicore::test::ContainedApp_adaptor,
-// 	public DBus::IntrospectableAdaptor,
-// 	public DBus::ObjectAdaptor
+//      public com::pelagicore::test::ContainedApp_adaptor,
+//      public DBus::IntrospectableAdaptor,
+//      public DBus::ObjectAdaptor
 // {
 // public:
-// 	ContainedApp (DBus::Connection &conn) :
-// 		DBus::ObjectAdaptor(conn, "/com/pelagicore/test/ContainedApp")
-// 	{
-// 		std::cout << "Inside ContainedApp constructor" << std::endl;
-// 	}
-// 	virtual std::string Echo(const std::string& argument) {
-// 		std::cout << "ContainedApp says: " << argument << std::endl;
-// 		return "ContainedApp says: " + argument;
-// 	}
+//      ContainedApp (DBus::Connection &conn) :
+//              DBus::ObjectAdaptor(conn, "/com/pelagicore/test/ContainedApp")
+//      {
+//              std::cout << "Inside ContainedApp constructor" << std::endl;
+//      }
+//      virtual std::string Echo(const std::string& argument) {
+//              std::cout << "ContainedApp says: " << argument << std::endl;
+//              return "ContainedApp says: " + argument;
+//      }
 // };
 
 void signalHandler(int s)
 {
-	std::cout << "Caught signal " << s << std::endl;
-	exit(0);
+    std::cout << "Caught signal " << s << std::endl;
+    exit(0);
 }
 
 int main(int argc, char **argv)
 {
-	struct sigaction sigIntHandler;
+    struct sigaction sigIntHandler;
 
-	sigIntHandler.sa_handler = signalHandler;
-	sigemptyset(&sigIntHandler.sa_mask);
-	sigIntHandler.sa_flags = 0;
+    sigIntHandler.sa_handler = signalHandler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
 
-	sigaction(SIGINT, &sigIntHandler, NULL);
+    sigaction(SIGINT, &sigIntHandler, NULL);
 
-	for (;;) ;
+    for (;; ) ;
 
-// 	DBus::BusDispatcher dispatcher;
-//
-// 	DBus::default_dispatcher = &dispatcher;
-// 	DBus::Connection bus = DBus::Connection::SessionBus();
-// 	ContainedApp app(bus);
-//
-// 	bus.request_name("com.pelagicore.test.ContainedApp");
-//
-// 	dispatcher.enter();
+    //  DBus::BusDispatcher dispatcher;
+    //
+    //  DBus::default_dispatcher = &dispatcher;
+    //  DBus::Connection bus = DBus::Connection::SessionBus();
+    //  ContainedApp app(bus);
+    //
+    //  bus.request_name("com.pelagicore.test.ContainedApp");
+    //
+    //  dispatcher.enter();
 }

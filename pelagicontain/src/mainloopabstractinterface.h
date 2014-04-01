@@ -13,10 +13,11 @@
 class MainloopAbstractInterface {
 
 public:
-	virtual ~MainloopAbstractInterface() {};
+    virtual ~MainloopAbstractInterface() {
+    };
 
-	virtual void enter() = 0;
-	virtual void leave() = 0;
+    virtual void enter() = 0;
+    virtual void leave() = 0;
 };
 
 #endif /* MAINLOOPABSTRACTINTERFACE_H */

@@ -11,31 +11,31 @@
 
 /*! A libdbus-c++ specific implementation of the mainloop interface
  */
-class DBusMainloop :
-	public MainloopAbstractInterface
+class DBusMainloop:
+    public MainloopAbstractInterface
 {
 public:
-	/*! Constructor
-	 *
-	 * Takes a pointer to the DBusDispatcher which is used to enter
-	 * and leave the mainloop.
-	 *
-	 * \param dispatcher A pointer to the DBusDispatcher
-	 */
-	DBusMainloop(DBus::BusDispatcher *dispatcher);
+    /*! Constructor
+     *
+     * Takes a pointer to the DBusDispatcher which is used to enter
+     * and leave the mainloop.
+     *
+     * \param dispatcher A pointer to the DBusDispatcher
+     */
+    DBusMainloop(DBus::BusDispatcher *dispatcher);
 
-	~DBusMainloop();
+    ~DBusMainloop();
 
-	/*! Implements MainloopAbstractInterface::enter
-	 */
-	virtual void enter();
+    /*! Implements MainloopAbstractInterface::enter
+     */
+    virtual void enter();
 
-	/*! Implements MainloopAbstractInterface::leave
-	 */
-	virtual void leave();
+    /*! Implements MainloopAbstractInterface::leave
+     */
+    virtual void leave();
 
 private:
-	DBus::BusDispatcher *m_dispatcher;
+    DBus::BusDispatcher *m_dispatcher;
 };
 
 #endif /* DBUSMAINLOOP_H */

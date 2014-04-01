@@ -26,12 +26,12 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 int main(int argc, char **argv)
 {
     const char *summary = "Pelagicore container utility. "
-            "Requires an absolute path to the container root, "
-            "the command to run inside the container and "
-            "an alphanumerical cookie string as first, second and third "
-            "argument respectively";
+                          "Requires an absolute path to the container root, "
+                          "the command to run inside the container and "
+                          "an alphanumerical cookie string as first, second and third "
+                          "argument respectively";
     const char *paramsDescription = "[container root directory (abs path)] "
-            "[command] [cookie]";
+                                    "[command] [cookie]";
 
     pelagicore::CommandLineParser commandLineParser(summary,
                                                     paramsDescription,
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
-	SystemcallInterface systemCallInterface;
+        SystemcallInterface systemCallInterface;
         Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
 
         std::string baseObjPath("/com/pelagicore/Pelagicontain/");
@@ -112,8 +112,8 @@ int main(int argc, char **argv)
 
         PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
-	pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
-		&systemCallInterface));
+        pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
+                                                    &systemCallInterface));
 
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
 

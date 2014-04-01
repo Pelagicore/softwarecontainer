@@ -62,12 +62,13 @@
  *  -# minor: The minor device number, passed verbatim to mknod
  *  -# mode: Permission mode, passed verbatim to chmod
  *
-*/
-class DeviceNodeGateway : public Gateway
+ */
+class DeviceNodeGateway: public Gateway
 {
 public:
     DeviceNodeGateway(ControllerAbstractInterface *controllerInterface);
-    ~DeviceNodeGateway(){}
+    ~DeviceNodeGateway(){
+    }
 
     /*!
      *  Implements Gateway::id

@@ -10,44 +10,44 @@
 
 /*! Pulse audio functionality for Pelagicontain
  */
-class PulseGateway :
-	public Gateway
+class PulseGateway:
+    public Gateway
 {
 public:
-	PulseGateway(const std::string &gatewayDir, const std::string &containerName);
-	~PulseGateway();
+    PulseGateway(const std::string &gatewayDir, const std::string &containerName);
+    ~PulseGateway();
 
-	/*!
-	 *  Implements Gateway::id
-	 */
-	virtual std::string id();
+    /*!
+     *  Implements Gateway::id
+     */
+    virtual std::string id();
 
-	/*!
-	 *  Implements Gateway::setConfig
-	 */
-	virtual bool setConfig(const std::string &config);
+    /*!
+     *  Implements Gateway::setConfig
+     */
+    virtual bool setConfig(const std::string &config);
 
-	/*!
-	 *  Implements Gateway::activate
-	 */
-	virtual bool activate();
+    /*!
+     *  Implements Gateway::activate
+     */
+    virtual bool activate();
 
-	/*! Implements Gateway::environment
-	 */
-	virtual std::string environment();
+    /*! Implements Gateway::environment
+     */
+    virtual std::string environment();
 
 private:
-	static void loadCallback(pa_context *c, uint32_t idx, void *userdata);
-	static void unloadCallback(pa_context *c, int success, void *userdata);
-	static void stateCallback(pa_context *c, void *userdata);
+    static void loadCallback(pa_context *c, uint32_t idx, void *userdata);
+    static void unloadCallback(pa_context *c, int success, void *userdata);
+    static void stateCallback(pa_context *c, void *userdata);
 
-	std::string socketName();
+    std::string socketName();
 
-	pa_mainloop_api *m_api;
-	pa_context *m_context;
-	pa_threaded_mainloop *m_mainloop;
-	std::string m_socket;
-	int m_index;
+    pa_mainloop_api *m_api;
+    pa_context *m_context;
+    pa_threaded_mainloop *m_mainloop;
+    std::string m_socket;
+    int m_index;
 };
 
 #endif /* PULSEGATEWAY_H */

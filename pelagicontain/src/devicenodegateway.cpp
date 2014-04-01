@@ -26,7 +26,7 @@ std::string DeviceNodeGateway::environment()
 
 bool DeviceNodeGateway::setConfig(const std::string &config)
 {
-    json_error_t  error;
+    json_error_t error;
     json_t       *root = NULL, *devices = NULL;
     bool success = true;
     std::vector<struct Device> newDevList;
@@ -61,12 +61,12 @@ cleanup_setConfig:
 
     // Also frees 'devices'
     if (root)
-        json_decref (root);
+        json_decref(root);
 
     return success;
 }
 
-std::vector<struct DeviceNodeGateway::Device> 
+std::vector<struct DeviceNodeGateway::Device>
 DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
     ok = true;
     std::vector<struct DeviceNodeGateway::Device> dev_list;
@@ -74,21 +74,21 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
         struct DeviceNodeGateway::Device dev;
         json_t *device = 0;
         std::string* fields[] = {&dev.name, &dev.major, &dev.minor, &dev.mode};
-        std::string  fieldsStr[] = {"name", "major", "minor", "mode"};
+        std::string fieldsStr[] = {"name", "major", "minor", "mode"};
         uint numFields = 4;
 
         device = json_array_get(list, i);
         if (ok && !json_is_object(device)) {
-            log_error ("Expected JSON device object, found something else");
+            log_error("Expected JSON device object, found something else");
             ok = false;
         }
 
         for (uint j = 0; ok && j < numFields; j++) {
             json_t *value = 0;
-            value = json_object_get (device, fieldsStr[j].c_str());
+            value = json_object_get(device, fieldsStr[j].c_str());
             if (ok && !json_is_string(value)) {
-                log_error (std::string("Key '" + fieldsStr[j] +
-                           "' is not a member of device object!").c_str());
+                log_error(std::string("Key '" + fieldsStr[j] +
+                                      "' is not a member of device object!").c_str());
                 ok = false;
             }
             if (json_string_value(value)) {
@@ -117,13 +117,13 @@ bool DeviceNodeGateway::activate()
         struct DeviceNodeGateway::Device dev;
         dev = m_devList.at(i);
         success = m_controllerIface->systemCall("mknod " + dev.name + " c " +
-                                       dev.major + " " + dev.minor);
+                                                dev.major + " " + dev.minor);
         if (success) {
             success = m_controllerIface->systemCall("chmod " +
-            dev.mode + " " + dev.name );
+                                                    dev.mode + " " + dev.name );
         } else {
-            log_debug (std::string("Failed to create device " + dev.name)
-                            .c_str());
+            log_debug(std::string("Failed to create device " + dev.name)
+                      .c_str());
         }
     }
 

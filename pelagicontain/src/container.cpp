@@ -12,7 +12,7 @@
 
 
 #ifndef LXCTEMPLATE
-	#error Must define LXCTEMPLATE as path to lxc-pelagicontain
+    #error Must define LXCTEMPLATE as path to lxc-pelagicontain
 #endif
 
 /*
@@ -29,7 +29,7 @@
 
 Container::Container(const std::string &name,
                      const std::string &configFile,
-                     const std::string &containerRoot) :
+                     const std::string &containerRoot):
     m_configFile(configFile),
     m_name(name),
     m_containerRoot(containerRoot),
@@ -158,10 +158,10 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 bool Container::bindMountDir(const std::string &src, const std::string &dst)
 {
     int mountRes = mount(src.c_str(), // source
-                          dst.c_str(), // target
-                          "",			  // fstype
-                          MS_BIND,		  // flags
-                          NULL);		  // data
+                         dst.c_str(),  // target
+                         "",              // fstype
+                         MS_BIND,         // flags
+                         NULL);           // data
 
     if (mountRes == 0)
     {
