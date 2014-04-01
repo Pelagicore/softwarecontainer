@@ -8,6 +8,7 @@ import json
 import sys
 import time
 import re
+import os
 
 from common import ComponentTestHelper
 
@@ -64,6 +65,7 @@ with open("%s/com.pelagicore.comptest/bin/containedapp" % container_root, "w") a
     f.write("""#!/bin/sh
     ls -la
     ls -ls /dev/random > /appshared/devicenode_test_output""")
+os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_root)
 
 time.sleep(2)
 
