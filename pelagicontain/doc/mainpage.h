@@ -64,7 +64,7 @@ Assuming the container location (i.e. the contanier root directory) is called
 		<ul><li>
 		This is where shared data exposed to the container should
 		be placed, files that should be shared between all instances
-		of a running application.
+		of a running application as a certain user.
 		</li></ul>		
 </ul>
 
@@ -165,7 +165,7 @@ A minimal configuration would then look like: <br />
 <code>./setup-dirs.sh /tmp/test/</code><br>
 
 Copy \c controller to <code>/tmp/test/bin/</code><br>
-Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/</code> (containedapp is
+Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/bin/</code> (containedapp is
 built separately from the pelagicontain project and is found in
 pelagicontain/component-test/)<br>
 
