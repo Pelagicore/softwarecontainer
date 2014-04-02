@@ -100,17 +100,14 @@ TEST_F(NetworkGatewayTest, TestActivate) {
 
     ASSERT_TRUE(gw.setConfig(config));
 
-    std::string ip = gw.ip();
-
     std::string cmd_0 = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"10.0.3.1\"";
-    std::string cmd_1 = "ifconfig eth0 " + ip + " netmask 255.255.255.0 up";
-    std::string cmd_2 = "route add default gw 10.0.3.1";
+    std::string cmd_1 = "route add default gw 10.0.3.1";
 
     {
         InSequence sequence;
         EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(_)).Times(1);
         EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
-        EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
     }
 
     bool success = gw.activate();
@@ -126,18 +123,15 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
 
     ASSERT_TRUE(gw.setConfig(config));
 
-    std::string ip = gw.ip();
-
     std::string cmd_0 = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"10.0.3.1\"";
-    std::string cmd_1 = "ifconfig eth0 " + ip + " netmask 255.255.255.0 up";
-    std::string cmd_2 = "route add default gw 10.0.3.1";
-    std::string cmd_3 = "ifconfig eth0 up";
+    std::string cmd_1 = "route add default gw 10.0.3.1";
+    std::string cmd_2 = "ifconfig eth0 up";
 
     {
         InSequence sequence;
         EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(_)).Times(1);
         EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
-        EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
     }
 
     bool success = gw.activate();
@@ -146,8 +140,8 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
     {
         InSequence sequence;
         EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
-        EXPECT_CALL(controllerInterface, systemCall(cmd_3)).Times(1);
         EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     success = gw.activate();
