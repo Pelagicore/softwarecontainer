@@ -6,8 +6,8 @@
 """
 
 
-import commands, os, time, sys, signal
-from subprocess import Popen, call, check_output
+import commands, os, time, sys, signal, sys
+from subprocess import Popen, call, check_output, STDOUT
 import os
 
 import dbus
@@ -79,16 +79,21 @@ class ComponentTestHelper:
         return self.start_pelagicontain2(self.pelagicontain_binary,
                                          self.container_root_dir, command)
 
-    def start_pelagicontain2(self, pelagicontain_bin, container_root, cmd):
+    def start_pelagicontain2(self, pelagicontain_bin, container_root, cmd,
+                             suppress_stdout=False):
         # @param  pelagicontain_bin path to pelagicontain binary
         # @param  container_root    path to container root
         # @param  cmd               command to execute in container
         # @return true if pelagicontain started successfully
         #         false otherwise
+        out = sys.stdout
+        if (suppress_stdout):
+            out = open(os.devnull, 'wb')
         try:
             self.pelagicontain_pid = Popen([pelagicontain_bin, container_root,
-                                            cmd, self.cookie]).pid
+                                            cmd, self.cookie], stdout=out).pid
         except OSError as e:
+            print "Launch error: %s" % e
             return False
 
         return True

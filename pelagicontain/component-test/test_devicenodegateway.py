@@ -46,7 +46,7 @@ def setup():
 
     helper.pam_iface.helper_set_configs(configs)
     if not helper.start_pelagicontain2(pelagicontain_binary, container_root,
-                                       "/controller/controller"):
+                                       "/controller/controller", True):
         print "Failed to launch pelagicontain!"
         sys.exit(1)
 
