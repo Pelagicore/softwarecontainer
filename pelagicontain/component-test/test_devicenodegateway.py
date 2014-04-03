@@ -9,84 +9,76 @@ import sys
 import time
 import re
 import os
+import pytest
+
+import conftest
 
 from common import ComponentTestHelper
 
-config = {"devices": [
-    {
-        "name": "/dev/random",
-        "major": "1",
-        "minor": "8",
-        "mode": "666"
+class TestDeviceNodeGatway():
+    config = {"devices": [
+        {
+            "name": "/dev/random",
+            "major": "1",
+            "minor": "8",
+            "mode": "666"
+        }
+    ]}
+
+    configs = {
+        "devicenode": json.dumps(config)
     }
-]}
 
-configs = {
-    "devicenode": json.dumps(config)
-}
-
-helper = ComponentTestHelper()
-container_root = None
+    helper = ComponentTestHelper()
+    container_root = None
 
 
-# Check that sys.argv is usable, notify user otherwise. Exits on failure
-def ensure_command_line_ok():
-    if len(sys.argv) != 3:
-        print "Proper invocation looks like this:"
-        print "%s <pelagicontain path> <container path>" % sys.argv[0]
-        sys.exit(1)
+    # Run before any tests
+    def do_setup(self, pelagicontain_binary, container_path):
+        self.helper.pam_iface.helper_set_configs(self.configs)
+        if not self.helper.start_pelagicontain2(pelagicontain_binary,
+                container_path, "/controller/controller", False):
+            print "Failed to launch pelagicontain!"
+            sys.exit(1)
 
 
-# Run before any tests
-def setup():
-    global container_root
-    ensure_command_line_ok()
-    pelagicontain_binary = sys.argv[1]
-    container_root = sys.argv[2]
+    # Run after all tests
+    def teardown(self):
+        try:
+            self.helper.shutdown_pelagicontain()
+        except:
+            pass
 
-    helper.pam_iface.helper_set_configs(configs)
-    if not helper.start_pelagicontain2(pelagicontain_binary, container_root,
-                                       "/controller/controller", True):
-        print "Failed to launch pelagicontain!"
-        sys.exit(1)
+    def test_can_create_device_node(self, pelagicontain_binary, container_path):
+        self.do_setup(pelagicontain_binary, container_path)
 
+        with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
+            print "Overwriting containedapp..."
+            f.write("""#!/bin/sh
+            ls -la
+            ls -ls /dev/random > /appshared/devicenode_test_output""")
+        os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
 
-# Run after all tests
-def teardown():
-    helper.shutdown_pelagicontain()
+        time.sleep(2)
 
-# Begin testing sequence
+        self.helper.pam_iface.helper_trigger_update(self.helper.cookie, self.configs)
 
+        time.sleep(2)
 
-setup()
+        self.helper.find_pelagicontain_on_dbus()
+        self.helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
-with open("%s/com.pelagicore.comptest/bin/containedapp" % container_root, "w") as f:
-    print "Overwriting containedapp..."
-    f.write("""#!/bin/sh
-    ls -la
-    ls -ls /dev/random > /appshared/devicenode_test_output""")
-os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_root)
+        time.sleep(2)
 
-time.sleep(2)
-
-helper.pam_iface.helper_trigger_update(helper.cookie, configs)
-
-time.sleep(2)
-
-helper.find_pelagicontain_on_dbus()
-helper.find_and_run_Launch_on_pelagicontain_on_dbus()
-
-time.sleep(2)
-
-try:
-    with open("%s/com.pelagicore.comptest/shared/devicenode_test_output" % container_root) as f:
-        line = f.readline()
-        print "-->", line
-        regex = "\s*\d\scrw-rw-rw-\s*\d\s*root\s*root\s*\d,\s*\d.*/dev/random$"
-        if re.match(regex, line):
-            print "Looks like device was created OK!"
-except:
-    print "Unable to read command output, output file couldn't be opened!"
+        try:
+            with open("%s/com.pelagicore.comptest/shared/devicenode_test_output" % container_root) as f:
+                line = f.readline()
+                print "-->", line
+                regex = "\s*\d\scrw-rw-rw-\s*\d\s*root\s*root\s*\d,\s*\d.*/dev/random$"
+                if re.match(regex, line):
+                    print "Looks like device was created OK!"
+        except:
+            print "Unable to read command output, output file couldn't be opened!"
 
 
-teardown()
+        self.teardown()

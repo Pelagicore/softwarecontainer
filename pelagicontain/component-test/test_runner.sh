@@ -16,10 +16,14 @@ while getopts p:c: opt; do
 done
 shift $((OPTIND - 1))
 
+mkdir testreports
+
 ./pam_stub.py &> pam.log &
 pam_pid=$!
 
-./test_devicenodegateway.py $pelagicontain_bin $container_path
+py.test test_devicenodegateway.py --junitxml=testreports/devicenodegateway.xml \
+                                  --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                                  --container_path /tmp/container/
 dng_exit=$?
 
 kill $pam_pid
