@@ -33,4 +33,4 @@ if [ "$dng_exit" == "0" ]; then
 else
     echo "Device node manager: FAIL"
 fi
-exit 0
+exit $dng_exit
