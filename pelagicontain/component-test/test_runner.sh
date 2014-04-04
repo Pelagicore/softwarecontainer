@@ -1,10 +1,12 @@
 #!/bin/bash
 
 # Parse command line arguments
-pelagicontain_bin=../../build/pelagicontain/src/pelagicontain 
+pelagicontain_bin=../../build/pelagicontain/src/pelagicontain
 container_path=/tmp/container/
+controller_bin=../../build/controller/src/controller
+setup_script=../../scripts/setup_environment.sh
 
-while getopts p:c: opt; do
+while getopts p:c:x:s opt; do
     case $opt in
     p)
         pelagicontain_bin=$OPTARG
@@ -12,11 +14,21 @@ while getopts p:c: opt; do
     c)
         container_path=$OPTARG
         ;;
+    x)
+        controller_bin=$OPTARG
+        ;;
+    s)
+        setup_script=$OPTARG
+        ;;
     esac
 done
 shift $((OPTIND - 1))
 
-mkdir testreports
+mkdir -p testreports
+
+$($setup_script -d $container_path \
+                -x $controller_bin \
+                -a com.pelagicore.comptest)
 
 eval `dbus-launch --sh-syntax`
 
