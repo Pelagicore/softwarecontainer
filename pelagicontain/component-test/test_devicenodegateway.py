@@ -59,16 +59,16 @@ class TestDeviceNodeGatway():
             ls -ls /dev/random > /appshared/devicenode_test_output""")
         os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
 
-        time.sleep(2)
+        time.sleep(5)
 
         self.helper.pam_iface.helper_trigger_update(self.helper.cookie, self.configs)
 
-        time.sleep(2)
+        time.sleep(5)
 
         self.helper.find_pelagicontain_on_dbus()
         self.helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
-        time.sleep(2)
+        time.sleep(10)
 
         try:
             with open("%s/com.pelagicore.comptest/shared/devicenode_test_output" % container_root) as f:
@@ -76,8 +76,8 @@ class TestDeviceNodeGatway():
                 print "-->", line
                 regex = "\s*\d\scrw-rw-rw-\s*\d\s*root\s*root\s*\d,\s*\d.*/dev/random$"
                 assert(re.match(regex, line))
-        except:
-            pytest.fail("Unable to read command output, output file couldn't be opened!")
+        except Exception as e:
+            pytest.fail("Unable to read command output, output file couldn't be opened! Exception: %s" % e)
 
 
         self.teardown()
