@@ -5,9 +5,17 @@
 #include <stdio.h>
 #include "pulsegateway.h"
 #include "debug.h"
+#include "jansson.h"
 
-PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName):
-    m_api(0), m_context(0), m_index(-1)
+PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName,
+                           ControllerAbstractInterface *controllerInterface):
+    Gateway(controllerInterface),
+    m_api(0), 
+    m_context(0),
+    m_mainloop(NULL),
+    m_index(-1),
+    m_enableAudio(false),
+    m_controllerInterface(controllerInterface)
 {
     m_socket = gatewayDir + "/pulse-" + containerName + ".sock";
 }
@@ -47,51 +55,91 @@ std::string PulseGateway::id()
 
 bool PulseGateway::setConfig(const std::string &config)
 {
-    return true;
+    bool success = true;
+    ConfigError err = ConfigError::Ok;
+
+    /* Check the value of the audio key of the config */
+    std::string value = parseConfig(config.c_str(), "audio", &err);
+
+    if (value.compare("true") == 0)
+    {
+	log_debug("Audio will be enabled\n");
+	m_enableAudio = true;
+    }
+    else
+    {
+	log_debug("Audio will be disabled\n");
+        if (err == ConfigError::BadConfig)
+        {
+            log_error("Malformed configuration file");
+            success = false;
+        }
+	m_enableAudio = false;
+    }
+
+    if (m_enableAudio)
+    {
+        std::string var = "PULSE_SERVER";
+        std::string val = "/gateways/" + socketName();
+        success = m_controllerInterface->setEnvironmentVariable(var, val);
+    }
+
+    return success;
 }
 
 bool PulseGateway::activate()
 {
-    /* NOTE: Code here should probably be acting based on what has been
-     * set through a call to setConfig, i.e. what 'activate' means depends
-     * on the config. This is not considered at the moment.
-     */
+    bool success = true;
+    if (m_enableAudio)
+    {
+	success = connectToPulseServer();
+    }
+
+    return success;
+}
+
+bool PulseGateway::connectToPulseServer()
+{
+    bool success = true;
 
     /* Create mainloop */
     m_mainloop = pa_threaded_mainloop_new();
     pa_threaded_mainloop_start(m_mainloop);
 
-    if (m_mainloop) {
+    if (m_mainloop)
+    {
         /* Set up connection to pulse server */
         pa_threaded_mainloop_lock(m_mainloop);
         m_api = pa_threaded_mainloop_get_api(m_mainloop);
         m_context = pa_context_new(m_api, "pulsetest");
-        pa_context_set_state_callback(m_context, stateCallback, this);
+        pa_context_set_state_callback (m_context, stateCallback, this);
 
         int err = pa_context_connect(
-            m_context,        /* context */
-            NULL,              /* default server */
-            PA_CONTEXT_NOFAIL, /* keep reconnection on failure */
-            NULL );            /* use default spawn api */
+                  m_context,        /* context */
+                  NULL,              /* default server */
+                  PA_CONTEXT_NOFAIL, /* keep reconnection on failure */
+                  NULL );            /* use default spawn api */
 
         if (err != 0)
+        {
+            success = false;
             log_error("Pulse error: %s", pa_strerror(err));
+        }
 
         pa_threaded_mainloop_unlock(m_mainloop);
-    } else {
+    }
+    else
+    {
+        success = false;
         log_error("Failed to create pulse mainloop->");
     }
 
-    return true;
+    return success;
 }
 
 std::string PulseGateway::environment()
 {
-    std::string env;
-    env += "PULSE_SERVER=";
-    env += "/gateways/";
-    env += socketName();
-    return env;
+    return "";
 }
 
 std::string PulseGateway::socketName()
@@ -154,4 +202,51 @@ void PulseGateway::stateCallback(pa_context *context, void *userdata)
         log_debug("pulse: Terminated");
         break;
     }
+}
+
+std::string PulseGateway::parseConfig(
+    const std::string &config
+    , const std::string &key
+    , ConfigError *err)
+{
+    json_error_t  error;
+    json_t       *root, *value;
+    std::string ret = "";
+
+    /* Get root JSON object */
+    root = json_loads(config.c_str(), 0, &error);
+
+    if (!root) {
+        log_error("Error on line %d: %s\n", error.line, error.text);
+        *err = ConfigError::BadConfig;
+        goto cleanup_parse_json;
+    }
+
+    // Get string
+    value = json_object_get(root, key.c_str());
+
+    if (error.text == NULL) {
+        *err = ConfigError::BadConfig;
+        goto cleanup_parse_json;
+    }
+
+    if (!json_is_string(value)) {
+        log_error("Value is not a string.");
+        log_error("error: on line %d: %s\n", error.line, error.text);
+        *err = ConfigError::BadConfig;
+        json_decref(value);
+        goto cleanup_parse_json;
+    }
+
+    ret = std::string(json_string_value(value));
+
+    goto cleanup_parse_json;
+
+cleanup_parse_json:
+    if (root)
+    {
+        json_decref(root);
+    }
+
+    return ret;
 }

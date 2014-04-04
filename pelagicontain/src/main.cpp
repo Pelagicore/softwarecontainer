@@ -120,7 +120,8 @@ int main(int argc, char **argv)
         pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
                                                     &systemcallInterface));
 
-        pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
+        pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName,
+                                                  &controllerInterface));
 
         pelagicontain.addGateway(new DeviceNodeGateway(&controllerInterface));
 
