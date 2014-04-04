@@ -18,6 +18,8 @@ shift $((OPTIND - 1))
 
 mkdir testreports
 
+eval `dbus-launch --sh-syntax`
+
 ./pam_stub.py &> pam.log &
 pam_pid=$!
 
