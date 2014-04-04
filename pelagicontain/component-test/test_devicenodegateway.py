@@ -71,7 +71,7 @@ class TestDeviceNodeGatway():
         time.sleep(10)
 
         try:
-            with open("%s/com.pelagicore.comptest/shared/devicenode_test_output" % container_root) as f:
+            with open("%s/com.pelagicore.comptest/shared/devicenode_test_output" % container_path) as f:
                 line = f.readline()
                 print "-->", line
                 regex = "\s*\d\scrw-rw-rw-\s*\d\s*root\s*root\s*\d,\s*\d.*/dev/random$"
