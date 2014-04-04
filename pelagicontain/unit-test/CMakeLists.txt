@@ -9,6 +9,8 @@ add_executable(runUnitTestsPelagicontain
     networkgateway_unittest.cpp
     dbusgateway_unittest.cpp
     pelagicontain_unittest.cpp
+    pulsegateway_unittest.cpp
+    pulsegateway_unittest_data.h
     ../src/container.cpp
     ../src/controllerinterface.cpp
     ../src/dbusgateway.cpp
