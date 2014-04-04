@@ -75,10 +75,9 @@ class TestDeviceNodeGatway():
                 line = f.readline()
                 print "-->", line
                 regex = "\s*\d\scrw-rw-rw-\s*\d\s*root\s*root\s*\d,\s*\d.*/dev/random$"
-                if re.match(regex, line):
-                    print "Looks like device was created OK!"
+                assert(re.match(regex, line))
         except:
-            print "Unable to read command output, output file couldn't be opened!"
+            pytest.fail("Unable to read command output, output file couldn't be opened!")
 
 
         self.teardown()
