@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "controller.h"
 
@@ -68,11 +69,13 @@ void Controller::killApp()
 void Controller::setEnvironmentVariable(const std::string &variable,
     const std::string &value)
 {
-    std::string command = variable + "=" + value;
-    int ret = putenv((char *)command.c_str());
-    if (ret != 0)
-        perror("putenv: ");
-    std::cout << "Controller set \"" << variable << "\" to \"" << value << "\"" << std::endl;
+    int ret = setenv(variable.c_str(), value.c_str(), 1);
+
+    if (ret == -1) {
+        perror("setenv: ");
+    }
+
+    std::cout << "Controller set \"" << variable << "=" << value << "\"" << std::endl;
 }
 
 void Controller::systemCall(const std::string &command)
