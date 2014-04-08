@@ -51,7 +51,7 @@ public:
 
 void close_fd_helper(pid_t pid, int infp, int outfp)
 {
-    
+    close(infp);
 }
 
 
@@ -132,14 +132,9 @@ public:
     SystemcallInterfaceStub systemcallInterface;
 };
 
-/*! Test DBusGateway calls ControllerInterface::makePopencall when
- * DBusGateway::setConfig() has been called
- *
- * The DbusGateway::setConfig() should try to issue a ifconfig
- * system call inside the container in order to set the containers IP
- * address.
+/*! Test DBusGateway saves the config when DBusGateway::setConfig()
+ * has been called.
  */
-
 TEST_F(DBusGatewayTest, TestSetConfig) {
     DBusGateway gw(&controllerInterface,
                    &systemcallInterface,
@@ -152,6 +147,10 @@ TEST_F(DBusGatewayTest, TestSetConfig) {
     ASSERT_TRUE(success);
 }
 
+/*! Test DBusGateway writes the config provided by DBusGateway::setConfig()
+ * to a fileno provided by the systemcallInterface when
+ * DBusGateway::activate() has been called.
+ */
 TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     DBusGateway gw(&controllerInterface,
                    &systemcallInterface,
@@ -166,6 +165,13 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     EXPECT_EQ(config, systemcallInterface.fileContent());
 }
 
+/*! Test DBusGateway calls ControllerInterface::makePopencall() when
+ * DBusGateway::activate() has been called
+ *
+ * The DbusGateway::activate() should try to issue a dbus-proxy call
+ * and then try to write the config to stdin of this. At the end it
+ * should remove the file created by dbus-proxy.
+ */
 TEST_F(DBusGatewayTest, TestActivateCall) {
     NiceMock<MockSystemcallInnterface> systemcallInterfaceMock;
     DBusGateway *gw = new DBusGateway(&controllerInterface,
