@@ -4,6 +4,13 @@
  */
 
 #include "systemcallinterface.h"
+#include "debug.h"
+#include <stdio.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <signal.h>
+#include <sys/wait.h>
+
 
 SystemcallInterface::SystemcallInterface()
 {
@@ -25,14 +32,61 @@ bool SystemcallInterface::makeCall(const std::string &cmd, int &exitCode)
     return (exitCode == 0);
 }
 
-bool SystemcallInterface::makePopenCall(const std::string &command, const std::string &type, FILE **fd)
+pid_t SystemcallInterface::makePopenCall(const std::string &command,
+                                         int *infp,
+                                         int *outfp)
 {
-    *fd = popen(command.c_str(), type.c_str());
-    return (*fd == NULL);
+    int READ = 0;
+    int WRITE = 1;
+
+    int p_stdin[2], p_stdout[2];
+    pid_t pid;
+
+    if (pipe(p_stdin) != 0 || pipe(p_stdout) != 0) {
+        return -1;
+    }
+
+    pid = fork();
+
+    if (pid < 0) {
+        return pid;
+    } else if (pid == 0) {
+        close(p_stdin[WRITE]);
+        dup2(p_stdin[READ], READ);
+        close(p_stdout[READ]);
+        dup2(p_stdout[WRITE], WRITE);
+
+        // Set group id to the same as pid, that way we can kill the
+        // shells children on close.
+        setpgid(0, 0);
+
+        execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
+        perror("execl");
+        exit(1);
+    }
+
+    if (infp == NULL) {
+        close(p_stdin[WRITE]);
+    } else {
+        *infp = p_stdin[WRITE];
+    }
+
+    if (outfp == NULL) {
+        close(p_stdout[READ]);
+    } else {
+        *outfp = p_stdout[READ];
+    }
+
+    return pid;
 }
 
-bool SystemcallInterface::makePcloseCall(FILE **fd, int &exitCode)
+bool SystemcallInterface::makePcloseCall(pid_t pid, int infp, int outfp)
 {
-    exitCode = pclose(*fd);
-    return (exitCode == 0);
+    close(infp);
+    close(outfp);
+
+    // the negative pid mekes it to kill the whole group, not only the shell
+    int killed = kill(-pid, SIGKILL);
+
+    return killed == 0;
 }

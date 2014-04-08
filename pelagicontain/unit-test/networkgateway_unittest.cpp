@@ -48,8 +48,9 @@ public:
     }
 
     MOCK_METHOD1(makeCall, bool(const std::string &cmd));
-    MOCK_METHOD3(makePopenCall, bool(const std::string &command, const std::string &type, FILE **fd));
-    MOCK_METHOD2(makePcloseCall, bool(FILE **fd, int &exitCode));
+    MOCK_METHOD3(makePopenCall,
+                 pid_t(const std::string &command, int *infp, int *outfp));
+    MOCK_METHOD3(makePcloseCall, bool(pid_t pid, int infp, int outfp));
 };
 
 using ::testing::DefaultValue;

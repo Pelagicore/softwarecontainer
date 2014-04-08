@@ -34,8 +34,7 @@ public:
         return true;
     }
 
-    MOCK_METHOD1(systemCall,
-        bool(const std::string &cmd));
+    MOCK_METHOD1(systemCall, bool(const std::string &cmd));
 
 };
 
@@ -45,13 +44,14 @@ class MockSystemcallInnterface :
 public:
     MOCK_METHOD1(makeCall, bool(const std::string &cmd));
     MOCK_METHOD2(makeCall, bool(const std::string &cmd, int &exitCode));
-    MOCK_METHOD3(makePopenCall, bool(const std::string &command, const std::string &type, FILE **fd));
-    MOCK_METHOD2(makePcloseCall, bool(FILE **fd, int &exitCode));
+    MOCK_METHOD3(makePopenCall,
+                 pid_t(const std::string &command, int *infp, int *outfp));
+    MOCK_METHOD3(makePcloseCall, bool(pid_t pid, int infp, int outfp));
 };
 
-void close_fd_helper(FILE **fd, int &exitCode)
+void close_fd_helper(pid_t pid, int infp, int outfp)
 {
-    exitCode = fclose(*fd) == 0;
+    
 }
 
 
@@ -60,9 +60,13 @@ class SystemcallInterfaceStub :
 {
 public:
     FILE *file_descriptor = NULL;
+    pid_t m_pid = 999;
+    int m_infp = -1;
+    int m_outfp = -1;
 
     SystemcallInterfaceStub() {
         file_descriptor = tmpfile();
+        m_infp = fileno(file_descriptor);
     }
 
     virtual ~SystemcallInterfaceStub() {
@@ -82,20 +86,21 @@ public:
         return true;
     }
 
-    bool makePopenCall(const std::string &command, const std::string &type, FILE **fd)
+    pid_t makePopenCall(const std::string &command,
+                        int *infp,
+                        int *outfp)
     {
-        *fd = file_descriptor;
-        return true;
+        *infp = m_infp;
+        *outfp = m_outfp;
+        return m_pid;
     }
 
-    bool makePcloseCall(FILE **fd, int &exitCode)
+    bool makePcloseCall(pid_t pid, int infp, int outfp)
     {
-        if(*fd == file_descriptor) {
-            exitCode = 0;
+        if(pid == m_pid && infp == m_infp && outfp == m_outfp) {
             return true;
         }
 
-        exitCode = -1;
         return false;
     }
 
@@ -121,10 +126,10 @@ using ::testing::NiceMock;
 class DBusGatewayTest : public ::testing::Test
 {
 public:
-    const std::string m_containerRoot = "/tmp/dbusgateway-unit-test";
+    const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/gateways";
     const std::string m_containerName = "test";
     NiceMock<MockController> controllerInterface;
-  SystemcallInterfaceStub systemcallInterface;
+    SystemcallInterfaceStub systemcallInterface;
 };
 
 /*! Test DBusGateway calls ControllerInterface::makePopencall when
@@ -136,7 +141,11 @@ public:
  */
 
 TEST_F(DBusGatewayTest, TestSetConfig) {
-    DBusGateway gw(&controllerInterface, &systemcallInterface, DBusGateway::SessionProxy, m_containerRoot, m_containerName);
+    DBusGateway gw(&controllerInterface,
+                   &systemcallInterface,
+                   DBusGateway::SessionProxy,
+                   m_gatewayDir,
+                   m_containerName);
 
     std::string config = "{}";
     bool success = gw.setConfig(config);
@@ -144,7 +153,11 @@ TEST_F(DBusGatewayTest, TestSetConfig) {
 }
 
 TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
-    DBusGateway gw(&controllerInterface, &systemcallInterface, DBusGateway::SessionProxy, m_containerRoot, m_containerName);
+    DBusGateway gw(&controllerInterface,
+                   &systemcallInterface,
+                   DBusGateway::SessionProxy,
+                   m_gatewayDir,
+                   m_containerName);
 
     std::string config = "{}";
 
@@ -155,29 +168,47 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
 
 TEST_F(DBusGatewayTest, TestActivateCall) {
     NiceMock<MockSystemcallInnterface> systemcallInterfaceMock;
-    DBusGateway *gw = new DBusGateway(&controllerInterface, &systemcallInterfaceMock, DBusGateway::SessionProxy, m_containerRoot, m_containerName);
+    DBusGateway *gw = new DBusGateway(&controllerInterface,
+                                      &systemcallInterfaceMock,
+                                      DBusGateway::SessionProxy,
+                                      m_gatewayDir,
+                                      m_containerName);
+
+    // create sock file which teardown will remove
+    std::string cmd_mkdir = "mkdir -p ";
+    cmd_mkdir += m_gatewayDir;
+    system(cmd_mkdir.c_str());
+    std::string cmd_touch = "touch ";
+    cmd_touch += m_gatewayDir;
+    cmd_touch += "/sess_test.sock";
+    system(cmd_touch.c_str());
 
     std::string config = "{}";
 
     ASSERT_TRUE(gw->setConfig(config));
 
     FILE *tmp = tmpfile();
+    int infp = fileno(tmp);
 
     {
         InSequence sequence;
         EXPECT_CALL(
             systemcallInterfaceMock,
-            makePopenCall("dbus-proxy /tmp/dbusgateway-unit-test/gateways/sess_test.sock session", "w", _)
-        ).WillOnce(DoAll(::testing::SetArgPointee<2>(tmp), Return(true)));
+            makePopenCall("dbus-proxy "
+                          "/tmp/dbusgateway-unit-test/gateways/sess_test.sock "
+                          "session",
+                          _, _)
+        ).WillOnce(DoAll(::testing::SetArgPointee<1>(infp), Return(999)));
 
         EXPECT_CALL(
             systemcallInterfaceMock,
-            makePcloseCall(_, _)
-        ).WillOnce(DoAll(::testing::Invoke(close_fd_helper), ::testing::SetArgReferee<1>(0), Return(true)));
+            makePcloseCall(_, _, _)
+        ).WillOnce(DoAll(::testing::Invoke(close_fd_helper), Return(true)));
     }
 
     ASSERT_TRUE(gw->activate());
+    ASSERT_TRUE(gw->teardown());
 
     delete gw;
-
 }
+

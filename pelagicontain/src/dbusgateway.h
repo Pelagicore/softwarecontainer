@@ -24,7 +24,8 @@ public:
      */
     DBusGateway(ControllerAbstractInterface *controllerInterface,
                 SystemcallAbstractInterface *systemcallInterface,
-                ProxyType type, const std::string &gatewayDir,
+                ProxyType type,
+                const std::string &gatewayDir,
                 const std::string &name);
     ~DBusGateway();
 
@@ -47,16 +48,22 @@ public:
      */
     virtual std::string environment();
 
+    /*! Implements Gateway::teardown
+     */
+    virtual bool teardown();
+
 private:
     const char *typeString();
     const char *socketName();
 
     SystemcallAbstractInterface *m_systemcallInterface;
-    pid_t m_pid;
     std::string m_socket;
     ProxyType m_type;
     std::string m_config;
-    FILE *m_fp;
+    pid_t m_pid;
+    int m_infp;
+    int m_outfp;
+    bool m_hasBeenConfigured;
 };
 
 #endif /* DBUSGATEWAY_H */

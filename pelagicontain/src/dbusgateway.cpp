@@ -10,52 +10,33 @@
 #include "debug.h"
 
 DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
-    SystemcallAbstractInterface *systemcallInterface,
-    ProxyType type,
-    const std::string &containerRoot,
-    const std::string &name):
+                         SystemcallAbstractInterface *systemcallInterface,
+                         ProxyType type,
+                         const std::string &gatewayDir,
+                         const std::string &name):
     Gateway(controllerInterface),
     m_systemcallInterface(systemcallInterface),
     m_type(type),
-    m_fp(NULL)
+    m_pid(-1),
+    m_infp(-1),
+    m_outfp(-1),
+    m_hasBeenConfigured(false)
 {
     if (m_type == SessionProxy) {
-        m_socket = containerRoot
-		    + std::string("/gateways/sess_")
+        m_socket = gatewayDir
+            + std::string("/sess_")
             + name
             + std::string(".sock");
     } else {
-        m_socket = containerRoot
-            + std::string("/gateways/sys_")
+        m_socket = gatewayDir
+            + std::string("/sys_")
             + name
             + std::string(".sock");
     }
-
-    std::string variable;
-    variable += "DBUS_";
-    if (m_type == SessionProxy) {
-        variable += "SESSION";
-    } else {
-        variable += "SYSTEM";
-    }
-    variable += "_BUS_ADDRESS";
-
-    std::string value;
-    value += "unix:path=";
-    value += "/gateways/";
-    value += socketName();
-
-    controllerInterface->setEnvironmentVariable(variable, value);
 }
 
 DBusGateway::~DBusGateway()
 {
-    if(m_fp != NULL) {
-        int exitCode;
-        if(!m_systemcallInterface->makePcloseCall(&m_fp, exitCode)) {
-            log_error("pclose() returned error: %i\n", exitCode);
-        }
-    }
 }
 
 std::string DBusGateway::id()
@@ -68,7 +49,8 @@ bool DBusGateway::setConfig(const std::string &config)
     m_config = config;
 
     if(m_config.length() > 1) {
-      return true;
+        m_hasBeenConfigured = true;
+        return true;
     }
 
     return false;
@@ -76,20 +58,54 @@ bool DBusGateway::setConfig(const std::string &config)
 
 bool DBusGateway::activate()
 {
-    std::string command = "dbus-proxy ";
-    command += m_socket + " " + typeString();
+    if(m_hasBeenConfigured) {
 
-	std::string type("w");
-    m_systemcallInterface->makePopenCall(command, type, &m_fp);
+        // set DBUS ENV
+        std::string variable = "DBUS_";
+        if (m_type == SessionProxy) {
+            variable += "SESSION";
+        } else {
+            variable += "SYSTEM";
+        }
+        variable += "_BUS_ADDRESS";
 
-    if(m_fp == NULL) {
-        return false;
+        std::string value = "unix:path=/gateways/";
+        value += socketName();
+        m_controllerInterface->setEnvironmentVariable(variable, value);
+
+        // Open pipe
+        std::string command = "dbus-proxy ";
+        command += m_socket + " " + typeString();
+        m_pid = m_systemcallInterface->makePopenCall(command, &m_infp, &m_outfp);
+        if(m_pid == -1) {
+            return false;
+        }
+
+        write(m_infp, m_config.c_str(), sizeof(char) * m_config.length());
+
+        return true;
     }
 
-    const char *config = m_config.c_str();
-    fwrite(config, sizeof(char), sizeof(config), m_fp);
+    return false;
+}
 
-    return true;
+bool DBusGateway::teardown() {
+
+    bool success = true;
+
+    if(m_pid != -1) {
+        if(!m_systemcallInterface->makePcloseCall(m_pid, m_infp, m_outfp)) {
+            log_error("makePcloseCall() returned error\n");
+            success = false;
+        }
+    }
+
+    if(unlink(m_socket.c_str()) == -1) {
+        log_error("Could not remove %s\n", m_socket.c_str());
+        success = false;
+    }
+
+    return success;
 }
 
 const char *DBusGateway::typeString()
@@ -110,20 +126,5 @@ const char *DBusGateway::socketName()
 
 std::string DBusGateway::environment()
 {
-  /*
-    log_debug("Requesting environment for %s with socket %s",
-        typeString(), m_socket.c_str());
-
-    std::string env;
-    env += "DBUS_";
-    if (m_type == SessionProxy) {
-        env += "SESSION";
-    } else {
-        env += "SYSTEM";
-    }
-    env += "_BUS_ADDRESS=unix:path=";
-    env += "/deployed_app/";
-    env += socketName();
-  */
     return "";
 }

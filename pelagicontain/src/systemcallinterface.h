@@ -35,22 +35,25 @@ public:
      */
     virtual bool makeCall(const std::string &cmd, int &exitCode);
 
-    /*! Implements abstract method popen on SystemcallAbstractInterface
-	 *
-     * \param command The command send to popen().
-	 * \param type The type send to popen().
-     * \param fd A pointer to the file descriptor stream.
-	 * \return True if the command was successfully executed.
-     */
-    virtual bool makePopenCall(const std::string &command, const std::string &type, FILE **fd);
-
-    /*! Implements abstract method pclose on SystemcallAbstractInterface
+    /*! Implements abstract method makePopenCall on SystemcallAbstractInterface
      *
-     * \param fd A pointer to the file descriptor stream.
-     * \param exitCode Stores the exit code returned by the call to pclose()
+     * \param command The command send to popen().
+     * \param infp A pointer to the input stream file descriptor stream.
+     * \param infp A pointer to the output stream file descriptor stream.
+     * \return pid_t if the command was successfully executed, otherwise -1.
+     */
+    virtual pid_t makePopenCall(const std::string &command,
+                                int *infp,
+                                int *outfp);
+
+    /*! Implements abstract method makePcloseCall on SystemcallAbstractInterface
+     *
+     * \param pid A pid to the process to be closed.
+     * \param infp The input stream file descriptor to be closed
+     * \param infp The output stream file descriptor to be closed
      * \return True if the command was successfully executed.
      */
-    virtual bool makePcloseCall(FILE **fd, int &exitCode);
+    virtual bool makePcloseCall(pid_t pid, int infp, int outfp);
 };
 
 #endif /* SYSTEMCALLINTERFACE_H */
