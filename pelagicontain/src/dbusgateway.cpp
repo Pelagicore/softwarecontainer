@@ -76,14 +76,31 @@ bool DBusGateway::activate()
         // Open pipe
         std::string command = "dbus-proxy ";
         command += m_socket + " " + typeString();
-        m_pid = m_systemcallInterface->makePopenCall(command, &m_infp, &m_outfp);
+        m_pid = m_systemcallInterface->makePopenCall(command,
+                                                     &m_infp,
+                                                     &m_outfp);
         if(m_pid == -1) {
             return false;
         }
 
-        write(m_infp, m_config.c_str(), sizeof(char) * m_config.length());
+        size_t count = sizeof(char) * m_config.length();
 
-        return true;
+        ssize_t written = write(m_infp,
+                                m_config.c_str(),
+                                count);
+
+        // writing didn't work at all
+        if(written == -1) {
+            return false;
+        }
+
+        // writing has written exact amout of bytes
+        if(written == (ssize_t)count) {
+            return true;
+        }
+
+        // something went wrong during the write
+        return false;
     }
 
     return false;
