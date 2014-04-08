@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
-        SystemcallInterface systemCallInterface;
+        SystemcallInterface systemcallInterface;
         Pelagicontain pelagicontain(&pamInterface,
                                     &dbusmainloop,
                                     &controllerInterface,
@@ -118,20 +118,20 @@ int main(int argc, char **argv)
         PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
         pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
-                                                    &systemCallInterface));
+                                                    &systemcallInterface));
 
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
 
         pelagicontain.addGateway(new DeviceNodeGateway(&controllerInterface));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-                                                 &systemCallInterface,
+                                                 &systemcallInterface,
                                                  DBusGateway::SessionProxy,
                                                  gatewayDir,
                                                  containerName));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-                                                 &systemCallInterface,
+                                                 &systemcallInterface,
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
                                                  containerName));
