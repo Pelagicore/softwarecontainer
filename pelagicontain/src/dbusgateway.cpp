@@ -58,53 +58,55 @@ bool DBusGateway::setConfig(const std::string &config)
 
 bool DBusGateway::activate()
 {
-    if(m_hasBeenConfigured) {
+    if(!m_hasBeenConfigured) {
+        log_error ("'Activate' called on non-configured gateway %s",
+                   id().c_str());
+        return false;
+    }
 
-        // set DBUS ENV
-        std::string variable = "DBUS_";
-        if (m_type == SessionProxy) {
-            variable += "SESSION";
-        } else {
-            variable += "SYSTEM";
-        }
-        variable += "_BUS_ADDRESS";
+    // set DBUS ENV
+    std::string variable = "DBUS_";
+    if (m_type == SessionProxy) {
+        variable += "SESSION";
+    } else {
+        variable += "SYSTEM";
+    }
+    variable += "_BUS_ADDRESS";
 
-        std::string value = "unix:path=/gateways/";
-        value += socketName();
-        m_controllerInterface->setEnvironmentVariable(variable, value);
+    std::string value = "unix:path=/gateways/";
+    value += socketName();
+    m_controllerInterface->setEnvironmentVariable(variable, value);
 
-        // Open pipe
-        std::string command = "dbus-proxy ";
-        command += m_socket + " " + typeString();
-        m_pid = m_systemcallInterface->makePopenCall(command,
-                                                     &m_infp,
-                                                     &m_outfp);
-        if(m_pid == -1) {
-            log_error ("Failed to launch %s", command.c_str());
-            return false;
-        }
+    // Open pipe
+    std::string command = "dbus-proxy ";
+    command += m_socket + " " + typeString();
+    m_pid = m_systemcallInterface->makePopenCall(command,
+                                                 &m_infp,
+                                                 &m_outfp);
+    if(m_pid == -1) {
+        log_error ("Failed to launch %s", command.c_str());
+        return false;
+    }
 
-        size_t count = sizeof(char) * m_config.length();
+    size_t count = sizeof(char) * m_config.length();
 
-        ssize_t written = write(m_infp,
-                                m_config.c_str(),
-                                count);
+    ssize_t written = write(m_infp,
+                            m_config.c_str(),
+                            count);
 
-        // writing didn't work at all
-        if(written == -1) {
-            log_error ("Failed to write to STDIN of dbus-proxy!");
-            return false;
-        }
-
-        // writing has written exact amout of bytes
-        if(written == (ssize_t)count) {
-            return true;
-        }
-
-        // something went wrong during the write
+    // writing didn't work at all
+    if(written == -1) {
         log_error ("Failed to write to STDIN of dbus-proxy!");
         return false;
     }
+
+    // writing has written exact amout of bytes
+    if(written == (ssize_t)count) {
+        return true;
+    }
+
+    // something went wrong during the write
+    log_error ("Failed to write to STDIN of dbus-proxy!");
 
     return false;
 }
