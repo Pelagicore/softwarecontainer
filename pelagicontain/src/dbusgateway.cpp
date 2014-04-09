@@ -120,6 +120,9 @@ bool DBusGateway::teardown() {
             log_error("makePcloseCall() returned error\n");
             success = false;
         }
+    } else {
+        log_error("Failed to close connection to dbus-proxy!");
+        success = false;
     }
 
     if(unlink(m_socket.c_str()) == -1) {
