@@ -9,6 +9,8 @@ import sys
 import time
 import re
 import os
+import distutils.spawn
+import shutil
 
 from common import ComponentTestHelper
 
@@ -60,7 +62,15 @@ def setup():
         print "Failed to launch pelagicontain!"
         sys.exit(1)
 
-    os.system("cp `which dbus-send` " + container_root + "/" + helper.app_uuid + "/bin/")
+    dbus_send = distutils.spawn.find_executable("dbus-send")
+    if not dbus_send:
+        print "Could not find 'dbus-send'; is it installed?"
+        exit(1)
+
+    dest = container_root + "/" + helper.app_uuid + "/bin/"
+
+    print "Copying %s to %s" % (dbus_send, dest)
+    shutil.copy(dbus_send, dest)
 
 
 # Run after all tests
