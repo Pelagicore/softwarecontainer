@@ -34,6 +34,30 @@ public:
      */
     virtual bool makeCall(const std::string &cmd, int &exitCode) = 0;
 
+    /*! Mimics the popen2 call, allows spawning a process and then redirects
+     *  STDIN and STDOUT to the file descriptors given.
+     *
+     * \param command The command send to popen().
+     * \param infp A pointer to the input stream file descriptor stream.
+     * \param infp A pointer to the output stream file descriptor stream.
+     * \return pid of executed process, or -1 upon failure
+     */
+    virtual pid_t makePopenCall(const std::string &command,
+                                int *infp,
+                                int *outfp) = 0;
+
+    /*! Terminates the process indicated by \a pid and closes the file
+     *  descriptors given. This call is to be coupled with the makePopenCall()
+     *  function
+     *
+     * \param pid A pid to the process to be closed.
+     * \param infp The input stream file descriptor to be closed
+     * \param infp The output stream file descriptor to be closed
+     * \return True if the command was successfully executed.
+     */
+    virtual bool makePcloseCall(pid_t pid, int infp, int outfp) = 0;
+
+
 };
 
 #endif /* SYSTEMCALLABSTRACTINTERFACE_H */

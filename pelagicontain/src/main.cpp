@@ -25,11 +25,12 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 int main(int argc, char **argv)
 {
+
     const char *summary = "Pelagicore container utility. "
                           "Requires an absolute path to the container root, "
                           "the command to run inside the container and "
-                          "an alphanumerical cookie string as first, second and third "
-                          "argument respectively";
+                          "an alphanumerical cookie string as first, second and"
+                          "third argument respectively";
     const char *paramsDescription = "[container root directory (abs path)] "
                                     "[command] [cookie]";
 
@@ -42,11 +43,14 @@ int main(int argc, char **argv)
     std::string containedCommand;
     std::string cookie;
     const char* configFilePath = CONFIG;
-    commandLineParser.addOption(configFilePath, "with-config-file", 'c',
+    commandLineParser.addOption(configFilePath,
+                                "with-config-file",
+                                'c',
                                 "Config file");
 
-    if (commandLineParser.parse(argc, argv))
+    if (commandLineParser.parse(argc, argv)) {
         return -1;
+    }
 
     if (argc < 4) {
         log_error("Invalid arguments");
@@ -72,22 +76,20 @@ int main(int argc, char **argv)
     // in/out of the container.
     std::string containerDir = containerRoot + "/" + containerName;
     std::string gatewayDir = containerDir + "/gateways";
-    if (mkdir(containerDir.c_str(), S_IRWXU) == -1)
-    {
+    if (mkdir(containerDir.c_str(), S_IRWXU) == -1) {
         log_error("Could not create container directory %s, %s.",
                   containerDir.c_str(),
                   strerror(errno));
         exit(-1);
     }
-    if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1)
-    {
+    if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
         log_error("Could not create gateway directory %s, %s.",
                   gatewayDir.c_str(),
                   strerror(errno));
         exit(-1);
     }
 
-    { // Create a new scope so that we can du clean up after dtors
+    { // Create a new scope so that we can do a clean up after dtors
         DBus::BusDispatcher dispatcher;
         DBus::default_dispatcher = &dispatcher;
         DBus::Connection bus = DBus::Connection::SessionBus();
@@ -104,8 +106,11 @@ int main(int argc, char **argv)
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
-        SystemcallInterface systemCallInterface;
-        Pelagicontain pelagicontain(&pamInterface, &dbusmainloop, &controllerInterface, cookie);
+        SystemcallInterface systemcallInterface;
+        Pelagicontain pelagicontain(&pamInterface,
+                                    &dbusmainloop,
+                                    &controllerInterface,
+                                    cookie);
 
         std::string baseObjPath("/com/pelagicore/Pelagicontain/");
         std::string fullObjPath = baseObjPath + cookie;
@@ -113,21 +118,28 @@ int main(int argc, char **argv)
         PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
 
         pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
-                                                    &systemCallInterface));
+                                                    &systemcallInterface));
 
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName));
 
         pelagicontain.addGateway(new DeviceNodeGateway(&controllerInterface));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-                                                 DBusGateway::SessionProxy, gatewayDir, containerName,
-                                                 containerConfig));
+                                                 &systemcallInterface,
+                                                 DBusGateway::SessionProxy,
+                                                 gatewayDir,
+                                                 containerName));
 
         pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-                                                 DBusGateway::SystemProxy, gatewayDir, containerName,
-                                                 containerConfig));
+                                                 &systemcallInterface,
+                                                 DBusGateway::SystemProxy,
+                                                 gatewayDir,
+                                                 containerName));
 
-        pid_t pcPid = pelagicontain.preload(containerName, containerConfig, containerRoot, containedCommand);
+        pid_t pcPid = pelagicontain.preload(containerName,
+                                            containerConfig,
+                                            containerRoot,
+                                            containedCommand);
 
         log_debug("Started Pelagicontain with PID: %d", pcPid);
 
@@ -136,12 +148,15 @@ int main(int argc, char **argv)
     }
 
     // remove instance specific dirs again
-    if (rmdir(gatewayDir.c_str()) == -1)
-    {
-        log_error("Cannot delete dir %s, %s", gatewayDir.c_str(), strerror(errno));
+    if (rmdir(gatewayDir.c_str()) == -1) {
+        log_error("Cannot delete dir %s, %s",
+                  gatewayDir.c_str(),
+                  strerror(errno));
     }
-    if (rmdir(containerDir.c_str()) == -1)
-    {
-        log_error("Cannot delete dir %s, %s", gatewayDir.c_str(), strerror(errno));
+
+    if (rmdir(containerDir.c_str()) == -1) {
+        log_error("Cannot delete dir %s, %s",
+                  gatewayDir.c_str(),
+                  strerror(errno));
     }
 }

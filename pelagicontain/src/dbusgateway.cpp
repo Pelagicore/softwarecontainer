@@ -2,6 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+#include <iostream>
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
@@ -9,59 +10,33 @@
 #include "debug.h"
 
 DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
-                         ProxyType type, const std::string &gatewayDir,
-                         const std::string &name, const std::string &containerConfig):
+                         SystemcallAbstractInterface *systemcallInterface,
+                         ProxyType type,
+                         const std::string &gatewayDir,
+                         const std::string &name):
     Gateway(controllerInterface),
-    m_type(type)
+    m_systemcallInterface(systemcallInterface),
+    m_type(type),
+    m_pid(-1),
+    m_infp(-1),
+    m_outfp(-1),
+    m_hasBeenConfigured(false)
 {
-    /* TODO: The config should not be set here, it should be set
-     * when Pelagicontain calls setConfig() on this object. This
-     * means dbus-proxy needs to be modified to not take a config
-     * file as argument which it bases it's config on, rather it
-     * should somehow get the config set as a result of the call
-     * to setConfig()
-     */
     if (m_type == SessionProxy) {
         m_socket = gatewayDir
-                   + std::string("/sess_")
-                   + name
-                   + std::string(".sock");
+            + std::string("/sess_")
+            + name
+            + std::string(".sock");
     } else {
         m_socket = gatewayDir
-                   + std::string("/sys_")
-                   + name
-                   + std::string(".sock");
-    }
-
-    log_debug("Spawning %s proxy, socket: %s, config: %s",
-              typeString(), m_socket.c_str(), containerConfig.c_str());
-
-    m_pid = fork();
-    if (m_pid == 0) { /* child */
-        /* execlp only returns on errors */
-        execlp("dbus-proxy", "dbus-proxy", m_socket.c_str(), typeString(),
-               containerConfig.c_str(), NULL);
-        log_error("Unable to spawn %s proxy!", typeString());
-        /* Kill our clone, otherwise we get multiple running processes */
-        exit(1);
-    } else if (m_pid == -1) {
-        log_error("Failed to fork!");
+            + std::string("/sys_")
+            + name
+            + std::string(".sock");
     }
 }
 
 DBusGateway::~DBusGateway()
 {
-    if (kill(m_pid, SIGTERM) == -1) {
-        log_error("Failed to kill %s proxy!", typeString());
-    } else {
-        log_debug("Killed %s proxy!", typeString());
-    }
-
-    if (remove(m_socket.c_str()) == -1) {
-        log_error("Failed to remove %s proxy socket!", typeString());
-    } else {
-        log_debug("Removed %s proxy socket!", typeString());
-    }
 }
 
 std::string DBusGateway::id()
@@ -71,12 +46,91 @@ std::string DBusGateway::id()
 
 bool DBusGateway::setConfig(const std::string &config)
 {
-    return true;
+    m_config = config;
+
+    if(m_config.length() > 1) {
+        m_hasBeenConfigured = true;
+        return true;
+    }
+
+    return false;
 }
 
 bool DBusGateway::activate()
 {
-    return true;
+    if(!m_hasBeenConfigured) {
+        log_error ("'Activate' called on non-configured gateway %s",
+                   id().c_str());
+        return false;
+    }
+
+    // set DBUS ENV
+    std::string variable = "DBUS_";
+    if (m_type == SessionProxy) {
+        variable += "SESSION";
+    } else {
+        variable += "SYSTEM";
+    }
+    variable += "_BUS_ADDRESS";
+
+    std::string value = "unix:path=/gateways/";
+    value += socketName();
+    m_controllerInterface->setEnvironmentVariable(variable, value);
+
+    // Open pipe
+    std::string command = "dbus-proxy ";
+    command += m_socket + " " + typeString();
+    m_pid = m_systemcallInterface->makePopenCall(command,
+                                                 &m_infp,
+                                                 &m_outfp);
+    if(m_pid == -1) {
+        log_error ("Failed to launch %s", command.c_str());
+        return false;
+    }
+
+    size_t count = sizeof(char) * m_config.length();
+
+    ssize_t written = write(m_infp,
+                            m_config.c_str(),
+                            count);
+
+    // writing didn't work at all
+    if(written == -1) {
+        log_error ("Failed to write to STDIN of dbus-proxy!");
+        return false;
+    }
+
+    // writing has written exact amout of bytes
+    if(written == (ssize_t)count) {
+        return true;
+    }
+
+    // something went wrong during the write
+    log_error ("Failed to write to STDIN of dbus-proxy!");
+
+    return false;
+}
+
+bool DBusGateway::teardown() {
+
+    bool success = true;
+
+    if(m_pid != -1) {
+        if(!m_systemcallInterface->makePcloseCall(m_pid, m_infp, m_outfp)) {
+            log_error("makePcloseCall() returned error\n");
+            success = false;
+        }
+    } else {
+        log_error("Failed to close connection to dbus-proxy!");
+        success = false;
+    }
+
+    if(unlink(m_socket.c_str()) == -1) {
+        log_error("Could not remove %s\n", m_socket.c_str());
+        success = false;
+    }
+
+    return success;
 }
 
 const char *DBusGateway::typeString()
@@ -97,19 +151,5 @@ const char *DBusGateway::socketName()
 
 std::string DBusGateway::environment()
 {
-    log_debug("Requesting environment for %s with socket %s",
-              typeString(), m_socket.c_str());
-
-    std::string env;
-    env += "DBUS_";
-    if (m_type == SessionProxy) {
-        env += "SESSION";
-    } else {
-        env += "SYSTEM";
-    }
-    env += "_BUS_ADDRESS=unix:path=";
-    env += "/gateways/";
-    env += socketName();
-
-    return env;
+    return "";
 }

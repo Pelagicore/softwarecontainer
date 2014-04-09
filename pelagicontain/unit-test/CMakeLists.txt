@@ -7,6 +7,7 @@ add_executable(runUnitTestsPelagicontain
     devicenodegateway_unittest_data.h
     main.cpp
     networkgateway_unittest.cpp
+    dbusgateway_unittest.cpp
     pelagicontain_unittest.cpp
     ../src/container.cpp
     ../src/controllerinterface.cpp
