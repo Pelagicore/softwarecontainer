@@ -43,6 +43,7 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
     pid_t pid;
 
     if (pipe(stdinfp) != 0 || pipe(stdoutfp) != 0) {
+        log_error("Failed to open STDIN and STDOUT to dbus-proxy");
         return -1;
     }
 
