@@ -80,6 +80,7 @@ bool DBusGateway::activate()
                                                      &m_infp,
                                                      &m_outfp);
         if(m_pid == -1) {
+            log_error ("Failed to launch %s", command.c_str());
             return false;
         }
 
@@ -91,6 +92,7 @@ bool DBusGateway::activate()
 
         // writing didn't work at all
         if(written == -1) {
+            log_error ("Failed to write to STDIN of dbus-proxy!");
             return false;
         }
 
@@ -100,6 +102,7 @@ bool DBusGateway::activate()
         }
 
         // something went wrong during the write
+        log_error ("Failed to write to STDIN of dbus-proxy!");
         return false;
     }
 
