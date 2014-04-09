@@ -39,10 +39,10 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
     int READ = 0;
     int WRITE = 1;
 
-    int p_stdin[2], p_stdout[2];
+    int stdinfp[2], stdoutfp[2];
     pid_t pid;
 
-    if (pipe(p_stdin) != 0 || pipe(p_stdout) != 0) {
+    if (pipe(stdinfp) != 0 || pipe(stdoutfp) != 0) {
         return -1;
     }
 
@@ -51,10 +51,10 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
     if (pid < 0) {
         return pid;
     } else if (pid == 0) {
-        close(p_stdin[WRITE]);
-        dup2(p_stdin[READ], READ);
-        close(p_stdout[READ]);
-        dup2(p_stdout[WRITE], WRITE);
+        close(stdinfp[WRITE]);
+        dup2(stdinfp[READ], READ);
+        close(stdoutfp[READ]);
+        dup2(stdoutfp[WRITE], WRITE);
 
         // Set group id to the same as pid, that way we can kill the
         // shells children on close.
@@ -66,15 +66,15 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
     }
 
     if (infp == NULL) {
-        close(p_stdin[WRITE]);
+        close(stdinfp[WRITE]);
     } else {
-        *infp = p_stdin[WRITE];
+        *infp = stdinfp[WRITE];
     }
 
     if (outfp == NULL) {
-        close(p_stdout[READ]);
+        close(stdoutfp[READ]);
     } else {
-        *outfp = p_stdout[READ];
+        *outfp = stdoutfp[READ];
     }
 
     return pid;
