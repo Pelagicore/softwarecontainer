@@ -73,6 +73,7 @@ void Controller::setEnvironmentVariable(const std::string &variable,
 
     if (ret == -1) {
         perror("setenv: ");
+        return;
     }
 
     std::cout << "Controller set \"" << variable << "=" << value << "\"" << std::endl;
