@@ -33,10 +33,18 @@ int Controller::runApp()
     }
 
     if (m_pid == 0) { // Child
+        // Set group id to the same as pid, that way we can kill any of the apps
+        // children on close.
+        int ret = setpgid(0, 0);
+        if (ret == -1) {
+            perror("setpgid error: ");
+        }
+
         // This path to containedapp makes sense inside the container
-        int ret = execlp("/appbin/containedapp", "containedapp", NULL);
-        if (ret == -1)
+        ret = execlp("/appbin/containedapp", "containedapp", NULL);
+        if (ret == -1) {
             perror("exec error: ");
+        }
         exit(1);
     } // Parent
     std::cout << "Started app with pid: " << "\"" << m_pid << "\"" << std::endl;
@@ -52,7 +60,8 @@ void Controller::killApp()
         return;
     }
 
-    int ret = kill(m_pid, SIGINT);
+    // The negative pid makes kill send the signal to the whole process group
+    int ret = kill(-m_pid, SIGINT);
     if (ret == -1) {
         perror("Error killing application: ");
     } else {
