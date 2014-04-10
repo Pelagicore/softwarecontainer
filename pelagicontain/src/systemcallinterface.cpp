@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 
 SystemcallInterface::SystemcallInterface()
