@@ -143,8 +143,6 @@ with open(app_bin + "containedapp", "w") as f:
     f.write("""#!/bin/sh
     /appbin/paplay --volume=0 /appbin/Front_Right.wav
     echo $? > /appshared/pulsegateway_test_output
-    env
-    ls /gateways/
     """)
 os.system("chmod 755 " + app_bin + "containedapp")
 time.sleep(1)
