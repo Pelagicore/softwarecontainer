@@ -61,24 +61,19 @@ bool PulseGateway::setConfig(const std::string &config)
     /* Check the value of the audio key of the config */
     std::string value = parseConfig(config.c_str(), "audio", &err);
 
-    if (value.compare("true") == 0)
-    {
+    if (value.compare("true") == 0) {
 	log_debug("Audio will be enabled\n");
 	m_enableAudio = true;
-    }
-    else
-    {
+    } else {
 	log_debug("Audio will be disabled\n");
-        if (err == ConfigError::BadConfig)
-        {
+        if (err == ConfigError::BadConfig) {
             log_error("Malformed configuration file");
             success = false;
         }
 	m_enableAudio = false;
     }
 
-    if (m_enableAudio)
-    {
+    if (m_enableAudio) {
         std::string var = "PULSE_SERVER";
         std::string val = "/gateways/" + socketName();
         success = m_controllerInterface->setEnvironmentVariable(var, val);
@@ -90,8 +85,7 @@ bool PulseGateway::setConfig(const std::string &config)
 bool PulseGateway::activate()
 {
     bool success = true;
-    if (m_enableAudio)
-    {
+    if (m_enableAudio) {
 	success = connectToPulseServer();
     }
 
@@ -106,8 +100,7 @@ bool PulseGateway::connectToPulseServer()
     m_mainloop = pa_threaded_mainloop_new();
     pa_threaded_mainloop_start(m_mainloop);
 
-    if (m_mainloop)
-    {
+    if (m_mainloop) {
         /* Set up connection to pulse server */
         pa_threaded_mainloop_lock(m_mainloop);
         m_api = pa_threaded_mainloop_get_api(m_mainloop);
@@ -120,21 +113,17 @@ bool PulseGateway::connectToPulseServer()
                   PA_CONTEXT_NOFAIL, /* keep reconnection on failure */
                   NULL );            /* use default spawn api */
 
-        if (err != 0)
-        {
+        if (err != 0) {
             success = false;
             log_error("pulse: Error code %d (%s)", err, pa_strerror(err));
 
-            if (error == -1)
-            {
+            if (err == -1) {
                 log_debug("Is the home directory set?");
             }
         }
 
         pa_threaded_mainloop_unlock(m_mainloop);
-    }
-    else
-    {
+    } else {
         success = false;
         log_error("Failed to create pulse mainloop->");
     }
@@ -152,11 +141,11 @@ std::string PulseGateway::socketName()
     return m_socket.substr(m_socket.rfind('/') + 1);
 }
 
-void PulseGateway::loadCallback(pa_context *c, uint32_t index, void *userdata)
+void PulseGateway::loadCallback(pa_context *context, uint32_t index, void *userdata)
 {
     PulseGateway *p = static_cast<PulseGateway *>(userdata);
     p->m_index = (int)index;
-    int error = pa_context_errno(c);
+    int error = pa_context_errno(context);
     if (error != 0) {
         log_error("pulse: Error code %d (%s)", error, pa_strerror(error));
     }
@@ -166,13 +155,15 @@ void PulseGateway::loadCallback(pa_context *c, uint32_t index, void *userdata)
     pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
 
-void PulseGateway::unloadCallback(pa_context *c, int success, void *userdata)
+void PulseGateway::unloadCallback(pa_context *context, int success, void *userdata)
 {
     PulseGateway *p = static_cast<PulseGateway *>(userdata);
-    if (success)
+
+    if (success) {
         log_debug("pulse: Unloaded module %d", p->m_index);
-    else
+    } else {
         log_debug("pulse: Failed to unload module %d", p->m_index);
+    }
 
     pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
@@ -253,8 +244,7 @@ std::string PulseGateway::parseConfig(
     goto cleanup_parse_json;
 
 cleanup_parse_json:
-    if (root)
-    {
+    if (root) {
         json_decref(root);
     }
 
