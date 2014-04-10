@@ -123,7 +123,12 @@ bool PulseGateway::connectToPulseServer()
         if (err != 0)
         {
             success = false;
-            log_error("Pulse error: %s", pa_strerror(err));
+            log_error("pulse: Error code %d (%s)", err, pa_strerror(err));
+
+            if (error == -1)
+            {
+                log_debug("Is the home directory set?");
+            }
         }
 
         pa_threaded_mainloop_unlock(m_mainloop);
@@ -151,7 +156,12 @@ void PulseGateway::loadCallback(pa_context *c, uint32_t index, void *userdata)
 {
     PulseGateway *p = static_cast<PulseGateway *>(userdata);
     p->m_index = (int)index;
-    log_error("pulse: Loaded module %d", p->m_index);
+    int error = pa_context_errno(c);
+    if (error != 0) {
+        log_error("pulse: Error code %d (%s)", error, pa_strerror(error));
+    }
+
+    log_debug("pulse: Loaded module %d", p->m_index);
 
     pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
