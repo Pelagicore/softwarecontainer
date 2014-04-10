@@ -53,10 +53,6 @@ def kill_pa_server():
 # Copy paplay from the host system
 def find_and_copy_paplay():
     global app_bin
-    wav = "/usr/share/sounds/alsa/Front_Right.wav"
-    if not os.path.isfile(wav):
-        print "Could not find sound file to test with"
-        return False
 
     paplay = distutils.spawn.find_executable("paplay")
     if not paplay:
@@ -66,7 +62,6 @@ def find_and_copy_paplay():
     print "Copying %s to %s" % (paplay, app_bin)
     try:
         shutil.copy(paplay, app_bin)
-        shutil.copy(wav, app_bin)
     except IOError as e:
         return False
     return True
@@ -79,8 +74,9 @@ def setup_suite():
     app_bin = container_root + "/" + helper.app_uuid + "/bin/"
 
     if not find_and_copy_paplay():
-        print "Problem copying paplay and/or wav-file"
+        print "Problem copying paplaye"
         sys.exit(1)
+    os.system("dd if=/dev/urandom of=" + app_bin + "test.wav bs=1k count=1")
 
     pa_server_pid = start_pa_server()
 
@@ -107,7 +103,7 @@ def teardown_test_case():
 # Run after last tests
 def teardown_suite():
     os.system("rm " + app_bin + "paplay")
-    os.system("rm " + app_bin + "Front_Right.wav")
+    os.system("rm " + app_bin + "test.wav")
     kill_pa_server()
 
 def run_app():
@@ -141,7 +137,7 @@ setup_suite()
 with open(app_bin + "containedapp", "w") as f:
     print "Overwriting containedapp..."
     f.write("""#!/bin/sh
-    /appbin/paplay --volume=0 /appbin/Front_Right.wav
+    /appbin/paplay --volume=0 --raw /appbin/test.wav
     echo $? > /appshared/pulsegateway_test_output
     """)
 os.system("chmod 755 " + app_bin + "containedapp")
