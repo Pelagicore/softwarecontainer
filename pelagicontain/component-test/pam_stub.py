@@ -18,7 +18,8 @@ class PAMStub(dbus.service.Object):
     BUS_NAME = "com.pelagicore.PAM"
 
     def __init__(self):
-        self.configs = {}
+        print "PAM stub started..."
+        self.configs = {"":""}
         self.bus = dbus.SessionBus()
         request = self.bus.request_name(self.BUS_NAME, dbus.bus.NAME_FLAG_REPLACE_EXISTING)
         bus_name = dbus.service.BusName(self.BUS_NAME, bus=self.bus)
@@ -89,8 +90,9 @@ class PAMStub(dbus.service.Object):
         self.configs = configs
 
     def call_pelagicontain_update(self, cookie, configs):
-        pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain",
-            "/com/pelagicore/Pelagicontain/" + cookie)
+        pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain" + cookie,
+            "/com/pelagicore/Pelagicontain")
+        print pelagicontain_remote_object
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object,
             "com.pelagicore.Pelagicontain")
         pelagicontain_iface.Update(configs)
