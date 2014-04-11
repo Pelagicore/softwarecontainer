@@ -74,9 +74,9 @@ def setup_suite():
     app_bin = container_root + "/" + helper.app_uuid + "/bin/"
 
     if not find_and_copy_paplay():
-        print "Problem copying paplaye"
+        print "Problem copying paplay"
         sys.exit(1)
-    os.system("dd if=/dev/urandom of=" + app_bin + "test.wav bs=1k count=1")
+    os.system("dd if=/dev/urandom of=" + app_bin + "/test.wav bs=1k count=1")
 
     pa_server_pid = start_pa_server()
 
@@ -102,8 +102,8 @@ def teardown_test_case():
 
 # Run after last tests
 def teardown_suite():
-    os.system("rm " + app_bin + "paplay")
-    os.system("rm " + app_bin + "test.wav")
+    os.system("rm " + app_bin + "/paplay")
+    os.system("rm " + app_bin + "/test.wav")
     kill_pa_server()
 
 def run_app():
@@ -173,3 +173,8 @@ teardown_test_case()
 teardown_suite()
 
 print "SUMMARY: " + str(TESTS_PASSED) + " of " + str(TOTAL_NUMBER_OF_TESTS) + " tests passed"
+
+if TESTS_PASSED == TOTAL_NUMBER_OF_TESTS:
+    exit(0)
+else:
+    exit(1)
