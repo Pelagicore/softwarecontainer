@@ -6,11 +6,12 @@
 #include "pulsegateway.h"
 #include "debug.h"
 #include "jansson.h"
+#include <libgen.h>
 
 PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName,
                            ControllerAbstractInterface *controllerInterface):
     Gateway(controllerInterface),
-    m_api(0), 
+    m_api(0),
     m_context(0),
     m_mainloop(NULL),
     m_index(-1),
@@ -61,16 +62,16 @@ bool PulseGateway::setConfig(const std::string &config)
     /* Check the value of the audio key of the config */
     std::string value = parseConfig(config.c_str(), "audio", &err);
 
-    if (value.compare("true") == 0) {
-	log_debug("Audio will be enabled\n");
-	m_enableAudio = true;
+    if (value == "true") {
+        log_debug("Audio will be enabled\n");
+        m_enableAudio = true;
     } else {
-	log_debug("Audio will be disabled\n");
+        log_debug("Audio will be disabled\n");
         if (err == ConfigError::BadConfig) {
             log_error("Malformed configuration file");
             success = false;
         }
-	m_enableAudio = false;
+        m_enableAudio = false;
     }
 
     if (m_enableAudio) {
@@ -86,7 +87,7 @@ bool PulseGateway::activate()
 {
     bool success = true;
     if (m_enableAudio) {
-	success = connectToPulseServer();
+        success = connectToPulseServer();
     }
 
     return success;
@@ -105,7 +106,7 @@ bool PulseGateway::connectToPulseServer()
         pa_threaded_mainloop_lock(m_mainloop);
         m_api = pa_threaded_mainloop_get_api(m_mainloop);
         m_context = pa_context_new(m_api, "pulsetest");
-        pa_context_set_state_callback (m_context, stateCallback, this);
+        pa_context_set_state_callback(m_context, stateCallback, this);
 
         int err = pa_context_connect(
                   m_context,        /* context */
@@ -138,7 +139,9 @@ std::string PulseGateway::environment()
 
 std::string PulseGateway::socketName()
 {
-    return m_socket.substr(m_socket.rfind('/') + 1);
+    char socket[1024];
+    snprintf(socket, sizeof(socket), "%s", m_socket.c_str());
+    return std::string(basename(socket));
 }
 
 void PulseGateway::loadCallback(pa_context *context, uint32_t index, void *userdata)
