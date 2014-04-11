@@ -9,7 +9,25 @@
 #include "gateway.h"
 #include "systemcallinterface.h"
 
-/*! Pulse audio functionality for Pelagicontain
+/*! This Pelagicontain gateway is responsible for setting up a connection to the
+ *  PulseAudio server running on the host system. The gateway decides whether to
+ *  connect to the PulseAudio server or not based on the configuration passed to
+ *  setConfig.
+ *  If configured to enable audio, the gateway sets up a mainloop and then connects
+ *  to the default PulseAudio server by calling pa_context_connect(). This is done
+ *  during the activate() call.
+ *  Once activate() has been called, the gateway listens to changes in the connection
+ *  through the stateCallback function and, once the connection has been successfully
+ *  set up, loads the module-native-protocol-unix PulseAudio module.
+ *
+ *  JSON format for configuration that enables audio (sent to setConfig()):
+ *  \code{.js}
+ *   {"audio": "true"}
+ *  \endcode
+ *
+ *  A malformed configuration or a configuration that sets audio to false will simply
+ *  disable audio and in such case, the gateway will not connect to the PulseAudio
+ *  server at all.
  */
 class PulseGateway:
     public Gateway
@@ -28,15 +46,29 @@ public:
 
     /*!
      *  Implements Gateway::setConfig
+     *
+     *  Parses the JSON string configuration and sets m_enableAudio to true
+     *  or false based on the content of the configuration.
+     *
+     * \param config JSON configuration object
+     * \returns true upon successful parsing, false otherwise
      */
     virtual bool setConfig(const std::string &config);
 
     /*!
      *  Implements Gateway::activate
+     *
+     *  If audio is to be enabled, then calling this function results in a call
+     *  to connectToPulseServer.
+     *
+     * \returns true upon success (PulseAudio server connect call and mainloop
+     *               setup successfully), false otherwise.
      */
     virtual bool activate();
 
     /*! Implements Gateway::environment
+     *
+     *  This gateway has no environment.
      */
     virtual std::string environment();
 
@@ -46,8 +78,8 @@ private:
 
     /*! Creates a mainloop, sets a PulseAudio context, and sets callbacks for PulseAudio.
      *
-     * \return true Upon success
-     * \return false Upon failure
+     * \returns true upon success (PulseAudio server connect call and mainloop
+     *               setup successfully), false otherwise.
      */
     bool connectToPulseServer();
 
@@ -57,8 +89,6 @@ private:
      * \param index The index of the loaded module
      * \param userdata Pointer to the calling PulseGateway object
      *
-     * \return true Upon success
-     * \return false Upon failure
      */
     static void loadCallback(pa_context *context, uint32_t idx, void *userdata);
 
@@ -68,8 +98,6 @@ private:
      * \param index The index of the loaded module
      * \param userdata Pointer to the calling PulseGateway object
      *
-     * \return true Upon success
-     * \return false Upon failure
      */
     static void unloadCallback(pa_context *context, int success, void *userdata);
 
@@ -79,8 +107,6 @@ private:
      * \param index The index of the loaded module
      * \param userdata Pointer to the calling PulseGateway object
      *
-     * \return true Upon success
-     * \return false Upon failure
      */
     static void stateCallback(pa_context *c, void *userdata);
 
