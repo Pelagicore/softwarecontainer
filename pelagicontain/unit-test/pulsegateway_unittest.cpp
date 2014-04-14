@@ -106,7 +106,7 @@ TEST_F(PulseGatewayTest, TestHasNoEnvironment) {
 }
 
 /*! Test well-formed configuration that enables the gateway.
- *  
+ *
  *  Tests with configurations that are syntactically correct, i.e. not
  *  causing errors, and that enables audio.
  */
@@ -139,7 +139,7 @@ TEST_P(PulseGatewayValidConfig, TestCanParseValidConfig) {
 
 
 /*! Test malformed configuration that disables the gateway.
- *  
+ *
  *  Tests with configurations that are syntactically incorrect, i.e.
  *  causing parsing errors.
  */
@@ -160,7 +160,7 @@ TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
 }
 
 /*! Test well-formed configuration that disables the gateway.
- *  
+ *
  *  Tests with configurations that are syntactically correct, i.e. not
  *  causing errors, but that disables audio.
  */
