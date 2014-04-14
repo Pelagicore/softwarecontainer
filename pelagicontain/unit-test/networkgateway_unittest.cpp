@@ -7,7 +7,6 @@
 
 #include "networkgateway.h"
 #include "debug.h"
-#include "log_console.h"
 
 using namespace pelagicore;
 

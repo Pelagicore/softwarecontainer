@@ -6,7 +6,6 @@
 #include "gtest/gtest.h"
 
 #include "debug.h"
-#include "log_console.h"
 
 #include "devicenodegateway.h"
 #include "devicenodegateway_unittest_data.h"
