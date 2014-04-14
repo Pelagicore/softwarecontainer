@@ -23,10 +23,13 @@ PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &con
 
 PulseGateway::~PulseGateway()
 {
+}
+
+bool PulseGateway::teardown()
+{
     if (m_mainloop) {
         /* Unload module if module loaded successfully on startup */
-        if (m_index != -1)
-        {
+        if (m_index != -1) {
             pa_threaded_mainloop_lock(m_mainloop);
             pa_context_unload_module(
                 m_context,
@@ -47,6 +50,8 @@ PulseGateway::~PulseGateway()
         pa_threaded_mainloop_free(m_mainloop);
     }
     log_debug("pulse: Teardown complete");
+
+    return true;
 }
 
 std::string PulseGateway::id()

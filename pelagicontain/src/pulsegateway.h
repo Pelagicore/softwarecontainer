@@ -72,6 +72,14 @@ public:
      */
     virtual std::string environment();
 
+    /*! Implements Gateway::teardown
+     *
+     *  Unloads eventual PulseAudio modules and disconnects from the PulseAudio server.
+     *
+     *  \return true When teardown is complete.
+     */
+    virtual bool teardown();
+
 private:
 
     enum ConfigError {Ok, BadConfig};

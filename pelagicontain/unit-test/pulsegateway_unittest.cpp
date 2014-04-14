@@ -133,6 +133,8 @@ TEST_P(PulseGatewayValidConfig, TestCanParseValidConfig) {
 
     success = gw.activate();
     ASSERT_TRUE(success);
+
+    ASSERT_TRUE(gw.teardown());
 }
 
 
