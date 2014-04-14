@@ -9,7 +9,6 @@
 #include "pulsegateway_unittest_data.h"
 #include "generators.h"
 #include "debug.h"
-#include "log_console.h"
 
 using namespace pelagicore;
 
