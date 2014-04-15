@@ -92,7 +92,6 @@ class PAMStub(dbus.service.Object):
     def call_pelagicontain_update(self, cookie, configs):
         pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain" + cookie,
             "/com/pelagicore/Pelagicontain")
-        print pelagicontain_remote_object
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object,
             "com.pelagicore.Pelagicontain")
         pelagicontain_iface.Update(configs)
