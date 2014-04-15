@@ -12,6 +12,11 @@ LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 int main(int argc, char **argv) {
+    if (!std::getenv("LOG_OUTPUT")) {
+        // Silence the logger
+        logging::ConsoleLogContext::setGlobalLogLevel(logging::LogLevel::None);
+    }
+
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
