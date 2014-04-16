@@ -104,8 +104,8 @@ class ComponentTestHelper:
         while not found and tries < 2:
             try:
                 self.pelagicontain_remote_object = \
-                    self.bus.get_object("com.pelagicore.Pelagicontain",
-                                   "/com/pelagicore/Pelagicontain/" + self.cookie)
+                    self.bus.get_object("com.pelagicore.Pelagicontain" + self.cookie,
+                                   "/com/pelagicore/Pelagicontain")
                 self.pelagicontain_iface =\
                     dbus.Interface(self.pelagicontain_remote_object, 
                                    "com.pelagicore.Pelagicontain")

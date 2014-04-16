@@ -56,7 +56,9 @@ void Controller::killApp()
 {
     std::cout << "Trying to kill: " << m_pid << std::endl;
     if (m_pid == 0) {
-        std::cout << "Warning: Trying to kill an app without previously having started one" << std::endl;
+        std::cout << "WARNING: Trying to kill an app without previously having started one. "
+            << "This is normal if this is a preloaded but unused container."
+            << std::endl;
         return;
     }
 

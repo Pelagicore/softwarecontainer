@@ -102,7 +102,8 @@ int main(int argc, char **argv)
         /* The request_name call does not return anything but raises an
          * exception if the name cannot be requested.
          */
-        bus.request_name("com.pelagicore.Pelagicontain");
+        std::string name = "com.pelagicore.Pelagicontain" + cookie;
+        bus.request_name(name.c_str());
 
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
@@ -112,10 +113,9 @@ int main(int argc, char **argv)
                                     &controllerInterface,
                                     cookie);
 
-        std::string baseObjPath("/com/pelagicore/Pelagicontain/");
-        std::string fullObjPath = baseObjPath + cookie;
+        std::string objectPath = "/com/pelagicore/Pelagicontain";
 
-        PelagicontainToDBusAdapter pcAdapter(bus, fullObjPath, pelagicontain);
+        PelagicontainToDBusAdapter pcAdapter(bus, objectPath, pelagicontain);
 
         pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
                                                     &systemcallInterface));
