@@ -126,7 +126,6 @@ class ComponentTestHelper:
             print "\n-=< All tests passed >=-\n"
         else:
             print "\n-=< Failure >=-\n"
-        exit(self.result)
 
     def find_and_run_Launch_on_pelagicontain_on_dbus(self):
         self.pelagicontain_iface = dbus.Interface(self.pelagicontain_remote_object, 
