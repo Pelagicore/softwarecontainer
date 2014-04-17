@@ -4,7 +4,7 @@
  */
 #include "dbusmainloop.h"
 
-DBusMainloop::DBusMainloop(DBus::BusDispatcher *dispatcher):
+DBusMainloop::DBusMainloop(DBus::Glib::BusDispatcher *dispatcher):
     m_dispatcher(dispatcher)
 {
 }

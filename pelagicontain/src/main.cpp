@@ -15,6 +15,8 @@
 #include <sys/stat.h>
 #include "systemcallinterface.h"
 #include "devicenodegateway.h"
+#include "MainLoopApplication.h"
+#include "GlibIO.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -22,6 +24,11 @@ LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 #ifndef CONFIG
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
+
+bool event() {
+    log_debug("This is the event firing!");
+    return true;
+}
 
 int main(int argc, char **argv)
 {
@@ -89,8 +96,13 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
+    pelagicore::MainLoopApplication ml;
+    pelagicore::GlibIdleCallback cb (event);
+    cb.activate(900);
+
     { // Create a new scope so that we can do a clean up after dtors
-        DBus::BusDispatcher dispatcher;
+        DBus::Glib::BusDispatcher dispatcher;
+        dispatcher.attach(ml.getMainContext());
         DBus::default_dispatcher = &dispatcher;
         DBus::Connection bus = DBus::Connection::SessionBus();
 
@@ -144,7 +156,8 @@ int main(int argc, char **argv)
 
         log_debug("Started Pelagicontain with PID: %d", pcPid);
 
-        dbusmainloop.enter();
+       // dbusmainloop.enter();
+        ml.run();
         log_debug("Exited dbusmainloop.");
     }
 

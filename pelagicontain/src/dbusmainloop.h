@@ -6,6 +6,7 @@
 #define DBUSMAINLOOP_H
 
 #include <dbus-c++/dbus.h>
+#include <dbus-c++/glib-integration.h>
 
 #include "mainloopabstractinterface.h"
 
@@ -22,7 +23,7 @@ public:
      *
      * \param dispatcher A pointer to the DBusDispatcher
      */
-    DBusMainloop(DBus::BusDispatcher *dispatcher);
+    DBusMainloop(DBus::Glib::BusDispatcher *dispatcher);
 
     ~DBusMainloop();
 
@@ -35,7 +36,7 @@ public:
     virtual void leave();
 
 private:
-    DBus::BusDispatcher *m_dispatcher;
+    DBus::Glib::BusDispatcher *m_dispatcher;
 };
 
 #endif /* DBUSMAINLOOP_H */
