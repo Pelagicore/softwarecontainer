@@ -36,12 +36,14 @@ eval `dbus-launch --sh-syntax`
 pam_pid=$!
 exit_codes=()
 
+# Device node gateway tests
 py.test test_devicenodegateway.py --junitxml=testreports/devicenodegateway.xml \
                                  --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
-                                  --container_path /tmp/container/
+                                 --container_path /tmp/container/
 dng_exit=$?
 exit_codes+=$dng_exit
 
+# Pelagicontain tests
 py.test test_pelagicontain.py --junitxml=testreports/pelagicontain.xml \
                               --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
                               --container_path /tmp/container/
@@ -49,12 +51,21 @@ py.test test_pelagicontain.py --junitxml=testreports/pelagicontain.xml \
 pelagicontain_exit=$?
 exit_codes+=$pelagicontain_exit
 
+# Network gateway tests
 py.test test_networkgateway.py --junitxml=testreports/networkgateway.xml \
                                --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
                                --container_path /tmp/container/
 
 nwg_exit=$?
 exit_codes+=$nwg_exit
+
+# D-Bus gateway tests
+py.test test_dbusgateway.py --junitxml=testreports/dbusgateway.xml \
+                               --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                               --container_path /tmp/container/
+
+dbusgw_exit=$?
+exit_codes+=$dbusgw_exit
 
 kill $pam_pid
 wait $pam_pid 2>/dev/null
@@ -78,6 +89,12 @@ if [ "$nwg_exit" == "0" ]; then
     echo "Network Gateway: SUCCESS"
 else
     echo "Network Gateway: FAIL"
+fi
+
+if [ "$dbusgw_exit" == "0" ]; then
+    echo "D-Bus Gateway: SUCCESS"
+else
+    echo "D-Bus Gateway: FAIL"
 fi
 
 [[ $exit_codes =~ 1 ]] && exit 1 || exit 0
