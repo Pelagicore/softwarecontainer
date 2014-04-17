@@ -70,8 +70,6 @@ exit_codes+=$dbusgw_exit
 kill $pam_pid
 wait $pam_pid 2>/dev/null
 
-reset
-
 ## Report
 if [ "$dng_exit" == "0" ]; then
     echo "Device node manager: SUCCESS"
