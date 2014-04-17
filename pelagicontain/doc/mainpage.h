@@ -162,13 +162,6 @@
    </code>
 
    <h2>Running the Pelagicontain component tests</h2>
-   <code>./setup-dirs.sh /tmp/test/</code><br>
-
-   Copy \c controller to <code>/tmp/test/bin/</code><br>
-   Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/bin/</code> (containedapp is
-   built separately from the pelagicontain project and is found in
-   pelagicontain/component-test/)<br>
-
    Add a container-br0 bridge: <br />
    <code>brctl addbr container-br0</code> <br />
    <code>brctl setfd container-br0 0</code> <br />
@@ -176,8 +169,23 @@
    <code>iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE</code> <br />
    <code>echo 1 > /proc/sys/net/ipv4/ip_forward</code> <br />
 
+   The Pelagicontain component tests use the py.test testing framework. The tests are
+   launched by the test_runner.sh script which also sets up the environement (including
+   a Platform Access Manager stub).
+
+   \deprecated
+   <code>./setup-dirs.sh /tmp/test/</code><br>
+
+   \deprecated
+   Copy \c controller to <code>/tmp/test/bin/</code><br>
+   Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/bin/</code> (containedapp is
+   built separately from the pelagicontain project and is found in
+   pelagicontain/component-test/)<br>
+
+   \deprecated
    With root privilegies start \c pam_stub.py (found in pelagicontain/component-test/)
 
+   \deprecated
    Run \c test_pelagicontain (also with root privilegies) and point out where the
    \c pelagicontain binary is (assuming we are in the git repo root and build is
    done in \c build):<br>
