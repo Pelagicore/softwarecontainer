@@ -26,7 +26,7 @@ shift $((OPTIND - 1))
 
 mkdir -p testreports
 
-$($setup_script -d $container_path \
+sudo $($setup_script -d $container_path \
                 -x $controller_bin \
                 -a com.pelagicore.comptest)
 
@@ -37,17 +37,24 @@ pam_pid=$!
 exit_codes=()
 
 py.test test_devicenodegateway.py --junitxml=testreports/devicenodegateway.xml \
-                                  --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                                 --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
                                   --container_path /tmp/container/
 dng_exit=$?
 exit_codes+=$dng_exit
 
 py.test test_pelagicontain.py --junitxml=testreports/pelagicontain.xml \
-                                  --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
-                                  --container_path /tmp/container/
+                              --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                              --container_path /tmp/container/
 
 pelagicontain_exit=$?
 exit_codes+=$pelagicontain_exit
+
+py.test test_networkgateway.py --junitxml=testreports/networkgateway.xml \
+                               --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                               --container_path /tmp/container/
+
+nwg_exit=$?
+exit_codes+=$nwg_exit
 
 kill $pam_pid
 wait $pam_pid 2>/dev/null
@@ -65,6 +72,12 @@ if [ "$pelagicontain_exit" == "0" ]; then
     echo "Pelagicontain: SUCCESS"
 else
     echo "Pelagicontain: FAIL"
+fi
+
+if [ "$nwg_exit" == "0" ]; then
+    echo "Network Gateway: SUCCESS"
+else
+    echo "Network Gateway: FAIL"
 fi
 
 [[ $exit_codes =~ 1 ]] && exit 1 || exit 0
