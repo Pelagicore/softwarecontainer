@@ -15,6 +15,8 @@
 #include <sys/stat.h>
 #include "systemcallinterface.h"
 #include "devicenodegateway.h"
+#include "MainLoopApplication.h"
+#include "GlibIO.h"
 
 #include <glibmm.h>
 #include <dbus-c++/dbus.h>
