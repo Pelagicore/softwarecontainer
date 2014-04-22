@@ -28,6 +28,12 @@ void PelagicontainToDBusAdapter::Update(const std::map<std::string, std::string>
     m_pelagicontain->update(configs);
 }
 
+void PelagicontainToDBusAdapter::SetContainerEnvironmentVariable(const std::string &var,
+                                                                 const std::string &val)
+{
+    m_pelagicontain->setContainerEnvironmentVariable(var, val);
+}
+
 void PelagicontainToDBusAdapter::Shutdown()
 {
     m_pelagicontain->shutdown();

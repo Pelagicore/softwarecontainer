@@ -129,6 +129,11 @@ void Pelagicontain::activateGateways()
     }
 }
 
+void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val)
+{
+    m_controllerInterface->setEnvironmentVariable(var, val);
+}
+
 void Pelagicontain::shutdown()
 {
     /* Tell Controller to shut down the app
