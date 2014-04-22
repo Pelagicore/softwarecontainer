@@ -171,7 +171,37 @@
 
    The Pelagicontain component tests use the py.test testing framework. The tests are
    launched by the test_runner.sh script which also sets up the environement (including
-   a Platform Access Manager stub).
+   a Platform Access Manager stub and a container root directory). The script is located in the
+   component test source directory, i.e. /path/to/pelagicontain/pelagicontain/component-test/.
+
+   Assuming Pelagicontain and the controller has been built in a build directory called "build", 
+   located directly under the component's top level directory, the tests can be run with the following
+   command: <br />
+   <code>sudo ./test_runner.sh</code>
+
+   The following optional command line arguments can be passed to the test_runner.sh script if custom
+   paths are to be used in the tests.
+   <ul>
+       <li>p - path to pelagicontain binary (default value: ../../build/pelagicontain/src/pelagicontain)</li>
+       <li>c - path to container root directory (default value: /tmp/container/)</li>
+       <li>x - path to controller binary (default value: ../../build/controller/src/controller)</li>
+       <li>s - path to setup_environment.sh (default value: ../../scripts/setup_environment.sh)</li>
+   </ul>
+
+   In order to run an individual component test, the environment needs to be setup first. A setup script
+   is provided to facilitate this. For example: <br />
+   <code>
+       sudo ../../scripts/setup_environment.sh -d /tmp/container/ -x ../../build/controller/src/controller
+       -a com.pelagicore.comptest
+   </code>
+
+   The PAM-stub then needs to be launched (this is also located under the component test source 
+   directory): <br />
+   <code>sudo ./path/to/pam_stub.py</code>
+
+   Launching each component test is then done with the following command: <br />
+   <code>sudo py.test /path/to/component-tests/test_component-name.py --pelagicontain_binary
+   /path/to/pelagicontain --container_path /path/to/container-root/ </code>
 
    \deprecated
    <code>./setup-dirs.sh /tmp/test/</code><br>
