@@ -36,7 +36,7 @@ class ComponentTestHelper:
         self.bus = self.create_session_bus()
         
         pam_remote_object = self.bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
-        self.pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
+        self.__pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
 
         self.container_root_dir = "/tmp/test/"
         self.pelagicontain_binary = self.pelagicontain_binary_path()
@@ -59,7 +59,7 @@ class ComponentTestHelper:
         return pelagicontain_binary
 
     def pam_iface(self):        
-        return self.pam_iface
+        return self.__pam_iface
 
     def generate_cookie(self):
         # Only use the last part, hyphens are not allowed in D-Bus object paths

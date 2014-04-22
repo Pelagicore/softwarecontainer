@@ -98,8 +98,8 @@ class TestPelagicontain():
         return success
 
     def test_pelagicontain(self, pelagicontain_binary, container_path, teardown_fixture):
-        helper.pam_iface.test_reset_values()
-        helper.pam_iface.helper_set_configs(self.configs)
+        helper.pam_iface().test_reset_values()
+        helper.pam_iface().helper_set_configs(self.configs)
 
         """ Start Pelagicontain, test is passed if Popen succeeds.
             The command to execute inside the container is passed to the test function.
@@ -123,7 +123,7 @@ class TestPelagicontain():
 
         """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
         """
-        assert helper.pam_iface.test_register_called()
+        assert helper.pam_iface().test_register_called()
 
         """ NOTE: Same as above, there's currently no support to test if an app was
             actually started (should be checked by finding it on D-Bus).
@@ -135,14 +135,14 @@ class TestPelagicontain():
             a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
             made by Pelagicontain.
         """
-        assert helper.pam_iface.test_updatefinished_called()
+        assert helper.pam_iface().test_updatefinished_called()
 
         """ Assert that an environment variable can be set within the container
             by calling SetContainerEnvironmentVariable. Requires Launch to be called
             again.
         """
         # Create app that reads environment variables within the container
-        helper.pam_iface.helper_set_container_env(helper.cookie, "test-var", "test-val")
+        helper.pam_iface().helper_set_container_env(helper.cookie, "test-var", "test-val")
         time.sleep(1)
         self.create_app(container_path)
         time.sleep(2)
@@ -175,4 +175,4 @@ class TestPelagicontain():
         """ The call to Pelagicontain::Shutdown should have triggered a call to
             PAM::UnregisterClient
         """
-        assert helper.pam_iface.test_unregisterclient_called()
+        assert helper.pam_iface().test_unregisterclient_called()

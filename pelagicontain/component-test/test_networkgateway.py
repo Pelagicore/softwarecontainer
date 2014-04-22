@@ -64,7 +64,7 @@ class TestNetworkGateway():
     @pytest.mark.parametrize("config", TEST_CONFIGS)
     def test_has_internet_access(self, pelagicontain_binary, container_path, teardown_fixture,
                                  config):
-        helper.pam_iface.helper_set_configs({"networking": json.dumps(config)})
+        helper.pam_iface().helper_set_configs({"networking": json.dumps(config)})
         assert setup(pelagicontain_binary, container_path)
         time.sleep(2)
 
@@ -98,7 +98,7 @@ def ping_successful(container_path):
 
 def setup(pelagicontain_binary, container_path):
     # --------------- Reset PAM stub
-    helper.pam_iface.test_reset_values()
+    helper.pam_iface().test_reset_values()
 
     # --------------- Run tests for startup
     """ Start Pelagicontain, test is passed if Popen succeeds.
@@ -127,14 +127,14 @@ def setup(pelagicontain_binary, container_path):
 
     """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
     """
-    assert helper.pam_iface.test_register_called()
+    assert helper.pam_iface().test_register_called()
 
     """ The call by Pelagicontain to PAM::RegisterClient would have triggered
         a call by PAM to Pelagicontain::Update which in turn should result in
         a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
         made by Pelagicontain.
     """
-    assert helper.pam_iface.test_updatefinished_called()
+    assert helper.pam_iface().test_updatefinished_called()
     return True
 
 def teardown():
@@ -151,7 +151,7 @@ def teardown():
     """ The call to Pelagicontain::Shutdown should have triggered a call to
         PAM::UnregisterClient
     """
-    assert helper.pam_iface.test_unregisterclient_called()
+    assert helper.pam_iface().test_unregisterclient_called()
 
     """ NOTE: Possible assertions that should be made when Pelagicontain is more
         complete:

@@ -36,7 +36,7 @@ class TestDeviceNodeGatway():
 
     # Run before any tests
     def do_setup(self, pelagicontain_binary, container_path):
-        helper.pam_iface.helper_set_configs(self.configs)
+        helper.pam_iface().helper_set_configs(self.configs)
         if not helper.start_pelagicontain2(pelagicontain_binary,
                 container_path, "/controller/controller", False):
             print "Failed to launch pelagicontain!"
@@ -62,7 +62,7 @@ class TestDeviceNodeGatway():
 
         time.sleep(5)
 
-        helper.pam_iface.helper_trigger_update(helper.cookie, self.configs)
+        helper.pam_iface().helper_trigger_update(helper.cookie, self.configs)
 
         time.sleep(5)
 
