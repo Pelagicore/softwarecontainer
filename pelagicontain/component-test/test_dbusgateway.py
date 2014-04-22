@@ -29,7 +29,7 @@ config = {
         "dbus-proxy-config-system": [
                 {
                         "direction": "outgoing",
-                        "interface": "com.pelagicore.copmtest",
+                        "interface": "com.pelagicore.comptest",
                         "object-path": "/",
                         "method": "Echo"
                 }
