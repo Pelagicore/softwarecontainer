@@ -35,6 +35,8 @@
     NOTE: When we have a proper D-Bus service running as an app inside the container
     we can assert more things during shutdown as well.
 """
+import os
+import time
 import pytest
 
 import conftest
@@ -62,39 +64,52 @@ DBUS_GW_CONFIG = """
 
 NETWORK_GW_CONFIG = """
 {
-    "internet-access": "true",
-    "gateway": "10.0.3.1"
+    "internet-access": "false",
+    "gateway": ""
 }
 """
 
+helper = None
 class TestPelagicontain():
+    global helper
     helper = ComponentTestHelper()
     configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": NETWORK_GW_CONFIG}
 
-    def abort(self):
-        self.helper.result = 1
-        self.helper.cleanup_and_finish()
+    def create_app(self, container_path):
+        with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
+            print "Overwriting containedapp..."
+            f.write("""#!/bin/sh
+                       env > /appshared/env_log""")
+        os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
 
-    def test_pelagicontain(self, pelagicontain_binary, container_path):
-        self.helper.pam_iface.test_reset_values()
-        self.helper.pam_iface.helper_set_configs(self.configs)
+    def is_env_set(self, container_path):
+        success = False
+
+        try:
+            with open("%s/com.pelagicore.comptest/shared/env_log" % container_path) as f:
+                lines = f.readlines()
+                for line in lines:
+                    if "test-var=test-val" in line:
+                        success = True
+                        break
+        except Exception as e:
+            pytest.fail("Unable to read command output, output file couldn't be opened! " + \
+                        "Exception: %s" % e)
+        return success
+
+    def test_pelagicontain(self, pelagicontain_binary, container_path, teardown_fixture):
+        helper.pam_iface.test_reset_values()
+        helper.pam_iface.helper_set_configs(self.configs)
 
         """ Start Pelagicontain, test is passed if Popen succeeds.
             The command to execute inside the container is passed to the test function.
         """
-
-        success = self.helper.start_pelagicontain2(pelagicontain_binary, container_path,
-                                              "/controller/controller", False)
-        if not success:
-            self.abort()
-
+        assert helper.start_pelagicontain2(pelagicontain_binary, container_path,
+                                           "/controller/controller", False)
         """ Assert the Pelagicontain remote object can be found on the bus
         """
-        success = self.helper.find_pelagicontain_on_dbus()
-        if not success:
-            self.abort()
+        assert helper.find_pelagicontain_on_dbus()
 
-        assert self.helper.result == 0
         """ NOTE: This test is disabled as we currently are not starting a D-Bus service
             inside the container as intended. Should be enabled when that works
         """
@@ -104,18 +119,12 @@ class TestPelagicontain():
             This will trigger a call to PAM::RegisterClient over D-Bus which we will
             assert later.
         """
-        success = self.helper.find_and_run_Launch_on_pelagicontain_on_dbus()
-        if not success:
-            self.abort()
+        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
-        assert self.helper.result == 0
         """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
         """
-        success = self.helper.pam_iface.test_register_called()
-        if not success:
-            self.abort()
+        assert helper.pam_iface.test_register_called()
 
-        assert self.helper.result == 0
         """ NOTE: Same as above, there's currently no support to test if an app was
             actually started (should be checked by finding it on D-Bus).
         """
@@ -126,11 +135,21 @@ class TestPelagicontain():
             a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
             made by Pelagicontain.
         """
-        success = self.helper.pam_iface.test_updatefinished_called()
-        if not success:
-            self.abort()
+        assert helper.pam_iface.test_updatefinished_called()
 
-        assert self.helper.result == 0
+        """ Assert that an environment variable can be set within the container
+            by calling SetContainerEnvironmentVariable. Requires Launch to be called
+            again.
+        """
+        # Create app that reads environment variables within the container
+        helper.pam_iface.helper_set_container_env(helper.cookie, "test-var", "test-val")
+        time.sleep(1)
+        self.create_app(container_path)
+        time.sleep(2)
+        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
+        time.sleep(2)
+        assert self.is_env_set(container_path)
+
         # --------------- Run tests for shutdown
 
         """ NOTE: Possible assertions that should be made when Pelagicontain is more
@@ -147,21 +166,13 @@ class TestPelagicontain():
         """
         success = True
         try:
-            self.helper.shutdown_pelagicontain()
+            helper.teardown()
         except:
             success = False
 
-        if not success:
-            self.abort()
-
-        assert self.helper.result == 0
+        assert success
 
         """ The call to Pelagicontain::Shutdown should have triggered a call to
             PAM::UnregisterClient
         """
-        success = self.helper.pam_iface.test_unregisterclient_called()
-        if not success:
-            self.abort()
-
-        assert self.helper.result == 0
-        self.helper.cleanup_and_finish()
+        assert helper.pam_iface.test_unregisterclient_called()

@@ -38,8 +38,8 @@ exit_codes=()
 
 # Device node gateway tests
 py.test test_devicenodegateway.py --junitxml=testreports/devicenodegateway.xml \
-                                 --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
-                                 --container_path /tmp/container/
+                                --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                                --container_path /tmp/container/
 dng_exit=$?
 exit_codes+=$dng_exit
 
@@ -61,8 +61,8 @@ exit_codes+=$nwg_exit
 
 # D-Bus gateway tests
 py.test test_dbusgateway.py --junitxml=testreports/dbusgateway.xml \
-                               --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
-                               --container_path /tmp/container/
+                            --pelagicontain_binary ../../build/pelagicontain/src/pelagicontain \
+                            --container_path /tmp/container/
 
 dbusgw_exit=$?
 exit_codes+=$dbusgw_exit

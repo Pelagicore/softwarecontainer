@@ -62,7 +62,8 @@ class TestNetworkGateway():
         * Malformed configuration where gateway has not been specified.
     """
     @pytest.mark.parametrize("config", TEST_CONFIGS)
-    def test_has_internet_access(self, pelagicontain_binary, container_path, config):
+    def test_has_internet_access(self, pelagicontain_binary, container_path, teardown_fixture,
+                                 config):
         helper.pam_iface.helper_set_configs({"networking": json.dumps(config)})
         assert setup(pelagicontain_binary, container_path)
         time.sleep(2)
@@ -80,10 +81,6 @@ class TestNetworkGateway():
             assert not ping_success
         time.sleep(2)
 
-    def test_teardown(self):
-        assert helper.result == 0
-        helper.cleanup_and_finish()
-
 def ping_successful(container_path):
     success = False
 
@@ -100,7 +97,6 @@ def ping_successful(container_path):
     return success
 
 def setup(pelagicontain_binary, container_path):
-    success = True
     # --------------- Reset PAM stub
     helper.pam_iface.test_reset_values()
 
@@ -108,24 +104,12 @@ def setup(pelagicontain_binary, container_path):
     """ Start Pelagicontain, test is passed if Popen succeeds.
         The command to execute inside the container is passed to the test function.
     """
-    if helper.start_pelagicontain2(pelagicontain_binary, container_path,
-                                   "controller/controller", False) == False:
-        print "FAIL: Could not start Pelagicontain"
-        helper.result = 1
-        helper.cleanup_and_finish()
-        success = False
-    else:
-        print "PASS: Started Pelagicontain"
+    assert helper.start_pelagicontain2(pelagicontain_binary, container_path,
+                                   "controller/controller", False)
 
     """ Assert the Pelagicontain remote object can be found on the bus
     """
-    if helper.find_pelagicontain_on_dbus() == False:
-        print "FAIL: Could not find Pelagicontain on D-Bus"
-        helper.result = 1
-        helper.cleanup_and_finish()
-        success = False
-    else:
-        print "PASS: Found Pelagicontain on D-Bus"
+    assert helper.find_pelagicontain_on_dbus()
 
     with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
         print "Overwriting containedapp..."
@@ -139,54 +123,35 @@ def setup(pelagicontain_binary, container_path):
         assert later.
     """
 
-    if helper.find_and_run_Launch_on_pelagicontain_on_dbus() == False:
-        print "FAIL: Failed to find Launch in Pelagicontain on D-Bus"
-        helper.result = 1
-        helper.cleanup_and_finish()
-        success = False
-    else:
-        print "PASS: Found Launch in Pelagicontain on D-Bus"
+    assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
     """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
     """
-    if helper.pam_iface.test_register_called() == False:
-        print "FAIL: RegisterClient was not called!"
-        helper.result = 1
-        helper.cleanup_and_finish()
-        success = False
-    else:
-        print "PASS: RegisterClient was called!"
+    assert helper.pam_iface.test_register_called()
 
     """ The call by Pelagicontain to PAM::RegisterClient would have triggered
         a call by PAM to Pelagicontain::Update which in turn should result in
         a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
         made by Pelagicontain.
     """
-    if helper.pam_iface.test_updatefinished_called() == False:
-        print "FAIL: UpdateFinished was not called!"
-        helper.result = 1
-        helper.cleanup_and_finish()
-        success = False
-    else:
-        print "PASS: UpdateFinished was called!"
-
-    return success
+    assert helper.pam_iface.test_updatefinished_called()
+    return True
 
 def teardown():
-    success = True
     # --------------- Run tests for shutdown
-    helper.shutdown_pelagicontain()
+
+    success = True
+    try:
+        helper.teardown()
+    except:
+        success = False
+
+    assert success
 
     """ The call to Pelagicontain::Shutdown should have triggered a call to
         PAM::UnregisterClient
     """
-    if helper.pam_iface.test_unregisterclient_called() == False:
-        print "FAIL: UnregisterClient was not called!"
-        helper.result = 1
-        helper.cleanup_and_finish()
-        success = False
-    else:
-        print "PASS: UnregisterClient was called!"
+    assert helper.pam_iface.test_unregisterclient_called()
 
     """ NOTE: Possible assertions that should be made when Pelagicontain is more
         complete:
@@ -200,4 +165,4 @@ def teardown():
 
         * Verify that PELAGICONTAIN_PID is no longer running
     """
-    return success
+    return True

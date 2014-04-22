@@ -40,14 +40,14 @@ configs = {
     "dbus-proxy": json.dumps(config)
 }
 
+helper = ComponentTestHelper()
 class TestDBusGateway():
-    helper = ComponentTestHelper()
 
     # Run before any tests
     def do_setup(self, pelagicontain_binary, container_path):
-        self.helper.pam_iface.helper_set_configs(configs)
-        if not self.helper.start_pelagicontain2(pelagicontain_binary,
-                container_path, "/controller/controller", False):
+        helper.pam_iface.helper_set_configs(configs)
+        if not helper.start_pelagicontain2(pelagicontain_binary,
+                                           container_path, "/controller/controller", False):
             print "Failed to launch pelagicontain!"
             sys.exit(1)
 
@@ -57,7 +57,7 @@ class TestDBusGateway():
             print "Could not find 'dbus-send'; is it installed?"
             exit(1)
 
-        dest = container_path + "/" + self.helper.app_uuid + "/bin/"
+        dest = container_path + "/" + helper.app_uuid + "/bin/"
 
         print "Copying %s to %s" % (dbus_send, dest)
         shutil.copy(dbus_send, dest)
@@ -65,12 +65,12 @@ class TestDBusGateway():
     # Run after all tests
     def teardown(self):
         try:
-            self.helper.shutdown_pelagicontain()
+            helper.teardown()
         except:
             pass
 
     # Actual test
-    def test_can_introspect(self, pelagicontain_binary, container_path):
+    def test_can_introspect(self, pelagicontain_binary, container_path, teardown_fixture):
         """ Tests Introspect() on com.pelagicore.PAM on D-Bus session bus.
         """
         self.do_setup(pelagicontain_binary, container_path)
@@ -81,8 +81,8 @@ sleep 1
 /appbin/dbus-send --session --print-reply --dest=com.pelagicore.PAM /com/pelagicore/PAM org.freedesktop.DBus.Introspectable.Introspect > /appshared/dbus_test_output""")
         os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
 
-        self.helper.find_pelagicontain_on_dbus()
-        self.helper.find_and_run_Launch_on_pelagicontain_on_dbus()
+        assert helper.find_pelagicontain_on_dbus()
+        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
         time.sleep(2)
 

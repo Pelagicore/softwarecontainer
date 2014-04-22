@@ -15,6 +15,8 @@ import conftest
 
 from common import ComponentTestHelper
 
+helper = ComponentTestHelper()
+
 class TestDeviceNodeGatway():
     config = {"devices": [
         {
@@ -29,14 +31,13 @@ class TestDeviceNodeGatway():
         "devicenode": json.dumps(config)
     }
 
-    helper = ComponentTestHelper()
     container_root = None
 
 
     # Run before any tests
     def do_setup(self, pelagicontain_binary, container_path):
-        self.helper.pam_iface.helper_set_configs(self.configs)
-        if not self.helper.start_pelagicontain2(pelagicontain_binary,
+        helper.pam_iface.helper_set_configs(self.configs)
+        if not helper.start_pelagicontain2(pelagicontain_binary,
                 container_path, "/controller/controller", False):
             print "Failed to launch pelagicontain!"
             sys.exit(1)
@@ -45,11 +46,11 @@ class TestDeviceNodeGatway():
     # Run after all tests
     def teardown(self):
         try:
-            self.helper.shutdown_pelagicontain()
+            helper.shutdown_pelagicontain()
         except:
             pass
 
-    def test_can_create_device_node(self, pelagicontain_binary, container_path):
+    def test_can_create_device_node(self, pelagicontain_binary, container_path, teardown_fixture):
         self.do_setup(pelagicontain_binary, container_path)
 
         with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
@@ -61,12 +62,12 @@ class TestDeviceNodeGatway():
 
         time.sleep(5)
 
-        self.helper.pam_iface.helper_trigger_update(self.helper.cookie, self.configs)
+        helper.pam_iface.helper_trigger_update(helper.cookie, self.configs)
 
         time.sleep(5)
 
-        self.helper.find_pelagicontain_on_dbus()
-        self.helper.find_and_run_Launch_on_pelagicontain_on_dbus()
+        assert helper.find_pelagicontain_on_dbus()
+        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
         time.sleep(10)
 
