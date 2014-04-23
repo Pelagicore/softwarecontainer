@@ -74,7 +74,7 @@ class ComponentTestHelper:
     def find_pelagicontain_on_dbus(self):
         tries = 0
         found = False
-        while not found and tries < 2:
+        while not found and tries < 20:
             try:
                 self.pelagicontain_remote_object = \
                     self.bus.get_object("com.pelagicore.Pelagicontain" + self.cookie,
@@ -85,7 +85,7 @@ class ComponentTestHelper:
                 found = True
             except:
                 pass
-            time.sleep(1)
+            time.sleep(0.3)
             tries = tries + 1
         if found:
             return True
