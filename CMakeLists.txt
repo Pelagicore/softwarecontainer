@@ -44,4 +44,4 @@ if(BUILD_COMPONENT_TESTS)
 endif(BUILD_COMPONENT_TESTS)
 
 execute_process(COMMAND git submodule init)
-execute_process(COMMAND git submodule update)
+execute_process(COMMAND git submodule foreach git pull origin master)
