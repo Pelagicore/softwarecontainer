@@ -87,7 +87,7 @@ def setup_test_case(config):
 
     helper.pam_iface.helper_set_configs(config)
     time.sleep(1)
-    if not helper.start_pelagicontain2(pelagicontain_binary, container_root,
+    if not helper.start_pelagicontain(pelagicontain_binary, container_root,
                                        "/controller/controller"):
         print "Failed to launch pelagicontain!"
         sys.exit(1)

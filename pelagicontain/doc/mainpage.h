@@ -222,27 +222,6 @@
 
    To view the log output the '-s' flag can be passed to py.test
 
-   \deprecated
-   <code>./setup-dirs.sh /tmp/test/</code><br>
-
-   \deprecated
-   Copy \c controller to <code>/tmp/test/bin/</code><br>
-   Copy \c containedapp to <code>/tmp/test/com.pelagicore.comptest/bin/</code> (containedapp is
-   built separately from the pelagicontain project and is found in
-   pelagicontain/component-test/)<br>
-
-   \deprecated
-   With root privilegies start \c pam_stub.py (found in pelagicontain/component-test/)
-
-   \deprecated
-   Run \c test_pelagicontain (also with root privilegies) and point out where the
-   \c pelagicontain binary is (assuming we are in the git repo root and build is
-   done in \c build):<br>
-   <code>PC_BINARY=build/pelagicontain/src/pelagicontain ./pelagicontain/component-test/test_pelagicontain.py</code>
-
-   Remember that pam_stub and the test must have access to the same D-Bus bus,
-   and the test requires root privilegies.
-
    <h2>Per-container Configuration using pelagicontain.conf</h2>
    \deprecated This needs to be reviewed and updated, only partially relevant
 

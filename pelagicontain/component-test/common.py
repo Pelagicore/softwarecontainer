@@ -34,48 +34,25 @@ class ComponentTestHelper:
         print "Generated Cookie = %s, appId = %s" % (self.cookie, self.app_uuid)
 
         self.bus = self.create_session_bus()
-        
+
         pam_remote_object = self.bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
         self.__pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
-
-        self.container_root_dir = "/tmp/test/"
-        self.pelagicontain_binary = self.pelagicontain_binary_path()
 
     def create_session_bus(self):
         return dbus.SessionBus()
 
-    def pelagicontain_binary_path(self):
-        # Check if user pointed out a path to Pelagicontain
-        pelagicontain_binary = ""
-        if os.environ.has_key("PC_BINARY"):
-            pelagicontain_binary = str(os.environ["PC_BINARY"])
-            if not pelagicontain_binary.endswith("pelagicontain"):
-                if not pelagicontain_binary.endswith("/"):
-                    pelagicontain_binary += "/"
-                pelagicontain_binary += "pelagicontain"
-        else:
-            pelagicontain_binary = "pelagicontain"
-
-        return pelagicontain_binary
-
-    def pam_iface(self):        
+    def pam_iface(self):
         return self.__pam_iface
 
     def generate_cookie(self):
         # Only use the last part, hyphens are not allowed in D-Bus object paths
         return commands.getoutput("uuidgen").strip().split("-").pop()
-    
+
     def generate_app_uuid(self):
         return commands.getoutput("uuidgen").strip()
 
-    def start_pelagicontain(self, command):
-        # The intention is to pass a cookie to Pelagicontain which it will use to
-        # destinguish itself on D-Bus (as we will potentially have multiple instances
-        # running in the system
-        return self.start_pelagicontain2(self.pelagicontain_binary,
-                                         self.container_root_dir, command)
 
-    def start_pelagicontain2(self, pelagicontain_bin, container_root, cmd,
+    def start_pelagicontain(self, pelagicontain_bin, container_root, cmd,
                              suppress_stdout=False):
         # @param  pelagicontain_bin path to pelagicontain binary
         # @param  container_root    path to container root
