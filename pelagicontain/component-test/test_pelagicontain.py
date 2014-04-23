@@ -104,7 +104,7 @@ class TestPelagicontain():
         """ Start Pelagicontain, test is passed if Popen succeeds.
             The command to execute inside the container is passed to the test function.
         """
-        assert helper.start_pelagicontain2(pelagicontain_binary, container_path,
+        assert helper.start_pelagicontain(pelagicontain_binary, container_path,
                                            "/controller/controller", False)
         """ Assert the Pelagicontain remote object can be found on the bus
         """
