@@ -31,15 +31,14 @@
     (Shutdown, teardown - Bring down gateways and Controller)
     * Issue 'shutdown' of Pelagicontain
     * Assert the expected call to PAM::UnregisterClient was made
-
-    NOTE: When we have a proper D-Bus service running as an app inside the container
-    we can assert more things during shutdown as well.
 """
 import os
 import time
 import pytest
 
+# conftest contains some fixtures
 import conftest
+
 from common import ComponentTestHelper
 
 DBUS_GW_CONFIG = """
@@ -70,12 +69,20 @@ NETWORK_GW_CONFIG = """
 """
 
 helper = None
+
 class TestPelagicontain():
     global helper
     helper = ComponentTestHelper()
     configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": NETWORK_GW_CONFIG}
 
-    def create_app(self, container_path):
+    def create_empty_app(self, container_path):
+        with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
+            print "Overwriting containedapp..."
+            f.write("""#!/bin/sh
+                       exit 0""")
+        os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
+
+    def create_env_app(self, container_path):
         with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
             print "Overwriting containedapp..."
             f.write("""#!/bin/sh
@@ -105,15 +112,14 @@ class TestPelagicontain():
             The command to execute inside the container is passed to the test function.
         """
         assert helper.start_pelagicontain(pelagicontain_binary, container_path,
-                                           "/controller/controller", False)
+            "/controller/controller", False)
+
         """ Assert the Pelagicontain remote object can be found on the bus
         """
         assert helper.find_pelagicontain_on_dbus()
 
-        """ NOTE: This test is disabled as we currently are not starting a D-Bus service
-            inside the container as intended. Should be enabled when that works
-        """
-        #test_cant_find_app_on_dbus()
+        # When we run Pelagicontain::Launch the Controller expects to find an app
+        self.create_empty_app(container_path)
 
         """ Call Launch on Pelagicontain over D-Bus and assert the call goes well.
             This will trigger a call to PAM::RegisterClient over D-Bus which we will
@@ -124,11 +130,6 @@ class TestPelagicontain():
         """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
         """
         assert helper.pam_iface().test_register_called()
-
-        """ NOTE: Same as above, there's currently no support to test if an app was
-            actually started (should be checked by finding it on D-Bus).
-        """
-        #test_can_find_app_on_dbus()
 
         """ The call by Pelagicontain to PAM::RegisterClient would have triggered
             a call by PAM to Pelagicontain::Update which in turn should result in
@@ -144,26 +145,12 @@ class TestPelagicontain():
         # Create app that reads environment variables within the container
         helper.pam_iface().helper_set_container_env(helper.cookie, "test-var", "test-val")
         time.sleep(1)
-        self.create_app(container_path)
-        time.sleep(2)
+        self.create_env_app(container_path)
         assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
-        time.sleep(2)
+        time.sleep(1)
         assert self.is_env_set(container_path)
 
         # --------------- Run tests for shutdown
-
-        """ NOTE: Possible assertions that should be made when Pelagicontain is more
-            complete:
-
-            * Issue pelagicontain.Shutdown()
-
-            * Verify that com.pelagicore.pelagicontain.test_app disappears from bus
-            and that PAM has not been requested to unregister
-
-            * Verify that PAM receives PAM.unregister() with the correct appId
-
-            * Verify that PELAGICONTAIN_PID is no longer running
-        """
         success = True
         try:
             helper.teardown()
