@@ -189,11 +189,18 @@
    </ul>
 
    In order to run an individual component test, the environment needs to be setup first. A setup script
-   is provided to facilitate this. For example: <br />
+   is provided to facilitate this. Assuming the current directory is the git root
+   and the project has been built in a directory called 'build', the following line
+   sets up a container and environment: <br />
    <code>
-       sudo ../../scripts/setup_environment.sh -d /tmp/container/ -x ../../build/controller/src/controller
+       sudo scripts/setup_environment.sh
+       -d /tmp/container/
+       -x build/controller/src/controller
        -a com.pelagicore.comptest
    </code>
+
+   In this case the container is set up in '/tmp/container' and the app id
+   is set to 'com.pelagicore.comptest'.
 
    The PAM-stub then needs to be launched (this is also located under the component test source 
    directory): <br />
@@ -202,6 +209,18 @@
    Launching each component test is then done with the following command: <br />
    <code>sudo py.test /path/to/component-tests/test_component-name.py --pelagicontain_binary
    /path/to/pelagicontain --container_path /path/to/container-root/ </code>
+
+   So in the case where the container and environement is set up as above, and assuming
+   we want to run a component test named 'test_pelagicontain.py', and that the current
+   directory is the git root and that the project is built in a directory named 'build'
+   the command would be: <br />
+   <code>
+       sudo py.test pelagicontain/component-test/test_pelagicontain.py
+       --pelagicontain_binary build/pelagicontain/src/pelagicontain
+       --container_path /tmp/container/
+   </code>
+
+   To view the log output the '-s' flag can be passed to py.test
 
    \deprecated
    <code>./setup-dirs.sh /tmp/test/</code><br>
