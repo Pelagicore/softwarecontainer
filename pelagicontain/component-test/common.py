@@ -29,10 +29,6 @@ class ComponentTestHelper:
         self.pelagicontain_pid = None
         self.pelagicontain_iface = None
 
-        # Result flag is set to non zero on failure. Return value is set as exit
-        # status and is used by e.g. ctest to determine test results.
-        self.result = 0
-
         self.cookie = self.generate_cookie()
         self.app_uuid = "com.pelagicore.comptest"
         print "Generated Cookie = %s, appId = %s" % (self.cookie, self.app_uuid)
@@ -40,7 +36,7 @@ class ComponentTestHelper:
         self.bus = self.create_session_bus()
         
         pam_remote_object = self.bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
-        self.pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
+        self.__pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
 
         self.container_root_dir = "/tmp/test/"
         self.pelagicontain_binary = self.pelagicontain_binary_path()
@@ -63,7 +59,7 @@ class ComponentTestHelper:
         return pelagicontain_binary
 
     def pam_iface(self):        
-        return self.pam_iface
+        return self.__pam_iface
 
     def generate_cookie(self):
         # Only use the last part, hyphens are not allowed in D-Bus object paths
@@ -119,14 +115,11 @@ class ComponentTestHelper:
         else:
             return False
 
-    def cleanup_and_finish(self):
+    def teardown(self):
+        self.shutdown_pelagicontain()
+
         if not self.pelagicontain_pid == 0:
             call(["kill", "-9", str(self.pelagicontain_pid)])
-        if self.result == 0:
-            print "\n-=< All tests passed >=-\n"
-        else:
-            print "\n-=< Failure >=-\n"
-        exit(self.result)
 
     def find_and_run_Launch_on_pelagicontain_on_dbus(self):
         self.pelagicontain_iface = dbus.Interface(self.pelagicontain_remote_object, 

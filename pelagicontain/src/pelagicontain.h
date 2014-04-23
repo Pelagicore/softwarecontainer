@@ -88,6 +88,16 @@ public:
      */
     void shutdown();
 
+    /*! Sets environment variable inside the container.
+     *
+     * Notifies the controller to set the environment variable passed as argument
+     * inside the container.
+     *
+     * \param var The name of the environment variable to be set
+     * \param val The value that the environement variable should be set to
+     */
+    void setContainerEnvironmentVariable(const std::string &var, const std::string &val);
+
 private:
     void setGatewayConfigs(const std::map<std::string, std::string> &configs);
     void activateGateways();
