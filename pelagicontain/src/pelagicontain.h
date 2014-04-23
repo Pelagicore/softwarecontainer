@@ -101,6 +101,9 @@ public:
     void setContainerEnvironmentVariable(const std::string &var,
                                          const std::string &val);
 
+
+    void handle_controller_shutdown(const std::string, int, int);
+
 private:
     void setGatewayConfigs(const std::map<std::string, std::string> &configs);
     void activateGateways();

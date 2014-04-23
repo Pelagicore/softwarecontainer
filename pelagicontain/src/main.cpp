@@ -17,6 +17,8 @@
 #include "devicenodegateway.h"
 
 #include <glibmm.h>
+#include <dbus-c++/dbus.h>
+#include <dbus-c++/glib-integration.h>
 
 #include <glibmm.h>
 #include <dbus-c++/dbus.h>
