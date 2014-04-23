@@ -11,6 +11,7 @@ add_executable(controller
 
 TARGET_LINK_LIBRARIES(controller
 	${DEPENDENCIES_LIBRARIES}
+	${GLIBMM_LIBRARIES}
 )
 
 install(TARGETS controller RUNTIME DESTINATION bin)

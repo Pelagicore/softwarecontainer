@@ -3,6 +3,8 @@
  *   All rights reserved.
  */
 #include <iostream>
+#include <glibmm.h>
+#include <poll.h>
 
 #include "controller.h"
 #include "fifoipc.h"
@@ -12,6 +14,8 @@
  * inside of the container. This implementation is just a stub to support the
  * basic flow between components, consider it a test. Must be made more useful and robust!
  */
+
+
 
 int main(int argc, char **argv)
 {
@@ -29,10 +33,17 @@ int main(int argc, char **argv)
         path = std::string("/gateways/");
     path += "in_fifo";
 
-    Controller controller;
+    Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
+
+    Controller controller(ml);
     IPCMessage message(controller);
     FifoIPC ipc(message);
     ipc.initialize(path);
+
+    sigc::slot<bool> fifoSlot = sigc::mem_fun(&ipc, &FifoIPC::loop);
+    sigc::connection conn = Glib::signal_timeout().connect(fifoSlot, 100);
+
+    ml->run();
 
     return 0;
 }

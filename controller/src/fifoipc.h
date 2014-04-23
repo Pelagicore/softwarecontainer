@@ -29,7 +29,6 @@ public:
      */
     bool initialize(const std::string &fifoPath);
 
-private:
     /* A call to this method will make us enter a loop waiting for input
      * and will only exit when there is an error or when the input
      * resulting in a call to shutdown has been received and the call to
@@ -37,6 +36,7 @@ private:
      */
     bool loop();
 
+private:
     bool createFifo();
 
     IPCMessage &m_message;
