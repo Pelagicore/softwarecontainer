@@ -93,10 +93,9 @@ class ComponentTestHelper:
             return False
 
     def teardown(self):
-        self.shutdown_pelagicontain()
-
-        if not self.pelagicontain_pid == 0:
-            call(["kill", "-9", str(self.pelagicontain_pid)])
+        if not self.shutdown_pelagicontain():
+            if not self.pelagicontain_pid == 0:
+                call(["kill", "-9", str(self.pelagicontain_pid)])
 
     def find_and_run_Launch_on_pelagicontain_on_dbus(self):
         self.pelagicontain_iface = dbus.Interface(self.pelagicontain_remote_object, 
@@ -127,7 +126,13 @@ class ComponentTestHelper:
             if not self.pelagicontain_iface:
                 print "Failed to find pelagicontain on D-Bus.."
                 return False
-        self.pelagicontain_iface.Shutdown()
-        print "Shutting down Pelagicontain"
 
+        print "Shutting down Pelagicontain"
+        try:
+            self.pelagicontain_iface.Shutdown()
+        except dbus.DBusException as e:
+            print "Pelagicontain already shutdown"
+            print "D-Bus says: " + str(e)
+
+        self.pelagicontain_iface = None
         return True

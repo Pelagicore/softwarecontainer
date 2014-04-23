@@ -83,6 +83,8 @@ else
     sudo brctl addbr $BRIDGE
     sudo brctl setfd $BRIDGE 0
     sudo ifconfig $BRIDGE 10.0.3.1 netmask 255.255.255.0 promisc up
+    iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE
+    echo 1 > /proc/sys/net/ipv4/ip_forward
 fi
 
 if [ -d "$deploydir/late_mounts" ]; then

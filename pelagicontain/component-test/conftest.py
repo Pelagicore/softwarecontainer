@@ -25,9 +25,20 @@ def teardown_fixture(request):
     """
     helper = getattr(request.module, "helper")
     def teardown():
-        if request.node.rep_call.failed:
-            print "A test failed, shutting down Pelagicontain"
-            helper.teardown()
+        try:
+            if request.node.rep_setup.failed:
+                print "Setup failed, shutting down Pelagicontain"
+                helper.teardown()
+        except AttributeError as e:
+            pass
+
+        try:
+            if request.node.rep_call.failed:
+                print "A test failed, shutting down Pelagicontain"
+                helper.teardown()
+        except AttributeError as e:
+            pass
+
     request.addfinalizer(teardown)
 
 @pytest.mark.tryfirst
