@@ -4,8 +4,8 @@
  */
 #include "dbusmainloop.h"
 
-DBusMainloop::DBusMainloop(DBus::Glib::BusDispatcher *dispatcher):
-    m_dispatcher(dispatcher)
+DBusMainloop::DBusMainloop(Glib::RefPtr<Glib::MainLoop> ml):
+    m_dispatcher(ml)
 {
 }
 
@@ -15,10 +15,10 @@ DBusMainloop::~DBusMainloop()
 
 void DBusMainloop::enter()
 {
-    m_dispatcher->enter();
+    m_dispatcher->run();
 }
 
 void DBusMainloop::leave()
 {
-    m_dispatcher->leave();
+    m_dispatcher->quit();
 }

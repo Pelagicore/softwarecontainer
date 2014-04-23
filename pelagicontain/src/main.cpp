@@ -17,6 +17,8 @@
 #include "devicenodegateway.h"
 
 #include <glibmm.h>
+#include <dbus-c++/dbus.h>
+#include <dbus-c++/glib-integration.h>
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -100,14 +102,14 @@ int main(int argc, char **argv)
 
     { // Create a new scope so that we can do a clean up after dtors
         DBus::Glib::BusDispatcher dispatcher;
-        dispatcher.attach(ml->get_context()->gobj());
         DBus::default_dispatcher = &dispatcher;
+        dispatcher.attach(ml->get_context()->gobj());
         DBus::Connection bus = DBus::Connection::SessionBus();
 
         /* Pelagicontain needs an interface to the mainloop so it can
          * exit it when we are to clean up and shut down
          */
-        DBusMainloop dbusmainloop(&dispatcher);
+        DBusMainloop mainloopInterface(ml);
 
         /* The request_name call does not return anything but raises an
          * exception if the name cannot be requested.
@@ -119,7 +121,7 @@ int main(int argc, char **argv)
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
         Pelagicontain pelagicontain(&pamInterface,
-                                    &dbusmainloop,
+                                    &mainloopInterface,
                                     &controllerInterface,
                                     cookie);
 

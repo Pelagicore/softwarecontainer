@@ -6,6 +6,7 @@
 #define PELAGICONTAIN_H
 
 #include <sys/types.h>
+#include <glibmm.h>
 
 #include "container.h"
 #include "paminterface.h"
@@ -98,6 +99,9 @@ public:
      */
     void setContainerEnvironmentVariable(const std::string &var, const std::string &val);
 
+
+    void handle_controller_shutdown(const std::string, int, int);
+
 private:
     void setGatewayConfigs(const std::map<std::string, std::string> &configs);
     void activateGateways();
@@ -110,6 +114,13 @@ private:
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     std::string m_cookie;
+
+    bool kill_main_loop() {
+        if (m_mainloopInterface) {
+            m_mainloopInterface->leave();
+        }
+        return true;
+    }
 };
 
 #endif /* PELAGICONTAIN_H */

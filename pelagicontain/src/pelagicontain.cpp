@@ -4,6 +4,7 @@
  */
 #include <sys/wait.h>
 #include <unistd.h>
+#include <glibmm.h>
 
 #include "container.h"
 #include "debug.h"
@@ -41,6 +42,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
                              const std::string &containedCommand)
 {
     m_container = new Container(containerName, containerConfig, containerRoot);
+    Glib::SignalChildWatch cw = Glib::signal_child_watch();
 
     /* Get the commands to run in a separate process */
     std::vector<std::string> commands;
@@ -61,25 +63,38 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     log_debug(createCommand.c_str());
     system(createCommand.c_str());
 
-    pid_t pid = fork();
-    if (pid == 0) { /* child */
-        /* NOTE: lxc-execute inherits file descriptors from parent which seems
-         * to cause a crash, so we close a bunch to avoid that, fd 0, 1, and 2
-         * are kept because they are standard fd's that we want (e.g. see output
-         * on stdout). (the number 30 is arbitrary)
-         */
-        for (int i = 3; i < 30; i++)
-            close(i);
+    std::vector<std::string> executeCommandVec;
+    executeCommandVec = Glib::shell_parse_argv(executeCommand);
 
-        log_debug(executeCommand.c_str());
-        system(executeCommand.c_str());
+    int pid;
+    Glib::spawn_async_with_pipes(".",
+                                 executeCommandVec,
+                                 Glib::SPAWN_DO_NOT_REAP_CHILD 
+                                    | Glib::SPAWN_SEARCH_PATH,
+                                 sigc::slot<void>(),
+                                 &pid);
 
-        log_debug(destroyCommand.c_str());
-        system(destroyCommand.c_str());
-        exit(0);
-    } /* Parent */
+    sigc::slot<void, int, int> shutdown_slot;
+    shutdown_slot = sigc::bind<0>(
+        sigc::mem_fun(*this, 
+                      &Pelagicontain::handle_controller_shutdown),
+        destroyCommand /* First param to handle_controller_shutdown */);
+    cw.connect(shutdown_slot, pid);
 
     return pid;
+}
+
+void Pelagicontain::handle_controller_shutdown(const std::string lxcExitCommand, int pid, int exitCode) {
+    log_debug("Controller (pid %d) exited with code: %d. Shutting down now..", pid, exitCode);
+
+    log_debug("Issuing: %s", lxcExitCommand.c_str());
+    Glib::spawn_command_line_sync(lxcExitCommand);
+
+    shutdownGateways();
+    m_pamInterface->unregisterClient(m_cookie);
+
+    log_debug("Queueing up main loop termination");
+    Glib::signal_idle().connect(sigc::mem_fun(*this, &Pelagicontain::kill_main_loop));
 }
 
 void Pelagicontain::launch(const std::string &appId) {
@@ -142,21 +157,6 @@ void Pelagicontain::shutdown()
      * code in the forked child)
      */
     m_controllerInterface->shutdown();
-
-    /* Shut down (clean up) all Gateways */
-    shutdownGateways();
-
-    m_pamInterface->unregisterClient(m_cookie);
-
-    /* Wait for Controller */
-    int status = 0;
-    wait(&status);
-    if (WIFEXITED(status))
-        log_debug("Child exited");
-    if (WIFSIGNALED(status))
-        log_debug("Child exited by signal: %d", WTERMSIG(status));
-
-    m_mainloopInterface->leave();
 }
 
 void Pelagicontain::shutdownGateways()
