@@ -52,14 +52,6 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     std::string executeCommand = commands[1];
     std::string destroyCommand = commands[2];
 
-    /* Calling create and execute is part of the Preloading phase.
-     * When the call to execute returns, it means the shutdown phase
-     * has been initiated and destroy is a part of that phase (destroy
-     * is called when execute has returned).
-     *
-     * Calls to Controller to e.g. launch the contained app, which occurs
-     * between preload and shutdown, is part of the launch phase.
-     */
     log_debug(createCommand.c_str());
     system(createCommand.c_str());
 
@@ -74,18 +66,21 @@ pid_t Pelagicontain::preload(const std::string &containerName,
                                  sigc::slot<void>(),
                                  &pid);
 
-    sigc::slot<void, int, int> shutdown_slot;
-    shutdown_slot = sigc::bind<0>(
+    sigc::slot<void, int, int> shutdownSlot;
+    shutdownSlot = sigc::bind<0>(
         sigc::mem_fun(*this, 
-                      &Pelagicontain::handle_controller_shutdown),
-        destroyCommand /* First param to handle_controller_shutdown */);
-    cw.connect(shutdown_slot, pid);
+                      &Pelagicontain::handleControllerShutdown),
+        destroyCommand /* First param to handleControllerShutdown */);
+    cw.connect(shutdownSlot, pid);
 
     return pid;
 }
 
-void Pelagicontain::handle_controller_shutdown(const std::string lxcExitCommand, int pid, int exitCode) {
-    log_debug("Controller (pid %d) exited with code: %d. Shutting down now..", pid, exitCode);
+void Pelagicontain::handleControllerShutdown(const std::string lxcExitCommand,
+                                                   int pid,
+                                                   int exitCode) {
+    log_debug("Controller (pid %d) exited with code: %d. "
+              "Shutting down now..", pid, exitCode);
 
     log_debug("Issuing: %s", lxcExitCommand.c_str());
     Glib::spawn_command_line_sync(lxcExitCommand);
@@ -94,7 +89,8 @@ void Pelagicontain::handle_controller_shutdown(const std::string lxcExitCommand,
     m_pamInterface->unregisterClient(m_cookie);
 
     log_debug("Queueing up main loop termination");
-    Glib::signal_idle().connect(sigc::mem_fun(*this, &Pelagicontain::kill_main_loop));
+    Glib::signal_idle().connect(
+        sigc::mem_fun(*this, &Pelagicontain::killMainLoop));
 }
 
 void Pelagicontain::launch(const std::string &appId) {

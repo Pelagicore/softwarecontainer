@@ -87,6 +87,7 @@ class TestPelagicontain():
             print "Overwriting containedapp..."
             f.write("""#!/bin/sh
                        env > /appshared/env_log""")
+
         os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
 
     def is_env_set(self, container_path):

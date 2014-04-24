@@ -85,7 +85,7 @@ class ComponentTestHelper:
                 found = True
             except:
                 pass
-            time.sleep(0.3)
+            time.sleep(1)
             tries = tries + 1
         if found:
             return True
