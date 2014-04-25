@@ -142,11 +142,11 @@ const char *DBusGateway::typeString()
     }
 }
 
-const char *DBusGateway::socketName()
+std::string DBusGateway::socketName()
 {
     // Return the filename after stripping directory info
     std::string socket(m_socket.c_str());
-    return socket.substr(socket.rfind('/') + 1).c_str();
+    return socket.substr(socket.rfind('/') + 1);
 }
 
 std::string DBusGateway::environment()
