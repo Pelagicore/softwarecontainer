@@ -6,6 +6,11 @@ container_path=/tmp/container/
 controller_bin=../../build/controller/src/controller
 setup_script=../../scripts/setup_environment.sh
 
+# Hardcoded test output paths for e.g. logs
+test_output_path=/tmp/pelagicontain-comptests/
+test_reports_path=$test_output_path/test-reports/
+pam_log_path=$test_output_path/pam_log/
+
 while getopts p:c:x:s opt; do
     case $opt in
     p)
@@ -24,7 +29,9 @@ while getopts p:c:x:s opt; do
 done
 shift $((OPTIND - 1))
 
-mkdir -p testreports
+mkdir -p $test_reports_path
+mkdir -p $pam_log_path
+
 
 sudo $($setup_script -d $container_path \
                 -x $controller_bin \
@@ -32,37 +39,37 @@ sudo $($setup_script -d $container_path \
 
 eval `dbus-launch --sh-syntax`
 
-./pam_stub.py &> pam.log &
+./pam_stub.py &> $pam_log_path/pam.log &
 pam_pid=$!
 exit_codes=()
 
 # Device node gateway tests
-py.test test_devicenodegateway.py --junitxml=testreports/devicenodegateway.xml \
-                                --pelagicontain_binary $pelagicontain_bin \
-                                --container_path $container_path
+py.test test_devicenodegateway.py --junitxml=$test_reports_path/devicenodegateway.xml \
+                                  --pelagicontain-binary $pelagicontain_bin \
+                                  --container-path $container_path
 dng_exit=$?
 exit_codes+=$dng_exit
 
 # Pelagicontain tests
-py.test test_pelagicontain.py --junitxml=testreports/pelagicontain.xml \
-                              --pelagicontain_binary $pelagicontain_bin \
-                              --container_path $container_path
+py.test test_pelagicontain.py --junitxml=$test_reports_path/pelagicontain.xml \
+                              --pelagicontain-binary $pelagicontain_bin \
+                              --container-path $container_path
 
 pelagicontain_exit=$?
 exit_codes+=$pelagicontain_exit
 
 # Network gateway tests
-py.test test_networkgateway.py --junitxml=testreports/networkgateway.xml \
-                               --pelagicontain_binary $pelagicontain_bin \
-                               --container_path $container_path
+py.test test_networkgateway.py --junitxml=$test_reports_path/networkgateway.xml \
+                               --pelagicontain-binary $pelagicontain_bin \
+                               --container-path $container_path
 
 nwg_exit=$?
 exit_codes+=$nwg_exit
 
 # D-Bus gateway tests
-py.test test_dbusgateway.py --junitxml=testreports/dbusgateway.xml \
-                            --pelagicontain_binary $pelagicontain_bin \
-                            --container_path $container_path
+py.test test_dbusgateway.py --junitxml=$test_reports_path/dbusgateway.xml \
+                            --pelagicontain-binary $pelagicontain_bin \
+                            --container-path $container_path
 
 dbusgw_exit=$?
 exit_codes+=$dbusgw_exit

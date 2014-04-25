@@ -216,8 +216,8 @@
    the command would be: <br />
    <code>
        sudo py.test pelagicontain/component-test/test_pelagicontain.py
-       --pelagicontain_binary build/pelagicontain/src/pelagicontain
-       --container_path /tmp/container/
+       --pelagicontain-binary build/pelagicontain/src/pelagicontain
+       --container-path /tmp/container/
    </code>
 
    To view the log output the '-s' flag can be passed to py.test

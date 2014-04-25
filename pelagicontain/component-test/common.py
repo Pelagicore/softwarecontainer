@@ -25,7 +25,6 @@ glib.init_threads()
 
 class ComponentTestHelper:
     def __init__(self):
-        # Some globals used throughout the tests
         self.pelagicontain_pid = None
         self.pelagicontain_iface = None
 
@@ -74,13 +73,14 @@ class ComponentTestHelper:
     def find_pelagicontain_on_dbus(self):
         tries = 0
         found = False
+
         while not found and tries < 20:
             try:
                 self.pelagicontain_remote_object = \
                     self.bus.get_object("com.pelagicore.Pelagicontain" + self.cookie,
                                    "/com/pelagicore/Pelagicontain")
                 self.pelagicontain_iface =\
-                    dbus.Interface(self.pelagicontain_remote_object, 
+                    dbus.Interface(self.pelagicontain_remote_object,
                                    "com.pelagicore.Pelagicontain")
                 found = True
             except:
@@ -93,10 +93,9 @@ class ComponentTestHelper:
             return False
 
     def teardown(self):
-        self.shutdown_pelagicontain()
-
-        if not self.pelagicontain_pid == 0:
-            call(["kill", "-9", str(self.pelagicontain_pid)])
+        if not self.shutdown_pelagicontain():
+            if not self.pelagicontain_pid == 0:
+                call(["kill", "-9", str(self.pelagicontain_pid)])
 
     def find_and_run_Launch_on_pelagicontain_on_dbus(self):
         self.pelagicontain_iface = dbus.Interface(self.pelagicontain_remote_object, 
@@ -115,19 +114,19 @@ class ComponentTestHelper:
         except:
             return (False, "")
 
-    # ----------------------------- Shutdown
-    """ Calling Shutdown will raise a D-Bus error since Pelagicontain shuts down
-        without sending a reply. D-Bus seems to consider it an error that there is
-        no reply even if the method itself is not supposed to return anything. We
-        catch the exception and ignore it.
-    """
     def shutdown_pelagicontain(self):
         if not self.pelagicontain_iface:
             self.find_pelagicontain_on_dbus()
             if not self.pelagicontain_iface:
                 print "Failed to find pelagicontain on D-Bus.."
                 return False
-        self.pelagicontain_iface.Shutdown()
-        print "Shutting down Pelagicontain"
 
+        print "Shutting down Pelagicontain"
+        try:
+            self.pelagicontain_iface.Shutdown()
+        except dbus.DBusException as e:
+            print "Pelagicontain already shutdown"
+            print "D-Bus says: " + str(e)
+
+        self.pelagicontain_iface = None
         return True

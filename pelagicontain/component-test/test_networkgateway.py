@@ -48,30 +48,25 @@ CONFIG_NETWORK_ENABLED = {"internet-access": "true", "gateway": "10.0.3.1"}
 CONFIG_NETWORK_DISABLED = {"internet-access": "false", "gateway": ""}
 CONFIG_NETWORK_NO_GATEWAY = {"internet-access": "true", "gateway": ""}
 
-TEST_CONFIGS= [CONFIG_NETWORK_ENABLED,
-               CONFIG_NETWORK_DISABLED,
-               CONFIG_NETWORK_NO_GATEWAY]
+TEST_CONFIGS= [CONFIG_NETWORK_DISABLED,
+               CONFIG_NETWORK_NO_GATEWAY,
+               CONFIG_NETWORK_ENABLED]
 
 helper = ComponentTestHelper()
 
 class TestNetworkGateway():
     """ Tests the NetworkGateway using three different configurations:
 
-        * Well-formed configuration with internet access enabled.
         * Well-formed configuration with internet access disabled.
         * Malformed configuration where gateway has not been specified.
+        * Well-formed configuration with internet access enabled.
     """
-    @pytest.mark.parametrize("config", TEST_CONFIGS)
-    def test_has_internet_access(self, pelagicontain_binary, container_path, teardown_fixture,
-                                 config):
-        helper.pam_iface().helper_set_configs({"networking": json.dumps(config)})
-        assert setup(pelagicontain_binary, container_path)
-        time.sleep(2)
-
-        assert teardown()
+    def test_has_internet_access(self, setup, container_path):
+        config = setup
         ping_success = ping_successful(container_path)
 
-        # Build is parametrized, assert based on what config has been passed to the test case
+        # Build is parametrized, assert based on what config has been passed
+        # to the test case
         if "true" in config["internet-access"]:
             if "10.0.3.1" in config["gateway"]:
                 assert ping_success
@@ -79,7 +74,8 @@ class TestNetworkGateway():
                 assert not ping_success
         else:
             assert not ping_success
-        time.sleep(2)
+
+        helper.teardown()
 
 def ping_successful(container_path):
     success = False
@@ -96,9 +92,12 @@ def ping_successful(container_path):
                     "Exception: %s" % e)
     return success
 
-def setup(pelagicontain_binary, container_path):
+@pytest.fixture(params=TEST_CONFIGS)
+def setup(request, teardown_fixture, pelagicontain_binary, container_path):
     # --------------- Reset PAM stub
     helper.pam_iface().test_reset_values()
+
+    helper.pam_iface().helper_set_configs({"networking": json.dumps(request.param)})
 
     # --------------- Run tests for startup
     """ Start Pelagicontain, test is passed if Popen succeeds.
@@ -111,18 +110,17 @@ def setup(pelagicontain_binary, container_path):
     """
     assert helper.find_pelagicontain_on_dbus()
 
+    # Create the app
     with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
         print "Overwriting containedapp..."
         f.write("""#!/bin/sh
                    ping -c 1 www.google.com > /appshared/ping_log""")
     os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
 
-
     """ Call Launch on Pelagicontain over D-Bus and assert the call goes well.
         This will trigger a call to PAM::RegisterClient over D-Bus which we will
         assert later.
     """
-
     assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
 
     """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
@@ -135,34 +133,9 @@ def setup(pelagicontain_binary, container_path):
         made by Pelagicontain.
     """
     assert helper.pam_iface().test_updatefinished_called()
-    return True
 
-def teardown():
-    # --------------- Run tests for shutdown
+    # We need to wait for the ping command to recieve a reply from the remote host
+    time.sleep(2)
 
-    success = True
-    try:
-        helper.teardown()
-    except:
-        success = False
-
-    assert success
-
-    """ The call to Pelagicontain::Shutdown should have triggered a call to
-        PAM::UnregisterClient
-    """
-    assert helper.pam_iface().test_unregisterclient_called()
-
-    """ NOTE: Possible assertions that should be made when Pelagicontain is more
-        complete:
-
-        * Issue pelagicontain.Shutdown()
-
-        * Verify that com.pelagicore.pelagicontain.test_app disappears from bus
-          and that PAM has not been requested to unregister
-
-        * Verify that PAM receives PAM.unregister() with the correct appId
-
-        * Verify that PELAGICONTAIN_PID is no longer running
-    """
-    return True
+    # Return the used config to the test
+    return request.param

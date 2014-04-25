@@ -1,18 +1,18 @@
 import pytest
 
 def pytest_addoption(parser):
-    parser.addoption("--pelagicontain_binary", action="store", default=None,
+    parser.addoption("--pelagicontain-binary", action="store", default=None,
         help="Path to pelagicontain binary")
-    parser.addoption("--container_path", action="store", default=None,
+    parser.addoption("--container-path", action="store", default=None,
         help="Path to container")
 
 @pytest.fixture(scope="module")
 def pelagicontain_binary(request):
-    return request.config.getoption("--pelagicontain_binary")
+    return request.config.getoption("--pelagicontain-binary")
 
 @pytest.fixture(scope="module")
 def container_path(request):
-    return request.config.getoption("--container_path")
+    return request.config.getoption("--container-path")
 
 @pytest.fixture
 def teardown_fixture(request):
@@ -25,9 +25,20 @@ def teardown_fixture(request):
     """
     helper = getattr(request.module, "helper")
     def teardown():
-        if request.node.rep_call.failed:
-            print "A test failed, shutting down Pelagicontain"
-            helper.teardown()
+        try:
+            if request.node.rep_setup.failed:
+                print "Setup failed, shutting down Pelagicontain"
+                helper.teardown()
+        except AttributeError as e:
+            pass
+
+        try:
+            if request.node.rep_call.failed:
+                print "A test failed, shutting down Pelagicontain"
+                helper.teardown()
+        except AttributeError as e:
+            pass
+
     request.addfinalizer(teardown)
 
 @pytest.mark.tryfirst
