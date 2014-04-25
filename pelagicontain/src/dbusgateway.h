@@ -107,7 +107,7 @@ public:
 
 private:
     const char *typeString();
-    const char *socketName();
+    std::string socketName();
 
     SystemcallAbstractInterface *m_systemcallInterface;
 
