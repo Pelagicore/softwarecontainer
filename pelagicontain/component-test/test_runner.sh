@@ -45,31 +45,31 @@ exit_codes=()
 
 # Device node gateway tests
 py.test test_devicenodegateway.py --junitxml=$test_reports_path/devicenodegateway.xml \
-                                --pelagicontain_binary $pelagicontain_bin \
-                                --container_path $container_path
+                                  --pelagicontain-binary $pelagicontain_bin \
+                                  --container-path $container_path
 dng_exit=$?
 exit_codes+=$dng_exit
 
 # Pelagicontain tests
 py.test test_pelagicontain.py --junitxml=$test_reports_path/pelagicontain.xml \
-                              --pelagicontain_binary $pelagicontain_bin \
-                              --container_path $container_path
+                              --pelagicontain-binary $pelagicontain_bin \
+                              --container-path $container_path
 
 pelagicontain_exit=$?
 exit_codes+=$pelagicontain_exit
 
 # Network gateway tests
 py.test test_networkgateway.py --junitxml=$test_reports_path/networkgateway.xml \
-                               --pelagicontain_binary $pelagicontain_bin \
-                               --container_path $container_path
+                               --pelagicontain-binary $pelagicontain_bin \
+                               --container-path $container_path
 
 nwg_exit=$?
 exit_codes+=$nwg_exit
 
 # D-Bus gateway tests
 py.test test_dbusgateway.py --junitxml=$test_reports_path/dbusgateway.xml \
-                            --pelagicontain_binary $pelagicontain_bin \
-                            --container_path $container_path
+                            --pelagicontain-binary $pelagicontain_bin \
+                            --container-path $container_path
 
 dbusgw_exit=$?
 exit_codes+=$dbusgw_exit
