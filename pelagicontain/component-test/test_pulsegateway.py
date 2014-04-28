@@ -17,31 +17,79 @@ import shutil
 
 from common import ComponentTestHelper
 
-# PulseAudio server requires a home directory to be set
-os.environ['HOME'] = "/root/"
-
 # Prepare configurations
 audio_enabled = { "audio": "true" }
-pulse_enabled_config = { "pulseaudio": json.dumps(audio_enabled) }
 audio_disabled = { "audio": "false" }
-pulse_disabled_config = { "pulseaudio": json.dumps(audio_disabled) }
+
+TEST_CONFIGS = [audio_enabled, audio_disabled]
 
 helper = ComponentTestHelper()
-container_root = None
 pa_server_pid = None
 app_bin = None
 
-# Check that sys.argv is usable, notify user otherwise. Exits on failure
-def ensure_command_line_ok():
-    if len(sys.argv) != 3:
-        print "Proper invocation looks like this:"
-        print "%s <pelagicontain path> <container path>" % sys.argv[0]
+
+@pytest.fixture(scope="module")
+def setup_suite(container_path):
+    """ Setup fixture that is run once per test run (as opposed to once
+        per test function). Sets the HOME environment variable for the
+        PulseAudio server, copies paplay from the host system and creates
+        the sound file that is to be played in the test.
+    """
+    global pa_server_pid, app_bin
+    app_bin = container_path + "/" + helper.app_uuid + "/bin/"
+
+    # PulseAudio server requires a home directory to be set
+    os.environ['HOME'] = "/root/"
+
+    if not find_and_copy_paplay():
+        print "Problem copying paplay"
         sys.exit(1)
 
-# Start a pulse server on the host system. Necessary as existing servers usually
-# are not run as root
+    # Create sound file filled with noise
+    os.system("dd if=/dev/urandom of=" + app_bin + "/test.wav bs=1k count=1")
+
+    pa_server_pid = start_pa_server()
+
+@pytest.fixture(scope="function", params=TEST_CONFIGS)
+def setup_test_case(request, container_path, pelagicontain_binary):
+    """ Setup fixture that is run once per test function. Sets the config
+        for the current test, starts Pelagicontain and calls create_app().
+    """
+    global app_bin
+
+    helper.pam_iface().helper_set_configs({ "pulseaudio": json.dumps(request.param) })
+    time.sleep(1)
+    if not helper.start_pelagicontain(pelagicontain_binary, container_path,
+                                      "/controller/controller", False):
+        print "Failed to launch pelagicontain!"
+        sys.exit(1)
+    print "Found Pelagicontain on D-Bus: " + \
+        str(helper.find_pelagicontain_on_dbus())
+    time.sleep(2)
+    create_app()
+    return request.param
+
+@pytest.fixture(scope="module")
+def teardown_suite(request):
+    """ Teardown for entire test run, i.e. run after all the tests
+        have been executed.
+        Removes the paplay binary and the sound file. Kills the
+        PulseAudio server.
+    """
+    def remove_files():
+        os.system("rm " + app_bin + "/paplay")
+        os.system("rm " + app_bin + "/test.wav")
+    def kill_server():
+        kill_pa_server()
+    request.addfinalizer(remove_files)
+    request.addfinalizer(kill_server)
+
 def start_pa_server():
-    process = subprocess.Popen(['pulseaudio', '--exit-idle-time=-1'], shell=True, preexec_fn=os.setsid)
+    """ Start a pulse server on the host system. Necessary
+        as existing servers usually are not run as root.
+    """
+    process = subprocess.Popen(['pulseaudio', '--exit-idle-time=-1'],
+                               shell=True, preexec_fn=os.setsid)
     print "Spawned PulseAudio server with PID " + str(process.pid)
     return process.pid
 
@@ -66,115 +114,63 @@ def find_and_copy_paplay():
         return False
     return True
 
-# Run before first test case
-def setup_suite():
-    global container_root, pa_server_pid, app_bin
-    ensure_command_line_ok()
-    container_root = sys.argv[2]
-    app_bin = container_root + "/" + helper.app_uuid + "/bin/"
-
-    if not find_and_copy_paplay():
-        print "Problem copying paplay"
-        sys.exit(1)
-    os.system("dd if=/dev/urandom of=" + app_bin + "/test.wav bs=1k count=1")
-
-    pa_server_pid = start_pa_server()
-
-# Run before each test case
-def setup_test_case(config):
-    global container_root, app_bin
-    pelagicontain_binary = sys.argv[1]
-
-    helper.pam_iface.helper_set_configs(config)
-    time.sleep(1)
-    if not helper.start_pelagicontain(pelagicontain_binary, container_root,
-                                       "/controller/controller"):
-        print "Failed to launch pelagicontain!"
-        sys.exit(1)
-    print "Found Pelagicontain on DBUS: " + \
-        str(helper.find_pelagicontain_on_dbus())
-
-# Run after each test
-def teardown_test_case():
-    print "UnregisterClient called: " + \
-        str(helper.pam_iface.test_unregisterclient_called())
-    helper.shutdown_pelagicontain()
-
-# Run after last tests
-def teardown_suite():
-    os.system("rm " + app_bin + "/paplay")
-    os.system("rm " + app_bin + "/test.wav")
-    kill_pa_server()
+def create_app():
+    """ Create an app that plays a wave file located in /appbin/.
+        Note that this will overwrite existing apps named "containedapp".
+    """
+    global app_bin
+    with open(app_bin + "containedapp", "w") as f:
+        print "Overwriting containedapp..."
+        f.write("""#!/bin/sh
+                    /appbin/paplay --raw --volume=0 /appbin/test.wav
+                    echo $? > /appshared/pulsegateway_test_output
+                """)
+    os.system("chmod 755 " + app_bin + "containedapp")
 
 def run_app():
+    """ Run /appbin/containedapp.
+    """
     print "Found and run Launch on DBUS: " + \
         str(helper.find_and_run_Launch_on_pelagicontain_on_dbus())
     print "Register called: " + \
-        str(helper.pam_iface.test_register_called())
+        str(helper.pam_iface().test_register_called())
     print "Update finished called: " + \
-        str(helper.pam_iface.test_updatefinished_called())
+        str(helper.pam_iface().test_updatefinished_called())
 
-def is_app_output_ok(expected):
-    path = container_root + \
+def is_app_output_ok(expected, container_path):
+    """ Parses output and checks whether it is expected.
+    """
+    success = False
+    path = container_path + \
         "/com.pelagicore.comptest/shared/pulsegateway_test_output"
     try:
         with open(path) as f:
             lines = f.readlines()
             if not len(lines) == 1:
                 print "Too few or too many lines in log file"
-                return False
             else:
                 if expected in lines[0]:
-                    return True
+                    success = True
     except Exception as e:
         print "Unable to read command output, output file couldn't be opened!"
         print str(e)
-        return False
 
-setup_suite()
+    return success
 
-# Create contained app
-with open(app_bin + "containedapp", "w") as f:
-    print "Overwriting containedapp..."
-    f.write("""#!/bin/sh
-    /appbin/paplay --volume=0 --raw /appbin/test.wav
-    echo $? > /appshared/pulsegateway_test_output
-    """)
-os.system("chmod 755 " + app_bin + "containedapp")
-time.sleep(1)
 
-TOTAL_NUMBER_OF_TESTS = 2
-TESTS_PASSED = 0
+class TestPulseGateway():
+    def test_sound_enable_disable(
+            self, setup_suite, setup_test_case, container_path,
+            teardown_fixture, teardown_suite):
 
-# Test with sound enabled
-print "\nRunning test 1/2"
-setup_test_case(pulse_enabled_config)
-run_app()
-time.sleep(2)
-if is_app_output_ok("0"):
-    print "PASS: Audio enabled"
-    TESTS_PASSED += 1
-else:
-    print "FAIL: Audio should be enabled but is not"
-teardown_test_case()
+        config = setup_test_case
+        run_app()
+        time.sleep(2)
 
-# Test with sound disabled
-print "\nRunning test 2/2"
-setup_test_case(pulse_disabled_config)
-run_app()
-time.sleep(2)
-if is_app_output_ok("1"):
-    print "PASS: Audio disabled"
-    TESTS_PASSED += 1
-else:
-    print "FAIL: Audio should be disabled but is not"
-teardown_test_case()
-
-teardown_suite()
-
-print "SUMMARY: " + str(TESTS_PASSED) + " of " + str(TOTAL_NUMBER_OF_TESTS) + " tests passed"
-
-if TESTS_PASSED == TOTAL_NUMBER_OF_TESTS:
-    exit(0)
-else:
-    exit(1)
+        if "true" in config["audio"]:
+            assert is_app_output_ok("0", container_path)
+        else:
+            assert is_app_output_ok("1", container_path)
+        print "UnregisterClient called: " + \
+            str(helper.pam_iface().test_unregisterclient_called())
+        helper.shutdown_pelagicontain()
