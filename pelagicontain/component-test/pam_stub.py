@@ -24,7 +24,7 @@ class PAMStub(dbus.service.Object):
         request = self.bus.request_name(self.BUS_NAME, dbus.bus.NAME_FLAG_REPLACE_EXISTING)
         bus_name = dbus.service.BusName(self.BUS_NAME, bus=self.bus)
         dbus.service.Object.__init__(self, bus_name, "/com/pelagicore/PAM")
-        
+
     @dbus.service.method(BUS_NAME, in_signature="s", out_signature="s", 
         sender_keyword="sender")
     def Echo(self, message, sender=None):
@@ -55,18 +55,12 @@ class PAMStub(dbus.service.Object):
     @dbus.service.method(BUS_NAME, in_signature="sa{ss}", out_signature="",
         sender_keyword="sender")
     def helper_trigger_update(self, cookie, configs, sender=None):
-        print sender + " called helper_trigger_update with args " + "\"" + str(configs) + "\""
         self.call_pelagicontain_update(cookie, configs)
 
     @dbus.service.method(BUS_NAME, in_signature="a{ss}", out_signature="",
         sender_keyword="sender")
     def helper_set_configs(self, configs, sender=None):
         self.set_configs(configs)
-
-    @dbus.service.method(BUS_NAME, in_signature="sss", out_signature="",
-        sender_keyword="sender")
-    def helper_set_container_env(self, cookie, var, val, sender=None):
-        self.call_pelagicontain_set_container_env(cookie, var, val)
 
     """ Methods below are used by the component test to verify the expected
         methods have been called on this object by Pelagicontain
@@ -85,6 +79,7 @@ class PAMStub(dbus.service.Object):
 
     @dbus.service.method(BUS_NAME)
     def test_reset_values(self):
+        self.configs = {"":""}
         self.register_called = False
         self.unregisterclient_called = False
         self.updatefinished_called = False
@@ -95,18 +90,13 @@ class PAMStub(dbus.service.Object):
         self.configs = configs
 
     def call_pelagicontain_update(self, cookie, configs):
+        print "Calling Pelagicontain::Update with:", configs
         pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain" + cookie,
             "/com/pelagicore/Pelagicontain")
         pelagicontain_iface = dbus.Interface(pelagicontain_remote_object,
             "com.pelagicore.Pelagicontain")
         pelagicontain_iface.Update(configs)
 
-    def call_pelagicontain_set_container_env(self, cookie, var, val):
-        pelagicontain_remote_object = self.bus.get_object("com.pelagicore.Pelagicontain" + cookie,
-            "/com/pelagicore/Pelagicontain")
-        pelagicontain_iface = dbus.Interface(pelagicontain_remote_object,
-            "com.pelagicore.Pelagicontain")
-        pelagicontain_iface.SetContainerEnvironmentVariable(var, val)
 
 DBusGMainLoop(set_as_default=True)
 myservice = PAMStub()
