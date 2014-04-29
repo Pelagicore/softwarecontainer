@@ -1,2 +1,5 @@
 Runtime dependencies:
 * LXC >= 0.9.0 (we pass full path to lxc-template to lxc-create not available in)
+
+Component test dependencies:
+* py.test >= 2.5.2

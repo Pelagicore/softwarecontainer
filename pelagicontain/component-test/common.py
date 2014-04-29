@@ -5,8 +5,12 @@
     All rights reserved.
 """
 
-import commands, os, time, sys, signal, sys
-from subprocess import Popen, call, check_output, STDOUT
+import commands
+import os
+import time
+import sys
+import signal
+from subprocess import Popen, call, STDOUT
 import os
 
 import dbus
@@ -25,31 +29,30 @@ IFACE = "com.pelagicore.Pelagicontain"
 OPATH = "/com/pelagicore/Pelagicontain"
 APP_ID = "com.pelagicore.comptest"
 
+
 class ComponentTestHelper:
     def __init__(self):
+        self.__pelagicontain_process = None
         self.__pelagicontain_pid = None
         self.__pc_iface = None
-        self.__cookie = self.generate_cookie()
+        self.__cookie = self.__generate_cookie()
 
         print "Generated Cookie = %s, appId = %s" % (self.__cookie, APP_ID)
 
-        self.__bus = self.create_session_bus()
+        self.__bus = dbus.SessionBus()
 
         pam_remote_object = self.__bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
         self.__pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
 
-    def create_session_bus(self):
-        return dbus.SessionBus()
-
     def pam_iface(self):
         return self.__pam_iface
 
-    def generate_cookie(self):
+    def __generate_cookie(self):
         # Only use the last part, hyphens are not allowed in D-Bus object paths
         return commands.getoutput("uuidgen").strip().split("-").pop()
 
     def start_pelagicontain(self, pelagicontain_bin, container_root,
-            cmd="/controller/controller", suppress_stdout=False):
+                            cmd="/controller/controller", suppress_stdout=False):
         """ param  pelagicontain_bin path to pelagicontain binary
             param  container_root    path to container root
             param  cmd               command to execute in container
@@ -61,13 +64,14 @@ class ComponentTestHelper:
         if (suppress_stdout):
             out = open(os.devnull, 'wb')
         try:
-            self.__pelagicontain_pid = Popen([pelagicontain_bin, container_root,
-                cmd, self.__cookie], stdout=out).pid
+            self.__pelagicontain_process = Popen(
+                [pelagicontain_bin, container_root, cmd, self.__cookie],
+                stdout=out)
         except OSError as e:
             print "Launch error: %s" % e
             return False
-
-        if self.__find_pelagicontain_on_dbus() == False:
+        self.__pelagicontain_pid = self.__pelagicontain_process.pid
+        if self.__find_pelagicontain_on_dbus() is False:
             print "Could not find Pelagicontain service on D-Bus"
             return False
 
@@ -103,12 +107,17 @@ class ComponentTestHelper:
             if not self.__pelagicontain_pid == 0:
                 call(["kill", "-9", str(self.__pelagicontain_pid)])
 
-    def make_system_call(self, cmds):
-        try:
-            output = check_output(cmds)
-            return (True, output)
-        except:
-            return (False, "")
+    def poke_pelagicontain_zombie(self):
+        """ When using Popen to start a process the process will be a zombie
+            when it has exited until the parent process finishes (i.e. the
+            test that has an instance of this helper class). This method
+            interacts with the process in a way that if it has exited already,
+            it will be removed and thus not a zombie anymore. This is useful in
+            tests that wants to check if Pelagicontain is running still.
+        """
+        returncode = self.__pelagicontain_process.poll()
+        if returncode is not None:
+            self.__pelagicontain_process.communicate()
 
     def shutdown_pelagicontain(self):
         if not self.__pc_iface:
@@ -136,3 +145,5 @@ class ComponentTestHelper:
     def cookie(self):
         return self.__cookie
 
+    def pelagicontain_pid(self):
+        return self.__pelagicontain_pid

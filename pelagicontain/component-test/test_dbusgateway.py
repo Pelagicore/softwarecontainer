@@ -4,50 +4,84 @@
     Copyright (C) 2014 Pelagicore AB
     All rights reserved.
 """
+
+import pytest
+
 import json
 import sys
 import time
 import re
 import os
-import pytest
 import distutils.spawn
 import shutil
 
+# conftest contains some fixtures we use in the tests
 import conftest
 
 from common import ComponentTestHelper
 
-config = {
-        "dbus-proxy-config-session": [
-                {
-                        "direction": "*",
-                        "interface": "*",
-                        "object-path": "*",
-                        "method": "*"
-                }
-        ],
-        "dbus-proxy-config-system": [
-                {
-                        "direction": "outgoing",
-                        "interface": "com.pelagicore.comptest",
-                        "object-path": "/",
-                        "method": "Echo"
-                }
-        ]
+
+CONFIG = {
+    "dbus-proxy-config-session": [
+        {
+            "direction": "*",
+            "interface": "*",
+            "object-path": "*",
+            "method": "*"
+        }
+    ],
+    "dbus-proxy-config-system": [
+        {
+            "direction": "outgoing",
+            "interface": "com.pelagicore.comptest",
+            "object-path": "/",
+            "method": "Echo"
+        }
+    ]
 }
 
-configs = {
-    "dbus-proxy": json.dumps(config)
+CONFIGS = {
+    "dbus-proxy": json.dumps(CONFIG)
 }
 
+# The app introspects PAM on D-Bus using dbus-send and writes the output to file
+# which content is used later in the assertion
+DBUSSEND_APP = """
+#!/bin/sh
+/appbin/dbus-send --session --print-reply --dest=com.pelagicore.PAM /com/pelagicore/PAM org.freedesktop.DBus.Introspectable.Introspect > /appshared/dbus_test_output
+"""
+
+# We keep the helper object module global so external fixtures can access it
 helper = ComponentTestHelper()
+
+
 class TestDBusGateway():
 
-    # Run before any tests
+    def test_can_introspect(self, pelagicontain_binary, container_path, teardown_fixture):
+        """ Tests Introspect() on com.pelagicore.PAM on D-Bus session bus.
+        """
+        self.do_setup(pelagicontain_binary, container_path)
+        containedapp_file = container_path + "/com.pelagicore.comptest/bin/containedapp"
+        with open(containedapp_file, "w") as f:
+            print "Overwriting containedapp..."
+            f.write(DBUSSEND_APP)
+        os.system("chmod 755 " + containedapp_file)
+
+        helper.pelagicontain_iface().Launch(helper.app_id())
+        time.sleep(0.5)
+
+        try:
+            with open("%s/com.pelagicore.comptest/shared/dbus_test_output" % container_path) as f:
+                line = f.readline()
+                regex = "^method"
+                assert re.match(regex, line)
+        except:
+            print "Output file not found"
+            exit(1)
+
     def do_setup(self, pelagicontain_binary, container_path):
-        helper.pam_iface().helper_set_configs(configs)
-        if not helper.start_pelagicontain(pelagicontain_binary,
-                                           container_path, "/controller/controller", False):
+        helper.pam_iface().helper_set_configs(CONFIGS)
+        if not helper.start_pelagicontain(pelagicontain_binary, container_path):
             print "Failed to launch pelagicontain!"
             sys.exit(1)
 
@@ -57,44 +91,7 @@ class TestDBusGateway():
             print "Could not find 'dbus-send'; is it installed?"
             exit(1)
 
-        dest = container_path + "/" + helper.app_uuid + "/bin/"
+        dest = container_path + "/" + helper.app_id() + "/bin/"
 
         print "Copying %s to %s" % (dbus_send, dest)
         shutil.copy(dbus_send, dest)
-
-    # Run after all tests
-    def teardown(self):
-        try:
-            helper.teardown()
-        except:
-            pass
-
-    # Actual test
-    def test_can_introspect(self, pelagicontain_binary, container_path, teardown_fixture):
-        """ Tests Introspect() on com.pelagicore.PAM on D-Bus session bus.
-        """
-        self.do_setup(pelagicontain_binary, container_path)
-        with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
-            print "Overwriting containedapp..."
-            f.write("""#!/bin/sh
-sleep 1
-/appbin/dbus-send --session --print-reply --dest=com.pelagicore.PAM /com/pelagicore/PAM org.freedesktop.DBus.Introspectable.Introspect > /appshared/dbus_test_output""")
-        os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
-
-        assert helper.find_pelagicontain_on_dbus()
-        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
-
-        time.sleep(2)
-
-        try:
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output" % container_root) as f:
-                line = f.readline()
-                print "-->", line
-                regex = "^method"
-                if re.match(regex, line):
-                    print "Looks like dbus-send was run OK!"
-        except:
-            print "Output file not found"
-
-        self.teardown()
-
