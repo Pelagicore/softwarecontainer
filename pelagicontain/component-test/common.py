@@ -21,17 +21,17 @@ gobject.threads_init()
 from dbus import glib
 glib.init_threads()
 
+IFACE = "com.pelagicore.Pelagicontain"
+OPATH = "/com/pelagicore/Pelagicontain"
+APP_ID = "com.pelagicore.comptest"
 
 class ComponentTestHelper:
     def __init__(self):
         self.__pelagicontain_pid = None
         self.__pc_iface = None
-        self.__opath = "/com/pelagicore/Pelagicontain"
-        self.__iface_name = "com.pelagicore.Pelagicontain"
         self.__cookie = self.generate_cookie()
-        self.__app_id = "com.pelagicore.comptest"
 
-        print "Generated Cookie = %s, appId = %s" % (self.__cookie, self.__app_id)
+        print "Generated Cookie = %s, appId = %s" % (self.__cookie, APP_ID)
 
         self.__bus = self.create_session_bus()
 
@@ -83,11 +83,11 @@ class ComponentTestHelper:
         tries = 0
         found = False
 
-        service_name = self.__iface_name + self.__cookie
+        service_name = IFACE + self.__cookie
         while not found and tries < 2:
             try:
-                self.__pc_object = self.__bus.get_object(service_name, self.__opath)
-                self.__pc_iface = dbus.Interface(self.__pc_object, self.__iface_name)
+                pc_object = self.__bus.get_object(service_name, OPATH)
+                self.__pc_iface = dbus.Interface(pc_object, IFACE)
                 found = True
             except:
                 pass
@@ -102,15 +102,6 @@ class ComponentTestHelper:
         if not self.shutdown_pelagicontain():
             if not self.__pelagicontain_pid == 0:
                 call(["kill", "-9", str(self.__pelagicontain_pid)])
-
-    def find_and_run_Launch_on_pelagicontain_on_dbus(self):
-        self.__pc_iface = dbus.Interface(self.__pc_object, self.__iface_name)
-        try:
-            self.__pc_iface.Launch(self.__app_id)
-            return True
-        except Exception as e:
-            print e
-            return False
 
     def make_system_call(self, cmds):
         try:
@@ -140,7 +131,7 @@ class ComponentTestHelper:
         return self.__pc_iface
 
     def app_id(self):
-        return self.__app_id
+        return APP_ID
 
     def cookie(self):
         return self.__cookie
