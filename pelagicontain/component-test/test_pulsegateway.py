@@ -27,6 +27,11 @@ helper = ComponentTestHelper()
 pa_server_pid = None
 app_bin = None
 
+PAPLAY_APP = """
+#!/bin/sh
+/appbin/paplay --raw --volume=0 /appbin/test.wav
+echo $? > /appshared/pulsegateway_test_output
+"""
 
 @pytest.fixture(scope="module")
 def setup_suite(container_path):
@@ -121,10 +126,7 @@ def create_app():
     global app_bin
     with open(app_bin + "containedapp", "w") as f:
         print "Overwriting containedapp..."
-        f.write("""#!/bin/sh
-                    /appbin/paplay --raw --volume=0 /appbin/test.wav
-                    echo $? > /appshared/pulsegateway_test_output
-                """)
+        f.write(PAPLAY_APP)
     os.system("chmod 755 " + app_bin + "containedapp")
 
 def run_app():
@@ -159,9 +161,33 @@ def is_app_output_ok(expected, container_path):
 
 
 class TestPulseGateway():
+    """ Tests the Pelagicontain PulseAudio gateway using different configurations.
+        The tests require that a PulseAudio server is running as root on the host
+        system and that the paplay program exists so that it can be copied to the
+        container. The setup_suite fixture is responsible for setting this up.
+    """
+
     def test_sound_enable_disable(
             self, setup_suite, setup_test_case, container_path,
             teardown_fixture, teardown_suite):
+        """ Tests the PulseAudio gateway with configurations for sound enabled and
+            sound disabled. The test will launch an app that runs paplay and writes
+            the exit signal to file. Because the test parametrization occues in the
+            setup_test_case fixture, the test relies on the fixture to inform the
+            test about what configuration has been used.
+
+            Asserts that the log output of the application only contains a "0" when
+            audio should be enabled and that it only contains a "1" when audio should
+            be disabled.
+
+                * Get config from setup-fixture
+                * Run the app
+                * Assert that the app's exit code corresponds to the expected value
+
+            NOTE: The application run from within the tests sets output volume to 0
+            so it will not be possible to hear any sound. Also, the sound file played
+            by the application is less than a second short.
+        """
 
         config = setup_test_case
         run_app()
