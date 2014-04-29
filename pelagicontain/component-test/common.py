@@ -5,7 +5,6 @@
     All rights reserved.
 """
 
-
 import commands, os, time, sys, signal, sys
 from subprocess import Popen, call, check_output, STDOUT
 import os
@@ -25,16 +24,18 @@ glib.init_threads()
 
 class ComponentTestHelper:
     def __init__(self):
-        self.pelagicontain_pid = None
-        self.pelagicontain_iface = None
+        self.__pelagicontain_pid = None
+        self.__pc_iface = None
+        self.__opath = "/com/pelagicore/Pelagicontain"
+        self.__iface_name = "com.pelagicore.Pelagicontain"
+        self.__cookie = self.generate_cookie()
+        self.__app_id = "com.pelagicore.comptest"
 
-        self.cookie = self.generate_cookie()
-        self.app_uuid = "com.pelagicore.comptest"
-        print "Generated Cookie = %s, appId = %s" % (self.cookie, self.app_uuid)
+        print "Generated Cookie = %s, appId = %s" % (self.__cookie, self.__app_id)
 
-        self.bus = self.create_session_bus()
+        self.__bus = self.create_session_bus()
 
-        pam_remote_object = self.bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
+        pam_remote_object = self.__bus.get_object("com.pelagicore.PAM", "/com/pelagicore/PAM")
         self.__pam_iface = dbus.Interface(pam_remote_object, "com.pelagicore.PAM")
 
     def create_session_bus(self):
@@ -47,41 +48,46 @@ class ComponentTestHelper:
         # Only use the last part, hyphens are not allowed in D-Bus object paths
         return commands.getoutput("uuidgen").strip().split("-").pop()
 
-    def generate_app_uuid(self):
-        return commands.getoutput("uuidgen").strip()
+    def start_pelagicontain(self, pelagicontain_bin, container_root,
+            cmd="/controller/controller", suppress_stdout=False):
+        """ param  pelagicontain_bin path to pelagicontain binary
+            param  container_root    path to container root
+            param  cmd               command to execute in container
 
-
-    def start_pelagicontain(self, pelagicontain_bin, container_root, cmd,
-                             suppress_stdout=False):
-        # @param  pelagicontain_bin path to pelagicontain binary
-        # @param  container_root    path to container root
-        # @param  cmd               command to execute in container
-        # @return true if pelagicontain started successfully
-        #         false otherwise
+            return true if pelagicontain started successfully
+                   false otherwise
+        """
         out = sys.stdout
         if (suppress_stdout):
             out = open(os.devnull, 'wb')
         try:
-            self.pelagicontain_pid = Popen([pelagicontain_bin, container_root,
-                                            cmd, self.cookie], stdout=out).pid
+            self.__pelagicontain_pid = Popen([pelagicontain_bin, container_root,
+                cmd, self.__cookie], stdout=out).pid
         except OSError as e:
             print "Launch error: %s" % e
             return False
 
+        if self.__find_pelagicontain_on_dbus() == False:
+            print "Could not find Pelagicontain service on D-Bus"
+            return False
+
         return True
 
-    def find_pelagicontain_on_dbus(self):
+    def is_service_available(self):
+        if self.__pc_iface is None:
+            return False
+        else:
+            return True
+
+    def __find_pelagicontain_on_dbus(self):
         tries = 0
         found = False
 
-        while not found and tries < 20:
+        service_name = self.__iface_name + self.__cookie
+        while not found and tries < 2:
             try:
-                self.pelagicontain_remote_object = \
-                    self.bus.get_object("com.pelagicore.Pelagicontain" + self.cookie,
-                                   "/com/pelagicore/Pelagicontain")
-                self.pelagicontain_iface =\
-                    dbus.Interface(self.pelagicontain_remote_object,
-                                   "com.pelagicore.Pelagicontain")
+                self.__pc_object = self.__bus.get_object(service_name, self.__opath)
+                self.__pc_iface = dbus.Interface(self.__pc_object, self.__iface_name)
                 found = True
             except:
                 pass
@@ -94,14 +100,13 @@ class ComponentTestHelper:
 
     def teardown(self):
         if not self.shutdown_pelagicontain():
-            if not self.pelagicontain_pid == 0:
-                call(["kill", "-9", str(self.pelagicontain_pid)])
+            if not self.__pelagicontain_pid == 0:
+                call(["kill", "-9", str(self.__pelagicontain_pid)])
 
     def find_and_run_Launch_on_pelagicontain_on_dbus(self):
-        self.pelagicontain_iface = dbus.Interface(self.pelagicontain_remote_object, 
-                                             "com.pelagicore.Pelagicontain")
+        self.__pc_iface = dbus.Interface(self.__pc_object, self.__iface_name)
         try:
-            self.pelagicontain_iface.Launch(self.app_uuid)
+            self.__pc_iface.Launch(self.__app_id)
             return True
         except Exception as e:
             print e
@@ -115,18 +120,28 @@ class ComponentTestHelper:
             return (False, "")
 
     def shutdown_pelagicontain(self):
-        if not self.pelagicontain_iface:
-            self.find_pelagicontain_on_dbus()
-            if not self.pelagicontain_iface:
+        if not self.__pc_iface:
+            self.__find_pelagicontain_on_dbus()
+            if not self.__pc_iface:
                 print "Failed to find pelagicontain on D-Bus.."
                 return False
 
         print "Shutting down Pelagicontain"
         try:
-            self.pelagicontain_iface.Shutdown()
+            self.__pc_iface.Shutdown()
         except dbus.DBusException as e:
             print "Pelagicontain already shutdown"
             print "D-Bus says: " + str(e)
 
-        self.pelagicontain_iface = None
+        self.__pc_iface = None
         return True
+
+    def pelagicontain_iface(self):
+        return self.__pc_iface
+
+    def app_id(self):
+        return self.__app_id
+
+    def cookie(self):
+        return self.__cookie
+
