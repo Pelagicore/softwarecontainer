@@ -39,6 +39,10 @@ sudo $($setup_script -d $container_path \
 
 eval `dbus-launch --sh-syntax`
 
+# Required for PulseAudio
+export XDG_RUNTIME_DIR=/tmp/test
+export PULSE_SERVER=$XDG_RUNTIME_DIR/pulse/native
+
 ./pam_stub.py &> $pam_log_path/pam.log &
 pam_pid=$!
 exit_codes=()
@@ -74,6 +78,14 @@ py.test test_dbusgateway.py --junitxml=$test_reports_path/dbusgateway.xml \
 dbusgw_exit=$?
 exit_codes+=$dbusgw_exit
 
+# Pulseaudio gateway tests
+py.test test_pulsegateway.py --junitxml=$test_reports_path/pulsegateway.xml \
+                             --pelagicontain-binary $pelagicontain_bin \
+                             --container-path $container_path
+
+pulsegw_exit=$?
+exit_codes+=$pulsegw_exit
+
 kill $pam_pid
 wait $pam_pid 2>/dev/null
 
@@ -100,6 +112,12 @@ if [ "$dbusgw_exit" == "0" ]; then
     echo "D-Bus Gateway: SUCCESS"
 else
     echo "D-Bus Gateway: FAIL"
+fi
+
+if [ "$pulsegw_exit" == "0" ]; then
+    echo "PulseAudio Gateway: SUCCESS"
+else
+    echo "PulseAudio Gateway: FAIL"
 fi
 
 [[ $exit_codes =~ 1 ]] && exit 1 || exit 0
