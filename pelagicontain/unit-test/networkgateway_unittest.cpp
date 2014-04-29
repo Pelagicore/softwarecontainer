@@ -31,8 +31,12 @@ public:
         return true;
     }
 
-    MOCK_METHOD1(systemCall,
-                 bool(const std::string &cmd));
+    virtual bool hasBeenStarted() const
+    {
+        return true;
+    }
+
+    MOCK_METHOD1(systemCall, bool(const std::string &cmd));
 };
 
 

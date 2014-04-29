@@ -11,7 +11,9 @@
 #include "controllerinterface.h"
 
 ControllerInterface::ControllerInterface(const std::string &gatewayDir):
-    m_fifo(0), m_fifoPath(gatewayDir + "/in_fifo")
+    m_fifo(0),
+    m_fifoPath(gatewayDir + "/in_fifo"),
+    m_running(false)
 {
 }
 
@@ -32,6 +34,7 @@ bool ControllerInterface::startApp()
         return false;
     }
 
+    m_running = true;
     return true;
 }
 
@@ -48,6 +51,7 @@ bool ControllerInterface::shutdown()
         return false;
     }
 
+    m_running = false;
     return true;
 }
 
@@ -82,6 +86,11 @@ bool ControllerInterface::systemCall(const std::string &cmd)
     }
 
     return true;
+}
+
+bool ControllerInterface::hasBeenStarted() const
+{
+    return m_running;
 }
 
 bool ControllerInterface::openFifo()

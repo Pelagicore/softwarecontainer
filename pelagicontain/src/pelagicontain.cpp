@@ -18,14 +18,14 @@ Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
     m_pamInterface(pamInterface),
     m_mainloopInterface(mainloopInterface),
     m_controllerInterface(controllerInterface),
-    m_cookie(cookie)
+    m_cookie(cookie),
+    m_launching(false)
 {
 }
 
 Pelagicontain::~Pelagicontain()
 {
-    if (m_container)
-    {
+    if (m_container) {
         delete m_container;
     }
 }
@@ -35,7 +35,7 @@ void Pelagicontain::addGateway(Gateway *gateway)
     m_gateways.push_back(gateway);
 }
 
-/* Preload the container. This is a non-blocking operation */
+// Preload the container. This is a non-blocking operation
 pid_t Pelagicontain::preload(const std::string &containerName,
                              const std::string &containerConfig,
                              const std::string &containerRoot,
@@ -44,7 +44,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     m_container = new Container(containerName, containerConfig, containerRoot);
     Glib::SignalChildWatch cw = Glib::signal_child_watch();
 
-    /* Get the commands to run in a separate process */
+    // Get the commands to run in a separate process
     std::vector<std::string> commands;
     commands = m_container->commands(containedCommand, m_gateways);
 
@@ -68,8 +68,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
 
     sigc::slot<void, int, int> shutdownSlot;
     shutdownSlot = sigc::bind<0>(
-        sigc::mem_fun(*this, 
-                      &Pelagicontain::handleControllerShutdown),
+        sigc::mem_fun(*this, &Pelagicontain::handleControllerShutdown),
         destroyCommand /* First param to handleControllerShutdown */);
     cw.connect(shutdownSlot, pid);
 
@@ -78,9 +77,10 @@ pid_t Pelagicontain::preload(const std::string &containerName,
 
 void Pelagicontain::handleControllerShutdown(const std::string lxcExitCommand,
                                                    int pid,
-                                                   int exitCode) {
-    log_debug("Controller (pid %d) exited with code: %d. "
-              "Shutting down now..", pid, exitCode);
+                                                   int exitCode)
+{
+    log_debug("Controller (pid %d) exited with code: %d. Shutting down now..",
+              pid, exitCode);
 
     log_debug("Issuing: %s", lxcExitCommand.c_str());
     Glib::spawn_command_line_sync(lxcExitCommand);
@@ -89,14 +89,14 @@ void Pelagicontain::handleControllerShutdown(const std::string lxcExitCommand,
     m_pamInterface->unregisterClient(m_cookie);
 
     log_debug("Queueing up main loop termination");
-    Glib::signal_idle().connect(
-        sigc::mem_fun(*this, &Pelagicontain::killMainLoop));
+    Glib::signal_idle().connect(sigc::mem_fun(*this, &Pelagicontain::killMainLoop));
 }
 
-void Pelagicontain::launch(const std::string &appId) {
+void Pelagicontain::launch(const std::string &appId)
+{
+    m_launching = true;
     m_appId = appId;
-    if (m_container)
-    {
+    if (m_container) {
         // this should always be true except when unit-testing.
         m_container->setApplication(appId);
     }
@@ -111,19 +111,23 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 
     activateGateways();
 
-    m_controllerInterface->startApp();
+    // We should only start the app if we have ended up here because launch was
+    // called and the app has not been started previously.
+    if (m_launching && !m_controllerInterface->hasBeenStarted()) {
+        m_controllerInterface->startApp();
+    }
 }
 
 void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
 {
-    /* Go through the received configs and see if they match any of
-     * the running gateways, if so: set their respective config
-     */
+    // Go through the received configs and see if they match any of
+    // the running gateways, if so: set their respective config
     std::string config;
     std::string gatewayId;
 
     for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-         gateway != m_gateways.end(); ++gateway) {
+        gateway != m_gateways.end(); ++gateway)
+    {
         gatewayId = (*gateway)->id();
         if (configs.count(gatewayId) != 0) {
             config = configs.at(gatewayId);
@@ -147,11 +151,8 @@ void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, cons
 
 void Pelagicontain::shutdown()
 {
-    /* Tell Controller to shut down the app
-     * Controller will exit when the app has shut down and then
-     * lxc-execute will return and lxc-destroy be run (see above
-     * code in the forked child)
-     */
+    // Tell Controller to shut down the app and Controller will exit when the
+    // app has shut down and then we will handle the signal through the handler.
     m_controllerInterface->shutdown();
 }
 
@@ -160,8 +161,9 @@ void Pelagicontain::shutdownGateways()
     for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
          gateway != m_gateways.end(); ++gateway)
     {
-        if (!(*gateway)->teardown())
-            log_warning("Could not teardown gateway cleanly");
+        if (!(*gateway)->teardown()) {
+            log_warning("Could not tear down gateway cleanly");
+        }
         delete (*gateway);
     }
 

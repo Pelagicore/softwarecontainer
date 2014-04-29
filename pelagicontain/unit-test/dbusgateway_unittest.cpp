@@ -33,11 +33,16 @@ public:
         return true;
     }
 
+    virtual bool hasBeenStarted() const
+    {
+        return true;
+    }
+
     MOCK_METHOD1(systemCall, bool(const std::string &cmd));
 
 };
 
-class MockSystemcallInnterface :
+class MockSystemcallInterfaceDBusGWTest :
     public SystemcallAbstractInterface
 {
 public:
@@ -172,7 +177,7 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
  * should remove the file created by dbus-proxy.
  */
 TEST_F(DBusGatewayTest, TestActivateCall) {
-    NiceMock<MockSystemcallInnterface> systemcallInterfaceMock;
+    NiceMock<MockSystemcallInterfaceDBusGWTest> systemcallInterfaceMock;
     DBusGateway *gw = new DBusGateway(&controllerInterface,
                                       &systemcallInterfaceMock,
                                       DBusGateway::SessionProxy,

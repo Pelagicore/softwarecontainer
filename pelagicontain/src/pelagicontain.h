@@ -109,14 +109,6 @@ private:
     void activateGateways();
     void shutdownGateways();
 
-    Container *m_container;
-    PAMAbstractInterface *m_pamInterface;
-    MainloopAbstractInterface *m_mainloopInterface;
-    ControllerAbstractInterface *m_controllerInterface;
-    std::vector<Gateway *> m_gateways;
-    std::string m_appId;
-    std::string m_cookie;
-
     /* Helper function used to terminate the main event loop */
     bool killMainLoop() {
         if (m_mainloopInterface) {
@@ -143,6 +135,17 @@ private:
     void handleControllerShutdown(const std::string lxcDestroyCommand,
                                         int controllerPid,
                                         int controllerExitCode);
+
+    Container *m_container;
+    PAMAbstractInterface *m_pamInterface;
+    MainloopAbstractInterface *m_mainloopInterface;
+    ControllerAbstractInterface *m_controllerInterface;
+    std::vector<Gateway *> m_gateways;
+    std::string m_appId;
+    std::string m_cookie;
+
+    // Keeps track of if someone has called launch
+    bool m_launching;
 };
 
 #endif /* PELAGICONTAIN_H */
