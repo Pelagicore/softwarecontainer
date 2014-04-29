@@ -59,15 +59,21 @@ int Controller::runApp()
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv("/appbin/containedapp");
     sigc::slot<void> setupSlot = sigc::mem_fun(*this, &Controller::childSetupSlot);
-    Glib::spawn_async_with_pipes(".",
-                                 executeCommandVec,
-                                 Glib::SPAWN_DO_NOT_REAP_CHILD 
-                                    | Glib::SPAWN_SEARCH_PATH,
-                                 setupSlot,
-                                 &m_pid);
-
     sigc::slot<void, int, int> shutdownSlot;
     shutdownSlot = sigc::mem_fun(*this, &Controller::handleAppShutdownSlot);
+    try {
+        Glib::spawn_async_with_pipes(".",
+                                    executeCommandVec,
+                                    Glib::SPAWN_DO_NOT_REAP_CHILD
+                                        | Glib::SPAWN_SEARCH_PATH,
+                                    setupSlot,
+                                    &m_pid);
+    } catch (const Glib::Error& ex) {
+        // It's possible the spawn fails with an exception in which case we
+        // catch it to do some cleanup instead of crashing hard.
+        std::cout << "Error: " << ex.what() << std::endl;
+    }
+
     cw.connect(shutdownSlot, m_pid);
 
     std::cout << "Started app with pid: " << "\"" << m_pid << "\"" << std::endl;
@@ -82,7 +88,6 @@ void Controller::killApp()
         std::cout << "WARNING: Trying to kill an app without previously having started one. "
             << "This is normal if this is a preloaded but unused container."
             << std::endl;
-//         return;
         shutdown();
         return;
     }
