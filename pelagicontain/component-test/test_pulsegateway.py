@@ -41,7 +41,7 @@ def setup_suite(container_path):
         the sound file that is to be played in the test.
     """
     global pa_server_pid, app_bin
-    app_bin = container_path + "/" + helper.app_uuid + "/bin/"
+    app_bin = container_path + "/" + helper.app_id() + "/bin/"
 
     # PulseAudio server requires a home directory to be set
     os.environ['HOME'] = "/root/"
@@ -64,13 +64,10 @@ def setup_test_case(request, container_path, pelagicontain_binary):
 
     helper.pam_iface().helper_set_configs({ "pulseaudio": json.dumps(request.param) })
     time.sleep(1)
-    if not helper.start_pelagicontain(pelagicontain_binary, container_path,
-                                      "/controller/controller", False):
+    if not helper.start_pelagicontain(pelagicontain_binary, container_path):
         print "Failed to launch pelagicontain!"
         sys.exit(1)
-    print "Found Pelagicontain on D-Bus: " + \
-        str(helper.find_pelagicontain_on_dbus())
-    time.sleep(2)
+    #time.sleep(2)
     create_app()
     return request.param
 
@@ -133,7 +130,7 @@ def run_app():
     """ Run /appbin/containedapp.
     """
     print "Found and run Launch on DBUS: " + \
-        str(helper.find_and_run_Launch_on_pelagicontain_on_dbus())
+        str(helper.pelagicontain_iface().Launch(helper.app_id()))
     print "Register called: " + \
         str(helper.pam_iface().test_register_called())
     print "Update finished called: " + \

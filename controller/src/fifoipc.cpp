@@ -10,6 +10,7 @@
 #include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
+#include <poll.h>
 
 #include "fifoipc.h"
 
@@ -53,36 +54,44 @@ bool FifoIPC::loop()
     char buf[BUF_SIZE];
     char c;
     bool shouldContinue = true;
-    while (shouldContinue) {
-        // Read next message in pipe, it should be null terminated
-        int i = 0;
-        do {
-            int status = read(fd, &c, 1);
-            if (status > 0) {
-                buf[i++] = c;
-            } else if (status == 0) {
-                // We've read 'end of file', just ignore it
-                break;
-            } else if (status == -1) {
-                perror("FifoIPC read: ");
-                return false;
-            } else {
-                std::cout << "Error: Unknown problem reading fifo" << std::endl;
-                return false;
-            }
-        // Look for end of message or end of storage buffer
-        } while ((c != '\0') && (i != sizeof(buf) - 1));
 
-        buf[i] = '\0';
-        std::string messageString(buf);
-        int messageStatus = 0;
-        // If message is empty we don't need to handle it
-        if (messageString.size() > 0)
-            shouldContinue = m_message.handleMessage(messageString, &messageStatus);
-        if (messageStatus == -1)
-            // The message was not understood by IPCMessage
-            std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
+    struct pollfd pfd[2];
+    pfd[0].fd = fd;
+    pfd[0].events = POLLIN;
+
+    int result = poll(pfd, 1, 100);
+
+    if (!(pfd[0].revents & POLLIN)) {
+        return true;
     }
+
+    int i = 0;
+    do {
+        int status = read(fd, &c, 1);
+        if (status > 0) {
+            buf[i++] = c;
+        } else if (status == 0) {
+            // We've read 'end of file', just ignore it
+            break;
+        } else if (status == -1) {
+            perror("FifoIPC read: ");
+            return false;
+        } else {
+            std::cout << "Error: Unknown problem reading fifo" << std::endl;
+            return false;
+        }
+    // Look for end of message or end of storage buffer
+    } while ((c != '\0') && (i != sizeof(buf) - 1));
+
+    buf[i] = '\0';
+    std::string messageString(buf);
+    int messageStatus = 0;
+    // If message is empty we don't need to handle it
+    if (messageString.size() > 0)
+        shouldContinue = m_message.handleMessage(messageString, &messageStatus);
+    if (messageStatus == -1)
+        // The message was not understood by IPCMessage
+        std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
 
     return true;
 }

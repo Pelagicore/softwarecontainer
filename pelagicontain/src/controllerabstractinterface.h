@@ -45,6 +45,13 @@ public:
      * \return True if all went well, false if not
      */
     virtual bool systemCall(const std::string &cmd) = 0;
+
+    /*! This method returns true if a call to startApp has been made previously,
+     * false if not.
+     *
+     * \return True or false
+     */
+    virtual bool hasBeenStarted() const = 0;
 };
 
 #endif /* CONTROLLERABSTRACTINTERFACE_H */

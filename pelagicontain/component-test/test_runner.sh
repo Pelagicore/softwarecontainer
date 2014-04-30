@@ -39,10 +39,6 @@ sudo $($setup_script -d $container_path \
 
 eval `dbus-launch --sh-syntax`
 
-# Required for PulseAudio
-export XDG_RUNTIME_DIR=/tmp/test
-export PULSE_SERVER=$XDG_RUNTIME_DIR/pulse/native
-
 ./pam_stub.py &> $pam_log_path/pam.log &
 pam_pid=$!
 exit_codes=()

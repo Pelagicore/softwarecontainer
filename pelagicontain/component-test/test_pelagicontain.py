@@ -36,130 +36,60 @@ import os
 import time
 import pytest
 
-# conftest contains some fixtures
+# conftest contains some fixtures we use in the tests
 import conftest
 
 from common import ComponentTestHelper
 
-DBUS_GW_CONFIG = """
-[{
-    "config-session": [],
-    "config-system": [
-        {
-            "direction": "*",
-            "interface": "*",
-            "object-path": "/org/bluez/*",
-            "method": "*"
-        },
-        {
-            "direction": "*",
-            "interface": "org.bluez.Manager",
-            "object-path": "/",
-            "method": "*"
-        }
-    ]
-}]
+
+# The app does nothing for so long we have time to call Pelagicontain::Shutdown ourselves
+SLEEPY_APP = """
+#!/bin/sh
+sleep 10
 """
 
-NETWORK_GW_CONFIG = """
-{
-    "internet-access": "false",
-    "gateway": ""
-}
-"""
+# We keep the helper object module global so external fixtures can access it
+helper = ComponentTestHelper()
 
-helper = None
 
 class TestPelagicontain():
-    global helper
-    helper = ComponentTestHelper()
-    configs = {"dbus-proxy": DBUS_GW_CONFIG, "networking": NETWORK_GW_CONFIG}
-
-    def create_empty_app(self, container_path):
-        with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
-            print "Overwriting containedapp..."
-            f.write("""#!/bin/sh
-                       exit 0""")
-        os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
-
-    def create_env_app(self, container_path):
-        with open("%s/com.pelagicore.comptest/bin/containedapp" % container_path, "w") as f:
-            print "Overwriting containedapp..."
-            f.write("""#!/bin/sh
-                       env > /appshared/env_log""")
-        os.system("chmod 755 %s/com.pelagicore.comptest/bin/containedapp" % container_path)
-
-    def is_env_set(self, container_path):
-        success = False
-
-        try:
-            with open("%s/com.pelagicore.comptest/shared/env_log" % container_path) as f:
-                lines = f.readlines()
-                for line in lines:
-                    if "test-var=test-val" in line:
-                        success = True
-                        break
-        except Exception as e:
-            pytest.fail("Unable to read command output, output file couldn't be opened! " + \
-                        "Exception: %s" % e)
-        return success
 
     def test_pelagicontain(self, pelagicontain_binary, container_path, teardown_fixture):
         helper.pam_iface().test_reset_values()
-        helper.pam_iface().helper_set_configs(self.configs)
 
-        """ Start Pelagicontain, test is passed if Popen succeeds.
-            The command to execute inside the container is passed to the test function.
-        """
-        assert helper.start_pelagicontain(pelagicontain_binary, container_path,
-            "/controller/controller", False)
+        # Start Pelagicontain, test is passed if Popen succeeds.
+        # The command to execute inside the container is passed to the test function.
+        assert helper.start_pelagicontain(pelagicontain_binary, container_path)
 
-        """ Assert the Pelagicontain remote object can be found on the bus
-        """
-        assert helper.find_pelagicontain_on_dbus()
+        # Assert the Pelagicontain remote object can be found on the bus
+        assert helper.is_service_available()
 
         # When we run Pelagicontain::Launch the Controller expects to find an app
-        self.create_empty_app(container_path)
+        self.create_app(container_path)
 
-        """ Call Launch on Pelagicontain over D-Bus and assert the call goes well.
-            This will trigger a call to PAM::RegisterClient over D-Bus which we will
-            assert later.
-        """
-        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
+        # Call Launch on Pelagicontain over D-Bus
+        helper.pelagicontain_iface().Launch(helper.app_id())
 
-        """ Assert against the PAM-stub that RegisterClient was called by Pelagicontain
-        """
+        # Assert against the PAM-stub that RegisterClient was called by Pelagicontain
         assert helper.pam_iface().test_register_called()
 
-        """ The call by Pelagicontain to PAM::RegisterClient would have triggered
-            a call by PAM to Pelagicontain::Update which in turn should result in
-            a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
-            made by Pelagicontain.
-        """
+        # The call by Pelagicontain to PAM::RegisterClient would have triggered
+        # a call by PAM to Pelagicontain::Update which in turn should result in
+        # a call from Pelagicontain to PAM::UpdateFinished. Assert that call was
+        # made by Pelagicontain.
         assert helper.pam_iface().test_updatefinished_called()
 
-        """ Assert that an environment variable can be set within the container
-            by calling SetContainerEnvironmentVariable. Requires Launch to be called
-            again.
-        """
-        # Create app that reads environment variables within the container
-        helper.pam_iface().helper_set_container_env(helper.cookie, "test-var", "test-val")
-        time.sleep(1)
-        self.create_env_app(container_path)
-        assert helper.find_and_run_Launch_on_pelagicontain_on_dbus()
-        time.sleep(1)
-        assert self.is_env_set(container_path)
+        helper.pelagicontain_iface().Shutdown()
+        # Allow some time for Pelagicontain to make the subsequent call to PAM
+        time.sleep(0.5)
 
-        # --------------- Run tests for shutdown
-        success = True
-        try:
-            helper.teardown()
-        except:
-            success = False
-
-        assert success
-
-        """ The call to Pelagicontain::Shutdown should have triggered a call to
-            PAM::UnregisterClient
-        """
+        # The call to Pelagicontain::Shutdown should have triggered a call to
+        # PAM::UnregisterClient
         assert helper.pam_iface().test_unregisterclient_called()
+
+    def create_app(self, container_path):
+        containedapp_file = container_path + "/com.pelagicore.comptest/bin/containedapp"
+        with open(containedapp_file, "w") as f:
+            print "Overwriting containedapp..."
+            f.write(SLEEPY_APP)
+        os.system("chmod 755 " + containedapp_file)

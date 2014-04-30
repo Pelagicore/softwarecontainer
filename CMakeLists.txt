@@ -13,6 +13,9 @@ find_package(PkgConfig           REQUIRED)
 find_package(PelagicoreUtilities REQUIRED)
 find_package(PLog                REQUIRED)
 find_package(DBusCpp             REQUIRED)
+find_package(DBusCppGlib         REQUIRED)
+
+pkg_check_modules(GLIBMM glibmm-2.4)
 
 add_definitions(-DPACKAGE_VERSION="0.1")
 
@@ -26,7 +29,7 @@ endif()
 message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
-include_directories (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR})
+include_directories (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR} ${DBUSCPPGLIB_INCLUDE_DIR} ${GLIBMM_INCLUDE_DIRS})
 
 option(BUILD_TESTS "Enables unit testing" ON)
 if(BUILD_TESTS)

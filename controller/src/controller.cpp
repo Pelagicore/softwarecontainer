@@ -10,11 +10,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glibmm.h>
 
 #include "controller.h"
 
-Controller::Controller():
-    m_pid(0)
+Controller::Controller(Glib::RefPtr<Glib::MainLoop> ml):
+    m_ml(ml), m_pid(0)
 {
 }
 
@@ -22,31 +23,59 @@ Controller::~Controller()
 {
 }
 
+bool Controller::killMainLoop() {
+    if (m_ml) {
+        m_ml->quit();
+    }
+    return true;
+}
+
+void Controller::childSetupSlot()
+{
+    int ret = setpgid(0, 0);
+    if (ret == -1) {
+        perror("setpgid error: ");
+    }
+}
+
+void Controller::handleAppShutdownSlot(int pid, int exitCode) {
+    std::cout << "handled app shutdown" << std::endl;
+    shutdown();
+}
+
+void Controller::shutdown()
+{
+    sigc::slot<bool> shutdownSlot;
+    shutdownSlot = sigc::mem_fun(*this, &Controller::killMainLoop);
+    Glib::signal_idle().connect(shutdownSlot);
+}
+
 int Controller::runApp()
 {
     std::cout << "Will run app now..." << std::endl;
 
-    m_pid = fork();
-    if (m_pid == -1) {
-        perror("Error starting application: ");
-        return m_pid;
+    Glib::SignalChildWatch cw = Glib::signal_child_watch();
+
+    std::vector<std::string> executeCommandVec;
+    executeCommandVec = Glib::shell_parse_argv("/appbin/containedapp");
+    sigc::slot<void> setupSlot = sigc::mem_fun(*this, &Controller::childSetupSlot);
+    sigc::slot<void, int, int> shutdownSlot;
+    shutdownSlot = sigc::mem_fun(*this, &Controller::handleAppShutdownSlot);
+    try {
+        Glib::spawn_async_with_pipes(".",
+                                    executeCommandVec,
+                                    Glib::SPAWN_DO_NOT_REAP_CHILD
+                                        | Glib::SPAWN_SEARCH_PATH,
+                                    setupSlot,
+                                    &m_pid);
+    } catch (const Glib::Error& ex) {
+        // It's possible the spawn fails with an exception in which case we
+        // catch it to do some cleanup instead of crashing hard.
+        std::cout << "Error: " << ex.what() << std::endl;
     }
 
-    if (m_pid == 0) { // Child
-        // Set group id to the same as pid, that way we can kill any of the apps
-        // children on close.
-        int ret = setpgid(0, 0);
-        if (ret == -1) {
-            perror("setpgid error: ");
-        }
+    cw.connect(shutdownSlot, m_pid);
 
-        // This path to containedapp makes sense inside the container
-        ret = execlp("/appbin/containedapp", "containedapp", NULL);
-        if (ret == -1) {
-            perror("exec error: ");
-        }
-        exit(1);
-    } // Parent
     std::cout << "Started app with pid: " << "\"" << m_pid << "\"" << std::endl;
 
     return m_pid;
@@ -59,6 +88,7 @@ void Controller::killApp()
         std::cout << "WARNING: Trying to kill an app without previously having started one. "
             << "This is normal if this is a preloaded but unused container."
             << std::endl;
+        shutdown();
         return;
     }
 
@@ -66,14 +96,7 @@ void Controller::killApp()
     int ret = kill(-m_pid, SIGINT);
     if (ret == -1) {
         perror("Error killing application: ");
-    } else {
-        int status;
-        waitpid(m_pid, &status, 0);
-        if (WIFEXITED(status))
-            std::cout << "Controller: wait: app exited (WIFEXITED)" << std::endl;
-        if (WIFSIGNALED(status))
-            std::cout << "Controller: wait: app shut down by signal: " <<
-                WTERMSIG(status) << " (WIFSIGNALED)" << std::endl;
+        shutdown();
     }
 }
 

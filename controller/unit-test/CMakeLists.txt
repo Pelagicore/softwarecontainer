@@ -15,7 +15,8 @@ link_directories(
 TARGET_LINK_LIBRARIES(runUnitTestsController
         ${PELAGICORE_UTILS_LIBRARIES}
         ${DEPENDENCIES_LIBRARIES}
-        ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
+        ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES} ${DBUSCPPGLIB_LIBRARIES}
+        ${GLIBMM_LIBRARIES}
         gtest
         gtest_main
         gmock

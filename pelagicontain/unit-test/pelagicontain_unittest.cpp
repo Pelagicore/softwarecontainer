@@ -44,6 +44,11 @@ class StubController:
         return true;
     }
 
+    virtual bool hasBeenStarted() const
+    {
+        return true;
+    }
+
     virtual bool systemCall(const std::string &cmd)
     {
         return true;
@@ -90,7 +95,9 @@ using ::testing::NiceMock;
  * The test uses a mock of the abstract interface of PAM and calls
  * metods on Pelagicontain in the same sequence as the Launcher and
  * PAM would do. The assertions are only on how Pelagicontain calls
- * PAM in response to these calls.
+ * PAM in response to these calls. The shutdown phase is not tested since
+ * it relies on the controller to be running and catching it's exit signal
+ * after calling shutdown. This is tested in the component tests instead.
  */
 TEST(PelagicontainTest, TestInteractionWithPAM) {
     std::string appId = "the-app-id";
@@ -106,12 +113,10 @@ TEST(PelagicontainTest, TestInteractionWithPAM) {
         InSequence sequence;
         EXPECT_CALL(pam, registerClient(cookie, appId)).Times(1);
         EXPECT_CALL(pam, updateFinished(cookie)).Times(1);
-        EXPECT_CALL(pam, unregisterClient(cookie)).Times(1);
     }
 
     pc.launch(appId);
     pc.update(std::map<std::string, std::string>({{"", ""}}));
-    pc.shutdown();
 }
 
 /*! Test Pelagicontain calls Gateway::setConfig and Gateway::activate when
@@ -162,41 +167,4 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     {{gw1Id, ""}, {gw2Id, ""}, {gw3Id, ""}};
 
     pc.update(configs);
-}
-
-/*! Test Pelagicontain calls Gateway::teardown when Pelagicontain::update has
- * been called
- *
- * All gateways that are added on Pelagicontain::initialize should be torn
- * down when Pelagicontain::shutdown has been called.
- */
-TEST(PelagicontainTest, TestCallShutdownShouldTearDownGateways) {
-    /* "Nice mock", i.e. don't warn about uninteresting calls on this mock */
-    NiceMock<MockPAMAbstractInterface> pam;
-    StubMainloop mainloop;
-    StubController controller;
-
-    /* If we don't use pointers, there will be a crash when Pelagicontain
-     * calls delete on the Gateway object
-     */
-    MockGateway *gw1 = new MockGateway;
-    MockGateway *gw2 = new MockGateway;
-    MockGateway *gw3 = new MockGateway;
-
-    std::string gw1Id = "1";
-    std::string gw2Id = "2";
-    std::string gw3Id = "3";
-
-    EXPECT_CALL(*gw1, teardown()).Times(1);
-    EXPECT_CALL(*gw2, teardown()).Times(1);
-    EXPECT_CALL(*gw3, teardown()).Times(1);
-
-    const std::string cookie = "unimportant-cookie";
-    Pelagicontain pc(&pam, &mainloop, &controller, cookie);
-
-    pc.addGateway(gw1);
-    pc.addGateway(gw2);
-    pc.addGateway(gw3);
-
-    pc.shutdown();
 }

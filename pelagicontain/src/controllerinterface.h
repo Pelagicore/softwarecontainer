@@ -40,11 +40,16 @@ public:
      */
     virtual bool systemCall(const std::string &cmd);
 
+    /*! Implements ControllerAbstractInterface::hasBeenStarted
+     */
+    virtual bool hasBeenStarted() const;
+
 private:
     bool openFifo();
 
     int m_fifo;
     std::string m_fifoPath;
+    bool m_running;
 };
 
 #endif /* CONTROLLERINTERFACE_H */

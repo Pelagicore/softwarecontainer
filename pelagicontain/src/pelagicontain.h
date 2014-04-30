@@ -6,6 +6,7 @@
 #define PELAGICONTAIN_H
 
 #include <sys/types.h>
+#include <glibmm.h>
 
 #include "container.h"
 #include "paminterface.h"
@@ -45,7 +46,8 @@ public:
      * should be done as part of starting the whole Pelagicontain component.
      *
      * \param containerName Name of the container
-     * \param containerConfig Path to the global config (/etc/pelagicontain commonly)
+     * \param containerConfig Path to the global config (/etc/pelagicontain
+              commonly)
      * \param containerRoot A path to the root of the container, i.e. the base
      *  path to e.g. the configurations and application root
      * \param containedCommand The command to be executed inside the container
@@ -90,18 +92,49 @@ public:
 
     /*! Sets environment variable inside the container.
      *
-     * Notifies the controller to set the environment variable passed as argument
-     * inside the container.
+     * Notifies the controller to set the environment variable passed as
+     * argument inside the container.
      *
      * \param var The name of the environment variable to be set
      * \param val The value that the environement variable should be set to
      */
-    void setContainerEnvironmentVariable(const std::string &var, const std::string &val);
+    void setContainerEnvironmentVariable(const std::string &var,
+                                         const std::string &val);
+
+
+    void handle_controller_shutdown(const std::string, int, int);
 
 private:
     void setGatewayConfigs(const std::map<std::string, std::string> &configs);
     void activateGateways();
     void shutdownGateways();
+
+    /* Helper function used to terminate the main event loop */
+    bool killMainLoop() {
+        if (m_mainloopInterface) {
+            m_mainloopInterface->leave();
+        }
+        return true;
+    }
+
+    /*! Handle shutdown of the controller process inside a container
+     *
+     * Called by a SignalChildWatch source when the pid belonging to the
+     * controller exits. Takes care of:
+     *  - Cleaning up LXC (by issuing \a lxcDestroyCommand)
+     *  - Issuing Pelagicontain::shutdownGateways()
+     *  - PAMAbstractInterface::unregisterClient()
+     *  - Killing the main event loop (and thus exiting Pelagicontain)
+     *
+     * \param lxcDestroyCommand Shell command for terminating LXC. Typically
+     *        lxc-destroy plus some parameters
+     * \param controllerPid pid of the controller as spawned by
+     *        Pelagicontain::preload()
+     * \param exitCode exit code of \a controllerPid
+     */
+    void handleControllerShutdown(const std::string lxcDestroyCommand,
+                                        int controllerPid,
+                                        int controllerExitCode);
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
@@ -110,6 +143,9 @@ private:
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     std::string m_cookie;
+
+    // Keeps track of if someone has called launch
+    bool m_launching;
 };
 
 #endif /* PELAGICONTAIN_H */

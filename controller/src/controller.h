@@ -5,13 +5,15 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <glibmm.h>
+
 #include "abstractcontroller.h"
 
 class Controller:
     public AbstractController
 {
 public:
-    Controller();
+    Controller(Glib::RefPtr<Glib::MainLoop> ml);
     ~Controller();
 
     virtual int runApp();
@@ -21,6 +23,12 @@ public:
     virtual void systemCall(const std::string &command);
 
 private:
+    void shutdown();
+    bool killMainLoop();
+    void childSetupSlot();
+    void handleAppShutdownSlot(int pid, int exitCode);
+
+    Glib::RefPtr<Glib::MainLoop> m_ml;
     pid_t m_pid;
 };
 
