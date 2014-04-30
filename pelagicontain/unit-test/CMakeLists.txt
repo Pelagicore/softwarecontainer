@@ -28,13 +28,16 @@ link_directories(
 TARGET_LINK_LIBRARIES(runUnitTestsPelagicontain
 	${PELAGICORE_UTILS_LIBRARIES}
 	${DEPENDENCIES_LIBRARIES}
-	${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES} ${DBUSCPPGLIB_LIBRARIES}
-    ${GLIBMM_LIBRARIES}
+	${DBUS_LIBRARIES}
+	${DBUSCPP_LIBRARIES}
+	${DBUSCPPGLIB_LIBRARIES}
+	${GLIBMM_LIBRARIES}
 	gtest
 	gtest_main
 	gmock
 	gmock_main
 )
+
 include_directories(../src)
 
 add_test(

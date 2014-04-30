@@ -29,22 +29,24 @@ endif()
 message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
-include_directories (${DBUS_INCLUDE_DIR} ${DBUSCPP_INCLUDE_DIR} ${DBUSCPPGLIB_INCLUDE_DIR} ${GLIBMM_INCLUDE_DIRS})
+include_directories(
+	${DBUS_INCLUDE_DIR}
+	${DBUSCPP_INCLUDE_DIR}
+	${DBUSCPPGLIB_INCLUDE_DIR}
+	${GLIBMM_INCLUDE_DIRS}
+)
 
-option(BUILD_TESTS "Enables unit testing" ON)
-if(BUILD_TESTS)
+option(ENABLE_TEST "Enables unit testing" ON)
+if(ENABLE_TEST)
 	enable_testing()
 	add_gmock()
-	add_coverage()
-endif(BUILD_TESTS)
+endif()
+
+add_coverage()
 
 add_subdirectory(pelagicontain)
 add_subdirectory(controller)
-
-option(BUILD_COMPONENT_TESTS "Build test app used by the component test " OFF)
-if(BUILD_COMPONENT_TESTS)
-	add_subdirectory(pelagicontain/component-test/contained-app)
-endif(BUILD_COMPONENT_TESTS)
+add_subdirectory(doc)
 
 execute_process(COMMAND git submodule init)
 execute_process(COMMAND git submodule update)
