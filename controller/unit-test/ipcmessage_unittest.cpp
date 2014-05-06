@@ -41,9 +41,8 @@ TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
         EXPECT_CALL(controller, killApp()).Times(1);
     }
 
-    int status;
-    message.handleMessage(runAppCmd, &status);
-    message.handleMessage(killAppCmd, &status);
+    message.handleMessage(runAppCmd);
+    message.handleMessage(killAppCmd);
 }
 
 /*! Test that Controller::systemCall is called with the expected argument
@@ -58,8 +57,7 @@ TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
     std::string expectedArgument("this is a system call");
     EXPECT_CALL(controller, systemCall(expectedArgument)).Times(1);
 
-    int status;
-    message.handleMessage(systemCallCmd, &status);
+    message.handleMessage(systemCallCmd);
 }
 
 /*! Test that Controller::setEnvironmentVariable is called with the expected
@@ -75,29 +73,11 @@ TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
     std::string expectedValue("this is the value");
     EXPECT_CALL(controller, setEnvironmentVariable(expectedVariable, expectedValue)).Times(1);
 
-    int status;
-    message.handleMessage(setEnvironmentVariableCmd, &status);
+    message.handleMessage(setEnvironmentVariableCmd);
 }
 
-/*! Test that IPCMessage sets status flag as expeced on a valid message and
- * an invalid message.
- */
-TEST(IPCMessageTest, TestShouldSetErrorFlagAsExpected) {
-    NiceMock<MockAbstractController> controller;
-    IPCMessage message(controller);
-
-    int status = 123;
-    message.handleMessage(std::string("4 valid message"), &status);
-    EXPECT_EQ(status, 0);
-
-    status = 123;
-    message.handleMessage(std::string("invalid message"), &status);
-    EXPECT_EQ(status, -1);
-}
-
-/*! Test that IPCMessage returns the expected value. Valid and invalid messages
- * should get 'true' as a response, while a call to Controller::killApp should
- * result in 'false' as it means the IPC should stop sending more messages.
+/*! Test that IPCMessage returns the expected value. Valid messages should
+ * get 'true' back, and invalid messages should get 'false'
  */
 TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
     NiceMock<MockAbstractController> controller;
@@ -107,15 +87,14 @@ TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
     std::string invalidMessage("invalid message");
     std::string killAppMessage("2");
 
-    int status;
     bool returnVal;
 
-    returnVal = message.handleMessage(validMessage, &status);
+    returnVal = message.handleMessage(validMessage);
     EXPECT_EQ(returnVal, true);
 
-    returnVal = message.handleMessage(invalidMessage, &status);
-    EXPECT_EQ(returnVal, true);
-
-    returnVal = message.handleMessage(killAppMessage, &status);
+    returnVal = message.handleMessage(invalidMessage);
     EXPECT_EQ(returnVal, false);
+
+    returnVal = message.handleMessage(killAppMessage);
+    EXPECT_EQ(returnVal, true);
 }
