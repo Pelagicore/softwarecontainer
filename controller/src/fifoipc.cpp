@@ -51,20 +51,22 @@ bool FifoIPC::loop()
         return false;
     }
 
-    char buf[BUF_SIZE];
-    char c;
-    bool shouldContinue = true;
-
     struct pollfd pfd[2];
     pfd[0].fd = fd;
     pfd[0].events = POLLIN;
 
     int result = poll(pfd, 1, 100);
+    if (result == -1) {
+        perror("FifoIPC poll: ");
+        return false;
+    }
 
     if (!(pfd[0].revents & POLLIN)) {
         return true;
     }
 
+    char buf[BUF_SIZE];
+    char c;
     int i = 0;
     do {
         int status = read(fd, &c, 1);
@@ -85,13 +87,15 @@ bool FifoIPC::loop()
 
     buf[i] = '\0';
     std::string messageString(buf);
-    int messageStatus = 0;
+    bool messageProcessedOk = false;
     // If message is empty we don't need to handle it
-    if (messageString.size() > 0)
-        shouldContinue = m_message.handleMessage(messageString, &messageStatus);
-    if (messageStatus == -1)
+    if (messageString.size() > 0) {
+        messageProcessedOk = m_message.handleMessage(messageString);
+    }
+    if (!messageProcessedOk) {
         // The message was not understood by IPCMessage
         std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
+    }
 
     return true;
 }
