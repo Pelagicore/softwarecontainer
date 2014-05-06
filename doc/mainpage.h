@@ -207,8 +207,8 @@
    <code>sudo ./path/to/pam_stub.py</code>
 
    Launching each component test is then done with the following command: <br />
-   <code>sudo py.test /path/to/component-tests/test_component-name.py --pelagicontain_binary
-   /path/to/pelagicontain --container_path /path/to/container-root/ </code>
+   <code>sudo py.test /path/to/component-tests/test_component-name.py --pelagicontain-binary
+   /path/to/pelagicontain --container-path /path/to/container-root/ </code>
 
    So in the case where the container and environement is set up as above, and assuming
    we want to run a component test named 'test_pelagicontain.py', and that the current
