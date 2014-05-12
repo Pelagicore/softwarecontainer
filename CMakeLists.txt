@@ -48,5 +48,9 @@ add_subdirectory(pelagicontain)
 add_subdirectory(controller)
 add_subdirectory(doc)
 
-execute_process(COMMAND git submodule init)
-execute_process(COMMAND git submodule update)
+execute_process(
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMAND git submodule init)
+execute_process(
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMAND git submodule update)
