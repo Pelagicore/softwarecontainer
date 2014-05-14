@@ -55,6 +55,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     log_debug(createCommand.c_str());
     system(createCommand.c_str());
 
+    log_debug(executeCommand.c_str());
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv(executeCommand);
 
