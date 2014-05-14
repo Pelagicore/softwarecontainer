@@ -8,7 +8,6 @@
 from time import sleep
 import os
 import sys
-from subprocess import call
 
 from common import ComponentTestHelper
 
