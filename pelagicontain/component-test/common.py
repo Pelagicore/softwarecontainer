@@ -31,13 +31,14 @@ APP_ID = "com.pelagicore.comptest"
 
 
 class ComponentTestHelper:
-    def __init__(self):
+    def __init__(self, app_id=APP_ID):
         self.__pelagicontain_process = None
         self.__pelagicontain_pid = None
         self.__pc_iface = None
         self.__cookie = self.__generate_cookie()
+        self.__app_id = app_id
 
-        print "Generated Cookie = %s, appId = %s" % (self.__cookie, APP_ID)
+        print "Generated Cookie = %s, appId = %s" % (self.__cookie, self.__app_id)
 
         self.__bus = dbus.SessionBus()
 
@@ -140,7 +141,7 @@ class ComponentTestHelper:
         return self.__pc_iface
 
     def app_id(self):
-        return APP_ID
+        return self.__app_id
 
     def cookie(self):
         return self.__cookie

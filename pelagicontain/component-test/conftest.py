@@ -23,19 +23,29 @@ def teardown_fixture(request):
         Pass this fixture to any test function that should shutdown Pelagicontain
         upon assertion failure.
     """
-    helper = getattr(request.module, "helper")
+    helpers = list()
+    helper_attribute = getattr(request.module, "helper")
+    # The helper attribute of the requesting module should be either an
+    # instance of a test-helper or a list of instances
+    if type(helper_attribute) is list:
+        helpers = helper_attribute
+    else:
+        helpers.append(helper_attribute)
+
     def teardown():
         try:
             if request.node.rep_setup.failed:
                 print "Setup failed, shutting down Pelagicontain"
-                helper.teardown()
+                for helper in helpers:
+                    helper.teardown()
         except AttributeError as e:
             pass
 
         try:
             if request.node.rep_call.failed:
                 print "A test failed, shutting down Pelagicontain"
-                helper.teardown()
+                for helper in helpers:
+                    helper.teardown()
         except AttributeError as e:
             pass
 
