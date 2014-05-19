@@ -66,12 +66,6 @@ public:
      */
     virtual bool activate();
 
-    /*! Implements Gateway::environment
-     *
-     *  This gateway has no environment.
-     */
-    virtual std::string environment();
-
     /*! Implements Gateway::teardown
      *
      *  Unloads eventual PulseAudio modules and disconnects from the PulseAudio server.

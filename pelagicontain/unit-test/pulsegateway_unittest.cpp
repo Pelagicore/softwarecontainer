@@ -103,12 +103,6 @@ TEST_F(PulseGatewayTest, TestIdEqualspulseaudio) {
     ASSERT_STREQ(gw.id().c_str(), "pulseaudio");
 }
 
-TEST_F(PulseGatewayTest, TestHasNoEnvironment) {
-    PulseGateway gw(gatewayDir, containerName, &controllerInterface);
-
-    ASSERT_STREQ(gw.environment().c_str(), "");
-}
-
 /*! Test well-formed configuration that enables the gateway.
  *
  *  Tests with configurations that are syntactically correct, i.e. not

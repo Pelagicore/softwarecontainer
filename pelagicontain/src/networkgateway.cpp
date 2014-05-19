@@ -33,11 +33,6 @@ std::string NetworkGateway::id()
     return "networking";
 }
 
-std::string NetworkGateway::environment()
-{
-    return "";
-}
-
 bool NetworkGateway::setConfig(const std::string &config)
 {
     bool success = true;

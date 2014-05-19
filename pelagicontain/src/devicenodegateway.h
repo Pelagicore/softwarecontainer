@@ -104,12 +104,6 @@ public:
      */
     virtual bool activate();
 
-    /*! Implements Gateway::environment
-     *
-     * This gateway has no environment.
-     */
-    virtual std::string environment();
-
 private:
     struct Device {
         std::string name;

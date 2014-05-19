@@ -118,17 +118,7 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
 {
     int max_cmd_len = sysconf(_SC_ARG_MAX);
     char lxc_command[max_cmd_len];
-    std::string environment;
     std::vector<std::string> commands;
-
-    // Set up an environment
-    for (std::vector<Gateway *>::const_iterator it = gateways.begin();
-         it != gateways.end(); ++it) {
-        std::string env = (*it)->environment();
-        if (!env.empty())
-            environment += env + " ";
-    }
-    log_debug("Using environment: %s", environment.c_str());
 
     // Command to create container
     sprintf(lxc_command,
@@ -144,8 +134,10 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
     commands.push_back(std::string(lxc_command));
 
     // Create command to execute inside container
-    snprintf(lxc_command, max_cmd_len, "lxc-execute -n %s -- env %s %s",
-             name(), environment.c_str(), containedCommand.c_str());
+    snprintf(lxc_command, max_cmd_len,
+             "lxc-execute -n %s -- env %s",
+             name(),
+             containedCommand.c_str());
     commands.push_back(std::string(lxc_command));
 
     // Command to destroy container

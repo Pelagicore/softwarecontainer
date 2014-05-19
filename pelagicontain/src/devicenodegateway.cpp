@@ -19,11 +19,6 @@ std::string DeviceNodeGateway::id()
     return "devicenode";
 }
 
-std::string DeviceNodeGateway::environment()
-{
-    return "";
-}
-
 bool DeviceNodeGateway::setConfig(const std::string &config)
 {
     json_error_t error;

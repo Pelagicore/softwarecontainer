@@ -137,11 +137,6 @@ bool PulseGateway::connectToPulseServer()
     return success;
 }
 
-std::string PulseGateway::environment()
-{
-    return "";
-}
-
 std::string PulseGateway::socketName()
 {
     char socket[1024];
