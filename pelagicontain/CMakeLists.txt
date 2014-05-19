@@ -8,5 +8,11 @@ if(ENABLE_TEST)
 	add_subdirectory(unit-test)
 endif(ENABLE_TEST)
 
-install(PROGRAMS lxc-pelagicontain DESTINATION ${LXC_TEMPLATE_DIR})
+set(LXC_HOOK_SCRIPT_MAKESLAVE "${LXC_HOOK_SCRIPTS_DIR}/lxc-hook-makeslave.sh")
+configure_file(
+	${PROJECT_SOURCE_DIR}/pelagicontain/lxc-pelagicontain.in
+	${CMAKE_BINARY_DIR}/pelagicontain/lxc-pelagicontain
+)
+install(PROGRAMS ${CMAKE_BINARY_DIR}/pelagicontain/lxc-pelagicontain DESTINATION ${LXC_TEMPLATE_DIR})
 install(FILES pelagicontain.conf DESTINATION ${SYS_CONFIG_DIR})
+install(PROGRAMS lxc-hook-makeslave.sh DESTINATION ${LXC_HOOK_SCRIPTS_DIR})

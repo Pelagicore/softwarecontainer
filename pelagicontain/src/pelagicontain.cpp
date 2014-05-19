@@ -59,13 +59,20 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv(executeCommand);
 
+    std::vector<std::string> envVarVec = {"MOUNT_DIR=" + containerRoot + "/late_mounts"};
+
     int pid;
-    Glib::spawn_async_with_pipes(".",
-                                 executeCommandVec,
-                                 Glib::SPAWN_DO_NOT_REAP_CHILD 
-                                    | Glib::SPAWN_SEARCH_PATH,
-                                 sigc::slot<void>(),
-                                 &pid);
+    try {
+        Glib::spawn_async_with_pipes(
+            ".",
+            executeCommandVec,
+            envVarVec,
+            Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
+            sigc::slot<void>(),
+            &pid);
+    } catch (const Glib::Error &ex) {
+        log_error("spawn error: %s", ex.what().c_str());
+    }
 
     sigc::slot<void, int, int> shutdownSlot;
     shutdownSlot = sigc::bind<0>(

@@ -22,12 +22,15 @@ add_definitions(-DPACKAGE_VERSION="0.1")
 if(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
 	SET(SYS_CONFIG_DIR /etc)
 	SET(LXC_TEMPLATE_DIR /var/hl/lxc-templates/)
+	SET(LXC_HOOK_SCRIPTS_DIR /var/hl/lxc-hook-scripts/)
 else()
 	SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
 	SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_PREFIX}/var/hl/lxc-templates)
+	SET(LXC_HOOK_SCRIPTS_DIR ${CMAKE_INSTALL_PREFIX}/var/hl/lxc-hook-scripts)
 endif()
 message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
+message("LXC hook scripts will be installed in " ${LXC_HOOK_SCRIPTS_DIR})
 
 include_directories(
 	${DBUS_INCLUDE_DIR}
