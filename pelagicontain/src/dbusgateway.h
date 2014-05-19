@@ -88,10 +88,6 @@ public:
      */
     virtual bool activate();
 
-    /*! Implements Gateway::environment
-     */
-    virtual std::string environment();
-
     /*! Implements Gateway::teardown
      *
      *  This function will clean up processes launched and file descriptors

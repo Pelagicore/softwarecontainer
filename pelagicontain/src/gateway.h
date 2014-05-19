@@ -23,14 +23,6 @@ public:
     virtual ~Gateway() {
     };
 
-    /*! Additions to the environment relevant to this gateway. The string
-     * returned by this function must be usable with the 'env' util of
-     * coreutils
-     *
-     * \returns Core-utils compatible environment
-     */
-    virtual std::string environment() = 0;
-
     /*! Used by pelagicontain to map configurations to gateways */
     virtual std::string id() = 0;
 

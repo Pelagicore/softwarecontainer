@@ -148,8 +148,3 @@ std::string DBusGateway::socketName()
     std::string socket(m_socket.c_str());
     return socket.substr(socket.rfind('/') + 1);
 }
-
-std::string DBusGateway::environment()
-{
-    return "";
-}

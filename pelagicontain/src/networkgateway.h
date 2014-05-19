@@ -31,10 +31,6 @@ public:
      */
     virtual bool activate();
 
-    /*! Implements Gateway::environment
-     */
-    virtual std::string environment();
-
     /*! Returns the IP of the container
      */
     std::string ip();
