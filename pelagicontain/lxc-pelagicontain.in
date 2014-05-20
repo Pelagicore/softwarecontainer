@@ -218,12 +218,11 @@ lxc.pts = 1
 #lxc.aa_profile = unconfined
 EOF
 
-if [ -d "$rootfs/lib" ]; then
 cat <<EOF >> $path/config
 lxc.mount.entry = /lib $rootfs/lib none ro,bind 0 0
 lxc.mount.entry = /usr/lib $rootfs/usr/lib none ro,bind 0 0
+lxc.mount.entry = /usr/sbin $rootfs/usr/sbin none ro,bind 0 0
 EOF
-fi
 
 if [ -n "$GATEWAY_DIR" ]; then
 cat <<EOF >> $path/config
