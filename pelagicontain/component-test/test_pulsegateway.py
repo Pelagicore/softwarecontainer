@@ -45,6 +45,8 @@ def setup_suite(container_path):
 
     # PulseAudio server requires a home directory to be set
     os.environ['HOME'] = "/root/"
+    os.environ['XDG_RUNTIME_DIR'] = '/tmp/test'
+    os.environ['PULSE_SERVER'] = '/tmp/test/pulse/native'
 
     if not find_and_copy_paplay():
         print "Problem copying paplay"
