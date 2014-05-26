@@ -15,11 +15,11 @@
  * basic flow between components, consider it a test. Must be made more useful and robust!
  */
 
-
+LOG_DECLARE_DEFAULT_CONTEXT(Controller_DefaultLogContext, "CON", "Main context");
 
 int main(int argc, char **argv)
 {
-    std::cout << "In Controller" << std::endl;
+    log_info() << "In Controller" ;
 
     /** The first command line arg to controller can be the path to where the
      *  FIFO file will be created. This is set to /gateways/ if it is

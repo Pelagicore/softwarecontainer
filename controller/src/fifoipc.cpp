@@ -25,7 +25,7 @@ FifoIPC::~FifoIPC()
 {
     int ret = unlink(m_fifoPath.c_str());
     if (ret == -1) {
-        perror("unlink: ");
+    	log_error("unlink: ") << strerror(errno);
     }
 }
 
@@ -35,7 +35,7 @@ bool FifoIPC::initialize(const std::string &fifoPath)
 
     if (m_fifoCreated == false) {
         if (createFifo() == false) {
-            std::cout << "Could not create FIFO!" << std::endl;
+            log_info() << "Could not create FIFO!" ;
             return false;
         }
     }
@@ -47,7 +47,7 @@ bool FifoIPC::loop()
 {
     int fd = open(m_fifoPath.c_str(), O_RDONLY);
     if (fd == -1) {
-        perror("FifoIPC open: ");
+    	log_error("FifoIPC open: ") << strerror(errno);
         return false;
     }
 
@@ -57,7 +57,7 @@ bool FifoIPC::loop()
 
     int result = poll(pfd, 1, 100);
     if (result == -1) {
-        perror("FifoIPC poll: ");
+    	log_error("FifoIPC poll: ") << strerror(errno);
         return false;
     }
 
@@ -76,10 +76,10 @@ bool FifoIPC::loop()
             // We've read 'end of file', just ignore it
             break;
         } else if (status == -1) {
-            perror("FifoIPC read: ");
+        	log_error("FifoIPC read: ") << strerror(errno);
             return false;
         } else {
-            std::cout << "Error: Unknown problem reading fifo" << std::endl;
+            log_error() << "Unknown problem reading fifo" ;
             return false;
         }
     // Look for end of message or end of storage buffer
@@ -94,7 +94,7 @@ bool FifoIPC::loop()
     }
     if (!messageProcessedOk) {
         // The message was not understood by IPCMessage
-        std::cout << "Warning: IPC message to Controller was not sent" << std::endl;
+        log_info() << "Warning: IPC message to Controller was not sent" ;
     }
 
     return true;
@@ -105,7 +105,7 @@ bool FifoIPC::createFifo()
     int ret = mkfifo(m_fifoPath.c_str(), 0666);
     // All errors except for when fifo already exist are bad
     if ((ret == -1) && (errno != EEXIST)) {
-        perror("Error creating fifo: ");
+    	log_error("Error creating fifo: ") << strerror(errno);
         return false;
     }
 

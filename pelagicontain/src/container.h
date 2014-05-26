@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "gateway.h"
+#include "log.h"
 
 /*! Container is an abstraction of the specific containment technology used.
  *
@@ -19,6 +20,8 @@
  */
 class Container
 {
+	LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+
 public:
 
     /*!

@@ -7,6 +7,7 @@
 
 #include <string>
 #include "systemcallabstractinterface.h"
+#include "log.h"
 
 /*! SystemcallInterface provides an interface to the host system.
  *
@@ -16,6 +17,8 @@
 class SystemcallInterface:
     public SystemcallAbstractInterface
 {
+	LOG_DECLARE_CLASS_CONTEXT("SYSC", "System call interface");
+
 public:
     SystemcallInterface();
     ~SystemcallInterface();

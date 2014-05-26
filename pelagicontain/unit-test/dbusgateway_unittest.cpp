@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "dbusgateway.h"
-#include "debug.h"
+#include "log.h"
 
 using namespace pelagicore;
 

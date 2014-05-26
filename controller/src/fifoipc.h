@@ -8,6 +8,7 @@
 #include <string>
 
 #include "ipcmessage.h"
+#include "log.h"
 
 /*! FifoIPC is an implementation of an IPC based on a named pipe.
  *
@@ -15,6 +16,8 @@
  */
 class FifoIPC
 {
+	LOG_DECLARE_CLASS_CONTEXT("FIFO", "Controller");
+
 public:
     FifoIPC(IPCMessage &message);
     ~FifoIPC();

@@ -25,6 +25,8 @@ namespace {
 
 class PelagicontainComponentTest: public ::testing::Test {
 
+	LOG_DECLARE_CLASS_CONTEXT("TEST", "Pelagicontain component test");
+
 protected:
     std::string m_containerRoot = "/tmp/pc-component-test/";
     std::string m_appRoot = m_containerRoot + "rootfs/";
@@ -41,7 +43,7 @@ protected:
         std::string controller = m_appRoot + "controller";
         struct stat st;
         if (stat(controller.c_str(), &st) != 0) {
-            std::cout << "Error: test did not find controller at: " << controller << std::endl;
+            log_info() << "Error: test did not find controller at: " << controller ;
             exit(1);
         }
 
@@ -95,7 +97,7 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
 
     int fh = open(m_outputFile.c_str(), O_RDONLY);
     if (fh == -1) {
-        perror("open: ");
+    	log_error("open: ") << strerror(errno);
     }
 
     // Read the file content echoed from controller
@@ -106,7 +108,7 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
         memset(buf, 0, sizeof(buf));
         status = read(fh, buf, sizeof(buf));
         if (status == -1) {
-            perror("read: ");
+        	log_error("read: ") << strerror(errno);
         } else if (status > 0) {
             fileContent = std::string(buf);
             break;
@@ -115,7 +117,7 @@ TEST_F(PelagicontainComponentTest, TestControllerExecutesSystemCall) {
 
     int ret = close(fh);
     if (ret == -1) {
-        perror("close: ");
+    	log_error("close: ") << strerror(errno);
     }
 
     EXPECT_EQ(echoedString, fileContent);
@@ -146,7 +148,7 @@ TEST_F(PelagicontainComponentTest, TestControllerSetsEnvironmentVariable) {
 
     int fh = open(m_outputFile.c_str(), O_RDONLY);
     if (fh == -1) {
-        perror("open: ");
+    	log_error("open: ") << strerror(errno);
     }
 
     // Read file content and assert it's the same as the variable was set to
@@ -157,7 +159,7 @@ TEST_F(PelagicontainComponentTest, TestControllerSetsEnvironmentVariable) {
         memset(buf, 0, sizeof(buf));
         status = read(fh, buf, sizeof(buf));
         if (status == -1) {
-            perror("read: ");
+        	log_error("read: ") << strerror(errno);
         } else if (status > 0) {
             fileContent = std::string(buf);
             break;
@@ -166,7 +168,7 @@ TEST_F(PelagicontainComponentTest, TestControllerSetsEnvironmentVariable) {
 
     int ret = close(fh);
     if (ret == -1) {
-        perror("close: ");
+    	log_error("close: ") << strerror(errno);
     }
 
     EXPECT_EQ(value, fileContent);

@@ -34,6 +34,8 @@
  */
 class DBusGateway: public Gateway
 {
+	LOG_DECLARE_CLASS_CONTEXT("DBUS", "DBus gateway");
+
 public:
     enum ProxyType {SessionProxy, SystemProxy};
 

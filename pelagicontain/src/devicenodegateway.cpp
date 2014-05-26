@@ -2,7 +2,6 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#include "debug.h"
 #include "generators.h"
 #include "jansson.h"
 

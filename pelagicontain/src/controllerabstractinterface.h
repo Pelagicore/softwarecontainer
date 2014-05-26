@@ -5,6 +5,8 @@
 #ifndef CONTROLLERABSTRACTINTERFACE_H
 #define CONTROLLERABSTRACTINTERFACE_H
 
+#include <string>
+
 /*! ControllerAbstractInterface is an abstract interface to the Controller.
  *
  *  This class is used by Pelagicontain to communicate with Controller

@@ -4,7 +4,6 @@
  */
 #include <stdio.h>
 #include "pulsegateway.h"
-#include "debug.h"
 #include "jansson.h"
 #include <libgen.h>
 

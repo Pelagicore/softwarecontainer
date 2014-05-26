@@ -3,7 +3,7 @@
  *   All rights reserved.
  */
 #include "CommandLineParser.h"
-#include "debug.h"
+#include "log.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
@@ -25,7 +25,7 @@
 #include <dbus-c++/glib-integration.h>
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
-LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
+LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 #ifndef CONFIG
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    std::string containerName = gen_ct_name();
+    std::string containerName = Generator::gen_ct_name();
     std::string containerConfig(configFilePath);
 
     // Create gateway directory for container in containerRoot/gateways.

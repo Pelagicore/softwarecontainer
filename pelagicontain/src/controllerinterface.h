@@ -8,6 +8,7 @@
 #include <string>
 
 #include "controllerabstractinterface.h"
+#include "log.h"
 
 /*! ControllerInterface is an interface to Controller.
  *
@@ -18,6 +19,8 @@
 class ControllerInterface:
     public ControllerAbstractInterface
 {
+	LOG_DECLARE_CLASS_CONTEXT("CTLI", "Controller interface");
+
 public:
     ControllerInterface(const std::string &gatewayDir);
 

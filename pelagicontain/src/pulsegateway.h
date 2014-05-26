@@ -32,6 +32,8 @@
 class PulseGateway:
     public Gateway
 {
+	LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
+
 public:
     PulseGateway(
         const std::string &gatewayDir

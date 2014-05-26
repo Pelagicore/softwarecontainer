@@ -6,7 +6,7 @@
 #include "gtest/gtest.h"
 
 #include "log-console.h"
-#include "debug.h"
+#include "log.h"
 
 LOG_DEFINE_APP_IDS("CON", "Controller");
 LOG_DECLARE_CONTEXT(Controller_DefaultLogContext, "CON", "Main context");

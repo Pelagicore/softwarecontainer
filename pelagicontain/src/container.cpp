@@ -5,7 +5,6 @@
 #include <fstream>
 #include <unistd.h>
 #include "container.h"
-#include "debug.h"
 #include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/types.h>

@@ -7,7 +7,6 @@
 #include <errno.h>
 #include <iostream>
 
-#include "debug.h"
 #include "controllerinterface.h"
 
 ControllerInterface::ControllerInterface(const std::string &gatewayDir):

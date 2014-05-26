@@ -14,6 +14,8 @@
 #include "mainloopabstractinterface.h"
 
 class Pelagicontain {
+	LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+
 public:
     /*! Constructor
      *

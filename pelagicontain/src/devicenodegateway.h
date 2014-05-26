@@ -65,6 +65,8 @@
  */
 class DeviceNodeGateway: public Gateway
 {
+	LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
+
 public:
     DeviceNodeGateway(ControllerAbstractInterface *controllerInterface);
     ~DeviceNodeGateway(){

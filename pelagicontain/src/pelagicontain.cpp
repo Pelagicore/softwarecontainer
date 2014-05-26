@@ -7,7 +7,6 @@
 #include <glibmm.h>
 
 #include "container.h"
-#include "debug.h"
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,

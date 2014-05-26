@@ -6,6 +6,7 @@
 #define GENERATORS_H
 
 #include <string>
+#include "log.h"
 
 /*! \brief  Generator functions
  *  \file   generators.h
@@ -14,6 +15,11 @@
  *  names, IP addresses and container names. By using these functions, unique
  *  names are ensured
  */
+class Generator {
+
+	LOG_DECLARE_CLASS_CONTEXT("GEN", "Generator");
+
+public:
 
 /*! \brief Generate a network interface name
  *
@@ -25,7 +31,7 @@
  * \return A unique network interface name
  * \return NULL upon error
  */
-std::string gen_net_iface_name(const char *ip_addr_net);
+static std::string gen_net_iface_name(const char *ip_addr_net);
 
 /*!  \brief Generate a gateway address
  *
@@ -35,7 +41,7 @@ std::string gen_net_iface_name(const char *ip_addr_net);
  * \return A gateway IP address
  * \return NULL upon error
  */
-char *gen_gw_ip_addr (char *ip_addr_net);
+static char *gen_gw_ip_addr (char *ip_addr_net);
 
 /*! \brief Generate an IP address
  *
@@ -45,7 +51,7 @@ char *gen_gw_ip_addr (char *ip_addr_net);
  * \param ip_addr_net A 24 bit network portion of an IP address
  * \return A string representing an IP address
  */
-std::string gen_ip_addr (const char *ip_addr_net);
+static std::string gen_ip_addr (const char *ip_addr_net);
 
 /*! \brief Generate a container name
  *
@@ -54,6 +60,8 @@ std::string gen_ip_addr (const char *ip_addr_net);
  * \return name upon success
  * \return NULL upon failure
  */
-std::string gen_ct_name();
+static std::string gen_ct_name();
+
+};
 
 #endif /* GENERATORS_H */

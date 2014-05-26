@@ -13,13 +13,12 @@
 #include "ifaddrs.h"
 
 #include "generators.h"
-#include "debug.h"
 
 using namespace std;
 
 const static char *iface_counter_file = "/tmp/pelc_ifc";
 
-std::string gen_net_iface_name (const char *ip_addr_net)
+std::string Generator::gen_net_iface_name (const char *ip_addr_net)
 {
     struct  ifaddrs *ifaddr, *ifa;
     int collision = 0;
@@ -29,7 +28,7 @@ std::string gen_net_iface_name (const char *ip_addr_net)
         snprintf(iface, sizeof(iface), "veth-%d", (rand() % 1024));
 
         if (getifaddrs(&ifaddr) == -1) {
-            perror("getifaddrs");
+        	log_error("getifaddrs") << strerror(errno);
             exit(EXIT_FAILURE);
         }
 
@@ -53,7 +52,7 @@ std::string gen_net_iface_name (const char *ip_addr_net)
  * Read the counter value from iface_counter_file and increase it to
  * find the next ip. Naively assumes no ip collisions occur at the moment.
  */
-std::string gen_ip_addr (const char *ip_addr_net)
+std::string Generator::gen_ip_addr (const char *ip_addr_net)
 {
     int fd = open(iface_counter_file, O_CREAT | O_RDWR);
     int counter = 0;
@@ -90,7 +89,7 @@ std::string gen_ip_addr (const char *ip_addr_net)
     return std::string(ip);
 }
 
-std::string gen_ct_name()
+std::string Generator::gen_ct_name()
 {
     static const char alphanum[] = "abcdefghijklmnopqrstuvwxyz";
     struct timeval time;

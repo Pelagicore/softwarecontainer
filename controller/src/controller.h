@@ -8,10 +8,13 @@
 #include <glibmm.h>
 
 #include "abstractcontroller.h"
+#include "log.h"
 
 class Controller:
     public AbstractController
 {
+	LOG_DECLARE_CLASS_CONTEXT("CTRL", "Controller");
+
 public:
     Controller(Glib::RefPtr<Glib::MainLoop> ml);
     ~Controller();

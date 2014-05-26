@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include "dbusgateway.h"
-#include "debug.h"
+#include "log.h"
 
 DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
                          SystemcallAbstractInterface *systemcallInterface,

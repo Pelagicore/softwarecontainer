@@ -4,7 +4,6 @@
  */
 
 #include "systemcallinterface.h"
-#include "debug.h"
 #include <stdio.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -63,7 +62,7 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
         setpgid(0, 0);
 
         execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
-        perror("execl");
+    	log_error("execl") << strerror(errno);
         exit(1);
     }
 

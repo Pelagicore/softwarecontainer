@@ -5,7 +5,6 @@
 #include <cstring>
 #include "ifaddrs.h"
 #include "unistd.h"
-#include "debug.h"
 #include "networkgateway.h"
 #include "jansson.h"
 #include "generators.h"
@@ -109,7 +108,7 @@ bool NetworkGateway::generateIP()
 {
     const char * ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
 
-    m_ip = gen_ip_addr(ipAddrNet);
+    m_ip = Generator::gen_ip_addr(ipAddrNet);
     log_debug("IP set to %s\n", m_ip.c_str());
 
     return true;
@@ -238,7 +237,7 @@ int NetworkGateway::waitForDevice(const std::string &iface)
     while (i < max_poll && found_iface == false) {
         if (getifaddrs(&ifaddr) == -1) {
             retval = -EINVAL;
-            perror("getifaddrs");
+        	log_error("getifaddrs") << strerror(errno);
             goto cleanup_wait;
         }
 

@@ -8,6 +8,7 @@
 #include "string.h"
 #include "jansson.h"
 #include "errno.h"
+#include "log.h"
 
 /*! Key-value configuration system.
  *
@@ -16,6 +17,9 @@
  */
 
 class ConfigParser {
+
+	LOG_DECLARE_CLASS_CONTEXT("CFGP", "Config parser");
+
 public:
     ConfigParser();
     ~ConfigParser();
