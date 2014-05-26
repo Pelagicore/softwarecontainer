@@ -102,6 +102,7 @@ void Pelagicontain::handleControllerShutdown(const std::string lxcExitCommand,
 
 void Pelagicontain::launch(const std::string &appId)
 {
+    log_debug("Launch called with appId: %s", appId.c_str());
     m_launching = true;
     m_appId = appId;
     if (m_container) {
@@ -113,6 +114,7 @@ void Pelagicontain::launch(const std::string &appId)
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
+    log_debug("update called");
     setGatewayConfigs(configs);
 
     m_pamInterface->updateFinished(m_cookie);
@@ -159,6 +161,7 @@ void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, cons
 
 void Pelagicontain::shutdown()
 {
+    log_debug("shutdown called");
     // Tell Controller to shut down the app and Controller will exit when the
     // app has shut down and then we will handle the signal through the handler.
     m_controllerInterface->shutdown();
