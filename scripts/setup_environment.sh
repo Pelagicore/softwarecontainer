@@ -87,10 +87,6 @@ else
     echo 1 > /proc/sys/net/ipv4/ip_forward
 fi
 
-# Required for PulseAudio
-export XDG_RUNTIME_DIR=/tmp/test
-export PULSE_SERVER=$XDG_RUNTIME_DIR/pulse/native
-
 if [ -d "$deploydir/late_mounts" ]; then
     echo "Found $deploydir/late_mounts"
 else
