@@ -67,10 +67,10 @@ bool PulseGateway::setConfig(const std::string &config)
     std::string value = parseConfig(config.c_str(), "audio", &err);
 
     if (value == "true") {
-        log_debug("Audio will be enabled\n");
+        log_debug("Audio will be enabled");
         m_enableAudio = true;
     } else {
-        log_debug("Audio will be disabled\n");
+        log_debug("Audio will be disabled");
         if (err == ConfigError::BadConfig) {
             log_error("Malformed configuration file");
             success = false;
@@ -220,7 +220,7 @@ std::string PulseGateway::parseConfig(
     root = json_loads(config.c_str(), 0, &error);
 
     if (!root) {
-        log_error("Error on line %d: %s\n", error.line, error.text);
+        log_error("Error on line %d: %s", error.line, error.text);
         *err = ConfigError::BadConfig;
         goto cleanup_parse_json;
     }
@@ -235,7 +235,7 @@ std::string PulseGateway::parseConfig(
 
     if (!json_is_string(value)) {
         log_error("Value is not a string.");
-        log_error("error: on line %d: %s\n", error.line, error.text);
+        log_error("error: on line %d: %s", error.line, error.text);
         *err = ConfigError::BadConfig;
         json_decref(value);
         goto cleanup_parse_json;

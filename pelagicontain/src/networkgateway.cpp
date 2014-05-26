@@ -40,12 +40,12 @@ bool NetworkGateway::setConfig(const std::string &config)
     std::string value = parseConfig(config.c_str(), "internet-access");
     if (value.compare("true") == 0)
     {
-        log_debug("Internet access will be enabled\n");
+        log_debug("Internet access will be enabled");
         m_internetAccess = true;
     }
     else
     {
-        log_debug("Internet access disabled\n");
+        log_debug("Internet access disabled");
         m_internetAccess = false;
     }
 
@@ -54,16 +54,16 @@ bool NetworkGateway::setConfig(const std::string &config)
 
     if (m_gateway.compare("") != 0)
     {
-        log_debug("Default gateway set to %s\n", m_gateway.c_str());
+        log_debug("Default gateway set to %s", m_gateway.c_str());
     }
     else
     {
         m_internetAccess = false;
-        log_debug("No gateway. Network access will be disabled\n");
+        log_debug("No gateway. Network access will be disabled");
 
         if (m_internetAccess)
         {
-            log_error("Bad gateway setting in configuration file\n");
+            log_error("Bad gateway setting in configuration file");
             success = false;
         }
     }
@@ -109,7 +109,7 @@ bool NetworkGateway::generateIP()
     const char * ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
 
     m_ip = Generator::gen_ip_addr(ipAddrNet);
-    log_debug("IP set to %s\n", m_ip.c_str());
+    log_debug("IP set to %s", m_ip.c_str());
 
     return true;
 }
@@ -204,19 +204,19 @@ int NetworkGateway::limitIface(const std::string &ifaceName, const std::string &
 
         /* poll for device */
         if (!waitForDevice(ifaceName)) {
-            log_error("Device never showed up. Not setting TC.\n");
+            log_error("Device never showed up. Not setting TC.");
             /* We're forked, so just exit */
             exit(0);
         }
 
         /* issue command */
-        log_debug("issuing: %s\n", cmd);
+        log_debug("issuing: %s", cmd);
         system(cmd);
         exit(0);
 
     } else { /* parent */
         if (pid == -1) {
-            log_error("Unable to fork interface observer!\n");
+            log_error("Unable to fork interface observer!");
             return -EINVAL;
         }
         return 0;
@@ -247,7 +247,7 @@ int NetworkGateway::waitForDevice(const std::string &iface)
                 continue;
             } else {
                 if (strcmp(ifa->ifa_name, iface.c_str()) == 0) {
-                    log_debug("Device found: %s\n", ifa->ifa_name);
+                    log_debug("Device found: %s", ifa->ifa_name);
                     found_iface = true;
                     break;
                 }
@@ -283,7 +283,7 @@ int NetworkGateway::clearIfaceLimits(char *iface)
              iface);
 
     if (system(cmd) == -1) {
-        log_error("Unable to execute limit clear command\n");
+        log_error("Unable to execute limit clear command");
         return -EINVAL;
     }
 
@@ -372,7 +372,7 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
     root = json_loads(config.c_str(), 0, &error);
 
     if (!root) {
-        log_error("Error on line %d: %s\n", error.line, error.text);
+        log_error("Error on line %d: %s", error.line, error.text);
         goto cleanup_parse_json;
     }
 
@@ -381,7 +381,7 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
 
     if (!json_is_string(value)) {
         log_error("Value is not a string.");
-        log_error("error: on line %d: %s\n", error.line, error.text);
+        log_error("error: on line %d: %s", error.line, error.text);
         json_decref(value);
         goto cleanup_parse_json;
     }

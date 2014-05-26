@@ -25,13 +25,13 @@ bool DeviceNodeGateway::setConfig(const std::string &config)
     bool success = true;
     std::vector<struct Device> newDevList;
 
-    log_debug("DeviceNodeGateway::setConfig called\n");
+    log_debug("DeviceNodeGateway::setConfig called");
 
     /* Get root JSON object */
     root = json_loads(config.c_str(), 0, &error);
 
     if (!root) {
-        log_error("Error on line %d: %s\n", error.line, error.text);
+        log_error("Error on line %d: %s", error.line, error.text);
         success = false;
         goto cleanup_setConfig;
     }
@@ -41,7 +41,7 @@ bool DeviceNodeGateway::setConfig(const std::string &config)
 
     if (!json_is_array(devices)) {
         log_error("Value is not an array.");
-        log_error("error: on line %d: %s\n", error.line, error.text);
+        log_error("error: on line %d: %s", error.line, error.text);
         success = false;
         goto cleanup_setConfig;
     }

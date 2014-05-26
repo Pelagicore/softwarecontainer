@@ -117,7 +117,7 @@ bool DBusGateway::teardown() {
 
     if(m_pid != -1) {
         if(!m_systemcallInterface->makePcloseCall(m_pid, m_infp, m_outfp)) {
-            log_error("makePcloseCall() returned error\n");
+            log_error("makePcloseCall() returned error");
             success = false;
         }
     } else {
@@ -126,7 +126,7 @@ bool DBusGateway::teardown() {
     }
 
     if(unlink(m_socket.c_str()) == -1) {
-        log_error("Could not remove %s\n", m_socket.c_str());
+        log_error("Could not remove %s", m_socket.c_str());
         success = false;
     }
 
