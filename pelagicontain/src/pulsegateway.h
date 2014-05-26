@@ -38,7 +38,7 @@ public:
     PulseGateway(
         const std::string &gatewayDir
         , const std::string &containerName
-        , ControllerAbstractInterface *controllerInterface);
+        , ControllerAbstractInterface &controllerInterface);
     ~PulseGateway();
 
     /*!
@@ -141,7 +141,6 @@ private:
     std::string m_socket;
     int m_index;
     bool m_enableAudio;
-    ControllerAbstractInterface *m_controllerInterface;
 };
 
 #endif /* PULSEGATEWAY_H */

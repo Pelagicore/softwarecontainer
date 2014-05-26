@@ -43,8 +43,8 @@ public:
      *
      * \param  type       SessionProxy or SystemProxy
      */
-    DBusGateway(ControllerAbstractInterface *controllerInterface,
-                SystemcallAbstractInterface *systemcallInterface,
+    DBusGateway(ControllerAbstractInterface &controllerInterface,
+                SystemcallAbstractInterface &systemcallInterface,
                 ProxyType type,
                 const std::string &gatewayDir,
                 const std::string &name);
@@ -107,7 +107,7 @@ private:
     const char *typeString();
     std::string socketName();
 
-    SystemcallAbstractInterface *m_systemcallInterface;
+    SystemcallAbstractInterface &m_systemcallInterface;
 
     // Socket used for exposing D-Bus in container
     std::string m_socket;

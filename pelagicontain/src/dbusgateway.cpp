@@ -9,8 +9,8 @@
 #include "dbusgateway.h"
 #include "log.h"
 
-DBusGateway::DBusGateway(ControllerAbstractInterface *controllerInterface,
-                         SystemcallAbstractInterface *systemcallInterface,
+DBusGateway::DBusGateway(ControllerAbstractInterface &controllerInterface,
+                         SystemcallAbstractInterface &systemcallInterface,
                          ProxyType type,
                          const std::string &gatewayDir,
                          const std::string &name):
@@ -75,12 +75,12 @@ bool DBusGateway::activate()
 
     std::string value = "unix:path=/gateways/";
     value += socketName();
-    m_controllerInterface->setEnvironmentVariable(variable, value);
+    getController().setEnvironmentVariable(variable, value);
 
     // Open pipe
     std::string command = "dbus-proxy ";
     command += m_socket + " " + typeString();
-    m_pid = m_systemcallInterface->makePopenCall(command,
+    m_pid = m_systemcallInterface.makePopenCall(command,
                                                  &m_infp,
                                                  &m_outfp);
     if(m_pid == -1) {
@@ -116,7 +116,7 @@ bool DBusGateway::teardown() {
     bool success = true;
 
     if(m_pid != -1) {
-        if(!m_systemcallInterface->makePcloseCall(m_pid, m_infp, m_outfp)) {
+        if(!m_systemcallInterface.makePcloseCall(m_pid, m_infp, m_outfp)) {
             log_error("makePcloseCall() returned error");
             success = false;
         }

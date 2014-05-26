@@ -74,6 +74,8 @@ class MockGateway:
     public Gateway
 {
 public:
+	MockGateway(ControllerAbstractInterface& controller) : Gateway(controller) {
+	}
     virtual std::string environment()
     {
         return "";
@@ -134,7 +136,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     StubMainloop mainloop;
     StubController controller;
 
-    MockGateway gw1, gw2, gw3;
+    MockGateway gw1(controller), gw2(controller), gw3(controller);
 
     std::string gw1Id = "1";
     std::string gw2Id = "2";

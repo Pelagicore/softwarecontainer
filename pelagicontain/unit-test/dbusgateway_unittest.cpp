@@ -140,8 +140,8 @@ public:
  * has been called.
  */
 TEST_F(DBusGatewayTest, TestSetConfig) {
-    DBusGateway gw(&controllerInterface,
-                   &systemcallInterface,
+    DBusGateway gw(controllerInterface,
+                   systemcallInterface,
                    DBusGateway::SessionProxy,
                    m_gatewayDir,
                    m_containerName);
@@ -156,8 +156,8 @@ TEST_F(DBusGatewayTest, TestSetConfig) {
  * DBusGateway::activate() has been called.
  */
 TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
-    DBusGateway gw(&controllerInterface,
-                   &systemcallInterface,
+    DBusGateway gw(controllerInterface,
+                   systemcallInterface,
                    DBusGateway::SessionProxy,
                    m_gatewayDir,
                    m_containerName);
@@ -178,8 +178,8 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
  */
 TEST_F(DBusGatewayTest, TestActivateCall) {
     NiceMock<MockSystemcallInterfaceDBusGWTest> systemcallInterfaceMock;
-    DBusGateway *gw = new DBusGateway(&controllerInterface,
-                                      &systemcallInterfaceMock,
+    DBusGateway *gw = new DBusGateway(controllerInterface,
+                                      systemcallInterfaceMock,
                                       DBusGateway::SessionProxy,
                                       m_gatewayDir,
                                       m_containerName);

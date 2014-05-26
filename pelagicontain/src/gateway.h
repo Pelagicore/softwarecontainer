@@ -15,11 +15,10 @@
 class Gateway
 {
 public:
-    Gateway(ControllerAbstractInterface *controllerInterface):
+    Gateway(ControllerAbstractInterface &controllerInterface):
         m_controllerInterface(controllerInterface){
     };
-    Gateway() {
-    };
+//    virtual Gateway() {    };
     virtual ~Gateway() {
     };
 
@@ -51,8 +50,12 @@ public:
         return true;
     }
 
+    ControllerAbstractInterface& getController() {
+    	return m_controllerInterface;
+    }
+
 protected:
-    ControllerAbstractInterface *m_controllerInterface;
+    ControllerAbstractInterface &m_controllerInterface;
 };
 
 #endif /* GATEWAY_H */

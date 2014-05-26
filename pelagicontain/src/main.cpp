@@ -133,22 +133,22 @@ int main(int argc, char **argv)
 
         PelagicontainToDBusAdapter pcAdapter(bus, objectPath, pelagicontain);
 
-        pelagicontain.addGateway(new NetworkGateway(&controllerInterface,
-                                                    &systemcallInterface));
+        pelagicontain.addGateway(new NetworkGateway(controllerInterface,
+                                                    systemcallInterface));
 
         pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName,
-                                                  &controllerInterface));
+                                                  controllerInterface));
 
-        pelagicontain.addGateway(new DeviceNodeGateway(&controllerInterface));
+        pelagicontain.addGateway(new DeviceNodeGateway(controllerInterface));
 
-        pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-                                                 &systemcallInterface,
+        pelagicontain.addGateway(new DBusGateway(controllerInterface,
+                                                 systemcallInterface,
                                                  DBusGateway::SessionProxy,
                                                  gatewayDir,
                                                  containerName));
 
-        pelagicontain.addGateway(new DBusGateway(&controllerInterface,
-                                                 &systemcallInterface,
+        pelagicontain.addGateway(new DBusGateway(controllerInterface,
+                                                 systemcallInterface,
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
                                                  containerName));

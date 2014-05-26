@@ -8,14 +8,13 @@
 #include <libgen.h>
 
 PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName,
-                           ControllerAbstractInterface *controllerInterface):
+                           ControllerAbstractInterface &controllerInterface):
     Gateway(controllerInterface),
     m_api(0),
     m_context(0),
     m_mainloop(NULL),
     m_index(-1),
-    m_enableAudio(false),
-    m_controllerInterface(controllerInterface)
+    m_enableAudio(false)
 {
     m_socket = gatewayDir + "/pulse-" + containerName + ".sock";
 }
@@ -81,7 +80,7 @@ bool PulseGateway::setConfig(const std::string &config)
     if (m_enableAudio) {
         std::string var = "PULSE_SERVER";
         std::string val = "/gateways/" + socketName();
-        success = m_controllerInterface->setEnvironmentVariable(var, val);
+        success = getController().setEnvironmentVariable(var, val);
     }
 
     return success;

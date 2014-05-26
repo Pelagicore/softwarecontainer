@@ -14,8 +14,8 @@ class NetworkGateway: public Gateway
 	LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
 
 public:
-    NetworkGateway(ControllerAbstractInterface *controllerInterface,
-                   SystemcallAbstractInterface *systemCallInterface);
+    NetworkGateway(ControllerAbstractInterface &controllerInterface,
+                   SystemcallAbstractInterface &systemCallInterface);
     ~NetworkGateway();
 
     /*!
@@ -173,7 +173,7 @@ private:
     std::string m_gateway;
     bool m_internetAccess;
     bool m_interfaceInitialized;
-    SystemcallAbstractInterface *m_systemCallInterface;
+    SystemcallAbstractInterface &m_systemCallInterface;
 
 };
 

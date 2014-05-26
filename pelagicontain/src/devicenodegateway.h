@@ -68,7 +68,7 @@ class DeviceNodeGateway: public Gateway
 	LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
 
 public:
-    DeviceNodeGateway(ControllerAbstractInterface *controllerInterface);
+    DeviceNodeGateway(ControllerAbstractInterface &controllerInterface);
     ~DeviceNodeGateway(){
     }
 
@@ -118,7 +118,6 @@ private:
 
     std::vector<struct Device> parseDeviceList(json_t *list, bool &ok);
 
-    ControllerAbstractInterface  *m_controllerIface;
 };
 
 #endif /* DEVICENODEGATEWAY_H */

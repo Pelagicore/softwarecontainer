@@ -7,9 +7,8 @@
 
 #include "devicenodegateway.h"
 
-DeviceNodeGateway::DeviceNodeGateway(ControllerAbstractInterface *controllerInterface):
-    Gateway(controllerInterface),
-    m_controllerIface(controllerInterface)
+DeviceNodeGateway::DeviceNodeGateway(ControllerAbstractInterface &controllerInterface):
+    Gateway(controllerInterface)
 {
 }
 
@@ -110,14 +109,13 @@ bool DeviceNodeGateway::activate()
     {
         struct DeviceNodeGateway::Device dev;
         dev = m_devList.at(i);
-        success = m_controllerIface->systemCall("mknod " + dev.name + " c " +
+        success = getController().systemCall("mknod " + dev.name + " c " +
                                                 dev.major + " " + dev.minor);
         if (success) {
-            success = m_controllerIface->systemCall("chmod " +
+            success = getController().systemCall("chmod " +
                                                     dev.mode + " " + dev.name );
         } else {
-            log_debug(std::string("Failed to create device " + dev.name)
-                      .c_str());
+            log_error() << "Failed to create device " << dev.name;
         }
     }
 

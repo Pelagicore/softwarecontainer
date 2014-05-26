@@ -11,9 +11,9 @@
 
 
 NetworkGateway::NetworkGateway(ControllerAbstractInterface
-                               *controllerInterface,
+                               &controllerInterface,
                                SystemcallAbstractInterface
-                               *systemCallInterface):
+                               &systemCallInterface):
     Gateway(controllerInterface),
     m_ip(""),
     m_gateway(""),
@@ -117,7 +117,7 @@ bool NetworkGateway::generateIP()
 bool NetworkGateway::setDefaultGateway()
 {
     std::string cmd = "route add default gw ";
-    m_controllerInterface->systemCall(cmd + m_gateway);
+    getController().systemCall(cmd + m_gateway);
 
     return true;
 }
@@ -136,7 +136,7 @@ bool NetworkGateway::up()
         cmd = "ifconfig eth0 up";
     }
 
-    m_controllerInterface->systemCall(cmd);
+    getController().systemCall(cmd);
 
     /* The route to the default gateway must be added
        each time the interface is brought up again */
@@ -146,7 +146,7 @@ bool NetworkGateway::up()
 bool NetworkGateway::down()
 {
     std::string cmd = "ifconfig eth0 down";
-    m_controllerInterface->systemCall(cmd);
+    getController().systemCall(cmd);
 
     return true;
 }
@@ -154,7 +154,7 @@ bool NetworkGateway::down()
 bool NetworkGateway::ping(const std::string &ip)
 {
     std::string cmd = "ping -c 2 ";
-    m_controllerInterface->systemCall(cmd + ip);
+    getController().systemCall(cmd + ip);
 
     return true;
 }
@@ -164,7 +164,7 @@ bool NetworkGateway::isBridgeAvailable()
     bool ret = false;
     std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
-    if (m_systemCallInterface->makeCall(cmd))
+    if (m_systemCallInterface.makeCall(cmd))
     {
         ret = true;
     }
