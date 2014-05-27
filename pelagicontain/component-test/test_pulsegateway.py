@@ -15,15 +15,20 @@ import signal
 import distutils.spawn
 import shutil
 
+# conftest contains some fixtures we use in the tests
+import conftest
+
 from common import ComponentTestHelper
 
 # Prepare configurations
-audio_enabled = { "audio": "true" }
-audio_disabled = { "audio": "false" }
+audio_enabled = {"audio": "true"}
+audio_disabled = {"audio": "false"}
 
 TEST_CONFIGS = [audio_enabled, audio_disabled]
 
+# We keep the helper object module global so external fixtures can access it
 helper = ComponentTestHelper()
+
 pa_server_pid = None
 app_bin = None
 
@@ -32,6 +37,7 @@ PAPLAY_APP = """
 /appbin/paplay --raw --volume=0 /appbin/test.wav
 echo $? > /appshared/pulsegateway_test_output
 """
+
 
 @pytest.fixture(scope="module")
 def setup_suite(container_path):
@@ -57,6 +63,7 @@ def setup_suite(container_path):
 
     pa_server_pid = start_pa_server()
 
+
 @pytest.fixture(scope="function", params=TEST_CONFIGS)
 def setup_test_case(request, container_path, pelagicontain_binary):
     """ Setup fixture that is run once per test function. Sets the config
@@ -64,14 +71,19 @@ def setup_test_case(request, container_path, pelagicontain_binary):
     """
     global app_bin
 
-    helper.pam_iface().helper_set_configs({ "pulseaudio": json.dumps(request.param) })
+    helper.pam_iface().helper_set_configs({"pulseaudio": json.dumps(request.param)})
     time.sleep(1)
     if not helper.start_pelagicontain(pelagicontain_binary, container_path):
         print "Failed to launch pelagicontain!"
         sys.exit(1)
-    #time.sleep(2)
     create_app()
+
+    try:
+        os.remove(container_path + helper.app_id() + "/shared/pulsegateway_test_output")
+    except OSError as e:
+        pass
     return request.param
+
 
 @pytest.fixture(scope="module")
 def teardown_suite(request):
@@ -83,10 +95,13 @@ def teardown_suite(request):
     def remove_files():
         os.system("rm " + app_bin + "/paplay")
         os.system("rm " + app_bin + "/test.wav")
+
     def kill_server():
-        kill_pa_server()
+        global pa_server_pid
+        os.killpg(pa_server_pid, signal.SIGTERM)
     request.addfinalizer(remove_files)
     request.addfinalizer(kill_server)
+
 
 def start_pa_server():
     """ Start a pulse server on the host system. Necessary
@@ -97,10 +112,6 @@ def start_pa_server():
     print "Spawned PulseAudio server with PID " + str(process.pid)
     return process.pid
 
-# Kill the pulse server
-def kill_pa_server():
-    global pa_server_pid
-    os.killpg(pa_server_pid, signal.SIGTERM)
 
 # Copy paplay from the host system
 def find_and_copy_paplay():
@@ -118,6 +129,7 @@ def find_and_copy_paplay():
         return False
     return True
 
+
 def create_app():
     """ Create an app that plays a wave file located in /appbin/.
         Note that this will overwrite existing apps named "containedapp".
@@ -128,15 +140,6 @@ def create_app():
         f.write(PAPLAY_APP)
     os.system("chmod 755 " + app_bin + "containedapp")
 
-def run_app():
-    """ Run /appbin/containedapp.
-    """
-    print "Found and run Launch on DBUS: " + \
-        str(helper.pelagicontain_iface().Launch(helper.app_id()))
-    print "Register called: " + \
-        str(helper.pam_iface().test_register_called())
-    print "Update finished called: " + \
-        str(helper.pam_iface().test_updatefinished_called())
 
 def is_app_output_ok(expected, container_path):
     """ Parses output and checks whether it is expected.
@@ -189,13 +192,10 @@ class TestPulseGateway():
         """
 
         config = setup_test_case
-        run_app()
-        time.sleep(2)
+        helper.pelagicontain_iface().Launch(helper.app_id())
+        time.sleep(1)
 
         if "true" in config["audio"]:
             assert is_app_output_ok("0", container_path)
         else:
             assert is_app_output_ok("1", container_path)
-        print "UnregisterClient called: " + \
-            str(helper.pam_iface().test_unregisterclient_called())
-        helper.shutdown_pelagicontain()
