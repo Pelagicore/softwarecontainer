@@ -102,14 +102,13 @@ bool DBusGateway::activate()
 
     // writing has written exact amout of bytes
     if(written == (ssize_t)count) {
+        close(m_infp);
+        m_infp = -1;
         return true;
     }
 
     // something went wrong during the write
     log_error ("Failed to write to STDIN of dbus-proxy!");
-
-    close(m_infp);
-    m_infp = -1;
 
     return false;
 }
