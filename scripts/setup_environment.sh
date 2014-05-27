@@ -102,15 +102,20 @@ else
     mkdir -p "$deploydir/late_mounts"
 fi
 
-if [ `df -P $deploydir/late_mounts | tail -1 | cut -d '%' -f 2 |\
-      cut -b 2-` == "$deploydir/late_mounts" ]; then
+# Check for circular mounts. Mount if not found.
+# NOTE: df -P $mountdir will not return the correct mount point but rather the mountpoint of the
+# rootfs, hence the mount command is used instead.
+mountname="late_mounts"
+mountdir="$deploydir$mountname"
+grepresult=(`mount | grep "$mountdir"`)
+
+if [ "${grepresult[0]}" = "$mountdir" ] && [ "${grepresult[0]}" = "${grepresult[2]}" ]; then
     echo "Found circular bind-mount (this is good)"
 else
-    echo "Circular bind mount on $deploydir/late_mounts \
-NOT FOUND, attempting to add..."
-    sudo mount --bind $deploydir/late_mounts $deploydir/late_mounts
-    sudo mount --make-unbindable $deploydir/late_mounts
-    sudo mount --make-shared $deploydir/late_mounts
+    echo "Circular bind mount on $mountdir NOT FOUND, attempting to add..."
+    sudo mount --bind $mountdir $mountdir
+    sudo mount --make-unbindable $mountdir
+    sudo mount --make-shared $mountdir
 fi
 
 # Create directory structure
