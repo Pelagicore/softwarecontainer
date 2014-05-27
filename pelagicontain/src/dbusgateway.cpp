@@ -108,6 +108,9 @@ bool DBusGateway::activate()
     // something went wrong during the write
     log_error ("Failed to write to STDIN of dbus-proxy!");
 
+    close(m_infp);
+    m_infp = -1;
+
     return false;
 }
 
