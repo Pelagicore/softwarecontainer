@@ -103,8 +103,6 @@ else
 fi
 
 # Check for circular mounts. Mount if not found.
-# NOTE: df -P $mountdir will not return the correct mount point but rather the mountpoint of the
-# rootfs, hence the mount command is used instead.
 mountname="late_mounts"
 mountdir="$deploydir$mountname"
 grepresult=(`mount | grep "$mountdir"`)
