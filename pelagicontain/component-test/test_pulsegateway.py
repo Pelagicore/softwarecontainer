@@ -77,8 +77,11 @@ def setup_test_case(request, container_path, pelagicontain_binary):
         print "Failed to launch pelagicontain!"
         sys.exit(1)
     create_app()
-    # TODO: Catch if file not exists
-    os.system("rm " + container_path + helper.app_id() + "/shared/pulsegateway_test_output")
+
+    try:
+        os.remove(container_path + helper.app_id() + "/shared/pulsegateway_test_output")
+    except OSError as e:
+        pass
     return request.param
 
 
