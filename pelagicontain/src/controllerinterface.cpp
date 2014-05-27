@@ -96,7 +96,6 @@ bool ControllerInterface::openFifo()
 {
     int max_spin = 1000; // Milliseconds
     while (access (m_fifoPath.c_str(), F_OK) == -1 && max_spin-- > 0) {
-        log_error ("FIFO (%s) not available.. Spinning ..", m_fifoPath.c_str());
         usleep(1000);
     }
 
