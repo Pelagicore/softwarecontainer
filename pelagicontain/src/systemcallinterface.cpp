@@ -83,11 +83,15 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
 
 bool SystemcallInterface::makePcloseCall(pid_t pid, int infp, int outfp)
 {
-    if (close(infp) == -1) {
-        log_error ("Failed to close STDIN to dbus-proxy");
+    if (infp > -1) {
+        if (close(infp) == -1) {
+            log_warning ("Failed to close STDIN to dbus-proxy");
+        }
     }
-    if (close(outfp) == -1) {
-        log_error ("Failed to close STDOUT to dbus-proxy");
+    if (outfp != -1) {
+        if (close(outfp) == -1) {
+            log_warning ("Failed to close STDOUT to dbus-proxy");
+        }
     }
 
     // the negative pid mekes it to kill the whole group, not only the shell
