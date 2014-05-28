@@ -142,7 +142,7 @@ class TestDBusGateway():
         the_helper = ComponentTestHelper()
         helper.append(the_helper)
         the_helper.pam_iface().helper_set_configs(configs)
-        
+
         if not the_helper.start_pelagicontain(pelagicontain_binary, container_path):
             print "Failed to launch pelagicontain!"
             sys.exit(1)
@@ -165,4 +165,4 @@ class TestDBusGateway():
         os.system("chmod 755 " + containedapp_file)
 
         the_helper.pelagicontain_iface().Launch(the_helper.app_id())
-        time.sleep(0.5) # sleep so the dbus interface has time to launch, etc.
+        time.sleep(0.5)  # sleep so the dbus interface has time to launch, etc.
