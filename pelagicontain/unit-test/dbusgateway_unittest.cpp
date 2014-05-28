@@ -67,9 +67,11 @@ public:
     pid_t m_pid = 999;
     int m_infp = -1;
     int m_outfp = -1;
+    std::string m_tmpfile;
 
     SystemcallInterfaceStub() {
-        file_descriptor = tmpfile();
+        m_tmpfile = tempnam("/tmp/", NULL);
+        file_descriptor = fopen(m_tmpfile.c_str(), "w+b");
         m_infp = fileno(file_descriptor);
     }
 
@@ -77,6 +79,7 @@ public:
         if(file_descriptor != NULL) {
             fclose(file_descriptor);
         }
+        remove(m_tmpfile.c_str());
     };
 
     virtual bool makeCall(const std::string &cmd)
@@ -101,7 +104,10 @@ public:
 
     bool makePcloseCall(pid_t pid, int infp, int outfp)
     {
-        if(pid == m_pid && infp == m_infp && outfp == m_outfp) {
+        if(pid == m_pid
+            && ( infp == m_infp || infp == -1 )
+            && ( outfp == m_outfp || outfp == -1 ))
+        {
             return true;
         }
 
@@ -110,6 +116,10 @@ public:
 
     std::string fileContent()
     {
+        // Open file for reading. Don't reuse file_descriptor here
+        // since it might have been closed previously
+        FILE * file_descriptor_read = fopen(m_tmpfile.c_str(), "r");
+
         std::string content = "";
         char buf[20];
         rewind(file_descriptor);
@@ -117,6 +127,7 @@ public:
             content += buf;
         }
 
+        fclose(file_descriptor_read);
         return content;
     }
 };
