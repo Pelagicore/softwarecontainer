@@ -94,7 +94,7 @@ bool ControllerInterface::hasBeenStarted() const
 
 bool ControllerInterface::openFifo()
 {
-    int max_spin = 1000; // Milliseconds
+    int max_spin = 10000; // Milliseconds
     while (access (m_fifoPath.c_str(), F_OK) == -1 && max_spin-- > 0) {
         usleep(1000);
     }
