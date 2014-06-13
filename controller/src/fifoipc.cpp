@@ -48,6 +48,7 @@ bool FifoIPC::loop()
     int fd = open(m_fifoPath.c_str(), O_RDONLY);
     if (fd == -1) {
     	log_error("FifoIPC open: ") << strerror(errno);
+        close(fd);
         return false;
     }
 
@@ -57,11 +58,13 @@ bool FifoIPC::loop()
 
     int result = poll(pfd, 1, 100);
     if (result == -1) {
-    	log_error("FifoIPC poll: ") << strerror(errno);
+        log_error("FifoIPC poll: ") << strerror(errno);
+        close(fd);
         return false;
     }
 
     if (!(pfd[0].revents & POLLIN)) {
+        close(fd);
         return true;
     }
 
@@ -76,10 +79,12 @@ bool FifoIPC::loop()
             // We've read 'end of file', just ignore it
             break;
         } else if (status == -1) {
-        	log_error("FifoIPC read: ") << strerror(errno);
+            log_error("FifoIPC read: ") << strerror(errno);
+            close(fd);
             return false;
         } else {
             log_error() << "Unknown problem reading fifo" ;
+            close(fd);
             return false;
         }
     // Look for end of message or end of storage buffer
@@ -97,6 +102,7 @@ bool FifoIPC::loop()
         log_info() << "Warning: IPC message to Controller was not sent" ;
     }
 
+    close(fd);
     return true;
 }
 
