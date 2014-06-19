@@ -71,72 +71,115 @@ helper = list()
 
 class TestDBusGateway():
 
-    def test_can_introspect(self, pelagicontain_binary, container_path, teardown_fixture):
+    def test_can_introspect(self,
+                            pelagicontain_binary,
+                            container_path,
+                            teardown_fixture):
         """ Tests Introspect() on com.pelagicore.PAM on D-Bus session bus and
             org.freedesktop.DBus.Introspectable system bus.
         """
+        session_file = container_path + "/com.pelagicore.comptest/shared/dbus_test_output-session"
+        system_file = container_path + "/com.pelagicore.comptest/shared/dbus_test_output-system"
+
+        self.remove_output_files(session_file, system_file)
         self.do_setup(pelagicontain_binary, container_path, CONFIGS)
+        self.wait_for_output_files(session_file, system_file)
 
         try:
             # check session output
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output-session" % container_path) as f:
+            with open(session_file) as f:
                 xml = f.read()
                 regex = '<interface name="com\.pelagicore\.PAM">'
                 assert re.search(regex, xml)
 
             # check system output
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output-system" % container_path) as f:
+            with open(system_file) as f:
                 xml = f.read()
                 regex = '<interface name="org\.freedesktop\.DBus">'
                 assert re.search(regex, xml)
 
-        except:
-            print sys.exc_info()[0]
+        except Exception as e:
+            print e
             exit(1)
 
-    def test_can_not_introspect(self, pelagicontain_binary, container_path, teardown_fixture):
-        """ Tests fail of Introspect() on session and system bus, because of empty configs
+    def test_can_not_introspect(self,
+                                pelagicontain_binary,
+                                container_path,
+                                teardown_fixture):
+        """ Tests fail of Introspect() on session and system bus, because of
+            empty configs
         """
+        session_file = container_path + "/com.pelagicore.comptest/shared/dbus_test_output-session"
+        system_file = container_path + "/com.pelagicore.comptest/shared/dbus_test_output-system"
+
+        self.remove_output_files(session_file, system_file)
         self.do_setup(pelagicontain_binary, container_path, CONFIGS_WITHOUT_PERMISSION)
+        self.wait_for_output_files(session_file, system_file)
 
         try:
             # check session output
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output-session" % container_path) as f:
+            with open(session_file) as f:
                 xml = f.read()
                 regex = '<interface name="com\.pelagicore\.PAM">'
                 assert None == re.search(regex, xml)
 
             # check system output
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output-system" % container_path) as f:
+            with open(system_file) as f:
                 xml = f.read()
                 regex = '<interface name="org\.freedesktop\.DBus">'
                 assert None == re.search(regex, xml)
 
-        except:
-            print sys.exc_info()[0]
+        except Exception as e:
+            print e
             exit(1)
 
-    def test_can_not_introspect_with_error(self, pelagicontain_binary, container_path, teardown_fixture):
-        """ Tests fail of Introspect() on session and system bus, because of invalid configs
+    def test_can_not_introspect_with_error(self,
+                                           pelagicontain_binary,
+                                           container_path,
+                                           teardown_fixture):
+        """ Tests fail of Introspect() on session and system bus, because
+            of invalid configs
         """
+        session_file = container_path + "/com.pelagicore.comptest/shared/dbus_test_output-session"
+        system_file = container_path + "/com.pelagicore.comptest/shared/dbus_test_output-system"
+
+        self.remove_output_files(session_file, system_file)
         self.do_setup(pelagicontain_binary, container_path, CONFIGS_WITH_ERROR)
+        self.wait_for_output_files(session_file, system_file)
 
         try:
             # check session output
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output-session" % container_path) as f:
+            with open(session_file) as f:
                 xml = f.read()
                 regex = '<interface name="com\.pelagicore\.PAM">'
                 assert None == re.search(regex, xml)
 
             # check system output
-            with open("%s/com.pelagicore.comptest/shared/dbus_test_output-system" % container_path) as f:
+            with open(system_file) as f:
                 xml = f.read()
                 regex = '<interface name="org\.freedesktop\.DBus">'
                 assert None == re.search(regex, xml)
 
-        except:
-            print sys.exc_info()[0]
+        except Exception as e:
+            print e
             exit(1)
+
+    def remove_output_files(self, session_file, system_file):
+        try:
+            os.remove(session_file)
+            os.remove(system_file)
+        except Exception as e:
+            print e
+
+    def wait_for_output_files(self, session_file, system_file):
+        tries = 0
+        while not os.path.isfile(session_file) and tries < 30:
+            time.sleep(0.1)
+            tries += 1
+        tries = 0
+        while not os.path.isfile(system_file) and tries < 30:
+            time.sleep(0.1)
+            tries += 1
 
     def do_setup(self, pelagicontain_binary, container_path, configs):
         the_helper = ComponentTestHelper()
@@ -165,4 +208,3 @@ class TestDBusGateway():
         os.system("chmod 755 " + containedapp_file)
 
         the_helper.pelagicontain_iface().Launch(the_helper.app_id())
-        time.sleep(0.5)  # sleep so the dbus interface has time to launch, etc.
