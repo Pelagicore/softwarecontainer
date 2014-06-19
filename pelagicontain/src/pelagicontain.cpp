@@ -31,7 +31,8 @@ Pelagicontain::~Pelagicontain()
 
 void Pelagicontain::addGateway(Gateway *gateway)
 {
-    m_gateways.push_back(gateway);
+//     m_gateways.push_back(gateway);
+    m_gateways[gateway->id()] = gateway;
 }
 
 // Preload the container. This is a non-blocking operation
@@ -131,25 +132,45 @@ void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &
 {
     // Go through the received configs and see if they match any of
     // the running gateways, if so: set their respective config
-    std::string config;
-    std::string gatewayId;
+//     std::string config;
+//     std::string gatewayId;
+// 
+//     for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+//         gateway != m_gateways.end(); ++gateway)
+//     {
+//         gatewayId = (*gateway)->id();
+//         if (configs.count(gatewayId) != 0) {
+//             config = configs.at(gatewayId);
+//             (*gateway)->setConfig(config);
+//         }
+//     }
 
-    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-        gateway != m_gateways.end(); ++gateway)
+    // Set configs on only the gateways for which we received a config for
+    for (std::map<std::string, std::string>::const_iterator iter = configs.begin();
+         iter != configs.end();
+         ++iter)
     {
-        gatewayId = (*gateway)->id();
-        if (configs.count(gatewayId) != 0) {
-            config = configs.at(gatewayId);
-            (*gateway)->setConfig(config);
+        std::string gatewayId = iter->first;
+        if (m_gateways.count(gatewayId) != 0) {
+            std::string config = iter->second;
+            m_gateways[gatewayId]->setConfig(config);
+            m_configured.push_back(gatewayId);
         }
     }
 }
 
 void Pelagicontain::activateGateways()
 {
-    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-         gateway != m_gateways.end(); ++gateway) {
-        (*gateway)->activate();
+//     for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+//          gateway != m_gateways.end(); ++gateway) {
+//         (*gateway)->activate();
+//     }
+
+    for (std::vector<std::string>::iterator gatewayId = m_configured.begin();
+         gatewayId != m_configured.end();
+         ++gatewayId)
+    {
+        m_gateways[*gatewayId]->activate();
     }
 }
 
@@ -168,14 +189,27 @@ void Pelagicontain::shutdown()
 
 void Pelagicontain::shutdownGateways()
 {
-    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-         gateway != m_gateways.end(); ++gateway)
-    {
-        if (!(*gateway)->teardown()) {
-            log_warning("Could not tear down gateway cleanly");
-        }
-        delete (*gateway);
-    }
+//     for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
+//          gateway != m_gateways.end(); ++gateway)
+//     {
+//         if (!(*gateway)->teardown()) {
+//             log_warning("Could not tear down gateway cleanly");
+//         }
+//         delete (*gateway);
+//     }
+// 
+//     m_gateways.clear();
 
-    m_gateways.clear();
+    for (std::vector<std::string>::iterator gatewayId = m_configured.begin();
+         gatewayId != m_configured.end();
+         ++gatewayId)
+    {
+        if (!m_gateways[*gatewayId]->teardown()) {
+            log_warning() << "Could not tear down gateway cleanly: " << *gatewayId;
+        }
+
+        delete m_gateways[*gatewayId];
+        m_gateways.clear();
+        m_configured.clear();
+    }
 }

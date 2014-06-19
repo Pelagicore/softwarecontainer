@@ -47,6 +47,7 @@ std::string DBusGateway::id()
 
 bool DBusGateway::setConfig(const std::string &config)
 {
+    log_debug() << "### configuring";
     m_config = config;
 
     if(m_config.length() > 1) {
@@ -59,6 +60,7 @@ bool DBusGateway::setConfig(const std::string &config)
 
 bool DBusGateway::activate()
 {
+    log_debug() << "### activating";
     if(!m_hasBeenConfigured) {
         log_warning() << "'Activate' called on non-configured gateway " << id();
         return false;
@@ -87,6 +89,7 @@ bool DBusGateway::activate()
         log_error() << "Failed to launch " << command;
         return false;
     } else {
+        log_debug() << "### statrted dbus-proxy";
         m_dbusProxyStarted = true;
     }
 
@@ -106,6 +109,7 @@ bool DBusGateway::activate()
     if(written == (ssize_t)count) {
         close(m_infp);
         m_infp = -1;
+        log_debug() << "### write to dbus-proxy went well";
         return true;
     }
 
