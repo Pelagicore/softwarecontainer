@@ -133,10 +133,18 @@ class TestDBusGateway():
             print e
             exit(1)
 
+    @pytest.mark.skipif("True")
     def test_can_not_introspect_with_error(self,
                                            pelagicontain_binary,
                                            container_path,
                                            teardown_fixture):
+        """ NOTE: This test is skipped because the way we test for a failed
+            introspection should not rely on the output files. This worked
+            previously when the output files existed from previous tests.
+            Now we need some way to let the other tests wait for the output
+            to be there and this test to have some other way of testing for
+            failure.
+        """
         """ Tests fail of Introspect() on session and system bus, because
             of invalid configs
         """
@@ -172,12 +180,24 @@ class TestDBusGateway():
             print e
 
     def wait_for_output_files(self, session_file, system_file):
+        """ NOTE: This assume the file will eventually show up, if it doesn't
+            this will crash on the 'stat' part later.
+        """
+        # Check if file exist, then stat to see if there's content
         tries = 0
-        while not os.path.isfile(session_file) and tries < 30:
+        while not os.path.isfile(session_file) and tries < 100:
             time.sleep(0.1)
             tries += 1
         tries = 0
-        while not os.path.isfile(system_file) and tries < 30:
+        while not os.stat(session_file).st_size > 0 and tries < 100:
+            time.sleep(0.1)
+            tries += 1
+        tries = 0
+        while not os.path.isfile(system_file) and tries < 100:
+            time.sleep(0.1)
+            tries += 1
+        tries = 0
+        while not os.stat(system_file).st_size > 0 and tries < 100:
             time.sleep(0.1)
             tries += 1
 

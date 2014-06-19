@@ -144,21 +144,13 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
 
     {
         InSequence sequence;
-
-        EXPECT_CALL(gw1, id())
-            .Times(1)
-            .WillOnce(Return(gw1Id));
-
-        EXPECT_CALL(gw2, id())
-            .Times(1)
-            .WillOnce(Return(gw2Id));
-
-        EXPECT_CALL(gw3, id())
-            .Times(1)
-            .WillOnce(Return(gw3Id));
-
+        EXPECT_CALL(gw1, id()).Times(1).WillOnce(Return(gw1Id));
         EXPECT_CALL(gw1, setConfig(_)).Times(1);
+
+        EXPECT_CALL(gw2, id()).Times(1).WillOnce(Return(gw2Id));
         EXPECT_CALL(gw2, setConfig(_)).Times(1);
+
+        EXPECT_CALL(gw3, id()).Times(1).WillOnce(Return(gw3Id));
         EXPECT_CALL(gw3, setConfig(_)).Times(1);
 
         EXPECT_CALL(gw1, activate()).Times(1);

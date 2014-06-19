@@ -142,9 +142,7 @@ private:
     PAMAbstractInterface *m_pamInterface;
     MainloopAbstractInterface *m_mainloopInterface;
     ControllerAbstractInterface *m_controllerInterface;
-//     std::vector<Gateway *> m_gateways;
-    std::map<std::string, Gateway *> m_gateways;
-    std::vector<std::string> m_configured;
+    std::vector<Gateway *> m_gateways;
     std::string m_appId;
     std::string m_cookie;
 

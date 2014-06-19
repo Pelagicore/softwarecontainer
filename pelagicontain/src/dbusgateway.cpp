@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <unistd.h>
 #include "dbusgateway.h"
 #include "log.h"
 
@@ -47,7 +48,6 @@ std::string DBusGateway::id()
 
 bool DBusGateway::setConfig(const std::string &config)
 {
-    log_debug() << "### configuring";
     m_config = config;
 
     if(m_config.length() > 1) {
@@ -60,7 +60,6 @@ bool DBusGateway::setConfig(const std::string &config)
 
 bool DBusGateway::activate()
 {
-    log_debug() << "### activating";
     if(!m_hasBeenConfigured) {
         log_warning() << "'Activate' called on non-configured gateway " << id();
         return false;
@@ -89,7 +88,6 @@ bool DBusGateway::activate()
         log_error() << "Failed to launch " << command;
         return false;
     } else {
-        log_debug() << "### statrted dbus-proxy";
         m_dbusProxyStarted = true;
     }
 
@@ -109,7 +107,8 @@ bool DBusGateway::activate()
     if(written == (ssize_t)count) {
         close(m_infp);
         m_infp = -1;
-        log_debug() << "### write to dbus-proxy went well";
+        // dbus-proxy might take some time to create the bus socket
+        waitForSocketCreation();
         return true;
     }
 
@@ -117,6 +116,16 @@ bool DBusGateway::activate()
     log_error() << "Failed to write to STDIN of dbus-proxy!";
 
     return false;
+}
+
+void DBusGateway::waitForSocketCreation()
+{
+    int count = 0;
+    while (access(m_socket.c_str(), F_OK) == -1 || count > 1000) {
+        usleep(1000*10);
+        count++;
+    }
+    log_debug() << "Found D-Bus socket: " << m_socket;
 }
 
 bool DBusGateway::teardown() {
