@@ -45,7 +45,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
 
     // Get the commands to run in a separate process
     std::vector<std::string> commands;
-    commands = m_container->commands(containedCommand, m_gateways);
+    commands = m_container->commands(containedCommand);
 
     std::string createCommand = commands[0];
     std::string executeCommand = commands[1];
