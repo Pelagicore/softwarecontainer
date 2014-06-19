@@ -127,6 +127,10 @@ private:
 
     // Keeps track of whether setConfig() has been run or not
     bool m_hasBeenConfigured;
+
+    // Keeps track of whether the dbus-proxy program has been started
+    // this is used for deciding what teardown is necessary
+    bool m_dbusProxyStarted;
 };
 
 #endif /* DBUSGATEWAY_H */

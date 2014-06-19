@@ -20,7 +20,8 @@ DBusGateway::DBusGateway(ControllerAbstractInterface &controllerInterface,
     m_pid(-1),
     m_infp(-1),
     m_outfp(-1),
-    m_hasBeenConfigured(false)
+    m_hasBeenConfigured(false),
+    m_dbusProxyStarted(false)
 {
     if (m_type == SessionProxy) {
         m_socket = gatewayDir
@@ -59,8 +60,7 @@ bool DBusGateway::setConfig(const std::string &config)
 bool DBusGateway::activate()
 {
     if(!m_hasBeenConfigured) {
-        log_error ("'Activate' called on non-configured gateway %s",
-                   id().c_str());
+        log_warning() << "'Activate' called on non-configured gateway " << id();
         return false;
     }
 
@@ -81,11 +81,13 @@ bool DBusGateway::activate()
     std::string command = "dbus-proxy ";
     command += m_socket + " " + typeString();
     m_pid = m_systemcallInterface.makePopenCall(command,
-                                                 &m_infp,
-                                                 &m_outfp);
+                                                &m_infp,
+                                                &m_outfp);
     if(m_pid == -1) {
-        log_error ("Failed to launch %s", command.c_str());
+        log_error() << "Failed to launch " << command;
         return false;
+    } else {
+        m_dbusProxyStarted = true;
     }
 
     size_t count = sizeof(char) * m_config.length();
@@ -96,7 +98,7 @@ bool DBusGateway::activate()
 
     // writing didn't work at all
     if(written == -1) {
-        log_error ("Failed to write to STDIN of dbus-proxy!");
+        log_error() << "Failed to write to STDIN of dbus-proxy: " << strerror(errno);
         return false;
     }
 
@@ -108,7 +110,7 @@ bool DBusGateway::activate()
     }
 
     // something went wrong during the write
-    log_error ("Failed to write to STDIN of dbus-proxy!");
+    log_error() << "Failed to write to STDIN of dbus-proxy!";
 
     return false;
 }
@@ -117,19 +119,21 @@ bool DBusGateway::teardown() {
 
     bool success = true;
 
-    if(m_pid != -1) {
-        if(!m_systemcallInterface.makePcloseCall(m_pid, m_infp, m_outfp)) {
-            log_error("makePcloseCall() returned error");
+    if (m_dbusProxyStarted) {
+        if(m_pid != -1) {
+            if(!m_systemcallInterface.makePcloseCall(m_pid, m_infp, m_outfp)) {
+                log_error() << "makePcloseCall() returned error";
+                success = false;
+            }
+        } else {
+            log_error() << "Failed to close connection to dbus-proxy!";
             success = false;
         }
-    } else {
-        log_error("Failed to close connection to dbus-proxy!");
-        success = false;
-    }
 
-    if(unlink(m_socket.c_str()) == -1) {
-        log_error("Could not remove %s", m_socket.c_str());
-        success = false;
+        if(unlink(m_socket.c_str()) == -1) {
+            log_error() << "Could not remove " << m_socket << ": " << strerror(errno);
+            success = false;
+        }
     }
 
     return success;
