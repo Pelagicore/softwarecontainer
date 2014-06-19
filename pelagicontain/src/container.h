@@ -32,8 +32,7 @@ public:
 
     ~Container();
 
-    std::vector<std::string> commands(const std::string &containedCommand,
-                                      const std::vector<Gateway *> &gateways);
+    std::vector<std::string> commands(const std::string &containedCommand);
 
     /*
      * Setup the container for a specific app

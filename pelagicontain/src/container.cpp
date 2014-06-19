@@ -112,8 +112,7 @@ const char *Container::name()
     return m_name.c_str();
 }
 
-std::vector<std::string> Container::commands(const std::string &containedCommand,
-                                             const std::vector<Gateway *> &gateways)
+std::vector<std::string> Container::commands(const std::string &containedCommand)
 {
     int max_cmd_len = sysconf(_SC_ARG_MAX);
     char lxc_command[max_cmd_len];
