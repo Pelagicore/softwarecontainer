@@ -106,7 +106,7 @@ public:
 private:
     const char *typeString();
     std::string socketName();
-    void waitForSocketCreation();
+    bool isSocketCreated();
 
     SystemcallAbstractInterface &m_systemcallInterface;
 

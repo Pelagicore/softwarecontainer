@@ -88,6 +88,7 @@ bool DBusGateway::activate()
         log_error() << "Failed to launch " << command;
         return false;
     } else {
+        log_debug() << "Started dbus-proxy: " << m_pid;
         m_dbusProxyStarted = true;
     }
 
@@ -108,7 +109,12 @@ bool DBusGateway::activate()
         close(m_infp);
         m_infp = -1;
         // dbus-proxy might take some time to create the bus socket
-        waitForSocketCreation();
+        if (isSocketCreated()) {
+            log_debug() << "Found D-Bus socket: " << m_socket;
+        } else {
+            log_error() << "Did not find any D-Bus socket: " << m_socket;
+            return false;
+        }
         return true;
     }
 
@@ -118,18 +124,22 @@ bool DBusGateway::activate()
     return false;
 }
 
-void DBusGateway::waitForSocketCreation()
+bool DBusGateway::isSocketCreated()
 {
+    int maxCount = 1000;
     int count = 0;
-    while (access(m_socket.c_str(), F_OK) == -1 || count > 1000) {
-        usleep(1000*10);
+    do {
+        if (count >= maxCount) {
+            return false;
+        }
         count++;
-    }
-    log_debug() << "Found D-Bus socket: " << m_socket;
+        usleep(1000*10);
+    } while (access(m_socket.c_str(), F_OK) == -1);
+    return true;
 }
 
-bool DBusGateway::teardown() {
-
+bool DBusGateway::teardown()
+{
     bool success = true;
 
     if (m_dbusProxyStarted) {
