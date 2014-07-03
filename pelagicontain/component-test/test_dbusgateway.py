@@ -185,20 +185,21 @@ class TestDBusGateway():
         """
         # Check if file exist, then stat to see if there's content
         tries = 0
+        sleep_time = 0.1
         while not os.path.isfile(session_file) and tries < 100:
-            time.sleep(0.1)
+            time.sleep(sleep_time)
             tries += 1
         tries = 0
         while not os.stat(session_file).st_size > 0 and tries < 100:
-            time.sleep(0.1)
+            time.sleep(sleep_time)
             tries += 1
         tries = 0
         while not os.path.isfile(system_file) and tries < 100:
-            time.sleep(0.1)
+            time.sleep(sleep_time)
             tries += 1
         tries = 0
         while not os.stat(system_file).st_size > 0 and tries < 100:
-            time.sleep(0.1)
+            time.sleep(sleep_time)
             tries += 1
 
     def do_setup(self, pelagicontain_binary, container_path, configs):
