@@ -77,7 +77,12 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     shutdownSlot = sigc::bind<0>(
         sigc::mem_fun(*this, &Pelagicontain::handleControllerShutdown),
         destroyCommand /* First param to handleControllerShutdown */);
-    cw.connect(shutdownSlot, pid);
+
+    // The pid might not valid if there was an error spawning. We should only
+    // connect the watcher if the spawning went well.
+    if (pid) {
+        cw.connect(shutdownSlot, pid);
+    }
 
     return pid;
 }
