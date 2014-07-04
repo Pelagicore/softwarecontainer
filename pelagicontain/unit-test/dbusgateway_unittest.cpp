@@ -63,7 +63,7 @@ class SystemcallInterfaceStub :
     public SystemcallAbstractInterface
 {
 public:
-    FILE *file_descriptor = NULL;
+    FILE *m_fileDescriptor = NULL;
     pid_t m_pid = 999;
     int m_infp = -1;
     int m_outfp = -1;
@@ -71,13 +71,13 @@ public:
 
     SystemcallInterfaceStub() {
         m_tmpfile = tempnam("/tmp/", NULL);
-        file_descriptor = fopen(m_tmpfile.c_str(), "w+b");
-        m_infp = fileno(file_descriptor);
+        m_fileDescriptor = fopen(m_tmpfile.c_str(), "w+b");
+        m_infp = fileno(m_fileDescriptor);
     }
 
     virtual ~SystemcallInterfaceStub() {
-        if(file_descriptor != NULL) {
-            fclose(file_descriptor);
+        if(m_fileDescriptor != NULL) {
+            fclose(m_fileDescriptor);
         }
         remove(m_tmpfile.c_str());
     };
@@ -116,18 +116,19 @@ public:
 
     std::string fileContent()
     {
-        // Open file for reading. Don't reuse file_descriptor here
+        // Open file for reading. Don't reuse m_fileDescriptor here
         // since it might have been closed previously
-        FILE * file_descriptor_read = fopen(m_tmpfile.c_str(), "r");
+        FILE *fdRead = fopen(m_tmpfile.c_str(), "r");
 
         std::string content = "";
         char buf[20];
-        rewind(file_descriptor);
-        while (fgets(buf, 20, file_descriptor)) {
+        rewind(fdRead);
+        while (fgets(buf, 20, fdRead)) {
             content += buf;
+            std::cout << buf << std::endl;
         }
 
-        fclose(file_descriptor_read);
+        fclose(fdRead);
         return content;
     }
 };
@@ -176,8 +177,19 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     std::string config = "{}";
 
     ASSERT_TRUE(gw.setConfig(config));
+
+    // DBusGateway relies on dbus-proxy to create a socket and since dbus-proxy
+    // will not be started during these tests we need to create a file so
+    // DBusGateway doesn't fail
+    std::string socketFile = m_gatewayDir + "/sess_" + m_containerName + ".sock";
+    FILE *fh = fopen(socketFile.c_str(), "wb");
+    fclose(fh);
+
     ASSERT_TRUE(gw.activate());
     EXPECT_EQ(config, systemcallInterface.fileContent());
+
+    // Teardown will remove the "socket" file created above.
+    gw.teardown();
 }
 
 /*! Test DBusGateway calls ControllerInterface::makePopencall() when
