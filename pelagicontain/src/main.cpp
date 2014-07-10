@@ -31,14 +31,8 @@ LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main conte
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
 
-bool event() {
-    log_debug("This is the event firing!");
-    return true;
-}
-
 int main(int argc, char **argv)
 {
-
     const char *summary = "Pelagicore container utility. "
                           "Requires an absolute path to the container root, "
                           "the command to run inside the container and "
@@ -158,10 +152,23 @@ int main(int argc, char **argv)
                                             containerRoot,
                                             containedCommand);
 
-        log_debug("Started Pelagicontain with PID: %d", pcPid);
-
-        ml->run();
-        log_debug("Exited dbusmainloop.");
+        if (!pcPid) {
+            // Fatal failure, only do necessary cleanup
+            log_error() << "Could not start container, will shut down";
+        } else {
+            log_debug() << "Started container with PID " << pcPid;
+            // setup IPC between Pelagicontain and Controller
+            bool connected = pelagicontain.establishConnection();
+            if (connected) {
+                ml->run();
+                // When we return here Pelagicontain has exited the mainloop
+                log_debug("Exited mainloop");
+            } else {
+                // Fatal failure, only do necessary cleanup
+                log_error() << "Could not connect to Controller";
+                pelagicontain.shutdownContainer();
+            }
+        }
     }
 
     // remove instance specific dirs again
@@ -176,4 +183,6 @@ int main(int argc, char **argv)
                   gatewayDir.c_str(),
                   strerror(errno));
     }
+
+    log_debug() << "Goodbye.";
 }

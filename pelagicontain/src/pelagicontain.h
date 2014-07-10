@@ -14,7 +14,7 @@
 #include "mainloopabstractinterface.h"
 
 class Pelagicontain {
-	LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+    LOG_DECLARE_CLASS_CONTEXT("PCON", "Pelagicontain");
 
 public:
     /*! Constructor
@@ -103,8 +103,9 @@ public:
     void setContainerEnvironmentVariable(const std::string &var,
                                          const std::string &val);
 
+    bool establishConnection();
 
-    void handle_controller_shutdown(const std::string, int, int);
+    void shutdownContainer();
 
 private:
     void setGatewayConfigs(const std::map<std::string, std::string> &configs);
@@ -123,20 +124,15 @@ private:
      *
      * Called by a SignalChildWatch source when the pid belonging to the
      * controller exits. Takes care of:
-     *  - Cleaning up LXC (by issuing \a lxcDestroyCommand)
+     *  - Cleaning up LXC
      *  - Issuing Pelagicontain::shutdownGateways()
      *  - PAMAbstractInterface::unregisterClient()
      *  - Killing the main event loop (and thus exiting Pelagicontain)
      *
-     * \param lxcDestroyCommand Shell command for terminating LXC. Typically
-     *        lxc-destroy plus some parameters
-     * \param controllerPid pid of the controller as spawned by
-     *        Pelagicontain::preload()
-     * \param exitCode exit code of \a controllerPid
+     * \param pid pid of the controller as spawned by Pelagicontain::preload()
+     * \param exitCode exit code of \a pid
      */
-    void handleControllerShutdown(const std::string lxcDestroyCommand,
-                                        int controllerPid,
-                                        int controllerExitCode);
+    void handleControllerShutdown(int pid, int exitCode);
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
@@ -148,6 +144,8 @@ private:
 
     // Keeps track of if someone has called launch
     bool m_launching;
+
+    std::string m_destroyCommand;
 };
 
 #endif /* PELAGICONTAIN_H */

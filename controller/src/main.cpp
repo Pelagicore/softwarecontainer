@@ -4,22 +4,20 @@
  */
 #include <iostream>
 #include <glibmm.h>
-#include <poll.h>
 
 #include "controller.h"
-#include "fifoipc.h"
+#include "socketipc.h"
 
 /**
  * "Controller" is meant to be the interface Pelagicontain uses to reach the
- * inside of the container. This implementation is just a stub to support the
- * basic flow between components, consider it a test. Must be made more useful and robust!
+ * inside of the container.
  */
 
 LOG_DECLARE_DEFAULT_CONTEXT(Controller_DefaultLogContext, "CON", "Main context");
 
 int main(int argc, char **argv)
 {
-    log_info() << "In Controller" ;
+    log_info() << "In Controller";
 
     /** The first command line arg to controller can be the path to where the
      *  FIFO file will be created. This is set to /gateways/ if it is
@@ -31,17 +29,21 @@ int main(int argc, char **argv)
         path = std::string(argv[1]);
     else
         path = std::string("/gateways/");
-    path += "in_fifo";
+    path += "ipc_socket";
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
 
     Controller controller(ml);
     IPCMessage message(controller);
-    FifoIPC ipc(message);
-    ipc.initialize(path);
+    SocketIPC ipc(message);
+    if (!ipc.initialize(path)) {
+        log_error() << "Failed to connect to Pelagicontain";
+        return 1;
+    }
 
-    sigc::slot<bool> fifoSlot = sigc::mem_fun(&ipc, &FifoIPC::loop);
-    sigc::connection conn = Glib::signal_timeout().connect(fifoSlot, 100);
+    // Start checking for messages from Pelagicontain from the IPC
+    sigc::slot<bool> checkForMessagesSlot = sigc::mem_fun(&ipc, &SocketIPC::checkForMessages);
+    sigc::connection conn = Glib::signal_timeout().connect(checkForMessagesSlot, 10);
 
     ml->run();
 

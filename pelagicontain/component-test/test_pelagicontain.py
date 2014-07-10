@@ -69,9 +69,11 @@ class TestPelagicontain():
 
         # Call Launch on Pelagicontain over D-Bus
         helper.pelagicontain_iface().Launch(helper.app_id())
+        time.sleep(0.5)
 
         # Assert against the PAM-stub that RegisterClient was called by Pelagicontain
         assert helper.pam_iface().test_register_called()
+        time.sleep(0.5)
 
         # The call by Pelagicontain to PAM::RegisterClient would have triggered
         # a call by PAM to Pelagicontain::Update which in turn should result in
