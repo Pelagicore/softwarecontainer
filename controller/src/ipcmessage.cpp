@@ -25,9 +25,52 @@ IPCMessage::~IPCMessage()
 {
 }
 
-bool IPCMessage::handleMessage(const std::string &message)
+bool IPCMessage::handleMessage(const char buf[], int length)
 {
-    const char *buf = message.c_str();
+    char c;
+    int total = 0;
+    char msg[BUF_SIZE];
+
+    if (length > BUF_SIZE) {
+        log_error() << "Message size can not be greater than buffer";
+        return false;
+    }
+
+    // Loop until the complete received buffer is processed
+    bool done = false;
+    while (!done) {
+        memset(msg, '\0', sizeof(char) * BUF_SIZE);
+        int i = 0;
+        // Find (possibly many) null terminated messages in buffer
+        do {
+            c = buf[i + total];
+            msg[i] = c;
+            ++i;
+        } while ((c != '\0') && ((i + total) < length));
+
+        total += i;
+
+        // If message is empty we don't need to handle it
+        if (strlen(msg) > 0) {
+            log_debug() << "Received \"" << msg << "\"";
+            if (!dispatchMessage(msg)) {
+                // The message was not understood by IPCMessage
+                log_error() << "IPC message to Controller was not sent";
+                return false;
+            }
+        }
+
+        if (total == length) {
+            done = true;
+        }
+    }
+
+    // All messages were dispatched
+    return true;
+}
+
+bool IPCMessage::dispatchMessage(const char buf[])
+{
     bool retVal = false;
 
     switch (buf[PROTOCOL_INDEX]) {
@@ -40,11 +83,11 @@ bool IPCMessage::handleMessage(const std::string &message)
         retVal = true;
         break;
     case SET_ENV_VAR:
-        callSetEnvironmentVariable(buf, message.size());
+        callSetEnvironmentVariable(buf, strlen(buf));
         retVal = true;
         break;
     case SYS_CALL:
-        callSystemCall(buf, message.size());
+        callSystemCall(buf, strlen(buf));
         retVal = true;
         break;
     default:
@@ -55,13 +98,13 @@ bool IPCMessage::handleMessage(const std::string &message)
     return retVal;
 }
 
-void IPCMessage::callSetEnvironmentVariable(const char *buf, int messageLength)
+void IPCMessage::callSetEnvironmentVariable(const char buf[], int messageLength)
 {
     char variable[BUF_SIZE];
-    memset(variable, 0, sizeof(variable));
+    memset(variable, 0, sizeof(char) * BUF_SIZE);
 
     char value[BUF_SIZE];
-    memset(value, 0, sizeof(value));
+    memset(value, 0, sizeof(char) * BUF_SIZE);
 
     // Find the variable and the value
     for (int i = OFFSET; i < messageLength; ++i) {
@@ -83,10 +126,10 @@ void IPCMessage::callSetEnvironmentVariable(const char *buf, int messageLength)
     m_controller.setEnvironmentVariable(variableString, valueString);
 }
 
-void IPCMessage::callSystemCall(const char *buf, int messageLength)
+void IPCMessage::callSystemCall(const char buf[], int messageLength)
 {
     char command[BUF_SIZE];
-    memset(command, 0, sizeof(command));
+    memset(command, 0, sizeof(char) * BUF_SIZE);
 
     strncpy(command, buf + OFFSET, messageLength);
 
