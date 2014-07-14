@@ -36,6 +36,11 @@ public:
         return true;
     }
 
+    virtual bool initialize()
+    {
+        return true;
+    }
+
     MOCK_METHOD1(systemCall, bool(const std::string &cmd));
 };
 
