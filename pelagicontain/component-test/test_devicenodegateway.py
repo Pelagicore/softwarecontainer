@@ -59,7 +59,8 @@ class TestDeviceNodeGateway():
         time.sleep(0.5)
 
         try:
-            with open("%s/com.pelagicore.comptest/shared/devicenode_test_output" % container_path) as f:
+            test_file = container_path + "/com.pelagicore.comptest/shared/devicenode_test_output"
+            with open(test_file) as f:
                 line = f.readline()
                 print "-->", line
                 regex = "\s*\d\scrw-rw-rw-\s*\d\s*root\s*root\s*\d,\s*\d.*/dev/random$"
@@ -68,6 +69,12 @@ class TestDeviceNodeGateway():
             pytest.fail("Unable to read command output, output file couldn't be opened! Exception: %s" % e)
 
     def do_setup(self, pelagicontain_binary, container_path):
+        test_file = container_path + "/com.pelagicore.comptest/shared/devicenode_test_output"
+        try:
+            os.remove(test_file)
+        except Exception:
+            pass
+
         helper.pam_iface().test_reset_values()
         helper.pam_iface().helper_set_configs(CONFIGS)
         if not helper.start_pelagicontain(pelagicontain_binary, container_path):

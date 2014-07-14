@@ -51,9 +51,19 @@ public:
     /*! This method returns true if a call to startApp has been made previously,
      * false if not.
      *
-     * \return True or false
+     * \return true or false
      */
     virtual bool hasBeenStarted() const = 0;
+
+    /*! Sets up the IPC between Pelagicontain and Controller and waits for
+     *  Controller to connect. If Controller connects, we are ready to receive
+     *  messages from it. Returns true if Controller connected and no other
+     *  errors occured, and false if there was any error or the timeout was
+     *  reached before Controller connected.
+     *
+     * \return true or false
+     */
+    virtual bool initialize() = 0;
 };
 
 #endif /* CONTROLLERABSTRACTINTERFACE_H */

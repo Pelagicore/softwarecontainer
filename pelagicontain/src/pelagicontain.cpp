@@ -18,7 +18,8 @@ Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
     m_mainloopInterface(mainloopInterface),
     m_controllerInterface(controllerInterface),
     m_cookie(cookie),
-    m_launching(false)
+    m_launching(false),
+    m_destroyCommand("")
 {
 }
 
@@ -49,7 +50,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
 
     std::string createCommand = commands[0];
     std::string executeCommand = commands[1];
-    std::string destroyCommand = commands[2];
+    m_destroyCommand = commands[2];
 
     log_debug(createCommand.c_str());
     system(createCommand.c_str());
@@ -74,9 +75,7 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     }
 
     sigc::slot<void, int, int> shutdownSlot;
-    shutdownSlot = sigc::bind<0>(
-        sigc::mem_fun(*this, &Pelagicontain::handleControllerShutdown),
-        destroyCommand /* First param to handleControllerShutdown */);
+    shutdownSlot = sigc::mem_fun(this, &Pelagicontain::handleControllerShutdown);
 
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
@@ -87,20 +86,26 @@ pid_t Pelagicontain::preload(const std::string &containerName,
     return pid;
 }
 
-void Pelagicontain::handleControllerShutdown(const std::string lxcExitCommand,
-                                                   int pid,
-                                                   int exitCode)
+bool Pelagicontain::establishConnection()
 {
-    log_debug("Controller (pid %d) exited with code: %d. Shutting down now..",
-              pid, exitCode);
+    return m_controllerInterface->initialize();
+}
 
-    log_debug("Issuing: %s", lxcExitCommand.c_str());
-    Glib::spawn_command_line_sync(lxcExitCommand);
+void Pelagicontain::shutdownContainer()
+{
+    log_debug() << "Issuing: " << m_destroyCommand;
+    Glib::spawn_command_line_sync(m_destroyCommand);
+}
 
+void Pelagicontain::handleControllerShutdown(int pid, int exitCode)
+{
+    log_debug() << "Container with pid " << pid << " exited with exit code " << exitCode;
+
+    shutdownContainer();
     shutdownGateways();
     m_pamInterface->unregisterClient(m_cookie);
 
-    log_debug("Queueing up main loop termination");
+    log_debug() << "Shutting down Pelagicontain, queueing up mainloop termination";
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Pelagicontain::killMainLoop));
 }
 
@@ -153,7 +158,8 @@ void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &
 void Pelagicontain::activateGateways()
 {
     for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-         gateway != m_gateways.end(); ++gateway) {
+         gateway != m_gateways.end(); ++gateway)
+    {
         (*gateway)->activate();
     }
 }

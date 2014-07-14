@@ -11,7 +11,7 @@ link_directories(
 add_executable(controller
 	main.cpp
 	controller.cpp
-	fifoipc.cpp
+	socketipc.cpp
 	ipcmessage.cpp
 )
 

@@ -76,14 +76,14 @@ int Controller::runApp()
 
     cw.connect(shutdownSlot, m_pid);
 
-    log_info() << "Started app with pid: " << "\"" << m_pid << "\"" ;
+    log_info() << "Started app with pid: " << m_pid;
 
     return m_pid;
 }
 
 void Controller::killApp()
 {
-    log_info() << "Trying to kill: " << m_pid ;
+    log_info() << "Trying to kill pid: " << m_pid;
     if (m_pid == 0) {
         log_info() << "WARNING: Trying to kill an app without previously having started one. "
             << "This is normal if this is a preloaded but unused container."
