@@ -6,8 +6,6 @@
 #include "config.h"
 
 Config *Config::m_instance = 0;
-// int Config::m_ipcBufferSize = 1024;
-// int Config::m_controllerConnectionTimeout = 10;
 
 Config::Config():
     m_ipcBufferSize(1024),
