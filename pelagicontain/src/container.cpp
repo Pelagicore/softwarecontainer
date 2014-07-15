@@ -84,9 +84,10 @@ bool Container::isDirectory(const std::string &path)
 
 Container::~Container()
 {
-    // Unmount all mounted dirs
-    for (std::vector<std::string>::const_iterator it = m_mounts.begin();
-         it != m_mounts.end();
+
+    // Unmount all mounted dirs. Done backwards, behaving like a stack.
+    for (std::vector<std::string>::const_reverse_iterator it = m_mounts.rbegin();
+         it != m_mounts.rend();
          ++it)
     {
         if (umount((*it).c_str()) == -1)
@@ -95,9 +96,9 @@ Container::~Container()
         }
     }
 
-    // Clean up all created directories
-    for (std::vector<std::string>::const_iterator it = m_dirs.begin();
-         it != m_dirs.end();
+    // Clean up all created directories, also done backwards
+    for (std::vector<std::string>::const_reverse_iterator it = m_dirs.rbegin();
+         it != m_dirs.rend();
          ++it)
     {
         if (rmdir((*it).c_str()) == -1)
@@ -139,7 +140,7 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
     commands.push_back(std::string(lxc_command));
 
     // Command to destroy container
-    snprintf(lxc_command, max_cmd_len, "lxc-destroy -n %s", name());
+    snprintf(lxc_command, max_cmd_len, "lxc-destroy -f -n %s", name());
     commands.push_back(std::string(lxc_command));
 
     return commands;
