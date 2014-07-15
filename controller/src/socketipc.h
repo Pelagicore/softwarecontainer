@@ -48,6 +48,7 @@ private:
     IPCMessage &m_message;
     std::string m_socketPath;
     int m_socket;
+    int m_bufferSize;
 };
 
 #endif //SOCKETIPC_H

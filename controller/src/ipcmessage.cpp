@@ -5,10 +5,10 @@
 #include <cstring>
 #include <iostream>
 
+#include "config.h"
 #include "ipcmessage.h"
 
 static const int OFFSET = 2;
-static const int BUF_SIZE = 1024;
 static const int PROTOCOL_INDEX = 0;
 static const char RUN_APP = '1';
 static const char KILL_APP = '2';
@@ -17,7 +17,8 @@ static const char SYS_CALL = '4';
 static const char VAR_VAL_DELIMITER = ' ';
 
 IPCMessage::IPCMessage(AbstractController &controller) :
-    m_controller(controller)
+    m_controller(controller),
+    m_bufferSize(Config::instance()->ipcBufferSize())
 {
 }
 
@@ -29,11 +30,11 @@ bool IPCMessage::handleMessage(const char buf[], int length)
 {
     char c;
     int total = 0;
-    char msg[BUF_SIZE];
+    char msg[m_bufferSize];
 
     // If there is one big message in the buffer is isn't allowed to be bigger
     // than the buffer we put it in.
-    if (length > BUF_SIZE) {
+    if (length > m_bufferSize) {
         log_error() << "Total message buffer size too big";
         return false;
     }
@@ -42,7 +43,7 @@ bool IPCMessage::handleMessage(const char buf[], int length)
     // (possibly many) null terminated messages in buffer
     bool done = false;
     while (!done) {
-        memset(msg, '\0', sizeof(char) * BUF_SIZE);
+        memset(msg, '\0', sizeof(char) * m_bufferSize);
         int i = 0;
         // Look for null terminated message in buffer
         do {
@@ -104,11 +105,11 @@ bool IPCMessage::dispatchMessage(const char buf[])
 
 void IPCMessage::callSetEnvironmentVariable(const char buf[], int messageLength)
 {
-    char variable[BUF_SIZE];
-    memset(variable, 0, sizeof(char) * BUF_SIZE);
+    char variable[m_bufferSize];
+    memset(variable, 0, sizeof(char) * m_bufferSize);
 
-    char value[BUF_SIZE];
-    memset(value, 0, sizeof(char) * BUF_SIZE);
+    char value[m_bufferSize];
+    memset(value, 0, sizeof(char) * m_bufferSize);
 
     // Find the variable and the value
     for (int i = OFFSET; i < messageLength; ++i) {
@@ -132,8 +133,8 @@ void IPCMessage::callSetEnvironmentVariable(const char buf[], int messageLength)
 
 void IPCMessage::callSystemCall(const char buf[], int messageLength)
 {
-    char command[BUF_SIZE];
-    memset(command, 0, sizeof(char) * BUF_SIZE);
+    char command[m_bufferSize];
+    memset(command, 0, sizeof(char) * m_bufferSize);
 
     strncpy(command, buf + OFFSET, messageLength);
 

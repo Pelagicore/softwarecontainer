@@ -10,16 +10,16 @@
 #include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
-#include <poll.h>
 
+#include "config.h"
 #include "socketipc.h"
-
-static const int BUF_SIZE = 1024;
 
 SocketIPC::SocketIPC(IPCMessage &message):
     m_message(message),
     m_socketPath(""),
-    m_socket(0)
+    m_socket(0),
+    m_bufferSize(Config::instance()->ipcBufferSize())
+
 {
 }
 
@@ -60,8 +60,8 @@ bool SocketIPC::initialize(const std::string &socketPath)
 
 bool SocketIPC::checkForMessages()
 {
-    char buf[BUF_SIZE];
-    memset(buf, '\0', sizeof(char) * BUF_SIZE);
+    char buf[m_bufferSize];
+    memset(buf, '\0', sizeof(char) * m_bufferSize);
 
     struct timeval tv;
     tv.tv_sec = 0;
@@ -73,7 +73,7 @@ bool SocketIPC::checkForMessages()
     select(m_socket + 1, &readfds, 0, 0, &tv);
 
     if (FD_ISSET(m_socket, &readfds)) {
-        int received = recv(m_socket, buf, BUF_SIZE, 0);
+        int received = recv(m_socket, buf, m_bufferSize, 0);
         if (received <= 0) {
             log_error() << "recv:" << strerror(errno);
             // TODO: Do we need to propagate failure here?

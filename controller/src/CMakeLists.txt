@@ -13,6 +13,7 @@ add_executable(controller
 	controller.cpp
 	socketipc.cpp
 	ipcmessage.cpp
+	${PROJECT_SOURCE_DIR}/common/config.cpp
 )
 
 TARGET_LINK_LIBRARIES(controller
