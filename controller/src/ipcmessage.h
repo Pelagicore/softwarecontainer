@@ -49,6 +49,7 @@ private:
     void callSystemCall(const char buf[], int messageLength);
 
     AbstractController &m_controller;
+    int m_bufferSize;
 };
 
 #endif // IPCMESSAGE_H

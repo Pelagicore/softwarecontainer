@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <iostream>
 
+#include "config.h"
 #include "controllerinterface.h"
 
 ControllerInterface::ControllerInterface(const std::string &gatewayDir):
@@ -16,7 +17,7 @@ ControllerInterface::ControllerInterface(const std::string &gatewayDir):
     m_listenSocket(0),
     m_connectionSocket(0),
     m_highestFd(0),
-    m_timeout(10)
+    m_timeout(Config::instance()->controllerConnectionTimeout())
 {
 }
 

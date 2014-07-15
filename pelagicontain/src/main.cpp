@@ -2,6 +2,10 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+#include <glibmm.h>
+#include <dbus-c++/dbus.h>
+#include <dbus-c++/glib-integration.h>
+
 #include "CommandLineParser.h"
 #include "log.h"
 #include "paminterface.h"
@@ -15,14 +19,6 @@
 #include <sys/stat.h>
 #include "systemcallinterface.h"
 #include "devicenodegateway.h"
-
-#include <glibmm.h>
-#include <dbus-c++/dbus.h>
-#include <dbus-c++/glib-integration.h>
-
-#include <glibmm.h>
-#include <dbus-c++/dbus.h>
-#include <dbus-c++/glib-integration.h>
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
