@@ -31,17 +31,20 @@ bool IPCMessage::handleMessage(const char buf[], int length)
     int total = 0;
     char msg[BUF_SIZE];
 
+    // If there is one big message in the buffer is isn't allowed to be bigger
+    // than the buffer we put it in.
     if (length > BUF_SIZE) {
-        log_error() << "Message size can not be greater than buffer";
+        log_error() << "Total message buffer size too big";
         return false;
     }
 
-    // Loop until the complete received buffer is processed
+    // Loop until the complete received buffer is processed, and find
+    // (possibly many) null terminated messages in buffer
     bool done = false;
     while (!done) {
         memset(msg, '\0', sizeof(char) * BUF_SIZE);
         int i = 0;
-        // Find (possibly many) null terminated messages in buffer
+        // Look for null terminated message in buffer
         do {
             c = buf[i + total];
             msg[i] = c;
@@ -50,9 +53,10 @@ bool IPCMessage::handleMessage(const char buf[], int length)
 
         total += i;
 
+        log_debug() << "Received \"" << msg << "\"";
+
         // If message is empty we don't need to handle it
         if (strlen(msg) > 0) {
-            log_debug() << "Received \"" << msg << "\"";
             if (!dispatchMessage(msg)) {
                 // The message was not understood by IPCMessage
                 log_error() << "IPC message to Controller was not sent";

@@ -83,7 +83,7 @@ bool SocketIPC::checkForMessages()
 
         //TODO: The return value here should be used, currently a 'false'
         //      means that one or more messages in the buffer were not handled
-        m_message.handleMessage(buf, BUF_SIZE);
+        m_message.handleMessage(buf, received);
     }
 
     return true; // Continue to let the signal handler call this method
