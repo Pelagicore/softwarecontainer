@@ -81,43 +81,9 @@ bool SocketIPC::checkForMessages()
             return false; // Disconnects the signal handler
         }
 
-        char c;
-        int total = 0;
-        char msg[BUF_SIZE];
-
-        // Loop until the complete received buffer is processed
-        bool done = false;
-        while (!done) {
-            memset(msg, '\0', sizeof(char) * BUF_SIZE);
-            int i = 0;
-            // Find (possibly many) null terminated messages in buffer
-            do {
-                c = buf[total + i];
-                msg[i] = c;
-                ++i;
-            } while ((c != '\0') && (i != sizeof(buf)));
-
-            total += i;
-
-            log_debug() << "Received \"" << msg << "\"";
-            std::string messageString(msg);
-
-            bool messageProcessedOk = false;
-            // If message is empty we don't need to handle it
-            //TODO: Can it ever be empty? If only a null char was sent for example?
-            if (messageString.size() > 0) {
-                messageProcessedOk = m_message.handleMessage(messageString);
-            }
-            if (!messageProcessedOk) {
-                // The message was not understood by IPCMessage
-                // TODO: Is this a fatal failure? Propagate to shut down?
-                log_info() << "Warning: IPC message to Controller was not sent" ;
-            }
-
-            if (total == received) {
-                done = true;
-            }
-        }
+        //TODO: The return value here should be used, currently a 'false'
+        //      means that one or more messages in the buffer were not handled
+        m_message.handleMessage(buf, received);
     }
 
     return true; // Continue to let the signal handler call this method

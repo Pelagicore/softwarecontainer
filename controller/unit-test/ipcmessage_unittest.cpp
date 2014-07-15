@@ -24,6 +24,45 @@ using ::testing::InSequence;
 using ::testing::Return;
 using ::testing::NiceMock;
 
+/*! Test that a specified message length that is bigger than buffer results
+ *  in 'false'
+ */
+TEST(IPCMessageTest, TestShouldNotAcceptTooLongMessage) {
+    MockAbstractController controller;
+    IPCMessage message(controller);
+
+    char someMessage[] = "message";
+    int tooLong = 15000;
+
+    EXPECT_EQ(message.handleMessage(someMessage, tooLong), false);
+}
+
+/*! Test that a message containing a null character results in no calls to
+ *  Controller and returns 'true', i.e. it's just ignored.
+ */
+TEST(IPCMessageTest, TestShouldHandleNullMessage) {
+    MockAbstractController controller;
+    IPCMessage message(controller);
+
+    char nullMessage[] = {'\0'};
+
+    EXPECT_EQ(message.handleMessage(nullMessage, 1), true);
+}
+
+/*! Test that a valid message which is longer than the specified
+ *  length is handled correctly.
+ */
+TEST(IPCMessageTest, TestShouldHandleTooBigValidMessage) {
+    MockAbstractController controller;
+    IPCMessage message(controller);
+
+    char tooBigMessage[] = {'1', '\0', '3'};
+    int smallValue = 1;
+
+    EXPECT_CALL(controller, runApp()).Times(1);
+    EXPECT_EQ(message.handleMessage(tooBigMessage, smallValue), true);
+}
+
 /*! Test that Controller::runApp and Controller::killApp are called by IPCMessage
  * when the corresponding messages are passed to IPCMessage
  */
@@ -41,8 +80,8 @@ TEST(IPCMessageTest, TestShouldCallRunAppAndKillApp) {
         EXPECT_CALL(controller, killApp()).Times(1);
     }
 
-    message.handleMessage(runAppCmd);
-    message.handleMessage(killAppCmd);
+    message.handleMessage(runAppCmd.c_str(), runAppCmd.size());
+    message.handleMessage(killAppCmd.c_str(), killAppCmd.size());
 }
 
 /*! Test that Controller::systemCall is called with the expected argument
@@ -57,7 +96,7 @@ TEST(IPCMessageTest, TestShouldCallSystemCallWithExpectedArg) {
     std::string expectedArgument("this is a system call");
     EXPECT_CALL(controller, systemCall(expectedArgument)).Times(1);
 
-    message.handleMessage(systemCallCmd);
+    message.handleMessage(systemCallCmd.c_str(), systemCallCmd.size());
 }
 
 /*! Test that Controller::setEnvironmentVariable is called with the expected
@@ -73,13 +112,13 @@ TEST(IPCMessageTest, TestShouldCallSetEnvironmentVariableWithExpectedArgs) {
     std::string expectedValue("this is the value");
     EXPECT_CALL(controller, setEnvironmentVariable(expectedVariable, expectedValue)).Times(1);
 
-    message.handleMessage(setEnvironmentVariableCmd);
+    message.handleMessage(setEnvironmentVariableCmd.c_str(), setEnvironmentVariableCmd.size());
 }
 
 /*! Test that IPCMessage returns the expected value. Valid messages should
  * get 'true' back, and invalid messages should get 'false'
  */
-TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
+TEST(IPCMessageTest, TestShouldReturnExpectedValue) {
     NiceMock<MockAbstractController> controller;
     IPCMessage message(controller);
 
@@ -89,12 +128,12 @@ TEST(IPCMessageTest, TestSendShouldReturnExpectedValue) {
 
     bool returnVal;
 
-    returnVal = message.handleMessage(validMessage);
+    returnVal = message.handleMessage(validMessage.c_str(), validMessage.size());
     EXPECT_EQ(returnVal, true);
 
-    returnVal = message.handleMessage(invalidMessage);
+    returnVal = message.handleMessage(invalidMessage.c_str(), invalidMessage.size());
     EXPECT_EQ(returnVal, false);
 
-    returnVal = message.handleMessage(killAppMessage);
+    returnVal = message.handleMessage(killAppMessage.c_str(), killAppMessage.size());
     EXPECT_EQ(returnVal, true);
 }

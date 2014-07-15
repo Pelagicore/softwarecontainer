@@ -6,14 +6,28 @@
 #define IPCMESSAGE_H
 
 #include <string>
+#include "log.h"
 
 #include "abstractcontroller.h"
 
 class IPCMessage {
+    LOG_DECLARE_CLASS_CONTEXT("MSG", "IPC Message");
+
 public:
     IPCMessage(AbstractController &controller);
     ~IPCMessage();
 
+    /*! Parse and pass all messages in buffer to Controller
+     *
+     *  The messages in the buffer must be null terminated and the \c length
+     *  argument can not be greater than the size of the buffer. Returns \c true
+     *  if all messages found in buffer were passed to Controller, \c false if
+     *  one or more messages could not be passed to Controller, or if the
+     *  \c length argument is greater than allowed.
+     */
+    bool handleMessage(const char buf[], int length);
+
+private:
     /*! Call the appropriate method on Controller.
      *
      * The specified message will be parsed and the appropriate
@@ -28,11 +42,11 @@ public:
      * \return true if the message was processed OK and passed to Controller,
      *          returns false if not.
      */
-    bool handleMessage(const std::string &message);
+    bool dispatchMessage(const char buf[]);
 
-private:
-    void callSetEnvironmentVariable(const char *buf, int messageLength);
-    void callSystemCall(const char *buf, int messageLength);
+    void callSetEnvironmentVariable(const char buf[], int messageLength);
+
+    void callSystemCall(const char buf[], int messageLength);
 
     AbstractController &m_controller;
 };
