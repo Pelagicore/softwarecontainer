@@ -45,6 +45,7 @@ $rootfs/dev/pts \
 $rootfs/dev/shm \
 $rootfs/lib \
 $rootfs/usr/lib \
+$rootfs/usr/local/lib \
 $rootfs/lib64 \
 $rootfs/usr/lib64 \
 $rootfs/deployed_app \
@@ -221,6 +222,7 @@ EOF
 cat <<EOF >> $path/config
 lxc.mount.entry = /lib $rootfs/lib none ro,bind 0 0
 lxc.mount.entry = /usr/lib $rootfs/usr/lib none ro,bind 0 0
+lxc.mount.entry = /usr/local/lib $rootfs/usr/local/lib none ro,bind 0 0
 lxc.mount.entry = /usr/sbin $rootfs/usr/sbin none ro,bind 0 0
 EOF
 
