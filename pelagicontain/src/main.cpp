@@ -6,6 +6,8 @@
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/glib-integration.h>
 
+#include <signal.h>
+#include <unistd.h>
 #include "CommandLineParser.h"
 #include "log.h"
 #include "paminterface.h"
@@ -27,8 +29,21 @@ LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main conte
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
 
+/* Needs to be global in order to be reachable from the signal handler */
+static Pelagicontain *pelagicontain;
+
+void signalHandler(int signum)
+{
+    log_debug() << "caught signal " << signum;
+    pelagicontain->shutdown();
+}
+
 int main(int argc, char **argv)
 {
+
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+
     const char *summary = "Pelagicore container utility. "
                           "Requires an absolute path to the container root, "
                           "the command to run inside the container and "
@@ -114,36 +129,36 @@ int main(int argc, char **argv)
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
-        Pelagicontain pelagicontain(&pamInterface,
-                                    &mainloopInterface,
-                                    &controllerInterface,
-                                    cookie);
+        pelagicontain = new Pelagicontain(&pamInterface,
+                                          &mainloopInterface,
+                                          &controllerInterface,
+                                          cookie);
 
         std::string objectPath = "/com/pelagicore/Pelagicontain";
 
-        PelagicontainToDBusAdapter pcAdapter(bus, objectPath, pelagicontain);
+        PelagicontainToDBusAdapter pcAdapter(bus, objectPath, *pelagicontain);
 
-        pelagicontain.addGateway(new NetworkGateway(controllerInterface,
+        pelagicontain->addGateway(new NetworkGateway(controllerInterface,
                                                     systemcallInterface));
 
-        pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName,
+        pelagicontain->addGateway(new PulseGateway(gatewayDir, containerName,
                                                   controllerInterface));
 
-        pelagicontain.addGateway(new DeviceNodeGateway(controllerInterface));
+        pelagicontain->addGateway(new DeviceNodeGateway(controllerInterface));
 
-        pelagicontain.addGateway(new DBusGateway(controllerInterface,
+        pelagicontain->addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SessionProxy,
                                                  gatewayDir,
                                                  containerName));
 
-        pelagicontain.addGateway(new DBusGateway(controllerInterface,
+        pelagicontain->addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
                                                  containerName));
 
-        pid_t pcPid = pelagicontain.preload(containerName,
+        pid_t pcPid = pelagicontain->preload(containerName,
                                             containerConfig,
                                             containerRoot,
                                             containedCommand);
@@ -154,7 +169,7 @@ int main(int argc, char **argv)
         } else {
             log_debug() << "Started container with PID " << pcPid;
             // setup IPC between Pelagicontain and Controller
-            bool connected = pelagicontain.establishConnection();
+            bool connected = pelagicontain->establishConnection();
             if (connected) {
                 ml->run();
                 // When we return here Pelagicontain has exited the mainloop
@@ -162,10 +177,12 @@ int main(int argc, char **argv)
             } else {
                 // Fatal failure, only do necessary cleanup
                 log_error() << "Could not connect to Controller";
-                pelagicontain.shutdownContainer();
+                pelagicontain->shutdownContainer();
             }
         }
     }
+
+    delete pelagicontain;
 
     // remove instance specific dirs again
     if (rmdir(gatewayDir.c_str()) == -1) {
