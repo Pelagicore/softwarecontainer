@@ -54,13 +54,9 @@ int Controller::runApp()
 {
     log_info() << "Will run app now..." ;
 
-    Glib::SignalChildWatch cw = Glib::signal_child_watch();
-
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv("/appbin/containedapp");
     sigc::slot<void> setupSlot = sigc::mem_fun(*this, &Controller::childSetupSlot);
-    sigc::slot<void, int, int> shutdownSlot;
-    shutdownSlot = sigc::mem_fun(*this, &Controller::handleAppShutdownSlot);
     try {
         Glib::spawn_async_with_pipes(".",
                                     executeCommandVec,
@@ -68,15 +64,20 @@ int Controller::runApp()
                                         | Glib::SPAWN_SEARCH_PATH,
                                     setupSlot,
                                     &m_pid);
-    } catch (const Glib::Error& ex) {
-        // It's possible the spawn fails with an exception in which case we
-        // catch it to do some cleanup instead of crashing hard.
+    } catch (const Glib::Error &ex) {
+        // It's a fatal error if app couldn't spawn, so we shut down.
         log_info() << "Error: " << ex.what() ;
+        shutdown();
     }
 
-    cw.connect(shutdownSlot, m_pid);
-
-    log_info() << "Started app with pid: " << m_pid;
+    // We should only connect the watcher if the pid is valid
+    if (m_pid) {
+        sigc::slot<void, int, int> shutdownSlot;
+        shutdownSlot = sigc::mem_fun(*this, &Controller::handleAppShutdownSlot);
+        Glib::SignalChildWatch cw = Glib::signal_child_watch();
+        cw.connect(shutdownSlot, m_pid);
+        log_info() << "Started app with pid: " << m_pid;
+    }
 
     return m_pid;
 }
@@ -86,8 +87,7 @@ void Controller::killApp()
     log_info() << "Trying to kill pid: " << m_pid;
     if (m_pid == 0) {
         log_info() << "WARNING: Trying to kill an app without previously having started one. "
-            << "This is normal if this is a preloaded but unused container."
-            ;
+            << "This is normal if this is a preloaded but unused container.";
         shutdown();
         return;
     }
