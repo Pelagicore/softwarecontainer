@@ -49,6 +49,18 @@ public:
      */
     bool setApplication(const std::string &appId);
 
+    /*!
+     * Setup the container for preloading
+     *
+     * Setup the container so directories are available for later use when
+     * setApplication is called. If the 'late_mount' directory is missing
+     * or any subddirectory to it could not be created, \c false is returned,
+     * if all went well, \c true is returned.
+     *
+     * \return true or false
+     */
+    bool initialize();
+
 private:
     /*
      * Check if path is a directory

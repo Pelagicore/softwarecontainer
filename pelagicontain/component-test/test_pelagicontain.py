@@ -108,11 +108,35 @@ class TestPelagicontain():
             * Remove containedapp if there is one (might be left from some test)
             * Launch app (this is a correct app id and so on)
             * Assert PC shuts down as a result
+
+            TODO: This test will pass if PC crashes or exits for some other
+            reason as well...
         """
         helper.start_pelagicontain(pelagicontain_binary, container_path)
         pc_iface = helper.pelagicontain_iface()
         self.remove_containedapp_if_present(container_path)
         pc_iface.Launch(helper.app_id())
+        time.sleep(1)
+        assert not self.pelagicontain_is_running()
+
+    def test_pc_shuts_down_when_missing_latemount_dir(
+            self,
+            pelagicontain_binary,
+            teardown_fixture):
+        """ Test that PC shuts down if there are crucial container directories
+            missing, e.g. '<container-root>/late_mounts/<container-name>'
+
+            * Start Pelagicontain with a container root that doesn't contain a
+              late_mounts directory
+            * Assert Pelagicontain shuts down
+
+            TODO: This test will pass if PC crashes or exits for some other
+            reason as well...
+        """
+        container_path = "/tmp/nonexistent/"
+        if not os.path.isdir(container_path):
+            os.makedirs(container_path)
+        helper.start_pelagicontain(pelagicontain_binary, container_path)
         time.sleep(1)
         assert not self.pelagicontain_is_running()
 

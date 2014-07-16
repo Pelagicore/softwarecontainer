@@ -31,10 +31,14 @@ Container::Container(const std::string &name,
     m_containerRoot(containerRoot),
     m_mountDir(containerRoot + "/late_mounts")
 {
+}
+
+bool Container::initialize()
+{
     // Make sure the directory for "late mounts" exist
     if (!isDirectory(m_mountDir.c_str())) {
-        log_error("Directory %s does not exist", m_mountDir.c_str());
-        exit(-1);
+        log_error() << "Directory " << m_mountDir << " does not exist";
+        return false;
     }
 
     // Create directories needed for mounting, will be removed in dtor
@@ -47,9 +51,11 @@ Container::Container(const std::string &name,
     allOk = allOk && createDirectory((runDir + "/home").c_str());
 
     if (!allOk) {
-        log_error("Could not set up all needed directories, shutting down.");
-        exit(-1);
+        log_error() << "Could not set up all needed directories";
+        return false;
     }
+
+    return true;
 }
 
 bool Container::createDirectory(const std::string &path)
