@@ -64,7 +64,8 @@ bool Container::createDirectory(const std::string &path)
         log_error("Could not create directory %s, %s.", path.c_str(), strerror(errno));
         return false;
     }
-    m_dirs.insert(m_dirs.begin(), path);
+
+    m_dirs.push_back(path);
     return true;
 }
 
