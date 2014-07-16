@@ -42,6 +42,13 @@ pid_t Pelagicontain::preload(const std::string &containerName,
                              const std::string &containedCommand)
 {
     m_container = new Container(containerName, containerConfig, containerRoot);
+    if (!m_container->initialize()) {
+        log_error() << "Could not setup container for preloading";
+        // Nothing has really started yet, returning an invalid pid is the
+        // only thing needed to 'shut down'
+        return 0;
+    }
+
     Glib::SignalChildWatch cw = Glib::signal_child_watch();
 
     // Get the commands to run in a separate process
@@ -116,9 +123,15 @@ void Pelagicontain::launch(const std::string &appId)
     m_appId = appId;
     if (m_container) {
         // this should always be true except when unit-testing.
-        m_container->setApplication(appId);
+        if (m_container->setApplication(appId)) {
+            m_pamInterface->registerClient(m_cookie, m_appId);
+        } else {
+            log_error() << "Could not set up container for application, shutting down";
+            // If we are here we should have been reached over D-Bus and are
+            // running in the mainloop, so we should call Pelagicontain::shutdown
+            shutdown();
+        }
     }
-    m_pamInterface->registerClient(m_cookie, m_appId);
 }
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
