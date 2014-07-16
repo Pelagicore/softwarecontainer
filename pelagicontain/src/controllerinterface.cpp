@@ -23,14 +23,22 @@ ControllerInterface::ControllerInterface(const std::string &gatewayDir):
 
 ControllerInterface::~ControllerInterface()
 {
+    // Close both the sockets...
     if (m_connectionSocket) {
         if (close(m_connectionSocket) == -1) {
             log_error() << "close:" << strerror(errno);
         }
+    }
 
-        if (unlink(m_socketPath.c_str()) == -1) {
-            log_error() << "unlink:" << strerror(errno);
+    if (m_listenSocket) {
+        if (close(m_listenSocket) == -1) {
+            log_error() << "close listen:" << strerror(errno);
         }
+    }
+
+    // ...and unlink the file
+    if (unlink(m_socketPath.c_str()) == -1) {
+        log_error() << "unlink:" << strerror(errno);
     }
 }
 

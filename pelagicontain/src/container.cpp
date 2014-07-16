@@ -91,6 +91,7 @@ Container::~Container()
          it != m_mounts.rend();
          ++it)
     {
+        log_debug() << "Unmounting " << (*it).c_str();
         if (umount((*it).c_str()) == -1)
         {
             log_error("Could not unmount %s, %s", (*it).c_str(), strerror(errno));
@@ -102,6 +103,7 @@ Container::~Container()
          it != m_dirs.rend();
          ++it)
     {
+        log_debug() << "Removing " << (*it).c_str();
         if (rmdir((*it).c_str()) == -1)
         {
             log_error("Could not remove dir %s, %s", (*it).c_str(), strerror(errno));
