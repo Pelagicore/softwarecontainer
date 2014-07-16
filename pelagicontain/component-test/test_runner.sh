@@ -43,6 +43,11 @@ eval `dbus-launch --sh-syntax`
 pam_pid=$!
 exit_codes=()
 
+# Shutdown and cleanup tests
+py.test test_cleanshutdown.py --junitxml=$test_reports_path/cleanshutdown.xml \
+                              --pelagicontain-binary $pelagicontain_bin \
+                              --container-path $container_path
+
 # Device node gateway tests
 py.test test_devicenodegateway.py --junitxml=$test_reports_path/devicenodegateway.xml \
                                   --pelagicontain-binary $pelagicontain_bin \
