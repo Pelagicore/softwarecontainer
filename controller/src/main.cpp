@@ -4,6 +4,7 @@
  */
 #include <iostream>
 #include <glibmm.h>
+#include <sys/stat.h>
 
 #include "controller.h"
 #include "socketipc.h"
@@ -14,6 +15,18 @@
  */
 
 LOG_DECLARE_DEFAULT_CONTEXT(Controller_DefaultLogContext, "CON", "Main context");
+
+bool isDirectory(const std::string &path)
+{
+    bool isDir = false;
+    struct stat st;
+    if (stat(path.c_str(), &st) == 0) {
+        if ((st.st_mode & S_IFDIR) != 0) {
+            isDir = true;
+        }
+    }
+    return isDir;
+}
 
 int main(int argc, char **argv)
 {
@@ -30,6 +43,16 @@ int main(int argc, char **argv)
     else
         path = std::string("/gateways/");
     path += "ipc_socket";
+
+    if (!isDirectory("/gateways") ||
+        !isDirectory("/appbin") ||
+        !isDirectory("/apphome") ||
+        !isDirectory("/appshared"))
+    {
+        log_error() << "Expected directories not available in container, "
+                    << "shutting down Controller";
+        return 1;
+    }
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
 
