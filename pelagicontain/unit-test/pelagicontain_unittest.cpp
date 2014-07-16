@@ -106,7 +106,7 @@ using ::testing::NiceMock;
  * it relies on the controller to be running and catching it's exit signal
  * after calling shutdown. This is tested in the component tests instead.
  */
-TEST(PelagicontainTest, TestInteractionWithPAM) {
+TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
     std::string appId = "the-app-id";
     const std::string cookie = "mycookie";
 

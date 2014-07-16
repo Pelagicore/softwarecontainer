@@ -20,7 +20,7 @@
  */
 class Container
 {
-	LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+    LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
 
 public:
 
@@ -34,13 +34,20 @@ public:
 
     std::vector<std::string> commands(const std::string &containedCommand);
 
-    /*
+    /*!
      * Setup the container for a specific app
      *
-     * Setup the container so that the app specific directories available inside the
-     * container.
+     * Setup the container so that the app specific directories are available
+     * inside the container. If any of these directories could not setup \c false
+     * is returned which is considered fatal, the app should not be started if
+     * this is the case. Method returns \c true if all directories could be
+     * made available
+     *
+     * \param appId A string with the application ID
+     *
+     * \return true or false
      */
-    void setApplication(const std::string &appId);
+    bool setApplication(const std::string &appId);
 
 private:
     /*

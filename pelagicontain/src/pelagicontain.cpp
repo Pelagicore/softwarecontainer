@@ -116,9 +116,13 @@ void Pelagicontain::launch(const std::string &appId)
     m_appId = appId;
     if (m_container) {
         // this should always be true except when unit-testing.
-        m_container->setApplication(appId);
+        if (m_container->setApplication(appId)) {
+            m_pamInterface->registerClient(m_cookie, m_appId);
+        } else {
+            log_error() << "Could not set up container for application, shutting down";
+            shutdown();
+        }
     }
-    m_pamInterface->registerClient(m_cookie, m_appId);
 }
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
