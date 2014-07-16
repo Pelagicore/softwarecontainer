@@ -52,9 +52,13 @@ bool IPCMessage::handleMessage(const char buf[], int length)
             ++i;
         } while ((c != '\0') && ((i + total) < length));
 
-        total += i;
+        // Force null termination of message string
+        if (msg[i] != '\0') {
+            msg[i] = '\0';
+        }
+        log_debug("Received \"%s\"", msg);
 
-        log_debug() << "Received \"" << msg << "\"";
+        total += i;
 
         // If message is empty we don't need to handle it
         if (strlen(msg) > 0) {
