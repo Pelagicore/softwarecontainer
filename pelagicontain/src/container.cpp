@@ -31,9 +31,9 @@ Container::Container(const std::string &name,
     m_containerRoot(containerRoot),
     m_mountDir(containerRoot + "/late_mounts")
 {
-    // Make sure m_mountDir exist
+    // Make sure the directory for "late mounts" exist
     if (!isDirectory(m_mountDir.c_str())) {
-        log_error("Directory %s does not exist, shutting down.", m_mountDir.c_str());
+        log_error("Directory %s does not exist", m_mountDir.c_str());
         exit(-1);
     }
 
@@ -174,11 +174,11 @@ bool Container::setApplication(const std::string &appId)
     std::string appDirBase = m_containerRoot + "/" + appId;
     std::string dstDirBase = m_mountDir + "/" + m_name;
 
-    bool mountOk = true;
+    // If any bind mout call fails there's no need to make any remaining calls
+    bool allOk = true;
+    allOk = allOk && bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
+    allOk = allOk && bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
+    allOk = allOk && bindMountDir(appDirBase + "/home", dstDirBase + "/home");
 
-    mountOk = bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
-    mountOk = mountOk & bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
-    mountOk = mountOk & bindMountDir(appDirBase + "/home", dstDirBase + "/home");
-
-    return mountOk;
+    return allOk;
 }
