@@ -42,6 +42,7 @@ add_executable( pelagicontain
     dbusadaptor.h
     systemcallinterface.cpp
     devicenodegateway.cpp
+    ${PROJECT_SOURCE_DIR}/common/config.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain

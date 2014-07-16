@@ -187,8 +187,12 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     // will not be started during these tests we need to create a file so
     // DBusGateway doesn't fail
     std::string socketFile = m_gatewayDir + "/sess_" + m_containerName + ".sock";
-    FILE *fh = fopen(socketFile.c_str(), "wb");
-    fclose(fh);
+    std::string cmd_mkdir = "mkdir -p ";
+    cmd_mkdir += m_gatewayDir;
+    system(cmd_mkdir.c_str());
+    std::string cmd_touch = "touch ";
+    cmd_touch += socketFile;
+    system(cmd_touch.c_str());
 
     ASSERT_TRUE(gw.activate());
     EXPECT_EQ(config, systemcallInterface.fileContent());

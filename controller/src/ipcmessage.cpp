@@ -5,10 +5,10 @@
 #include <cstring>
 #include <iostream>
 
+#include "config.h"
 #include "ipcmessage.h"
 
 static const int OFFSET = 2;
-static const int BUF_SIZE = 1024;
 static const int PROTOCOL_INDEX = 0;
 static const char RUN_APP = '1';
 static const char KILL_APP = '2';
@@ -17,7 +17,8 @@ static const char SYS_CALL = '4';
 static const char VAR_VAL_DELIMITER = ' ';
 
 IPCMessage::IPCMessage(AbstractController &controller) :
-    m_controller(controller)
+    m_controller(controller),
+    m_bufferSize(Config::instance()->ipcBufferSize())
 {
 }
 
@@ -25,9 +26,60 @@ IPCMessage::~IPCMessage()
 {
 }
 
-bool IPCMessage::handleMessage(const std::string &message)
+bool IPCMessage::handleMessage(const char buf[], int length)
 {
-    const char *buf = message.c_str();
+    char c;
+    int total = 0;
+    char msg[m_bufferSize];
+
+    // If there is one big message in the buffer is isn't allowed to be bigger
+    // than the buffer we put it in.
+    if (length > m_bufferSize) {
+        log_error() << "Total message buffer size too big";
+        return false;
+    }
+
+    // Loop until the complete received buffer is processed, and find
+    // (possibly many) null terminated messages in buffer
+    bool done = false;
+    while (!done) {
+        memset(msg, '\0', sizeof(char) * m_bufferSize);
+        int i = 0;
+        // Look for null terminated message in buffer
+        do {
+            c = buf[i + total];
+            msg[i] = c;
+            ++i;
+        } while ((c != '\0') && ((i + total) < length));
+
+        // Force null termination of message string
+        if (msg[i] != '\0') {
+            msg[i] = '\0';
+        }
+        log_debug("Received \"%s\"", msg);
+
+        total += i;
+
+        // If message is empty we don't need to handle it
+        if (strlen(msg) > 0) {
+            if (!dispatchMessage(msg)) {
+                // The message was not understood by IPCMessage
+                log_error() << "IPC message to Controller was not sent";
+                return false;
+            }
+        }
+
+        if (total == length) {
+            done = true;
+        }
+    }
+
+    // All messages were dispatched
+    return true;
+}
+
+bool IPCMessage::dispatchMessage(const char buf[])
+{
     bool retVal = false;
 
     switch (buf[PROTOCOL_INDEX]) {
@@ -40,11 +92,11 @@ bool IPCMessage::handleMessage(const std::string &message)
         retVal = true;
         break;
     case SET_ENV_VAR:
-        callSetEnvironmentVariable(buf, message.size());
+        callSetEnvironmentVariable(buf, strlen(buf));
         retVal = true;
         break;
     case SYS_CALL:
-        callSystemCall(buf, message.size());
+        callSystemCall(buf, strlen(buf));
         retVal = true;
         break;
     default:
@@ -55,13 +107,13 @@ bool IPCMessage::handleMessage(const std::string &message)
     return retVal;
 }
 
-void IPCMessage::callSetEnvironmentVariable(const char *buf, int messageLength)
+void IPCMessage::callSetEnvironmentVariable(const char buf[], int messageLength)
 {
-    char variable[BUF_SIZE];
-    memset(variable, 0, sizeof(variable));
+    char variable[m_bufferSize];
+    memset(variable, 0, sizeof(char) * m_bufferSize);
 
-    char value[BUF_SIZE];
-    memset(value, 0, sizeof(value));
+    char value[m_bufferSize];
+    memset(value, 0, sizeof(char) * m_bufferSize);
 
     // Find the variable and the value
     for (int i = OFFSET; i < messageLength; ++i) {
@@ -83,10 +135,10 @@ void IPCMessage::callSetEnvironmentVariable(const char *buf, int messageLength)
     m_controller.setEnvironmentVariable(variableString, valueString);
 }
 
-void IPCMessage::callSystemCall(const char *buf, int messageLength)
+void IPCMessage::callSystemCall(const char buf[], int messageLength)
 {
-    char command[BUF_SIZE];
-    memset(command, 0, sizeof(command));
+    char command[m_bufferSize];
+    memset(command, 0, sizeof(char) * m_bufferSize);
 
     strncpy(command, buf + OFFSET, messageLength);
 

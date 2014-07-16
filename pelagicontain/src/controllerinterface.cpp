@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <iostream>
 
+#include "config.h"
 #include "controllerinterface.h"
 
 ControllerInterface::ControllerInterface(const std::string &gatewayDir):
@@ -16,7 +17,7 @@ ControllerInterface::ControllerInterface(const std::string &gatewayDir):
     m_listenSocket(0),
     m_connectionSocket(0),
     m_highestFd(0),
-    m_timeout(10)
+    m_timeout(Config::instance()->controllerConnectionTimeout())
 {
 }
 
@@ -150,6 +151,9 @@ bool ControllerInterface::startApp()
 
     if (canSend()) {
         char msg[] = {'1', '\0'};
+
+        log_debug("Sending: \"%s\"", msg);
+
         int ret = send(m_connectionSocket, msg, sizeof(msg), 0);
         if (ret == -1) {
             log_error() << "send:" << strerror(errno);
@@ -168,6 +172,9 @@ bool ControllerInterface::shutdown()
 
     if (canSend()) {
         char msg[] = {'2', '\0'};
+
+        log_debug("Sending: \"%s\"", msg);
+
         int ret = send(m_connectionSocket, msg, sizeof(msg), 0);
         if (ret == -1) {
             log_error() << "send:" << strerror(errno);

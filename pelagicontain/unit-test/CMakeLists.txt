@@ -19,6 +19,7 @@ add_executable(runUnitTestsPelagicontain
     ../src/networkgateway.cpp
     ../src/pelagicontain.cpp
     ../src/pulsegateway.cpp
+    ${PROJECT_SOURCE_DIR}/common/config.cpp
 )
 
 link_directories(

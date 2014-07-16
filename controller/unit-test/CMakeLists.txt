@@ -6,6 +6,7 @@ add_executable(runUnitTestsController
     main.cpp
     ipcmessage_unittest.cpp
     ../src/ipcmessage.cpp
+    ${PROJECT_SOURCE_DIR}/common/config.cpp
 )
 
 link_directories(

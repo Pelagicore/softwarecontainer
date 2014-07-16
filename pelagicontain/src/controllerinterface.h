@@ -82,7 +82,7 @@ private:
     int m_listenSocket;
     int m_connectionSocket;
     int m_highestFd;
-    //TODO: This should be set through some global config
+    // Timeout value (in seconds) for waiting for Controller to connect
     int m_timeout;
     struct sockaddr_un m_remote;
     struct timeval m_selectTimeout;
