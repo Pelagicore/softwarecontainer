@@ -176,7 +176,7 @@ int main(int argc, char **argv)
                 log_debug("Exited mainloop");
             } else {
                 // Fatal failure, only do necessary cleanup
-                log_error() << "Could not connect to Controller";
+                log_error() << "Got no connection from Controller";
                 pelagicontain->shutdownContainer();
             }
         }
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 
     if (rmdir(containerDir.c_str()) == -1) {
         log_error("Cannot delete dir %s, %s",
-                  gatewayDir.c_str(),
+                  containerDir.c_str(),
                   strerror(errno));
     }
 
