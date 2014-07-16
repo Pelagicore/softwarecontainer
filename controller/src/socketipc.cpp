@@ -45,7 +45,7 @@ bool SocketIPC::initialize(const std::string &socketPath)
 
     if (connect(m_socket, (struct sockaddr *)&remote, len) == -1) {
         log_error() << "connect:" << strerror(errno);
-        return true;
+        return false;
     }
 
     log_debug() << "Connected to Pelagicontain";

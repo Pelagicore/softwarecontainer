@@ -14,23 +14,6 @@
     bus as the tests. The stub is implemented as component-test/pam_stub.py. The
     stub exposes an API that mirrors the real PAM and helper methods that the tests
     uses to assert how Pelagicontain interacted with the PAM-stub.
-
-    The test procedure is as follows:
-
-    (Reset PAM-stub from any previous tests)
-
-    (Startup, preloading - Controller is started, gateways are created)
-    * Start Pelagicontain, pass the command to be executed in the container
-    * Assert Pelagicontain can be found on D-Bus
-
-    (Launching App - Gateways gets configured and activated, Controller starts App)
-    * Assert Pelagicontain::Launch can be called
-    * Assert the expected call to PAM::RegisterClient was made
-    * Assert the expected call to PAM::UpdateFinished was made
-
-    (Shutdown, teardown - Bring down gateways and Controller)
-    * Issue 'shutdown' of Pelagicontain
-    * Assert the expected call to PAM::UnregisterClient was made
 """
 import os
 import time
@@ -54,7 +37,28 @@ helper = ComponentTestHelper()
 
 class TestPelagicontain():
 
-    def test_pelagicontain(self, pelagicontain_binary, container_path, teardown_fixture):
+    def test_pelagicontain(
+            self,
+            pelagicontain_binary,
+            container_path,
+            teardown_fixture):
+        """ The test procedure is as follows:
+
+            (Reset PAM-stub from any previous tests)
+
+            (Startup, preloading - Controller is started, gateways are created)
+            * Start Pelagicontain, pass the command to be executed in the container
+            * Assert Pelagicontain can be found on D-Bus
+
+            (Launching App - Gateways gets configured and activated, Controller starts App)
+            * Assert Pelagicontain::Launch can be called
+            * Assert the expected call to PAM::RegisterClient was made
+            * Assert the expected call to PAM::UpdateFinished was made
+
+            (Shutdown, teardown - Bring down gateways and Controller)
+            * Issue 'shutdown' of Pelagicontain
+            * Assert the expected call to PAM::UnregisterClient was made
+        """
         helper.pam_iface().test_reset_values()
 
         # Start Pelagicontain, test is passed if Popen succeeds.
@@ -89,9 +93,75 @@ class TestPelagicontain():
         # PAM::UnregisterClient
         assert helper.pam_iface().test_unregisterclient_called()
 
+    def test_pc_shuts_down_when_no_containedapp(
+            self,
+            pelagicontain_binary,
+            container_path,
+            teardown_fixture):
+        """ Test that PC shuts down if there is no app to laucnh.
+
+            This test assumes all other prerequisites (other than there's no
+            file named 'containedapp' where it should be) for running an app
+            are fulfilled.
+
+            * Start PC
+            * Remove containedapp if there is one (might be left from some test)
+            * Launch app (this is a correct app id and so on)
+            * Assert PC shuts down as a result
+
+            TODO: This test will pass if PC crashes or exits for some other
+            reason as well...
+        """
+        helper.start_pelagicontain(pelagicontain_binary, container_path)
+        pc_iface = helper.pelagicontain_iface()
+        self.remove_containedapp_if_present(container_path)
+        pc_iface.Launch(helper.app_id())
+        time.sleep(1)
+        assert not self.pelagicontain_is_running()
+
+    def test_pc_shuts_down_when_missing_latemount_dir(
+            self,
+            pelagicontain_binary,
+            teardown_fixture):
+        """ Test that PC shuts down if there are crucial container directories
+            missing, e.g. '<container-root>/late_mounts/<container-name>'
+
+            * Start Pelagicontain with a container root that doesn't contain a
+              late_mounts directory
+            * Assert Pelagicontain shuts down
+
+            TODO: This test will pass if PC crashes or exits for some other
+            reason as well...
+        """
+        container_path = "/tmp/nonexistent/"
+        if not os.path.isdir(container_path):
+            os.makedirs(container_path)
+        helper.start_pelagicontain(pelagicontain_binary, container_path)
+        time.sleep(1)
+        assert not self.pelagicontain_is_running()
+
     def create_app(self, container_path):
         containedapp_file = container_path + "/com.pelagicore.comptest/bin/containedapp"
         with open(containedapp_file, "w") as f:
             print "Overwriting containedapp..."
             f.write(SLEEPY_APP)
         os.system("chmod 755 " + containedapp_file)
+
+    def remove_containedapp_if_present(self, container_path):
+        containedapp = container_path + helper.app_id() + "/bin/containedapp"
+        if os.path.isfile(containedapp):
+            os.remove(containedapp)
+
+    def pelagicontain_is_running(self):
+        """ Return False is Pelagicontain is not running, True if it is.
+        """
+        # If the process is a zombie it will be killed by this call, otherwise
+        # it's unaffected
+        helper.poke_pelagicontain_zombie()
+        pc_pid = helper.pelagicontain_pid()
+        try:
+            os.kill(pc_pid, 0)
+        except OSError:
+            return False
+        else:
+            return True

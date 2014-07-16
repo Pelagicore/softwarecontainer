@@ -25,17 +25,22 @@ public:
     ~SocketIPC();
 
     /*! Connects to Pelagicontain through the IPC socket set up by Pelagicontain.
+     *
      *  Returns true if the connection could be estabished, false on error. If
      *  false is returned it is considered a fatal error and Controller should
-     *  exist as soon as possible.
+     *  exit as soon as possible. The path specified should be an absolute path
+     *  and relative to the inside of the container (unless controller is run
+     *  outside of a container for e.g. testing reasons).
      *
-     * \param socketPath An absolute path to the IPC socket
+     * \param socketPath An absolute path to the IPC socket, relative to the
+     *                   inside of the container.
      *
      * \return true or false
      */
     bool initialize(const std::string &socketPath);
 
     /*! Checks if there are any messages from Pelagicontain to recieve.
+     *
      *  A timeout signal handler calls this method until it returns false, which
      *  is only done when an error occurs. Will be called on timeout as long
      *  as it returns true.
