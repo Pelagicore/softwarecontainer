@@ -29,18 +29,54 @@ LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main conte
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
 
-/* Needs to be global in order to be reachable from the signal handler */
+/* These has to be global in order to be reachable from the signal handler */
 static Pelagicontain *pelagicontain;
+static pid_t pcPid;
+static std::string containerDir;
+
+/**
+ * Remove the dirs created by main when we cleanup
+ */
+void remove_dirs()
+{
+    std::string gatewayDir = containerDir + "/gateways";
+    if (rmdir(gatewayDir.c_str()) == -1) {
+        log_error("Cannot delete dir %s, %s",
+                  gatewayDir.c_str(),
+                  strerror(errno));
+    }
+
+    if (rmdir(containerDir.c_str()) == -1) {
+        log_error("Cannot delete dir %s, %s",
+                  containerDir.c_str(),
+                  strerror(errno));
+    }
+}
 
 void signalHandler(int signum)
 {
     log_debug() << "caught signal " << signum;
-    pelagicontain->shutdown();
+    if (!pcPid) {
+        if (pelagicontain) {
+            // pelagicontain might not have been initialized (preloaded), so we can't just
+            // run shutdownContainer. But in the case it is initialized we DO want to run
+            // it. Unfortunately, there is currently no way to check that.
+            // pelagicontain->shutdownContainer();
+            delete pelagicontain;
+            remove_dirs();
+        }
+        exit(signum);
+    } else {
+        // But if pcPid is set, then it is definately initialized
+        // This will shutdown pelagicontain and make it exit the main loop
+        // back to main() which will take care of the rest of the cleanup
+        pelagicontain->shutdown();
+    }
 }
 
 int main(int argc, char **argv)
 {
-
+    // Register signalHandler with signals
     signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
 
@@ -92,7 +128,7 @@ int main(int argc, char **argv)
     // Create gateway directory for container in containerRoot/gateways.
     // This dir will contain various sockets etc acting as gateways
     // in/out of the container.
-    std::string containerDir = containerRoot + "/" + containerName;
+    containerDir = containerRoot + "/" + containerName;
     std::string gatewayDir = containerDir + "/gateways";
     if (mkdir(containerDir.c_str(), S_IRWXU) == -1) {
         log_error("Could not create container directory %s, %s.",
@@ -158,10 +194,10 @@ int main(int argc, char **argv)
                                                  gatewayDir,
                                                  containerName));
 
-        pid_t pcPid = pelagicontain->preload(containerName,
-                                            containerConfig,
-                                            containerRoot,
-                                            containedCommand);
+        pcPid = pelagicontain->preload(containerName,
+                                       containerConfig,
+                                       containerRoot,
+                                       containedCommand);
 
         if (!pcPid) {
             // Fatal failure, only do necessary cleanup
@@ -183,19 +219,7 @@ int main(int argc, char **argv)
     }
 
     delete pelagicontain;
-
-    // remove instance specific dirs again
-    if (rmdir(gatewayDir.c_str()) == -1) {
-        log_error("Cannot delete dir %s, %s",
-                  gatewayDir.c_str(),
-                  strerror(errno));
-    }
-
-    if (rmdir(containerDir.c_str()) == -1) {
-        log_error("Cannot delete dir %s, %s",
-                  containerDir.c_str(),
-                  strerror(errno));
-    }
+    remove_dirs();
 
     log_debug() << "Goodbye.";
 }
