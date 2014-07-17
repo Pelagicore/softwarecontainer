@@ -80,20 +80,6 @@ class TestCleanup(object):
         assert self.__dir_diff(container_before, container_path)
         assert self.__dir_diff(late_mounts_before, container_path + "/late_mounts/")
 
-    def test_pc_start_interrupt(self, pelagicontain_binary, container_path, teardown_fixture):
-        container_before = os.listdir(container_path)
-        late_mounts_before = os.listdir(container_path + "/late_mounts/")
-        helper.pam_iface().test_reset_values()
-        self.__create_app(container_path)
-
-        """ Interrupt before loading an app """
-        helper.start_pelagicontain(pelagicontain_binary, container_path)
-        helper.shutdown_pelagicontain()
-        sleep(1)
-
-        assert self.__dir_diff(container_before, container_path)
-        assert self.__dir_diff(late_mounts_before, container_path + "/late_mounts/")
-
     def __create_app(self, container_path):
         """ Write the app to pelagicontain
         """
