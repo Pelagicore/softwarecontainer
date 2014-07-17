@@ -49,7 +49,6 @@ public:
      * Calls the lxc-execute commmand.
      *
      * \return The pid of lxc-execute process, a '0' is returned on error.
-     * on error
      */
     pid_t execute();
 
