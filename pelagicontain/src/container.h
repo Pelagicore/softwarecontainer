@@ -25,14 +25,38 @@ class Container
 public:
 
     /*!
-     * \param name The name of the container
-     * \param configFile A path to the configuration file (including the file name)
+     * Constructor
+     *
+     * \param name Name of the container
+     * \param configFile Path to the configuration file (including the file name)
+     * \param containerRoot A path to the root of the container, i.e. the base
+     *  path to e.g. the configurations and application root
+     * \param containedCommand The command to be executed inside the container
      */
-    Container(const std::string &name, const std::string &configFile, const std::string &containerRoot);
+    Container(const std::string &name,
+              const std::string &configFile,
+              const std::string &containerRoot,
+              const std::string &containedCommand);
 
     ~Container();
 
-    std::vector<std::string> commands(const std::string &containedCommand);
+    /*!
+     * Calls the lxc-create command.
+     */
+    void create();
+
+    /*!
+     * Calls the lxc-execute commmand.
+     *
+     * \return The pid of lxc-execute process, a '0' is returned on error.
+     * on error
+     */
+    pid_t execute();
+
+    /*!
+     * Calls the lxc-destroy command.
+     */
+    void destroy();
 
     /*!
      * Setup the container for a specific app
@@ -106,6 +130,7 @@ private:
 
     std::string m_containerRoot;
     std::string m_mountDir;
+    std::string m_containedCommand;
 };
 
 #endif //CONTAINER_H

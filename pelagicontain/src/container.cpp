@@ -25,11 +25,13 @@
 
 Container::Container(const std::string &name,
                      const std::string &configFile,
-                     const std::string &containerRoot):
+                     const std::string &containerRoot,
+                     const std::string &containedCommand):
     m_configFile(configFile),
     m_name(name),
     m_containerRoot(containerRoot),
-    m_mountDir(containerRoot + "/late_mounts")
+    m_mountDir(containerRoot + "/late_mounts"),
+    m_containedCommand(containedCommand)
 {
 }
 
@@ -83,7 +85,6 @@ bool Container::isDirectory(const std::string &path)
 
 Container::~Container()
 {
-
     // Unmount all mounted dirs. Done backwards, behaving like a stack.
     for (std::vector<std::string>::const_reverse_iterator it = m_mounts.rbegin();
          it != m_mounts.rend();
@@ -112,14 +113,13 @@ const char *Container::name()
     return m_name.c_str();
 }
 
-std::vector<std::string> Container::commands(const std::string &containedCommand)
+void Container::create()
 {
-    int max_cmd_len = sysconf(_SC_ARG_MAX);
-    char lxc_command[max_cmd_len];
-    std::vector<std::string> commands;
+    int maxCmdLen = sysconf(_SC_ARG_MAX);
+    char lxcCommand[maxCmdLen];
 
     // Command to create container
-    sprintf(lxc_command,
+    sprintf(lxcCommand,
             "CONTROLLER_DIR=%s GATEWAY_DIR=%s MOUNT_DIR=%s lxc-create -n %s -t %s"
             " -f %s > /tmp/lxc_%s.log",
             (m_containerRoot + "/bin").c_str(),
@@ -129,20 +129,56 @@ std::vector<std::string> Container::commands(const std::string &containedCommand
             LXCTEMPLATE,
             m_configFile.c_str(),
             name());
-    commands.push_back(std::string(lxc_command));
+
+    log_debug("%s", lxcCommand);
+    system(lxcCommand);
+}
+
+pid_t Container::execute()
+{
+    int maxCmdLen = sysconf(_SC_ARG_MAX);
+    char lxcCommand[maxCmdLen];
 
     // Create command to execute inside container
-    snprintf(lxc_command, max_cmd_len,
+    snprintf(lxcCommand, maxCmdLen,
              "lxc-execute -n %s -- env %s",
              name(),
-             containedCommand.c_str());
-    commands.push_back(std::string(lxc_command));
+             m_containedCommand.c_str());
+
+    std::vector<std::string> executeCommandVec;
+    executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
+    std::vector<std::string> envVarVec = {"MOUNT_DIR=" + m_mountDir};
+
+    log_debug("%s", lxcCommand);
+
+    pid_t pid;
+    try {
+        Glib::spawn_async_with_pipes(
+            ".",
+            executeCommandVec,
+            envVarVec,
+            Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
+            sigc::slot<void>(),
+            &pid);
+    } catch (const Glib::Error &ex) {
+        log_error("spawn error: %s", ex.what().c_str());
+        pid = 0;
+    }
+
+    return pid;
+}
+
+void Container::destroy()
+{
+    int maxCmdLen = sysconf(_SC_ARG_MAX);
+    char lxcCommand[maxCmdLen];
 
     // Command to destroy container
-    snprintf(lxc_command, max_cmd_len, "lxc-destroy -f -n %s", name());
-    commands.push_back(std::string(lxc_command));
+    snprintf(lxcCommand, maxCmdLen, "lxc-destroy -f -n %s", name());
 
-    return commands;
+    std::string destroyCommand(lxcCommand);
+    log_debug() << destroyCommand;
+    Glib::spawn_command_line_sync(destroyCommand);
 }
 
 bool Container::bindMountDir(const std::string &src, const std::string &dst)
