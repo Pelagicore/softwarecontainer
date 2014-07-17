@@ -86,7 +86,7 @@ void Controller::killApp()
 {
     log_info() << "Trying to kill pid: " << m_pid;
     if (m_pid == 0) {
-        log_info() << "WARNING: Trying to kill an app without previously having started one. "
+        log_warn() << "Trying to kill an app without previously having started one. "
             << "This is normal if this is a preloaded but unused container.";
         shutdown();
         return;

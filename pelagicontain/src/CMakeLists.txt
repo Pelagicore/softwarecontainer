@@ -1,6 +1,8 @@
 pkg_check_modules(DEPENDENCIES REQUIRED libpulse jansson)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
+find_package(SharedServiceInterfaces REQUIRED)
+
 link_directories(
 	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS} ${GLIBMM_LIBRARY_DIRS})
 
@@ -11,8 +13,8 @@ find_program(DBUSBINDINGTOOL "dbusxx-xml2cpp")
 macro(generate_dbus_hfile type xml h)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${h}
-        COMMAND dbusxx-xml2cpp ../../shared-service-interfaces/${xml} --${type}=${h}
-        DEPENDS ../../shared-service-interfaces/${xml}
+        COMMAND dbusxx-xml2cpp ${SHARED_SERVICE_INTERFACES_PATH}/${xml} --${type}=${h}
+        DEPENDS ${SHARED_SERVICE_INTERFACES_PATH}/${xml}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 endmacro(generate_dbus_hfile type xml h)

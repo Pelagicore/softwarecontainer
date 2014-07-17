@@ -1,3 +1,0 @@
-[submodule "shared-service-interfaces"]
-	path = shared-service-interfaces
-	url = git@git.pelagicore.net:application-management/shared-service-interfaces.git

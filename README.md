@@ -1,9 +1,6 @@
 This package includes the Pelagicontain component
 
 
-After cloning run this to initialize the submodules:
-
-git submodule update --init
 
 
 To build the project documentation set -DENABLE_DOC=1 when running cmake.

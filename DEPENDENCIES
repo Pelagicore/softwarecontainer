@@ -1,4 +1,5 @@
 Build dependencies:
+* shared-service-interfaces : git@git.pelagicore.net:application-management/shared-service-interfaces.git
 * ivi-logging
 * pelagicore-utils
 * glibmm-2.4
