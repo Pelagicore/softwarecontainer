@@ -37,7 +37,7 @@ static std::string containerDir;
 /**
  * Remove the dirs created by main when we cleanup
  */
-void remove_dirs()
+void removeDirs()
 {
     std::string gatewayDir = containerDir + "/gateways";
     if (rmdir(gatewayDir.c_str()) == -1) {
@@ -63,7 +63,7 @@ void signalHandler(int signum)
             // it. Unfortunately, there is currently no way to check that.
             // pelagicontain->shutdownContainer();
             delete pelagicontain;
-            remove_dirs();
+            removeDirs();
         }
         exit(signum);
     } else {
@@ -134,13 +134,24 @@ int main(int argc, char **argv)
         log_error("Could not create container directory %s, %s.",
                   containerDir.c_str(),
                   strerror(errno));
-        exit(-1);
+        return -1;
     }
     if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
         log_error("Could not create gateway directory %s, %s.",
                   gatewayDir.c_str(),
                   strerror(errno));
-        exit(-1);
+        return -1;
+    }
+
+    Container container(containerName,
+                        containerConfig,
+                        containerRoot,
+                        containedCommand);
+
+    if (!container.initialize()) {
+        log_error() << "Could not setup container for preloading";
+        removeDirs();
+        return -1;
     }
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
@@ -194,10 +205,7 @@ int main(int argc, char **argv)
                                                  gatewayDir,
                                                  containerName));
 
-        pcPid = pelagicontain->preload(containerName,
-                                       containerConfig,
-                                       containerRoot,
-                                       containedCommand);
+        pcPid = pelagicontain->preload(&container);
 
         if (!pcPid) {
             // Fatal failure, only do necessary cleanup
@@ -219,7 +227,7 @@ int main(int argc, char **argv)
     }
 
     delete pelagicontain;
-    remove_dirs();
+    removeDirs();
 
     log_debug() << "Goodbye.";
 }

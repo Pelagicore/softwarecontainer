@@ -18,16 +18,12 @@ Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
     m_mainloopInterface(mainloopInterface),
     m_controllerInterface(controllerInterface),
     m_cookie(cookie),
-    m_launching(false),
-    m_destroyCommand("")
+    m_launching(false)
 {
 }
 
 Pelagicontain::~Pelagicontain()
 {
-    if (m_container) {
-        delete m_container;
-    }
 }
 
 void Pelagicontain::addGateway(Gateway *gateway)
@@ -36,57 +32,20 @@ void Pelagicontain::addGateway(Gateway *gateway)
 }
 
 // Preload the container. This is a non-blocking operation
-pid_t Pelagicontain::preload(const std::string &containerName,
-                             const std::string &containerConfig,
-                             const std::string &containerRoot,
-                             const std::string &containedCommand)
+pid_t Pelagicontain::preload(Container *container)
 {
-    m_container = new Container(containerName, containerConfig, containerRoot);
-    if (!m_container->initialize()) {
-        log_error() << "Could not setup container for preloading";
-        // Nothing has really started yet, returning an invalid pid is the
-        // only thing needed to 'shut down'
-        return 0;
-    }
+    m_container = container;
 
-    Glib::SignalChildWatch cw = Glib::signal_child_watch();
+    m_container->create();
 
-    // Get the commands to run in a separate process
-    std::vector<std::string> commands;
-    commands = m_container->commands(containedCommand);
-
-    std::string createCommand = commands[0];
-    std::string executeCommand = commands[1];
-    m_destroyCommand = commands[2];
-
-    log_debug(createCommand.c_str());
-    system(createCommand.c_str());
-
-    log_debug(executeCommand.c_str());
-    std::vector<std::string> executeCommandVec;
-    executeCommandVec = Glib::shell_parse_argv(executeCommand);
-
-    std::vector<std::string> envVarVec = {"MOUNT_DIR=" + containerRoot + "/late_mounts"};
-
-    int pid;
-    try {
-        Glib::spawn_async_with_pipes(
-            ".",
-            executeCommandVec,
-            envVarVec,
-            Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
-            sigc::slot<void>(),
-            &pid);
-    } catch (const Glib::Error &ex) {
-        log_error("spawn error: %s", ex.what().c_str());
-    }
-
-    sigc::slot<void, int, int> shutdownSlot;
-    shutdownSlot = sigc::mem_fun(this, &Pelagicontain::handleControllerShutdown);
+    pid_t pid = m_container->execute();
 
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
     if (pid) {
+        Glib::SignalChildWatch cw = Glib::signal_child_watch();
+        sigc::slot<void, int, int> shutdownSlot;
+        shutdownSlot = sigc::mem_fun(this, &Pelagicontain::handleControllerShutdown);
         cw.connect(shutdownSlot, pid);
     }
 
@@ -100,8 +59,7 @@ bool Pelagicontain::establishConnection()
 
 void Pelagicontain::shutdownContainer()
 {
-    log_debug() << "Issuing: " << m_destroyCommand;
-    Glib::spawn_command_line_sync(m_destroyCommand);
+    m_container->destroy();
 }
 
 void Pelagicontain::handleControllerShutdown(int pid, int exitCode)
