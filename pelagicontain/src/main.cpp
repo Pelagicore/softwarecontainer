@@ -38,6 +38,8 @@
 #include "cgroupsgateway.h"
 #endif
 
+#include "UNIXSignalGlibHandler.h"
+
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
@@ -57,15 +59,11 @@ void removeDirs()
 {
     std::string gatewayDir = containerDir + "/gateways";
     if (rmdir(gatewayDir.c_str()) == -1) {
-        log_error("Cannot delete dir %s, %s",
-                  gatewayDir.c_str(),
-                  strerror(errno));
+        log_error() << "Cannot delete dir " << gatewayDir << " , " << strerror(errno);
     }
 
     if (rmdir(containerDir.c_str()) == -1) {
-        log_error("Cannot delete dir %s, %s",
-                  containerDir.c_str(),
-                  strerror(errno));
+        log_error() << "Cannot delete dir " << containerDir << " , " << strerror(errno);
     }
 }
 
@@ -92,10 +90,6 @@ void signalHandler(int signum)
 
 int main(int argc, char **argv)
 {
-    // Register signalHandler with signals
-    signal(SIGINT, signalHandler);
-    signal(SIGTERM, signalHandler);
-
     const char *summary = "Pelagicore container utility. "
                           "Requires an absolute path to the container root, "
                           "the command to run inside the container and "
@@ -123,7 +117,7 @@ int main(int argc, char **argv)
     }
 
     if (argc < 4) {
-        log_error("Invalid arguments");
+        log_error() << "Invalid arguments";
         commandLineParser.printHelp();
         return -1;
     } else {
@@ -133,7 +127,7 @@ int main(int argc, char **argv)
     }
 
     if (containerRoot.c_str()[0] != '/') {
-        log_error("Path to container root must be absolute");
+        log_error() << "Path to container root must be absolute";
         commandLineParser.printHelp();
         return -1;
     }
@@ -147,35 +141,46 @@ int main(int argc, char **argv)
     containerDir = containerRoot + "/" + containerName;
     std::string gatewayDir = containerDir + "/gateways";
     if (mkdir(containerDir.c_str(), S_IRWXU) == -1) {
-        log_error("Could not create container directory %s, %s.",
-                  containerDir.c_str(),
-                  strerror(errno));
-        return -1;
+        log_error() << "Could not create container directory " <<
+                  containerDir << " , " << strerror(errno);
+        exit(-1);
     }
     if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
-        log_error("Could not create gateway directory %s, %s.",
-                  gatewayDir.c_str(),
-                  strerror(errno));
-        return -1;
-    }
-
-    // Make sure path ends in '/' since it might not always be checked
-    if (containerRoot.back() != '/') {
-        containerRoot += "/";
-    }
-
-    Container container(containerName,
-                        containerConfig,
-                        containerRoot,
-                        containedCommand);
-
-    if (!container.initialize()) {
-        log_error() << "Could not setup container for preloading";
-        removeDirs();
-        return -1;
+        log_error() << "Could not create gateway directory " <<
+                  gatewayDir << strerror(errno);
+        exit(-1);
     }
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
+
+    // Register signalHandler with signals
+	std::vector<int> signals = {SIGTERM}; // SIGINT is automatically handled by UNIXSignalGlibHandler
+	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
+
+	    log_debug() << "caught signal " << signum;
+
+	    ml->quit();
+
+//	    if (!pcPid) {
+//	        if (pelagicontain) {
+//	            // pelagicontain might not have been initialized (preloaded), so we can't just
+//	            // run shutdownContainer. But in the case it is initialized we DO want to run
+//	            // it. Unfortunately, there is currently no way to check that.
+//	            // pelagicontain->shutdownContainer();
+//	            delete pelagicontain;
+//	            remove_dirs();
+//	        }
+//
+//	        exit(signum);
+//
+//	    } else {
+//	        // But if pcPid is set, then it is definately initialized
+//	        // This will shutdown pelagicontain and make it exit the main loop
+//	        // back to main() which will take care of the rest of the cleanup
+//	        pelagicontain->shutdown();
+//	    }
+
+	});
 
     { // Create a new scope so that we can do a clean up after dtors
         DBus::Glib::BusDispatcher dispatcher;
@@ -257,7 +262,7 @@ int main(int argc, char **argv)
             if (connected) {
                 ml->run();
                 // When we return here Pelagicontain has exited the mainloop
-                log_debug("Exited mainloop");
+                log_debug() << "Exited mainloop";
             } else {
                 // Fatal failure, only do necessary cleanup
                 log_error() << "Got no connection from Controller";

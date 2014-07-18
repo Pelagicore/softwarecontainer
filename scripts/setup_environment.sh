@@ -9,7 +9,7 @@
 #
 # Additional arguments: Files to put in <deployment dir>/<appId>/bin/
 #
-# Example: ./setup_environment.sh -d /tmp/container -d /tmp/container/
+# Example: ./setup_environment.sh -d /tmp/container
 #                                 -a com.pelagicore.myApp -c yes
 #                                 -- /etc/password
 

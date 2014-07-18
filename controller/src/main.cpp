@@ -9,6 +9,8 @@
 #include "controller.h"
 #include "socketipc.h"
 
+#include "CommandLineParser.h"
+
 /**
  * "Controller" is meant to be the interface Pelagicontain uses to reach the
  * inside of the container.
@@ -30,6 +32,9 @@ bool isDirectory(const std::string &path)
 
 int main(int argc, char **argv)
 {
+//	pelagicore::CommandLineParser parser("Pelagicontain controller", "<path>", PACKAGE_VERSION, "Description of the Pelagicontain controller");
+//	parser.parse(argc, argv);
+
     log_info() << "In Controller";
 
     /** The first command line arg to controller can be the path to where the
