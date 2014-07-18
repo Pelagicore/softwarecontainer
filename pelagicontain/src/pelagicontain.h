@@ -21,6 +21,7 @@ public:
      *
      * \param pamInterface A pointer to the Platform Access Manager interface
      * \param mainloopInterface A pointer to the mainloop interface
+     * \param controllerInterface A pointer to the Controller interface
      * \param cookie A unique identifier used to distinguish unique instances
      *  of Pelagicontain
      */
@@ -39,27 +40,16 @@ public:
 
     /*! Starts the container preloading phase.
      *
-     * The three phases, 'preload', 'launch', and 'shutdown' are initiated
-     * by calling this method. The preload phase is started directly as
-     * a result of calling this method. The launch and shotdown phases are
-     * initiated by the client calling Pelagicontain::launch and
-     * Pelagicontain::shutdown respectively as separate events, but those
-     * must be preceeded by a call to this method. The call to this method
-     * should be done as part of starting the whole Pelagicontain component.
+     * The 'preload' phase is initiated by a call to this method. If an invalid
+     * pid is returned, there has been an error and the container will not
+     * be functional. This is considered fatal, no further calls should be
+     * made and we should shut down.
      *
-     * \param containerName Name of the container
-     * \param containerConfig Path to the global config (/etc/pelagicontain
-              commonly)
-     * \param containerRoot A path to the root of the container, i.e. the base
-     *  path to e.g. the configurations and application root
-     * \param containedCommand The command to be executed inside the container
+     * \param container The container object to preload
      *
-     * \return The PID of the container
+     * \return The PID of the container, '0' on error
      */
-    pid_t preload(const std::string &containerName,
-                  const std::string &containerConfig,
-                  const std::string &containerRoot,
-                  const std::string &containedCommand);
+    pid_t preload(Container *container);
 
     /*! Initiates the 'launch' phase.
      *
@@ -144,8 +134,6 @@ private:
 
     // Keeps track of if someone has called launch
     bool m_launching;
-
-    std::string m_destroyCommand;
 };
 
 #endif /* PELAGICONTAIN_H */
