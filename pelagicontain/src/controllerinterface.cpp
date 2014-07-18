@@ -54,7 +54,7 @@ bool ControllerInterface::initialize()
     strcpy(local.sun_path, m_socketPath.c_str());
     unlink(local.sun_path);
 
-    int len = strlen(local.sun_path) * sizeof(local.sun_family);
+    int len = strlen(local.sun_path) + sizeof(local.sun_family);
     if (bind(m_listenSocket, (struct sockaddr *)&local, len) == -1) {
         log_error() << "bind:" << strerror(errno);
         return false;
