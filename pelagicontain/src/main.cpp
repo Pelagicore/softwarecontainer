@@ -180,7 +180,7 @@ int main(int argc, char **argv)
 //	        pelagicontain->shutdown();
 //	    }
 
-	});
+	}, ml->get_context()->gobj());
 
     { // Create a new scope so that we can do a clean up after dtors
         DBus::Glib::BusDispatcher dispatcher;
