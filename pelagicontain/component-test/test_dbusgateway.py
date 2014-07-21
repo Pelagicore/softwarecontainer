@@ -22,7 +22,7 @@ from common import ComponentTestHelper
 
 
 CONFIG = {
-    "dbus-proxy-config-session": [
+    "dbus-gateway-config-session": [
         {
             "direction": "*",
             "interface": "*",
@@ -30,7 +30,7 @@ CONFIG = {
             "method": "*"
         }
     ],
-    "dbus-proxy-config-system": [
+    "dbus-gateway-config-system": [
         {
             "direction": "outgoing",
             "interface": "org.freedesktop.DBus.Introspectable",
@@ -41,20 +41,20 @@ CONFIG = {
 }
 
 CONFIGS = {
-    "dbus-proxy": json.dumps(CONFIG)
+    "dbus-gateway": json.dumps(CONFIG)
 }
 
 CONFIG_WITHOUT_PERMISSION = {
-    "dbus-proxy-config-session": [],
-    "dbus-proxy-config-system": []
+    "dbus-gateway-config-session": [],
+    "dbus-gateway-config-system": []
 }
 
 CONFIGS_WITHOUT_PERMISSION = {
-    "dbus-proxy": json.dumps(CONFIG_WITHOUT_PERMISSION)
+    "dbus-gateway": json.dumps(CONFIG_WITHOUT_PERMISSION)
 }
 
 CONFIGS_WITH_ERROR = {
-    "dbus-proxy": "{}"
+    "dbus-gateway": "{}"
 }
 
 # The app introspects PAM on D-Bus using dbus-send and writes the output to file

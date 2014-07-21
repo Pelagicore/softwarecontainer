@@ -43,7 +43,7 @@ DBusGateway::~DBusGateway()
 
 std::string DBusGateway::id()
 {
-    return "dbus-proxy";
+    return "dbus-gateway";
 }
 
 bool DBusGateway::setConfig(const std::string &config)
