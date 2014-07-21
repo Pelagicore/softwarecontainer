@@ -143,6 +143,11 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    // Make sure path ends in '/' since it might not always be checked
+    if (containerRoot.back() != '/') {
+        containerRoot += "/";
+    }
+
     Container container(containerName,
                         containerConfig,
                         containerRoot,
