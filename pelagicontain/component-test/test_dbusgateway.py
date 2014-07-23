@@ -41,7 +41,7 @@ CONFIG = {
 }
 
 CONFIGS = {
-    "dbus-gateway": json.dumps(CONFIG)
+    "dbus": json.dumps(CONFIG)
 }
 
 CONFIG_WITHOUT_PERMISSION = {

@@ -29,7 +29,7 @@ NetworkGateway::~NetworkGateway()
 
 std::string NetworkGateway::id()
 {
-    return "network-gateway";
+    return "network";
 }
 
 bool NetworkGateway::setConfig(const std::string &config)

@@ -76,7 +76,7 @@ def ping_successful(container_path):
 @pytest.fixture(params=TEST_CONFIGS)
 def setup(request, teardown_fixture, pelagicontain_binary, container_path):
     helper.pam_iface().test_reset_values()
-    helper.pam_iface().helper_set_configs({"network-gateway": json.dumps(request.param)})
+    helper.pam_iface().helper_set_configs({"network": json.dumps(request.param)})
 
     assert helper.start_pelagicontain(pelagicontain_binary, container_path)
 
