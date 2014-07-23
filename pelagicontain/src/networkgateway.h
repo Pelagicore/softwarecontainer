@@ -158,14 +158,24 @@ private:
 
     /*! Parse the JSON configuration passed down from Platform Access Manager
      *
-     * Parses the configuration and looks up the value for the key passed as argument.
+     *  Returns true if the "internet-access" key is set to true and returns
+     *  false if not.
      *
      * \param config The JSON string containing the configuration
-     * \param key The key to look up.
-     * \return std::string  Value belonging to key
-     * \return Empty string  Upon failure
+     * \return true or false
      */
-    std::string parseConfig(const std::string &config, const std::string &key);
+    bool isInternetAccessSet(const std::string &config);
+
+    /*! Parse the JSON configuration passed down from Platform Access Manager
+     *
+     *  Returns the string value of the "gateway" key. If there is an error
+     *  or the value is an empty string, an empty string is returned.
+     *
+     * \param config The JSON string containing the configuration
+     * \return An empty string if invalid or empty key, otherwise string with
+     *         gateway
+     */
+    std::string gatewayFromConfig(const std::string &config);
 
     static int waitForDevice(const std::string &iface);
 

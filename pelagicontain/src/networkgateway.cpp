@@ -36,33 +36,23 @@ bool NetworkGateway::setConfig(const std::string &config)
 {
     bool success = true;
 
-    /* Check the value of the internet-access key of the config*/
-    std::string value = parseConfig(config.c_str(), "internet-access");
-    if (value.compare("true") == 0)
-    {
+    if (isInternetAccessSet(config)) {
         log_debug("Internet access will be enabled");
         m_internetAccess = true;
-    }
-    else
-    {
+    } else {
         log_debug("Internet access disabled");
         m_internetAccess = false;
     }
 
-    /* Retrieve the gateway IP */
-    m_gateway = parseConfig(config.c_str(), "gateway");
+    m_gateway = gatewayFromConfig(config);
 
-    if (m_gateway.compare("") != 0)
-    {
+    if (m_gateway.compare("") != 0) {
         log_debug("Default gateway set to %s", m_gateway.c_str());
-    }
-    else
-    {
+    } else {
         m_internetAccess = false;
         log_debug("No gateway. Network access will be disabled");
 
-        if (m_internetAccess)
-        {
+        if (m_internetAccess) {
             log_error("Bad gateway setting in configuration file");
             success = false;
         }
@@ -363,12 +353,13 @@ bool NetworkGateway::teardownIptables(const std::string &ipAddress)
     return true;
 }
 
-std::string NetworkGateway::parseConfig(const std::string &config, const std::string &key) {
+bool NetworkGateway::isInternetAccessSet(const std::string &config)
+{
     json_error_t error;
-    json_t       *root, *value;
-    std::string ret = "";
+    json_t *root, *value;
+    bool accessSet = false;
 
-    /* Get root JSON object */
+    // Get root JSON object
     root = json_loads(config.c_str(), 0, &error);
 
     if (!root) {
@@ -376,25 +367,53 @@ std::string NetworkGateway::parseConfig(const std::string &config, const std::st
         goto cleanup_parse_json;
     }
 
-    // Get string
-    value = json_object_get(root, key.c_str());
-
-    if (!json_is_string(value)) {
-        log_error("Value is not a string.");
-        log_error("error: on line %d: %s", error.line, error.text);
+    // Get value
+    value = json_object_get(root, "internet-access");
+    if (!json_is_boolean(value)) {
+        log_error("Value is not a boolean.");
         json_decref(value);
         goto cleanup_parse_json;
     }
 
-    ret = std::string(json_string_value(value));
-
-    goto cleanup_parse_json;
+    accessSet = json_is_true(value);
 
 cleanup_parse_json:
-    if (root)
-    {
+    if (root) {
         json_decref(root);
     }
 
-    return ret;
+    return accessSet;
+}
+
+std::string NetworkGateway::gatewayFromConfig(const std::string &config)
+{
+    json_error_t error;
+    json_t *root, *value;
+    std::string gateway = "";
+
+    // Get root JSON object
+    root = json_loads(config.c_str(), 0, &error);
+
+    if (!root) {
+        log_error("Error on line %d: %s", error.line, error.text);
+        goto cleanup_parse_json;
+    }
+
+    // Get value
+    value = json_object_get(root, "gateway");
+
+    if (!json_is_string(value)) {
+        log_error("Value is not a string.");
+        json_decref(value);
+        goto cleanup_parse_json;
+    }
+
+    gateway = json_string_value(value);
+
+cleanup_parse_json:
+    if (root) {
+        json_decref(root);
+    }
+
+    return gateway;
 }
