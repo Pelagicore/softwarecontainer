@@ -32,7 +32,6 @@ shift $((OPTIND - 1))
 mkdir -p $test_reports_path
 mkdir -p $pam_log_path
 
-
 sudo $setup_script -d $container_path \
                    -x $controller_bin \
                    -a com.pelagicore.comptest
@@ -42,107 +41,39 @@ eval `dbus-launch --sh-syntax`
 ./pam_stub.py &> $pam_log_path/pam.log &
 pam_pid=$!
 exit_codes=()
+declare -A test_results
 
-# Test kill of evil/hung apps
-py.test test_kill.py --junitxml=$test_reports_path/kill.xml \
-                     --pelagicontain-binary $pelagicontain_bin \
-                     --container-path $container_path
+# Arguments: <Test name> <xml report filename> <testfile>
+function run_pytest {
+    py.test $3 --junitxml=$test_reports_path/$2.xml \
+               --pelagicontain-binary $pelagicontain_bin \
+               --container-path $container_path
+    exitval=$?
+    test_results["$1"]="$exitval"
+    exit_codes+="$exitval"
+}
 
-kill_exit=$?
-exit_codes+=$kill_exit
-
-# Shutdown and cleanup tests
-py.test test_cleanshutdown.py --junitxml=$test_reports_path/cleanshutdown.xml \
-                              --pelagicontain-binary $pelagicontain_bin \
-                              --container-path $container_path
-
-shutdown_exit=$?
-exit_codes+=$shutdown_exit
-
-# Device node gateway tests
-py.test test_devicenodegateway.py --junitxml=$test_reports_path/devicenodegateway.xml \
-                                  --pelagicontain-binary $pelagicontain_bin \
-                                  --container-path $container_path
-dng_exit=$?
-exit_codes+=$dng_exit
-
-# Pelagicontain tests
-py.test test_pelagicontain.py --junitxml=$test_reports_path/pelagicontain.xml \
-                              --pelagicontain-binary $pelagicontain_bin \
-                              --container-path $container_path
-
-pelagicontain_exit=$?
-exit_codes+=$pelagicontain_exit
-
-# Network gateway tests
-py.test test_networkgateway.py --junitxml=$test_reports_path/networkgateway.xml \
-                               --pelagicontain-binary $pelagicontain_bin \
-                               --container-path $container_path
-
-nwg_exit=$?
-exit_codes+=$nwg_exit
-
-# D-Bus gateway tests
-py.test test_dbusgateway.py --junitxml=$test_reports_path/dbusgateway.xml \
-                            --pelagicontain-binary $pelagicontain_bin \
-                            --container-path $container_path
-
-dbusgw_exit=$?
-exit_codes+=$dbusgw_exit
-
-# Pulseaudio gateway tests
-py.test test_pulsegateway.py --junitxml=$test_reports_path/pulsegateway.xml \
-                             --pelagicontain-binary $pelagicontain_bin \
-                             --container-path $container_path
-
-pulsegw_exit=$?
-exit_codes+=$pulsegw_exit
+# Run the tests
+run_pytest 'Kill application' killapp test_kill.py
+run_pytest 'Clean shutdown' cleanshutdown test_cleanshutdown.py
+run_pytest 'Device node gateway' devicenodegateway test_devicenodegateway.py
+run_pytest 'Pelagicontain' pelagicontain test_pelagicontain.py
+run_pytest 'Network gateway' networkgateway test_networkgateway.py
+run_pytest 'D-Bus gateway' dbusgateway test_dbusgateway.py
+run_pytest 'Pulseaudio gateway' pulsegateway test_pulsegateway.py
 
 kill $pam_pid
 wait $pam_pid 2>/dev/null
 
-## Report
-
-if [ "$kill_exit" == "0" ]; then
-    echo "Kill app: SUCCESS"
-else
-    echo "Kill app: FAIL"
-fi
-
-if [ "$shutdown_exit" == "0" ]; then
-    echo "Shutdown cleanup: SUCCESS"
-else
-    echo "Shutdown cleanup: FAIL"
-fi
-
-if [ "$dng_exit" == "0" ]; then
-    echo "Device node manager: SUCCESS"
-else
-    echo "Device node manager: FAIL"
-fi
-
-if [ "$pelagicontain_exit" == "0" ]; then
-    echo "Pelagicontain: SUCCESS"
-else
-    echo "Pelagicontain: FAIL"
-fi
-
-if [ "$nwg_exit" == "0" ]; then
-    echo "Network Gateway: SUCCESS"
-else
-    echo "Network Gateway: FAIL"
-fi
-
-if [ "$dbusgw_exit" == "0" ]; then
-    echo "D-Bus Gateway: SUCCESS"
-else
-    echo "D-Bus Gateway: FAIL"
-fi
-
-if [ "$pulsegw_exit" == "0" ]; then
-    echo "PulseAudio Gateway: SUCCESS"
-else
-    echo "PulseAudio Gateway: FAIL"
-fi
+## Report, unfortunately out of order here.
+for key in "${!test_results[@]}";
+do
+    test_exit=${test_results["$key"]}
+    if [ "$test_exit" == "0" ]; then
+        echo "$key: SUCCESS"
+    else
+        echo "$key: FAIL"
+    fi
+done
 
 [[ $exit_codes =~ 1 ]] && exit 1 || exit 0
