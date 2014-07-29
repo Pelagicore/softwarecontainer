@@ -33,9 +33,9 @@ mkdir -p $test_reports_path
 mkdir -p $pam_log_path
 
 
-sudo $($setup_script -d $container_path \
-                -x $controller_bin \
-                -a com.pelagicore.comptest)
+sudo $setup_script -d $container_path \
+                   -x $controller_bin \
+                   -a com.pelagicore.comptest
 
 eval `dbus-launch --sh-syntax`
 
@@ -43,10 +43,21 @@ eval `dbus-launch --sh-syntax`
 pam_pid=$!
 exit_codes=()
 
+# Test kill of evil/hung apps
+py.test test_kill.py --junitxml=$test_reports_path/kill.xml \
+                     --pelagicontain-binary $pelagicontain_bin \
+                     --container-path $container_path
+
+kill_exit=$?
+exit_codes+=$kill_exit
+
 # Shutdown and cleanup tests
 py.test test_cleanshutdown.py --junitxml=$test_reports_path/cleanshutdown.xml \
                               --pelagicontain-binary $pelagicontain_bin \
                               --container-path $container_path
+
+shutdown_exit=$?
+exit_codes+=$shutdown_exit
 
 # Device node gateway tests
 py.test test_devicenodegateway.py --junitxml=$test_reports_path/devicenodegateway.xml \
@@ -91,6 +102,19 @@ kill $pam_pid
 wait $pam_pid 2>/dev/null
 
 ## Report
+
+if [ "$kill_exit" == "0" ]; then
+    echo "Kill app: SUCCESS"
+else
+    echo "Kill app: FAIL"
+fi
+
+if [ "$shutdown_exit" == "0" ]; then
+    echo "Shutdown cleanup: SUCCESS"
+else
+    echo "Shutdown cleanup: FAIL"
+fi
+
 if [ "$dng_exit" == "0" ]; then
     echo "Device node manager: SUCCESS"
 else

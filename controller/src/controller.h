@@ -20,6 +20,10 @@ public:
     ~Controller();
 
     virtual int runApp();
+    /*!  
+     *  Kill an app by sending SIGINT to it. If it has not shut down within
+     *  five seconds, a SIGKILL is sent to it. 
+     */
     virtual void killApp();
     virtual void setEnvironmentVariable(const std::string &variable,
                                         const std::string &value);
