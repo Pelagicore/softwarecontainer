@@ -154,7 +154,7 @@ int main(int argc, char **argv)
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
 
     // Register signalHandler with signals
-	std::vector<int> signals = {SIGTERM}; // SIGINT is automatically handled by UNIXSignalGlibHandler
+	std::vector<int> signals = {SIGINT, SIGTERM};
 	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
 
 	    log_debug() << "caught signal " << signum;
