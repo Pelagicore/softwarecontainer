@@ -67,7 +67,7 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
         struct DeviceNodeGateway::Device dev;
         json_t *device = 0;
         std::string* fields[] = {&dev.name, &dev.major, &dev.minor, &dev.mode};
-        std::string fieldsStr[] = {"name", "major", "minor", "mode"};
+        const char* fieldsStr[] = {"name", "major", "minor", "mode"};
         uint numFields = 4;
 
         device = json_array_get(list, i);
@@ -78,10 +78,9 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
 
         for (uint j = 0; ok && j < numFields; j++) {
             json_t *value = 0;
-            value = json_object_get(device, fieldsStr[j].c_str());
+            value = json_object_get(device, fieldsStr[j]);
             if (ok && !json_is_string(value)) {
-                log_error(std::string("Key '" + fieldsStr[j] +
-                                      "' is not a member of device object!").c_str());
+                log_error() << "Key '" << fieldsStr[j] << "' is not a member of device object!";
                 ok = false;
             }
             if (json_string_value(value)) {

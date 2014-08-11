@@ -7,13 +7,12 @@
 
 #include "config.h"
 #include "ipcmessage.h"
+#include "common.h"
 
 static const int OFFSET = 2;
 static const int PROTOCOL_INDEX = 0;
-static const char RUN_APP = '1';
-static const char KILL_APP = '2';
-static const char SET_ENV_VAR = '3';
-static const char SYS_CALL = '4';
+
+
 static const char VAR_VAL_DELIMITER = ' ';
 
 IPCMessage::IPCMessage(AbstractController &controller) :

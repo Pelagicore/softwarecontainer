@@ -9,9 +9,7 @@
 #
 # Additional arguments: Files to put in <deployment dir>/<appId>/bin/
 #
-# Example: ./setup_environment.sh -d /tmp/container
-#                                 -a com.pelagicore.myApp -c yes
-#                                 -- /etc/password
+# Example: ./setup_environment.sh -d /tmp/container -a com.pelagicore.myApp -c yes -x /$HOME/apps/bin/controller
 
 BRCTL_CMD="/sbin/brctl"
 BRIDGE="container-br0"
@@ -104,13 +102,14 @@ fi
 
 # Check for circular mounts. Mount if not found.
 mountname="late_mounts"
-mountdir="$deploydir$mountname"
+mountdir="$deploydir/$mountname"
 grepresult=(`mount | grep "$mountdir"`)
 
 if [ "${grepresult[0]}" = "$mountdir" ] && [ "${grepresult[0]}" = "${grepresult[2]}" ]; then
     echo "Found circular bind-mount (this is good)"
 else
     echo "Circular bind mount on $mountdir NOT FOUND, attempting to add..."
+    echo mountdir $mountdir
     sudo mount --bind $mountdir $mountdir
     sudo mount --make-unbindable $mountdir
     sudo mount --make-shared $mountdir

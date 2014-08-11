@@ -5,6 +5,9 @@
 #ifndef ABSTRACTCONTROLLER_H
 #define ABSTRACTCONTROLLER_H
 
+#include <string>
+#include <unistd.h>
+
 /*! AbstractController is an abstract interface to the Controller class
  *
  *  It's used by the IPC implementation to call methods on an implementation
@@ -20,7 +23,7 @@ public:
      *
      * \return Pid of the application process
      */
-    virtual int runApp() = 0;
+    virtual pid_t runApp() = 0;
 
     /*! Stops the application running inside the container, and also stops
      * Controller

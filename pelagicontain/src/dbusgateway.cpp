@@ -124,7 +124,7 @@ bool DBusGateway::activate()
     return false;
 }
 
-bool DBusGateway::isSocketCreated()
+bool DBusGateway::isSocketCreated() const
 {
     int maxCount = 1000;
     int count = 0;

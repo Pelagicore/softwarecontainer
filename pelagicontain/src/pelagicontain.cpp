@@ -76,11 +76,12 @@ void Pelagicontain::handleControllerShutdown(int pid, int exitCode)
 
 void Pelagicontain::launch(const std::string &appId)
 {
-    log_debug("Launch called with appId: %s", appId.c_str());
+    log_debug() << "Launch called with appId: " << appId;
     m_launching = true;
     m_appId = appId;
     if (m_container) {
         // this should always be true except when unit-testing.
+    	// TODO : rename setApplication(), which is not a setter
         if (m_container->setApplication(appId)) {
             m_pamInterface->registerClient(m_cookie, m_appId);
         } else {
@@ -94,7 +95,7 @@ void Pelagicontain::launch(const std::string &appId)
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
 {
-    log_debug("update called");
+    log_debug() << "update called";
     setGatewayConfigs(configs);
 
     m_pamInterface->updateFinished(m_cookie);
@@ -142,7 +143,7 @@ void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, cons
 
 void Pelagicontain::shutdown()
 {
-    log_debug("shutdown called");
+    log_debug() << "shutdown called";
     // Tell Controller to shut down the app and Controller will exit when the
     // app has shut down and then we will handle the signal through the handler.
     m_controllerInterface->shutdown();
@@ -154,7 +155,7 @@ void Pelagicontain::shutdownGateways()
          gateway != m_gateways.end(); ++gateway)
     {
         if (!(*gateway)->teardown()) {
-            log_warning("Could not tear down gateway cleanly");
+            log_warning() << "Could not tear down gateway cleanly";
         }
         delete (*gateway);
     }

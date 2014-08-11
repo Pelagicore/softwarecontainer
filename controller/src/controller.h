@@ -19,6 +19,7 @@ public:
     Controller(Glib::RefPtr<Glib::MainLoop> ml);
     ~Controller();
 
+<<<<<<< df8ab6bef560ba4315c245778c1e8adaffa5313a
     virtual int runApp();
     /*!  
      *  Kill an app by sending SIGINT to it. If it has not shut down within
@@ -28,6 +29,13 @@ public:
     virtual void setEnvironmentVariable(const std::string &variable,
                                         const std::string &value);
     virtual void systemCall(const std::string &command);
+=======
+    pid_t runApp() override;
+    void killApp() override;
+    void setEnvironmentVariable(const std::string &variable,
+                                        const std::string &value) override;
+    void systemCall(const std::string &command) override;
+>>>>>>> Cleanup
 
 private:
     void shutdown();

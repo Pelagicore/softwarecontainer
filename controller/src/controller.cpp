@@ -34,7 +34,7 @@ void Controller::childSetupSlot()
 {
     int ret = setpgid(0, 0);
     if (ret == -1) {
-    	log_error("setpgid error: ") << strerror(errno);
+    	log_error() << "setpgid error: " << strerror(errno);
     }
 }
 
@@ -66,7 +66,7 @@ int Controller::runApp()
                                     &m_pid);
     } catch (const Glib::Error &ex) {
         // It's a fatal error if app couldn't spawn, so we shut down.
-        log_info() << "Error: " << ex.what() ;
+        log_error() << ex.what();
         shutdown();
     }
 
@@ -109,7 +109,16 @@ void Controller::killApp()
         }
     }
 
+<<<<<<< df8ab6bef560ba4315c245778c1e8adaffa5313a
     shutdown();
+=======
+    // The negative pid makes kill send the signal to the whole process group
+    int ret = kill(-m_pid, SIGINT);
+    if (ret == -1) {
+    	log_error() << "Error killing application: " << strerror(errno);
+        shutdown();
+    }
+>>>>>>> Cleanup
 }
 
 void Controller::setEnvironmentVariable(const std::string &variable,
@@ -118,7 +127,7 @@ void Controller::setEnvironmentVariable(const std::string &variable,
     int ret = setenv(variable.c_str(), value.c_str(), 1);
 
     if (ret == -1) {
-    	log_error("setenv: ") << strerror(errno);
+    	log_error() << "setenv: " << strerror(errno);
         return;
     }
 

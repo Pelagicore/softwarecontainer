@@ -10,6 +10,8 @@
 #include "config.h"
 #include "controllerinterface.h"
 
+#include "common.h"
+
 ControllerInterface::ControllerInterface(const std::string &gatewayDir):
     m_connected(false),
     m_socketPath(gatewayDir + "/ipc_socket"),
@@ -124,7 +126,7 @@ bool ControllerInterface::isControllerConnected()
 bool ControllerInterface::checkForMessage()
 {
     char str[1024];
-    memset(str, '\0', sizeof(char) * 1024);
+    memset(str, 0, sizeof(str));
 
     struct timeval tv;
     tv.tv_sec = 0;
@@ -158,7 +160,7 @@ bool ControllerInterface::startApp()
     bool result = false;
 
     if (canSend()) {
-        char msg[] = {'1', '\0'};
+        char msg[] = {RUN_APP, '\0'};
 
         log_debug() << "Sending:" << msg;
 

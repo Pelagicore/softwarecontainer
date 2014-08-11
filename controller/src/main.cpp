@@ -54,8 +54,7 @@ int main(int argc, char **argv)
         !isDirectory("/apphome") ||
         !isDirectory("/appshared"))
     {
-        log_error() << "Expected directories not available in container, "
-                    << "shutting down Controller";
+        log_error() << "Expected directories not available in container, shutting down Controller";
         return 1;
     }
 
