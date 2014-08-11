@@ -53,6 +53,7 @@ $rootfs/appshared \
 $rootfs/apphome \
 $rootfs/gateways \
 $rootfs/controller \
+${ADDITIONAL_FOLDER_MOUNTS}
 "
 
     mkdir -p $tree || return 1

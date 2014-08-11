@@ -17,6 +17,15 @@ find_package(DBusCppGlib         REQUIRED)
 pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
 
 add_definitions(-DPACKAGE_VERSION="0.1")
+add_definitions(${GLIBMM_CFLAGS_OTHER})
+
+if(ADDITIONAL_LD_LIBRARY_PATH)
+    add_definitions(-DADDITIONAL_LD_LIBRARY_PATH=${ADDITIONAL_LD_LIBRARY_PATH})
+endif()
+
+if(ADDITIONAL_PATH)
+    add_definitions(-DADDITIONAL_PATH=${ADDITIONAL_PATH})
+endif()
 
 if(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
 	SET(SYS_CONFIG_DIR /etc)

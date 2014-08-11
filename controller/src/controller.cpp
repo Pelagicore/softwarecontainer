@@ -13,14 +13,28 @@
 #include <glibmm.h>
 
 #include "controller.h"
+#include "pelagicore-common.h"
+
 
 Controller::Controller(Glib::RefPtr<Glib::MainLoop> ml):
     m_ml(ml), m_pid(0)
 {
+	adjustEnvironment();
 }
 
 Controller::~Controller()
 {
+}
+
+void Controller::adjustEnvironment() {
+#ifdef ADDITIONAL_LD_LIBRARY_PATH
+	appendToEnvVariable(LD_LIBRARY_PATH_ENV_VARIABLE, STRINGIZE(ADDITIONAL_LD_LIBRARY_PATH));
+#endif
+
+#ifdef ADDITIONAL_PATH
+	appendToEnvVariable(PATH_ENV_VARIABLE, STRINGIZE(ADDITIONAL_PATH));
+#endif
+
 }
 
 bool Controller::killMainLoop() {
