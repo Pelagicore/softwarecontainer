@@ -190,14 +190,21 @@ int main(int argc, char **argv)
 
         PelagicontainToDBusAdapter pcAdapter(bus, objectPath, *pelagicontain);
 
+#ifdef ENABLE_NETGW
         pelagicontain->addGateway(new NetworkGateway(controllerInterface,
                                                     systemcallInterface));
+#endif
 
+#ifdef ENABLE_PULSEGW
         pelagicontain->addGateway(new PulseGateway(gatewayDir, containerName,
                                                   controllerInterface));
+#endif
 
+#ifdef ENABLE_DEVICENODEGW
         pelagicontain->addGateway(new DeviceNodeGateway(controllerInterface));
+#endif
 
+#ifdef ENABLE_DBUSGW
         pelagicontain->addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SessionProxy,
@@ -209,6 +216,7 @@ int main(int argc, char **argv)
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
                                                  containerName));
+#endif
 
         pcPid = pelagicontain->preload(&container);
 
