@@ -27,6 +27,7 @@ gateway_support_unit(ENABLE_DEVICENODEGW ../src/devicenodegateway.cpp)
 add_executable(runUnitTestsPelagicontain
     main.cpp
     pelagicontain_unittest.cpp
+    generators_unittest.cpp
     ../src/container.cpp
     ../src/controllerinterface.cpp
     ../src/generators.cpp

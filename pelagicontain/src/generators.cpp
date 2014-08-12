@@ -54,7 +54,7 @@ std::string Generator::gen_net_iface_name (const char *ip_addr_net)
  */
 std::string Generator::gen_ip_addr (const char *ip_addr_net)
 {
-    int fd = open(iface_counter_file, O_CREAT | O_RDWR);
+    int fd = open(iface_counter_file, O_CREAT | O_RDWR, S_IRWXU);
     int counter = 0;
     char buf[4];
     char ip[20];
