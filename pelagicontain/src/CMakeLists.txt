@@ -13,11 +13,11 @@ endif(ENABLE_PULSEGW)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
 # Enable or disable support for gateways compile-time.
-SET(GWSOURCES "")
+SET(GATEWAY_SOURCES "")
 macro(gateway_support flag strname filename)
     if (${flag})
         MESSAGE(INFO " Compiling with gateway support for ${strname}")
-        LIST(APPEND GWSOURCES ${filename})
+        LIST(APPEND GATEWAY_SOURCES ${filename})
         ADD_DEFINITIONS(-D${flag})
     else(${flag})
         MESSAGE(INFO " Compiling without gateway support for ${strname}")
@@ -71,7 +71,7 @@ add_executable( pelagicontain
     dbusadaptor.h
     systemcallinterface.cpp
     ${PROJECT_SOURCE_DIR}/common/config.cpp
-    ${GWSOURCES}
+    ${GATEWAY_SOURCES}
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain
