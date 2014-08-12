@@ -15,12 +15,25 @@
 #include "pelagicontaintodbusadapter.h"
 #include "dbusmainloop.h"
 #include "generators.h" /* used for gen_ct_name */
+
+#ifdef ENABLE_PULSEGW
 #include "pulsegateway.h"
+#endif
+
+#ifdef ENABLE_NETGW
 #include "networkgateway.h"
+#endif
+
+#ifdef ENABLE_DBUSGW
 #include "dbusgateway.h"
+#endif
+
 #include <sys/stat.h>
 #include "systemcallinterface.h"
+
+#ifdef ENABLE_DEVICENODEGW
 #include "devicenodegateway.h"
+#endif
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
