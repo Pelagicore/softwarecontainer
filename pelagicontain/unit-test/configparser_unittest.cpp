@@ -5,6 +5,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -13,26 +15,45 @@
 
 TEST(ConfigParserTest, TestInit) {
     // Nonexisting file
-    system ("rm -f /tmp/config");
+    char filename1[18] = "tmpconfig1_XXXXXX";
+    int fd = mkstemp(filename1);
+    close(fd);
+    unlink(filename1);
+
     ConfigParser config1;
-    ASSERT_NE(0, config1.read("/tmp/config"));
+    ASSERT_NE(0, config1.read(filename1));
 
     // Existing minimal JSON
+    char filename2[18] = "tmpconfig2_XXXXXX";
+    fd = mkstemp(filename2);
+    char empty[4] = "{ }";
+    write(fd, empty, 3);
+    close(fd);
+
     ConfigParser config2;
-    system("echo '{ }' > /tmp/config");
-    ASSERT_EQ(0, config2.read("/tmp/config"));
+    ASSERT_EQ(0, config2.read(filename2));
 
     // Existing erroneous JSON
+    char filename3[18] = "tmpconfig3_XXXXXX";
+    fd = mkstemp(filename3);
+    char erroneous[12] = "{ \"foo\" : }";
+    write(fd, erroneous, 11);
+    close(fd);
+
     ConfigParser config3;
-    system("echo '{ \"foo\" : }' > /tmp/config");
-    ASSERT_NE(0, config1.read("/tmp/config"));
+    ASSERT_NE(0, config1.read(filename3));
 }
 
 TEST(ConfigParserTest, TestReadSimple) {
     char *value = NULL;
-    system ("echo '{ \"test\": \"testvalue\" }' > /tmp/config");
+    char filename[17] = "tmpconfig_XXXXXX";
+    int fd = mkstemp(filename);
+    char json[24] = "{ \"test\": \"testvalue\" }";
+    write(fd, json, 23);
+    close(fd);
+
     ConfigParser config;
-    ASSERT_EQ(0, config.read("/tmp/config"));
+    ASSERT_EQ(0, config.read(filename));
 
     value = config.getString("test");
     ASSERT_FALSE(value == NULL);
@@ -44,9 +65,14 @@ TEST(ConfigParserTest, TestReadSimple) {
 }
 
 TEST(ConfigParserTest, TestReadMultiline) {
-    system ("echo '{ \"test\": [\"row1\", \"row2\"] }' > /tmp/config");
+    char filename[17] = "tmpconfig_XXXXXX";
+    int fd = mkstemp(filename);
+    char json[29] = "{ \"test\": [\"row1\", \"row2\"] }";
+    write(fd, json, 28);
+    close(fd);
+
     ConfigParser config;
-    ASSERT_EQ(0, config.read("/tmp/config"));
+    ASSERT_EQ(0, config.read(filename));
 
     // We can get the value
     char *value = config.getString("test");

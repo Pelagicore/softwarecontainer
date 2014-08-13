@@ -9,13 +9,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "generators.h"
 
 TEST(GeneratorTest, TestIPCounter) {
     Generator gen;
 	const char ip_addr_net[] = "192.168.0.";
-	system ("rm -f /tmp/pelc_ifc");
+    const char filename[] = "/tmp/pelc_ifc";
+    unlink(filename);
     
+    // We start from 0 (no really, we start from 2)
     std::string ip = gen.gen_ip_addr(ip_addr_net);
     ASSERT_FALSE(ip.empty());
     ASSERT_EQ(ip, "192.168.0.2");
@@ -23,7 +29,12 @@ TEST(GeneratorTest, TestIPCounter) {
     ip = gen.gen_ip_addr(ip_addr_net);
     ASSERT_EQ(ip, "192.168.0.3");
 
-	system("echo 253 > /tmp/pelc_ifc");
+    // Make sure it wraps around
+    int fd = open(filename, O_WRONLY);
+    char buf[4] = "253";
+    write(fd, buf, 3);
+    close(fd);
+
     ip = gen.gen_ip_addr(ip_addr_net);
     ASSERT_EQ(ip, "192.168.0.254");
 
