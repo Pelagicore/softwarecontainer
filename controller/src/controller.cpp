@@ -101,38 +101,17 @@ void Controller::killApp()
     log_info() << "Trying to kill pid: " << m_pid;
     if (m_pid == 0) {
         log_warn() << "Trying to kill an app without previously having started one. "
-                   << "This is normal if this is a preloaded but unused container.";
-    } else {
-        // The negative pid makes kill send the signal to the whole process group
-        int ret = kill(-m_pid, SIGINT);
-        if (ret == -1) {
-            log_error("Error killing application: ") << strerror(errno);
-        }
-
-        // Make sure it dies properly, waiting a total of 5 sec
-        int triesLeft = 500;
-        bool alive = true;
-        while (triesLeft-- != 0 && alive) {
-            alive = kill(-m_pid, 0) == 0;
-            usleep(10000);
-        }
-
-        if (alive) {
-            log_warning("Application refuses to die, sending SIGKILL");
-            kill(-m_pid, SIGKILL); // No mercy
-        }
+            "This is normal if this is a preloaded but unused container.";
+        shutdown();
+        return;
     }
 
-<<<<<<< df8ab6bef560ba4315c245778c1e8adaffa5313a
-    shutdown();
-=======
     // The negative pid makes kill send the signal to the whole process group
     int ret = kill(-m_pid, SIGINT);
     if (ret == -1) {
     	log_error() << "Error killing application: " << strerror(errno);
         shutdown();
     }
->>>>>>> Cleanup
 }
 
 void Controller::setEnvironmentVariable(const std::string &variable,

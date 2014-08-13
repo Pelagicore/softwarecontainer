@@ -63,7 +63,7 @@ bool Container::initialize()
 bool Container::createDirectory(const std::string &path)
 {
     if (mkdir(path.c_str(), S_IRWXU) == -1) {
-        log_error("Could not create directory %s, %s.", path.c_str(), strerror(errno));
+        log_error() << "Could not create directory " << path << " ," << strerror(errno);
         return false;
     }
 
@@ -86,24 +86,20 @@ bool Container::isDirectory(const std::string &path)
 Container::~Container()
 {
     // Unmount all mounted dirs. Done backwards, behaving like a stack.
-    for (std::vector<std::string>::const_reverse_iterator it = m_mounts.rbegin();
-         it != m_mounts.rend();
-         ++it)
+    for (auto it = m_mounts.rbegin(); it != m_mounts.rend(); ++it)
     {
-        log_debug() << "Unmounting " << (*it).c_str();
+        log_debug() << "Unmounting " << *it;
         if (umount((*it).c_str()) == -1) {
-            log_error("Could not unmount %s, %s", (*it).c_str(), strerror(errno));
+            log_error() << "Could not unmount " << *it << strerror(errno);
         }
     }
 
     // Clean up all created directories, also done backwards
-    for (std::vector<std::string>::const_reverse_iterator it = m_dirs.rbegin();
-         it != m_dirs.rend();
-         ++it)
+    for (auto it = m_dirs.rbegin(); it != m_dirs.rend();++it)
     {
         log_debug() << "Removing " << (*it).c_str();
         if (rmdir((*it).c_str()) == -1) {
-            log_error("Could not remove dir %s, %s", (*it).c_str(), strerror(errno));
+            log_error() << "Could not remove dir " << *it << strerror(errno);
         }
     }
 }
@@ -130,7 +126,7 @@ void Container::create()
             m_configFile.c_str(),
             name());
 
-    log_debug() << (const char*) lxcCommand;
+    log_debug() << "Command " << lxcCommand;
     system(lxcCommand);
 }
 
@@ -140,7 +136,7 @@ pid_t Container::execute()
     char lxcCommand[maxCmdLen];
 
     // Create command to execute inside container
-    snprintf(lxcCommand, maxCmdLen,
+    snprintf(lxcCommand, sizeof(lxcCommand),
              "lxc-execute -n %s -- env %s",
              name(),
              m_containedCommand.c_str());
@@ -149,7 +145,7 @@ pid_t Container::execute()
     executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
     std::vector<std::string> envVarVec = {"MOUNT_DIR=" + m_mountDir};
 
-    log_debug() << (const char*) lxcCommand;
+    log_debug() << "Execute: " << &lxcCommand[0];
 
     pid_t pid;
     try {
@@ -161,7 +157,7 @@ pid_t Container::execute()
             sigc::slot<void>(),
             &pid);
     } catch (const Glib::Error &ex) {
-        log_error("spawn error: %s", ex.what().c_str());
+        log_error() << "spawn error: " << ex.what();
         pid = 0;
     }
 
@@ -192,9 +188,10 @@ bool Container::bindMountDir(const std::string &src, const std::string &dst)
     if (mountRes == 0) {
         // Success
         m_mounts.push_back(dst);
+        log_verbose() << "Mounted folder " << src << " in " << dst;
     } else {
         // Failure
-        log_error("Could not mount dir into container: src=%s, dst=%s err=%s",
+        log_warning("Could not mount dir into container: src=%s, dst=%s err=%s",
                   src.c_str(),
                   dst.c_str(),
                   strerror(errno));
@@ -203,13 +200,14 @@ bool Container::bindMountDir(const std::string &src, const std::string &dst)
     return (mountRes == 0);
 }
 
-/* When we know which app that will be run we need to
- * do some setup, like mount in the application bin and
- * shared directories.
- */
 bool Container::setApplication(const std::string &appId)
 {
-    // The directory(ies) to be mounted is known by convention, e.g.
+	/* When we know which app that will be run we need to
+	 * do some setup, like mount in the application bin and
+	 * shared directories.
+	 */
+
+	// The directory(ies) to be mounted is known by convention, e.g.
     // /var/am/<appId>/bin/ and /var/am/<appId>/shared/
 
     // bind mount /var/am/<appId>/bin/ into /var/am/late_mounts/<contid>/bin
