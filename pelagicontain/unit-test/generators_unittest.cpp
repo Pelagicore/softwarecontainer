@@ -17,7 +17,7 @@
 
 TEST(GeneratorTest, TestIPCounter) {
     Generator gen;
-	const char ip_addr_net[] = "192.168.0.";
+    const char ip_addr_net[] = "192.168.0.";
     const char filename[] = "/tmp/pelc_ifc";
     unlink(filename);
     
