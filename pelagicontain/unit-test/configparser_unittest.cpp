@@ -30,7 +30,7 @@ TEST(ConfigParserTest, TestInit) {
 
 TEST(ConfigParserTest, TestReadSimple) {
     char *value = NULL;
-	system ("echo '{ \"test\": \"testvalue\" }' > /tmp/config");
+    system ("echo '{ \"test\": \"testvalue\" }' > /tmp/config");
     ConfigParser config;
     ASSERT_EQ(0, config.read("/tmp/config"));
 
@@ -44,7 +44,7 @@ TEST(ConfigParserTest, TestReadSimple) {
 }
 
 TEST(ConfigParserTest, TestReadMultiline) {
-	system ("echo '{ \"test\": [\"row1\", \"row2\"] }' > /tmp/config");
+    system ("echo '{ \"test\": [\"row1\", \"row2\"] }' > /tmp/config");
     ConfigParser config;
     ASSERT_EQ(0, config.read("/tmp/config"));
 
