@@ -14,9 +14,9 @@
 #include "configparser.h"
 
 // Using sizeof inside the function would give size of pointer, not of array
-void writeFile(char filename[], char contents[], size_t size) {
+void writeStringToFile(char filename[], const char *contents) {
     int fd = mkstemp(filename);
-    write(fd, contents, size - 1); // We don't need to write \0
+    write(fd, contents, strlen(contents));
     close(fd);
 }
 
@@ -32,16 +32,16 @@ TEST(ConfigParserTest, TestInit) {
 
     // Existing minimal JSON
     char filename2[] = "tmpconfig2_XXXXXX";
-    char empty[] = "{ }";
-    writeFile(filename2, empty, sizeof(empty));
+    const char empty[] = "{ }";
+    writeStringToFile(filename2, empty);
 
     ConfigParser config2;
     ASSERT_EQ(0, config2.read(filename2));
 
     // Existing erroneous JSON
     char filename3[] = "tmpconfig3_XXXXXX";
-    char erroneous[] = "{ \"foo\" : }";
-    writeFile(filename3, erroneous, sizeof(erroneous));
+    const char erroneous[] = "{ \"foo\" : }";
+    writeStringToFile(filename3, erroneous);
 
     ConfigParser config3;
     ASSERT_NE(0, config1.read(filename3));
@@ -50,8 +50,8 @@ TEST(ConfigParserTest, TestInit) {
 TEST(ConfigParserTest, TestReadSimple) {
     char *value = NULL;
     char filename[] = "tmpconfig_XXXXXX";
-    char json[] = "{ \"test\": \"testvalue\" }";
-    writeFile(filename, json, sizeof(json));
+    const char json[] = "{ \"test\": \"testvalue\" }";
+    writeStringToFile(filename, json);
 
     ConfigParser config;
     ASSERT_EQ(0, config.read(filename));
@@ -67,8 +67,8 @@ TEST(ConfigParserTest, TestReadSimple) {
 
 TEST(ConfigParserTest, TestReadMultiline) {
     char filename[] = "tmpconfig_XXXXXX";
-    char json[] = "{ \"test\": [\"row1\", \"row2\"] }";
-    writeFile(filename, json, sizeof(json));
+    const char json[] = "{ \"test\": [\"row1\", \"row2\"] }";
+    writeStringToFile(filename, json);
 
     ConfigParser config;
     ASSERT_EQ(0, config.read(filename));

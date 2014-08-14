@@ -31,8 +31,8 @@ TEST(GeneratorTest, TestIPCounter) {
 
     // Make sure it wraps around
     int fd = open(filename, O_WRONLY);
-    char buf[] = "253";
-    write(fd, buf, sizeof(buf) - 1);
+    const char buf[] = "253";
+    write(fd, buf, strlen(buf));
     close(fd);
 
     ip = gen.gen_ip_addr(ip_addr_net);
