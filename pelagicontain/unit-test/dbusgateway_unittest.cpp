@@ -75,17 +75,19 @@ public:
     std::string m_tmpfile;
 
     SystemcallInterfaceStub() {
-        m_tmpfile = tempnam("/tmp/", NULL);
-        m_fileDescriptor = fopen(m_tmpfile.c_str(), "w+b");
+        char tmpfile[] = "tmpfile_XXXXXX";
+        int fd = mkstemp(tmpfile);
+        m_tmpfile = std::string(tmpfile);
+        m_fileDescriptor = fdopen(fd, "w+b");
         m_infp = fileno(m_fileDescriptor);
+
     }
 
     virtual ~SystemcallInterfaceStub() {
         if(m_fileDescriptor != NULL) {
             fclose(m_fileDescriptor);
         }
-        remove(m_tmpfile.c_str());
-    };
+    }
 
     virtual bool makeCall(const std::string &cmd)
     {
