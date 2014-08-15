@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+#   Copyright (C) 2014 Pelagicore AB
+#   All rights reserved.
+#
+
 echo "This script will set up a component test directory structure in $1"
 
 if [ ! -z $1 ]; then

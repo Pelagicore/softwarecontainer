@@ -1,5 +1,10 @@
 import pytest
 
+"""
+    Copyright (C) 2014 Pelagicore AB
+    All rights reserved.
+"""
+
 def pytest_addoption(parser):
     parser.addoption("--pelagicontain-binary", action="store", default=None,
         help="Path to pelagicontain binary")
