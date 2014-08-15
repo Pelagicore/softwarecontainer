@@ -53,5 +53,4 @@ TEST(GeneratorTest, TestNameGen) {
     usleep(1000);
     std::string name3 = gen.gen_ct_name();
     ASSERT_NE(name1, name3);
-    ASSERT_NE(name2, name3);
 }

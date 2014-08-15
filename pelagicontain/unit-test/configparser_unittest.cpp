@@ -13,10 +13,9 @@
 
 #include "configparser.h"
 
-// Using sizeof inside the function would give size of pointer, not of array
 void writeStringToFile(char filename[], const char *contents) {
     int fd = mkstemp(filename);
-    write(fd, contents, strlen(contents));
+    write(fd, contents, strnlen(contents, 50));
     close(fd);
 }
 
@@ -28,7 +27,7 @@ TEST(ConfigParserTest, TestInit) {
     unlink(filename1);
 
     ConfigParser config1;
-    ASSERT_NE(0, config1.read(filename1));
+    EXPECT_NE(0, config1.read(filename1));
 
     // Existing minimal JSON
     char filename2[] = "tmpconfig2_XXXXXX";
@@ -36,7 +35,7 @@ TEST(ConfigParserTest, TestInit) {
     writeStringToFile(filename2, empty);
 
     ConfigParser config2;
-    ASSERT_EQ(0, config2.read(filename2));
+    EXPECT_EQ(0, config2.read(filename2));
 
     // Existing erroneous JSON
     char filename3[] = "tmpconfig3_XXXXXX";
@@ -44,7 +43,7 @@ TEST(ConfigParserTest, TestInit) {
     writeStringToFile(filename3, erroneous);
 
     ConfigParser config3;
-    ASSERT_NE(0, config1.read(filename3));
+    EXPECT_NE(0, config3.read(filename3));
 }
 
 TEST(ConfigParserTest, TestReadSimple) {
@@ -57,12 +56,12 @@ TEST(ConfigParserTest, TestReadSimple) {
     ASSERT_EQ(0, config.read(filename));
 
     value = config.getString("test");
-    ASSERT_FALSE(value == NULL);
+    EXPECT_FALSE(value == NULL);
     std::string val(value);
-    ASSERT_EQ(val, "testvalue");
+    EXPECT_EQ(val, "testvalue");
 
     value = config.getString("test2");
-    ASSERT_TRUE(value == NULL);
+    EXPECT_TRUE(value == NULL);
 }
 
 TEST(ConfigParserTest, TestReadMultiline) {
@@ -75,21 +74,21 @@ TEST(ConfigParserTest, TestReadMultiline) {
 
     // We can get the value
     char *value = config.getString("test");
-    ASSERT_FALSE(value == NULL);
+    EXPECT_FALSE(value == NULL);
 
     // And it should be a string delimited by \n containing two values
     char * token;
     token = strtok(value, "\n");
-    ASSERT_FALSE(token == NULL);
+    EXPECT_FALSE(token == NULL);
     std::string val1(token);
-    ASSERT_EQ(val1, "row1");
+    EXPECT_EQ(val1, "row1");
 
     token = strtok(NULL, "\n");
-    ASSERT_FALSE(token == NULL);
+    EXPECT_FALSE(token == NULL);
     std::string val2(token);
-    ASSERT_EQ(val2, "row2");
+    EXPECT_EQ(val2, "row2");
 
     // Now there should be no more
     token = strtok(NULL, "\n");
-    ASSERT_TRUE(token == NULL);
+    EXPECT_TRUE(token == NULL);
 }
