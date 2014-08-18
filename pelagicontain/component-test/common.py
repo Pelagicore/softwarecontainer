@@ -65,7 +65,7 @@ class ComponentTestHelper:
             out = open(os.devnull, 'wb')
         try:
             self.__pelagicontain_process = Popen(
-                [pelagicontain_bin, container_root, cmd, self.__cookie],
+                [pelagicontain_bin, container_root, self.__cookie],
                 stdout=out)
         except OSError as e:
             print "Launch error: %s" % e

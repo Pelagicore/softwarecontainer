@@ -20,7 +20,7 @@ public:
                                Pelagicontain &pc);
     virtual std::string Echo(const std::string& argument);
     virtual void Launch(const std::string& appId);
-    virtual void LaunchCommand(const std::string& command);
+    virtual void LaunchCommand(const std::string& commandLine);
     virtual void Update(const std::map<std::string, std::string> &configs);
     virtual void SetContainerEnvironmentVariable(const std::string &var, const std::string &val);
     virtual void Shutdown();

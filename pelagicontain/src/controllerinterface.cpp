@@ -10,7 +10,7 @@
 #include "config.h"
 #include "controllerinterface.h"
 
-#include "common.h"
+#include "pelagicontain-common.h"
 
 ControllerInterface::ControllerInterface(const std::string &gatewayDir):
     m_connected(false),

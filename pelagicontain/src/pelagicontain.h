@@ -13,6 +13,7 @@
 #include "controllerinterface.h"
 
 class Pelagicontain {
+
     LOG_DECLARE_CLASS_CONTEXT("PCON", "Pelagicontain");
 
 public:
@@ -59,6 +60,8 @@ public:
      *  the application wants access to
      */
     void launch(const std::string &appId);
+
+    void launchCommand(const std::string &commandLine);
 
     /*! Continues the 'launch' phase by allowing gateway configurations to
      *  be set.

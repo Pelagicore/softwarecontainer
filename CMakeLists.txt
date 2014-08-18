@@ -14,10 +14,13 @@ find_package(PelagicoreUtilities REQUIRED)
 find_package(DBusCpp             REQUIRED)
 find_package(DBusCppGlib         REQUIRED)
 
-pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
-
 add_definitions(-DPACKAGE_VERSION="0.1")
+
+pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
 add_definitions(${GLIBMM_CFLAGS_OTHER})
+
+pkg_check_modules(LXC REQUIRED lxc)
+add_definitions(${LXC_CFLAGS_OTHER})
 
 if(ADDITIONAL_LD_LIBRARY_PATH)
     add_definitions(-DADDITIONAL_LD_LIBRARY_PATH=${ADDITIONAL_LD_LIBRARY_PATH})
@@ -46,6 +49,7 @@ include_directories(
 	${DBUSCPP_INCLUDE_DIR}
 	${DBUSCPPGLIB_INCLUDE_DIR}
 	${GLIBMM_INCLUDE_DIRS}
+	${LXC_INCLUDE_DIRS}
 )
 
 option(ENABLE_TEST "Enables unit testing" ON)
@@ -55,6 +59,8 @@ if(ENABLE_TEST)
 endif()
 
 add_coverage()
+
+install(FILES scripts/setup_pelagicontain.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 add_subdirectory(pelagicontain)
 add_subdirectory(controller)

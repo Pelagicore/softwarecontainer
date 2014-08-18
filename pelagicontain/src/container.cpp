@@ -7,6 +7,7 @@
 #include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <lxc/lxccontainer.h>
 
 #include "container.h"
 
@@ -25,50 +26,49 @@
 
 Container::Container(const std::string &name,
                      const std::string &configFile,
-                     const std::string &containerRoot,
-                     const std::string &containedCommand):
+                     const std::string &containerRoot):
     m_configFile(configFile),
     m_name(name),
     m_containerRoot(containerRoot),
-    m_mountDir(containerRoot + "/late_mounts"),
-    m_containedCommand(containedCommand)
+    m_mountDir(containerRoot + "/late_mounts")
 {
+	log_debug() << "LXC version " << lxc_get_version();
 }
 
-bool Container::initialize()
+ReturnCode Container::initialize()
 {
     // Make sure the directory for "late mounts" exist
     if (!isDirectory(m_mountDir)) {
         log_error() << "Directory " << m_mountDir << " does not exist";
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     // Create directories needed for mounting, will be removed in dtor
     std::string runDir = m_mountDir + "/" + m_name;
 
     bool allOk = true;
-    allOk = allOk && createDirectory(runDir);
-    allOk = allOk && createDirectory(runDir + "/bin");
-    allOk = allOk && createDirectory(runDir + "/shared");
-    allOk = allOk && createDirectory(runDir + "/home");
+    allOk = allOk && isSuccess(createDirectory(runDir.c_str()));
+    allOk = allOk && isSuccess(createDirectory((runDir + "/bin").c_str()));
+    allOk = allOk && isSuccess(createDirectory((runDir + "/shared").c_str()));
+    allOk = allOk && isSuccess(createDirectory((runDir + "/home").c_str()));
 
-    if (!allOk) {
+    if (!allOk)
         log_error() << "Could not set up all needed directories";
-        return false;
-    }
 
-    return true;
+    return allOk ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
-bool Container::createDirectory(const std::string &path)
+ReturnCode Container::createDirectory(const std::string &path)
 {
     if (mkdir(path.c_str(), S_IRWXU) == -1) {
-        log_error() << "Could not create directory " << path << " ," << strerror(errno);
-        return false;
+        log_error() << "Could not create directory " << path << " / " << strerror(errno);
+        return ReturnCode::FAILURE;
     }
 
+	log_debug() << "Created directory " << path;
+
     m_dirs.push_back(path);
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
 bool Container::isDirectory(const std::string &path)
@@ -102,6 +102,14 @@ Container::~Container()
             log_error() << "Could not remove dir " << *it << strerror(errno);
         }
     }
+
+	if (isContainerDeleteEnabled())
+		destroy();
+
+	if (m_container != nullptr)
+		lxc_container_put(m_container);
+
+	m_container = nullptr;
 }
 
 const char *Container::name()
@@ -109,8 +117,54 @@ const char *Container::name()
     return m_name.c_str();
 }
 
+std::string  Container::toString() {
+	std::stringstream ss;
+	ss << "LXCContainer "
+			<< "name: " << m_container->name
+			<< " / state:" << m_container->state(m_container)
+			<< " / initPID:" << m_container->init_pid(m_container)
+			<< " / LastError: " << m_container->error_string;
+
+	return ss.str();
+}
+
 void Container::create()
 {
+if (isLXC_C_APIEnabled()) {
+	const char* containerName = name();
+
+	std::string containerPath = m_containerRoot;
+
+	setenv("CONTROLLER_DIR", (containerPath + "/bin").c_str(), true);
+	setenv("GATEWAY_DIR", (containerPath + "/" + containerName + "/gateways/").c_str(), true);
+	setenv("MOUNT_DIR", (containerPath + "/late_mounts").c_str(), true);
+
+	log_debug() << "CONTROLLER_DIR : " << getenv("CONTROLLER_DIR");
+	log_debug() << "GATEWAY_DIR : " << getenv("GATEWAY_DIR");
+	log_debug() << "MOUNT_DIR : " << getenv("MOUNT_DIR");
+
+	auto configFile = m_configFile.c_str();
+	log_debug() << "Config file : " << configFile;
+	log_debug() << "Template : " << LXCTEMPLATE;
+
+	m_container = lxc_container_new(containerName, nullptr);
+
+	lxc_container_get(m_container);
+
+	log_debug() << toString();
+
+	char* argv[] = { "lxc-create", nullptr };
+
+	int flags = 0;
+
+	struct bdev_specs specs = {};
+
+	m_container->load_config(m_container, configFile);
+
+	m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv);
+
+} else {
+
     int maxCmdLen = sysconf(_SC_ARG_MAX);
     char lxcCommand[maxCmdLen];
 
@@ -126,20 +180,37 @@ void Container::create()
             m_configFile.c_str(),
             name());
 
-    log_debug() << "Command " << lxcCommand;
+    log_debug() << "Command " << &lxcCommand[0];
     system(lxcCommand);
 }
 
-pid_t Container::execute()
+}
+
+pid_t Container::start()
 {
-    int maxCmdLen = sysconf(_SC_ARG_MAX);
+
+	if(isLXC_C_APIEnabled() && false){
+		log_debug() << "Starting container";
+
+		char* argv[] = { "/controller/controller", nullptr};
+//		m_container->start(m_container, false, argv );
+		m_container->startl(m_container, false, argv[0], nullptr );
+
+		log_debug() << "Container started : " << toString();
+
+		assert(m_container->is_running(m_container));
+
+		return m_container->init_pid(m_container);
+
+} else {
+	int maxCmdLen = sysconf(_SC_ARG_MAX);
     char lxcCommand[maxCmdLen];
 
     // Create command to execute inside container
     snprintf(lxcCommand, sizeof(lxcCommand),
              "lxc-execute -n %s -- env %s",
              name(),
-             m_containedCommand.c_str());
+             "/controller/controller");
 
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
@@ -162,10 +233,90 @@ pid_t Container::execute()
     }
 
     return pid;
+
+}
+
+}
+
+int Container::executeInContainerEntryFunction(void* param) {
+	ContainerFunction* function = (ContainerFunction*) param;
+	(*function)();
+	return 0;
+}
+
+pid_t Container::executeInContainer(ContainerFunction function) {
+	lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
+	options.stdin_fd = -1;  // no stdin
+	options.stdout_fd = 1;
+	options.stderr_fd = 2;
+	pid_t attached_process_pid = 0;
+	m_container->attach(m_container, &Container::executeInContainerEntryFunction, &function, &options, &attached_process_pid);
+	log_info() << " Attached PID: " << attached_process_pid;
+	return attached_process_pid;
+}
+
+pid_t Container::attach(const std::string& commandLine) {
+
+if(isLXC_C_APIEnabled()) {
+		log_debug() << "Attach " << commandLine;
+
+		return executeInContainer([&] () {
+
+//			std::vector<std::string> envVarVec = {};
+//			pid_t pid;
+
+			// TODO: set environment
+
+			execl(commandLine.c_str(), commandLine.c_str(), nullptr);
+
+//			GError* error = nullptr;
+//			if ( g_spawn_command_line_async("/bin/sh", &error) ) {
+////				m_state = ProcessState::STARTING;
+//			} else {
+////				log_error() << "Can't start application : " << commandLine;
+////				m_state = ProcessState::START_FAILED;
+//			}
+
+		});
+
+} else {
+	std::ostringstream oss;
+	std::vector<std::string> envVarVec = {"MOUNT_DIR=" + m_mountDir};
+
+	oss << "lxc-attach -n " << name() << " " << commandLine;
+
+	std::string command = oss.str();
+
+	log_debug() << command;
+
+	pid_t pid = -1;
+    auto executeCommandVec = Glib::shell_parse_argv(command);
+	Glib::spawn_async_with_pipes(".", executeCommandVec, envVarVec,
+			 Glib::SPAWN_SEARCH_PATH | Glib::SPAWN_LEAVE_DESCRIPTORS_OPEN,
+			sigc::slot<void>(), &pid);
+
+	log_debug() << "pid: " << pid;
+
+	return pid;
+}
+
+}
+
+void Container::stop()
+{
+	log_debug() << "Stopping the container";
+	m_container->stop(m_container);
 }
 
 void Container::destroy()
 {
+	stop();
+	if(isLXC_C_APIEnabled()) {
+
+	log_debug() << " Shutting down container";
+		kill(m_container->init_pid(m_container), SIGTERM);
+		m_container->shutdown(m_container, 2);
+} else {
     int maxCmdLen = sysconf(_SC_ARG_MAX);
     char lxcCommand[maxCmdLen];
 
@@ -176,6 +327,8 @@ void Container::destroy()
     log_debug() << destroyCommand;
     Glib::spawn_command_line_sync(destroyCommand);
 }
+}
+
 
 bool Container::bindMountDir(const std::string &src, const std::string &dst)
 {
@@ -216,11 +369,12 @@ bool Container::setApplication(const std::string &appId)
     std::string appDirBase = m_containerRoot + "/" + appId;
     std::string dstDirBase = m_mountDir + "/" + m_name;
 
-    // If any bind mout call fails there's no need to make any remaining calls
     bool allOk = true;
-    allOk = allOk && bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
-    allOk = allOk && bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
-    allOk = allOk && bindMountDir(appDirBase + "/home", dstDirBase + "/home");
+    allOk &= bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
+    allOk &= bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
+    allOk &= bindMountDir(appDirBase + "/home", dstDirBase + "/home");
+
+    allOk = true;
 
     return allOk;
 }

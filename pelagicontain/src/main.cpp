@@ -40,7 +40,11 @@
 
 #include "UNIXSignalGlibHandler.h"
 
-LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
+#include "pelagicore-common.h"
+
+#include <lxc/lxccontainer.h>
+
+//LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 #ifndef CONFIG
@@ -104,7 +108,6 @@ int main(int argc, char **argv)
                                                     "");
 
     std::string containerRoot;
-    std::string containedCommand;
     std::string cookie;
     const char* configFilePath = CONFIG;
     commandLineParser.addOption(configFilePath,
@@ -116,14 +119,13 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    if (argc < 4) {
+    if (argc < 3) {
         log_error() << "Invalid arguments";
         commandLineParser.printHelp();
         return -1;
     } else {
         containerRoot = std::string(argv[1]);
-        containedCommand = std::string(argv[2]);
-        cookie = std::string(argv[3]);
+        cookie = std::string(argv[2]);
     }
 
     if (containerRoot.c_str()[0] != '/') {
@@ -143,12 +145,22 @@ int main(int argc, char **argv)
     if (mkdir(containerDir.c_str(), S_IRWXU) == -1) {
         log_error() << "Could not create container directory " <<
                   containerDir << " , " << strerror(errno);
-        exit(-1);
+        return -1;
     }
     if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
-        log_error() << "Could not create gateway directory " <<
-                  gatewayDir << strerror(errno);
-        exit(-1);
+    	log_error() << "Could not create gateway directory " <<
+    	                  gatewayDir << strerror(errno);
+        return -1;
+    }
+
+    Container container(containerName,
+                        containerConfig,
+                        containerRoot);
+
+    if (isError(container.initialize())) {
+        log_error() << "Could not setup container for preloading";
+        removeDirs();
+        return -1;
     }
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
@@ -156,36 +168,21 @@ int main(int argc, char **argv)
     // Register signalHandler with signals
 	std::vector<int> signals = {SIGINT, SIGTERM};
 	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
-
 	    log_debug() << "caught signal " << signum;
-
-	    ml->quit();
-
-//	    if (!pcPid) {
-//	        if (pelagicontain) {
-//	            // pelagicontain might not have been initialized (preloaded), so we can't just
-//	            // run shutdownContainer. But in the case it is initialized we DO want to run
-//	            // it. Unfortunately, there is currently no way to check that.
-//	            // pelagicontain->shutdownContainer();
-//	            delete pelagicontain;
-//	            remove_dirs();
-//	        }
-//
-//	        exit(signum);
-//
-//	    } else {
-//	        // But if pcPid is set, then it is definately initialized
-//	        // This will shutdown pelagicontain and make it exit the main loop
-//	        // back to main() which will take care of the rest of the cleanup
-//	        pelagicontain->shutdown();
-//	    }
-
+	    switch(signum) {
+	    case SIGCHLD:
+	    	break;
+	    default:
+		    ml->quit();
+	    }
 	}, ml->get_context()->gobj());
 
     { // Create a new scope so that we can do a clean up after dtors
         DBus::Glib::BusDispatcher dispatcher;
         DBus::default_dispatcher = &dispatcher;
+
         dispatcher.attach(ml->get_context()->gobj());
+
         DBus::Connection bus = DBus::Connection::SessionBus();
 
         /* The request_name call does not return anything but raises an
@@ -207,37 +204,38 @@ int main(int argc, char **argv)
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
-        pelagicontain = new Pelagicontain(&pamInterface,
-                                          ml,
+        Pelagicontain pelagicontain(&pamInterface,
+                                          &mainloopInterface,
                                           &controllerInterface,
                                           cookie);
 
         std::string objectPath = "/com/pelagicore/Pelagicontain";
 
-        PelagicontainToDBusAdapter pcAdapter(bus, objectPath, *pelagicontain);
+        PelagicontainToDBusAdapter pcAdapter(bus, objectPath, pelagicontain);
 
 #ifdef ENABLE_NETWORKGATEWAY
-        pelagicontain->addGateway(new NetworkGateway(controllerInterface,
+        // TODO : create the gateway instances on the stack to ensure they are properly destructed
+        pelagicontain.addGateway(new NetworkGateway(controllerInterface,
                                                     systemcallInterface));
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-        pelagicontain->addGateway(new PulseGateway(gatewayDir, containerName,
+        pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName,
                                                   controllerInterface));
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-        pelagicontain->addGateway(new DeviceNodeGateway(controllerInterface));
+        pelagicontain.addGateway(new DeviceNodeGateway(controllerInterface));
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-        pelagicontain->addGateway(new DBusGateway(controllerInterface,
+        pelagicontain.addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SessionProxy,
                                                  gatewayDir,
                                                  containerName));
 
-        pelagicontain->addGateway(new DBusGateway(controllerInterface,
+        pelagicontain.addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
@@ -250,28 +248,33 @@ int main(int argc, char **argv)
                                                     containerName));
 #endif
 
-        pcPid = pelagicontain->preload(&container);
+        pid_t pcPid = pelagicontain.preload(&container);
 
-        if (!pcPid) {
-            // Fatal failure, only do necessary cleanup
-            log_error() << "Could not start container, will shut down";
-        } else {
-            log_debug() << "Started container with PID " << pcPid;
-            // setup IPC between Pelagicontain and Controller
-            bool connected = pelagicontain->establishConnection();
-            if (connected) {
-                ml->run();
-                // When we return here Pelagicontain has exited the mainloop
-                log_debug() << "Exited mainloop";
-            } else {
-                // Fatal failure, only do necessary cleanup
-                log_error() << "Got no connection from Controller";
-                pelagicontain->shutdownContainer();
-            }
-        }
+		if (!pcPid) {
+			// Fatal failure, only do necessary cleanup
+			log_error() << "Could not start container, will shut down";
+		} else {
+			log_debug() << "Started container with PID " << pcPid;
+			// setup IPC between Pelagicontain and Controller
+			bool connected = pelagicontain.establishConnection();
+			if (connected) {
+
+#ifdef OPEN_CONSOLE_IN_CONTAINER
+        std::string s = pelagicore::formatString("konsole -e lxc-attach -n %s", container.name());
+        system(s.c_str());
+#endif
+
+				ml->run();
+				// When we return here Pelagicontain has exited the mainloop
+				log_debug() << "Exited mainloop";
+			} else {
+				// Fatal failure, only do necessary cleanup
+				log_error() << "Got no connection from Controller";
+				pelagicontain.shutdownContainer();
+			}
+		}
     }
 
-    delete pelagicontain;
     removeDirs();
 
     log_debug() << "Goodbye.";

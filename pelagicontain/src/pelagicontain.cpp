@@ -38,15 +38,12 @@ pid_t Pelagicontain::preload(Container *container)
 
     m_container->create();
 
-    pid_t pid = m_container->execute();
+    pid_t pid = m_container->start();
 
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
     if (pid) {
-        Glib::SignalChildWatch cw = Glib::signal_child_watch();
-        sigc::slot<void, int, int> shutdownSlot;
-        shutdownSlot = sigc::mem_fun(this, &Pelagicontain::handleControllerShutdown);
-        cw.connect(shutdownSlot, pid);
+        Glib::signal_child_watch().connect(sigc::mem_fun(this, &Pelagicontain::handleControllerShutdown), pid);
     }
 
     return pid;
@@ -59,7 +56,7 @@ bool Pelagicontain::establishConnection()
 
 void Pelagicontain::shutdownContainer()
 {
-    m_container->destroy();
+	m_container->destroy();
 }
 
 void Pelagicontain::handleControllerShutdown(int pid, int exitCode)
@@ -91,6 +88,12 @@ void Pelagicontain::launch(const std::string &appId)
             shutdown();
         }
     }
+}
+
+void Pelagicontain::launchCommand(const std::string &commandLine)
+{
+    log_debug() << "launchCommand called with commandLine: " << commandLine;
+    m_container->attach(commandLine);
 }
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)

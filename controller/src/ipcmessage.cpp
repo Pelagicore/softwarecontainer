@@ -7,7 +7,7 @@
 
 #include "config.h"
 #include "ipcmessage.h"
-#include "common.h"
+#include "pelagicontain-common.h"
 
 static const int OFFSET = 2;
 static const int PROTOCOL_INDEX = 0;

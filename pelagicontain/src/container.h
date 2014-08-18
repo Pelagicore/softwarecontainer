@@ -10,6 +10,7 @@
 
 #include "gateway.h"
 #include "log.h"
+#include "pelagicontain-common.h"
 
 /*! Container is an abstraction of the specific containment technology used.
  *
@@ -21,6 +22,9 @@
 class Container
 {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+
+    /// A function to be executed in the container
+    typedef std::function<void()> ContainerFunction;
 
 public:
 
@@ -35,8 +39,7 @@ public:
      */
     Container(const std::string &name,
               const std::string &configFile,
-              const std::string &containerRoot,
-              const std::string &containedCommand);
+              const std::string &containerRoot);
 
     ~Container();
 
@@ -46,16 +49,22 @@ public:
     void create();
 
     /*!
-     * Calls the lxc-execute commmand.
+     * Start the container
      *
-     * \return The pid of lxc-execute process, a '0' is returned on error.
+     * \return The pid of the init process of the container
      */
-    pid_t execute();
+    pid_t start();
+
+    pid_t attach(const std::string& commandLine);
+
+    pid_t executeInContainer(ContainerFunction function);
 
     /*!
      * Calls the lxc-destroy command.
      */
     void destroy();
+
+    void stop();
 
     /*!
      * Setup the container for a specific app
@@ -82,9 +91,16 @@ public:
      *
      * \return true or false
      */
-    bool initialize();
+    ReturnCode initialize();
+
+    std::string toString();
+
+    const char *name();
 
 private:
+
+    static int executeInContainerEntryFunction(void* param);
+
     /*
      * Check if path is a directory
      */
@@ -96,7 +112,7 @@ private:
      * deleted in reverse order to creation insert to the beginning of
      * the list.
      */
-    bool createDirectory(const std::string &path);
+    ReturnCode createDirectory(const std::string &path);
 
     /*
      * Create a bind mount. On success the mount will be added to a list of
@@ -125,11 +141,11 @@ private:
      * The unique name of the LXC container
      */
     std::string m_name;
-    const char *name();
+
+    struct lxc_container *m_container = nullptr;
 
     std::string m_containerRoot;
     std::string m_mountDir;
-    std::string m_containedCommand;
 };
 
 #endif //CONTAINER_H

@@ -48,6 +48,7 @@ TARGET_LINK_LIBRARIES(runUnitTestsPelagicontain
 	${DBUSCPP_LIBRARIES}
 	${DBUSCPPGLIB_LIBRARIES}
 	${GLIBMM_LIBRARIES}
+    ${LXC_LIBRARIES}
 	gtest
 	gtest_main
 	gmock
