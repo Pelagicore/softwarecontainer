@@ -24,7 +24,7 @@ TEST(ConfigParserTest, TestInit) {
     char filename1[] = "tmpconfig1_XXXXXX";
     int fd = mkstemp(filename1);
     close(fd);
-    unlink(filename1);
+    EXPECT_EQ(0, unlink(filename1));
 
     ConfigParser config1;
     EXPECT_NE(0, config1.read(filename1));
@@ -36,6 +36,7 @@ TEST(ConfigParserTest, TestInit) {
 
     ConfigParser config2;
     EXPECT_EQ(0, config2.read(filename2));
+    EXPECT_EQ(0, unlink(filename2));
 
     // Existing erroneous JSON
     char filename3[] = "tmpconfig3_XXXXXX";
@@ -44,6 +45,7 @@ TEST(ConfigParserTest, TestInit) {
 
     ConfigParser config3;
     EXPECT_NE(0, config3.read(filename3));
+    EXPECT_EQ(0, unlink(filename3));
 }
 
 TEST(ConfigParserTest, TestReadSimple) {
@@ -62,6 +64,7 @@ TEST(ConfigParserTest, TestReadSimple) {
 
     value = config.getString("test2");
     EXPECT_TRUE(value == NULL);
+    EXPECT_EQ(0, unlink(filename));
 }
 
 TEST(ConfigParserTest, TestReadMultiline) {
@@ -91,4 +94,5 @@ TEST(ConfigParserTest, TestReadMultiline) {
     // Now there should be no more
     token = strtok(NULL, "\n");
     EXPECT_TRUE(token == NULL);
+    EXPECT_EQ(0, unlink(filename));
 }

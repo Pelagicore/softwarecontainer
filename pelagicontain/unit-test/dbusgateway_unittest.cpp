@@ -86,6 +86,7 @@ public:
     virtual ~SystemcallInterfaceStub() {
         if(m_fileDescriptor != NULL) {
             fclose(m_fileDescriptor);
+            unlink(m_tmpfile.c_str());
         }
     }
 
