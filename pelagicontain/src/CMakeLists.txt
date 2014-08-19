@@ -1,15 +1,15 @@
 # Default values
-option(ENABLE_PULSEGW "Enables pulse gateway" ON)
-option(ENABLE_NETGW "Enables network gateway" ON)
-option(ENABLE_DEVICENODEGW "Enables device node gateway" ON)
-option(ENABLE_DBUSGW "Enables DBus gateway" ON)
+option(ENABLE_PULSEGATEWAY "Enables pulse gateway" ON)
+option(ENABLE_NETWORKGATEWAY "Enables network gateway" ON)
+option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
+option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
 
 # Pulse is a special case since it has a dependency package
-if(ENABLE_PULSEGW)
+if(ENABLE_PULSEGATEWAY)
     pkg_check_modules(DEPENDENCIES REQUIRED libpulse jansson)
-else(ENABLE_PULSEGW)
+else(ENABLE_PULSEGATEWAY)
     pkg_check_modules(DEPENDENCIES REQUIRED jansson)
-endif(ENABLE_PULSEGW)
+endif(ENABLE_PULSEGATEWAY)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
 # Enable or disable support for gateways compile-time.
@@ -24,10 +24,10 @@ macro(gateway_support flag strname filename)
     endif(${flag})
 endmacro(gateway_support flag filename)
 
-gateway_support(ENABLE_PULSEGW pulse pulsegateway.cpp)
-gateway_support(ENABLE_NETGW network networkgateway.cpp)
-gateway_support(ENABLE_DBUSGW DBus dbusgateway.cpp)
-gateway_support(ENABLE_DEVICENODEGW DeviceNode devicenodegateway.cpp)
+gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
+gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
+gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
+gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 
 find_package(SharedServiceInterfaces REQUIRED)
 
