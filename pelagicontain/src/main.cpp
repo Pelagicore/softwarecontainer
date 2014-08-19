@@ -16,22 +16,22 @@
 #include "dbusmainloop.h"
 #include "generators.h" /* used for gen_ct_name */
 
-#ifdef ENABLE_PULSEGW
-#include "pulsegateway.h"
-#endif
-
-#ifdef ENABLE_NETGW
-#include "networkgateway.h"
-#endif
-
-#ifdef ENABLE_DBUSGW
-#include "dbusgateway.h"
-#endif
-
 #include <sys/stat.h>
 #include "systemcallinterface.h"
 
-#ifdef ENABLE_DEVICENODEGW
+#ifdef ENABLE_PULSEGATEWAY
+#include "pulsegateway.h"
+#endif
+
+#ifdef ENABLE_NETWORKGATEWAY
+#include "networkgateway.h"
+#endif
+
+#ifdef ENABLE_DBUSGATEWAY
+#include "dbusgateway.h"
+#endif
+
+#ifdef ENABLE_DEVICENODEGATEWAY
 #include "devicenodegateway.h"
 #endif
 
@@ -203,21 +203,21 @@ int main(int argc, char **argv)
 
         PelagicontainToDBusAdapter pcAdapter(bus, objectPath, *pelagicontain);
 
-#ifdef ENABLE_NETGW
+#ifdef ENABLE_NETWORKGATEWAY
         pelagicontain->addGateway(new NetworkGateway(controllerInterface,
                                                     systemcallInterface));
 #endif
 
-#ifdef ENABLE_PULSEGW
+#ifdef ENABLE_PULSEGATEWAY
         pelagicontain->addGateway(new PulseGateway(gatewayDir, containerName,
                                                   controllerInterface));
 #endif
 
-#ifdef ENABLE_DEVICENODEGW
+#ifdef ENABLE_DEVICENODEGATEWAY
         pelagicontain->addGateway(new DeviceNodeGateway(controllerInterface));
 #endif
 
-#ifdef ENABLE_DBUSGW
+#ifdef ENABLE_DBUSGATEWAY
         pelagicontain->addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SessionProxy,
