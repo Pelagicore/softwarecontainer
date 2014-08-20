@@ -17,7 +17,11 @@ def pelagicontain_binary(request):
 
 @pytest.fixture(scope="module")
 def container_path(request):
-    return request.config.getoption("--container-path")
+    option = request.config.getoption("--container-path")
+    if option.endswith("/"):
+      return option
+    else:
+      return option + "/"
 
 @pytest.fixture
 def teardown_fixture(request):
