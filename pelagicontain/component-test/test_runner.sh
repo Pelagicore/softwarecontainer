@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+#   Copyright (C) 2014 Pelagicore AB
+#   All rights reserved.
+#
+
 # Parse command line arguments
 pelagicontain_bin=../../build/pelagicontain/src/pelagicontain
 container_path=/tmp/container/

@@ -1,25 +1,42 @@
 
 add_definitions(${DEPENDENCIES_CFLAGS})
 
+SET(GATEWAY_TEST_SRC "")
+# It would be cool to be able to pass several files to this macro
+macro(gateway_support_unit flag filename)
+    if(${flag})
+        LIST(APPEND GATEWAY_TEST_SRC ${filename})
+    endif(${flag})
+endmacro(gateway_support_unit flag filename)
+
+gateway_support_unit(ENABLE_PULSEGW pulsegateway_unittest.cpp)
+gateway_support_unit(ENABLE_PULSEGW pulsegateway_unittest_data.h)
+gateway_support_unit(ENABLE_PULSEGW ../src/pulsegateway.cpp)
+
+gateway_support_unit(ENABLE_NETGW networkgateway_unittest.cpp)
+gateway_support_unit(ENABLE_NETGW ../src/networkgateway.cpp)
+
+gateway_support_unit(ENABLE_DBUSGW dbusgateway_unittest.cpp)
+gateway_support_unit(ENABLE_DBUSGW ../src/dbusgateway.cpp)
+
+gateway_support_unit(ENABLE_DEVICENODEGW devicenodegateway_unittest.cpp)
+gateway_support_unit(ENABLE_DEVICENODEGW devicenodegateway_unittest_data.h)
+gateway_support_unit(ENABLE_DEVICENODEGW ../src/devicenodegateway.cpp)
+
 # Compile an executable that will run your unit tests and link it with gtest and gtest_main:
 add_executable(runUnitTestsPelagicontain
-    devicenodegateway_unittest.cpp
-    devicenodegateway_unittest_data.h
     main.cpp
-    networkgateway_unittest.cpp
-    dbusgateway_unittest.cpp
     pelagicontain_unittest.cpp
-    pulsegateway_unittest.cpp
-    pulsegateway_unittest_data.h
+    generators_unittest.cpp
+    configparser_unittest.cpp
     ../src/container.cpp
     ../src/controllerinterface.cpp
-    ../src/dbusgateway.cpp
-    ../src/devicenodegateway.cpp
     ../src/generators.cpp
-    ../src/networkgateway.cpp
+    ../src/configparser.cpp
     ../src/pelagicontain.cpp
-    ../src/pulsegateway.cpp
+    
     ${PROJECT_SOURCE_DIR}/common/config.cpp
+    ${GATEWAY_TEST_SRC}
 )
 
 link_directories(

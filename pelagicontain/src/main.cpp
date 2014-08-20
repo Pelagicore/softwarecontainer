@@ -15,12 +15,25 @@
 #include "pelagicontaintodbusadapter.h"
 #include "dbusmainloop.h"
 #include "generators.h" /* used for gen_ct_name */
-#include "pulsegateway.h"
-#include "networkgateway.h"
-#include "dbusgateway.h"
+
 #include <sys/stat.h>
 #include "systemcallinterface.h"
+
+#ifdef ENABLE_PULSEGATEWAY
+#include "pulsegateway.h"
+#endif
+
+#ifdef ENABLE_NETWORKGATEWAY
+#include "networkgateway.h"
+#endif
+
+#ifdef ENABLE_DBUSGATEWAY
+#include "dbusgateway.h"
+#endif
+
+#ifdef ENABLE_DEVICENODEGATEWAY
 #include "devicenodegateway.h"
+#endif
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
@@ -190,14 +203,21 @@ int main(int argc, char **argv)
 
         PelagicontainToDBusAdapter pcAdapter(bus, objectPath, *pelagicontain);
 
+#ifdef ENABLE_NETWORKGATEWAY
         pelagicontain->addGateway(new NetworkGateway(controllerInterface,
                                                     systemcallInterface));
+#endif
 
+#ifdef ENABLE_PULSEGATEWAY
         pelagicontain->addGateway(new PulseGateway(gatewayDir, containerName,
                                                   controllerInterface));
+#endif
 
+#ifdef ENABLE_DEVICENODEGATEWAY
         pelagicontain->addGateway(new DeviceNodeGateway(controllerInterface));
+#endif
 
+#ifdef ENABLE_DBUSGATEWAY
         pelagicontain->addGateway(new DBusGateway(controllerInterface,
                                                  systemcallInterface,
                                                  DBusGateway::SessionProxy,
@@ -209,6 +229,7 @@ int main(int argc, char **argv)
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
                                                  containerName));
+#endif
 
         pcPid = pelagicontain->preload(&container);
 

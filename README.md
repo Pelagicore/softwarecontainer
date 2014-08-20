@@ -10,6 +10,9 @@ how to run Pelagicontain and how to run the component tests.
 
 To run the unit-tests build the project with -DENABLE_COVERAGE=1 -DBUILD_TESTS=ON
 
+To disable support for various gateways at compile time, set -DENABLE_PULSEGW=OFF 
+(for pulse), -DENABLE_NETGW=OFF (for network), -DENABLE_DEVICENODEGW=OFF (for 
+device node gateway) and -DENABLE_DBUSGW=OFF (for dbus).
 
 NOTE ON D-BUS RUNNING ON DESKTOP SYSTEMS
 
