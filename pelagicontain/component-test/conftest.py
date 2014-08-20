@@ -21,7 +21,7 @@ def container_path(request):
     if option.endswith("/"):
       return option
     else:
-        return (option + "/")
+      return option + "/"
 
 @pytest.fixture
 def teardown_fixture(request):
