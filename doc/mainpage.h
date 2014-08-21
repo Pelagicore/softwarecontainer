@@ -167,7 +167,7 @@
    
    Add a container-br0 bridge: <br />
 
-   <code>brctladdbr container-br0</code> <br />
+   <code>brctl addbr container-br0</code> <br />
    <code>brctl setfd container-br0 0</code> <br />
    <code>ifconfig container-br0 10.0.3.1 netmask 255.255.255.0 promisc up</code> <br />
    <code>iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE</code> <br />
