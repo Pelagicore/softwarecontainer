@@ -2,26 +2,15 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/file.h>
-#include <sys/stat.h>
 #include <sys/time.h>
-
 #include "ifaddrs.h"
 
 #include "generators.h"
 
-using namespace std;
-
-const static char *iface_counter_file = "/tmp/pelc_ifc";
-
 std::string Generator::gen_net_iface_name (const char *ip_addr_net)
 {
     struct  ifaddrs *ifaddr, *ifa;
-    int collision = 0;
+    bool collision = false;
     char iface[16];
 
     do {
@@ -38,7 +27,7 @@ std::string Generator::gen_net_iface_name (const char *ip_addr_net)
                 continue;
             } else {
                 if (strcmp(ifa->ifa_name, iface) == 0) {
-                    collision = 1;
+                    collision = true;
                     break;
                 }
             }
@@ -49,43 +38,19 @@ std::string Generator::gen_net_iface_name (const char *ip_addr_net)
 }
 
 /*
- * Read the counter value from iface_counter_file and increase it to
- * find the next ip. Naively assumes no ip collisions occur at the moment.
+ * Increase the counter and return an IP number based on that.
  */
 std::string Generator::gen_ip_addr (const char *ip_addr_net)
 {
-    int fd = open(iface_counter_file, O_CREAT | O_RDWR, S_IRWXU);
-    int counter = 0;
-    char buf[4];
-    char ip[20];
+    static int counter = 0;
 
-    if (fd == -1) {
-        log_error("Unable to lock interface counter");
-        return std::string();
-    }
-    flock(fd, LOCK_EX);
-
-    buf[3] = 0;
-    /* We reserve the first IP for gateway .. */
-    if (read(fd, buf, 3) == 0) {
+    counter++;
+    if (counter < 2 || counter > 254) {
         counter = 2;
-    } else {
-        counter = atoi(buf) + 1;
-        if (counter < 2 || counter > 254)
-            counter = 2;
     }
 
-    snprintf(buf, sizeof(buf), "%03d", counter);
-
-    /* Overwrite the first three bytes */
-    lseek(fd, 0, SEEK_SET);
-    write(fd, buf, 3);
-
-    flock(fd, LOCK_UN);
-    close(fd);
-
+    char ip[20];
     snprintf(ip, sizeof(ip), "%s%d", ip_addr_net, counter);
-
     return std::string(ip);
 }
 
