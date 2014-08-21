@@ -198,7 +198,7 @@ int main(int argc, char **argv)
         if (!pamRunning) {
             log_error() << "PAM not running, exiting";
             removeDirs();
-            exit(-1);
+            return -1;
         }
 
         PAMInterface pamInterface(bus);
