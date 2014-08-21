@@ -16,9 +16,9 @@ import conftest
 from common import ComponentTestHelper
 
 
-CONFIG_NETWORK_ENABLED = {"internet-access": "true", "gateway": "10.0.3.1"}
-CONFIG_NETWORK_DISABLED = {"internet-access": "false", "gateway": ""}
-CONFIG_NETWORK_NO_GATEWAY = {"internet-access": "true", "gateway": ""}
+CONFIG_NETWORK_ENABLED = {"internet-access": True, "gateway": "10.0.3.1"}
+CONFIG_NETWORK_DISABLED = {"internet-access": False, "gateway": ""}
+CONFIG_NETWORK_NO_GATEWAY = {"internet-access": True , "gateway": ""}
 
 TEST_CONFIGS = [CONFIG_NETWORK_DISABLED,
                 CONFIG_NETWORK_NO_GATEWAY,
@@ -46,7 +46,7 @@ class TestNetworkGateway():
 
         # Build is parametrized, assert based on what config has been passed
         # to the test case
-        if "true" in config["internet-access"]:
+        if config["internet-access"]:
             if "10.0.3.1" in config["gateway"]:
                 assert ping_success
             else:
