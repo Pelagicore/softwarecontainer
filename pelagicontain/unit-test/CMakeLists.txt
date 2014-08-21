@@ -9,19 +9,19 @@ macro(gateway_support_unit flag filename)
     endif(${flag})
 endmacro(gateway_support_unit flag filename)
 
-gateway_support_unit(ENABLE_PULSEGW pulsegateway_unittest.cpp)
-gateway_support_unit(ENABLE_PULSEGW pulsegateway_unittest_data.h)
-gateway_support_unit(ENABLE_PULSEGW ../src/pulsegateway.cpp)
+gateway_support_unit(ENABLE_PULSEGATEWAY pulsegateway_unittest.cpp)
+gateway_support_unit(ENABLE_PULSEGATEWAY pulsegateway_unittest_data.h)
+gateway_support_unit(ENABLE_PULSEGATEWAY ../src/pulsegateway.cpp)
 
-gateway_support_unit(ENABLE_NETGW networkgateway_unittest.cpp)
-gateway_support_unit(ENABLE_NETGW ../src/networkgateway.cpp)
+gateway_support_unit(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
+gateway_support_unit(ENABLE_NETWORKGATEWAY ../src/networkgateway.cpp)
 
-gateway_support_unit(ENABLE_DBUSGW dbusgateway_unittest.cpp)
-gateway_support_unit(ENABLE_DBUSGW ../src/dbusgateway.cpp)
+gateway_support_unit(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
+gateway_support_unit(ENABLE_DBUSGATEWAY ../src/dbusgateway.cpp)
 
-gateway_support_unit(ENABLE_DEVICENODEGW devicenodegateway_unittest.cpp)
-gateway_support_unit(ENABLE_DEVICENODEGW devicenodegateway_unittest_data.h)
-gateway_support_unit(ENABLE_DEVICENODEGW ../src/devicenodegateway.cpp)
+gateway_support_unit(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
+gateway_support_unit(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest_data.h)
+gateway_support_unit(ENABLE_DEVICENODEGATEWAY ../src/devicenodegateway.cpp)
 
 # Compile an executable that will run your unit tests and link it with gtest and gtest_main:
 add_executable(runUnitTestsPelagicontain
