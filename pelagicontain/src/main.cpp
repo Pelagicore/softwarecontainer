@@ -191,6 +191,16 @@ int main(int argc, char **argv)
         std::string name = "com.pelagicore.Pelagicontain" + cookie;
         bus.request_name(name.c_str());
 
+        /* If we can't communicate with PAM then there is nothing we can 
+         * do really, better to just exit.
+         */
+        bool pamRunning = bus.has_name("com.pelagicore.PAM");
+        if (!pamRunning) {
+            log_error() << "PAM not running, exiting";
+            removeDirs();
+            return -1;
+        }
+
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
