@@ -119,7 +119,7 @@ class PulseGatewayValidConfig:
 INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayValidConfig,
                         ::testing::ValuesIn(validConfigs));
 
-TEST_P(PulseGatewayValidConfig, TestCanParseValidConfig) {
+TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     StrictMock<PulseMockController> controllerInterface;
     PulseGateway gw("fake-gatewayDir", "fake-containerName", controllerInterface);
 
