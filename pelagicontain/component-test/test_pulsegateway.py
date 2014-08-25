@@ -193,7 +193,7 @@ class TestPulseGateway():
 
         config = setup_test_case
         helper.pelagicontain_iface().Launch(helper.app_id())
-        time.sleep(1)
+        time.sleep(3)
 
         if "true" in config["audio"]:
             assert is_app_output_ok("0", container_path)
