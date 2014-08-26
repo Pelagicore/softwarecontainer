@@ -115,6 +115,12 @@ int main(int argc, char **argv)
                                 'c',
                                 "Config file");
 
+    const char* terminalCommand = nullptr;
+    commandLineParser.addOption(terminalCommand,
+                                "terminal",
+                                't',
+                                "Example: konsole");
+
     if (commandLineParser.parse(argc, argv)) {
         return -1;
     }
@@ -165,15 +171,18 @@ int main(int argc, char **argv)
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
 
+    Pelagicontain* pPelagicontain = nullptr;
+
     // Register signalHandler with signals
 	std::vector<int> signals = {SIGINT, SIGTERM};
 	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
 	    log_debug() << "caught signal " << signum;
+	    pPelagicontain->shutdown();
 	    switch(signum) {
 	    case SIGCHLD:
 	    	break;
 	    default:
-		    ml->quit();
+	    	break;
 	    }
 	}, ml->get_context()->gobj());
 
@@ -208,6 +217,8 @@ int main(int argc, char **argv)
                                           &mainloopInterface,
                                           &controllerInterface,
                                           cookie);
+
+        pPelagicontain = &pelagicontain;
 
         std::string objectPath = "/com/pelagicore/Pelagicontain";
 
@@ -259,10 +270,10 @@ int main(int argc, char **argv)
 			bool connected = pelagicontain.establishConnection();
 			if (connected) {
 
-#ifdef OPEN_CONSOLE_IN_CONTAINER
-        std::string s = pelagicore::formatString("konsole -e lxc-attach -n %s", container.name());
-        system(s.c_str());
-#endif
+				if (terminalCommand != nullptr) {
+					std::string s = pelagicore::formatString("%s -e lxc-attach -n %s", terminalCommand, container.name());
+					system(s.c_str());
+				}
 
 				ml->run();
 				// When we return here Pelagicontain has exited the mainloop
