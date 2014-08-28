@@ -25,10 +25,10 @@ public:
         return true;
     }
 
-    virtual bool setEnvironmentVariable(const std::string &variable,
+    virtual ReturnCode setEnvironmentVariable(const std::string &variable,
                                         const std::string &value)
     {
-        return true;
+        return ReturnCode::SUCCESS;
     }
 
     virtual bool hasBeenStarted() const
@@ -41,7 +41,7 @@ public:
         return true;
     }
 
-    MOCK_METHOD1(systemCall, bool(const std::string &cmd));
+    MOCK_METHOD1(systemCall, ReturnCode(const std::string &cmd));
 };
 
 

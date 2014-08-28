@@ -59,9 +59,10 @@ else(DBUSBINDINGTOOL)
     MESSAGE(ERROR " Cannot find dbusxx-xml2cpp")
 endif(DBUSBINDINGTOOL)
 
-add_executable( pelagicontain
+add_library(pelagicontainLib SHARED 
     pelagicontaintodbusadapter.cpp
-    main.cpp
+    dbusmainloop.cpp
+    configparser.cpp
     container.cpp
     generators.cpp
     pelagicontain.cpp
@@ -74,6 +75,17 @@ add_executable( pelagicontain
     ${GATEWAY_SOURCES}
 )
 
+install(TARGETS pelagicontainLib DESTINATION lib)
+
+add_executable( pelagicontain
+#    main.cpp
+    mainWithLib.cpp
+)
+
+add_executable( pelagicontainWitLib
+    main.cpp
+)
+
 TARGET_LINK_LIBRARIES( pelagicontain
     ${PELAGICORE_UTILS_LIBRARIES}
     ${DEPENDENCIES_LIBRARIES}
@@ -81,6 +93,17 @@ TARGET_LINK_LIBRARIES( pelagicontain
     ${DBUSCPPGLIB_LIBRARIES}
     ${GLIBMM_LIBRARIES}
     ${LXC_LIBRARIES}
+    pelagicontainLib
+)
+
+TARGET_LINK_LIBRARIES( pelagicontainWitLib
+    ${PELAGICORE_UTILS_LIBRARIES}
+    ${DEPENDENCIES_LIBRARIES}
+    ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
+    ${DBUSCPPGLIB_LIBRARIES}
+    ${GLIBMM_LIBRARIES}
+    ${LXC_LIBRARIES}
+    pelagicontainLib
 )
 
 install(TARGETS pelagicontain RUNTIME DESTINATION bin)

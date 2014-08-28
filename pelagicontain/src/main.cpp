@@ -44,6 +44,7 @@
 
 #include <lxc/lxccontainer.h>
 
+
 //LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
@@ -51,15 +52,10 @@ LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main conte
     #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
 #endif
 
-/* These has to be global in order to be reachable from the signal handler */
-static Pelagicontain *pelagicontain;
-static pid_t pcPid;
-static std::string containerDir;
-
 /**
  * Remove the dirs created by main when we cleanup
  */
-void removeDirs()
+void removeDirs(const std::string& containerDir)
 {
     std::string gatewayDir = containerDir + "/gateways";
     if (rmdir(gatewayDir.c_str()) == -1) {
@@ -146,18 +142,8 @@ int main(int argc, char **argv)
     // Create gateway directory for container in containerRoot/gateways.
     // This dir will contain various sockets etc acting as gateways
     // in/out of the container.
-    containerDir = containerRoot + "/" + containerName;
+    std::string containerDir = containerRoot + "/" + containerName;
     std::string gatewayDir = containerDir + "/gateways";
-    if (mkdir(containerDir.c_str(), S_IRWXU) == -1) {
-        log_error() << "Could not create container directory " <<
-                  containerDir << " , " << strerror(errno);
-        return -1;
-    }
-    if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
-    	log_error() << "Could not create gateway directory " <<
-    	                  gatewayDir << strerror(errno);
-        return -1;
-    }
 
     Container container(containerName,
                         containerConfig,
@@ -165,7 +151,7 @@ int main(int argc, char **argv)
 
     if (isError(container.initialize())) {
         log_error() << "Could not setup container for preloading";
-        removeDirs();
+        removeDirs(containerDir);
         return -1;
     }
 
@@ -177,11 +163,11 @@ int main(int argc, char **argv)
 	std::vector<int> signals = {SIGINT, SIGTERM};
 	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
 	    log_debug() << "caught signal " << signum;
-	    pPelagicontain->shutdown();
 	    switch(signum) {
 	    case SIGCHLD:
 	    	break;
 	    default:
+		    pPelagicontain->shutdown();
 	    	break;
 	    }
 	}, ml->get_context()->gobj());
@@ -206,7 +192,7 @@ int main(int argc, char **argv)
         bool pamRunning = bus.has_name("com.pelagicore.PAM");
         if (!pamRunning) {
             log_error() << "PAM not running, exiting";
-            removeDirs();
+            removeDirs(containerDir);
             return -1;
         }
 
@@ -225,32 +211,35 @@ int main(int argc, char **argv)
         PelagicontainToDBusAdapter pcAdapter(bus, objectPath, pelagicontain);
 
 #ifdef ENABLE_NETWORKGATEWAY
-        // TODO : create the gateway instances on the stack to ensure they are properly destructed
-        pelagicontain.addGateway(new NetworkGateway(controllerInterface,
-                                                    systemcallInterface));
+        NetworkGateway networkGateway(controllerInterface, systemcallInterface);
+        pelagicontain.addGateway(networkGateway);
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-        pelagicontain.addGateway(new PulseGateway(gatewayDir, containerName,
-                                                  controllerInterface));
+        PulseGateway pulseGateway(gatewayDir, containerName, controllerInterface);
+        pelagicontain.addGateway(pulseGateway);
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-        pelagicontain.addGateway(new DeviceNodeGateway(controllerInterface));
+        DeviceNodeGateway deviceNodeGateway(controllerInterface);
+        pelagicontain.addGateway(deviceNodeGateway);
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-        pelagicontain.addGateway(new DBusGateway(controllerInterface,
-                                                 systemcallInterface,
-                                                 DBusGateway::SessionProxy,
-                                                 gatewayDir,
-                                                 containerName));
+        DBusGateway sessionBusGateway(controllerInterface,
+                                                         systemcallInterface,
+                                                         DBusGateway::SessionProxy,
+                                                         gatewayDir,
+                                                         containerName);
 
-        pelagicontain.addGateway(new DBusGateway(controllerInterface,
-                                                 systemcallInterface,
-                                                 DBusGateway::SystemProxy,
-                                                 gatewayDir,
-                                                 containerName));
+        pelagicontain.addGateway(sessionBusGateway);
+
+        DBusGateway systemBusGateway(controllerInterface,
+                                                         systemcallInterface,
+                                                         DBusGateway::SystemProxy,
+                                                         gatewayDir,
+                                                         containerName);
+        pelagicontain.addGateway(systemBusGateway);
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
@@ -267,8 +256,7 @@ int main(int argc, char **argv)
 		} else {
 			log_debug() << "Started container with PID " << pcPid;
 			// setup IPC between Pelagicontain and Controller
-			bool connected = pelagicontain.establishConnection();
-			if (connected) {
+			if (!isError(pelagicontain.establishConnection())) {
 
 				if (terminalCommand != nullptr) {
 					std::string s = pelagicore::formatString("%s -e lxc-attach -n %s", terminalCommand, container.name());
@@ -286,7 +274,7 @@ int main(int argc, char **argv)
 		}
     }
 
-    removeDirs();
+	removeDirs(containerDir);
 
     log_debug() << "Goodbye.";
 }

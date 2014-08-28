@@ -80,7 +80,7 @@ bool PulseGateway::setConfig(const std::string &config)
     if (m_enableAudio) {
         std::string var = "PULSE_SERVER";
         std::string val = "/gateways/" + socketName();
-        success = getController().setEnvironmentVariable(var, val);
+        success = isSuccess(getController().setEnvironmentVariable(var, val));
     }
 
     return success;

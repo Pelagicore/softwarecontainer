@@ -6,6 +6,7 @@
 #define CONTROLLERABSTRACTINTERFACE_H
 
 #include <string>
+#include "pelagicontain-common.h"
 
 /*! ControllerAbstractInterface is an abstract interface to the Controller.
  *
@@ -22,14 +23,14 @@ public:
      *
      * \return True if all went well, false if not
      */
-    virtual bool startApp() = 0;
+//    virtual bool startApp() = 0;
 
     /*! Stops the application running inside the container and also
      *  stops Controller.
      *
      * \return True if all went well, false if not
      */
-    virtual bool shutdown() = 0;
+//    virtual bool shutdown() = 0;
 
     /*! Tells controller to set the specified environment variable
      * to the specified value. If the variable does not exist, it is
@@ -38,22 +39,21 @@ public:
      * \param variable A string with the environment variable name
      * \param value A string with the value to set on the environment variable
      */
-    virtual bool setEnvironmentVariable(const std::string &variable,
-                                        const std::string &value) = 0;
+    virtual ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) = 0;
 
     /*! Notifies the controller to issue the system call
      *  defined in the cmd argument.
      *
      * \return True if all went well, false if not
      */
-    virtual bool systemCall(const std::string &cmd) = 0;
+    virtual ReturnCode systemCall(const std::string &cmd) = 0;
 
     /*! This method returns true if a call to startApp has been made previously,
      * false if not.
      *
      * \return true or false
      */
-    virtual bool hasBeenStarted() const = 0;
+//    virtual bool hasBeenStarted() const = 0;
 
     /*! Sets up the IPC between Pelagicontain and Controller and waits for
      *  Controller to connect. If Controller connects, we are ready to receive
@@ -63,7 +63,7 @@ public:
      *
      * \return true or false
      */
-    virtual bool initialize() = 0;
+//    virtual ReturnCode initialize() = 0;
 };
 
 #endif /* CONTROLLERABSTRACTINTERFACE_H */

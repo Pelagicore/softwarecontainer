@@ -45,6 +45,8 @@ message("LXC hook scripts will be installed in " ${LXC_HOOK_SCRIPTS_DIR})
 
 include_directories(
 	common
+	clientLib
+	pelagicontain/src
 	${DBUS_INCLUDE_DIR}
 	${DBUSCPP_INCLUDE_DIR}
 	${DBUSCPPGLIB_INCLUDE_DIR}

@@ -33,10 +33,10 @@ std::string Generator::gen_ct_name()
     gettimeofday(&time, NULL);
     srand((time.tv_sec * 1000) + (time.tv_usec / 1000));
 
-    for (int i = 0; i < 9; i++) {
+    for (size_t i = 0; i < sizeof(name); i++) {
         name[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
     }
 
-    name[9] = '\0';
+    name[sizeof(name)-1] = '\0';
     return std::string(name);
 }

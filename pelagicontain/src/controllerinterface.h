@@ -38,12 +38,12 @@ public:
 
     /*! Implements ControllerAbstractInterface::setEnvironmentVariable
      */
-    virtual bool setEnvironmentVariable(const std::string &variable,
+    virtual ReturnCode setEnvironmentVariable(const std::string &variable,
                                         const std::string &value);
 
     /*! Implements ControllerAbstractInterface::systemCall
      */
-    virtual bool systemCall(const std::string &cmd);
+    virtual ReturnCode systemCall(const std::string &cmd);
 
     /*! Implements ControllerAbstractInterface::hasBeenStarted
      */
@@ -51,7 +51,7 @@ public:
 
     /*! Implements ControllerAbstractInterface::initialize
      */
-    virtual bool initialize();
+    virtual ReturnCode initialize();
 
 private:
     /*! Waits for Controller to connect until timeout is reached.

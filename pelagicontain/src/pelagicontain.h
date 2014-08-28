@@ -26,8 +26,8 @@ public:
      *  of Pelagicontain
      */
     Pelagicontain(PAMAbstractInterface *pamInterface,
-                  Glib::RefPtr<Glib::MainLoop> mainloop,
-                  ControllerAbstractInterface *controllerInterface,
+                  MainloopAbstractInterface *mainloopInterface,
+                  ControllerInterface *controllerInterface,
                   const std::string &cookie);
 
     ~Pelagicontain();
@@ -36,7 +36,7 @@ public:
      *
      * \param gateway A gateway that will be used by the container
      */
-    void addGateway(Gateway *gateway);
+    void addGateway(Gateway & gateway);
 
     /*! Starts the container preloading phase.
      *
@@ -95,7 +95,7 @@ public:
     void setContainerEnvironmentVariable(const std::string &var,
                                          const std::string &val);
 
-    bool establishConnection();
+    ReturnCode establishConnection();
 
     void shutdownContainer();
 
@@ -128,14 +128,15 @@ private:
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
-    Glib::RefPtr<Glib::MainLoop> m_mainloop;
-    ControllerAbstractInterface *m_controllerInterface;
+    MainloopAbstractInterface *m_mainloopInterface;
+    ControllerInterface *m_controllerInterface;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     std::string m_cookie;
 
     // Keeps track of if someone has called launch
     bool m_launching;
+
 };
 
 #endif /* PELAGICONTAIN_H */

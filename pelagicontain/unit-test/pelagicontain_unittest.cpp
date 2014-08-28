@@ -13,8 +13,12 @@
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
 class StubController:
-    public ControllerAbstractInterface
+    public ControllerInterface
 {
+public:
+	StubController() : ControllerInterface("") {
+	}
+
     virtual bool startApp()
     {
         return true;
@@ -25,10 +29,10 @@ class StubController:
         return true;
     }
 
-    virtual bool setEnvironmentVariable(const std::string &variable,
+    virtual ReturnCode setEnvironmentVariable(const std::string &variable,
                                         const std::string &value)
     {
-        return true;
+        return ReturnCode::SUCCESS;
     }
 
     virtual bool hasBeenStarted() const
@@ -36,14 +40,14 @@ class StubController:
         return true;
     }
 
-    virtual bool initialize()
+    virtual ReturnCode initialize()
     {
-        return true;
+        return ReturnCode::SUCCESS;
     }
 
-    virtual bool systemCall(const std::string &cmd)
+    virtual ReturnCode systemCall(const std::string &cmd)
     {
-        return true;
+        return ReturnCode::SUCCESS;
     }
 };
 
@@ -153,9 +157,9 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     const std::string cookie = "unimportant-cookie";
     Pelagicontain pc(&pam, mainloop, &controller, cookie);
 
-    pc.addGateway(&gw1);
-    pc.addGateway(&gw2);
-    pc.addGateway(&gw3);
+    pc.addGateway(gw1);
+    pc.addGateway(gw2);
+    pc.addGateway(gw3);
 
     std::map<std::string, std::string> configs
     {{gw1Id, ""}, {gw2Id, ""}, {gw3Id, ""}};

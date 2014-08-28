@@ -10,8 +10,8 @@
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
-                             Glib::RefPtr<Glib::MainLoop> mainloop,
-                             ControllerAbstractInterface *controllerInterface,
+                             MainloopAbstractInterface *mainloopInterface,
+                             ControllerInterface *controllerInterface,
                              const std::string &cookie):
     m_container(NULL),
     m_pamInterface(pamInterface),
@@ -26,9 +26,9 @@ Pelagicontain::~Pelagicontain()
 {
 }
 
-void Pelagicontain::addGateway(Gateway *gateway)
+void Pelagicontain::addGateway(Gateway& gateway)
 {
-    m_gateways.push_back(gateway);
+    m_gateways.push_back(&gateway);
 }
 
 // Preload the container. This is a non-blocking operation
@@ -49,7 +49,7 @@ pid_t Pelagicontain::preload(Container *container)
     return pid;
 }
 
-bool Pelagicontain::establishConnection()
+ReturnCode Pelagicontain::establishConnection()
 {
     return m_controllerInterface->initialize();
 }
@@ -93,7 +93,9 @@ void Pelagicontain::launch(const std::string &appId)
 void Pelagicontain::launchCommand(const std::string &commandLine)
 {
     log_debug() << "launchCommand called with commandLine: " << commandLine;
-    m_container->attach(commandLine);
+    m_container->attach(commandLine, [&](pid_t pid, int returnCode) {
+    	shutdown();
+    });
 }
 
 void Pelagicontain::update(const std::map<std::string, std::string> &configs)
@@ -108,7 +110,8 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
     // We should only start the app if we have ended up here because launch was
     // called and the app has not been started previously.
     if (m_launching && !m_controllerInterface->hasBeenStarted()) {
-        m_controllerInterface->startApp();
+    	launchCommand(APP_BINARY);
+//        m_controllerInterface->startApp();
     }
 }
 
@@ -141,12 +144,12 @@ void Pelagicontain::activateGateways()
 
 void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val)
 {
-    m_controllerInterface->setEnvironmentVariable(var, val);
+	m_container->setEnvironmentVariable(var,val);
 }
 
 void Pelagicontain::shutdown()
 {
-    log_debug() << "shutdown called";
+    log_debug() << "shutdown called" << logging::getStackTrace();
     // Tell Controller to shut down the app and Controller will exit when the
     // app has shut down and then we will handle the signal through the handler.
     m_controllerInterface->shutdown();
@@ -160,7 +163,6 @@ void Pelagicontain::shutdownGateways()
         if (!(*gateway)->teardown()) {
             log_warning() << "Could not tear down gateway cleanly";
         }
-        delete (*gateway);
     }
 
     m_gateways.clear();

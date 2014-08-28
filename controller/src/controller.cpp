@@ -14,6 +14,7 @@
 
 #include "controller.h"
 #include "pelagicore-common.h"
+#include "pelagicontain-common.h"
 
 
 Controller::Controller(Glib::RefPtr<Glib::MainLoop> ml):
@@ -59,9 +60,7 @@ void Controller::handleAppShutdownSlot(int pid, int exitCode) {
 
 void Controller::shutdown()
 {
-    sigc::slot<bool> shutdownSlot;
-    shutdownSlot = sigc::mem_fun(*this, &Controller::killMainLoop);
-    Glib::signal_idle().connect(shutdownSlot);
+    Glib::signal_idle().connect(sigc::mem_fun(*this, &Controller::killMainLoop));
 }
 
 int Controller::runApp()
@@ -69,7 +68,7 @@ int Controller::runApp()
     log_info() << "Will run app now..." ;
 
     std::vector<std::string> executeCommandVec;
-    executeCommandVec = Glib::shell_parse_argv("/appbin/containedapp");
+    executeCommandVec = Glib::shell_parse_argv(APP_BINARY);
     sigc::slot<void> setupSlot = sigc::mem_fun(*this, &Controller::childSetupSlot);
     try {
         Glib::spawn_async_with_pipes(".",

@@ -38,10 +38,10 @@ public:
     }
 
     MOCK_METHOD1(systemCall,
-        bool(const std::string &cmd));
+    		ReturnCode(const std::string &cmd));
 
     MOCK_METHOD2(setEnvironmentVariable,
-                 bool(const std::string &variable, const std::string &value));
+    		ReturnCode(const std::string &variable, const std::string &value));
 };
 
 

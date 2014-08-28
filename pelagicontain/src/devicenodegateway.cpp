@@ -103,20 +103,20 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
 
 bool DeviceNodeGateway::activate()
 {
-    bool success = true;
     for (uint i = 0; i < m_devList.size(); i++)
     {
         struct DeviceNodeGateway::Device dev;
         dev = m_devList.at(i);
-        success = getController().systemCall("mknod " + dev.name + " c " +
+        auto success = getController().systemCall("mknod " + dev.name + " c " +
                                                 dev.major + " " + dev.minor);
-        if (success) {
+        if (!isError(success)) {
             success = getController().systemCall("chmod " +
                                                     dev.mode + " " + dev.name );
         } else {
             log_error() << "Failed to create device " << dev.name;
+            return false;
         }
     }
 
-    return success;
+    return true;
 }

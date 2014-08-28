@@ -19,14 +19,16 @@
  * implements the specifics behind the conceptual phases of 'Pereload', 'Launch',
  * and 'Shutdown'.
  */
-class Container
+class Container : public ControllerAbstractInterface
 {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+
+public:
 
     /// A function to be executed in the container
     typedef std::function<void()> ContainerFunction;
 
-public:
+    typedef std::function<void(pid_t pid, int returnCode)> ProcessListenerFunction;
 
     /*!
      * Constructor
@@ -55,9 +57,10 @@ public:
      */
     pid_t start();
 
-    pid_t attach(const std::string& commandLine);
+    pid_t attach(const std::string& commandLine, ProcessListenerFunction listener, const EnvironmentVariables& variables);
+    pid_t attach(const std::string& commandLine, ProcessListenerFunction listener);
 
-    pid_t executeInContainer(ContainerFunction function);
+    pid_t executeInContainer(ContainerFunction function, ProcessListenerFunction listener, const EnvironmentVariables& variables);
 
     /*!
      * Calls the lxc-destroy command.
@@ -95,7 +98,28 @@ public:
 
     std::string toString();
 
-    const char *name();
+    const char *name() const;
+
+    std::string containerDir() const {
+    	return m_containerRoot + name();
+    }
+
+    ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) override {
+    	log_error() << "Setting env variable in container " << var << "=" << val;
+    	m_env[var] = val;
+    	return ReturnCode::SUCCESS;
+    }
+
+    ReturnCode systemCall(const std::string &cmd) override {
+    	executeInContainer([cmd=cmd]() {
+        	log_error() << "Executing system command in container : " << cmd;
+    		system(cmd.c_str());
+    	}, [cmd=cmd](pid_t pid , int returnCode) {
+        	log_error() << "Command finished: " << cmd;
+    	}, m_env);
+    	sleep(1);
+    	return ReturnCode::SUCCESS;
+    }
 
 private:
 
@@ -146,6 +170,11 @@ private:
 
     std::string m_containerRoot;
     std::string m_mountDir;
+
+    std::vector<const char*> m_LXCContainerStates;
+
+    EnvironmentVariables m_env;
+
 };
 
 #endif //CONTAINER_H

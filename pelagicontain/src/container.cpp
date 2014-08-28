@@ -8,8 +8,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <lxc/lxccontainer.h>
+#include "lxc-common.h"
 
 #include "container.h"
+#include "pelagicore-common.h"
+
 
 #ifndef LXCTEMPLATE
     #error Must define LXCTEMPLATE as path to lxc-pelagicontain
@@ -33,10 +36,25 @@ Container::Container(const std::string &name,
     m_mountDir(containerRoot + "/late_mounts")
 {
 	log_debug() << "LXC version " << lxc_get_version();
+	int stateCount = lxc_get_wait_states(nullptr);
+	m_LXCContainerStates.resize(stateCount);
+	lxc_get_wait_states(m_LXCContainerStates.data());
+	log_debug() << m_LXCContainerStates;
+	assert((int)LXCContainerStates::ELEMENT_COUNT == m_LXCContainerStates.size());
 }
 
 ReturnCode Container::initialize()
 {
+    std::string gatewayDir = containerDir() + "/gateways";
+    if (mkdir(containerDir().c_str(), S_IRWXU) == -1) {
+        log_error() << "Could not create container directory " <<
+        		containerDir() << " , " << strerror(errno);
+    }
+    if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
+    	log_error() << "Could not create gateway directory " <<
+    	                  gatewayDir << strerror(errno);
+    }
+
     // Make sure the directory for "late mounts" exist
     if (!isDirectory(m_mountDir)) {
         log_error() << "Directory " << m_mountDir << " does not exist";
@@ -104,15 +122,27 @@ Container::~Container()
     }
 
 	if (isContainerDeleteEnabled())
+	{
 		destroy();
+		if (m_container != nullptr) {
+			lxc_container_put(m_container);
+			m_container = nullptr;
+		}
+	}
 
-	if (m_container != nullptr)
-		lxc_container_put(m_container);
+	std::string gatewayDir = containerDir() + "/gateways";
+	if (rmdir(gatewayDir.c_str()) == -1) {
+		log_warn() << "Cannot delete dir " << gatewayDir << " , " << strerror(errno);
+		system(pelagicore::formatString("find %s", gatewayDir.c_str()).c_str());
+	}
 
-	m_container = nullptr;
+	if (rmdir(containerDir().c_str()) == -1) {
+		log_warn() << "Cannot delete dir " << containerDir() << " , " << strerror(errno);
+	}
+
 }
 
-const char *Container::name()
+const char *Container::name() const
 {
     return m_name.c_str();
 }
@@ -163,6 +193,10 @@ if (isLXC_C_APIEnabled()) {
 
 	m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv);
 
+	log_debug() << "Container created";
+
+//	sleep(1);
+
 } else {
 
     int maxCmdLen = sysconf(_SC_ARG_MAX);
@@ -188,19 +222,24 @@ if (isLXC_C_APIEnabled()) {
 
 pid_t Container::start()
 {
+    pid_t pid;
 
 	if(isLXC_C_APIEnabled() && false){
 		log_debug() << "Starting container";
 
-		char* argv[] = { "/controller/controller", nullptr};
+		char* argv[] = { CONTROLLER_PATH , nullptr};
+		char* emptyArgv[] = { nullptr};
 //		m_container->start(m_container, false, argv );
-		m_container->startl(m_container, false, argv[0], nullptr );
+//		m_container->startl(m_container, false, argv, nullptr );
+		m_container->start(m_container, true, emptyArgv);
 
 		log_debug() << "Container started : " << toString();
 
 		assert(m_container->is_running(m_container));
 
-		return m_container->init_pid(m_container);
+//		sleep(10);
+
+		pid = m_container->init_pid(m_container);
 
 } else {
 	int maxCmdLen = sysconf(_SC_ARG_MAX);
@@ -210,7 +249,8 @@ pid_t Container::start()
     snprintf(lxcCommand, sizeof(lxcCommand),
              "lxc-execute -n %s -- env %s",
              name(),
-             "/controller/controller");
+             CONTROLLER_PATH);
+//             "/bin/sleep 1000");
 
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
@@ -218,7 +258,6 @@ pid_t Container::start()
 
     log_debug() << "Execute: " << &lxcCommand[0];
 
-    pid_t pid;
     try {
         Glib::spawn_async_with_pipes(
             ".",
@@ -232,9 +271,15 @@ pid_t Container::start()
         pid = 0;
     }
 
-    return pid;
-
 }
+
+	// Wait for the container to be ready. TODO : fix
+//	sleep(1);
+
+	// start the controller
+//	attach(CONTROLLER_PATH);
+
+    return pid;
 
 }
 
@@ -244,40 +289,58 @@ int Container::executeInContainerEntryFunction(void* param) {
 	return 0;
 }
 
-pid_t Container::executeInContainer(ContainerFunction function) {
+pid_t Container::executeInContainer(ContainerFunction function, ProcessListenerFunction listener, const EnvironmentVariables& variables) {
 	lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
 	options.stdin_fd = -1;  // no stdin
 	options.stdout_fd = 1;
 	options.stderr_fd = 2;
+
+	// prepare array of env variables to be set when launching the process in the container
+	std::vector<std::string> strings;
+	for(auto& var:variables) {
+		strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
+	}
+	const char* envVariablesArray[strings.size()+1];
+	for (size_t i =0;i<strings.size();i++) {
+		envVariablesArray[i] = strings[i].c_str();
+	}
+	envVariablesArray[strings.size()] = nullptr;
+	options.extra_env_vars = (char**) envVariablesArray;  // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
+
+	log_warning() << "Env variables : " << strings;
+
 	pid_t attached_process_pid = 0;
 	m_container->attach(m_container, &Container::executeInContainerEntryFunction, &function, &options, &attached_process_pid);
 	log_info() << " Attached PID: " << attached_process_pid;
+
+	assert(attached_process_pid != 0);
+
+    Glib::signal_child_watch().connect( [listener=listener](GPid pid, int child_status) {
+    	log_debug() << "Child finished " << pid;
+    	listener(pid, child_status);
+    }, attached_process_pid);
+
 	return attached_process_pid;
 }
 
-pid_t Container::attach(const std::string& commandLine) {
+pid_t Container::attach(const std::string& commandLine, ProcessListenerFunction listener) {
+	return attach(commandLine, listener, m_env);
+}
+
+pid_t Container::attach(const std::string& commandLine, ProcessListenerFunction listener, const EnvironmentVariables& variables) {
 
 if(isLXC_C_APIEnabled()) {
 		log_debug() << "Attach " << commandLine;
 
 		return executeInContainer([&] () {
+			log_debug() << "Starting command line in container : " << commandLine;
 
-//			std::vector<std::string> envVarVec = {};
-//			pid_t pid;
+			auto execReturnCode = execlp(commandLine.c_str(), commandLine.c_str(), nullptr);
 
-			// TODO: set environment
+			log_error() << "Error when executing the command in container : " << commandLine << logging::getStackTrace();
+			sleep(5);
 
-			execl(commandLine.c_str(), commandLine.c_str(), nullptr);
-
-//			GError* error = nullptr;
-//			if ( g_spawn_command_line_async("/bin/sh", &error) ) {
-////				m_state = ProcessState::STARTING;
-//			} else {
-////				log_error() << "Can't start application : " << commandLine;
-////				m_state = ProcessState::START_FAILED;
-//			}
-
-		});
+		}, listener, variables);
 
 } else {
 	std::ostringstream oss;
@@ -311,12 +374,18 @@ void Container::stop()
 void Container::destroy()
 {
 	stop();
+
 	if(isLXC_C_APIEnabled()) {
 
-	log_debug() << " Shutting down container";
-		kill(m_container->init_pid(m_container), SIGTERM);
+		log_debug() << "Shutting down container " << toString() << " pid " << m_container->init_pid(m_container);
+
+		if (m_container->init_pid(m_container) > 1)
+			kill(m_container->init_pid(m_container), SIGTERM);
+
 		m_container->shutdown(m_container, 2);
+
 } else {
+
     int maxCmdLen = sysconf(_SC_ARG_MAX);
     char lxcCommand[maxCmdLen];
 

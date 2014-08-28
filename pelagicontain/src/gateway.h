@@ -14,11 +14,12 @@
  */
 class Gateway
 {
+	LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
 public:
     Gateway(ControllerAbstractInterface &controllerInterface):
         m_controllerInterface(controllerInterface){
     };
-//    virtual Gateway() {    };
+
     virtual ~Gateway() {
     };
 

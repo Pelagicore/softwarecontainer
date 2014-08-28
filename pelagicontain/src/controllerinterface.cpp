@@ -44,11 +44,11 @@ ControllerInterface::~ControllerInterface()
     }
 }
 
-bool ControllerInterface::initialize()
+ReturnCode ControllerInterface::initialize()
 {
     if ((m_listenSocket = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
         log_error() << "socket:" << strerror(errno);
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     struct sockaddr_un local;
@@ -59,22 +59,22 @@ bool ControllerInterface::initialize()
     int len = strlen(local.sun_path) + sizeof(local.sun_family);
     if (bind(m_listenSocket, (struct sockaddr *)&local, len) == -1) {
         log_error() << "bind:" << strerror(errno);
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     if (listen(m_listenSocket, 1) == -1) {
         log_error() << "listen:" << strerror(errno);
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     m_selectTimeout.tv_sec = m_timeout;
     m_selectTimeout.tv_usec = 0;
 
     if (!isControllerConnected()) {
-        return false;
+        return ReturnCode::FAILURE;
     }
 
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
 bool ControllerInterface::isControllerConnected()
@@ -197,10 +197,10 @@ bool ControllerInterface::shutdown()
     return result;
 }
 
-bool ControllerInterface::setEnvironmentVariable(const std::string &variable,
+ReturnCode ControllerInterface::setEnvironmentVariable(const std::string &variable,
                                                  const std::string &value)
 {
-    bool result = false;
+    ReturnCode result = ReturnCode::FAILURE;
 
     if (canSend()) {
         std::string command = "3 " + variable + " " + value;
@@ -215,16 +215,16 @@ bool ControllerInterface::setEnvironmentVariable(const std::string &variable,
         if (ret == -1) {
             log_error() << "send:" << strerror(errno);
         } else {
-            result = true;
+            result = ReturnCode::SUCCESS;
         }
     }
 
     return result;
 }
 
-bool ControllerInterface::systemCall(const std::string &cmd)
+ReturnCode ControllerInterface::systemCall(const std::string &cmd)
 {
-    bool result = false;
+	ReturnCode result = ReturnCode::FAILURE;
 
     if (canSend()) {
         std::string command = "4 " + cmd;
@@ -239,7 +239,7 @@ bool ControllerInterface::systemCall(const std::string &cmd)
         if (ret == -1) {
             log_error() << "send:" << strerror(errno);
         } else {
-            result = true;
+            result = ReturnCode::SUCCESS;
         }
     }
 
