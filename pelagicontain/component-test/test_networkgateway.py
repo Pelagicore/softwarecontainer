@@ -90,7 +90,10 @@ def setup(request, teardown_fixture, pelagicontain_binary, container_path):
     helper.pelagicontain_iface().Launch(helper.app_id())
 
     # We need to wait for the ping command to recieve a reply from the remote host
-    time.sleep(2)
+    # But we wait for no more than 10 secs
+    timeout = 10
+    while helper.poke_pelagicontain_zombie() == None and timeout > 0:
+        time.sleep(1)
 
     # Return the used config to the test
     return request.param
