@@ -118,6 +118,7 @@ class ComponentTestHelper:
         returncode = self.__pelagicontain_process.poll()
         if returncode is not None:
             self.__pelagicontain_process.communicate()
+        return returncode
 
     def shutdown_pelagicontain(self):
         if not self.__pc_iface:
