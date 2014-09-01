@@ -61,7 +61,6 @@ add_executable( pelagicontain
     pelagicontaintodbusadapter.cpp
     dbusmainloop.cpp
     main.cpp
-    configparser.cpp
     container.cpp
     generators.cpp
     pelagicontain.cpp
