@@ -28,11 +28,9 @@ add_executable(runUnitTestsPelagicontain
     main.cpp
     pelagicontain_unittest.cpp
     generators_unittest.cpp
-    configparser_unittest.cpp
     ../src/container.cpp
     ../src/controllerinterface.cpp
     ../src/generators.cpp
-    ../src/configparser.cpp
     ../src/pelagicontain.cpp
     
     ${PROJECT_SOURCE_DIR}/common/config.cpp
