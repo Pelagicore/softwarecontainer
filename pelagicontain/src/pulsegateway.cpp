@@ -13,10 +13,10 @@ PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &con
     m_api(0),
     m_context(0),
     m_mainloop(NULL),
+    m_socket(gatewayDir + "/pulse-" + containerName + ".sock"),
     m_index(-1),
     m_enableAudio(false)
 {
-    m_socket = gatewayDir + "/pulse-" + containerName + ".sock";
 }
 
 PulseGateway::~PulseGateway()
@@ -63,7 +63,7 @@ bool PulseGateway::setConfig(const std::string &config)
     ConfigError err = ConfigError::Ok;
 
     /* Check the value of the audio key of the config */
-    std::string value = parseConfig(config.c_str(), "audio", &err);
+    std::string value = parseConfig(config, "audio", &err);
 
     if (value == "true") {
         log_debug("Audio will be enabled");
