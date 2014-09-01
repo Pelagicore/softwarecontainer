@@ -66,22 +66,16 @@ bool NetworkGateway::activate()
     bool success = false;
     bool ready = false;
 
-    if (isBridgeAvailable())
-    {
-        if (generateIP())
-        {
+    if (isBridgeAvailable()) {
+        if (generateIP()) {
             ready = true;
         }
     }
 
-    if (ready)
-    {
-        if (m_internetAccess)
-        {
+    if (ready) {
+        if (m_internetAccess) {
             success = up();
-        }
-        else
-        {
+        } else {
             success = down();
         }
     }
@@ -89,7 +83,7 @@ bool NetworkGateway::activate()
     return success;
 }
 
-std::string NetworkGateway::ip()
+const std::string NetworkGateway::ip()
 {
     return m_ip;
 }
@@ -116,13 +110,10 @@ bool NetworkGateway::up()
 {
     std::string cmd;
 
-    if (!m_interfaceInitialized)
-    {
+    if (!m_interfaceInitialized) {
         cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
         m_interfaceInitialized = true;
-    }
-    else
-    {
+    } else {
         cmd = "ifconfig eth0 up";
     }
 
@@ -154,12 +145,9 @@ bool NetworkGateway::isBridgeAvailable()
     bool ret = false;
     std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
-    if (m_systemCallInterface.makeCall(cmd))
-    {
+    if (m_systemCallInterface.makeCall(cmd)) {
         ret = true;
-    }
-    else
-    {
+    } else {
         log_error("No network bridge configured");
     }
 
@@ -235,17 +223,16 @@ int NetworkGateway::waitForDevice(const std::string &iface)
         for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
             if (ifa->ifa_name == NULL) {
                 continue;
-            } else {
-                if (strcmp(ifa->ifa_name, iface.c_str()) == 0) {
-                    log_debug("Device found: %s", ifa->ifa_name);
-                    found_iface = true;
-                    break;
-                }
+            } else if (strcmp(ifa->ifa_name, iface.c_str()) == 0) {
+                log_debug("Device found: %s", ifa->ifa_name);
+                found_iface = true;
+                break;
             }
         }
 
-        if (!found_iface)
+        if (!found_iface) {
             log_debug("Device unavailable");
+        }
 
         /* Give the device some time to show up */
         usleep(250000);

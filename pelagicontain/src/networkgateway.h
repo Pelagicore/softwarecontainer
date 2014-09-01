@@ -35,7 +35,7 @@ public:
 
     /*! Returns the IP of the container
      */
-    std::string ip();
+    const std::string ip();
 private:
 
     /*! Generate IP address for the container
