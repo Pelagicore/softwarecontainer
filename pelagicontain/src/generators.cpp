@@ -7,36 +7,6 @@
 
 #include "generators.h"
 
-std::string Generator::gen_net_iface_name (const char *ip_addr_net)
-{
-    struct  ifaddrs *ifaddr, *ifa;
-    bool collision = false;
-    char iface[16];
-
-    do {
-        snprintf(iface, sizeof(iface), "veth-%d", (rand() % 1024));
-
-        if (getifaddrs(&ifaddr) == -1) {
-        	log_error("getifaddrs") << strerror(errno);
-            exit(EXIT_FAILURE);
-        }
-
-        /* Iterate through the device list */
-        for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-            if (ifa->ifa_name == NULL) {
-                continue;
-            } else {
-                if (strcmp(ifa->ifa_name, iface) == 0) {
-                    collision = true;
-                    break;
-                }
-            }
-        }
-    } while (collision);
-
-    return std::string(iface);
-}
-
 /*
  * Increase the counter and return an IP number based on that.
  */

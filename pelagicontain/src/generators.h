@@ -21,18 +21,6 @@ class Generator {
 
 public:
 
-/*! \brief Generate a network interface name
- *
- * This will generate a network interface name which can be used to create new
- * virtual network interfaces
- *
- * \param ip_addr_net The network portion of the IP address for the new network
- *                    interface. Used to generate a descriptive name.
- * \return A unique network interface name
- * \return NULL upon error
- */
-static std::string gen_net_iface_name(const char *ip_addr_net);
-
 /*!  \brief Generate a gateway address
  *
  * Given the network portion of an IP address, this will output a suggested
