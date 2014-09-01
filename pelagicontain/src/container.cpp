@@ -38,7 +38,7 @@ Container::Container(const std::string &name,
 bool Container::initialize()
 {
     // Make sure the directory for "late mounts" exist
-    if (!isDirectory(m_mountDir.c_str())) {
+    if (!isDirectory(m_mountDir)) {
         log_error() << "Directory " << m_mountDir << " does not exist";
         return false;
     }
@@ -47,10 +47,10 @@ bool Container::initialize()
     std::string runDir = m_mountDir + "/" + m_name;
 
     bool allOk = true;
-    allOk = allOk && createDirectory(runDir.c_str());
-    allOk = allOk && createDirectory((runDir + "/bin").c_str());
-    allOk = allOk && createDirectory((runDir + "/shared").c_str());
-    allOk = allOk && createDirectory((runDir + "/home").c_str());
+    allOk = allOk && createDirectory(runDir);
+    allOk = allOk && createDirectory(runDir + "/bin");
+    allOk = allOk && createDirectory(runDir + "/shared");
+    allOk = allOk && createDirectory(runDir + "/home");
 
     if (!allOk) {
         log_error() << "Could not set up all needed directories";
