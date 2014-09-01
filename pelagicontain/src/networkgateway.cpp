@@ -83,7 +83,7 @@ bool NetworkGateway::activate()
     return success;
 }
 
-std::string NetworkGateway::ip()
+const std::string NetworkGateway::ip()
 {
     return m_ip;
 }
