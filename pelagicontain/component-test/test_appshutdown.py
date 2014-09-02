@@ -42,7 +42,7 @@ class TestAppShutdown():
         helper.start_pelagicontain(pelagicontain_binary, container_path)
         helper.pelagicontain_iface().Launch(helper.app_id())
         # Sleep a little bit longer than the app
-        sleep(2)
+        sleep(4)
         assert not self.pelagicontain_is_running()
 
     def create_app(self, container_path):
