@@ -13,11 +13,6 @@ DBusMainloop::~DBusMainloop()
 {
 }
 
-void DBusMainloop::enter()
-{
-    m_dispatcher->run();
-}
-
 void DBusMainloop::leave()
 {
     m_dispatcher->quit();

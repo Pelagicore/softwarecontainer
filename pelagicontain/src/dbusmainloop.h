@@ -26,10 +26,6 @@ public:
 
     ~DBusMainloop();
 
-    /*! Implements MainloopAbstractInterface::enter
-     */
-    virtual void enter();
-
     /*! Implements MainloopAbstractInterface::leave
      */
     virtual void leave();
