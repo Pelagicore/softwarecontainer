@@ -13,7 +13,6 @@
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
-#include "dbusmainloop.h"
 #include "generators.h" /* used for gen_ct_name */
 
 #include <sys/stat.h>
@@ -180,11 +179,6 @@ int main(int argc, char **argv)
         dispatcher.attach(ml->get_context()->gobj());
         DBus::Connection bus = DBus::Connection::SessionBus();
 
-        /* Pelagicontain needs an interface to the mainloop so it can
-         * exit it when we are to clean up and shut down
-         */
-        DBusMainloop mainloopInterface(ml);
-
         /* The request_name call does not return anything but raises an
          * exception if the name cannot be requested.
          */
@@ -205,7 +199,7 @@ int main(int argc, char **argv)
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
         pelagicontain = new Pelagicontain(&pamInterface,
-                                          &mainloopInterface,
+                                          ml,
                                           &controllerInterface,
                                           cookie);
 

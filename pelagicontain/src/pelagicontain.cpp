@@ -10,12 +10,12 @@
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
-                             MainloopAbstractInterface *mainloopInterface,
+                             Glib::RefPtr<Glib::MainLoop> mainloop,
                              ControllerAbstractInterface *controllerInterface,
                              const std::string &cookie):
     m_container(NULL),
     m_pamInterface(pamInterface),
-    m_mainloopInterface(mainloopInterface),
+    m_mainloop(mainloop),
     m_controllerInterface(controllerInterface),
     m_cookie(cookie),
     m_launching(false)

@@ -146,49 +146,6 @@ bool NetworkGateway::isBridgeAvailable()
     return ret;
 }
 
-/* NOTE: This code has not been tested since it was moved here from it's
- * original place.
- */
-int NetworkGateway::waitForDevice(const std::string &iface)
-{
-    struct ifaddrs *ifaddr, *ifa;
-    int max_poll = 10;
-    bool found_iface = false;
-    int i = 0;
-    int retval = 0;
-
-    while (i < max_poll && found_iface == false) {
-        if (getifaddrs(&ifaddr) == -1) {
-            retval = -EINVAL;
-        	log_error("getifaddrs") << strerror(errno);
-            goto cleanup_wait;
-        }
-
-        /* Iterate through the device list */
-        for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-            if (ifa->ifa_name == NULL) {
-                continue;
-            } else if (strcmp(ifa->ifa_name, iface.c_str()) == 0) {
-                log_debug("Device found: %s", ifa->ifa_name);
-                found_iface = true;
-                break;
-            }
-        }
-
-        if (!found_iface) {
-            log_debug("Device unavailable");
-        }
-
-        /* Give the device some time to show up */
-        usleep(250000);
-        i++;
-    }
-
-    retval = found_iface;
-cleanup_wait:
-    return retval;
-}
-
 bool NetworkGateway::isInternetAccessSet(const std::string &config)
 {
     json_error_t error;

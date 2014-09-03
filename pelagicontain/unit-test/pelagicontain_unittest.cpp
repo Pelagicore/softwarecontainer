@@ -5,24 +5,11 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include <glibmm.h>
+
 #include "pelagicontain.h"
 #include "pamabstractinterface.h"
-#include "mainloopabstractinterface.h"
 #include "controllerabstractinterface.h"
-
-/* We use this stub to let Pelagicontain work with it but ignore the calls */
-class StubMainloop:
-    public MainloopAbstractInterface
-{
-public:
-    virtual void enter()
-    {
-    }
-
-    virtual void leave()
-    {
-    }
-};
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
 class StubController:
@@ -111,9 +98,9 @@ TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
     const std::string cookie = "mycookie";
 
     MockPAMAbstractInterface pam;
-    StubMainloop mainloop;
+    Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
     StubController controller;
-    Pelagicontain pc(&pam, &mainloop, &controller, cookie);
+    Pelagicontain pc(&pam, mainloop, &controller, cookie);
 
     /* The calls should be made in the specific order as below: */
     {
@@ -138,7 +125,7 @@ TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
 TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
     NiceMock<MockPAMAbstractInterface> pam;
-    StubMainloop mainloop;
+    Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
     StubController controller;
 
     MockGateway gw1(controller), gw2(controller), gw3(controller);
@@ -164,7 +151,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     }
 
     const std::string cookie = "unimportant-cookie";
-    Pelagicontain pc(&pam, &mainloop, &controller, cookie);
+    Pelagicontain pc(&pam, mainloop, &controller, cookie);
 
     pc.addGateway(&gw1);
     pc.addGateway(&gw2);

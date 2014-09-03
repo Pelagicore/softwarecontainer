@@ -116,8 +116,6 @@ private:
      */
     std::string gatewayFromConfig(const std::string &config);
 
-    static int waitForDevice(const std::string &iface);
-
     std::string m_ip;
     std::string m_gateway;
     bool m_internetAccess;
