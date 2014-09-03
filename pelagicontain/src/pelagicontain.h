@@ -11,7 +11,6 @@
 #include "container.h"
 #include "paminterface.h"
 #include "controllerinterface.h"
-#include "mainloopabstractinterface.h"
 
 class Pelagicontain {
     LOG_DECLARE_CLASS_CONTEXT("PCON", "Pelagicontain");
@@ -26,7 +25,7 @@ public:
      *  of Pelagicontain
      */
     Pelagicontain(PAMAbstractInterface *pamInterface,
-                  MainloopAbstractInterface *mainloopInterface,
+                  Glib::RefPtr<Glib::MainLoop> mainloop,
                   ControllerAbstractInterface *controllerInterface,
                   const std::string &cookie);
 
@@ -104,8 +103,8 @@ private:
 
     /* Helper function used to terminate the main event loop */
     bool killMainLoop() {
-        if (m_mainloopInterface) {
-            m_mainloopInterface->leave();
+        if (m_mainloop) {
+            m_mainloop->quit();
         }
         return true;
     }
@@ -126,7 +125,7 @@ private:
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
-    MainloopAbstractInterface *m_mainloopInterface;
+    Glib::RefPtr<Glib::MainLoop> m_mainloop;
     ControllerAbstractInterface *m_controllerInterface;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;

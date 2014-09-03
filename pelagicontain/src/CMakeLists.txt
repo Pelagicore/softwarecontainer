@@ -59,7 +59,6 @@ endif(DBUSBINDINGTOOL)
 
 add_executable( pelagicontain
     pelagicontaintodbusadapter.cpp
-    dbusmainloop.cpp
     main.cpp
     container.cpp
     generators.cpp
