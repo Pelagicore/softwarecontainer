@@ -178,14 +178,17 @@ bool ControllerInterface::startApp()
 
 bool ControllerInterface::shutdown()
 {
+	return true;
     bool result = false;
 
     if (canSend()) {
         char msg[] = {'2', '\0'};
 
-        log_debug() << "Sending: " << msg;
+        log_debug() << "Sending " << sizeof(msg)<< "bytes :" <<  msg << " socket" << m_connectionSocket;
 
-        int ret = send(m_connectionSocket, msg, sizeof(msg), 0);
+        int ret = send(m_connectionSocket, msg, sizeof(msg), MSG_DONTWAIT);
+
+        log_debug() << "done";
         if (ret == -1) {
             log_error() << "send:" << strerror(errno);
         } else {

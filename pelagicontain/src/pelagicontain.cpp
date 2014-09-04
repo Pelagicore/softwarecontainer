@@ -10,16 +10,14 @@
 #include "pelagicontain.h"
 
 Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
-                             MainloopAbstractInterface *mainloopInterface,
                              ControllerInterface *controllerInterface,
                              const std::string &cookie):
-    m_container(NULL),
+    m_container(nullptr),
     m_pamInterface(pamInterface),
-    m_mainloop(mainloop),
     m_controllerInterface(controllerInterface),
-    m_cookie(cookie),
-    m_launching(false)
+    m_cookie(cookie)
 {
+	m_containerState = ContainerState::CREATED;
 }
 
 Pelagicontain::~Pelagicontain()
@@ -43,7 +41,7 @@ pid_t Pelagicontain::preload(Container *container)
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
     if (pid) {
-        Glib::signal_child_watch().connect(sigc::mem_fun(this, &Pelagicontain::handleControllerShutdown), pid);
+        Glib::signal_child_watch().connect(sigc::mem_fun(this, &Pelagicontain::onControllerShutdown), pid);
     }
 
     return pid;
@@ -57,18 +55,17 @@ ReturnCode Pelagicontain::establishConnection()
 void Pelagicontain::shutdownContainer()
 {
 	m_container->destroy();
-}
-
-void Pelagicontain::handleControllerShutdown(int pid, int exitCode)
-{
-    log_debug() << "Container with pid " << pid << " exited with exit code " << exitCode;
-
-    shutdownContainer();
     shutdownGateways();
     m_pamInterface->unregisterClient(m_cookie);
 
-    log_debug() << "Shutting down Pelagicontain, queueing up mainloop termination";
-    Glib::signal_idle().connect(sigc::mem_fun(*this, &Pelagicontain::killMainLoop));
+    m_containerState.setValueNotify(ContainerState::TERMINATED);
+}
+
+
+void Pelagicontain::onControllerShutdown(int pid, int exitCode)
+{
+    log_debug() << "Controller " << " exited with exit code " << exitCode;
+    shutdownContainer();
 }
 
 void Pelagicontain::launch(const std::string &appId)
@@ -122,23 +119,21 @@ void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &
     std::string config;
     std::string gatewayId;
 
-    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-        gateway != m_gateways.end(); ++gateway)
+    for (auto& gateway : m_gateways)
     {
-        gatewayId = (*gateway)->id();
+        gatewayId = gateway->id();
         if (configs.count(gatewayId) != 0) {
             config = configs.at(gatewayId);
-            (*gateway)->setConfig(config);
+            gateway->setConfig(config);
         }
     }
 }
 
 void Pelagicontain::activateGateways()
 {
-    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-         gateway != m_gateways.end(); ++gateway)
+    for (auto& gateway : m_gateways)
     {
-        (*gateway)->activate();
+        gateway->activate();
     }
 }
 
@@ -150,17 +145,19 @@ void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, cons
 void Pelagicontain::shutdown()
 {
     log_debug() << "shutdown called" << logging::getStackTrace();
+
+    shutdownContainer();
+//    onControllerShutdown(0, 0);
     // Tell Controller to shut down the app and Controller will exit when the
     // app has shut down and then we will handle the signal through the handler.
-    m_controllerInterface->shutdown();
+//    m_controllerInterface->shutdown();
 }
 
 void Pelagicontain::shutdownGateways()
 {
-    for (std::vector<Gateway *>::iterator gateway = m_gateways.begin();
-         gateway != m_gateways.end(); ++gateway)
+    for (auto& gateway : m_gateways)
     {
-        if (!(*gateway)->teardown()) {
+        if (!gateway->teardown()) {
             log_warning() << "Could not tear down gateway cleanly";
         }
     }

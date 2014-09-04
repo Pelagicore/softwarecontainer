@@ -104,7 +104,7 @@ TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
     MockPAMAbstractInterface pam;
     Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
     StubController controller;
-    Pelagicontain pc(&pam, mainloop, &controller, cookie);
+    Pelagicontain pc(&pam, &controller, cookie);
 
     /* The calls should be made in the specific order as below: */
     {
@@ -155,7 +155,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     }
 
     const std::string cookie = "unimportant-cookie";
-    Pelagicontain pc(&pam, mainloop, &controller, cookie);
+    Pelagicontain pc(&pam, &controller, cookie);
 
     pc.addGateway(gw1);
     pc.addGateway(gw2);

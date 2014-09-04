@@ -44,8 +44,8 @@ int main(int argc, char **argv)
                                 'c',
                                 "Config file");
 
-//    const char* terminalCommand = "konsole";
-    const char* terminalCommand = nullptr;
+    const char* terminalCommand = "konsole";
+//    const char* terminalCommand = nullptr;
     commandLineParser.addOption(terminalCommand,
                                 "terminal",
                                 't',
@@ -72,13 +72,19 @@ int main(int argc, char **argv)
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
 
-	// Create a new scope so that we can do a clean up after dtors
     DBus::Glib::BusDispatcher dispatcher;
     DBus::default_dispatcher = &dispatcher;
 
     dispatcher.attach(ml->get_context()->gobj());
 
     pelagicontain::PelagicontainLib lib(ml, containerRoot.c_str(), cookie.c_str(), configFilePath);
+
+    lib.getPelagicontain().getContainerState().addListener( [&] (ContainerState state) {
+        if(state == ContainerState::TERMINATED) {
+        	log_debug() << "Container terminated => stop main loop and quit";
+        	ml->quit();
+        }
+    });
 
     if (!isError(lib.init())) {
 

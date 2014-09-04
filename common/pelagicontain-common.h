@@ -1,4 +1,6 @@
 #include <map>
+#include <memory>
+#include <vector>
 
 #pragma once
 
@@ -36,3 +38,55 @@ inline bool isLXC_C_APIEnabled() {
 inline bool isContainerDeleteEnabled() {
 	return false;
 }
+
+
+template<typename Type>
+class ObservableProperty {
+public:
+	typedef std::function<void(const Type&)> Listener;
+
+	ObservableProperty(Type& value) : m_value(value) {
+	}
+
+	void addListener(Listener listener) {
+		m_listeners.push_back(listener);
+	}
+
+	operator const Type&() {
+		return m_value;
+	}
+
+protected:
+	std::vector<Listener> m_listeners;
+
+private:
+	const Type& m_value;
+
+};
+
+template<typename Type>
+class ObservableWritableProperty: public ObservableProperty<Type> {
+public:
+	ObservableWritableProperty() : ObservableProperty<Type>(m_value) {
+	}
+
+	void setValueNotify(Type value) {
+		m_value = value;
+		for(auto& listener : ObservableProperty<Type>::m_listeners) {
+			listener(getValue());
+		}
+	}
+
+	const Type& getValue() const {
+		return m_value;
+	}
+
+	ObservableWritableProperty& operator=(const Type& type) {
+		m_value = type;
+		return *this;
+	}
+
+private:
+	Type m_value;
+
+};

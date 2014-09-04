@@ -200,7 +200,6 @@ int main(int argc, char **argv)
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
         Pelagicontain pelagicontain(&pamInterface,
-                                          &mainloopInterface,
                                           &controllerInterface,
                                           cookie);
 

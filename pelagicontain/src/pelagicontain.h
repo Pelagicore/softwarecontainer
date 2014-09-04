@@ -12,6 +12,19 @@
 #include "paminterface.h"
 #include "controllerinterface.h"
 
+
+enum class ContainerState {
+	CREATED,
+	PRELOADED,
+	RUNNING,
+	TERMINATED
+};
+
+class ContainerListener {
+public:
+	virtual void onContainerStateChanged(ContainerState state) = 0;
+};
+
 class Pelagicontain {
 
     LOG_DECLARE_CLASS_CONTEXT("PCON", "Pelagicontain");
@@ -26,7 +39,6 @@ public:
      *  of Pelagicontain
      */
     Pelagicontain(PAMAbstractInterface *pamInterface,
-                  MainloopAbstractInterface *mainloopInterface,
                   ControllerInterface *controllerInterface,
                   const std::string &cookie);
 
@@ -99,18 +111,22 @@ public:
 
     void shutdownContainer();
 
+    ObservableProperty<ContainerState>& getContainerState() {
+    	return m_containerState;
+    }
+
 private:
     void setGatewayConfigs(const std::map<std::string, std::string> &configs);
     void activateGateways();
     void shutdownGateways();
 
-    /* Helper function used to terminate the main event loop */
-    bool killMainLoop() {
-        if (m_mainloop) {
-            m_mainloop->quit();
-        }
-        return true;
-    }
+//    /* Helper function used to terminate the main event loop */
+//    bool killMainLoop() {
+//        if (m_mainloopInterface) {
+//            m_mainloopInterface->leave();
+//        }
+//        return true;
+//    }
 
     /*! Handle shutdown of the controller process inside a container
      *
@@ -124,18 +140,20 @@ private:
      * \param pid pid of the controller as spawned by Pelagicontain::preload()
      * \param exitCode exit code of \a pid
      */
-    void handleControllerShutdown(int pid, int exitCode);
+    void onControllerShutdown(int pid, int exitCode);
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
-    MainloopAbstractInterface *m_mainloopInterface;
+//    MainloopAbstractInterface *m_mainloopInterface;
     ControllerInterface *m_controllerInterface;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     std::string m_cookie;
 
+    ObservableWritableProperty<ContainerState> m_containerState;
+
     // Keeps track of if someone has called launch
-    bool m_launching;
+    bool m_launching = false;
 
 };
 
