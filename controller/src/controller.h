@@ -8,7 +8,7 @@
 #include <glibmm.h>
 
 #include "abstractcontroller.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 class Controller:
     public AbstractController

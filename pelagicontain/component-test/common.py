@@ -88,7 +88,7 @@ class ComponentTestHelper:
         found = False
 
         service_name = IFACE + self.__cookie
-        while not found and tries < 5:
+        while not found and tries < 4:
             try:
                 pc_object = self.__bus.get_object(service_name, OPATH)
                 self.__pc_iface = dbus.Interface(pc_object, IFACE)

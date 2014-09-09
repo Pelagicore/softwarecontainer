@@ -1,0 +1,5 @@
+#pragma once
+
+#define PELAGICONTAIN_DEFAULT_CONFIG "@SYS_CONFIG_DIR@/pelagicontain.conf"
+
+#define PELAGICONTAIN_DEFAULT_WORKSPACE "/tmp/container/"

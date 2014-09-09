@@ -6,7 +6,7 @@
 #define IPCMESSAGE_H
 
 #include <string>
-#include "log.h"
+#include "pelagicontain-common.h"
 
 #include "abstractcontroller.h"
 

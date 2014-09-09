@@ -38,11 +38,14 @@ public:
      * \param cookie A unique identifier used to distinguish unique instances
      *  of Pelagicontain
      */
-    Pelagicontain(PAMAbstractInterface *pamInterface,
-                  ControllerInterface *controllerInterface,
+    Pelagicontain(ControllerInterface *controllerInterface,
                   const std::string &cookie);
 
     ~Pelagicontain();
+
+    void setPAM(PAMAbstractInterface& pamInterface) {
+    	m_pamInterface = &pamInterface;
+    }
 
     /*! Add a gateway.
      *

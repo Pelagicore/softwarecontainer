@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "gateway.h"
-#include "log.h"
 #include "pelagicontain-common.h"
 
 /*! Container is an abstraction of the specific containment technology used.
@@ -105,17 +104,17 @@ public:
     }
 
     ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) override {
-    	log_error() << "Setting env variable in container " << var << "=" << val;
+    	log_debug() << "Setting env variable in container " << var << "=" << val;
     	m_env[var] = val;
     	return ReturnCode::SUCCESS;
     }
 
     ReturnCode systemCall(const std::string &cmd) override {
-    	executeInContainer([cmd=cmd]() {
-        	log_error() << "Executing system command in container : " << cmd;
+    	executeInContainer([this, cmd=cmd]() {
+    		log_info() << "Executing system command in container : " << cmd;
     		system(cmd.c_str());
-    	}, [cmd=cmd](pid_t pid , int returnCode) {
-        	log_error() << "Command finished: " << cmd;
+    	}, [this, cmd=cmd](pid_t pid , int returnCode) {
+        	log_info() << "Command finished: " << cmd;
     	}, m_env);
     	sleep(1);
     	return ReturnCode::SUCCESS;

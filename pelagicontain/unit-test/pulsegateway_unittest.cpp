@@ -8,7 +8,7 @@
 #include "pulsegateway.h"
 #include "pulsegateway_unittest_data.h"
 #include "generators.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 using namespace pelagicore;
 

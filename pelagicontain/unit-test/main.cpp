@@ -5,8 +5,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "ivi-logging-console.h"
-#include "log.h"
+#include "log-console.h"
+#include "pelagicontain-common.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");

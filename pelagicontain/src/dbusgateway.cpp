@@ -8,7 +8,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include "dbusgateway.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 DBusGateway::DBusGateway(ControllerAbstractInterface &controllerInterface,
                          SystemcallAbstractInterface &systemcallInterface,

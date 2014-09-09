@@ -9,11 +9,9 @@
 #include "container.h"
 #include "pelagicontain.h"
 
-Pelagicontain::Pelagicontain(PAMAbstractInterface *pamInterface,
-                             ControllerInterface *controllerInterface,
+Pelagicontain::Pelagicontain(ControllerInterface *controllerInterface,
                              const std::string &cookie):
     m_container(nullptr),
-    m_pamInterface(pamInterface),
     m_controllerInterface(controllerInterface),
     m_cookie(cookie)
 {
@@ -144,7 +142,7 @@ void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, cons
 
 void Pelagicontain::shutdown()
 {
-    log_debug() << "shutdown called" << logging::getStackTrace();
+    log_debug() << "shutdown called"; // << logging::getStackTrace();
 
     shutdownContainer();
 //    onControllerShutdown(0, 0);

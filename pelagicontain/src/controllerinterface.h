@@ -10,7 +10,7 @@
 #include <sys/un.h>
 
 #include "controllerabstractinterface.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 /*! ControllerInterface is an interface to Controller.
  *

@@ -39,7 +39,6 @@ link_directories(
     ${GLIBMM_LIBRARY_DIRS}
 )
 
-add_definitions(-DCONFIG="${SYS_CONFIG_DIR}/pelagicontain.conf")
 
 
 find_program(DBUSBINDINGTOOL "dbusxx-xml2cpp")
@@ -71,8 +70,18 @@ add_library(pelagicontainLib SHARED
     pamproxy.h
     dbusadaptor.h
     systemcallinterface.cpp
+    pelagicontain-lib.cpp
     ${PROJECT_SOURCE_DIR}/common/config.cpp
     ${GATEWAY_SOURCES}
+)
+
+TARGET_LINK_LIBRARIES( pelagicontainLib
+    ${PELAGICORE_UTILS_LIBRARIES}
+    ${DEPENDENCIES_LIBRARIES}
+    ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
+    ${DBUSCPPGLIB_LIBRARIES}
+    ${GLIBMM_LIBRARIES}
+    ${LXC_LIBRARIES}
 )
 
 install(TARGETS pelagicontainLib DESTINATION lib)
@@ -82,27 +91,7 @@ add_executable( pelagicontain
     mainWithLib.cpp
 )
 
-add_executable( pelagicontainWitLib
-    main.cpp
-)
-
 TARGET_LINK_LIBRARIES( pelagicontain
-    ${PELAGICORE_UTILS_LIBRARIES}
-    ${DEPENDENCIES_LIBRARIES}
-    ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
-    ${DBUSCPPGLIB_LIBRARIES}
-    ${GLIBMM_LIBRARIES}
-    ${LXC_LIBRARIES}
-    pelagicontainLib
-)
-
-TARGET_LINK_LIBRARIES( pelagicontainWitLib
-    ${PELAGICORE_UTILS_LIBRARIES}
-    ${DEPENDENCIES_LIBRARIES}
-    ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
-    ${DBUSCPPGLIB_LIBRARIES}
-    ${GLIBMM_LIBRARIES}
-    ${LXC_LIBRARIES}
     pelagicontainLib
 )
 

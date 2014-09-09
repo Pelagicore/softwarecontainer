@@ -52,6 +52,7 @@ include_directories(
 	${DBUSCPPGLIB_INCLUDE_DIR}
 	${GLIBMM_INCLUDE_DIRS}
 	${LXC_INCLUDE_DIRS}
+	${CMAKE_CURRENT_BINARY_DIR}
 )
 
 option(ENABLE_TEST "Enables unit testing" ON)
@@ -64,6 +65,27 @@ add_coverage()
 
 install(FILES scripts/setup_pelagicontain.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
+set(CONTROLLER_PATH "${CMAKE_INSTALL_PREFIX}/bin/controller")
+add_definitions(-DCONTROLLER_PATH="${CONTROLLER_PATH}")
+add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+
+
+
+configure_file(pelagicontain.pc.in pelagicontain.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+
+set(DEVELOPMENT_INCLUDE_PATH " -I${CMAKE_CURRENT_SOURCE_DIR}/clientLib -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain/src -I${CMAKE_CURRENT_SOURCE_DIR}/common #")
+set(DEVELOPMENT_LIBRARY_PATH " -L${CMAKE_CURRENT_BINARY_DIR}/clientLib -L${CMAKE_CURRENT_BINARY_DIR}/lib #" )
+configure_file(pelagicontain.pc.in pelagicontain-uninstalled.pc @ONLY)
+if(INSTALL_PKGCONFIG_UNINSTALLED_FILE)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-uninstalled.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+endif()
+
+configure_file(pelagicontain-config.h.in pelagicontain-config.h @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pelagicontain)
+
 add_subdirectory(pelagicontain)
 add_subdirectory(controller)
+add_subdirectory(clientLib)
+
 add_subdirectory(doc)

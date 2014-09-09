@@ -8,11 +8,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <lxc/lxccontainer.h>
+#include <lxc/version.h>
 #include "lxc-common.h"
 
 #include "container.h"
 #include "pelagicore-common.h"
-
 
 #ifndef LXCTEMPLATE
     #error Must define LXCTEMPLATE as path to lxc-pelagicontain
@@ -273,12 +273,6 @@ pid_t Container::start()
 
 }
 
-	// Wait for the container to be ready. TODO : fix
-//	sleep(1);
-
-	// start the controller
-//	attach(CONTROLLER_PATH);
-
     return pid;
 
 }
@@ -307,7 +301,7 @@ pid_t Container::executeInContainer(ContainerFunction function, ProcessListenerF
 	envVariablesArray[strings.size()] = nullptr;
 	options.extra_env_vars = (char**) envVariablesArray;  // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
-	log_warning() << "Env variables : " << strings;
+	log_debug() << "Env variables : " << strings;
 
 	pid_t attached_process_pid = 0;
 	m_container->attach(m_container, &Container::executeInContainerEntryFunction, &function, &options, &attached_process_pid);
@@ -315,8 +309,8 @@ pid_t Container::executeInContainer(ContainerFunction function, ProcessListenerF
 
 	assert(attached_process_pid != 0);
 
-    Glib::signal_child_watch().connect( [listener=listener](GPid pid, int child_status) {
-    	log_debug() << "Child finished " << pid;
+    Glib::signal_child_watch().connect( [this,listener=listener](GPid pid, int child_status) {
+    	log_debug() << "Child finished pid:" << pid;
     	listener(pid, child_status);
     }, attached_process_pid);
 

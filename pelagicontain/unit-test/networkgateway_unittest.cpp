@@ -6,7 +6,7 @@
 #include "gtest/gtest.h"
 
 #include "networkgateway.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 using namespace pelagicore;
 

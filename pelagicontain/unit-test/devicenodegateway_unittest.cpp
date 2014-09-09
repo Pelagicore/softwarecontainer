@@ -5,7 +5,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "log.h"
+#include "pelagicontain-common.h"
 
 #include "devicenodegateway.h"
 #include "devicenodegateway_unittest_data.h"

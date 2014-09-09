@@ -17,10 +17,6 @@
 //LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
-#ifndef CONFIG
-    #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
-#endif
-
 int main(int argc, char **argv)
 {
     const char *summary = "Pelagicore container utility. "
@@ -38,14 +34,14 @@ int main(int argc, char **argv)
 
     std::string containerRoot;
     std::string cookie;
-    const char* configFilePath = CONFIG;
+    const char* configFilePath = PELAGICONTAIN_DEFAULT_CONFIG;
     commandLineParser.addOption(configFilePath,
                                 "with-config-file",
                                 'c',
                                 "Config file");
 
-    const char* terminalCommand = "konsole";
-//    const char* terminalCommand = nullptr;
+//    const char* terminalCommand = "konsole";
+    const char* terminalCommand = nullptr;
     commandLineParser.addOption(terminalCommand,
                                 "terminal",
                                 't',
@@ -70,14 +66,15 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
+    auto mainContext = Glib::MainContext::get_default();
+    Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
 
     DBus::Glib::BusDispatcher dispatcher;
     DBus::default_dispatcher = &dispatcher;
 
-    dispatcher.attach(ml->get_context()->gobj());
+    dispatcher.attach(mainContext->gobj());
 
-    pelagicontain::PelagicontainLib lib(ml, containerRoot.c_str(), cookie.c_str(), configFilePath);
+    pelagicontain::PelagicontainLib lib(mainContext, containerRoot.c_str(), cookie.c_str(), configFilePath);
 
     lib.getPelagicontain().getContainerState().addListener( [&] (ContainerState state) {
         if(state == ContainerState::TERMINATED) {
@@ -88,27 +85,29 @@ int main(int argc, char **argv)
 
     if (!isError(lib.init())) {
 
-    // Register signalHandler with signals
-	std::vector<int> signals = {SIGINT, SIGTERM};
-	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
-	    log_debug() << "caught signal " << signum;
-	    switch(signum) {
-	    case SIGCHLD:
-	    	break;
-	    default:
-		    lib.shutdown();
-	    	break;
-	    }
-	}, ml->get_context()->gobj());
+    	lib.registerDBusService();
 
-	if (terminalCommand != nullptr) {
-		std::string s = pelagicore::formatString("%s -e lxc-attach -n %s", terminalCommand, lib.getContainer().name());
-		system(s.c_str());
-	}
+		// Register signalHandler with signals
+		std::vector<int> signals = {SIGINT, SIGTERM};
+		pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
+			log_debug() << "caught signal " << signum;
+			switch(signum) {
+			case SIGCHLD:
+				break;
+			default:
+				lib.shutdown();
+				break;
+			}
+		}, ml->get_context()->gobj());
 
-	ml->run();
+		if (terminalCommand != nullptr) {
+			std::string s = pelagicore::formatString("%s -e lxc-attach -n %s", terminalCommand, lib.getContainer().name());
+			system(s.c_str());
+		}
 
-    log_debug() << "Goodbye.";
+		ml->run();
+
+		log_debug() << "Goodbye.";
     }
     else
     	log_error( ) << "Could not initialize pelagicontain";

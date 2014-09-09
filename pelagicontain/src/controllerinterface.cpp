@@ -58,7 +58,7 @@ ReturnCode ControllerInterface::initialize()
 
     int len = strlen(local.sun_path) + sizeof(local.sun_family);
     if (bind(m_listenSocket, (struct sockaddr *)&local, len) == -1) {
-        log_error() << "bind:" << strerror(errno);
+        log_error() << "bind to :" << local.sun_path << " / error:" << strerror(errno);
         return ReturnCode::FAILURE;
     }
 

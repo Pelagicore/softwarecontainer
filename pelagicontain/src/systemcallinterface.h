@@ -7,7 +7,7 @@
 
 #include <string>
 #include "systemcallabstractinterface.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 /*! SystemcallInterface provides an interface to the host system.
  *

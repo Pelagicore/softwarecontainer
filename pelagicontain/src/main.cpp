@@ -9,7 +9,6 @@
 #include <signal.h>
 #include <unistd.h>
 #include "CommandLineParser.h"
-#include "log.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
@@ -47,10 +46,6 @@
 
 //LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
-
-#ifndef CONFIG
-    #error Must define CONFIG; path to configuration file (/etc/pelagicontain?)
-#endif
 
 /**
  * Remove the dirs created by main when we cleanup
@@ -105,7 +100,7 @@ int main(int argc, char **argv)
 
     std::string containerRoot;
     std::string cookie;
-    const char* configFilePath = CONFIG;
+    const char* configFilePath = PELAGICONTAIN_DEFAULT_CONFIG;
     commandLineParser.addOption(configFilePath,
                                 "with-config-file",
                                 'c',
@@ -199,9 +194,10 @@ int main(int argc, char **argv)
         PAMInterface pamInterface(bus);
         ControllerInterface controllerInterface(gatewayDir);
         SystemcallInterface systemcallInterface;
-        Pelagicontain pelagicontain(&pamInterface,
-                                          &controllerInterface,
+        Pelagicontain pelagicontain(&controllerInterface,
                                           cookie);
+
+        pelagicontain.setPAM(pamInterface);
 
         pPelagicontain = &pelagicontain;
 

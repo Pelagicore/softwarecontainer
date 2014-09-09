@@ -10,7 +10,7 @@
 #include <sys/un.h>
 
 #include "ipcmessage.h"
-#include "log.h"
+#include "pelagicontain-common.h"
 
 /*! SocketIPC is an implementation of an IPC based on a Unix domain socket.
  *

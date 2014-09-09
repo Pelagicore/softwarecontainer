@@ -6,7 +6,7 @@
 #define GENERATORS_H
 
 #include <string>
-#include "log.h"
+#include "pelagicontain-common.h"
 
 /*! \brief  Generator functions
  *  \file   generators.h
