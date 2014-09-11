@@ -159,13 +159,14 @@ disable-shm=yes
 EOF
     chmod 744 $rootfs/usr/share/udhcpc/default.script
 
-    return $res
-}
-
     # Create an uuid for D-Bus
     cat <<EOF >> $rootfs/etc/machine-id
 `dbus-uuidgen`
 EOF
+
+    return $res
+}
+
 
 
 configure_busybox()
