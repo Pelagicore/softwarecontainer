@@ -147,7 +147,6 @@ private:
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
-//    MainloopAbstractInterface *m_mainloopInterface;
     ControllerInterface *m_controllerInterface;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;

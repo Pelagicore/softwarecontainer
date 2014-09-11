@@ -72,6 +72,7 @@ add_library(pelagicontainLib SHARED
     systemcallinterface.cpp
     pelagicontain-lib.cpp
     ${PROJECT_SOURCE_DIR}/common/config.cpp
+    ${PROJECT_SOURCE_DIR}/common/common.cpp
     ${GATEWAY_SOURCES}
 )
 
@@ -87,8 +88,7 @@ TARGET_LINK_LIBRARIES( pelagicontainLib
 install(TARGETS pelagicontainLib DESTINATION lib)
 
 add_executable( pelagicontain
-#    main.cpp
-    mainWithLib.cpp
+    main.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontain

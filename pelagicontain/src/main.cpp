@@ -2,6 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+#include "pelagicontain-lib.h"
 #include <glibmm.h>
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/glib-integration.h>
@@ -38,10 +39,6 @@
 #endif
 
 #include "UNIXSignalGlibHandler.h"
-
-#include "pelagicore-common.h"
-
-#include <lxc/lxccontainer.h>
 
 
 //LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
@@ -106,11 +103,12 @@ int main(int argc, char **argv)
                                 'c',
                                 "Config file");
 
+//    const char* terminalCommand = "konsole -e";
     const char* terminalCommand = nullptr;
     commandLineParser.addOption(terminalCommand,
                                 "terminal",
                                 't',
-                                "Example: konsole");
+                                "Example: konsole -e");
 
     if (commandLineParser.parse(argc, argv)) {
         return -1;
@@ -150,60 +148,15 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
+    auto mainContext = Glib::MainContext::get_default();
+    Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
 
-    Pelagicontain* pPelagicontain = nullptr;
+    DBus::Glib::BusDispatcher dispatcher;
+    DBus::default_dispatcher = &dispatcher;
 
-    // Register signalHandler with signals
-	std::vector<int> signals = {SIGINT, SIGTERM};
-	pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
-	    log_debug() << "caught signal " << signum;
-	    switch(signum) {
-	    case SIGCHLD:
-	    	break;
-	    default:
-		    pPelagicontain->shutdown();
-	    	break;
-	    }
-	}, ml->get_context()->gobj());
+    dispatcher.attach(mainContext->gobj());
 
-    { // Create a new scope so that we can do a clean up after dtors
-        DBus::Glib::BusDispatcher dispatcher;
-        DBus::default_dispatcher = &dispatcher;
-
-        dispatcher.attach(ml->get_context()->gobj());
-
-        DBus::Connection bus = DBus::Connection::SessionBus();
-
-        /* The request_name call does not return anything but raises an
-         * exception if the name cannot be requested.
-         */
-        std::string name = "com.pelagicore.Pelagicontain" + cookie;
-        bus.request_name(name.c_str());
-
-        /* If we can't communicate with PAM then there is nothing we can 
-         * do really, better to just exit.
-         */
-        bool pamRunning = bus.has_name("com.pelagicore.PAM");
-        if (!pamRunning) {
-            log_error() << "PAM not running, exiting";
-            removeDirs(containerDir);
-            return -1;
-        }
-
-        PAMInterface pamInterface(bus);
-        ControllerInterface controllerInterface(gatewayDir);
-        SystemcallInterface systemcallInterface;
-        Pelagicontain pelagicontain(&controllerInterface,
-                                          cookie);
-
-        pelagicontain.setPAM(pamInterface);
-
-        pPelagicontain = &pelagicontain;
-
-        std::string objectPath = "/com/pelagicore/Pelagicontain";
-
-        PelagicontainToDBusAdapter pcAdapter(bus, objectPath, pelagicontain);
+    pelagicontain::PelagicontainLib lib(mainContext, containerRoot.c_str(), cookie.c_str(), configFilePath);
 
 #ifdef ENABLE_NETWORKGATEWAY
         NetworkGateway networkGateway(controllerInterface, systemcallInterface);
@@ -268,8 +221,35 @@ int main(int argc, char **argv)
 			}
 		}
     }
+    lib.getPelagicontain().getContainerState().addListener( [&] (ContainerState state) {
+        if(state == ContainerState::TERMINATED) {
+        	log_debug() << "Container terminated => stop main loop and quit";
+        	ml->quit();
+        }
+    });
 
-	removeDirs(containerDir);
+    if (!isError(lib.init(true))) {
 
-    log_debug() << "Goodbye.";
+		// Register signalHandler with signals
+		std::vector<int> signals = {SIGINT, SIGTERM};
+		pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
+			log_debug() << "caught signal " << signum;
+			switch(signum) {
+			case SIGCHLD:
+				break;
+			default:
+				lib.shutdown();
+				break;
+			}
+		}, ml->get_context()->gobj());
+
+		if (terminalCommand != nullptr)
+			lib.getContainer().openTerminal(terminalCommand);
+
+		ml->run();
+
+		log_debug() << "Goodbye.";
+    }
+    else
+    	log_error( ) << "Could not initialize pelagicontain";
 }

@@ -85,10 +85,7 @@ int Controller::runApp()
 
     // We should only connect the watcher if the pid is valid
     if (m_pid) {
-        sigc::slot<void, int, int> shutdownSlot;
-        shutdownSlot = sigc::mem_fun(*this, &Controller::handleAppShutdownSlot);
-        Glib::SignalChildWatch cw = Glib::signal_child_watch();
-        cw.connect(shutdownSlot, m_pid);
+        addProcessListener(m_pid, sigc::mem_fun(*this, &Controller::handleAppShutdownSlot));
         log_info() << "Started app with pid: " << m_pid;
     }
 

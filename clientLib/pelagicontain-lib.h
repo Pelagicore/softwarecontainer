@@ -1,18 +1,15 @@
 #pragma once
 
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #include <glibmm.h>
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/glib-integration.h>
 
-//#include "pelagicore-common.h"
-
-//#include "log.h"
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
-//#include "dbusmainloop.h"
 
 #include "systemcallinterface.h"
 
@@ -38,8 +35,7 @@ namespace pelagicontain {
 
 class PelagicontainLib {
 
-	LOG_DECLARE_CLASS_CONTEXT("PC", "Pelagicontain library")
-	;
+	LOG_DECLARE_CLASS_CONTEXT("PC", "Pelagicontain library");
 
 public:
 	PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml,
@@ -79,7 +75,7 @@ public:
 		return m_initialized;
 	}
 
-	ReturnCode init() {
+	ReturnCode init(bool bRegisterDBusInterface = false) {
 
 		DBus::default_dispatcher = &dispatcher;
 
@@ -100,6 +96,9 @@ public:
 		dispatcher.attach(m_ml->gobj());
 
 		pamInterface = std::unique_ptr<PAMInterface>(new PAMInterface(*m_bus));
+
+		if (bRegisterDBusInterface)
+			registerDBusService();
 
 		pelagicontain.setPAM(*pamInterface.get());
 
@@ -162,6 +161,8 @@ public:
 		return pelagicontain;
 	}
 
+private:
+
 	ReturnCode registerDBusService() {
 
 		/* The request_name call does not return anything but raises an
@@ -177,8 +178,6 @@ public:
 
 		return ReturnCode::SUCCESS;
 	}
-
-private:
 
 	/**
 	 * Check if the workspace is present and create it if needed
@@ -213,6 +212,88 @@ private:
 
 	bool m_initialized = false;
 
+};
+
+/**
+ * Use this class to execute a command in a container
+ */
+class CommandJob {
+
+public:
+
+	static constexpr int UNASSIGNED_STREAM = -1;
+
+	CommandJob(PelagicontainLib& lib, const std::string& command) :
+			m_lib(lib) {
+		m_command = command;
+	}
+
+	ReturnCode start( ) {
+		m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+		return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+	}
+
+	void setEnvironnmentVariable(const std::string& key, const std::string& value) {
+		m_env[key] = value;
+	}
+
+	void captureStdin() {
+		pipe(m_stdin);
+	}
+
+	void captureStdout() {
+		pipe(m_stdout);
+	}
+
+	void captureStderr() {
+		pipe(m_stderr);
+	}
+
+	int wait() {
+		int status;
+		waitpid(m_pid, &status, 0);
+		return status;
+//		return WEXITSTATUS(status);
+	}
+
+	int stdout() {
+		return m_stdout[0];
+	}
+
+	int stderr() {
+		return m_stderr[0];
+	}
+
+	int stdin() {
+		return m_stdin[1];
+	}
+
+	pid_t pid() {
+		return m_pid;
+	}
+
+	/**
+	 * That method always returns true as soon as the start() method has been called, even if the command fails to start,
+	 * since we don't know if the exec() occuring after the fork into the container actually succeeds...
+	 */
+	bool isRunning() {
+		// TODO : find a way to test whether the exec() which occurs in the container succeeded
+		return (m_pid!=0);
+	}
+
+	std::string toString() const {
+		return logging::StringBuilder() << "Pelagicontain job. command: " << m_command << " stdin:" << m_stdin[0]
+				<< " stdout:" << m_stdout[1];
+	}
+
+private:
+	std::string m_command;
+	EnvironmentVariables m_env;
+	PelagicontainLib& m_lib;
+	pid_t m_pid = 0;
+	int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
+	int m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
+	int m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
 };
 
 }

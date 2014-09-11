@@ -4,15 +4,21 @@
 
 #include "pelagicontain-config.h"
 #include "pelagicontain-log.h"
+#include "pelagicore-common.h"
 
 #pragma once
 
 
 namespace pelagicontain {
 
-enum IPCCommand : uint8_t {
-	RUN_APP = '1', KILL_APP = '2', SET_ENV_VAR = '3', SYS_CALL = '4'
-};
+	/*
+	 * Check if path is a directory
+	 */
+	bool isDirectory(const std::string &path);
+
+	enum IPCCommand : uint8_t {
+		RUN_APP = '1', KILL_APP = '2', SET_ENV_VAR = '3', SYS_CALL = '4'
+	};
 
 	enum class ReturnCode {
 		FAILURE,
@@ -39,6 +45,9 @@ enum IPCCommand : uint8_t {
 		return false;
 	}
 
+	inline sigc::connection addProcessListener(pid_t pid, std::function<void(pid_t, int)> function, Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default()) {
+		return context->signal_child_watch().connect(function, pid);
+	}
 
 	template<typename Type>
 	class ObservableProperty {
@@ -90,6 +99,7 @@ enum IPCCommand : uint8_t {
 		Type m_value;
 
 	};
+
 
 }
 

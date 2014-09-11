@@ -89,17 +89,6 @@ ReturnCode Container::createDirectory(const std::string &path)
     return ReturnCode::SUCCESS;
 }
 
-bool Container::isDirectory(const std::string &path)
-{
-    bool isDir = false;
-    struct stat st;
-    if (stat(path.c_str(), &st) == 0) {
-        if ((st.st_mode & S_IFDIR) != 0) {
-            isDir = true;
-        }
-    }
-    return isDir;
-}
 
 Container::~Container()
 {
@@ -279,15 +268,14 @@ pid_t Container::start()
 
 int Container::executeInContainerEntryFunction(void* param) {
 	ContainerFunction* function = (ContainerFunction*) param;
-	(*function)();
-	return 0;
+	return (*function)();
 }
 
-pid_t Container::executeInContainer(ContainerFunction function, ProcessListenerFunction listener, const EnvironmentVariables& variables) {
+pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables& variables, int stdin, int stdout, int stderr) {
 	lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
-	options.stdin_fd = -1;  // no stdin
-	options.stdout_fd = 1;
-	options.stderr_fd = 2;
+	options.stdin_fd = stdin;  // no stdin
+	options.stdout_fd = stdout;
+	options.stderr_fd = stderr;
 
 	// prepare array of env variables to be set when launching the process in the container
 	std::vector<std::string> strings;
@@ -309,32 +297,43 @@ pid_t Container::executeInContainer(ContainerFunction function, ProcessListenerF
 
 	assert(attached_process_pid != 0);
 
-    Glib::signal_child_watch().connect( [this,listener=listener](GPid pid, int child_status) {
-    	log_debug() << "Child finished pid:" << pid;
-    	listener(pid, child_status);
-    }, attached_process_pid);
-
 	return attached_process_pid;
 }
 
-pid_t Container::attach(const std::string& commandLine, ProcessListenerFunction listener) {
-	return attach(commandLine, listener, m_env);
+pid_t Container::attach(const std::string& commandLine) {
+	return attach(commandLine, m_env);
 }
 
-pid_t Container::attach(const std::string& commandLine, ProcessListenerFunction listener, const EnvironmentVariables& variables) {
+pid_t Container::attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin, int stdout, int stderr) {
 
 if(isLXC_C_APIEnabled()) {
 		log_debug() << "Attach " << commandLine;
 
+	    std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
+	    const char* args[executeCommandVec.size()+1];
+
+	    for(size_t i=0; i < executeCommandVec.size(); i++)
+	    	args[i] = executeCommandVec[i].c_str();
+
+	    args[executeCommandVec.size()] = nullptr;
+
+	    log_debug() << executeCommandVec << " 45555 " << executeCommandVec[0];
+
+	    for(size_t i=0; i <= executeCommandVec.size(); i++)
+	    	log_debug() << args[i];
+
 		return executeInContainer([&] () {
 			log_debug() << "Starting command line in container : " << commandLine;
 
-			auto execReturnCode = execlp(commandLine.c_str(), commandLine.c_str(), nullptr);
+			auto execReturnCode = execvp(args[0], (char* const*) args);
 
-			log_error() << "Error when executing the command in container : " << commandLine << logging::getStackTrace();
-			sleep(5);
+			log_error() << "Error when executing the command in container : " << strerror(errno);
+//					<< " " << commandLine << logging::getStackTrace();
+			sleep(1);
 
-		}, listener, variables);
+			return 1;
+
+		}, variables, stdin, stdout, stderr);
 
 } else {
 	std::ostringstream oss;

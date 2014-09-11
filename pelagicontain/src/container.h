@@ -25,7 +25,7 @@ class Container : public ControllerAbstractInterface
 public:
 
     /// A function to be executed in the container
-    typedef std::function<void()> ContainerFunction;
+    typedef std::function<int()> ContainerFunction;
 
     typedef std::function<void(pid_t pid, int returnCode)> ProcessListenerFunction;
 
@@ -56,10 +56,14 @@ public:
      */
     pid_t start();
 
-    pid_t attach(const std::string& commandLine, ProcessListenerFunction listener, const EnvironmentVariables& variables);
-    pid_t attach(const std::string& commandLine, ProcessListenerFunction listener);
+    pid_t attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2);
 
-    pid_t executeInContainer(ContainerFunction function, ProcessListenerFunction listener, const EnvironmentVariables& variables);
+    /**
+     * Start a process with the environment variables which have previously been set
+     */
+    pid_t attach(const std::string& commandLine);
+
+    pid_t executeInContainer(ContainerFunction function, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2);
 
     /*!
      * Calls the lxc-destroy command.
@@ -110,24 +114,29 @@ public:
     }
 
     ReturnCode systemCall(const std::string &cmd) override {
-    	executeInContainer([this, cmd=cmd]() {
+
+    	pid_t pid = executeInContainer([this, cmd=cmd]() {
     		log_info() << "Executing system command in container : " << cmd;
-    		system(cmd.c_str());
-    	}, [this, cmd=cmd](pid_t pid , int returnCode) {
-        	log_info() << "Command finished: " << cmd;
+    		return system(cmd.c_str());
     	}, m_env);
-    	sleep(1);
+
+    	addProcessListener(pid, [this, cmd=cmd](pid_t pid , int returnCode) {
+        	log_info() << "Command finished: " << cmd;
+    	});
+
+    	usleep(200000);
     	return ReturnCode::SUCCESS;
     }
+
+	void openTerminal(std::string terminalCommand) const {
+		const char * command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << name();
+		log_error() << command;
+		system(command);
+	}
 
 private:
 
     static int executeInContainerEntryFunction(void* param);
-
-    /*
-     * Check if path is a directory
-     */
-    bool isDirectory(const std::string &path);
 
     /*
      * Create a directory, and if successful append it to a list of dirs

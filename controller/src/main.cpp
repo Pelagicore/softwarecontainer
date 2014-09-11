@@ -11,24 +11,16 @@
 
 #include "CommandLineParser.h"
 
+#include "UNIXSignalGlibHandler.h"
+
+#include "pelagicontain-common.h"
+
 /**
  * "Controller" is meant to be the interface Pelagicontain uses to reach the
  * inside of the container.
  */
 
 LOG_DECLARE_DEFAULT_CONTEXT(Controller_DefaultLogContext, "CON", "Main context");
-
-bool isDirectory(const std::string &path)
-{
-    bool isDir = false;
-    struct stat st;
-    if (stat(path.c_str(), &st) == 0) {
-        if ((st.st_mode & S_IFDIR) != 0) {
-            isDir = true;
-        }
-    }
-    return isDir;
-}
 
 int main(int argc, char **argv)
 {
@@ -49,14 +41,14 @@ int main(int argc, char **argv)
         path = std::string("/gateways/");
     path += "ipc_socket";
 
-    if (!isDirectory("/gateways") ||
-        !isDirectory("/appbin") ||
-        !isDirectory("/apphome") ||
-        !isDirectory("/appshared"))
-    {
-        log_error() << "Expected directories not available in container, shutting down Controller";
-        return 1;
-    }
+//    if (!isDirectory("/gateways") ||
+//        !isDirectory("/appbin") ||
+//        !isDirectory("/apphome") ||
+//        !isDirectory("/appshared"))
+//    {
+//        log_error() << "Expected directories not available in container, shutting down Controller";
+//        return 1;
+//    }
 
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create();
 
