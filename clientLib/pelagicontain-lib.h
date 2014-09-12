@@ -13,24 +13,6 @@
 
 #include "systemcallinterface.h"
 
-#include <fstream>
-
-#ifdef ENABLE_PULSEGATEWAY
-#include "pulsegateway.h"
-#endif
-
-#ifdef ENABLE_NETWORKGATEWAY
-#include "networkgateway.h"
-#endif
-
-#ifdef ENABLE_DBUSGATEWAY
-#include "dbusgateway.h"
-#endif
-
-#ifdef ENABLE_DEVICENODEGATEWAY
-#include "devicenodegateway.h"
-#endif
-
 namespace pelagicontain {
 
 class PelagicontainLib {
@@ -59,103 +41,11 @@ public:
 		return container;
 	}
 
-	bool isFolder(const std::string& path) {
-		// TODO: check if it is a folder
-		std::ifstream f( path.c_str() );
-		if ( f.good() ) {
-			f.close();
-			return true;
-		} else {
-			f.close();
-			return false;
-		}
-	}
-
 	bool isInitialized() {
 		return m_initialized;
 	}
 
-	ReturnCode init(bool bRegisterDBusInterface = false) {
-
-		DBus::default_dispatcher = &dispatcher;
-
-		// Make sure path ends in '/' since it might not always be checked
-		if (containerRoot.back() != '/') {
-			containerRoot += "/";
-		}
-
-		if ( isError( checkWorkspace() ) )
-			return ReturnCode::FAILURE;
-
-		if ( isError( container.initialize() ) ) {
-			log_error() << "Could not setup container for preloading";
-			return ReturnCode::FAILURE;
-		}
-
-		m_bus = new DBus::Connection(DBus::Connection::SessionBus());
-		dispatcher.attach(m_ml->gobj());
-
-		pamInterface = std::unique_ptr<PAMInterface>(new PAMInterface(*m_bus));
-
-		if (bRegisterDBusInterface)
-			registerDBusService();
-
-		pelagicontain.setPAM(*pamInterface.get());
-
-		/* If we can't communicate with PAM then there is nothing we can
-		 * do really, better to just exit.
-		 */
-		bool pamRunning = m_bus->has_name("com.pelagicore.PAM");
-		if (!pamRunning) {
-			log_error() << "PAM not running, exiting";
-			return ReturnCode::FAILURE;
-		}
-
-#ifdef ENABLE_NETWORKGATEWAY
-		m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway(container, systemcallInterface) ) );
-#endif
-
-#ifdef ENABLE_PULSEGATEWAY
-		m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway(gatewayDir, containerName, container) ) );
-#endif
-
-#ifdef ENABLE_DEVICENODEGATEWAY
-		m_gateways.push_back( std::unique_ptr<Gateway>( new DeviceNodeGateway(container) ) );
-#endif
-
-#ifdef ENABLE_DBUSGATEWAY
-		m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(container,
-										systemcallInterface,
-										DBusGateway::SessionProxy,
-										gatewayDir,
-										containerName) ) );
-
-		m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(container,
-										systemcallInterface,
-										DBusGateway::SystemProxy,
-										gatewayDir,
-										containerName) ) );
-#endif
-
-		for (auto& gateway : m_gateways)
-			pelagicontain.addGateway(*gateway);
-
-		pid_t pcPid = pelagicontain.preload(&container);
-
-		if (!pcPid) {
-			// Fatal failure, only do necessary cleanup
-			log_error() << "Could not start container, will shut down";
-		} else {
-			log_debug() << "Started container with PID " << pcPid;
-			// setup IPC between Pelagicontain and Controller
-			if ( isError( pelagicontain.establishConnection() ) )
-				return ReturnCode::FAILURE;
-		}
-
-		m_initialized = true;
-
-		return ReturnCode::SUCCESS;
-	}
+	ReturnCode init(bool bRegisterDBusInterface = false);
 
 	Pelagicontain& getPelagicontain() {
 		return pelagicontain;

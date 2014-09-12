@@ -56,10 +56,14 @@ public:
      */
     pid_t start();
 
+    /**
+     * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
+     * plus the ones passed as parameters here.
+     */
     pid_t attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2);
 
     /**
-     * Start a process with the environment variables which have previously been set
+     * Start a process with the environment variables which have previously been set by the gateways
      */
     pid_t attach(const std::string& commandLine);
 
@@ -109,7 +113,7 @@ public:
 
     ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) override {
     	log_debug() << "Setting env variable in container " << var << "=" << val;
-    	m_env[var] = val;
+    	m_gatewayEnvironmentVariables[var] = val;
     	return ReturnCode::SUCCESS;
     }
 
@@ -118,7 +122,7 @@ public:
     	pid_t pid = executeInContainer([this, cmd=cmd]() {
     		log_info() << "Executing system command in container : " << cmd;
     		return system(cmd.c_str());
-    	}, m_env);
+    	}, m_gatewayEnvironmentVariables);
 
     	addProcessListener(pid, [this, cmd=cmd](pid_t pid , int returnCode) {
         	log_info() << "Command finished: " << cmd;
@@ -181,7 +185,7 @@ private:
 
     std::vector<const char*> m_LXCContainerStates;
 
-    EnvironmentVariables m_env;
+    EnvironmentVariables m_gatewayEnvironmentVariables;
 
 };
 

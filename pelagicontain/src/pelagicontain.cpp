@@ -93,10 +93,9 @@ void Pelagicontain::launchCommand(const std::string &commandLine)
     addProcessListener(pid, [&](pid_t pid, int returnCode) {
     	shutdown();
     });
-
 }
 
-void Pelagicontain::update(const std::map<std::string, std::string> &configs)
+void Pelagicontain::update(const GatewayConfiguration &configs)
 {
     log_debug() << "update called";
     setGatewayConfigs(configs);
@@ -109,22 +108,19 @@ void Pelagicontain::update(const std::map<std::string, std::string> &configs)
     // called and the app has not been started previously.
     if (m_launching && !m_controllerInterface->hasBeenStarted()) {
     	launchCommand(APP_BINARY);
-//        m_controllerInterface->startApp();
     }
 }
 
-void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &configs)
+void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
 {
     // Go through the received configs and see if they match any of
     // the running gateways, if so: set their respective config
-    std::string config;
-    std::string gatewayId;
 
     for (auto& gateway : m_gateways)
     {
-        gatewayId = gateway->id();
+    	std::string gatewayId = gateway->id();
         if (configs.count(gatewayId) != 0) {
-            config = configs.at(gatewayId);
+            std::string config = configs.at(gatewayId);
             gateway->setConfig(config);
         }
     }
@@ -133,9 +129,7 @@ void Pelagicontain::setGatewayConfigs(const std::map<std::string, std::string> &
 void Pelagicontain::activateGateways()
 {
     for (auto& gateway : m_gateways)
-    {
         gateway->activate();
-    }
 }
 
 void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val)
@@ -146,12 +140,7 @@ void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, cons
 void Pelagicontain::shutdown()
 {
     log_debug() << "shutdown called"; // << logging::getStackTrace();
-
     shutdownContainer();
-//    onControllerShutdown(0, 0);
-    // Tell Controller to shut down the app and Controller will exit when the
-    // app has shut down and then we will handle the signal through the handler.
-//    m_controllerInterface->shutdown();
 }
 
 void Pelagicontain::shutdownGateways()

@@ -11,6 +11,8 @@
 
 namespace pelagicontain {
 
+	typedef std::map<std::string, std::string> GatewayConfiguration;
+
 	/*
 	 * Check if path is a directory
 	 */

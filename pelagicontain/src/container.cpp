@@ -184,8 +184,6 @@ if (isLXC_C_APIEnabled()) {
 
 	log_debug() << "Container created";
 
-//	sleep(1);
-
 } else {
 
     int maxCmdLen = sysconf(_SC_ARG_MAX);
@@ -218,15 +216,11 @@ pid_t Container::start()
 
 		char* argv[] = { CONTROLLER_PATH , nullptr};
 		char* emptyArgv[] = { nullptr};
-//		m_container->start(m_container, false, argv );
-//		m_container->startl(m_container, false, argv, nullptr );
 		m_container->start(m_container, true, emptyArgv);
 
 		log_debug() << "Container started : " << toString();
 
 		assert(m_container->is_running(m_container));
-
-//		sleep(10);
 
 		pid = m_container->init_pid(m_container);
 
@@ -239,7 +233,6 @@ pid_t Container::start()
              "lxc-execute -n %s -- env %s",
              name(),
              CONTROLLER_PATH);
-//             "/bin/sleep 1000");
 
     std::vector<std::string> executeCommandVec;
     executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
@@ -273,15 +266,25 @@ int Container::executeInContainerEntryFunction(void* param) {
 
 pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables& variables, int stdin, int stdout, int stderr) {
 	lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
-	options.stdin_fd = stdin;  // no stdin
+	options.stdin_fd = stdin;
 	options.stdout_fd = stdout;
 	options.stderr_fd = stderr;
 
-	// prepare array of env variables to be set when launching the process in the container
+	// prepare array of env variable strings to be set when launching the process in the container
 	std::vector<std::string> strings;
-	for(auto& var:variables) {
+	for(auto& var:variables)
 		strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
+
+	// Add the variables set by the gateways
+	for (auto& var : m_gatewayEnvironmentVariables) {
+		if (variables.count(var.first) == 0)
+			strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
+		else {
+			if (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first))
+				log_warning() << "Variable set twice with different values : " << var.first << ". values: " << var.second;
+		}
 	}
+
 	const char* envVariablesArray[strings.size()+1];
 	for (size_t i =0;i<strings.size();i++) {
 		envVariablesArray[i] = strings[i].c_str();
@@ -301,7 +304,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 }
 
 pid_t Container::attach(const std::string& commandLine) {
-	return attach(commandLine, m_env);
+	return attach(commandLine, m_gatewayEnvironmentVariables);
 }
 
 pid_t Container::attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin, int stdout, int stderr) {
@@ -317,19 +320,15 @@ if(isLXC_C_APIEnabled()) {
 
 	    args[executeCommandVec.size()] = nullptr;
 
-	    log_debug() << executeCommandVec << " 45555 " << executeCommandVec[0];
-
 	    for(size_t i=0; i <= executeCommandVec.size(); i++)
 	    	log_debug() << args[i];
 
 		return executeInContainer([&] () {
 			log_debug() << "Starting command line in container : " << commandLine;
 
-			auto execReturnCode = execvp(args[0], (char* const*) args);
+			execvp(args[0], (char* const*) args);
 
 			log_error() << "Error when executing the command in container : " << strerror(errno);
-//					<< " " << commandLine << logging::getStackTrace();
-			sleep(1);
 
 			return 1;
 

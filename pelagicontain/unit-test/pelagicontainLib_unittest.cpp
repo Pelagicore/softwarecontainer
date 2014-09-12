@@ -7,8 +7,11 @@
 #include "gtest/gtest.h"
 
 #include "generators.h"
-
 #include "pelagicontain-lib.h"
+
+#include "dbusgateway.h"
+
+
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
@@ -118,6 +121,59 @@ TEST(PelagicontainLib, TestJobReturnCode) {
 //	app.run();
 
 	ASSERT_TRUE(jobFalse.wait() != 0);
+}
+
+TEST(PelagicontainLib, TestDBusGatewayWithAccess) {
+	PelagicontainApp app;
+	PelagicontainLib& lib = app.lib;
+
+	{
+		GatewayConfiguration config;
+		config[DBusGateway::ID] = "{"
+				"\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
+				"\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}";
+
+		lib.getPelagicontain().update(config);
+
+		CommandJob jobTrue(lib,
+				"/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+		jobTrue.start();
+
+		ASSERT_TRUE(jobTrue.wait() == 0);
+	}
+
+	{
+		CommandJob jobTrue(lib,
+				"/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+		jobTrue.start();
+
+		ASSERT_TRUE(jobTrue.wait() == 0);
+	}
+
+}
+
+
+TEST(PelagicontainLib, TestDBusGatewayWithoutAccess) {
+	PelagicontainApp app;
+	PelagicontainLib& lib = app.lib;
+
+	{
+		CommandJob jobTrue(lib,
+				"/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+		jobTrue.start();
+
+		ASSERT_TRUE(jobTrue.wait() != 0);
+	}
+
+	{
+		CommandJob jobTrue(lib,
+				"/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+		jobTrue.start();
+
+		// We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
+		ASSERT_TRUE(jobTrue.wait() != 0);
+	}
+
 }
 
 

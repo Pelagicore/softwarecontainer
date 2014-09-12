@@ -89,7 +89,7 @@ public:
      *
      * \param configs A map of gateway IDs and their respective configurations
      */
-    void update(const std::map<std::string, std::string> &configs);
+    void update(const GatewayConfiguration &configs);
 
     /*! Initiates the 'shutdown' phase.
      *
@@ -119,7 +119,7 @@ public:
     }
 
 private:
-    void setGatewayConfigs(const std::map<std::string, std::string> &configs);
+    void setGatewayConfigs(const GatewayConfiguration &configs);
     void activateGateways();
     void shutdownGateways();
 

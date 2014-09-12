@@ -104,7 +104,7 @@ int main(int argc, char **argv)
                                 "Config file");
 
 //    const char* terminalCommand = "konsole -e";
-    const char* terminalCommand = nullptr;
+    const char* terminalCommand = "";
     commandLineParser.addOption(terminalCommand,
                                 "terminal",
                                 't',
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 			}
 		}, ml->get_context()->gobj());
 
-		if (terminalCommand != nullptr)
+		if ((terminalCommand != nullptr) && (strlen(terminalCommand) != 0))
 			lib.getContainer().openTerminal(terminalCommand);
 
 		ml->run();

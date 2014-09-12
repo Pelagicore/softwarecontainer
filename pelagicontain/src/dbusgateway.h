@@ -39,6 +39,8 @@ class DBusGateway: public Gateway
 public:
     enum ProxyType {SessionProxy, SystemProxy};
 
+    static constexpr const char* ID = "dbus";
+
     /*! Spawn the proxy and use the supplied path for the socket
      *
      * \param  type       SessionProxy or SystemProxy
