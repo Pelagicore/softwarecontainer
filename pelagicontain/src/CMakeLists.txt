@@ -85,6 +85,8 @@ TARGET_LINK_LIBRARIES( pelagicontainLib
     ${LXC_LIBRARIES}
 )
 
+set_target_properties(pelagicontainLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
+
 install(TARGETS pelagicontainLib DESTINATION lib)
 
 add_executable( pelagicontain

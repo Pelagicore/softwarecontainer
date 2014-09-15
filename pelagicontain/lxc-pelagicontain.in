@@ -52,7 +52,7 @@ $rootfs/appbin \
 $rootfs/appshared \
 $rootfs/apphome \
 $rootfs/gateways \
-$rootfs/controller \
+$rootfs/${CMAKE_INSTALL_PREFIX} \
 ${ADDITIONAL_FOLDER_MOUNTS}
 "
 
@@ -237,12 +237,6 @@ cat <<EOF >> $path/config
 lxc.mount.entry = $MOUNT_DIR/$name/bin appbin none ro,bind 0 0
 lxc.mount.entry = $MOUNT_DIR/$name/shared appshared none rw,bind 0 0
 lxc.mount.entry = $MOUNT_DIR/$name/home apphome none rw,bind 0 0
-EOF
-fi
-
-if [ -n "$CONTROLLER_DIR" ]; then
-cat <<EOF >> $path/config
-lxc.mount.entry = $CONTROLLER_DIR controller none rw,bind 0 0
 EOF
 fi
 

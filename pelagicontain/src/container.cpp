@@ -46,11 +46,11 @@ Container::Container(const std::string &name,
 ReturnCode Container::initialize()
 {
     std::string gatewayDir = containerDir() + "/gateways";
-    if (mkdir(containerDir().c_str(), S_IRWXU) == -1) {
+    if (isError(createDirectory(containerDir()))) {
         log_error() << "Could not create container directory " <<
         		containerDir() << " , " << strerror(errno);
     }
-    if (mkdir(gatewayDir.c_str(), S_IRWXU) == -1) {
+    if (isError(createDirectory(gatewayDir))) {
     	log_error() << "Could not create gateway directory " <<
     	                  gatewayDir << strerror(errno);
     }
@@ -154,11 +154,9 @@ if (isLXC_C_APIEnabled()) {
 
 	std::string containerPath = m_containerRoot;
 
-	setenv("CONTROLLER_DIR", (containerPath + "/bin").c_str(), true);
 	setenv("GATEWAY_DIR", (containerPath + "/" + containerName + "/gateways/").c_str(), true);
 	setenv("MOUNT_DIR", (containerPath + "/late_mounts").c_str(), true);
 
-	log_debug() << "CONTROLLER_DIR : " << getenv("CONTROLLER_DIR");
 	log_debug() << "GATEWAY_DIR : " << getenv("GATEWAY_DIR");
 	log_debug() << "MOUNT_DIR : " << getenv("MOUNT_DIR");
 
