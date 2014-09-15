@@ -22,7 +22,7 @@ class PelagicontainLib {
 public:
 	PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml,
 			const char* containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
-			, const char* cookie = "1"
+//			, const char* cookie = "1"
 			 , const char* configFilePath = PELAGICONTAIN_DEFAULT_CONFIG
 			 );
 
@@ -49,6 +49,10 @@ public:
 
 	Pelagicontain& getPelagicontain() {
 		return pelagicontain;
+	}
+
+	void setCookie(const std::string& cookie) {
+		m_cookie = cookie;
 	}
 
 private:

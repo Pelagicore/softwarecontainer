@@ -66,11 +66,12 @@ void Pelagicontain::onControllerShutdown(int pid, int exitCode)
     shutdownContainer();
 }
 
-void Pelagicontain::launch(const std::string &appId)
+void Pelagicontain::setApplicationID(const std::string &appId)
 {
-    log_debug() << "Launch called with appId: " << appId;
-    m_launching = true;
-    m_appId = appId;
+	m_appId = appId;
+
+	log_debug() << "register client " << m_cookie << " / " << m_appId;
+
     if (m_container) {
         // this should always be true except when unit-testing.
     	// TODO : rename setApplication(), which is not a setter
@@ -83,6 +84,14 @@ void Pelagicontain::launch(const std::string &appId)
             shutdown();
         }
     }
+
+}
+
+void Pelagicontain::launch(const std::string &appId)
+{
+    log_debug() << "Launch called with appId: " << appId;
+    m_launching = true;
+    setApplicationID(appId);
 }
 
 void Pelagicontain::launchCommand(const std::string &commandLine)
@@ -97,7 +106,8 @@ void Pelagicontain::launchCommand(const std::string &commandLine)
 
 void Pelagicontain::update(const GatewayConfiguration &configs)
 {
-    log_debug() << "update called";
+    log_debug() << "update called" << configs;
+
     setGatewayConfigs(configs);
 
     m_pamInterface->updateFinished(m_cookie);
@@ -109,6 +119,9 @@ void Pelagicontain::update(const GatewayConfiguration &configs)
     if (m_launching && !m_controllerInterface->hasBeenStarted()) {
     	launchCommand(APP_BINARY);
     }
+
+    m_containerState.setValueNotify(ContainerState::READY);
+
 }
 
 void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)

@@ -16,6 +16,7 @@
 enum class ContainerState {
 	CREATED,
 	PRELOADED,
+	READY,
 	RUNNING,
 	TERMINATED
 };
@@ -75,6 +76,10 @@ public:
      *  the application wants access to
      */
     void launch(const std::string &appId);
+
+
+    void setApplicationID(const std::string &appId);
+
 
     void launchCommand(const std::string &commandLine);
 
@@ -150,7 +155,7 @@ private:
     ControllerInterface *m_controllerInterface;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
-    std::string m_cookie;
+    const std::string& m_cookie;
 
     ObservableWritableProperty<ContainerState> m_containerState;
 

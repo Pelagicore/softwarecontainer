@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <memory>
 #include <vector>
@@ -5,9 +7,6 @@
 #include "pelagicontain-config.h"
 #include "pelagicontain-log.h"
 #include "pelagicore-common.h"
-
-#pragma once
-
 
 namespace pelagicontain {
 

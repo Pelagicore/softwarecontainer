@@ -18,14 +18,13 @@
 #include "devicenodegateway.h"
 #endif
 
-PelagicontainLib::PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml, const char* containerRootFolder, const char* cookie
-		, const char* configFilePath
+PelagicontainLib::PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml, const char* containerRootFolder, const char* configFilePath
 		 ) : containerName(Generator::gen_ct_name()),
 	containerConfig(configFilePath), containerRoot(containerRootFolder),
-	containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"), m_cookie(cookie),
+	containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"),
 	container(containerName, containerConfig,
 		  containerRoot), controllerInterface(gatewayDir),
-	pelagicontain(&controllerInterface, cookie) {
+	pelagicontain(&controllerInterface, m_cookie) {
 	m_ml = ml;
 }
 
@@ -46,6 +45,10 @@ ReturnCode PelagicontainLib::checkWorkspace() {
 }
 
 ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
+
+	if (bRegisterDBusInterface)
+		if (m_cookie.size()==0)
+			m_cookie = containerName;
 
 	DBus::default_dispatcher = &dispatcher;
 
