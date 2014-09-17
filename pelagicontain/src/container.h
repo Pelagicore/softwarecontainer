@@ -8,8 +8,9 @@
 #include <string>
 #include <vector>
 
-#include "gateway.h"
+//#include "gateway.h"
 #include "pelagicontain-common.h"
+#include "controllerabstractinterface.h"
 
 /*! Container is an abstraction of the specific containment technology used.
  *
@@ -67,7 +68,9 @@ public:
      */
     pid_t attach(const std::string& commandLine);
 
-    pid_t executeInContainer(ContainerFunction function, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2);
+    pid_t executeInContainer(ContainerFunction function, const EnvironmentVariables& variables = EnvironmentVariables(), int stdin = -1, int stdout = 1, int stderr = 2);
+
+    std::string bindMountFileInContainer(const std::string &src, const std::string &dst);
 
     /*!
      * Calls the lxc-destroy command.
@@ -154,7 +157,7 @@ private:
      * Create a bind mount. On success the mount will be added to a list of
      * mounts that will be unmounted in the dtor.
      */
-    bool bindMountDir(const std::string &src, const std::string &dst);
+    bool bindMount(const std::string &src, const std::string &dst);
 
     /*
      * List of all, by the container, mounted directories. These directories
@@ -167,6 +170,8 @@ private:
      * should be deleted in the destructor.
      */
     std::vector<std::string> m_dirs;
+
+    std::vector<std::string> m_files;
 
     /*
      * The LXC configuration file for this container

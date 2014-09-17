@@ -10,6 +10,7 @@
 #include "pelagicontain-lib.h"
 
 #include "dbusgateway.h"
+#include "waylandgateway.h"
 
 
 
@@ -34,10 +35,64 @@ struct PelagicontainApp {
 		return m_context;
 	}
 
+	void openTerminal() {
+		lib.getContainer().openTerminal("konsole -e");
+	}
+
 	Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
 	Glib::RefPtr<Glib::MainLoop> m_ml;
 	PelagicontainLib lib;
 };
+
+
+TEST(PelagicontainLib, TestWayland) {
+	PelagicontainApp app;
+	PelagicontainLib& lib = app.lib;
+
+	{
+		GatewayConfiguration config;
+		config[WaylandGateway::ID] = "{}";
+
+		lib.getPelagicontain().update(config);
+
+//		app.openTerminal();
+//		sleep(10000);
+
+		FunctionJob jobTrue(lib, [] () {
+
+			bool ERROR = 1;
+			bool SUCCESS = 0;
+
+			const char* waylandDir = getenv("XDG_RUNTIME_DIR");
+
+			log_debug() << "Wayland dir : " << waylandDir;
+
+			if (waylandDir == nullptr)
+				return ERROR;
+
+			std::string socketPath = waylandDir;
+			socketPath += "/wayland-0";
+
+			log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
+
+			if (!isSocket(socketPath))
+				return ERROR;
+
+			return SUCCESS;
+
+		});
+		jobTrue.start();
+
+		ASSERT_TRUE(jobTrue.wait() == 0);
+
+//		CommandJob westonJob(lib,
+//				"/usr/bin/weston-terminal");
+//		westonJob.start();
+//
+//		ASSERT_TRUE(westonJob.wait() == 0);
+	}
+
+}
 
 
 TEST(PelagicontainLib, TestStdin) {
@@ -151,6 +206,8 @@ TEST(PelagicontainLib, TestDBusGatewayWithAccess) {
 	}
 
 }
+
+
 
 
 TEST(PelagicontainLib, TestDBusGatewayWithoutAccess) {

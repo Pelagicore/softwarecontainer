@@ -61,7 +61,7 @@ bool SocketIPC::initialize(const std::string &socketPath)
 bool SocketIPC::checkForMessages()
 {
     char buf[m_bufferSize];
-    memset(buf, 0, sizeof(m_bufferSize));
+    memset(buf, 0, sizeof(buf));
 
     struct timeval tv;
     tv.tv_sec = 0;

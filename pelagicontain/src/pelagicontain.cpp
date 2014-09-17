@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <glibmm.h>
 
+#include "gateway.h"
 #include "container.h"
 #include "pelagicontain.h"
 
@@ -31,6 +32,9 @@ void Pelagicontain::addGateway(Gateway& gateway)
 pid_t Pelagicontain::preload(Container *container)
 {
     m_container = container;
+
+    for(auto& gateway : m_gateways)
+    	gateway->setContainer(*m_container);
 
     m_container->create();
 

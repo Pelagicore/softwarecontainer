@@ -10,8 +10,8 @@
 #include "paminterface.h"
 #include "pelagicontain.h"
 #include "pelagicontaintodbusadapter.h"
-
 #include "systemcallinterface.h"
+#include "gateway.h"
 
 namespace pelagicontain {
 
@@ -108,27 +108,18 @@ private:
 
 };
 
+
 /**
  * Use this class to execute a command in a container
  */
-class CommandJob {
+class JobAbstract {
 
 public:
 
 	static constexpr int UNASSIGNED_STREAM = -1;
 
-	CommandJob(PelagicontainLib& lib, const std::string& command) :
+	JobAbstract(PelagicontainLib& lib) :
 			m_lib(lib) {
-		m_command = command;
-	}
-
-	ReturnCode start( ) {
-		m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
-		return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
-	}
-
-	void setEnvironnmentVariable(const std::string& key, const std::string& value) {
-		m_env[key] = value;
 	}
 
 	void captureStdin() {
@@ -147,7 +138,6 @@ public:
 		int status;
 		waitpid(m_pid, &status, 0);
 		return status;
-//		return WEXITSTATUS(status);
 	}
 
 	int stdout() {
@@ -175,6 +165,38 @@ public:
 		return (m_pid!=0);
 	}
 
+	void setEnvironnmentVariable(const std::string& key, const std::string& value) {
+		m_env[key] = value;
+	}
+
+protected:
+	EnvironmentVariables m_env;
+	PelagicontainLib& m_lib;
+	pid_t m_pid = 0;
+	int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
+	int m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
+	int m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
+};
+
+/**
+ * Use this class to execute a command in a container
+ */
+class CommandJob : public JobAbstract {
+
+public:
+
+	static constexpr int UNASSIGNED_STREAM = -1;
+
+	CommandJob(PelagicontainLib& lib, const std::string& command) : JobAbstract(lib)
+			{
+		m_command = command;
+	}
+
+	ReturnCode start( ) {
+		m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+		return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+	}
+
 	std::string toString() const {
 		return logging::StringBuilder() << "Pelagicontain job. command: " << m_command << " stdin:" << m_stdin[0]
 				<< " stdout:" << m_stdout[1];
@@ -182,12 +204,35 @@ public:
 
 private:
 	std::string m_command;
-	EnvironmentVariables m_env;
-	PelagicontainLib& m_lib;
-	pid_t m_pid = 0;
-	int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
-	int m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
-	int m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
+};
+
+
+class FunctionJob : public JobAbstract {
+
+public:
+
+	static constexpr int UNASSIGNED_STREAM = -1;
+
+	FunctionJob(PelagicontainLib& lib, std::function<int()> command)  : JobAbstract(lib) {
+		m_command = command;
+	}
+
+	ReturnCode start( ) {
+		m_pid = m_lib.getContainer().executeInContainer(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+		return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+	}
+
+	void setEnvironnmentVariable(const std::string& key, const std::string& value) {
+		m_env[key] = value;
+	}
+
+	std::string toString() const {
+		return logging::StringBuilder() << "Pelagicontain job. " << " stdin:" << m_stdin[0]
+				<< " stdout:" << m_stdout[1];
+	}
+
+private:
+	std::function<int()> m_command;
 };
 
 }

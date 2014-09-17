@@ -12,6 +12,7 @@
 #include "paminterface.h"
 #include "controllerinterface.h"
 
+class Gateway;
 
 enum class ContainerState {
 	CREATED,

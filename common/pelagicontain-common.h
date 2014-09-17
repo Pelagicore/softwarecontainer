@@ -12,10 +12,6 @@ namespace pelagicontain {
 
 	typedef std::map<std::string, std::string> GatewayConfiguration;
 
-	/*
-	 * Check if path is a directory
-	 */
-	bool isDirectory(const std::string &path);
 
 	enum IPCCommand : uint8_t {
 		RUN_APP = '1', KILL_APP = '2', SET_ENV_VAR = '3', SYS_CALL = '4'
@@ -49,6 +45,14 @@ namespace pelagicontain {
 	inline sigc::connection addProcessListener(pid_t pid, std::function<void(pid_t, int)> function, Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default()) {
 		return context->signal_child_watch().connect(function, pid);
 	}
+
+	/*
+	 * Check if path is a directory
+	 */
+	bool isDirectory(const std::string &path);
+	bool isSocket(const std::string &path);
+	std::string parentPath(const std::string &path);
+	ReturnCode touch(const std::string& path);
 
 	template<typename Type>
 	class ObservableProperty {

@@ -18,6 +18,10 @@
 #include "devicenodegateway.h"
 #endif
 
+#include "dltgateway.h"
+#include "waylandgateway.h"
+
+
 PelagicontainLib::PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml, const char* containerRootFolder, const char* configFilePath
 		 ) : containerName(Generator::gen_ct_name()),
 	containerConfig(configFilePath), containerRoot(containerRootFolder),
@@ -109,6 +113,16 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 									gatewayDir,
 									containerName) ) );
 #endif
+
+	m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway(container,
+									systemcallInterface,
+									gatewayDir,
+									containerName) ) );
+
+	m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway(container,
+									systemcallInterface,
+									gatewayDir,
+									containerName) ) );
 
 	for (auto& gateway : m_gateways)
 		pelagicontain.addGateway(*gateway);

@@ -7,6 +7,7 @@
 
 #include <glibmm.h>
 
+#include "gateway.h"
 #include "pelagicontain.h"
 #include "pamabstractinterface.h"
 #include "controllerabstractinterface.h"

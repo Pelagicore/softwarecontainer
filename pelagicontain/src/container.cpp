@@ -2,6 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
+
 #include <fstream>
 #include <unistd.h>
 #include <sys/mount.h>
@@ -70,6 +71,18 @@ ReturnCode Container::initialize()
     allOk = allOk && isSuccess(createDirectory((runDir + "/shared").c_str()));
     allOk = allOk && isSuccess(createDirectory((runDir + "/home").c_str()));
 
+	int mountRes1 = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_BIND, NULL);
+	assert(mountRes1==0);
+	m_mounts.push_back(gatewayDir);
+	int mountRes2 = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_UNBINDABLE, NULL);
+	assert(mountRes2==0);
+	m_mounts.push_back(gatewayDir);
+	int mountRes3 = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_SHARED, NULL);
+	assert(mountRes3==0);
+	m_mounts.push_back(gatewayDir);
+
+	// TODO : remove those mounts when the container shuts down
+
     if (!allOk)
         log_error() << "Could not set up all needed directories";
 
@@ -97,7 +110,17 @@ Container::~Container()
     {
         log_debug() << "Unmounting " << *it;
         if (umount((*it).c_str()) == -1) {
-            log_error() << "Could not unmount " << *it << strerror(errno);
+            log_error() << "Could not unmount " << *it << " : " << strerror(errno);
+        }
+    }
+
+    // Clean up all files, also done backwards
+    for (auto it = m_files.rbegin(); it != m_files.rend();++it)
+    {
+    	auto filename = (*it).c_str();
+        log_debug() << "Removing " << filename;
+        if (unlink(filename)) {
+            log_error() << "Could not remove file " << filename << " : " <<strerror(errno);
         }
     }
 
@@ -106,7 +129,7 @@ Container::~Container()
     {
         log_debug() << "Removing " << (*it).c_str();
         if (rmdir((*it).c_str()) == -1) {
-            log_error() << "Could not remove dir " << *it << strerror(errno);
+            log_error() << "Could not remove dir " << *it << " : " << strerror(errno);
         }
     }
 
@@ -389,8 +412,25 @@ void Container::destroy()
 }
 
 
-bool Container::bindMountDir(const std::string &src, const std::string &dst)
+std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer)
 {
+    std::string dst = containerDir() + "/gateways/" + pathInContainer;
+
+    touch(dst);
+    m_files.push_back(dst);
+    auto s = bindMount(pathOnHost, dst);
+    assert(s);
+
+    std::string actualPathInContainer = "/gateways/";
+    actualPathInContainer += pathInContainer;
+
+    return actualPathInContainer;
+}
+
+bool Container::bindMount(const std::string &src, const std::string &dst)
+{
+    log_debug() << "Mounting " << src << " in " << dst;
+
     int mountRes = mount(src.c_str(), // source
                          dst.c_str(), // target
                          "",          // fstype
@@ -403,10 +443,11 @@ bool Container::bindMountDir(const std::string &src, const std::string &dst)
         log_verbose() << "Mounted folder " << src << " in " << dst;
     } else {
         // Failure
-        log_warning("Could not mount dir into container: src=%s, dst=%s err=%s",
+        log_warning("Could not mount into container: src=%s, dst=%s err=%s",
                   src.c_str(),
                   dst.c_str(),
                   strerror(errno));
+        sleep(1);
     }
 
     return (mountRes == 0);
@@ -429,9 +470,9 @@ bool Container::setApplication(const std::string &appId)
     std::string dstDirBase = m_mountDir + "/" + m_name;
 
     bool allOk = true;
-    allOk &= bindMountDir(appDirBase + "/bin", dstDirBase + "/bin");
-    allOk &= bindMountDir(appDirBase + "/shared", dstDirBase + "/shared");
-    allOk &= bindMountDir(appDirBase + "/home", dstDirBase + "/home");
+    allOk &= bindMount(appDirBase + "/bin", dstDirBase + "/bin");
+    allOk &= bindMount(appDirBase + "/shared", dstDirBase + "/shared");
+    allOk &= bindMount(appDirBase + "/home", dstDirBase + "/home");
 
     allOk = true;
 

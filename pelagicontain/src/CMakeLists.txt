@@ -71,6 +71,8 @@ add_library(pelagicontainLib SHARED
     dbusadaptor.h
     systemcallinterface.cpp
     pelagicontain-lib.cpp
+    dltgateway.cpp
+    waylandgateway.cpp
     ${PROJECT_SOURCE_DIR}/common/config.cpp
     ${PROJECT_SOURCE_DIR}/common/common.cpp
     ${GATEWAY_SOURCES}
