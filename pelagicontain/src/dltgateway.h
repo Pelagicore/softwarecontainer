@@ -43,7 +43,7 @@ public:
 		if (m_enabled) {
 			log_error() << "enabling DLT gateway";
 			std::string d = logging::StringBuilder() << DLT_SOCKET_FOLDER << "/" << SOCKET_FILE_NAME;
-			std::string path = getContainer().bindMountFileInContainer(d, SOCKET_FILE_NAME);
+			std::string path = getContainer().bindMountFileInContainer(d, SOCKET_FILE_NAME, false);
 			createSymLinkInContainer(path, d);
 		}
 

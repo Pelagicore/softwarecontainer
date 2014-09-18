@@ -8,10 +8,11 @@
 #include "pelagicontain-log.h"
 #include "pelagicore-common.h"
 
+#include <jansson.h>
+
 namespace pelagicontain {
 
 	typedef std::map<std::string, std::string> GatewayConfiguration;
-
 
 	enum IPCCommand : uint8_t {
 		RUN_APP = '1', KILL_APP = '2', SET_ENV_VAR = '3', SYS_CALL = '4'
@@ -105,6 +106,88 @@ namespace pelagicontain {
 
 	};
 
+
+	class JSonParser {
+
+		LOG_DECLARE_CLASS_CONTEXT("JSON", "JSON parser");
+
+	public:
+		JSonParser(const std::string &config) {
+			parseConfig(config);
+		}
+
+		~JSonParser() {
+		    if (m_root) {
+		        json_decref(m_root);
+		    }
+		}
+
+		bool isValueTrue(const std::string& field) {
+			json_t* value = json_object_get(m_root, field.c_str());
+			if (!json_is_boolean(value)) {
+				log_error("Value is not a boolean.");
+				json_decref(value);
+			}
+
+			return json_is_true(value);
+		}
+
+		std::string getValueAsString(const std::string& field) {
+			std::string s;
+			json_t* value = json_object_get(m_root, field.c_str());
+			if (value != nullptr) {
+				if (json_is_string(value)) {
+					s = json_string_value(value);
+				} else
+					log_error("Value is not a string.");
+
+				json_decref(value);
+			}
+
+			return s;
+		}
+
+	std::vector<std::string> getValueAsStringArray(const std::string& field) {
+		std::vector < std::string > s;
+		json_t* value = json_object_get(m_root, field.c_str());
+		if (value != nullptr) {
+			if (json_is_array(value)) {
+				for (size_t i = 0; i < json_array_size(value); i++) {
+					json_t *arrayElement = json_array_get(value, i);
+					if (json_is_string(arrayElement))
+						s.push_back(json_string_value(arrayElement));
+					else
+						log_error() << "Value is not a string";
+
+				}
+			} else
+				log_error() << "Value is not an array";
+
+			json_decref(value);
+		}
+
+		return s;
+	}
+
+	json_t* root() {
+		return m_root;
+	}
+
+	private:
+
+		void parseConfig(const std::string &config) {
+			json_error_t error;
+
+			// Get root JSON object
+			m_root = json_loads(config.c_str(), 0, &error);
+
+			if (m_root == nullptr)
+				log_error() << "Error on line " << error.line << ". " << error.text;
+		}
+
+		json_t* m_root;
+
+	};
 
 }
 

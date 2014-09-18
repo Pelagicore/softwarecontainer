@@ -77,9 +77,11 @@ void Pelagicontain::setApplicationID(const std::string &appId)
 	log_debug() << "register client " << m_cookie << " / " << m_appId;
 
     if (m_container) {
+
+        std::string appDirBase = m_container->root() + "/" + appId;
+
         // this should always be true except when unit-testing.
-    	// TODO : rename setApplication(), which is not a setter
-        if (m_container->setApplication(appId)) {
+        if (m_container->mountApplication(appDirBase)) {
             m_pamInterface->registerClient(m_cookie, m_appId);
         } else {
             log_error() << "Could not set up container for application, shutting down";

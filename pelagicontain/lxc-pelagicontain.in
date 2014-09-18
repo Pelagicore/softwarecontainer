@@ -43,6 +43,7 @@ $rootfs/var/log \
 $rootfs/usr/share/udhcpc \
 $rootfs/dev/pts \
 $rootfs/dev/shm \
+$rootfs/dev/dri \
 $rootfs/lib \
 $rootfs/usr/lib \
 $rootfs/lib64 \
@@ -224,6 +225,10 @@ cat <<EOF >> $path/config
 lxc.mount.entry = /lib $rootfs/lib none ro,bind 0 0
 lxc.mount.entry = /usr/lib $rootfs/usr/lib none ro,bind 0 0
 lxc.mount.entry = /usr/sbin $rootfs/usr/sbin none ro,bind 0 0
+#lxc.mount.entry = /etc/fonts $rootfs/etc/fonts none ro,bind 0 0
+lxc.mount.entry = /usr $rootfs/usr none ro,bind 0 0
+#lxc.mount.entry = / $rootfs/host none ro,bind 0 0
+lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0
 EOF
 
 if [ -n "$GATEWAY_DIR" ]; then

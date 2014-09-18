@@ -293,8 +293,6 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 
 	// prepare array of env variable strings to be set when launching the process in the container
 	std::vector<std::string> strings;
-	for(auto& var:variables)
-		strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
 
 	// Add the variables set by the gateways
 	for (auto& var : m_gatewayEnvironmentVariables) {
@@ -305,6 +303,9 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 				log_warning() << "Variable set twice with different values : " << var.first << ". values: " << var.second;
 		}
 	}
+
+	for(auto& var:variables)
+		strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
 
 	const char* envVariablesArray[strings.size()+1];
 	for (size_t i =0;i<strings.size();i++) {
@@ -412,13 +413,13 @@ void Container::destroy()
 }
 
 
-std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer)
+std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly)
 {
     std::string dst = containerDir() + "/gateways/" + pathInContainer;
 
     touch(dst);
     m_files.push_back(dst);
-    auto s = bindMount(pathOnHost, dst);
+    auto s = bindMount(pathOnHost, dst, readonly);
     assert(s);
 
     std::string actualPathInContainer = "/gateways/";
@@ -427,14 +428,35 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
     return actualPathInContainer;
 }
 
-bool Container::bindMount(const std::string &src, const std::string &dst)
+std::string Container::bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly)
 {
-    log_debug() << "Mounting " << src << " in " << dst;
+    std::string dst = containerDir() + "/gateways/" + pathInContainer;
+
+    log_debug() << "Creating folder : " << dst;
+    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    m_dirs.push_back(dst);
+    auto s = bindMount(pathOnHost, dst, readonly);
+    assert(s);
+
+    std::string actualPathInContainer = "/gateways/";
+    actualPathInContainer += pathInContainer;
+
+    return actualPathInContainer;
+}
+
+bool Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
+{
+    int flags = MS_BIND;
+
+    if (readOnly)
+    	flags |= MS_RDONLY;
+
+    log_debug() << "Mounting " << (readOnly ? " readonly " : "read/write ") << src << " in " << dst << " / flags: " << flags;
 
     int mountRes = mount(src.c_str(), // source
                          dst.c_str(), // target
                          "",          // fstype
-                         MS_BIND,     // flags
+                         flags,     // flags
                          NULL);       // data
 
     if (mountRes == 0) {
@@ -453,23 +475,10 @@ bool Container::bindMount(const std::string &src, const std::string &dst)
     return (mountRes == 0);
 }
 
-bool Container::setApplication(const std::string &appId)
-{
-	/* When we know which app that will be run we need to
-	 * do some setup, like mount in the application bin and
-	 * shared directories.
-	 */
+bool Container::mountApplication(const std::string &appDirBase) {
 
-	// The directory(ies) to be mounted is known by convention, e.g.
-    // /var/am/<appId>/bin/ and /var/am/<appId>/shared/
-
-    // bind mount /var/am/<appId>/bin/ into /var/am/late_mounts/<contid>/bin
-    // this directory will be accessible in container as according to
-    // the lxc-pelagicontain template
-    std::string appDirBase = m_containerRoot + "/" + appId;
     std::string dstDirBase = m_mountDir + "/" + m_name;
-
-    bool allOk = true;
+	bool allOk = true;
     allOk &= bindMount(appDirBase + "/bin", dstDirBase + "/bin");
     allOk &= bindMount(appDirBase + "/shared", dstDirBase + "/shared");
     allOk &= bindMount(appDirBase + "/home", dstDirBase + "/home");
@@ -477,4 +486,10 @@ bool Container::setApplication(const std::string &appId)
     allOk = true;
 
     return allOk;
+}
+
+ReturnCode Container::mountDevice(const std::string& pathInHost) {
+	log_warning() << "Mounting device in container : " << pathInHost;
+	auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
+	return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }

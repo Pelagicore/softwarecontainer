@@ -70,7 +70,11 @@ public:
 
     pid_t executeInContainer(ContainerFunction function, const EnvironmentVariables& variables = EnvironmentVariables(), int stdin = -1, int stdout = 1, int stderr = 2);
 
-    std::string bindMountFileInContainer(const std::string &src, const std::string &dst);
+    std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
+
+    std::string bindMountFolderInContainer(const std::string &src, const std::string &dst, bool readonly = true);
+
+    ReturnCode mountDevice(const std::string& pathInHost);
 
     /*!
      * Calls the lxc-destroy command.
@@ -92,7 +96,9 @@ public:
      *
      * \return true or false
      */
-    bool setApplication(const std::string &appId);
+//    bool setApplication(const std::string &appId);
+
+    bool mountApplication(const std::string& path);
 
     /*!
      * Setup the container for preloading
@@ -112,6 +118,10 @@ public:
 
     std::string containerDir() const {
     	return m_containerRoot + name();
+    }
+
+    const std::string& root() const {
+    	return m_containerRoot;
     }
 
     ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) override {
@@ -157,7 +167,7 @@ private:
      * Create a bind mount. On success the mount will be added to a list of
      * mounts that will be unmounted in the dtor.
      */
-    bool bindMount(const std::string &src, const std::string &dst);
+    bool bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
 
     /*
      * List of all, by the container, mounted directories. These directories

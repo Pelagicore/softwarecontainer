@@ -34,8 +34,16 @@ public:
 	static constexpr const char* SOCKET_FILE_NAME = "wayland-0";
 
 	bool setConfig(const std::string &config) override {
-		m_enabled = (config.length() != 0);
-		log_info() << "Received config : " << config;
+		JSonParser parser(config);
+		auto devices = parser.getValueAsStringArray("devices");
+
+		for(auto& device : devices) {
+			auto r = getContainer().mountDevice(device);
+			if (isSuccess(r))
+				log_error() << "Could not mount device " << device;
+			m_enabled = true;
+		}
+
 		return true;
 	}
 
@@ -45,7 +53,7 @@ public:
 			const char* dir = getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME);
 			if (dir != nullptr) {
 				std::string d = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
-				std::string path = getContainer().bindMountFileInContainer(d,  SOCKET_FILE_NAME);
+				std::string path = getContainer().bindMountFileInContainer(d,  SOCKET_FILE_NAME, false);
 				getController().setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
 			} else
 				return false;
