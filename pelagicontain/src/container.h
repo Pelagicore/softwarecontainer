@@ -61,7 +61,7 @@ public:
      * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    pid_t attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2);
+    pid_t attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2, const std::string& workingDirectory = "/");
 
     /**
      * Start a process with the environment variables which have previously been set by the gateways
@@ -167,7 +167,7 @@ private:
      * Create a bind mount. On success the mount will be added to a list of
      * mounts that will be unmounted in the dtor.
      */
-    bool bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
+    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
 
     /*
      * List of all, by the container, mounted directories. These directories

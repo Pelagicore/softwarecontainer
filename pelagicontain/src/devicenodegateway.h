@@ -114,9 +114,9 @@ private:
         std::string mode;
     };
 
-    std::vector<struct DeviceNodeGateway::Device> m_devList;
+    std::vector<DeviceNodeGateway::Device> m_devList;
 
-    std::vector<struct Device> parseDeviceList(json_t *list, bool &ok);
+    std::vector<Device> parseDeviceList(json_t *list, bool &ok);
 
 };
 

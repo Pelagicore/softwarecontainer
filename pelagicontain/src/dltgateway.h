@@ -18,6 +18,10 @@ public:
 
 	static constexpr const char* ID = "dlt";
 
+	static constexpr const char* DLT_SOCKET_FOLDER = "/tmp/";
+	static constexpr const char* SOCKET_FILE_NAME = "dlt";
+
+
 	DLTGateway(ControllerAbstractInterface &controllerInterface, SystemcallAbstractInterface &systemcallInterface,
 			const std::string &gatewayDir, const std::string &name) :
 			Gateway(controllerInterface), m_systemcallInterface(systemcallInterface) {
@@ -30,12 +34,14 @@ public:
 		return ID;
 	}
 
-	static constexpr const char* DLT_SOCKET_FOLDER = "/tmp/";
-	static constexpr const char* SOCKET_FILE_NAME = "dlt";
-
 	bool setConfig(const std::string &config) override {
-		m_enabled = (config.length() != 0);
-		log_info() << "Received config : " << config;
+		JSonParser parser(config);
+
+		m_enabled = false;
+		parser.readBoolean(ENABLED_FIELD, m_enabled);
+
+		log_debug() << "Received config enabled: " << m_enabled;
+
 		return true;
 	}
 

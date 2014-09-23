@@ -246,20 +246,12 @@ pid_t Container::start()
 		pid = m_container->init_pid(m_container);
 
 } else {
-	int maxCmdLen = sysconf(_SC_ARG_MAX);
-    char lxcCommand[maxCmdLen];
-
-    // Create command to execute inside container
-    snprintf(lxcCommand, sizeof(lxcCommand),
-             "lxc-execute -n %s -- env %s",
-             name(),
-             CONTROLLER_PATH);
-
     std::vector<std::string> executeCommandVec;
-    executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
+    std::string lxcCommand = StringBuilder() << "lxc-execute -n " << name() <<  " -- env " << CONTROLLER_PATH;
+    executeCommandVec = Glib::shell_parse_argv(lxcCommand);
     std::vector<std::string> envVarVec = {"MOUNT_DIR=" + m_mountDir};
 
-    log_debug() << "Execute: " << &lxcCommand[0];
+    log_debug() << "Execute: " << lxcCommand;
 
     try {
         Glib::spawn_async_with_pipes(
@@ -291,20 +283,20 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 	options.stdout_fd = stdout;
 	options.stderr_fd = stderr;
 
-	// prepare array of env variable strings to be set when launching the process in the container
-	std::vector<std::string> strings;
+	EnvironmentVariables actualVariables = variables;
 
 	// Add the variables set by the gateways
 	for (auto& var : m_gatewayEnvironmentVariables) {
-		if (variables.count(var.first) == 0)
-			strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
-		else {
+		if (variables.count(var.first) != 0)
 			if (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first))
-				log_warning() << "Variable set twice with different values : " << var.first << ". values: " << var.second;
-		}
+				log_warning() << "Variable set by gateway overriding original variable value: " << var.first << ". values: " << var.second;
+
+		actualVariables[var.first] = var.second;
 	}
 
-	for(auto& var:variables)
+	// prepare array of env variable strings to be set when launching the process in the container
+	std::vector<std::string> strings;
+	for(auto& var:actualVariables)
 		strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
 
 	const char* envVariablesArray[strings.size()+1];
@@ -329,7 +321,7 @@ pid_t Container::attach(const std::string& commandLine) {
 	return attach(commandLine, m_gatewayEnvironmentVariables);
 }
 
-pid_t Container::attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin, int stdout, int stderr) {
+pid_t Container::attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin, int stdout, int stderr, const std::string& workingDirectory) {
 
 if(isLXC_C_APIEnabled()) {
 		log_debug() << "Attach " << commandLine;
@@ -346,8 +338,15 @@ if(isLXC_C_APIEnabled()) {
 	    	log_debug() << args[i];
 
 		return executeInContainer([&] () {
-			log_debug() << "Starting command line in container : " << commandLine;
 
+			log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " << workingDirectory;
+
+			if (workingDirectory.length() != 0) {
+				auto ret = chdir(workingDirectory.c_str());
+				if (ret != 0)
+					log_error() << "Error when changing current directory : " << strerror(errno);
+
+			}
 			execvp(args[0], (char* const*) args);
 
 			log_error() << "Error when executing the command in container : " << strerror(errno);
@@ -420,7 +419,6 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
     touch(dst);
     m_files.push_back(dst);
     auto s = bindMount(pathOnHost, dst, readonly);
-    assert(s);
 
     std::string actualPathInContainer = "/gateways/";
     actualPathInContainer += pathInContainer;
@@ -436,7 +434,6 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
     mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     m_dirs.push_back(dst);
     auto s = bindMount(pathOnHost, dst, readonly);
-    assert(s);
 
     std::string actualPathInContainer = "/gateways/";
     actualPathInContainer += pathInContainer;
@@ -444,7 +441,7 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
     return actualPathInContainer;
 }
 
-bool Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
+ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
 {
     int flags = MS_BIND;
 
@@ -469,19 +466,18 @@ bool Container::bindMount(const std::string &src, const std::string &dst, bool r
                   src.c_str(),
                   dst.c_str(),
                   strerror(errno));
-        sleep(1);
     }
 
-    return (mountRes == 0);
+    return (mountRes == 0 ? ReturnCode::SUCCESS : ReturnCode::FAILURE);
 }
 
 bool Container::mountApplication(const std::string &appDirBase) {
 
     std::string dstDirBase = m_mountDir + "/" + m_name;
 	bool allOk = true;
-    allOk &= bindMount(appDirBase + "/bin", dstDirBase + "/bin");
-    allOk &= bindMount(appDirBase + "/shared", dstDirBase + "/shared");
-    allOk &= bindMount(appDirBase + "/home", dstDirBase + "/home");
+    allOk &= isSuccess(bindMount(appDirBase + "/bin", dstDirBase + "/bin"));
+    allOk &= isSuccess(bindMount(appDirBase + "/shared", dstDirBase + "/shared"));
+    allOk &= isSuccess(bindMount(appDirBase + "/home", dstDirBase + "/home"));
 
     allOk = true;
 

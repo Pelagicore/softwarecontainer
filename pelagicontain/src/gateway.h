@@ -18,6 +18,10 @@
 class Gateway
 {
 	LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
+
+protected:
+	static constexpr const char* ENABLED_FIELD = "enabled";
+
 public:
     Gateway(ControllerAbstractInterface &controllerInterface):
         m_controllerInterface(controllerInterface){

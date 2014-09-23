@@ -187,13 +187,17 @@ public:
 
 	static constexpr int UNASSIGNED_STREAM = -1;
 
-	CommandJob(PelagicontainLib& lib, const std::string& command) : JobAbstract(lib)
-			{
+	CommandJob(PelagicontainLib& lib, const std::string& command) : JobAbstract(lib) {
 		m_command = command;
 	}
 
-	ReturnCode start( ) {
-		m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+	ReturnCode setWorkingDirectory(const std::string& folder) {
+		m_workingDirectory = folder;
+		return ReturnCode::SUCCESS;
+	}
+
+	ReturnCode start() {
+		m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1], m_workingDirectory);
 		return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 	}
 
@@ -204,6 +208,7 @@ public:
 
 private:
 	std::string m_command;
+	std::string m_workingDirectory;
 };
 
 

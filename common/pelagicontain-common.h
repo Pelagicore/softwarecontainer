@@ -113,7 +113,10 @@ namespace pelagicontain {
 
 	public:
 		JSonParser(const std::string &config) {
-			parseConfig(config);
+			if (config != "")
+				parseConfig(config);
+			else
+				parseConfig("{}");
 		}
 
 		~JSonParser() {
@@ -122,52 +125,48 @@ namespace pelagicontain {
 		    }
 		}
 
-		bool isValueTrue(const std::string& field) {
-			json_t* value = json_object_get(m_root, field.c_str());
-			if (!json_is_boolean(value)) {
-				log_error("Value is not a boolean.");
-				json_decref(value);
-			}
-
-			return json_is_true(value);
-		}
-
-		std::string getValueAsString(const std::string& field) {
-			std::string s;
+		void readString(const std::string& field, std::string& v) {
 			json_t* value = json_object_get(m_root, field.c_str());
 			if (value != nullptr) {
 				if (json_is_string(value)) {
-					s = json_string_value(value);
+					v = json_string_value(value);
 				} else
 					log_error("Value is not a string.");
 
 				json_decref(value);
 			}
-
-			return s;
 		}
 
-	std::vector<std::string> getValueAsStringArray(const std::string& field) {
-		std::vector < std::string > s;
-		json_t* value = json_object_get(m_root, field.c_str());
-		if (value != nullptr) {
-			if (json_is_array(value)) {
-				for (size_t i = 0; i < json_array_size(value); i++) {
-					json_t *arrayElement = json_array_get(value, i);
-					if (json_is_string(arrayElement))
-						s.push_back(json_string_value(arrayElement));
-					else
-						log_error() << "Value is not a string";
+		void readBoolean(const std::string& field, bool& v) {
+			json_t* value = json_object_get(m_root, field.c_str());
+			if (value != nullptr) {
+				if (json_is_boolean(value)) {
+					v = json_is_true(value);
+				} else
+					log_error("Value is not a bool.");
 
-				}
-			} else
-				log_error() << "Value is not an array";
-
-			json_decref(value);
+				json_decref(value);
+			}
 		}
 
-		return s;
-	}
+		void readStringArray(const std::string& field, std::vector < std::string >& v) {
+			json_t* value = json_object_get(m_root, field.c_str());
+			if (value != nullptr) {
+				if (json_is_array(value)) {
+					for (size_t i = 0; i < json_array_size(value); i++) {
+						json_t *arrayElement = json_array_get(value, i);
+						if (json_is_string(arrayElement))
+							v.push_back(json_string_value(arrayElement));
+						else
+							log_error() << "Value is not a string";
+
+					}
+				} else
+					log_error() << "Value is not an array";
+
+				json_decref(value);
+			}
+		}
 
 	json_t* root() {
 		return m_root;
@@ -192,5 +191,5 @@ namespace pelagicontain {
 }
 
 using namespace pelagicontain;
-
+using logging::StringBuilder;
 

@@ -59,24 +59,23 @@ cleanup_setConfig:
     return success;
 }
 
-std::vector<struct DeviceNodeGateway::Device>
+std::vector<DeviceNodeGateway::Device>
 DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
     ok = true;
     std::vector<struct DeviceNodeGateway::Device> dev_list;
-    for (uint i = 0; i < json_array_size(list); i++) {
+    for (size_t i = 0; i < json_array_size(list); i++) {
         struct DeviceNodeGateway::Device dev;
-        json_t *device = 0;
         std::string* fields[] = {&dev.name, &dev.major, &dev.minor, &dev.mode};
         const char* fieldsStr[] = {"name", "major", "minor", "mode"};
         uint numFields = 4;
 
-        device = json_array_get(list, i);
+        json_t *device = json_array_get(list, i);
         if (ok && !json_is_object(device)) {
             log_error("Expected JSON device object, found something else");
             ok = false;
         }
 
-        for (uint j = 0; ok && j < numFields; j++) {
+        for (size_t j = 0; ok && j < numFields; j++) {
             json_t *value = 0;
             value = json_object_get(device, fieldsStr[j]);
             if (ok && !json_is_string(value)) {
@@ -103,10 +102,8 @@ DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
 
 bool DeviceNodeGateway::activate()
 {
-    for (uint i = 0; i < m_devList.size(); i++)
+    for(auto& dev : m_devList)
     {
-        struct DeviceNodeGateway::Device dev;
-        dev = m_devList.at(i);
         auto success = getController().systemCall("mknod " + dev.name + " c " +
                                                 dev.major + " " + dev.minor);
         if (!isError(success)) {

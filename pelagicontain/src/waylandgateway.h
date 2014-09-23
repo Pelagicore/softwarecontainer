@@ -35,7 +35,8 @@ public:
 
 	bool setConfig(const std::string &config) override {
 		JSonParser parser(config);
-		auto devices = parser.getValueAsStringArray("devices");
+		std::vector < std::string > devices;
+		parser.readStringArray("devices", devices);
 
 		for(auto& device : devices) {
 			auto r = getContainer().mountDevice(device);
