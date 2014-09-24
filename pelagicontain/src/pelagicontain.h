@@ -148,6 +148,9 @@ private:
      *
      * \param pid pid of the controller as spawned by Pelagicontain::preload()
      * \param exitCode exit code of \a pid
+     *
+     * jkhkh
+     *
      */
     void onControllerShutdown(int pid, int exitCode);
 
@@ -162,6 +165,8 @@ private:
 
     // Keeps track of if someone has called launch
     bool m_launching = false;
+
+    SignalConnectionsHandler m_connections;
 
 };
 

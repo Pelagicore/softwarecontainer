@@ -85,7 +85,7 @@ int Controller::runApp()
 
     // We should only connect the watcher if the pid is valid
     if (m_pid) {
-        addProcessListener(m_pid, sigc::mem_fun(*this, &Controller::handleAppShutdownSlot));
+    	addProcessListener(m_connections, m_pid, sigc::mem_fun(*this, &Controller::handleAppShutdownSlot));
         log_info() << "Started app with pid: " << m_pid;
     }
 

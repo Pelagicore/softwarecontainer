@@ -137,17 +137,14 @@ public:
     		return system(cmd.c_str());
     	}, m_gatewayEnvironmentVariables);
 
-    	addProcessListener(pid, [this, cmd=cmd](pid_t pid , int returnCode) {
-        	log_info() << "Command finished: " << cmd;
-    	});
+    	waitForProcessTermination(pid);
 
-    	usleep(200000);
     	return ReturnCode::SUCCESS;
     }
 
 	void openTerminal(std::string terminalCommand) const {
 		const char * command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << name();
-		log_error() << command;
+		log_info() << command;
 		system(command);
 	}
 

@@ -135,9 +135,7 @@ public:
 	}
 
 	int wait() {
-		int status;
-		waitpid(m_pid, &status, 0);
-		return status;
+		return waitForProcessTermination(m_pid);
 	}
 
 	int stdout() {

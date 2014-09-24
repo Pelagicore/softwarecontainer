@@ -61,6 +61,7 @@ private:
 
     Glib::RefPtr<Glib::MainLoop> m_ml;
     pid_t m_pid;
+    SignalConnectionsHandler m_connections;
 };
 
 #endif //CONTROLLER_H

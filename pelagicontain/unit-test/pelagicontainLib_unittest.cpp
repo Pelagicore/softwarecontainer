@@ -3,6 +3,7 @@
  *   All rights reserved.
  */
 
+#include <thread>
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -43,6 +44,36 @@ struct PelagicontainApp {
 	Glib::RefPtr<Glib::MainLoop> m_ml;
 	PelagicontainLib lib;
 };
+
+
+
+TEST(PelagicontainLib, MultithreadTest) {
+
+	static const int TIMEOUT = 20;
+
+	PelagicontainLib lib(Glib::MainContext::get_default());
+
+	bool finished = false;
+
+	auto f = [&]() {
+		log_info() << "Initializing";
+		lib.init(true);
+		finished = true;
+	};
+
+	std::thread t(f);
+
+	for (int i=0 ; (i<TIMEOUT) && !finished; i++ ) {
+		log_info() << "Waiting for pelagicontain to be initialized";
+		sleep(1);
+	}
+
+	ASSERT_TRUE(finished);
+
+	if (finished)
+		t.join();
+
+}
 
 
 TEST(PelagicontainLib, TestWayland) {
@@ -95,6 +126,7 @@ TEST(PelagicontainLib, TestWayland) {
 }
 
 
+
 TEST(PelagicontainLib, TestStdin) {
 	PelagicontainApp app;
 	PelagicontainLib& lib = app.lib;
@@ -113,7 +145,8 @@ TEST(PelagicontainLib, TestStdin) {
 	auto readBytesCount = read(job.stdout(), inputBytes, sizeof(inputBytes));
 	ASSERT_EQ(readBytesCount, sizeof(outputBytes));
 
-	addProcessListener(job.pid(), [&] (
+	SignalConnectionsHandler connections;
+	addProcessListener(connections, job.pid(), [&] (
 			int pid, int exitCode) {
 		log_debug() << "finished process :" << job.toString();
 		app.exit();
@@ -134,7 +167,9 @@ TEST(PelagicontainLib, TestNetworkInternetCapability) {
 	ASSERT_TRUE(job.isRunning());
 
 	bool bNetworkAccessSucceeded = false;
-	addProcessListener(job.pid(), [&] (
+
+	SignalConnectionsHandler connections;
+	addProcessListener(connections, job.pid(), [&] (
 			int pid, int exitCode) {
 		bNetworkAccessSucceeded = (exitCode == 0);
 		app.exit();

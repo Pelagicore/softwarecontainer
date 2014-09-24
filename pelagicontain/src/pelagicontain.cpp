@@ -43,7 +43,7 @@ pid_t Pelagicontain::preload(Container *container)
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
     if (pid) {
-    	addProcessListener(pid, sigc::mem_fun(this, &Pelagicontain::onControllerShutdown));
+    	addProcessListener(m_connections, pid, sigc::mem_fun(this, &Pelagicontain::onControllerShutdown));
     }
 
     return pid;
@@ -105,7 +105,7 @@ void Pelagicontain::launchCommand(const std::string &commandLine)
     log_debug() << "launchCommand called with commandLine: " << commandLine;
     pid_t pid = m_container->attach(commandLine);
 
-    addProcessListener(pid, [&](pid_t pid, int returnCode) {
+    addProcessListener(m_connections, pid, [&](pid_t pid, int returnCode) {
     	shutdown();
     });
 }

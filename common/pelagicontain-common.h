@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sys/wait.h>
+
 #include <map>
 #include <memory>
 #include <vector>
@@ -43,8 +45,40 @@ namespace pelagicontain {
 		return false;
 	}
 
-	inline sigc::connection addProcessListener(pid_t pid, std::function<void(pid_t, int)> function, Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default()) {
-		return context->signal_child_watch().connect(function, pid);
+	/**
+	 * That class contains references to sigc++ connections and automatically disconnects them on destruction
+	 */
+	class SignalConnectionsHandler {
+
+	public:
+
+		/**
+		 * Create a new connection
+		 */
+		sigc::connection& newConnection() {
+			m_connections.resize(m_connections.size() + 1);
+			return m_connections[m_connections.size() - 1 ];
+		}
+
+		~SignalConnectionsHandler() {
+			for(auto& connection: m_connections)
+				connection.disconnect();
+		}
+
+private:
+		std::vector<sigc::connection> m_connections;
+
+	};
+
+	inline void addProcessListener(SignalConnectionsHandler& connections, pid_t pid, std::function<void(pid_t, int)> function, Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default()) {
+		auto connection = context->signal_child_watch().connect(function, pid);
+		connections.newConnection() = connection;
+	}
+
+	inline int waitForProcessTermination(pid_t pid) {
+		int status;
+		waitpid(pid, &status, 0);
+		return status;
 	}
 
 	/*
