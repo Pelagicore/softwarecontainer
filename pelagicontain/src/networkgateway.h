@@ -6,7 +6,6 @@
 #define NETWORKGATEWAY_H
 
 #include "gateway.h"
-#include "controllerinterface.h"
 #include "systemcallinterface.h"
 
 class NetworkGateway: public Gateway
@@ -14,8 +13,7 @@ class NetworkGateway: public Gateway
 	LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
 
 public:
-    NetworkGateway(ControllerAbstractInterface &controllerInterface,
-                   SystemcallAbstractInterface &systemCallInterface);
+    NetworkGateway(SystemcallAbstractInterface &systemCallInterface);
     ~NetworkGateway();
 
     /*!

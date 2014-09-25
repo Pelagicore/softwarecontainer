@@ -12,8 +12,7 @@
 
 using namespace pelagicore;
 
-class MockController:
-    public ControllerAbstractInterface
+class MockController
 {
 public:
 
@@ -57,7 +56,7 @@ using ::testing::DefaultValue;
 TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
     NiceMock<MockController> controllerInterface;
-    DeviceNodeGateway gw(controllerInterface);
+    DeviceNodeGateway gw;
 
     ASSERT_STREQ(gw.id().c_str(), "devicenode");
 }
@@ -70,7 +69,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayValidConfig,
 
 TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     StrictMock<MockController> controllerInterface;
-    DeviceNodeGateway gw(controllerInterface);
+    DeviceNodeGateway gw;
 
     struct testData config = GetParam();
 
@@ -101,7 +100,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayInvalidConfig,
 
 TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
     StrictMock<MockController> controllerInterface;
-    DeviceNodeGateway gw(controllerInterface);
+    DeviceNodeGateway gw;
 
     struct testData config = GetParam();
     ASSERT_FALSE(gw.setConfig(config.data));

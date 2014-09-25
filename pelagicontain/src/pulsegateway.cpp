@@ -7,9 +7,8 @@
 #include "jansson.h"
 #include <libgen.h>
 
-PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName,
-                           ControllerAbstractInterface &controllerInterface):
-    Gateway(controllerInterface),
+PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName):
+    Gateway(),
     m_api(0),
     m_context(0),
     m_mainloop(NULL),
@@ -80,7 +79,7 @@ bool PulseGateway::setConfig(const std::string &config)
     if (m_enableAudio) {
         std::string var = "PULSE_SERVER";
         std::string val = "/gateways/" + socketName();
-        success = isSuccess(getController().setEnvironmentVariable(var, val));
+        success = isSuccess(setEnvironmentVariable(var, val));
     }
 
     return success;

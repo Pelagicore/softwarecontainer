@@ -4,12 +4,11 @@
 # -c: clean, this means the directory specified with -d should be removed
 #     before creating it again
 # -d: deployment directory, where to place container files
-# -x: Path to controller binary
 # -a: Application ID (as identified in PAM)
 #
 # Additional arguments: Files to put in <deployment dir>/<appId>/bin/
 #
-# Example: ./setup_environment.sh -d /tmp/container -a com.pelagicore.myApp -c yes -x /$HOME/apps/bin/controller
+# Example: ./setup_environment.sh -d /tmp/container -a com.pelagicore.myApp -c yes
 
 BRCTL_CMD="/sbin/brctl"
 BRIDGE="container-br0"
@@ -26,9 +25,6 @@ while getopts c:d:a:x: opt; do
     d)
         deploydir=$OPTARG
         ;;
-    x)
-        controllerbin=$OPTARG
-        ;;
     a)
         appId=$OPTARG
         ;;
@@ -39,17 +35,6 @@ shift $((OPTIND - 1))
 # Set deployment directory
 if [[ -z "$deploydir" ]]; then
     echo "Must specify -d (deployment directory)"
-    exit
-fi
-
-# Check for controller
-if [ -z "$controllerbin" ]; then
-    echo "Must specify -x (controller binary)"
-    exit
-fi
-
-if  [ ! -e $controllerbin ]; then
-    echo "$controllerbin does not exist"
     exit
 fi
 
@@ -125,7 +110,6 @@ mkdir -p $ROOTFSDIR/$appId
 mkdir -p $ROOTFSDIR/$appId/bin
 mkdir -p $ROOTFSDIR/$appId/home
 mkdir -p $ROOTFSDIR/$appId/shared
-cp $controllerbin $ROOTFSDIR/bin
 set +x
 
 # Deploy files in rootfs/

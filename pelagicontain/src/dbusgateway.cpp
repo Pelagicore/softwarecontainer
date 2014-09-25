@@ -10,12 +10,11 @@
 #include "dbusgateway.h"
 #include "pelagicontain-common.h"
 
-DBusGateway::DBusGateway(ControllerAbstractInterface &controllerInterface,
-                         SystemcallAbstractInterface &systemcallInterface,
+DBusGateway::DBusGateway(SystemcallAbstractInterface &systemcallInterface,
                          ProxyType type,
                          const std::string &gatewayDir,
                          const std::string &name):
-    Gateway(controllerInterface),
+    Gateway(),
     m_systemcallInterface(systemcallInterface),
     m_type(type),
     m_pid(-1),
@@ -76,7 +75,7 @@ bool DBusGateway::activate()
 
     std::string value = "unix:path=/gateways/";
     value += socketName();
-    getController().setEnvironmentVariable(variable, value);
+    setEnvironmentVariable(variable, value);
 
     // Open pipe
     std::string command = "dbus-proxy ";

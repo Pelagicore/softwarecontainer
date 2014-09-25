@@ -65,7 +65,6 @@ add_library(pelagicontainLib SHARED
     container.cpp
     generators.cpp
     pelagicontain.cpp
-    controllerinterface.cpp
     paminterface.cpp
     pamproxy.h
     dbusadaptor.h

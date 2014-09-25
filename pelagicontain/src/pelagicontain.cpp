@@ -10,10 +10,8 @@
 #include "container.h"
 #include "pelagicontain.h"
 
-Pelagicontain::Pelagicontain(ControllerInterface *controllerInterface,
-                             const std::string &cookie):
+Pelagicontain::Pelagicontain(const std::string &cookie):
     m_container(nullptr),
-    m_controllerInterface(controllerInterface),
     m_cookie(cookie)
 {
 	m_containerState = ContainerState::CREATED;
@@ -43,15 +41,10 @@ pid_t Pelagicontain::preload(Container *container)
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
     if (pid) {
-    	addProcessListener(m_connections, pid, sigc::mem_fun(this, &Pelagicontain::onControllerShutdown));
+    	addProcessListener(m_connections, pid, sigc::mem_fun(this, &Pelagicontain::onContainerShutdown));
     }
 
     return pid;
-}
-
-ReturnCode Pelagicontain::establishConnection()
-{
-    return m_controllerInterface->initialize();
 }
 
 void Pelagicontain::shutdownContainer()
@@ -64,7 +57,7 @@ void Pelagicontain::shutdownContainer()
 }
 
 
-void Pelagicontain::onControllerShutdown(int pid, int exitCode)
+void Pelagicontain::onContainerShutdown(int pid, int exitCode)
 {
     log_debug() << "Controller " << " exited with exit code " << exitCode;
     shutdownContainer();
@@ -120,11 +113,7 @@ void Pelagicontain::update(const GatewayConfiguration &configs)
 
     activateGateways();
 
-    // We should only start the app if we have ended up here because launch was
-    // called and the app has not been started previously.
-    if (m_launching && !m_controllerInterface->hasBeenStarted()) {
-    	launchCommand(APP_BINARY);
-    }
+   	launchCommand(APP_BINARY);
 
     m_containerState.setValueNotify(ContainerState::READY);
 

@@ -12,8 +12,7 @@
 
 using namespace pelagicore;
 
-class PulseMockController:
-    public ControllerAbstractInterface
+class PulseMockController
 {
 public:
 
@@ -104,7 +103,7 @@ protected:
 /*! Test that id is correct ("pulseaudio")
  */
 TEST_F(PulseGatewayTest, TestIdEqualspulseaudio) {
-    PulseGateway gw(gatewayDir, containerName, controllerInterface);
+    PulseGateway gw(gatewayDir, containerName);
     ASSERT_STREQ(gw.id().c_str(), "pulseaudio");
 }
 
@@ -121,7 +120,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayValidConfig,
 
 TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     StrictMock<PulseMockController> controllerInterface;
-    PulseGateway gw("fake-gatewayDir", "fake-containerName", controllerInterface);
+    PulseGateway gw("fake-gatewayDir", "fake-containerName");
 
     struct pulseTestData config = GetParam();
 
@@ -154,7 +153,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayInvalidConfig,
 
 TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
     StrictMock<PulseMockController> controllerInterface;
-    PulseGateway gw("fake-gatewayDir", "fake-containerName", controllerInterface);
+    PulseGateway gw("fake-gatewayDir", "fake-containerName");
 
     struct pulseTestData config = GetParam();
 
@@ -175,7 +174,7 @@ INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayDisablingConfig,
 
 TEST_P(PulseGatewayDisablingConfig, TestCanParseDisablingConfig) {
     StrictMock<PulseMockController> controllerInterface;
-    PulseGateway gw("fake-gatewayDir", "fake-containerName", controllerInterface);
+    PulseGateway gw("fake-gatewayDir", "fake-containerName");
 
     struct pulseTestData config = GetParam();
 

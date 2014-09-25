@@ -10,7 +10,6 @@
 
 #include "container.h"
 #include "paminterface.h"
-#include "controllerinterface.h"
 
 class Gateway;
 
@@ -40,8 +39,7 @@ public:
      * \param cookie A unique identifier used to distinguish unique instances
      *  of Pelagicontain
      */
-    Pelagicontain(ControllerInterface *controllerInterface,
-                  const std::string &cookie);
+    Pelagicontain(const std::string &cookie);
 
     ~Pelagicontain();
 
@@ -116,7 +114,7 @@ public:
     void setContainerEnvironmentVariable(const std::string &var,
                                          const std::string &val);
 
-    ReturnCode establishConnection();
+//    ReturnCode establishConnection();
 
     void shutdownContainer();
 
@@ -152,11 +150,10 @@ private:
      * jkhkh
      *
      */
-    void onControllerShutdown(int pid, int exitCode);
+    void onContainerShutdown(int pid, int exitCode);
 
     Container *m_container;
     PAMAbstractInterface *m_pamInterface;
-    ControllerInterface *m_controllerInterface;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     const std::string& m_cookie;

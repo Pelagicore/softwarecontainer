@@ -7,7 +7,6 @@
 #include "jansson.h"
 
 #include "gateway.h"
-#include "controllerinterface.h"
 
 /*! This gateway is responsible for exposing device nodes in an LXC container.
  * The basic operation looks as follows:
@@ -68,7 +67,7 @@ class DeviceNodeGateway: public Gateway
 	LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
 
 public:
-    DeviceNodeGateway(ControllerAbstractInterface &controllerInterface);
+    DeviceNodeGateway();
     ~DeviceNodeGateway(){
     }
 

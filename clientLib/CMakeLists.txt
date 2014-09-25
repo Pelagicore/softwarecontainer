@@ -6,9 +6,6 @@ set(HEADERS
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/pelagicontain.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/container.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/gateway.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/controllerinterface.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/controllerabstractinterface.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/mainloopabstractinterface.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/pelagicontaintodbusadapter.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/dbusadaptor.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/systemcallinterface.h

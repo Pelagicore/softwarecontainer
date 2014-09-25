@@ -6,7 +6,6 @@
 #define GATEWAY_H
 
 #include <string>
-#include "controllerinterface.h"
 #include "container.h"
 
 #include <wait.h>
@@ -23,8 +22,7 @@ protected:
 	static constexpr const char* ENABLED_FIELD = "enabled";
 
 public:
-    Gateway(ControllerAbstractInterface &controllerInterface):
-        m_controllerInterface(controllerInterface){
+    Gateway() {
     };
 
     virtual ~Gateway() {
@@ -73,10 +71,6 @@ public:
 		return (status == 0 ) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 	}
 
-    ControllerAbstractInterface& getController() {
-    	return m_controllerInterface;
-    }
-
     Container& getContainer() {
     	return *m_container;
     }
@@ -85,8 +79,20 @@ public:
     	m_container = &container;
     }
 
+    ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) {
+    	getContainer().setEnvironmentVariable(variable, value);
+    }
+
+    /*! Notifies the controller to issue the system call
+     *  defined in the cmd argument.
+     *
+     * \return True if all went well, false if not
+     */
+    ReturnCode systemCall(const std::string &cmd) {
+    	getContainer().systemCall(cmd);
+    }
+
 protected:
-    ControllerAbstractInterface &m_controllerInterface;
     Container* m_container = nullptr;
 };
 

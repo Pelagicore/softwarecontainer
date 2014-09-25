@@ -10,7 +10,6 @@
 
 //#include "gateway.h"
 #include "pelagicontain-common.h"
-#include "controllerabstractinterface.h"
 
 /*! Container is an abstraction of the specific containment technology used.
  *
@@ -19,7 +18,7 @@
  * implements the specifics behind the conceptual phases of 'Pereload', 'Launch',
  * and 'Shutdown'.
  */
-class Container : public ControllerAbstractInterface
+class Container
 {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
 
@@ -27,8 +26,6 @@ public:
 
     /// A function to be executed in the container
     typedef std::function<int()> ContainerFunction;
-
-    typedef std::function<void(pid_t pid, int returnCode)> ProcessListenerFunction;
 
     /*!
      * Constructor
@@ -124,13 +121,13 @@ public:
     	return m_containerRoot;
     }
 
-    ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) override {
+    ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) {
     	log_debug() << "Setting env variable in container " << var << "=" << val;
     	m_gatewayEnvironmentVariables[var] = val;
     	return ReturnCode::SUCCESS;
     }
 
-    ReturnCode systemCall(const std::string &cmd) override {
+    ReturnCode systemCall(const std::string &cmd) {
 
     	pid_t pid = executeInContainer([this, cmd=cmd]() {
     		log_info() << "Executing system command in container : " << cmd;

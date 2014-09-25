@@ -7,9 +7,7 @@
 
 Config *Config::m_instance = 0;
 
-Config::Config():
-    m_ipcBufferSize(1024),
-    m_controllerConnectionTimeout(20)
+Config::Config()
 {
 }
 
@@ -22,12 +20,3 @@ Config *Config::instance()
     return m_instance;
 }
 
-int Config::ipcBufferSize()
-{
-    return m_ipcBufferSize;
-}
-
-int Config::controllerConnectionTimeout()
-{
-    return m_controllerConnectionTimeout;
-}

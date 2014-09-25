@@ -37,8 +37,7 @@ class PulseGateway:
 public:
     PulseGateway(
         const std::string &gatewayDir
-        , const std::string &containerName
-        , ControllerAbstractInterface &controllerInterface);
+        , const std::string &containerName);
     ~PulseGateway();
 
     /*!

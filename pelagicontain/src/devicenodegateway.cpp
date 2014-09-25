@@ -7,8 +7,8 @@
 
 #include "devicenodegateway.h"
 
-DeviceNodeGateway::DeviceNodeGateway(ControllerAbstractInterface &controllerInterface):
-    Gateway(controllerInterface)
+DeviceNodeGateway::DeviceNodeGateway():
+    Gateway()
 {
 }
 
@@ -104,10 +104,10 @@ bool DeviceNodeGateway::activate()
 {
     for(auto& dev : m_devList)
     {
-        auto success = getController().systemCall("mknod " + dev.name + " c " +
+        auto success = systemCall("mknod " + dev.name + " c " +
                                                 dev.major + " " + dev.minor);
         if (!isError(success)) {
-            success = getController().systemCall("chmod " +
+            success = systemCall("chmod " +
                                                     dev.mode + " " + dev.name );
         } else {
             log_error() << "Failed to create device " << dev.name;

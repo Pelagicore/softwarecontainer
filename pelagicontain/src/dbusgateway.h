@@ -8,7 +8,6 @@
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
-#include "controllerinterface.h"
 #include "systemcallinterface.h"
 
 /*! DBus Gateway takes care of spawning and killing the DBus proxies.
@@ -45,8 +44,7 @@ public:
      *
      * \param  type       SessionProxy or SystemProxy
      */
-    DBusGateway(ControllerAbstractInterface &controllerInterface,
-                SystemcallAbstractInterface &systemcallInterface,
+    DBusGateway(SystemcallAbstractInterface &systemcallInterface,
                 ProxyType type,
                 const std::string &gatewayDir,
                 const std::string &name);

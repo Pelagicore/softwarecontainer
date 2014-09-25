@@ -7,7 +7,6 @@
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
-#include "controllerinterface.h"
 #include "systemcallinterface.h"
 
 class WaylandGateway: public Gateway {
@@ -18,9 +17,9 @@ public:
 
 	static constexpr const char* ID = "wayland";
 
-	WaylandGateway(ControllerAbstractInterface &controllerInterface, SystemcallAbstractInterface &systemcallInterface,
+	WaylandGateway(SystemcallAbstractInterface &systemcallInterface,
 			const std::string &gatewayDir, const std::string &name) :
-			Gateway(controllerInterface), m_systemcallInterface(systemcallInterface) {
+			Gateway(), m_systemcallInterface(systemcallInterface) {
 	}
 
 	~WaylandGateway() {
@@ -55,7 +54,7 @@ public:
 			if (dir != nullptr) {
 				std::string d = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
 				std::string path = getContainer().bindMountFileInContainer(d,  SOCKET_FILE_NAME, false);
-				getController().setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
+				setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
 			} else
 				return false;
 		}

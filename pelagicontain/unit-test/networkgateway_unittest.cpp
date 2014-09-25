@@ -10,8 +10,7 @@
 
 using namespace pelagicore;
 
-class MockController:
-    public ControllerAbstractInterface
+class MockController
 {
 public:
 
@@ -96,7 +95,7 @@ protected:
 TEST_F(NetworkGatewayTest, TestSetConfig) {
 
     std::string config = "{\"internet-access\": false, \"gateway\":\"\"}";
-    NetworkGateway gw(controllerInterface, systemCallInterface);
+    NetworkGateway gw(systemCallInterface);
 
     bool success = gw.setConfig(config);
     ASSERT_TRUE(success);
@@ -106,7 +105,7 @@ TEST_F(NetworkGatewayTest, TestSetConfig) {
  */
 TEST_F(NetworkGatewayTest, TestActivate) {
     std::string config = "{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}";
-    NetworkGateway gw(controllerInterface, systemCallInterface);
+    NetworkGateway gw(systemCallInterface);
 
     ASSERT_TRUE(gw.setConfig(config));
 
@@ -129,7 +128,7 @@ TEST_F(NetworkGatewayTest, TestActivate) {
  */
 TEST_F(NetworkGatewayTest, TestActivateTwice) {
     std::string config = "{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}";
-    NetworkGateway gw(controllerInterface, systemCallInterface);
+    NetworkGateway gw(systemCallInterface);
 
     ASSERT_TRUE(gw.setConfig(config));
 
@@ -163,7 +162,7 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
  *  is brought up when there is no config for networking.
  */
 TEST_F(NetworkGatewayTest, TestActivateNoConfig) {
-    NetworkGateway gw(controllerInterface, systemCallInterface);
+    NetworkGateway gw(systemCallInterface);
 
     std::string cmd_1 = "ifconfig eth0 down";
 
@@ -181,7 +180,7 @@ TEST_F(NetworkGatewayTest, TestActivateNoConfig) {
  */
 TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
     std::string config = "{\"internet-access\": \"true\"}";
-    NetworkGateway gw(controllerInterface, systemCallInterface);
+    NetworkGateway gw(systemCallInterface);
 
     ASSERT_TRUE(gw.setConfig(config));
 
@@ -201,7 +200,7 @@ TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
  */
 TEST_F(NetworkGatewayTest, TestActivateNoBridge) {
     std::string config = "{\"internet-access\": \"true\", \"gateway\":\"10.0.3.1\"}";
-    NetworkGateway gw(controllerInterface, systemCallInterface);
+    NetworkGateway gw(systemCallInterface);
 
     ASSERT_TRUE(gw.setConfig(config));
 

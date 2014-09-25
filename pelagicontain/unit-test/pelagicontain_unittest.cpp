@@ -10,38 +10,16 @@
 #include "gateway.h"
 #include "pelagicontain.h"
 #include "pamabstractinterface.h"
-#include "controllerabstractinterface.h"
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
-class StubController:
-    public ControllerInterface
+class StubController
 {
 public:
-	StubController() : ControllerInterface("") {
+	StubController() {
 	}
-
-    virtual bool startApp()
-    {
-        return true;
-    }
-
-    virtual bool shutdown()
-    {
-        return true;
-    }
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable,
                                         const std::string &value)
-    {
-        return ReturnCode::SUCCESS;
-    }
-
-    virtual bool hasBeenStarted() const
-    {
-        return true;
-    }
-
-    virtual ReturnCode initialize()
     {
         return ReturnCode::SUCCESS;
     }
@@ -71,7 +49,7 @@ class MockGateway:
     public Gateway
 {
 public:
-	MockGateway(ControllerAbstractInterface& controller) : Gateway(controller) {
+	MockGateway() : Gateway() {
 	}
     virtual std::string environment()
     {
@@ -105,7 +83,7 @@ TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
     MockPAMAbstractInterface pam;
     Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
     StubController controller;
-    Pelagicontain pc(&controller, cookie);
+    Pelagicontain pc(cookie);
     pc.setPAM(pam);
 
     /* The calls should be made in the specific order as below: */
@@ -134,7 +112,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
     StubController controller;
 
-    MockGateway gw1(controller), gw2(controller), gw3(controller);
+    MockGateway gw1, gw2, gw3;
 
     std::string gw1Id = "1";
     std::string gw2Id = "2";
@@ -157,7 +135,7 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     }
 
     const std::string cookie = "unimportant-cookie";
-    Pelagicontain pc(&controller, cookie);
+    Pelagicontain pc(cookie);
     pc.setPAM(pam);
 
     pc.addGateway(gw1);

@@ -71,8 +71,6 @@ add_coverage()
 
 install(FILES scripts/setup_pelagicontain.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-set(CONTROLLER_PATH "${CMAKE_INSTALL_PREFIX}/bin/controller")
-add_definitions(-DCONTROLLER_PATH="${CONTROLLER_PATH}")
 add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 
 
@@ -91,7 +89,6 @@ configure_file(pelagicontain-config.h.in pelagicontain-config.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pelagicontain)
 
 add_subdirectory(pelagicontain)
-add_subdirectory(controller)
 add_subdirectory(clientLib)
 
 add_subdirectory(doc)

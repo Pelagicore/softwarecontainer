@@ -27,8 +27,8 @@ PelagicontainLib::PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml, const cha
 	containerConfig(configFilePath), containerRoot(containerRootFolder),
 	containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"),
 	container(containerName, containerConfig,
-		  containerRoot), controllerInterface(gatewayDir),
-	pelagicontain(&controllerInterface, m_cookie) {
+		  containerRoot),
+	pelagicontain(m_cookie) {
 	m_ml = ml;
 }
 
@@ -89,37 +89,37 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 	}
 
 #ifdef ENABLE_NETWORKGATEWAY
-	m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway(container, systemcallInterface) ) );
+	m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway(systemcallInterface) ) );
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-	m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway(gatewayDir, containerName, container) ) );
+	m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway(gatewayDir, containerName) ) );
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-	m_gateways.push_back( std::unique_ptr<Gateway>( new DeviceNodeGateway(container) ) );
+	m_gateways.push_back( std::unique_ptr<Gateway>( new DeviceNodeGateway() ) );
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-	m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(container,
+	m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
 									systemcallInterface,
 									DBusGateway::SessionProxy,
 									gatewayDir,
 									containerName) ) );
 
-	m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(container,
+	m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
 									systemcallInterface,
 									DBusGateway::SystemProxy,
 									gatewayDir,
 									containerName) ) );
 #endif
 
-	m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway(container,
+	m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway(
 									systemcallInterface,
 									gatewayDir,
 									containerName) ) );
 
-	m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway(container,
+	m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway(
 									systemcallInterface,
 									gatewayDir,
 									containerName) ) );
@@ -134,9 +134,9 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 		log_error() << "Could not start container, will shut down";
 	} else {
 		log_debug() << "Started container with PID " << pcPid;
+		sleep(3);
 		// setup IPC between Pelagicontain and Controller
-		if ( isError( pelagicontain.establishConnection() ) )
-			return ReturnCode::FAILURE;
+//		if ( isError( pelagicontain.establishConnection() ) ) return ReturnCode::FAILURE;
 	}
 
 	m_initialized = true;

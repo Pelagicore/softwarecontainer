@@ -40,7 +40,7 @@ Container::Container(const std::string &name,
 	int stateCount = lxc_get_wait_states(nullptr);
 	m_LXCContainerStates.resize(stateCount);
 	lxc_get_wait_states(m_LXCContainerStates.data());
-	log_debug() << m_LXCContainerStates;
+//	log_debug() << m_LXCContainerStates;
 	assert((int)LXCContainerStates::ELEMENT_COUNT == m_LXCContainerStates.size());
 }
 
@@ -212,9 +212,8 @@ if (isLXC_C_APIEnabled()) {
 
     // Command to create container
     sprintf(lxcCommand,
-            "CONTROLLER_DIR=%s GATEWAY_DIR=%s MOUNT_DIR=%s lxc-create -n %s -t %s"
+            "GATEWAY_DIR=%s MOUNT_DIR=%s lxc-create -n %s -t %s"
             " -f %s > /tmp/lxc_%s.log",
-            (m_containerRoot + "/bin").c_str(),
             (m_containerRoot + name() + "/gateways/").c_str(),
             m_mountDir.c_str(),
             name(),
@@ -235,8 +234,8 @@ pid_t Container::start()
 	if(isLXC_C_APIEnabled() && false){
 		log_debug() << "Starting container";
 
-		char* argv[] = { CONTROLLER_PATH , nullptr};
-		char* emptyArgv[] = { nullptr};
+		char* argv[] = { "/bin/sleep" , nullptr};
+		char* emptyArgv[] = { "100000000", nullptr};
 		m_container->start(m_container, true, emptyArgv);
 
 		log_debug() << "Container started : " << toString();
@@ -247,7 +246,7 @@ pid_t Container::start()
 
 } else {
     std::vector<std::string> executeCommandVec;
-    std::string lxcCommand = StringBuilder() << "lxc-execute -n " << name() <<  " -- env " << CONTROLLER_PATH;
+    std::string lxcCommand = StringBuilder() << "lxc-execute -n " << name() <<  " -- env " << "/bin/sleep 100000000";
     executeCommandVec = Glib::shell_parse_argv(lxcCommand);
     std::vector<std::string> envVarVec = {"MOUNT_DIR=" + m_mountDir};
 

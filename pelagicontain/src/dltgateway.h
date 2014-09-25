@@ -7,7 +7,6 @@
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
-#include "controllerinterface.h"
 #include "systemcallinterface.h"
 
 class DLTGateway: public Gateway {
@@ -22,9 +21,9 @@ public:
 	static constexpr const char* SOCKET_FILE_NAME = "dlt";
 
 
-	DLTGateway(ControllerAbstractInterface &controllerInterface, SystemcallAbstractInterface &systemcallInterface,
+	DLTGateway(SystemcallAbstractInterface &systemcallInterface,
 			const std::string &gatewayDir, const std::string &name) :
-			Gateway(controllerInterface), m_systemcallInterface(systemcallInterface) {
+			Gateway(), m_systemcallInterface(systemcallInterface) {
 	}
 
 	~DLTGateway() {

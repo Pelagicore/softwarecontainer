@@ -92,7 +92,6 @@ private:
 
 	Glib::RefPtr<Glib::MainContext> m_ml;
 
-	ControllerInterface controllerInterface;
 	SystemcallInterface systemcallInterface;
 	Pelagicontain pelagicontain;
 

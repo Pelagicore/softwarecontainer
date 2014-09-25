@@ -10,11 +10,9 @@
 #include "generators.h"
 
 
-NetworkGateway::NetworkGateway(ControllerAbstractInterface
-                               &controllerInterface,
-                               SystemcallAbstractInterface
+NetworkGateway::NetworkGateway(SystemcallAbstractInterface
                                &systemCallInterface):
-    Gateway(controllerInterface),
+    Gateway(),
     m_ip(""),
     m_gateway(""),
     m_internetAccess(false),
@@ -101,7 +99,7 @@ bool NetworkGateway::generateIP()
 bool NetworkGateway::setDefaultGateway()
 {
     std::string cmd = "route add default gw ";
-    getController().systemCall(cmd + m_gateway);
+    systemCall(cmd + m_gateway);
 
     return true;
 }
@@ -117,7 +115,7 @@ bool NetworkGateway::up()
         cmd = "ifconfig eth0 up";
     }
 
-    getController().systemCall(cmd);
+    systemCall(cmd);
 
     /* The route to the default gateway must be added
        each time the interface is brought up again */
@@ -127,7 +125,7 @@ bool NetworkGateway::up()
 bool NetworkGateway::down()
 {
     std::string cmd = "ifconfig eth0 down";
-    getController().systemCall(cmd);
+    systemCall(cmd);
 
     return true;
 }
