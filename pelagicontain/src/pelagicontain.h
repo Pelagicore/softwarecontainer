@@ -64,7 +64,7 @@ public:
      *
      * \return The PID of the container, '0' on error
      */
-    pid_t preload(Container *container);
+    pid_t preload(Container &container);
 
     /*! Initiates the 'launch' phase.
      *
@@ -114,8 +114,6 @@ public:
     void setContainerEnvironmentVariable(const std::string &var,
                                          const std::string &val);
 
-//    ReturnCode establishConnection();
-
     void shutdownContainer();
 
     ObservableProperty<ContainerState>& getContainerState() {
@@ -126,14 +124,6 @@ private:
     void setGatewayConfigs(const GatewayConfiguration &configs);
     void activateGateways();
     void shutdownGateways();
-
-//    /* Helper function used to terminate the main event loop */
-//    bool killMainLoop() {
-//        if (m_mainloopInterface) {
-//            m_mainloopInterface->leave();
-//        }
-//        return true;
-//    }
 
     /*! Handle shutdown of the controller process inside a container
      *
@@ -146,8 +136,6 @@ private:
      *
      * \param pid pid of the controller as spawned by Pelagicontain::preload()
      * \param exitCode exit code of \a pid
-     *
-     * jkhkh
      *
      */
     void onContainerShutdown(int pid, int exitCode);

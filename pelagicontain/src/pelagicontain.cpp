@@ -27,9 +27,9 @@ void Pelagicontain::addGateway(Gateway& gateway)
 }
 
 // Preload the container. This is a non-blocking operation
-pid_t Pelagicontain::preload(Container *container)
+pid_t Pelagicontain::preload(Container &container)
 {
-    m_container = container;
+    m_container = &container;
 
     for(auto& gateway : m_gateways)
     	gateway->setContainer(*m_container);
@@ -113,7 +113,7 @@ void Pelagicontain::update(const GatewayConfiguration &configs)
 
     activateGateways();
 
-   	launchCommand(APP_BINARY);
+   	launchCommand(APP_BINARY);  // We launch the application with hardcoded immediately for backward compatibility. TODO : remove
 
     m_containerState.setValueNotify(ContainerState::READY);
 

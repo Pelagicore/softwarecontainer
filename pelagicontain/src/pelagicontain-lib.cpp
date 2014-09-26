@@ -127,7 +127,7 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 	for (auto& gateway : m_gateways)
 		pelagicontain.addGateway(*gateway);
 
-	pid_t pcPid = pelagicontain.preload(&container);
+	pid_t pcPid = pelagicontain.preload(container);
 
 	if (!pcPid) {
 		// Fatal failure, only do necessary cleanup

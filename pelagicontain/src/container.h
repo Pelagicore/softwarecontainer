@@ -7,8 +7,8 @@
 
 #include <string>
 #include <vector>
+#include <sys/mount.h>
 
-//#include "gateway.h"
 #include "pelagicontain-common.h"
 
 /*! Container is an abstraction of the specific containment technology used.
@@ -21,6 +21,9 @@
 class Container
 {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
+
+    static constexpr const char* GATEWAYS_PATH = "/gateways";
+    static constexpr const char* LATE_MOUNT_PATH = "/late_mounts";
 
 public:
 
@@ -111,10 +114,26 @@ public:
 
     std::string toString();
 
-    const char *name() const;
+    const char *name() const {
+        return m_name.c_str();
+    }
 
-    std::string containerDir() const {
-    	return m_containerRoot + name();
+    std::string gatewaysDirInContainer() const {
+    	return GATEWAYS_PATH;
+    }
+
+    std::string gatewaysDir() const {
+    	// TODO: see how to put gatewaysDir into the late_mounts to save one mount
+//    	return applicationMountDir() + GATEWAYS_PATH;
+    	return m_containerRoot + "/" + name() + GATEWAYS_PATH;
+    }
+
+    std::string lateMountDir() const {
+    	return m_containerRoot + LATE_MOUNT_PATH;
+    }
+
+    std::string applicationMountDir() const {
+    	return lateMountDir() + "/" + m_name;
     }
 
     const std::string& root() const {
@@ -163,19 +182,75 @@ private:
      */
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
 
-    /*
-     * List of all, by the container, mounted directories. These directories
-     * should be unmounted in the destructor.
-     */
-    std::vector<std::string> m_mounts;
+    class CleanUpHandler {
+    public:
+    	virtual ~CleanUpHandler() {}
+    	virtual ReturnCode clean() = 0;
+    };
 
-    /*
-     * List of all, by the container, created directories. These directories
-     * should be deleted in the destructor.
-     */
-    std::vector<std::string> m_dirs;
+    class DirectoryCleanUpHandler : public CleanUpHandler {
+    public:
+    	DirectoryCleanUpHandler(const std::string& path) {
+    		m_path = path;
+    	}
 
-    std::vector<std::string> m_files;
+    	ReturnCode clean() override {
+    		auto code = ReturnCode::FAILURE;
+
+			if(rmdir(m_path.c_str()) == 0)
+				code = ReturnCode::SUCCESS;
+			else
+				log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
+
+			return code;
+    	}
+
+    	std::string m_path;
+    };
+
+    class FileCleanUpHandler : public CleanUpHandler {
+    public:
+    	FileCleanUpHandler(const std::string& path) {
+    		m_path = path;
+    	}
+
+    	ReturnCode clean() override {
+    		auto code = ReturnCode::FAILURE;
+
+			if(unlink(m_path.c_str()) == 0)
+				code = ReturnCode::SUCCESS;
+			else
+				log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
+
+			return code;
+    	}
+
+    	std::string m_path;
+    };
+
+    class MountCleanUpHandler : public CleanUpHandler {
+    public:
+
+    	MountCleanUpHandler(const std::string& path) {
+    		m_path = path;
+    	}
+
+    	ReturnCode clean() override {
+    		auto code = ReturnCode::FAILURE;
+
+    		if(umount(m_path.c_str()) == 0)
+    			code = ReturnCode::SUCCESS;
+    		else
+    			log_error() << "Can't unmount " << m_path << " . Error :" << strerror(errno);
+
+    		return code;
+    	}
+
+    	std::string m_path;
+    };
+
+
+    std::vector<CleanUpHandler*> m_cleanupHandlers;
 
     /*
      * The LXC configuration file for this container
@@ -190,7 +265,6 @@ private:
     struct lxc_container *m_container = nullptr;
 
     std::string m_containerRoot;
-    std::string m_mountDir;
 
     std::vector<const char*> m_LXCContainerStates;
 

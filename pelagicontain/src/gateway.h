@@ -80,7 +80,7 @@ public:
     }
 
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) {
-    	getContainer().setEnvironmentVariable(variable, value);
+    	return getContainer().setEnvironmentVariable(variable, value);
     }
 
     /*! Notifies the controller to issue the system call
@@ -89,7 +89,7 @@ public:
      * \return True if all went well, false if not
      */
     ReturnCode systemCall(const std::string &cmd) {
-    	getContainer().systemCall(cmd);
+    	return getContainer().systemCall(cmd);
     }
 
 protected:

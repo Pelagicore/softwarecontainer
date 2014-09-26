@@ -57,11 +57,9 @@ mount --make-unbindable $mountdir
 mount --make-shared $mountdir
 
 # Create directory structure
-ROOTFSDIR=$deploydir/
-echo "Setting up environment in $ROOTFSDIR"
-set -x
-mkdir -p $ROOTFSDIR
-mkdir -p $ROOTFSDIR/bin
-set +x
+#ROOTFSDIR=$deploydir/
+#echo "Setting up environment in $ROOTFSDIR"
+#set -x
+#set +x
 
 

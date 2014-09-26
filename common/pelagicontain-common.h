@@ -16,10 +16,6 @@ namespace pelagicontain {
 
 	typedef std::map<std::string, std::string> GatewayConfiguration;
 
-	enum IPCCommand : uint8_t {
-		RUN_APP = '1', KILL_APP = '2', SET_ENV_VAR = '3', SYS_CALL = '4'
-	};
-
 	enum class ReturnCode {
 		FAILURE,
 		SUCCESS
