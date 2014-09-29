@@ -80,7 +80,7 @@ public:
     void setApplicationID(const std::string &appId);
 
 
-    void launchCommand(const std::string &commandLine);
+    pid_t launchCommand(const std::string &commandLine);
 
     /*! Continues the 'launch' phase by allowing gateway configurations to
      *  be set.
@@ -94,6 +94,11 @@ public:
      * \param configs A map of gateway IDs and their respective configurations
      */
     void update(const GatewayConfiguration &configs);
+
+    /**
+     * Set the gateway configuration and activate them
+     */
+    void setGatewayConfigs(const GatewayConfiguration &configs);
 
     /*! Initiates the 'shutdown' phase.
      *
@@ -120,9 +125,11 @@ public:
     	return m_containerState;
     }
 
+    void setMainLoopContext(Glib::RefPtr<Glib::MainContext>& mainLoopContext) {
+    	m_mainLoopContext = &mainLoopContext;
+    }
+
 private:
-    void setGatewayConfigs(const GatewayConfiguration &configs);
-    void activateGateways();
     void shutdownGateways();
 
     /*! Handle shutdown of the controller process inside a container
@@ -140,8 +147,8 @@ private:
      */
     void onContainerShutdown(int pid, int exitCode);
 
-    Container *m_container;
-    PAMAbstractInterface *m_pamInterface;
+    Container *m_container = nullptr;
+    PAMAbstractInterface *m_pamInterface = nullptr;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     const std::string& m_cookie;
@@ -152,6 +159,8 @@ private:
     bool m_launching = false;
 
     SignalConnectionsHandler m_connections;
+
+	Glib::RefPtr<Glib::MainContext>* m_mainLoopContext = nullptr;
 
 };
 

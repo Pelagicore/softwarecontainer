@@ -22,14 +22,14 @@
 #include "waylandgateway.h"
 
 
-PelagicontainLib::PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml, const char* containerRootFolder, const char* configFilePath
+PelagicontainLib::PelagicontainLib(const char* containerRootFolder, const char* configFilePath
 		 ) : containerName(Generator::gen_ct_name()),
 	containerConfig(configFilePath), containerRoot(containerRootFolder),
 	containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"),
 	container(containerName, containerConfig,
 		  containerRoot),
 	pelagicontain(m_cookie) {
-	m_ml = ml;
+	pelagicontain.setMainLoopContext(m_ml);
 }
 
 ReturnCode PelagicontainLib::checkWorkspace() {
@@ -48,13 +48,7 @@ ReturnCode PelagicontainLib::checkWorkspace() {
 	return ReturnCode::SUCCESS;
 }
 
-ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
-
-	if (bRegisterDBusInterface)
-		if (m_cookie.size()==0)
-			m_cookie = containerName;
-
-	DBus::default_dispatcher = &dispatcher;
+ReturnCode PelagicontainLib::preload() {
 
 	// Make sure path ends in '/' since it might not always be checked
 	if (containerRoot.back() != '/') {
@@ -69,24 +63,44 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 		return ReturnCode::FAILURE;
 	}
 
+	m_pcPid = pelagicontain.preload(container);
+
+	if (m_pcPid != 0) {
+		log_debug() << "Started container with PID " << m_pcPid;
+		sleep(1);
+	} else {
+		// Fatal failure, only do necessary cleanup
+		log_error() << "Could not start container, will shut down";
+	}
+
+	return ReturnCode::SUCCESS;
+}
+
+ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
+
+	if (m_ml->gobj() == nullptr) {
+		log_error() << "Main loop context must be set first !";
+		return ReturnCode::FAILURE;
+	}
+
+	if (pelagicontain.getContainerState() != ContainerState::PRELOADED)
+		if (isError(preload()))
+			return ReturnCode::FAILURE;
+
+	if (bRegisterDBusInterface)
+		if (m_cookie.size()==0)
+			m_cookie = containerName;
+
+	DBus::default_dispatcher = &dispatcher;
+
 	m_bus = new DBus::Connection(DBus::Connection::SessionBus());
 	dispatcher.attach(m_ml->gobj());
-
 	pamInterface = std::unique_ptr<PAMInterface>(new PAMInterface(*m_bus));
 
 	if (bRegisterDBusInterface)
 		registerDBusService();
 
 	pelagicontain.setPAM(*pamInterface.get());
-
-	/* If we can't communicate with PAM then there is nothing we can
-	 * do really, better to just exit.
-	 */
-	bool pamRunning = m_bus->has_name("com.pelagicore.PAM");
-	if (!pamRunning) {
-		log_error() << "PAM not running, exiting";
-		return ReturnCode::FAILURE;
-	}
 
 #ifdef ENABLE_NETWORKGATEWAY
 	m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway(systemcallInterface) ) );
@@ -114,29 +128,30 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 									containerName) ) );
 #endif
 
-	m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway(
-									systemcallInterface,
-									gatewayDir,
-									containerName) ) );
+	m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );
 
-	m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway(
-									systemcallInterface,
-									gatewayDir,
-									containerName) ) );
+	m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
 
 	for (auto& gateway : m_gateways)
 		pelagicontain.addGateway(*gateway);
 
-	pid_t pcPid = pelagicontain.preload(container);
+    // The pid might not valid if there was an error spawning. We should only
+    // connect the watcher if the spawning went well.
+    if (m_pcPid != 0) {
+    	addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
+    		pelagicontain.shutdownContainer();
+    	}, m_ml);
+    }
 
-	if (!pcPid) {
-		// Fatal failure, only do necessary cleanup
-		log_error() << "Could not start container, will shut down";
-	} else {
-		log_debug() << "Started container with PID " << pcPid;
-		sleep(3);
-		// setup IPC between Pelagicontain and Controller
-//		if ( isError( pelagicontain.establishConnection() ) ) return ReturnCode::FAILURE;
+	if (bRegisterDBusInterface) {
+		/* If we can't communicate with PAM then there is nothing we can
+		 * do really, better to just exit.
+		 */
+		bool pamRunning = m_bus->has_name("com.pelagicore.PAM");
+		if (!pamRunning) {
+			log_error() << "PAM not running, exiting";
+			return ReturnCode::FAILURE;
+		}
 	}
 
 	m_initialized = true;

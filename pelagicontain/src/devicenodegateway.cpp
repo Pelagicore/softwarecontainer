@@ -12,49 +12,25 @@ DeviceNodeGateway::DeviceNodeGateway():
 {
 }
 
-std::string DeviceNodeGateway::id()
-{
-    return "devicenode";
-}
-
 bool DeviceNodeGateway::setConfig(const std::string &config)
 {
-    json_error_t error;
-    json_t       *root = NULL, *devices = NULL;
+	JSonParser parser(config);
+
     bool success = true;
-    std::vector<struct Device> newDevList;
 
-    log_debug("DeviceNodeGateway::setConfig called");
-
-    /* Get root JSON object */
-    root = json_loads(config.c_str(), 0, &error);
-
-    if (!root) {
-        log_error("Error on line %d: %s", error.line, error.text);
-        success = false;
-        goto cleanup_setConfig;
-    }
+    log_debug() << "DeviceNodeGateway::setConfig called";
 
     // Get string
-    devices = json_object_get(root, "devices");
+    json_t* devices = json_object_get(parser.root(), "devices");
 
     if (!json_is_array(devices)) {
-        log_error("Value is not an array.");
-        log_error("error: on line %d: %s", error.line, error.text);
+        log_error() << "Value is not an array";
         success = false;
-        goto cleanup_setConfig;
+    } else {
+		std::vector<Device> newDevList = parseDeviceList(devices, success);
+		if (success)
+			m_devList = newDevList;
     }
-
-    newDevList = parseDeviceList(devices, success);
-    if (success) {
-        m_devList = newDevList;
-    }
-
-cleanup_setConfig:
-
-    // Also frees 'devices'
-    if (root)
-        json_decref(root);
 
     return success;
 }
@@ -62,9 +38,9 @@ cleanup_setConfig:
 std::vector<DeviceNodeGateway::Device>
 DeviceNodeGateway::parseDeviceList(json_t *list, bool &ok) {
     ok = true;
-    std::vector<struct DeviceNodeGateway::Device> dev_list;
+    std::vector<DeviceNodeGateway::Device> dev_list;
     for (size_t i = 0; i < json_array_size(list); i++) {
-        struct DeviceNodeGateway::Device dev;
+        DeviceNodeGateway::Device dev;
         std::string* fields[] = {&dev.name, &dev.major, &dev.minor, &dev.mode};
         const char* fieldsStr[] = {"name", "major", "minor", "mode"};
         uint numFields = 4;
@@ -104,15 +80,20 @@ bool DeviceNodeGateway::activate()
 {
     for(auto& dev : m_devList)
     {
-        auto success = systemCall("mknod " + dev.name + " c " +
-                                                dev.major + " " + dev.minor);
-        if (!isError(success)) {
-            success = systemCall("chmod " +
-                                                    dev.mode + " " + dev.name );
-        } else {
-            log_error() << "Failed to create device " << dev.name;
-            return false;
-        }
+    	if (dev.major.length() != 0)
+    	{
+			auto success = systemCall("mknod " + dev.name + " c " + dev.major + " " + dev.minor);
+			if (!isError(success)) {
+				success = systemCall("chmod " + dev.mode + " " + dev.name );
+			} else {
+				log_error() << "Failed to create device " << dev.name;
+				return false;
+			}
+		}
+    	else {
+    		// No major & minor numbers specified => simply map the device from the host into the container
+    		getContainer().mountDevice(dev.name);
+    	}
     }
 
     return true;

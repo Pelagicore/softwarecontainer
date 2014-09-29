@@ -17,9 +17,7 @@ public:
 
 	static constexpr const char* ID = "wayland";
 
-	WaylandGateway(SystemcallAbstractInterface &systemcallInterface,
-			const std::string &gatewayDir, const std::string &name) :
-			Gateway(), m_systemcallInterface(systemcallInterface) {
+	WaylandGateway() {
 	}
 
 	~WaylandGateway() {
@@ -34,29 +32,23 @@ public:
 
 	bool setConfig(const std::string &config) override {
 		JSonParser parser(config);
-		std::vector < std::string > devices;
-		parser.readStringArray("devices", devices);
-
-		for(auto& device : devices) {
-			auto r = getContainer().mountDevice(device);
-			if (isSuccess(r))
-				log_error() << "Could not mount device " << device;
-			m_enabled = true;
-		}
-
+		m_enabled = false;
+		parser.readBoolean("enabled", m_enabled);
 		return true;
 	}
 
 	bool activate() override {
 		if (m_enabled) {
-			log_info() << "enabling Wayland gateway";
 			const char* dir = getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME);
 			if (dir != nullptr) {
+				log_info() << "enabling Wayland gateway. Socket dir:" << dir;
 				std::string d = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
 				std::string path = getContainer().bindMountFileInContainer(d,  SOCKET_FILE_NAME, false);
 				setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
-			} else
+			} else {
+				log_error() << "Should enable wayland gateway, but " << WAYLAND_RUNTIME_DIR_VARIABLE_NAME << " is not defined";
 				return false;
+			}
 		}
 
 		return true;
@@ -68,7 +60,6 @@ public:
 
 private:
 
-	SystemcallAbstractInterface &m_systemcallInterface;
 	bool m_enabled = false;
 };
 

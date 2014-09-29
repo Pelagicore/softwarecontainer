@@ -20,14 +20,19 @@ class PelagicontainLib {
 	LOG_DECLARE_CLASS_CONTEXT("PC", "Pelagicontain library");
 
 public:
-	PelagicontainLib(Glib::RefPtr<Glib::MainContext> ml,
-			const char* containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
-//			, const char* cookie = "1"
+	PelagicontainLib(const char* containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
 			 , const char* configFilePath = PELAGICONTAIN_DEFAULT_CONFIG
-			 );
+	);
 
 	~PelagicontainLib() {
 	}
+
+	/**
+	 * Set the main loop
+	 */
+    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext) {
+    	m_ml = mainLoopContext;
+    }
 
 	void shutdown() {
 		pelagicontain.shutdown();
@@ -44,6 +49,12 @@ public:
 	bool isInitialized() {
 		return m_initialized;
 	}
+
+	/**
+	 * Preload the container.
+	 * That method can be called before setting the main loop context
+	 */
+	ReturnCode preload();
 
 	ReturnCode init(bool bRegisterDBusInterface = false);
 
@@ -104,6 +115,10 @@ private:
 	std::unique_ptr<PAMInterface> pamInterface;
 
 	bool m_initialized = false;
+
+	SignalConnectionsHandler m_connections;
+
+	pid_t m_pcPid = 0;
 
 };
 

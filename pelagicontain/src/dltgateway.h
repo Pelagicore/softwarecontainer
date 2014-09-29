@@ -20,10 +20,7 @@ public:
 	static constexpr const char* DLT_SOCKET_FOLDER = "/tmp/";
 	static constexpr const char* SOCKET_FILE_NAME = "dlt";
 
-
-	DLTGateway(SystemcallAbstractInterface &systemcallInterface,
-			const std::string &gatewayDir, const std::string &name) :
-			Gateway(), m_systemcallInterface(systemcallInterface) {
+	DLTGateway() {
 	}
 
 	~DLTGateway() {
@@ -61,7 +58,6 @@ public:
 
 private:
 
-	SystemcallAbstractInterface &m_systemcallInterface;
 	bool m_enabled = false;
 };
 

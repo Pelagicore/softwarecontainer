@@ -14,13 +14,24 @@
 #include "waylandgateway.h"
 
 
-
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
-struct PelagicontainApp {
+class PelagicontainApp : public ::testing::Test {
 
-	PelagicontainApp() : lib(m_context) {
-		lib.init();
+public:
+
+	PelagicontainApp() {
+	}
+
+	void SetUp() override {
+		::testing::Test::SetUp();
+		lib = std::unique_ptr < PelagicontainLib > (new PelagicontainLib());
+		lib->setMainLoopContext(m_context);
+		ASSERT_TRUE(isSuccess(lib->init()));
+	}
+
+	void TearDown() override {
+		::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
 	}
 
 	void run() {
@@ -37,13 +48,63 @@ struct PelagicontainApp {
 	}
 
 	void openTerminal() {
-		lib.getContainer().openTerminal("konsole -e");
+		lib->getContainer().openTerminal("konsole -e");
+	}
+
+	PelagicontainLib& getLib() {
+		return *lib;
 	}
 
 	Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
 	Glib::RefPtr<Glib::MainLoop> m_ml;
-	PelagicontainLib lib;
+	std::unique_ptr<PelagicontainLib> lib;
 };
+
+
+
+TEST_F(PelagicontainApp, TestWayland) {
+
+		GatewayConfiguration config;
+		config[WaylandGateway::ID] = "{ \"enabled\" : true }";
+
+		getLib().getPelagicontain().setGatewayConfigs(config);
+
+//		openTerminal();
+//		sleep(10000);
+
+		FunctionJob jobTrue(getLib(), [] () {
+
+			bool ERROR = 1;
+			bool SUCCESS = 0;
+
+			const char* waylandDir = getenv("XDG_RUNTIME_DIR");
+
+			log_debug() << "Wayland dir : " << waylandDir;
+
+			if (waylandDir == nullptr)
+				return ERROR;
+
+			std::string socketPath = StringBuilder() << waylandDir << "/" << WaylandGateway::SOCKET_FILE_NAME;
+
+			log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
+
+			if (!isSocket(socketPath))
+				return ERROR;
+
+			return SUCCESS;
+
+		});
+		jobTrue.start();
+
+		ASSERT_TRUE(jobTrue.wait() == 0);
+
+//		CommandJob westonJob(lib,
+//				"/usr/bin/weston-terminal");
+//		westonJob.start();
+//
+//		ASSERT_TRUE(westonJob.wait() == 0);
+
+}
 
 
 
@@ -51,7 +112,8 @@ TEST(PelagicontainLib, MultithreadTest) {
 
 	static const int TIMEOUT = 20;
 
-	PelagicontainLib lib(Glib::MainContext::get_default());
+	PelagicontainLib lib;
+	lib.setMainLoopContext(Glib::MainContext::get_default());
 
 	bool finished = false;
 
@@ -76,61 +138,10 @@ TEST(PelagicontainLib, MultithreadTest) {
 }
 
 
-TEST(PelagicontainLib, TestWayland) {
-	PelagicontainApp app;
-	PelagicontainLib& lib = app.lib;
-
-	{
-		GatewayConfiguration config;
-		config[WaylandGateway::ID] = "{}";
-
-		lib.getPelagicontain().update(config);
-
-//		app.openTerminal();
-//		sleep(10000);
-
-		FunctionJob jobTrue(lib, [] () {
-
-			bool ERROR = 1;
-			bool SUCCESS = 0;
-
-			const char* waylandDir = getenv("XDG_RUNTIME_DIR");
-
-			log_debug() << "Wayland dir : " << waylandDir;
-
-			if (waylandDir == nullptr)
-				return ERROR;
-
-			std::string socketPath = waylandDir;
-			socketPath += "/wayland-0";
-
-			log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
-
-			if (!isSocket(socketPath))
-				return ERROR;
-
-			return SUCCESS;
-
-		});
-		jobTrue.start();
-
-		ASSERT_TRUE(jobTrue.wait() == 0);
-
-//		CommandJob westonJob(lib,
-//				"/usr/bin/weston-terminal");
-//		westonJob.start();
-//
-//		ASSERT_TRUE(westonJob.wait() == 0);
-	}
-
-}
 
 
-
-TEST(PelagicontainLib, TestStdin) {
-	PelagicontainApp app;
-	PelagicontainLib& lib = app.lib;
-	CommandJob job(lib, "/bin/cat");
+TEST_F(PelagicontainApp, TestStdin) {
+	CommandJob job(getLib(), "/bin/cat");
 	job.captureStdin();
 	job.captureStdout();
 	job.start();
@@ -149,19 +160,17 @@ TEST(PelagicontainLib, TestStdin) {
 	addProcessListener(connections, job.pid(), [&] (
 			int pid, int exitCode) {
 		log_debug() << "finished process :" << job.toString();
-		app.exit();
-	}, app.getMainContext());
+		exit();
+	}, getMainContext());
 
 	kill(job.pid(), SIGTERM);
 
-	app.run();
+	run();
 }
 
 
-TEST(PelagicontainLib, TestNetworkInternetCapability) {
-	PelagicontainApp app;
-	PelagicontainLib& lib = app.lib;
-	CommandJob job(lib, "/bin/ping www.google.com -c 5");
+TEST_F(PelagicontainApp, TestNetworkInternetCapability) {
+	CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
 	job.start();
 
 	ASSERT_TRUE(job.isRunning());
@@ -172,10 +181,10 @@ TEST(PelagicontainLib, TestNetworkInternetCapability) {
 	addProcessListener(connections, job.pid(), [&] (
 			int pid, int exitCode) {
 		bNetworkAccessSucceeded = (exitCode == 0);
-		app.exit();
-	}, app.getMainContext());
+		exit();
+	}, getMainContext());
 
-	app.run();
+	run();
 
 	ASSERT_FALSE(bNetworkAccessSucceeded);
 }
@@ -190,17 +199,15 @@ TEST(PelagicontainLib, TestNetworkInternetCapability) {
 //}
 
 
-TEST(PelagicontainLib, TestJobReturnCode) {
-	PelagicontainApp app;
-	PelagicontainLib& lib = app.lib;
+TEST_F(PelagicontainApp, TestJobReturnCode) {
 
-	CommandJob jobTrue(lib, "/bin/true");
+	CommandJob jobTrue(getLib(), "/bin/true");
 	jobTrue.start();
 	ASSERT_TRUE(jobTrue.wait() == 0);
 
-	CommandJob jobFalse(lib, "/bin/false");
+	CommandJob jobFalse(getLib(), "/bin/false");
 	jobFalse.start();
-	ASSERT_FALSE(jobTrue.wait() == 0);
+	ASSERT_FALSE(jobFalse.wait() == 0);
 
 //	addProcessListener(jobFalse.pid(), [&] (
 //			int pid, int exitCode) {
@@ -210,12 +217,9 @@ TEST(PelagicontainLib, TestJobReturnCode) {
 //
 //	app.run();
 
-	ASSERT_TRUE(jobFalse.wait() != 0);
 }
 
-TEST(PelagicontainLib, TestDBusGatewayWithAccess) {
-	PelagicontainApp app;
-	PelagicontainLib& lib = app.lib;
+TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
 
 	{
 		GatewayConfiguration config;
@@ -223,9 +227,9 @@ TEST(PelagicontainLib, TestDBusGatewayWithAccess) {
 				"\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
 				"\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}";
 
-		lib.getPelagicontain().update(config);
+		getLib().getPelagicontain().setGatewayConfigs(config);
 
-		CommandJob jobTrue(lib,
+		CommandJob jobTrue(getLib(),
 				"/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
 		jobTrue.start();
 
@@ -233,7 +237,7 @@ TEST(PelagicontainLib, TestDBusGatewayWithAccess) {
 	}
 
 	{
-		CommandJob jobTrue(lib,
+		CommandJob jobTrue(getLib(),
 				"/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
 		jobTrue.start();
 
@@ -245,12 +249,10 @@ TEST(PelagicontainLib, TestDBusGatewayWithAccess) {
 
 
 
-TEST(PelagicontainLib, TestDBusGatewayWithoutAccess) {
-	PelagicontainApp app;
-	PelagicontainLib& lib = app.lib;
+TEST_F(PelagicontainApp, TestDBusGatewayWithoutAccess) {
 
 	{
-		CommandJob jobTrue(lib,
+		CommandJob jobTrue(getLib(),
 				"/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
 		jobTrue.start();
 
@@ -258,7 +260,7 @@ TEST(PelagicontainLib, TestDBusGatewayWithoutAccess) {
 	}
 
 	{
-		CommandJob jobTrue(lib,
+		CommandJob jobTrue(getLib(),
 				"/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
 		jobTrue.start();
 
@@ -269,8 +271,7 @@ TEST(PelagicontainLib, TestDBusGatewayWithoutAccess) {
 }
 
 
-TEST(PelagicontainLib, InitTest) {
-	PelagicontainApp app;
-    ASSERT_TRUE(app.lib.isInitialized());
+TEST_F(PelagicontainApp, InitTest) {
+    ASSERT_TRUE(getLib().isInitialized());
 }
 

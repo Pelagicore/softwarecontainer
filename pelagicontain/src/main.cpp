@@ -156,7 +156,8 @@ int main(int argc, char **argv)
 
     dispatcher.attach(mainContext->gobj());
 
-    pelagicontain::PelagicontainLib lib(mainContext, containerRoot.c_str(), configFilePath);
+    pelagicontain::PelagicontainLib lib(containerRoot.c_str(), configFilePath);
+    lib.setMainLoopContext(mainContext);
     lib.setCookie(cookie);
 
 #ifdef ENABLE_NETWORKGATEWAY

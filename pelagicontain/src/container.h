@@ -112,6 +112,10 @@ public:
      */
     ReturnCode initialize();
 
+    bool isInitialized() {
+    	return m_initialized;
+    }
+
     std::string toString();
 
     const char *name() const {
@@ -270,6 +274,7 @@ private:
 
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
+    bool m_initialized = false;
 };
 
 #endif //CONTAINER_H

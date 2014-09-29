@@ -39,7 +39,6 @@ Container::Container(const std::string &name,
 	int stateCount = lxc_get_wait_states(nullptr);
 	m_LXCContainerStates.resize(stateCount);
 	lxc_get_wait_states(m_LXCContainerStates.data());
-//	log_debug() << m_LXCContainerStates;
 	assert((int)LXCContainerStates::ELEMENT_COUNT == m_LXCContainerStates.size());
 }
 
@@ -73,6 +72,8 @@ ReturnCode Container::initialize()
 	mountRes = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_SHARED, NULL);
 	assert(mountRes==0);
     m_cleanupHandlers.push_back(new MountCleanUpHandler(gatewayDir));
+
+    m_initialized = allOk;
 
     return allOk ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
@@ -250,7 +251,12 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 	log_debug() << "Env variables : " << strings;
 
 	pid_t attached_process_pid = 0;
+
+//	while(attached_process_pid == 0) {
 	m_container->attach(m_container, &Container::executeInContainerEntryFunction, &function, &options, &attached_process_pid);
+//		log_debug() << "Waiting";
+//		usleep(10 * 1000);	}
+
 	log_info() << " Attached PID: " << attached_process_pid;
 
 	assert(attached_process_pid != 0);
@@ -274,8 +280,7 @@ pid_t Container::attach(const std::string& commandLine, const EnvironmentVariabl
 
 	args[executeCommandVec.size()] = nullptr;
 
-	for(size_t i=0; i <= executeCommandVec.size(); i++)
-		log_debug() << args[i];
+//	for(size_t i=0; i <= executeCommandVec.size(); i++)	log_debug() << args[i];
 
 	return executeInContainer([&] () {
 

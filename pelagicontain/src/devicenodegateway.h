@@ -30,6 +30,9 @@
  * \code{.js}
  *  {"devices": [
  *                    {
+ *                        "name":  "/dev/dri/card0"
+ *                    },
+ *                    {
  *                        "name":  "tty0",
  *                        "major": "4",
  *                        "minor": "0",
@@ -74,7 +77,10 @@ public:
     /*!
      *  Implements Gateway::id
      */
-    virtual std::string id();
+    virtual std::string id()
+    {
+        return "devicenode";
+    }
 
     /*!
      *  Implements Gateway::setConfig

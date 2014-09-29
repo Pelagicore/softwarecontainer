@@ -66,7 +66,9 @@ private:
 
 	};
 
-	inline void addProcessListener(SignalConnectionsHandler& connections, pid_t pid, std::function<void(pid_t, int)> function, Glib::RefPtr<Glib::MainContext> context = Glib::MainContext::get_default()) {
+	inline void addProcessListener(SignalConnectionsHandler& connections, pid_t pid, std::function<void(pid_t, int)> function
+			, Glib::RefPtr<Glib::MainContext> context // = Glib::MainContext::get_default()
+	) {
 		auto connection = context->signal_child_watch().connect(function, pid);
 		connections.newConnection() = connection;
 	}

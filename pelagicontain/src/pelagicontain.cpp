@@ -10,9 +10,7 @@
 #include "container.h"
 #include "pelagicontain.h"
 
-Pelagicontain::Pelagicontain(const std::string &cookie):
-    m_container(nullptr),
-    m_cookie(cookie)
+Pelagicontain::Pelagicontain(const std::string &cookie) : m_cookie(cookie)
 {
 	m_containerState = ContainerState::CREATED;
 }
@@ -23,6 +21,7 @@ Pelagicontain::~Pelagicontain()
 
 void Pelagicontain::addGateway(Gateway& gateway)
 {
+   	gateway.setContainer(*m_container);
     m_gateways.push_back(&gateway);
 }
 
@@ -31,18 +30,11 @@ pid_t Pelagicontain::preload(Container &container)
 {
     m_container = &container;
 
-    for(auto& gateway : m_gateways)
-    	gateway->setContainer(*m_container);
-
     m_container->create();
 
     pid_t pid = m_container->start();
 
-    // The pid might not valid if there was an error spawning. We should only
-    // connect the watcher if the spawning went well.
-    if (pid) {
-    	addProcessListener(m_connections, pid, sigc::mem_fun(this, &Pelagicontain::onContainerShutdown));
-    }
+    m_containerState.setValueNotify(ContainerState::PRELOADED);
 
     return pid;
 }
@@ -93,30 +85,26 @@ void Pelagicontain::launch(const std::string &appId)
     setApplicationID(appId);
 }
 
-void Pelagicontain::launchCommand(const std::string &commandLine)
+pid_t Pelagicontain::launchCommand(const std::string &commandLine)
 {
     log_debug() << "launchCommand called with commandLine: " << commandLine;
     pid_t pid = m_container->attach(commandLine);
 
+    assert(m_mainLoopContext != nullptr);
     addProcessListener(m_connections, pid, [&](pid_t pid, int returnCode) {
     	shutdown();
-    });
+    }, *m_mainLoopContext);
+
+    return pid;
 }
 
 void Pelagicontain::update(const GatewayConfiguration &configs)
 {
     log_debug() << "update called" << configs;
-
     setGatewayConfigs(configs);
-
     m_pamInterface->updateFinished(m_cookie);
-
-    activateGateways();
-
-   	launchCommand(APP_BINARY);  // We launch the application with hardcoded immediately for backward compatibility. TODO : remove
-
-    m_containerState.setValueNotify(ContainerState::READY);
-
+    if (m_launching)
+    	launchCommand(APP_BINARY);  // We launch the application with hardcoded immediately for backward compatibility. TODO : remove
 }
 
 void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
@@ -132,13 +120,14 @@ void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
             gateway->setConfig(config);
         }
     }
-}
 
-void Pelagicontain::activateGateways()
-{
+    m_containerState.setValueNotify(ContainerState::READY);
+
     for (auto& gateway : m_gateways)
         gateway->activate();
+
 }
+
 
 void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val)
 {
@@ -154,11 +143,8 @@ void Pelagicontain::shutdown()
 void Pelagicontain::shutdownGateways()
 {
     for (auto& gateway : m_gateways)
-    {
-        if (!gateway->teardown()) {
+        if (!gateway->teardown())
             log_warning() << "Could not tear down gateway cleanly";
-        }
-    }
 
     m_gateways.clear();
 }
