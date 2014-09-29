@@ -46,7 +46,7 @@ bool PulseGateway::teardown()
         pa_threaded_mainloop_stop(m_mainloop);
         pa_threaded_mainloop_free(m_mainloop);
     }
-    log_debug("pulse: Teardown complete");
+    log_debug() << "pulse: Teardown complete";
 
     return true;
 }
@@ -58,29 +58,22 @@ std::string PulseGateway::id()
 
 bool PulseGateway::setConfig(const std::string &config)
 {
+	JSonParser parser(config);
+
+    std::string value;
+    parser.readString("audio", value);
+    m_enableAudio = (value == "true");
+
     bool success = true;
-    ConfigError err = ConfigError::Ok;
-
-    /* Check the value of the audio key of the config */
-    std::string value = parseConfig(config, "audio", &err);
-
-    if (value == "true") {
-        log_debug("Audio will be enabled");
-        m_enableAudio = true;
-    } else {
-        log_debug("Audio will be disabled");
-        if (err == ConfigError::BadConfig) {
-            log_error("Malformed configuration file");
-            success = false;
-        }
-        m_enableAudio = false;
-    }
 
     if (m_enableAudio) {
+        log_debug() << "Audio will be enabled";
         std::string var = "PULSE_SERVER";
-        std::string val = "/gateways/" + socketName();
+        std::string val = getContainer().gatewaysDirInContainer() + "/" + socketName();
         success = isSuccess(setEnvironmentVariable(var, val));
     }
+    else
+        log_debug() << "Audio will be disabled";
 
     return success;
 }
@@ -121,14 +114,14 @@ bool PulseGateway::connectToPulseServer()
             log_error("pulse: Error code %d (%s)", err, pa_strerror(err));
 
             if (err == -1) {
-                log_debug("Is the home directory set?");
+                log_debug() << "Is the home directory set?";
             }
         }
 
         pa_threaded_mainloop_unlock(m_mainloop);
     } else {
         success = false;
-        log_error("Failed to create pulse mainloop->");
+        log_error() << "Failed to create pulse mainloop";
     }
 
     return success;
@@ -150,7 +143,7 @@ void PulseGateway::loadCallback(pa_context *context, uint32_t index, void *userd
         log_error("pulse: Error code %d (%s)", error, pa_strerror(error));
     }
 
-    log_debug("pulse: Loaded module %d", p->m_index);
+    log_debug() << "pulse: Loaded module " << p->m_index;
 
     pa_threaded_mainloop_signal(p->m_mainloop, 0);
 }
@@ -175,7 +168,7 @@ void PulseGateway::stateCallback(pa_context *context, void *userdata)
 
     switch (pa_context_get_state(context)) {
     case PA_CONTEXT_READY:
-        log_debug("Connection is up, loading module");
+        log_debug() << "Connection is up, loading module";
         snprintf(socket, sizeof(socket), "socket=%s", p->m_socket.c_str());
         pa_context_load_module(
             context,
@@ -203,50 +196,4 @@ void PulseGateway::stateCallback(pa_context *context, void *userdata)
         log_debug("pulse: Terminated");
         break;
     }
-}
-
-std::string PulseGateway::parseConfig(
-    const std::string &config
-    , const std::string &key
-    , ConfigError *err)
-{
-    json_error_t  error;
-    json_t       *root, *value;
-    std::string ret = "";
-
-    /* Get root JSON object */
-    root = json_loads(config.c_str(), 0, &error);
-
-    if (!root) {
-        log_error("Error on line %d: %s", error.line, error.text);
-        *err = ConfigError::BadConfig;
-        goto cleanup_parse_json;
-    }
-
-    // Get string
-    value = json_object_get(root, key.c_str());
-
-    if (error.text == NULL) {
-        *err = ConfigError::BadConfig;
-        goto cleanup_parse_json;
-    }
-
-    if (!json_is_string(value)) {
-        log_error("Value is not a string.");
-        log_error("error: on line %d: %s", error.line, error.text);
-        *err = ConfigError::BadConfig;
-        json_decref(value);
-        goto cleanup_parse_json;
-    }
-
-    ret = std::string(json_string_value(value));
-
-    goto cleanup_parse_json;
-
-cleanup_parse_json:
-    if (root) {
-        json_decref(root);
-    }
-
-    return ret;
 }

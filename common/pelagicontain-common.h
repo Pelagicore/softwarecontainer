@@ -204,6 +204,10 @@ private:
 		return m_root;
 	}
 
+	bool isValid() {
+		return (m_root != nullptr);
+	}
+
 	private:
 
 		void parseConfig(const std::string &config) {

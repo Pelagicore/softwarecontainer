@@ -113,20 +113,6 @@ private:
      */
     static void stateCallback(pa_context *c, void *userdata);
 
-    /*! Parse the JSON configuration passed down from Platform Access Manager
-     *
-     * Parses the configuration and looks up the value for the key passed as argument.
-     *
-     * \param config The JSON string containing the configuration
-     * \param key The key to look up.
-     * \return std::string  Value belonging to key
-     * \return Empty string  Upon failure
-     */
-    std::string parseConfig(
-        const std::string &config
-        , const std::string &key
-        , ConfigError *err = 0);
-
     /*! Returns the name of the socket, i.e. the filename part of the path
      *  to the socket.
      *
