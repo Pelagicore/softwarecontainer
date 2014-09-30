@@ -44,10 +44,10 @@ link_directories(
 find_program(DBUSBINDINGTOOL "dbusxx-xml2cpp")
 macro(generate_dbus_hfile type xml h)
     add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${h}
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${h}
         COMMAND dbusxx-xml2cpp ${SHARED_SERVICE_INTERFACES_PATH}/${xml} --${type}=${h}
         DEPENDS ${SHARED_SERVICE_INTERFACES_PATH}/${xml}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
 endmacro(generate_dbus_hfile type xml h)
 
@@ -64,6 +64,7 @@ add_library(pelagicontainLib SHARED
     configparser.cpp
     container.cpp
     generators.cpp
+    gateway.cpp
     pelagicontain.cpp
     paminterface.cpp
     pamproxy.h
@@ -71,6 +72,7 @@ add_library(pelagicontainLib SHARED
     systemcallinterface.cpp
     pelagicontain-lib.cpp
     dltgateway.cpp
+    filegateway.cpp
     waylandgateway.cpp
     ${PROJECT_SOURCE_DIR}/common/config.cpp
     ${PROJECT_SOURCE_DIR}/common/common.cpp

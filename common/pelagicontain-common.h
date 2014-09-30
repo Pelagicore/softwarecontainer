@@ -151,13 +151,54 @@ private:
 				parseConfig("{}");
 		}
 
+		JSonParser(json_t* element) {
+			m_root = element;
+			json_incref(m_root);
+		}
+
 		~JSonParser() {
 		    if (m_root) {
 		        json_decref(m_root);
 		    }
 		}
 
+		bool isArray() {
+			return json_is_array(m_root);
+		}
+
+		void read(const std::string& field, std::vector<JSonParser>& elements) {
+			json_t* value = json_object_get(m_root, field.c_str());
+			if (value != nullptr) {
+
+				if (json_is_array (value)) {
+					for (size_t i = 0; i < json_array_size(value); i++) {
+						json_t *arrayElement = json_array_get(value, i);
+						elements.push_back(JSonParser(arrayElement));
+					}
+				} else
+					log_error() << "Value is not an array";
+			}
+		}
+
+		size_t elementCount() {
+			return json_array_size(m_root);
+		}
+
+		JSonParser arrayElementAt(size_t index) {
+			if (json_is_array(m_root)) {
+				json_t *arrayElement = json_array_get(m_root, index);
+				return JSonParser(arrayElement);
+			} else
+				log_error() << "Value is not an array";
+
+			return JSonParser("");
+		}
+
 		void readString(const std::string& field, std::string& v) {
+			read(field, v);
+		}
+
+		void read(const std::string& field, std::string& v) {
 			json_t* value = json_object_get(m_root, field.c_str());
 			if (value != nullptr) {
 				if (json_is_string(value)) {
@@ -170,6 +211,10 @@ private:
 		}
 
 		void readBoolean(const std::string& field, bool& v) {
+			return read(field,v);
+		}
+
+		void read(const std::string& field, bool& v) {
 			json_t* value = json_object_get(m_root, field.c_str());
 			if (value != nullptr) {
 				if (json_is_boolean(value)) {

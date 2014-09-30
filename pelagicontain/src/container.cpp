@@ -19,6 +19,67 @@
     #error Must define LXCTEMPLATE as path to lxc-pelagicontain
 #endif
 
+class DirectoryCleanUpHandler : public Container::CleanUpHandler {
+public:
+	DirectoryCleanUpHandler(const std::string& path) {
+		m_path = path;
+	}
+
+	ReturnCode clean() override {
+		auto code = ReturnCode::FAILURE;
+
+		if(rmdir(m_path.c_str()) == 0)
+			code = ReturnCode::SUCCESS;
+		else
+			log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
+
+		return code;
+	}
+
+	std::string m_path;
+};
+
+class FileCleanUpHandler : public Container::CleanUpHandler {
+public:
+	FileCleanUpHandler(const std::string& path) {
+		m_path = path;
+	}
+
+	ReturnCode clean() override {
+		auto code = ReturnCode::FAILURE;
+
+		if(unlink(m_path.c_str()) == 0)
+			code = ReturnCode::SUCCESS;
+		else
+			log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
+
+		return code;
+	}
+
+	std::string m_path;
+};
+
+class MountCleanUpHandler : public Container::CleanUpHandler {
+public:
+
+	MountCleanUpHandler(const std::string& path) {
+		m_path = path;
+	}
+
+	ReturnCode clean() override {
+		auto code = ReturnCode::FAILURE;
+
+		if(umount(m_path.c_str()) == 0)
+			code = ReturnCode::SUCCESS;
+		else
+			log_error() << "Can't unmount " << m_path << " . Error :" << strerror(errno);
+
+		return code;
+	}
+
+	std::string m_path;
+};
+
 /* A directory need to exist and be set up in a special way.
  *
  * Basically something like:
@@ -399,4 +460,24 @@ ReturnCode Container::mountDevice(const std::string& pathInHost) {
 	log_warning() << "Mounting device in container : " << pathInHost;
 	auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
 	return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+}
+
+
+ReturnCode Container::systemCall(const std::string &cmd) {
+
+	pid_t pid = executeInContainer([this, cmd=cmd]() {
+		log_info() << "Executing system command in container : " << cmd;
+		return system(cmd.c_str());
+	}, m_gatewayEnvironmentVariables);
+
+	waitForProcessTermination(pid);
+
+	return ReturnCode::SUCCESS;
+}
+
+
+ReturnCode Container::setEnvironmentVariable(const std::string& var, const std::string& val) {
+	log_debug() << "Setting env variable in container " << var << "=" << val;
+	m_gatewayEnvironmentVariables[var] = val;
+	return ReturnCode::SUCCESS;
 }

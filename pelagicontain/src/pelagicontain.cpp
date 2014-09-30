@@ -104,7 +104,7 @@ void Pelagicontain::update(const GatewayConfiguration &configs)
     setGatewayConfigs(configs);
     m_pamInterface->updateFinished(m_cookie);
     if (m_launching)
-    	launchCommand(APP_BINARY);  // We launch the application with hardcoded immediately for backward compatibility. TODO : remove
+    	launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
 }
 
 void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)

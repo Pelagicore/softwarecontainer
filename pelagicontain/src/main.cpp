@@ -153,7 +153,6 @@ int main(int argc, char **argv)
 
     DBus::Glib::BusDispatcher dispatcher;
     DBus::default_dispatcher = &dispatcher;
-
     dispatcher.attach(mainContext->gobj());
 
     pelagicontain::PelagicontainLib lib(containerRoot.c_str(), configFilePath);
@@ -246,11 +245,11 @@ int main(int argc, char **argv)
 		}, ml->get_context()->gobj());
 
 		if ((terminalCommand != nullptr) && (strlen(terminalCommand) != 0))
-			lib.getContainer().openTerminal(terminalCommand);
+			lib.openTerminal(terminalCommand);
 
+		log_debug() << "Entering main loop";
 		ml->run();
-
-		log_debug() << "Goodbye.";
+		log_debug() << "Main loop exited";
     }
     else
     	log_error( ) << "Could not initialize pelagicontain";

@@ -33,9 +33,6 @@ class Pelagicontain {
 public:
     /*! Constructor
      *
-     * \param pamInterface A pointer to the Platform Access Manager interface
-     * \param mainloopInterface A pointer to the mainloop interface
-     * \param controllerInterface A pointer to the Controller interface
      * \param cookie A unique identifier used to distinguish unique instances
      *  of Pelagicontain
      */

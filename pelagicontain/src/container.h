@@ -27,6 +27,14 @@ class Container
 
 public:
 
+    class CleanUpHandler {
+    protected:
+    	LOG_SET_CLASS_CONTEXT(Container::getDefaultContext());
+    public:
+    	virtual ~CleanUpHandler() {}
+    	virtual ReturnCode clean() = 0;
+    };
+
     /// A function to be executed in the container
     typedef std::function<int()> ContainerFunction;
 
@@ -144,29 +152,9 @@ public:
     	return m_containerRoot;
     }
 
-    ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val) {
-    	log_debug() << "Setting env variable in container " << var << "=" << val;
-    	m_gatewayEnvironmentVariables[var] = val;
-    	return ReturnCode::SUCCESS;
-    }
+    ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val);
 
-    ReturnCode systemCall(const std::string &cmd) {
-
-    	pid_t pid = executeInContainer([this, cmd=cmd]() {
-    		log_info() << "Executing system command in container : " << cmd;
-    		return system(cmd.c_str());
-    	}, m_gatewayEnvironmentVariables);
-
-    	waitForProcessTermination(pid);
-
-    	return ReturnCode::SUCCESS;
-    }
-
-	void openTerminal(std::string terminalCommand) const {
-		const char * command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << name();
-		log_info() << command;
-		system(command);
-	}
+    ReturnCode systemCall(const std::string &cmd);
 
 private:
 
@@ -185,74 +173,6 @@ private:
      * mounts that will be unmounted in the dtor.
      */
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
-
-    class CleanUpHandler {
-    public:
-    	virtual ~CleanUpHandler() {}
-    	virtual ReturnCode clean() = 0;
-    };
-
-    class DirectoryCleanUpHandler : public CleanUpHandler {
-    public:
-    	DirectoryCleanUpHandler(const std::string& path) {
-    		m_path = path;
-    	}
-
-    	ReturnCode clean() override {
-    		auto code = ReturnCode::FAILURE;
-
-			if(rmdir(m_path.c_str()) == 0)
-				code = ReturnCode::SUCCESS;
-			else
-				log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
-
-			return code;
-    	}
-
-    	std::string m_path;
-    };
-
-    class FileCleanUpHandler : public CleanUpHandler {
-    public:
-    	FileCleanUpHandler(const std::string& path) {
-    		m_path = path;
-    	}
-
-    	ReturnCode clean() override {
-    		auto code = ReturnCode::FAILURE;
-
-			if(unlink(m_path.c_str()) == 0)
-				code = ReturnCode::SUCCESS;
-			else
-				log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
-
-			return code;
-    	}
-
-    	std::string m_path;
-    };
-
-    class MountCleanUpHandler : public CleanUpHandler {
-    public:
-
-    	MountCleanUpHandler(const std::string& path) {
-    		m_path = path;
-    	}
-
-    	ReturnCode clean() override {
-    		auto code = ReturnCode::FAILURE;
-
-    		if(umount(m_path.c_str()) == 0)
-    			code = ReturnCode::SUCCESS;
-    		else
-    			log_error() << "Can't unmount " << m_path << " . Error :" << strerror(errno);
-
-    		return code;
-    	}
-
-    	std::string m_path;
-    };
-
 
     std::vector<CleanUpHandler*> m_cleanupHandlers;
 

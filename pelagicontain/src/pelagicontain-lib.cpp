@@ -20,6 +20,10 @@
 
 #include "dltgateway.h"
 #include "waylandgateway.h"
+#include "filegateway.h"
+
+#include "pelagicontaintodbusadapter.h"
+#include "config.h"
 
 
 PelagicontainLib::PelagicontainLib(const char* containerRootFolder, const char* configFilePath
@@ -30,6 +34,9 @@ PelagicontainLib::PelagicontainLib(const char* containerRootFolder, const char* 
 		  containerRoot),
 	pelagicontain(m_cookie) {
 	pelagicontain.setMainLoopContext(m_ml);
+}
+
+PelagicontainLib::~PelagicontainLib() {
 }
 
 ReturnCode PelagicontainLib::checkWorkspace() {
@@ -97,9 +104,6 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 	dispatcher.attach(m_ml->gobj());
 	pamInterface = std::unique_ptr<PAMInterface>(new PAMInterface(*m_bus));
 
-	if (bRegisterDBusInterface)
-		registerDBusService();
-
 	pelagicontain.setPAM(*pamInterface.get());
 
 #ifdef ENABLE_NETWORKGATEWAY
@@ -129,8 +133,8 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 #endif
 
 	m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );
-
 	m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
+	m_gateways.push_back( std::unique_ptr<Gateway>( new FileGateway() ) );
 
 	for (auto& gateway : m_gateways)
 		pelagicontain.addGateway(*gateway);
@@ -144,6 +148,9 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
     }
 
 	if (bRegisterDBusInterface) {
+
+		registerDBusService();
+
 		/* If we can't communicate with PAM then there is nothing we can
 		 * do really, better to just exit.
 		 */
@@ -157,4 +164,29 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 	m_initialized = true;
 
 	return ReturnCode::SUCCESS;
+}
+
+
+ReturnCode PelagicontainLib::registerDBusService() {
+
+	/* The request_name call does not return anything but raises an
+	 * exception if the name cannot be requested.
+	 */
+	std::string name = "com.pelagicore.Pelagicontain" + m_cookie;
+	m_bus->request_name( name.c_str() );
+
+	std::string objectPath = "/com/pelagicore/Pelagicontain";
+
+	log_debug() << "Registering interface on DBUS";
+
+	m_pcAdapter = std::unique_ptr<PelagicontainToDBusAdapter
+				      > ( new PelagicontainToDBusAdapter(*m_bus, objectPath, pelagicontain) );
+
+	return ReturnCode::SUCCESS;
+}
+
+void PelagicontainLib::openTerminal(const std::string& terminalCommand) const {
+	std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << getContainer().name();
+	log_info() << command;
+	system(command.c_str());
 }

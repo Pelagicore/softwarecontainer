@@ -77,8 +77,6 @@ public:
 
 private:
 
-    enum ConfigError {Ok, BadConfig};
-
     /*! Creates a mainloop, sets a PulseAudio context, and sets callbacks for PulseAudio.
      *
      * \returns true upon success (PulseAudio server connect call and mainloop

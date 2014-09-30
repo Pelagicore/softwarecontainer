@@ -9,9 +9,10 @@
 
 #include "paminterface.h"
 #include "pelagicontain.h"
-#include "pelagicontaintodbusadapter.h"
 #include "systemcallinterface.h"
 #include "gateway.h"
+
+class PelagicontainToDBusAdapter;
 
 namespace pelagicontain {
 
@@ -24,8 +25,7 @@ public:
 			 , const char* configFilePath = PELAGICONTAIN_DEFAULT_CONFIG
 	);
 
-	~PelagicontainLib() {
-	}
+	~PelagicontainLib();
 
 	/**
 	 * Set the main loop
@@ -50,6 +50,8 @@ public:
 		return m_initialized;
 	}
 
+	void openTerminal(const std::string& terminalCommand) const;
+
 	/**
 	 * Preload the container.
 	 * That method can be called before setting the main loop context
@@ -68,21 +70,7 @@ public:
 
 private:
 
-	ReturnCode registerDBusService() {
-
-		/* The request_name call does not return anything but raises an
-		 * exception if the name cannot be requested.
-		 */
-		std::string name = "com.pelagicore.Pelagicontain" + m_cookie;
-		m_bus->request_name( name.c_str() );
-
-		std::string objectPath = "/com/pelagicore/Pelagicontain";
-
-		m_pcAdapter = std::unique_ptr<PelagicontainToDBusAdapter
-					      > ( new PelagicontainToDBusAdapter(*m_bus, objectPath, pelagicontain) );
-
-		return ReturnCode::SUCCESS;
-	}
+	ReturnCode registerDBusService();
 
 	/**
 	 * Check if the workspace is present and create it if needed
@@ -124,7 +112,7 @@ private:
 
 
 /**
- * Use this class to execute a command in a container
+ * Abstract class for jobs which get executed inside a container
  */
 class JobAbstract {
 
@@ -191,7 +179,7 @@ protected:
 };
 
 /**
- * Use this class to execute a command in a container
+ * Use this class to execute a command line in a container
  */
 class CommandJob : public JobAbstract {
 
@@ -223,7 +211,9 @@ private:
 	std::string m_workingDirectory;
 };
 
-
+/**
+ *
+ */
 class FunctionJob : public JobAbstract {
 
 public:

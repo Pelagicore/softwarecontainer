@@ -59,6 +59,7 @@ include_directories(
 	${GLIBMM_INCLUDE_DIRS}
 	${LXC_INCLUDE_DIRS}
 	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_BINARY_DIR}/pelagicontain/src
 )
 
 option(ENABLE_TEST "Enables unit testing" ON)

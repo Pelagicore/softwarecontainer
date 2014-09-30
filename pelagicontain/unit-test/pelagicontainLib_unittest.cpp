@@ -48,7 +48,7 @@ public:
 	}
 
 	void openTerminal() {
-		lib->getContainer().openTerminal("konsole -e");
+		lib->openTerminal("konsole -e");
 	}
 
 	PelagicontainLib& getLib() {
