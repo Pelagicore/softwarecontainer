@@ -11,30 +11,26 @@
 
 
 NetworkGateway::NetworkGateway(SystemcallAbstractInterface
-                               &systemCallInterface):
+                               &systemCallInterface) :
     Gateway(),
     m_ip(""),
     m_gateway(""),
     m_internetAccess(false),
     m_interfaceInitialized(false),
-    m_systemCallInterface(systemCallInterface)
-{
+    m_systemCallInterface(systemCallInterface) {
 }
 
-NetworkGateway::~NetworkGateway()
-{
+NetworkGateway::~NetworkGateway() {
 }
 
-std::string NetworkGateway::id()
-{
+std::string NetworkGateway::id() {
     return "network";
 }
 
-bool NetworkGateway::setConfig(const std::string &config)
-{
+bool NetworkGateway::setConfig(const std::string &config) {
     bool success = true;
 
-    if (isInternetAccessSet(config)) {
+    if ( isInternetAccessSet(config) ) {
         log_debug("Internet access will be enabled");
         m_internetAccess = true;
     } else {
@@ -45,7 +41,7 @@ bool NetworkGateway::setConfig(const std::string &config)
     m_gateway = gatewayFromConfig(config);
 
     if (m_gateway.compare("") != 0) {
-        log_debug("Default gateway set to %s", m_gateway.c_str());
+        log_debug( "Default gateway set to %s", m_gateway.c_str() );
     } else {
         m_internetAccess = false;
         log_debug("No gateway. Network access will be disabled");
@@ -59,13 +55,12 @@ bool NetworkGateway::setConfig(const std::string &config)
     return success;
 }
 
-bool NetworkGateway::activate()
-{
+bool NetworkGateway::activate() {
     bool success = false;
     bool ready = false;
 
-    if (isBridgeAvailable()) {
-        if (generateIP()) {
+    if ( isBridgeAvailable() ) {
+        if ( generateIP() ) {
             ready = true;
         }
     }
@@ -81,31 +76,27 @@ bool NetworkGateway::activate()
     return success;
 }
 
-const std::string NetworkGateway::ip()
-{
+const std::string NetworkGateway::ip() {
     return m_ip;
 }
 
-bool NetworkGateway::generateIP()
-{
-    const char * ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
+bool NetworkGateway::generateIP() {
+    const char *ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
 
     m_ip = Generator::gen_ip_addr(ipAddrNet);
-    log_debug("IP set to %s", m_ip.c_str());
+    log_debug( "IP set to %s", m_ip.c_str() );
 
     return true;
 }
 
-bool NetworkGateway::setDefaultGateway()
-{
+bool NetworkGateway::setDefaultGateway() {
     std::string cmd = "route add default gw ";
     systemCall(cmd + m_gateway);
 
     return true;
 }
 
-bool NetworkGateway::up()
-{
+bool NetworkGateway::up() {
     std::string cmd;
 
     if (!m_interfaceInitialized) {
@@ -122,20 +113,18 @@ bool NetworkGateway::up()
     return setDefaultGateway();
 }
 
-bool NetworkGateway::down()
-{
+bool NetworkGateway::down() {
     std::string cmd = "ifconfig eth0 down";
     systemCall(cmd);
 
     return true;
 }
 
-bool NetworkGateway::isBridgeAvailable()
-{
+bool NetworkGateway::isBridgeAvailable() {
     bool ret = false;
     std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
-    if (m_systemCallInterface.makeCall(cmd)) {
+    if ( m_systemCallInterface.makeCall(cmd) ) {
         ret = true;
     } else {
         log_error("No network bridge configured");
@@ -144,8 +133,7 @@ bool NetworkGateway::isBridgeAvailable()
     return ret;
 }
 
-bool NetworkGateway::isInternetAccessSet(const std::string &config)
-{
+bool NetworkGateway::isInternetAccessSet(const std::string &config) {
     json_error_t error;
     json_t *root, *value;
     bool accessSet = false;
@@ -160,7 +148,7 @@ bool NetworkGateway::isInternetAccessSet(const std::string &config)
 
     // Get value
     value = json_object_get(root, "internet-access");
-    if (!json_is_boolean(value)) {
+    if ( !json_is_boolean(value) ) {
         log_error("Value is not a boolean.");
         json_decref(value);
         goto cleanup_parse_json;
@@ -176,8 +164,7 @@ cleanup_parse_json:
     return accessSet;
 }
 
-std::string NetworkGateway::gatewayFromConfig(const std::string &config)
-{
+std::string NetworkGateway::gatewayFromConfig(const std::string &config) {
     json_error_t error;
     json_t *root, *value;
     std::string gateway = "";
@@ -193,7 +180,7 @@ std::string NetworkGateway::gatewayFromConfig(const std::string &config)
     // Get value
     value = json_object_get(root, "gateway");
 
-    if (!json_is_string(value)) {
+    if ( !json_is_string(value) ) {
         log_error("Value is not a string.");
         json_decref(value);
         goto cleanup_parse_json;

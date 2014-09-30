@@ -5,18 +5,15 @@
 
 #include "config.h"
 
-Config *Config::m_instance = 0;
+Config*Config::m_instance = 0;
 
-Config::Config()
-{
+Config::Config() {
 }
 
-Config *Config::instance()
-{
+Config*Config::instance() {
     if (!m_instance) {
         m_instance = new Config();
     }
 
     return m_instance;
 }
-

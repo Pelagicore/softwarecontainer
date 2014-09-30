@@ -9,25 +9,22 @@
 #include "gateway.h"
 #include "container.h"
 #include "pelagicontain.h"
+#include "paminterface.h"
 
-Pelagicontain::Pelagicontain(const std::string &cookie) : m_cookie(cookie)
-{
-	m_containerState = ContainerState::CREATED;
+Pelagicontain::Pelagicontain(const std::string &cookie) : m_cookie(cookie) {
+    m_containerState = ContainerState::CREATED;
 }
 
-Pelagicontain::~Pelagicontain()
-{
+Pelagicontain::~Pelagicontain() {
 }
 
-void Pelagicontain::addGateway(Gateway& gateway)
-{
-   	gateway.setContainer(*m_container);
+void Pelagicontain::addGateway(Gateway &gateway) {
+    gateway.setContainer(*m_container);
     m_gateways.push_back(&gateway);
 }
 
 // Preload the container. This is a non-blocking operation
-pid_t Pelagicontain::preload(Container &container)
-{
+pid_t Pelagicontain::preload(Container &container) {
     m_container = &container;
 
     m_container->create();
@@ -39,9 +36,8 @@ pid_t Pelagicontain::preload(Container &container)
     return pid;
 }
 
-void Pelagicontain::shutdownContainer()
-{
-	m_container->destroy();
+void Pelagicontain::shutdownContainer() {
+    m_container->destroy();
     shutdownGateways();
     m_pamInterface->unregisterClient(m_cookie);
 
@@ -49,24 +45,22 @@ void Pelagicontain::shutdownContainer()
 }
 
 
-void Pelagicontain::onContainerShutdown(int pid, int exitCode)
-{
+void Pelagicontain::onContainerShutdown(int pid, int exitCode) {
     log_debug() << "Controller " << " exited with exit code " << exitCode;
     shutdownContainer();
 }
 
-void Pelagicontain::setApplicationID(const std::string &appId)
-{
-	m_appId = appId;
+void Pelagicontain::setApplicationID(const std::string &appId) {
+    m_appId = appId;
 
-	log_debug() << "register client " << m_cookie << " / " << m_appId;
+    log_debug() << "register client " << m_cookie << " / " << m_appId;
 
     if (m_container) {
 
         std::string appDirBase = m_container->root() + "/" + appId;
 
         // this should always be true except when unit-testing.
-        if (m_container->mountApplication(appDirBase)) {
+        if ( m_container->mountApplication(appDirBase) ) {
             m_pamInterface->registerClient(m_cookie, m_appId);
         } else {
             log_error() << "Could not set up container for application, shutting down";
@@ -78,43 +72,38 @@ void Pelagicontain::setApplicationID(const std::string &appId)
 
 }
 
-void Pelagicontain::launch(const std::string &appId)
-{
+void Pelagicontain::launch(const std::string &appId) {
     log_debug() << "Launch called with appId: " << appId;
     m_launching = true;
     setApplicationID(appId);
 }
 
-pid_t Pelagicontain::launchCommand(const std::string &commandLine)
-{
+pid_t Pelagicontain::launchCommand(const std::string &commandLine) {
     log_debug() << "launchCommand called with commandLine: " << commandLine;
     pid_t pid = m_container->attach(commandLine);
 
     assert(m_mainLoopContext != nullptr);
     addProcessListener(m_connections, pid, [&](pid_t pid, int returnCode) {
-    	shutdown();
-    }, *m_mainLoopContext);
+                           shutdown();
+                       }, *m_mainLoopContext);
 
     return pid;
 }
 
-void Pelagicontain::update(const GatewayConfiguration &configs)
-{
+void Pelagicontain::update(const GatewayConfiguration &configs) {
     log_debug() << "update called" << configs;
     setGatewayConfigs(configs);
     m_pamInterface->updateFinished(m_cookie);
     if (m_launching)
-    	launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
+        launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
 }
 
-void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
-{
+void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs) {
     // Go through the received configs and see if they match any of
     // the running gateways, if so: set their respective config
 
-    for (auto& gateway : m_gateways)
-    {
-    	std::string gatewayId = gateway->id();
+    for (auto &gateway : m_gateways) {
+        std::string gatewayId = gateway->id();
         if (configs.count(gatewayId) != 0) {
             std::string config = configs.at(gatewayId);
             gateway->setConfig(config);
@@ -123,27 +112,24 @@ void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
 
     m_containerState.setValueNotify(ContainerState::READY);
 
-    for (auto& gateway : m_gateways)
+    for (auto &gateway : m_gateways)
         gateway->activate();
 
 }
 
 
-void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val)
-{
-	m_container->setEnvironmentVariable(var,val);
+void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val) {
+    m_container->setEnvironmentVariable(var, val);
 }
 
-void Pelagicontain::shutdown()
-{
+void Pelagicontain::shutdown() {
     log_debug() << "shutdown called"; // << logging::getStackTrace();
     shutdownContainer();
 }
 
-void Pelagicontain::shutdownGateways()
-{
-    for (auto& gateway : m_gateways)
-        if (!gateway->teardown())
+void Pelagicontain::shutdownGateways() {
+    for (auto &gateway : m_gateways)
+        if ( !gateway->teardown() )
             log_warning() << "Could not tear down gateway cleanly";
 
     m_gateways.clear();

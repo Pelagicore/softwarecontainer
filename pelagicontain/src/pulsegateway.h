@@ -29,15 +29,13 @@
  *  disable audio and in such case, the gateway will not connect to the PulseAudio
  *  server at all.
  */
-class PulseGateway:
-    public Gateway
-{
-	LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
+class PulseGateway :
+    public Gateway {
+    LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
 
 public:
-    PulseGateway(
-        const std::string &gatewayDir
-        , const std::string &containerName);
+    PulseGateway(const std::string &gatewayDir
+                 , const std::string &containerName);
     ~PulseGateway();
 
     /*!
@@ -76,7 +74,6 @@ public:
     virtual bool teardown();
 
 private:
-
     /*! Creates a mainloop, sets a PulseAudio context, and sets callbacks for PulseAudio.
      *
      * \returns true upon success (PulseAudio server connect call and mainloop

@@ -10,17 +10,15 @@
 #include "dbusadaptor.h"
 #include "pelagicontain.h"
 
-class PelagicontainToDBusAdapter:
+class PelagicontainToDBusAdapter :
     public com::pelagicore::Pelagicontain_adaptor,
     public DBus::IntrospectableAdaptor,
-    public DBus::ObjectAdaptor
-{
+    public DBus::ObjectAdaptor {
 public:
-    PelagicontainToDBusAdapter(DBus::Connection &conn, const std::string &objPath,
-                               Pelagicontain &pc);
-    virtual std::string Echo(const std::string& argument);
-    virtual void Launch(const std::string& appId);
-    virtual void LaunchCommand(const std::string& commandLine);
+    PelagicontainToDBusAdapter(DBus::Connection &conn, const std::string &objPath, Pelagicontain &pc);
+    virtual std::string Echo(const std::string &argument);
+    virtual void Launch(const std::string &appId);
+    virtual void LaunchCommand(const std::string &commandLine);
     virtual void Update(const std::map<std::string, std::string> &configs);
     virtual void SetContainerEnvironmentVariable(const std::string &var, const std::string &val);
     virtual void Shutdown();

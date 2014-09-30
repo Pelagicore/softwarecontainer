@@ -9,36 +9,33 @@
 #include "gateway.h"
 #include "systemcallinterface.h"
 
-class FileGateway: public Gateway {
+class FileGateway : public Gateway {
 
-	LOG_DECLARE_CLASS_CONTEXT("File", "file gateway");
+    LOG_DECLARE_CLASS_CONTEXT("File", "file gateway");
 
 public:
+    static constexpr const char *ID = "file";
 
-	static constexpr const char* ID = "file";
+    FileGateway() {
+    }
 
-	FileGateway() {
-	}
+    ~FileGateway() {
+    }
 
-	~FileGateway() {
-	}
+    std::string id() override {
+        return ID;
+    }
 
-	std::string id() override {
-		return ID;
-	}
+    bool setConfig(const std::string &config) override;
 
-	bool setConfig(const std::string &config) override;
+    bool activate() override {
+        return true;
+    }
 
-	bool activate() override {
-		return true;
-	}
-
-	bool teardown() override {
-		return true;
-	}
+    bool teardown() override {
+        return true;
+    }
 
 private:
-
-	bool m_enabled = false;
+    bool m_enabled = false;
 };
-

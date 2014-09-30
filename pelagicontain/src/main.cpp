@@ -80,8 +80,7 @@ void signalHandler(int signum)
     }
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char * *argv) {
     const char *summary = "Pelagicore container utility. "
                           "Requires an absolute path to the container root, "
                           "the command to run inside the container and "
@@ -97,20 +96,20 @@ int main(int argc, char **argv)
 
     std::string containerRoot;
     std::string cookie;
-    const char* configFilePath = PELAGICONTAIN_DEFAULT_CONFIG;
+    const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG;
     commandLineParser.addOption(configFilePath,
                                 "with-config-file",
                                 'c',
                                 "Config file");
 
-//    const char* terminalCommand = "konsole -e";
-    const char* terminalCommand = "";
+    //    const char* terminalCommand = "konsole -e";
+    const char *terminalCommand = "";
     commandLineParser.addOption(terminalCommand,
                                 "terminal",
                                 't',
                                 "Example: konsole -e");
 
-    if (commandLineParser.parse(argc, argv)) {
+    if ( commandLineParser.parse(argc, argv) ) {
         return -1;
     }
 
@@ -153,7 +152,7 @@ int main(int argc, char **argv)
 
     DBus::Glib::BusDispatcher dispatcher;
     DBus::default_dispatcher = &dispatcher;
-    dispatcher.attach(mainContext->gobj());
+    dispatcher.attach( mainContext->gobj() );
 
     pelagicontain::PelagicontainLib lib(containerRoot.c_str(), configFilePath);
     lib.setMainLoopContext(mainContext);
@@ -223,34 +222,34 @@ int main(int argc, char **argv)
 		}
     }
     lib.getPelagicontain().getContainerState().addListener( [&] (ContainerState state) {
-        if(state == ContainerState::TERMINATED) {
-        	log_debug() << "Container terminated => stop main loop and quit";
-        	ml->quit();
-        }
-    });
+                                                                if(state == ContainerState::TERMINATED) {
+                                                                    log_debug() <<
+                                                                    "Container terminated => stop main loop and quit";
+                                                                    ml->quit();
+                                                                }
+                                                            });
 
-    if (!isError(lib.init(true))) {
+    if ( !isError( lib.init(true) ) ) {
 
-		// Register signalHandler with signals
-		std::vector<int> signals = {SIGINT, SIGTERM};
-		pelagicore::UNIXSignalGlibHandler handler(signals, [&] (int signum) {
-			log_debug() << "caught signal " << signum;
-			switch(signum) {
-			case SIGCHLD:
-				break;
-			default:
-				lib.shutdown();
-				break;
-			}
-		}, ml->get_context()->gobj());
+        // Register signalHandler with signals
+        std::vector<int> signals = {SIGINT, SIGTERM};
+        pelagicore::UNIXSignalGlibHandler handler( signals, [&] (int signum) {
+                                                       log_debug() << "caught signal " << signum;
+                                                       switch(signum) {
+                                                       case SIGCHLD :
+                                                           break;
+                                                       default :
+                                                           lib.shutdown();
+                                                           break;
+                                                       }
+                                                   }, ml->get_context()->gobj() );
 
-		if ((terminalCommand != nullptr) && (strlen(terminalCommand) != 0))
-			lib.openTerminal(terminalCommand);
+        if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) )
+            lib.openTerminal(terminalCommand);
 
-		log_debug() << "Entering main loop";
-		ml->run();
-		log_debug() << "Main loop exited";
-    }
-    else
-    	log_error( ) << "Could not initialize pelagicontain";
+        log_debug() << "Entering main loop";
+        ml->run();
+        log_debug() << "Main loop exited";
+    } else
+        log_error() << "Could not initialize pelagicontain";
 }

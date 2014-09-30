@@ -16,93 +16,92 @@
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
-class PelagicontainApp : public ::testing::Test {
+class PelagicontainApp : public::testing::Test {
 
 public:
+    PelagicontainApp() {
+    }
 
-	PelagicontainApp() {
-	}
+    void SetUp() override {
+        ::testing::Test::SetUp();
+        lib = std::unique_ptr<PelagicontainLib> ( new PelagicontainLib() );
+        lib->setMainLoopContext(m_context);
+        ASSERT_TRUE( isSuccess( lib->init() ) );
+    }
 
-	void SetUp() override {
-		::testing::Test::SetUp();
-		lib = std::unique_ptr < PelagicontainLib > (new PelagicontainLib());
-		lib->setMainLoopContext(m_context);
-		ASSERT_TRUE(isSuccess(lib->init()));
-	}
+    void TearDown() override {
+        ::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
+    }
 
-	void TearDown() override {
-		::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
-	}
+    void run() {
+        m_ml = Glib::MainLoop::create(m_context);
+        m_ml->run();
+    }
 
-	void run() {
-		m_ml = Glib::MainLoop::create(m_context);
-		m_ml->run();
-	}
+    void exit() {
+        m_ml->quit();
+    }
 
-	void exit() {
-		m_ml->quit();
-	}
+    Glib::RefPtr<Glib::MainContext> getMainContext() {
+        return m_context;
+    }
 
-	Glib::RefPtr<Glib::MainContext> getMainContext() {
-		return m_context;
-	}
+    void openTerminal() {
+        lib->openTerminal("konsole -e");
+    }
 
-	void openTerminal() {
-		lib->openTerminal("konsole -e");
-	}
+    PelagicontainLib& getLib() {
+        return *lib;
+    }
 
-	PelagicontainLib& getLib() {
-		return *lib;
-	}
-
-	Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-	Glib::RefPtr<Glib::MainLoop> m_ml;
-	std::unique_ptr<PelagicontainLib> lib;
+    Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
+    Glib::RefPtr<Glib::MainLoop> m_ml;
+    std::unique_ptr<PelagicontainLib> lib;
 };
 
 
 
 TEST_F(PelagicontainApp, TestWayland) {
 
-		GatewayConfiguration config;
-		config[WaylandGateway::ID] = "{ \"enabled\" : true }";
+    GatewayConfiguration config;
+    config[WaylandGateway::ID] = "{ \"enabled\" : true }";
 
-		getLib().getPelagicontain().setGatewayConfigs(config);
+    getLib().getPelagicontain().setGatewayConfigs(config);
 
-//		openTerminal();
-//		sleep(10000);
+    //		openTerminal();
+    //		sleep(10000);
 
-		FunctionJob jobTrue(getLib(), [] () {
+    FunctionJob jobTrue(getLib(), [] (){
 
-			bool ERROR = 1;
-			bool SUCCESS = 0;
+                            bool ERROR = 1;
+                            bool SUCCESS = 0;
 
-			const char* waylandDir = getenv("XDG_RUNTIME_DIR");
+                            const char *waylandDir = getenv("XDG_RUNTIME_DIR");
 
-			log_debug() << "Wayland dir : " << waylandDir;
+                            log_debug() << "Wayland dir : " << waylandDir;
 
-			if (waylandDir == nullptr)
-				return ERROR;
+                            if (waylandDir == nullptr)
+                                return ERROR;
 
-			std::string socketPath = StringBuilder() << waylandDir << "/" << WaylandGateway::SOCKET_FILE_NAME;
+                            std::string socketPath = StringBuilder() << waylandDir << "/" << WaylandGateway::SOCKET_FILE_NAME;
 
-			log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
+                            log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
 
-			if (!isSocket(socketPath))
-				return ERROR;
+                            if ( !isSocket(socketPath) )
+                                return ERROR;
 
-			return SUCCESS;
+                            return SUCCESS;
 
-		});
-		jobTrue.start();
+                        });
+    jobTrue.start();
 
-		ASSERT_TRUE(jobTrue.wait() == 0);
+    ASSERT_TRUE(jobTrue.wait() == 0);
 
-//		CommandJob westonJob(lib,
-//				"/usr/bin/weston-terminal");
-//		westonJob.start();
-//
-//		ASSERT_TRUE(westonJob.wait() == 0);
+    //		CommandJob westonJob(lib,
+    //				"/usr/bin/weston-terminal");
+    //		westonJob.start();
+    //
+    //		ASSERT_TRUE(westonJob.wait() == 0);
 
 }
 
@@ -110,30 +109,30 @@ TEST_F(PelagicontainApp, TestWayland) {
 
 TEST(PelagicontainLib, MultithreadTest) {
 
-	static const int TIMEOUT = 20;
+    static const int TIMEOUT = 20;
 
-	PelagicontainLib lib;
-	lib.setMainLoopContext(Glib::MainContext::get_default());
+    PelagicontainLib lib;
+    lib.setMainLoopContext( Glib::MainContext::get_default() );
 
-	bool finished = false;
+    bool finished = false;
 
-	auto f = [&]() {
-		log_info() << "Initializing";
-		lib.init(true);
-		finished = true;
-	};
+    auto f = [&]() {
+        log_info() << "Initializing";
+        lib.init(true);
+        finished = true;
+    };
 
-	std::thread t(f);
+    std::thread t(f);
 
-	for (int i=0 ; (i<TIMEOUT) && !finished; i++ ) {
-		log_info() << "Waiting for pelagicontain to be initialized";
-		sleep(1);
-	}
+    for (int i = 0; (i < TIMEOUT) && !finished; i++ ) {
+        log_info() << "Waiting for pelagicontain to be initialized";
+        sleep(1);
+    }
 
-	ASSERT_TRUE(finished);
+    ASSERT_TRUE(finished);
 
-	if (finished)
-		t.join();
+    if (finished)
+        t.join();
 
 }
 
@@ -141,52 +140,52 @@ TEST(PelagicontainLib, MultithreadTest) {
 
 
 TEST_F(PelagicontainApp, TestStdin) {
-	CommandJob job(getLib(), "/bin/cat");
-	job.captureStdin();
-	job.captureStdout();
-	job.start();
-	ASSERT_TRUE(job.isRunning());
+    CommandJob job(getLib(), "/bin/cat");
+    job.captureStdin();
+    job.captureStdout();
+    job.start();
+    ASSERT_TRUE( job.isRunning() );
 
-	const char outputBytes[] = "test string";
-	char inputBytes[sizeof(outputBytes)] = {};
+    const char outputBytes[] = "test string";
+    char inputBytes[sizeof(outputBytes)] = {};
 
-	auto writtenBytesCount = write(job.stdin(), outputBytes, sizeof(outputBytes));
-	ASSERT_EQ(writtenBytesCount, sizeof(outputBytes));
+    auto writtenBytesCount = write( job.stdin(), outputBytes, sizeof(outputBytes) );
+    ASSERT_EQ( writtenBytesCount, sizeof(outputBytes) );
 
-	auto readBytesCount = read(job.stdout(), inputBytes, sizeof(inputBytes));
-	ASSERT_EQ(readBytesCount, sizeof(outputBytes));
+    auto readBytesCount = read( job.stdout(), inputBytes, sizeof(inputBytes) );
+    ASSERT_EQ( readBytesCount, sizeof(outputBytes) );
 
-	SignalConnectionsHandler connections;
-	addProcessListener(connections, job.pid(), [&] (
-			int pid, int exitCode) {
-		log_debug() << "finished process :" << job.toString();
-		exit();
-	}, getMainContext());
+    SignalConnectionsHandler connections;
+    addProcessListener( connections, job.pid(), [&] (
+                            int pid, int exitCode) {
+                            log_debug() << "finished process :" << job.toString();
+                            exit();
+                        }, getMainContext() );
 
-	kill(job.pid(), SIGTERM);
+    kill(job.pid(), SIGTERM);
 
-	run();
+    run();
 }
 
 
 TEST_F(PelagicontainApp, TestNetworkInternetCapability) {
-	CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
-	job.start();
+    CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
+    job.start();
 
-	ASSERT_TRUE(job.isRunning());
+    ASSERT_TRUE( job.isRunning() );
 
-	bool bNetworkAccessSucceeded = false;
+    bool bNetworkAccessSucceeded = false;
 
-	SignalConnectionsHandler connections;
-	addProcessListener(connections, job.pid(), [&] (
-			int pid, int exitCode) {
-		bNetworkAccessSucceeded = (exitCode == 0);
-		exit();
-	}, getMainContext());
+    SignalConnectionsHandler connections;
+    addProcessListener( connections, job.pid(), [&] (
+                            int pid, int exitCode) {
+                            bNetworkAccessSucceeded = (exitCode == 0);
+                            exit();
+                        }, getMainContext() );
 
-	run();
+    run();
 
-	ASSERT_FALSE(bNetworkAccessSucceeded);
+    ASSERT_FALSE(bNetworkAccessSucceeded);
 }
 
 
@@ -201,48 +200,50 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapability) {
 
 TEST_F(PelagicontainApp, TestJobReturnCode) {
 
-	CommandJob jobTrue(getLib(), "/bin/true");
-	jobTrue.start();
-	ASSERT_TRUE(jobTrue.wait() == 0);
+    CommandJob jobTrue(getLib(), "/bin/true");
+    jobTrue.start();
+    ASSERT_TRUE(jobTrue.wait() == 0);
 
-	CommandJob jobFalse(getLib(), "/bin/false");
-	jobFalse.start();
-	ASSERT_FALSE(jobFalse.wait() == 0);
+    CommandJob jobFalse(getLib(), "/bin/false");
+    jobFalse.start();
+    ASSERT_FALSE(jobFalse.wait() == 0);
 
-//	addProcessListener(jobFalse.pid(), [&] (
-//			int pid, int exitCode) {
-////		log_error () << exitCode;
-//		app.exit();
-//	}, app.getMainContext());
-//
-//	app.run();
+    //	addProcessListener(jobFalse.pid(), [&] (
+    //			int pid, int exitCode) {
+    ////		log_error () << exitCode;
+    //		app.exit();
+    //	}, app.getMainContext());
+    //
+    //	app.run();
 
 }
 
 TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
 
-	{
-		GatewayConfiguration config;
-		config[DBusGateway::ID] = "{"
-				"\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
-				"\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}";
+    {
+        GatewayConfiguration config;
+        config[DBusGateway::ID] = "{"
+                                  "\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
+                                  "\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}";
 
-		getLib().getPelagicontain().setGatewayConfigs(config);
+        getLib().getPelagicontain().setGatewayConfigs(config);
 
-		CommandJob jobTrue(getLib(),
-				"/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-		jobTrue.start();
+        CommandJob jobTrue(
+            getLib(),
+            "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+        jobTrue.start();
 
-		ASSERT_TRUE(jobTrue.wait() == 0);
-	}
+        ASSERT_TRUE(jobTrue.wait() == 0);
+    }
 
-	{
-		CommandJob jobTrue(getLib(),
-				"/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-		jobTrue.start();
+    {
+        CommandJob jobTrue(
+            getLib(),
+            "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+        jobTrue.start();
 
-		ASSERT_TRUE(jobTrue.wait() == 0);
-	}
+        ASSERT_TRUE(jobTrue.wait() == 0);
+    }
 
 }
 
@@ -251,27 +252,28 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
 
 TEST_F(PelagicontainApp, TestDBusGatewayWithoutAccess) {
 
-	{
-		CommandJob jobTrue(getLib(),
-				"/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-		jobTrue.start();
+    {
+        CommandJob jobTrue(
+            getLib(),
+            "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+        jobTrue.start();
 
-		ASSERT_TRUE(jobTrue.wait() != 0);
-	}
+        ASSERT_TRUE(jobTrue.wait() != 0);
+    }
 
-	{
-		CommandJob jobTrue(getLib(),
-				"/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-		jobTrue.start();
+    {
+        CommandJob jobTrue(
+            getLib(),
+            "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+        jobTrue.start();
 
-		// We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
-		ASSERT_TRUE(jobTrue.wait() != 0);
-	}
+        // We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
+        ASSERT_TRUE(jobTrue.wait() != 0);
+    }
 
 }
 
 
 TEST_F(PelagicontainApp, InitTest) {
-    ASSERT_TRUE(getLib().isInitialized());
+    ASSERT_TRUE( getLib().isInitialized() );
 }
-

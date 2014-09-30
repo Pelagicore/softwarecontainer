@@ -12,30 +12,25 @@
 #include <unistd.h>
 
 
-SystemcallInterface::SystemcallInterface()
-{
+SystemcallInterface::SystemcallInterface() {
 }
 
-SystemcallInterface::~SystemcallInterface()
-{
+SystemcallInterface::~SystemcallInterface() {
 }
 
-bool SystemcallInterface::makeCall(const std::string &cmd)
-{
-    bool success = (system(cmd.c_str()) == 0);
+bool SystemcallInterface::makeCall(const std::string &cmd) {
+    bool success = (system( cmd.c_str() ) == 0);
     return success;
 }
 
-bool SystemcallInterface::makeCall(const std::string &cmd, int &exitCode)
-{
-    exitCode = system(cmd.c_str());
+bool SystemcallInterface::makeCall(const std::string &cmd, int &exitCode) {
+    exitCode = system( cmd.c_str() );
     return (exitCode == 0);
 }
 
 pid_t SystemcallInterface::makePopenCall(const std::string &command,
                                          int *infp,
-                                         int *outfp)
-{
+                                         int *outfp) {
     int READ = 0;
     int WRITE = 1;
 
@@ -62,7 +57,7 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
         setpgid(0, 0);
 
         execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
-    	log_error("execl") << strerror(errno);
+        log_error("execl") << strerror(errno);
         exit(1);
     }
 
@@ -81,16 +76,15 @@ pid_t SystemcallInterface::makePopenCall(const std::string &command,
     return pid;
 }
 
-bool SystemcallInterface::makePcloseCall(pid_t pid, int infp, int outfp)
-{
+bool SystemcallInterface::makePcloseCall(pid_t pid, int infp, int outfp) {
     if (infp > -1) {
         if (close(infp) == -1) {
-            log_warning ("Failed to close STDIN to dbus-proxy");
+            log_warning("Failed to close STDIN to dbus-proxy");
         }
     }
     if (outfp != -1) {
         if (close(outfp) == -1) {
-            log_warning ("Failed to close STDOUT to dbus-proxy");
+            log_warning("Failed to close STDOUT to dbus-proxy");
         }
     }
 

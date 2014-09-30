@@ -10,19 +10,17 @@
 
 /*! PAMInterface is a D-Bus implementation of PAMAbstractInterface
  */
-class PAMInterface:
+class PAMInterface :
     public com::pelagicore::PAM_proxy,
     public DBus::IntrospectableProxy,
     public DBus::ObjectProxy,
-    public PAMAbstractInterface
-{
+    public PAMAbstractInterface {
 public:
     PAMInterface(DBus::Connection &connection);
 
     /*! Implements PAMAbstractInterface::registerClient
      */
-    virtual void registerClient(const std::string &cookie,
-                                const std::string &appId);
+    virtual void registerClient(const std::string &cookie, const std::string &appId);
 
     /*! Implements PAMAbstractInterface::unregisterClient
      */

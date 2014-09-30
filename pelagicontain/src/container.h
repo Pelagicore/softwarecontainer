@@ -18,25 +18,24 @@
  * implements the specifics behind the conceptual phases of 'Pereload', 'Launch',
  * and 'Shutdown'.
  */
-class Container
-{
+class Container {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
 
-    static constexpr const char* GATEWAYS_PATH = "/gateways";
-    static constexpr const char* LATE_MOUNT_PATH = "/late_mounts";
+    static constexpr const char *GATEWAYS_PATH = "/gateways";
+    static constexpr const char *LATE_MOUNT_PATH = "/late_mounts";
 
 public:
-
     class CleanUpHandler {
-    protected:
-    	LOG_SET_CLASS_CONTEXT(Container::getDefaultContext());
-    public:
-    	virtual ~CleanUpHandler() {}
-    	virtual ReturnCode clean() = 0;
+protected:
+        LOG_SET_CLASS_CONTEXT( Container::getDefaultContext() );
+public:
+        virtual ~CleanUpHandler() {
+        }
+        virtual ReturnCode clean() = 0;
     };
 
     /// A function to be executed in the container
-    typedef std::function<int()> ContainerFunction;
+    typedef std::function<int ()> ContainerFunction;
 
     /*!
      * Constructor
@@ -47,9 +46,7 @@ public:
      *  path to e.g. the configurations and application root
      * \param containedCommand The command to be executed inside the container
      */
-    Container(const std::string &name,
-              const std::string &configFile,
-              const std::string &containerRoot);
+    Container(const std::string &name, const std::string &configFile, const std::string &containerRoot);
 
     ~Container();
 
@@ -69,20 +66,24 @@ public:
      * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    pid_t attach(const std::string& commandLine, const EnvironmentVariables& variables, int stdin = -1, int stdout = 1, int stderr = 2, const std::string& workingDirectory = "/");
+    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, int stdin = -1, int stdout = 1,
+                 int stderr = 2,
+                 const std::string &workingDirectory = "/");
 
     /**
      * Start a process with the environment variables which have previously been set by the gateways
      */
-    pid_t attach(const std::string& commandLine);
+    pid_t attach(const std::string &commandLine);
 
-    pid_t executeInContainer(ContainerFunction function, const EnvironmentVariables& variables = EnvironmentVariables(), int stdin = -1, int stdout = 1, int stderr = 2);
+    pid_t executeInContainer(ContainerFunction function,
+                             const EnvironmentVariables &variables = EnvironmentVariables(), int stdin = -1, int stdout = 1,
+                             int stderr = 2);
 
     std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 
     std::string bindMountFolderInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 
-    ReturnCode mountDevice(const std::string& pathInHost);
+    ReturnCode mountDevice(const std::string &pathInHost);
 
     /*!
      * Calls the lxc-destroy command.
@@ -104,9 +105,9 @@ public:
      *
      * \return true or false
      */
-//    bool setApplication(const std::string &appId);
+    //    bool setApplication(const std::string &appId);
 
-    bool mountApplication(const std::string& path);
+    bool mountApplication(const std::string &path);
 
     /*!
      * Setup the container for preloading
@@ -121,44 +122,43 @@ public:
     ReturnCode initialize();
 
     bool isInitialized() {
-    	return m_initialized;
+        return m_initialized;
     }
 
     std::string toString();
 
-    const char *name() const {
+    const char*name() const {
         return m_name.c_str();
     }
 
     std::string gatewaysDirInContainer() const {
-    	return GATEWAYS_PATH;
+        return GATEWAYS_PATH;
     }
 
     std::string gatewaysDir() const {
-    	// TODO: see how to put gatewaysDir into the late_mounts to save one mount
-//    	return applicationMountDir() + GATEWAYS_PATH;
-    	return m_containerRoot + "/" + name() + GATEWAYS_PATH;
+        // TODO: see how to put gatewaysDir into the late_mounts to save one mount
+        //      return applicationMountDir() + GATEWAYS_PATH;
+        return m_containerRoot + "/" + name() + GATEWAYS_PATH;
     }
 
     std::string lateMountDir() const {
-    	return m_containerRoot + LATE_MOUNT_PATH;
+        return m_containerRoot + LATE_MOUNT_PATH;
     }
 
     std::string applicationMountDir() const {
-    	return lateMountDir() + "/" + m_name;
+        return lateMountDir() + "/" + m_name;
     }
 
     const std::string& root() const {
-    	return m_containerRoot;
+        return m_containerRoot;
     }
 
-    ReturnCode setEnvironmentVariable(const std::string& var, const std::string& val);
+    ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
 
     ReturnCode systemCall(const std::string &cmd);
 
 private:
-
-    static int executeInContainerEntryFunction(void* param);
+    static int executeInContainerEntryFunction(void *param);
 
     /*
      * Create a directory, and if successful append it to a list of dirs

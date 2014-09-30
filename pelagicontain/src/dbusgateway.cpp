@@ -10,10 +10,8 @@
 #include "dbusgateway.h"
 #include "pelagicontain-common.h"
 
-DBusGateway::DBusGateway(SystemcallAbstractInterface &systemcallInterface,
-                         ProxyType type,
-                         const std::string &gatewayDir,
-                         const std::string &name):
+DBusGateway::DBusGateway(SystemcallAbstractInterface &systemcallInterface, ProxyType type, const std::string &gatewayDir,
+                         const std::string &name) :
     Gateway(),
     m_systemcallInterface(systemcallInterface),
     m_type(type),
@@ -21,32 +19,28 @@ DBusGateway::DBusGateway(SystemcallAbstractInterface &systemcallInterface,
     m_infp(-1),
     m_outfp(-1),
     m_hasBeenConfigured(false),
-    m_dbusProxyStarted(false)
-{
+    m_dbusProxyStarted(false) {
     if (m_type == SessionProxy) {
         m_socket = gatewayDir
-            + std::string("/sess_")
-            + name
-            + std::string(".sock");
+                   + std::string("/sess_")
+                   + name
+                   + std::string(".sock");
     } else {
         m_socket = gatewayDir
-            + std::string("/sys_")
-            + name
-            + std::string(".sock");
+                   + std::string("/sys_")
+                   + name
+                   + std::string(".sock");
     }
 }
 
-DBusGateway::~DBusGateway()
-{
+DBusGateway::~DBusGateway() {
 }
 
-std::string DBusGateway::id()
-{
+std::string DBusGateway::id() {
     return ID;
 }
 
-bool DBusGateway::setConfig(const std::string &config)
-{
+bool DBusGateway::setConfig(const std::string &config) {
     m_config = config;
 
     if(m_config.length() > 1) {
@@ -57,8 +51,7 @@ bool DBusGateway::setConfig(const std::string &config)
     return false;
 }
 
-bool DBusGateway::activate()
-{
+bool DBusGateway::activate() {
     if(!m_hasBeenConfigured) {
         log_warning() << "'Activate' called on non-configured gateway " << id();
         return false;
@@ -108,7 +101,7 @@ bool DBusGateway::activate()
         close(m_infp);
         m_infp = -1;
         // dbus-proxy might take some time to create the bus socket
-        if (isSocketCreated()) {
+        if ( isSocketCreated() ) {
             log_debug() << "Found D-Bus socket: " << m_socket;
         } else {
             log_error() << "Did not find any D-Bus socket: " << m_socket;
@@ -123,8 +116,7 @@ bool DBusGateway::activate()
     return false;
 }
 
-bool DBusGateway::isSocketCreated() const
-{
+bool DBusGateway::isSocketCreated() const {
     int maxCount = 1000;
     int count = 0;
     do {
@@ -132,18 +124,17 @@ bool DBusGateway::isSocketCreated() const
             return false;
         }
         count++;
-        usleep(1000*10);
+        usleep(1000 * 10);
     } while (access(m_socket.c_str(), F_OK) == -1);
     return true;
 }
 
-bool DBusGateway::teardown()
-{
+bool DBusGateway::teardown() {
     bool success = true;
 
     if (m_dbusProxyStarted) {
         if(m_pid != -1) {
-            if(!m_systemcallInterface.makePcloseCall(m_pid, m_infp, m_outfp)) {
+            if( !m_systemcallInterface.makePcloseCall(m_pid, m_infp, m_outfp) ) {
                 log_error() << "makePcloseCall() returned error";
                 success = false;
             }
@@ -152,7 +143,7 @@ bool DBusGateway::teardown()
             success = false;
         }
 
-        if(unlink(m_socket.c_str()) == -1) {
+        if(unlink( m_socket.c_str() ) == -1) {
             log_error() << "Could not remove " << m_socket << ": " << strerror(errno);
             success = false;
         }
@@ -161,8 +152,7 @@ bool DBusGateway::teardown()
     return success;
 }
 
-const char *DBusGateway::typeString()
-{
+const char*DBusGateway::typeString() {
     if (m_type == SessionProxy) {
         return "session";
     } else {
@@ -170,9 +160,8 @@ const char *DBusGateway::typeString()
     }
 }
 
-std::string DBusGateway::socketName()
-{
+std::string DBusGateway::socketName() {
     // Return the filename after stripping directory info
-    std::string socket(m_socket.c_str());
+    std::string socket( m_socket.c_str() );
     return socket.substr(socket.rfind('/') + 1);
 }

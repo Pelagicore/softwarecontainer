@@ -42,15 +42,15 @@ const struct pulseTestData validConfigs[] = {
     {
         "Minimal config",
         "{"
-            "\"audio\": \"true\""
+        "\"audio\": \"true\""
         "}",
         "true"
     },
     {
         "Confusing config",
         "{"
-            "\"audo\": \"true\","
-            "\"audio\": \"true\""
+        "\"audo\": \"true\","
+        "\"audio\": \"true\""
         "}",
         "true"
     }
@@ -60,15 +60,15 @@ const struct pulseTestData disablingConfigs[] = {
     {
         "Minimal config",
         "{"
-            "\"audio\": \"false\""
+        "\"audio\": \"false\""
         "}",
         "false"
     },
     {
         "Confusing config",
         "{"
-            "\"audo\": \"true\","
-            "\"audio\": \"false\""
+        "\"audo\": \"true\","
+        "\"audio\": \"false\""
         "}",
         "false"
     },

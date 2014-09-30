@@ -5,5 +5,5 @@
 #include "dltgateway.h"
 
 // no clue why the following lines are needed
-constexpr const char* DLTGateway::SOCKET_FILE_NAME;
-constexpr const char* DLTGateway::DLT_SOCKET_FOLDER;
+constexpr const char*DLTGateway::SOCKET_FILE_NAME;
+constexpr const char*DLTGateway::DLT_SOCKET_FOLDER;

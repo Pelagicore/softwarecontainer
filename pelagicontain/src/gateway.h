@@ -14,12 +14,11 @@
  *
  * Gateway base class for Pelagicontain
  */
-class Gateway
-{
-	LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
+class Gateway {
+    LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
 
 protected:
-	static constexpr const char* ENABLED_FIELD = "enabled";
+    static constexpr const char *ENABLED_FIELD = "enabled";
 
 public:
     Gateway() {
@@ -56,18 +55,18 @@ public:
         return true;
     }
 
-	ReturnCode createSymLinkInContainer(const std::string &source, const std::string &destination);
+    ReturnCode createSymLinkInContainer(const std::string &source, const std::string &destination);
 
     Container& getContainer() {
-    	return *m_container;
+        return *m_container;
     }
 
-    void setContainer(Container& container) {
-    	m_container = &container;
+    void setContainer(Container &container) {
+        m_container = &container;
     }
 
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) {
-    	return getContainer().setEnvironmentVariable(variable, value);
+        return getContainer().setEnvironmentVariable(variable, value);
     }
 
     /*! Notifies the controller to issue the system call
@@ -76,11 +75,11 @@ public:
      * \return True if all went well, false if not
      */
     ReturnCode systemCall(const std::string &cmd) {
-    	return getContainer().systemCall(cmd);
+        return getContainer().systemCall(cmd);
     }
 
 protected:
-    Container* m_container = nullptr;
+    Container *m_container = nullptr;
 };
 
 #endif /* GATEWAY_H */

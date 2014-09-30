@@ -8,9 +8,8 @@
 #include "gateway.h"
 #include "systemcallinterface.h"
 
-class NetworkGateway: public Gateway
-{
-	LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
+class NetworkGateway : public Gateway {
+    LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
 
 public:
     NetworkGateway(SystemcallAbstractInterface &systemCallInterface);
@@ -35,7 +34,6 @@ public:
      */
     const std::string ip();
 private:
-
     /*! Generate IP address for the container
      *
      * Retrieves an IP from DHCP.

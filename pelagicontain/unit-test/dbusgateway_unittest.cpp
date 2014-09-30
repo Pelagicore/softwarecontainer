@@ -12,60 +12,50 @@
 
 using namespace pelagicore;
 
-class MockController
-{
+class MockController {
 public:
-
-    virtual bool startApp()
-    {
-            return true;
+    virtual bool startApp() {
+        return true;
     }
 
-    virtual bool shutdown()
-    {
+    virtual bool shutdown() {
         return true;
     }
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable,
-        const std::string &value)
-    {
+                                              const std::string &value) {
         return ReturnCode::SUCCESS;
     }
 
-    virtual bool hasBeenStarted() const
-    {
+    virtual bool hasBeenStarted() const {
         return true;
     }
 
-    virtual bool initialize()
-    {
+    virtual bool initialize() {
         return true;
     }
 
-    MOCK_METHOD1(systemCall, ReturnCode(const std::string &cmd));
+    MOCK_METHOD1( systemCall, ReturnCode(const std::string & cmd) );
 
 };
 
 class MockSystemcallInterfaceDBusGWTest :
-    public SystemcallAbstractInterface
-{
+    public SystemcallAbstractInterface {
 public:
-    MOCK_METHOD1(makeCall, bool(const std::string &cmd));
-    MOCK_METHOD2(makeCall, bool(const std::string &cmd, int &exitCode));
-    MOCK_METHOD3(makePopenCall,
-                 pid_t(const std::string &command, int *infp, int *outfp));
-    MOCK_METHOD3(makePcloseCall, bool(pid_t pid, int infp, int outfp));
+    MOCK_METHOD1( makeCall, bool(const std::string & cmd) );
+    MOCK_METHOD2( makeCall, bool(const std::string & cmd, int &exitCode) );
+    MOCK_METHOD3( makePopenCall,
+                  pid_t(const std::string & command, int *infp, int *outfp) );
+    MOCK_METHOD3( makePcloseCall, bool(pid_t pid, int infp, int outfp) );
 };
 
-void close_fd_helper(pid_t pid, int infp, int outfp)
-{
+void close_fd_helper(pid_t pid, int infp, int outfp) {
     close(infp);
 }
 
 
 class SystemcallInterfaceStub :
-    public SystemcallAbstractInterface
-{
+    public SystemcallAbstractInterface {
 public:
     FILE *m_fileDescriptor = NULL;
     pid_t m_pid = 999;
@@ -85,44 +75,38 @@ public:
     virtual ~SystemcallInterfaceStub() {
         if(m_fileDescriptor != NULL) {
             fclose(m_fileDescriptor);
-            unlink(m_tmpfile.c_str());
+            unlink( m_tmpfile.c_str() );
         }
     }
 
-    virtual bool makeCall(const std::string &cmd)
-    {
+    virtual bool makeCall(const std::string &cmd) {
         return true;
     }
 
-    virtual bool makeCall(const std::string &cmd, int &exitCode)
-    {
+    virtual bool makeCall(const std::string &cmd, int &exitCode) {
         exitCode = 0;
         return true;
     }
 
     pid_t makePopenCall(const std::string &command,
                         int *infp,
-                        int *outfp)
-    {
+                        int *outfp) {
         *infp = m_infp;
         *outfp = m_outfp;
         return m_pid;
     }
 
-    bool makePcloseCall(pid_t pid, int infp, int outfp)
-    {
-        if(pid == m_pid
-            && ( infp == m_infp || infp == -1 )
-            && ( outfp == m_outfp || outfp == -1 ))
-        {
+    bool makePcloseCall(pid_t pid, int infp, int outfp) {
+        if( pid == m_pid
+            && (infp == m_infp || infp == -1)
+            && (outfp == m_outfp || outfp == -1) ) {
             return true;
         }
 
         return false;
     }
 
-    std::string fileContent()
-    {
+    std::string fileContent() {
         // Open file for reading. Don't reuse m_fileDescriptor here
         // since it might have been closed previously
         FILE *fdRead = fopen(m_tmpfile.c_str(), "r");
@@ -130,7 +114,7 @@ public:
         std::string content = "";
         char buf[20];
         rewind(fdRead);
-        while (fgets(buf, 20, fdRead)) {
+        while ( fgets(buf, 20, fdRead) ) {
             content += buf;
             std::cout << buf << std::endl;
         }
@@ -141,13 +125,12 @@ public:
 };
 
 
-using ::testing::InSequence;
-using ::testing::_;
-using ::testing::Return;
-using ::testing::NiceMock;
+using::testing::InSequence;
+using::testing::_;
+using::testing::Return;
+using::testing::NiceMock;
 
-class DBusGatewayTest : public ::testing::Test
-{
+class DBusGatewayTest : public::testing::Test {
 public:
     const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/gateways";
     const std::string m_containerName = "test";
@@ -181,7 +164,7 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
 
     std::string config = "{}";
 
-    ASSERT_TRUE(gw.setConfig(config));
+    ASSERT_TRUE( gw.setConfig(config) );
 
     // DBusGateway relies on dbus-proxy to create a socket and since dbus-proxy
     // will not be started during these tests we need to create a file so
@@ -189,13 +172,13 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     std::string socketFile = m_gatewayDir + "/sess_" + m_containerName + ".sock";
     std::string cmd_mkdir = "mkdir -p ";
     cmd_mkdir += m_gatewayDir;
-    system(cmd_mkdir.c_str());
+    system( cmd_mkdir.c_str() );
     std::string cmd_touch = "touch ";
     cmd_touch += socketFile;
-    system(cmd_touch.c_str());
+    system( cmd_touch.c_str() );
 
-    ASSERT_TRUE(gw.activate());
-    EXPECT_EQ(config, systemcallInterface.fileContent());
+    ASSERT_TRUE( gw.activate() );
+    EXPECT_EQ( config, systemcallInterface.fileContent() );
 
     // Teardown will remove the "socket" file created above.
     gw.teardown();
@@ -218,15 +201,15 @@ TEST_F(DBusGatewayTest, TestActivateCall) {
     // create sock file which teardown will remove
     std::string cmd_mkdir = "mkdir -p ";
     cmd_mkdir += m_gatewayDir;
-    system(cmd_mkdir.c_str());
+    system( cmd_mkdir.c_str() );
     std::string cmd_touch = "touch ";
     cmd_touch += m_gatewayDir;
     cmd_touch += "/sess_test.sock";
-    system(cmd_touch.c_str());
+    system( cmd_touch.c_str() );
 
     std::string config = "{}";
 
-    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_TRUE( gw->setConfig(config) );
 
     FILE *tmp = tmpfile();
     int infp = fileno(tmp);
@@ -239,17 +222,16 @@ TEST_F(DBusGatewayTest, TestActivateCall) {
                           "/tmp/dbusgateway-unit-test/gateways/sess_test.sock "
                           "session",
                           _, _)
-        ).WillOnce(DoAll(::testing::SetArgPointee<1>(infp), Return(999)));
+            ).WillOnce( DoAll( ::testing::SetArgPointee<1>(infp), Return(999) ) );
 
         EXPECT_CALL(
             systemcallInterfaceMock,
             makePcloseCall(_, _, _)
-        ).WillOnce(DoAll(::testing::Invoke(close_fd_helper), Return(true)));
+            ).WillOnce( DoAll( ::testing::Invoke(close_fd_helper), Return(true) ) );
     }
 
-    ASSERT_TRUE(gw->activate());
-    ASSERT_TRUE(gw->teardown());
+    ASSERT_TRUE( gw->activate() );
+    ASSERT_TRUE( gw->teardown() );
 
     delete gw;
 }
-

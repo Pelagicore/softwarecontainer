@@ -15,7 +15,6 @@
 class SystemcallAbstractInterface {
 
 public:
-
     virtual ~SystemcallAbstractInterface() {
     };
 
@@ -42,9 +41,7 @@ public:
      * \param infp A pointer to the output stream file descriptor stream.
      * \return pid of executed process, or -1 upon failure
      */
-    virtual pid_t makePopenCall(const std::string &command,
-                                int *infp,
-                                int *outfp) = 0;
+    virtual pid_t makePopenCall(const std::string &command, int *infp, int *outfp) = 0;
 
     /*! Terminates the process indicated by \a pid and closes the file
      *  descriptors given. This call is to be coupled with the makePopenCall()

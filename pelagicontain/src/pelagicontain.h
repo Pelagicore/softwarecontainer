@@ -9,21 +9,21 @@
 #include <glibmm.h>
 
 #include "container.h"
-#include "paminterface.h"
 
 class Gateway;
+class PAMAbstractInterface;
 
 enum class ContainerState {
-	CREATED,
-	PRELOADED,
-	READY,
-	RUNNING,
-	TERMINATED
+    CREATED,
+    PRELOADED,
+    READY,
+    RUNNING,
+    TERMINATED
 };
 
 class ContainerListener {
 public:
-	virtual void onContainerStateChanged(ContainerState state) = 0;
+    virtual void onContainerStateChanged(ContainerState state) = 0;
 };
 
 class Pelagicontain {
@@ -40,15 +40,15 @@ public:
 
     ~Pelagicontain();
 
-    void setPAM(PAMAbstractInterface& pamInterface) {
-    	m_pamInterface = &pamInterface;
+    void setPAM(PAMAbstractInterface &pamInterface) {
+        m_pamInterface = &pamInterface;
     }
 
     /*! Add a gateway.
      *
      * \param gateway A gateway that will be used by the container
      */
-    void addGateway(Gateway & gateway);
+    void addGateway(Gateway &gateway);
 
     /*! Starts the container preloading phase.
      *
@@ -113,17 +113,16 @@ public:
      * \param var The name of the environment variable to be set
      * \param val The value that the environement variable should be set to
      */
-    void setContainerEnvironmentVariable(const std::string &var,
-                                         const std::string &val);
+    void setContainerEnvironmentVariable(const std::string &var, const std::string &val);
 
     void shutdownContainer();
 
     ObservableProperty<ContainerState>& getContainerState() {
-    	return m_containerState;
+        return m_containerState;
     }
 
-    void setMainLoopContext(Glib::RefPtr<Glib::MainContext>& mainLoopContext) {
-    	m_mainLoopContext = &mainLoopContext;
+    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> &mainLoopContext) {
+        m_mainLoopContext = &mainLoopContext;
     }
 
 private:
@@ -146,9 +145,9 @@ private:
 
     Container *m_container = nullptr;
     PAMAbstractInterface *m_pamInterface = nullptr;
-    std::vector<Gateway *> m_gateways;
+    std::vector<Gateway*> m_gateways;
     std::string m_appId;
-    const std::string& m_cookie;
+    const std::string &m_cookie;
 
     ObservableWritableProperty<ContainerState> m_containerState;
 
@@ -157,7 +156,7 @@ private:
 
     SignalConnectionsHandler m_connections;
 
-	Glib::RefPtr<Glib::MainContext>* m_mainLoopContext = nullptr;
+    Glib::RefPtr<Glib::MainContext> *m_mainLoopContext = nullptr;
 
 };
 

@@ -12,46 +12,39 @@
 
 using namespace pelagicore;
 
-class MockController
-{
+class MockController {
 public:
-
-    virtual bool startApp()
-    {
+    virtual bool startApp() {
         return true;
     }
 
-    virtual bool shutdown()
-    {
+    virtual bool shutdown() {
         return true;
     }
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable,
-                                        const std::string &value)
-    {
+                                              const std::string &value) {
         return ReturnCode::SUCCESS;
     }
 
-    virtual bool hasBeenStarted() const
-    {
+    virtual bool hasBeenStarted() const {
         return true;
     }
 
-    virtual bool initialize()
-    {
+    virtual bool initialize() {
         return true;
     }
 
-    MOCK_METHOD1(systemCall, ReturnCode(const std::string &cmd));
+    MOCK_METHOD1( systemCall, ReturnCode(const std::string & cmd) );
 };
 
-using ::testing::InSequence;
-using ::testing::_;
-using ::testing::Return;
-using ::testing::NiceMock;
-using ::testing::StrictMock;
-using ::testing::StrEq;
-using ::testing::DefaultValue;
+using::testing::InSequence;
+using::testing::_;
+using::testing::Return;
+using::testing::NiceMock;
+using::testing::StrictMock;
+using::testing::StrEq;
+using::testing::DefaultValue;
 
 TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
@@ -61,11 +54,11 @@ TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
     ASSERT_STREQ(gw.id().c_str(), "devicenode");
 }
 
-class DeviceNodeGatewayValidConfig:
+class DeviceNodeGatewayValidConfig :
     public testing::TestWithParam<testData> {};
 
-INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayValidConfig,
-                        ::testing::ValuesIn(validConfigs));
+INSTANTIATE_TEST_CASE_P( InstantiationName, DeviceNodeGatewayValidConfig,
+                         ::testing::ValuesIn(validConfigs) );
 
 TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     StrictMock<MockController> controllerInterface;
@@ -73,7 +66,7 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
 
     struct testData config = GetParam();
 
-    ASSERT_TRUE(gw.setConfig(config.data));
+    ASSERT_TRUE( gw.setConfig(config.data) );
 
     DefaultValue<bool>::Set(true);
     for (uint i = 0; i < config.names.size(); i++) {
@@ -85,23 +78,23 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
         std::string mknodCmd = "mknod " + name + " c " + major + " " + minor;
         std::string chmodCmd = "chmod " + mode + " " + name;
 
-        EXPECT_CALL(controllerInterface, systemCall(StrEq(mknodCmd.c_str())));
-        EXPECT_CALL(controllerInterface, systemCall(StrEq(chmodCmd.c_str())));
+        EXPECT_CALL( controllerInterface, systemCall( StrEq( mknodCmd.c_str() ) ) );
+        EXPECT_CALL( controllerInterface, systemCall( StrEq( chmodCmd.c_str() ) ) );
     }
     gw.activate();
     DefaultValue<bool>::Clear();
 }
 
-class DeviceNodeGatewayInvalidConfig:
+class DeviceNodeGatewayInvalidConfig :
     public testing::TestWithParam<testData> {};
 
-INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayInvalidConfig,
-                        ::testing::ValuesIn(invalidConfigs));
+INSTANTIATE_TEST_CASE_P( InstantiationName, DeviceNodeGatewayInvalidConfig,
+                         ::testing::ValuesIn(invalidConfigs) );
 
 TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
     StrictMock<MockController> controllerInterface;
     DeviceNodeGateway gw;
 
     struct testData config = GetParam();
-    ASSERT_FALSE(gw.setConfig(config.data));
+    ASSERT_FALSE( gw.setConfig(config.data) );
 }

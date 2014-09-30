@@ -14,10 +14,9 @@
  *  This class is used by Pelagicontain to communicate with the host system
  *  and is intended to be an abstraction of the acutal implementation.
  */
-class SystemcallInterface:
-    public SystemcallAbstractInterface
-{
-	LOG_DECLARE_CLASS_CONTEXT("SYSC", "System call interface");
+class SystemcallInterface :
+    public SystemcallAbstractInterface {
+    LOG_DECLARE_CLASS_CONTEXT("SYSC", "System call interface");
 
 public:
     SystemcallInterface();
@@ -45,9 +44,7 @@ public:
      * \param infp A pointer to the output stream file descriptor stream.
      * \return pid_t if the command was successfully executed, otherwise -1.
      */
-    virtual pid_t makePopenCall(const std::string &command,
-                                int *infp,
-                                int *outfp);
+    virtual pid_t makePopenCall(const std::string &command, int *infp, int *outfp);
 
     /*! Implements abstract method makePcloseCall on SystemcallAbstractInterface
      *

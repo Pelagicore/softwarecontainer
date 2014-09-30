@@ -12,71 +12,61 @@
 
 using namespace pelagicore;
 
-class PulseMockController
-{
+class PulseMockController {
 public:
-
-    virtual bool startApp()
-    {
-            return true;
-    }
-
-    virtual bool shutdown()
-    {
+    virtual bool startApp() {
         return true;
     }
 
-    virtual bool hasBeenStarted() const
-    {
+    virtual bool shutdown() {
         return true;
     }
 
-    virtual bool initialize()
-    {
+    virtual bool hasBeenStarted() const {
         return true;
     }
 
-    MOCK_METHOD1(systemCall,
-    		ReturnCode(const std::string &cmd));
+    virtual bool initialize() {
+        return true;
+    }
 
-    MOCK_METHOD2(setEnvironmentVariable,
-    		ReturnCode(const std::string &variable, const std::string &value));
+    MOCK_METHOD1( systemCall,
+                  ReturnCode(const std::string & cmd) );
+
+    MOCK_METHOD2( setEnvironmentVariable,
+                  ReturnCode(const std::string & variable, const std::string & value) );
 };
 
 
-class MockSystemcallInterface:
-    public SystemcallAbstractInterface
-{
+class MockSystemcallInterface :
+    public SystemcallAbstractInterface {
 public:
-    virtual bool makeCall(const std::string &cmd, int &exitCode)
-    {
+    virtual bool makeCall(const std::string &cmd, int &exitCode) {
         exitCode = 0;
         return true;
     }
 
-    MOCK_METHOD1(makeCall, bool(const std::string &cmd));
+    MOCK_METHOD1( makeCall, bool(const std::string & cmd) );
 
-    MOCK_METHOD3(makePopenCall, pid_t(const std::string &command, int *infp, int *outfp));
+    MOCK_METHOD3( makePopenCall, pid_t(const std::string & command, int *infp, int *outfp) );
 
-    MOCK_METHOD3(makePcloseCall, bool(pid_t pid, int infp, int outfp));
+    MOCK_METHOD3( makePcloseCall, bool(pid_t pid, int infp, int outfp) );
 
 };
 
-using ::testing::DefaultValue;
-using ::testing::InSequence;
-using ::testing::_;
-using ::testing::Return;
-using ::testing::NiceMock;
-using ::testing::StrictMock;
-using ::testing::StrEq;
-using ::testing::A;
+using::testing::DefaultValue;
+using::testing::InSequence;
+using::testing::_;
+using::testing::Return;
+using::testing::NiceMock;
+using::testing::StrictMock;
+using::testing::StrEq;
+using::testing::A;
 
-class PulseGatewayTest:
-    public ::testing::Test
-{
+class PulseGatewayTest :
+    public::testing::Test {
 protected:
-    virtual void SetUp()
-    {
+    virtual void SetUp() {
         DefaultValue<bool>::Set(true);
 
         // ContainerName and gatewayDir must be passed to constructor
@@ -87,9 +77,8 @@ protected:
         gatewayDir = containerDir + "/gateways";
     }
 
-    virtual void TearDown()
-    {
-        using ::testing::DefaultValue;
+    virtual void TearDown() {
+        using::testing::DefaultValue;
         DefaultValue<bool>::Clear();
     }
 
@@ -112,11 +101,11 @@ TEST_F(PulseGatewayTest, TestIdEqualspulseaudio) {
  *  Tests with configurations that are syntactically correct, i.e. not
  *  causing errors, and that enables audio.
  */
-class PulseGatewayValidConfig:
+class PulseGatewayValidConfig :
     public testing::TestWithParam<pulseTestData> {};
 
-INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayValidConfig,
-                        ::testing::ValuesIn(validConfigs));
+INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayValidConfig,
+                         ::testing::ValuesIn(validConfigs) );
 
 TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -125,9 +114,9 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     struct pulseTestData config = GetParam();
 
     DefaultValue<bool>::Set(true);
-    EXPECT_CALL(controllerInterface, setEnvironmentVariable(
-        A<const std::string &>(),
-        A<const std::string &>()));
+    EXPECT_CALL( controllerInterface, setEnvironmentVariable(
+                     A<const std::string &>(),
+                     A<const std::string &>() ) );
 
     bool success = gw.setConfig(config.data);
     DefaultValue<bool>::Clear();
@@ -136,7 +125,7 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     success = gw.activate();
     ASSERT_TRUE(success);
 
-    ASSERT_TRUE(gw.teardown());
+    ASSERT_TRUE( gw.teardown() );
 }
 
 
@@ -145,11 +134,11 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
  *  Tests with configurations that are syntactically incorrect, i.e.
  *  causing parsing errors.
  */
-class PulseGatewayInvalidConfig:
+class PulseGatewayInvalidConfig :
     public testing::TestWithParam<pulseTestData> {};
 
-INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayInvalidConfig,
-                        ::testing::ValuesIn(invalidConfigs));
+INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayInvalidConfig,
+                         ::testing::ValuesIn(invalidConfigs) );
 
 TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -166,11 +155,11 @@ TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
  *  Tests with configurations that are syntactically correct, i.e. not
  *  causing errors, but that disables audio.
  */
-class PulseGatewayDisablingConfig:
+class PulseGatewayDisablingConfig :
     public testing::TestWithParam<pulseTestData> {};
 
-INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayDisablingConfig,
-                        ::testing::ValuesIn(disablingConfigs));
+INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayDisablingConfig,
+                         ::testing::ValuesIn(disablingConfigs) );
 
 TEST_P(PulseGatewayDisablingConfig, TestCanParseDisablingConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -178,7 +167,7 @@ TEST_P(PulseGatewayDisablingConfig, TestCanParseDisablingConfig) {
 
     struct pulseTestData config = GetParam();
 
-    EXPECT_CALL(controllerInterface, setEnvironmentVariable(_, _)).Times(0);
+    EXPECT_CALL( controllerInterface, setEnvironmentVariable(_, _) ).Times(0);
 
     bool success = gw.setConfig(config.data);
     ASSERT_TRUE(success);

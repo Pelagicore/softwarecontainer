@@ -14,7 +14,7 @@ struct testData {
     const std::vector<std::string> modes;
 };
 
-void PrintTo(const testData& d, ::std::ostream* os) {
+void PrintTo(const testData &d, ::std::ostream *os) {
     *os << "Title: " << d.title;
     *os << "\nData: " << d.data;
 }
@@ -143,8 +143,8 @@ const struct testData validConfigs[] = {
         "              ]"
         "}",
         {"tty0", "tty1", "/dev/galcore"},
-        {"4",    "4",    "199"},
-        {"0",    "0",    "0"},
-        {"666",  "400",  "666"}
+        {"4", "4", "199"},
+        {"0", "0", "0"},
+        {"666", "400", "666"}
     },
 };
