@@ -11,8 +11,7 @@
 
 /*! This Pelagicontain gateway is responsible for setting up a connection to the
  *  PulseAudio server running on the host system. The gateway decides whether to
- *  connect to the PulseAudio server or not based on the configuration passed to
- *  setConfig.
+ *  connect to the PulseAudio server or not based on the configuration.
  *  If configured to enable audio, the gateway sets up a mainloop and then connects
  *  to the default PulseAudio server by calling pa_context_connect(). This is done
  *  during the activate() call.
@@ -20,9 +19,11 @@
  *  through the stateCallback function and, once the connection has been successfully
  *  set up, loads the module-native-protocol-unix PulseAudio module.
  *
- *  JSON format for configuration that enables audio (sent to setConfig()):
+ *  JSON format for configuration that enables audio:
  *  \code{.js}
- *   {"audio": "true"}
+ *  [
+ *   {"audio": true}
+ *  ]
  *  \endcode
  *
  *  A malformed configuration or a configuration that sets audio to false will simply
@@ -43,16 +44,7 @@ public:
      */
     virtual std::string id();
 
-    /*!
-     *  Implements Gateway::setConfig
-     *
-     *  Parses the JSON string configuration and sets m_enableAudio to true
-     *  or false based on the content of the configuration.
-     *
-     * \param config JSON configuration object
-     * \returns true upon successful parsing, false otherwise
-     */
-    virtual bool setConfig(const std::string &config);
+    ReturnCode readConfigElement(JSonElement &element) override;
 
     /*!
      *  Implements Gateway::activate
@@ -120,7 +112,7 @@ private:
     pa_threaded_mainloop *m_mainloop;
     std::string m_socket;
     int m_index;
-    bool m_enableAudio;
+    bool m_enableAudio = false;
 };
 
 #endif /* PULSEGATEWAY_H */

@@ -26,7 +26,7 @@ public:
         return ID;
     }
 
-    bool setConfig(const std::string &config) override;
+    ReturnCode readConfigElement(JSonElement &element) override;
 
     bool activate() override {
         return true;

@@ -26,13 +26,9 @@ void Pelagicontain::addGateway(Gateway &gateway) {
 // Preload the container. This is a non-blocking operation
 pid_t Pelagicontain::preload(Container &container) {
     m_container = &container;
-
     m_container->create();
-
     pid_t pid = m_container->start();
-
     m_containerState.setValueNotify(ContainerState::PRELOADED);
-
     return pid;
 }
 
@@ -110,10 +106,10 @@ void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs) {
         }
     }
 
-    m_containerState.setValueNotify(ContainerState::READY);
-
     for (auto &gateway : m_gateways)
         gateway->activate();
+
+    m_containerState.setValueNotify(ContainerState::READY);
 
 }
 

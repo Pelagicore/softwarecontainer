@@ -52,29 +52,24 @@ std::string PulseGateway::id() {
     return "pulseaudio";
 }
 
-bool PulseGateway::setConfig(const std::string &config) {
-    JSonParser parser(config);
-
-    std::string value;
-    parser.readString("audio", value);
-    m_enableAudio = (value == "true");
-
-    bool success = true;
-
-    if (m_enableAudio) {
-        log_debug() << "Audio will be enabled";
-        std::string var = "PULSE_SERVER";
-        std::string val = getContainer().gatewaysDirInContainer() + "/" + socketName();
-        success = isSuccess( setEnvironmentVariable(var, val) );
-    } else
-        log_debug() << "Audio will be disabled";
-
-    return success;
+ReturnCode PulseGateway::readConfigElement(JSonElement &element) {
+    bool enabled = false;
+    element.read("audio", enabled);
+    m_enableAudio |= enabled;
+    return ReturnCode::SUCCESS;
 }
 
 bool PulseGateway::activate() {
     bool success = true;
     if (m_enableAudio) {
+        if (m_enableAudio) {
+            log_debug() << "Audio will be enabled";
+            std::string var = "PULSE_SERVER";
+            std::string val = getContainer().gatewaysDirInContainer() + "/" + socketName();
+            success = isSuccess( setEnvironmentVariable(var, val) );
+        } else
+            log_debug() << "Audio will be disabled";
+
         success = connectToPulseServer();
     }
 
@@ -103,7 +98,7 @@ bool PulseGateway::connectToPulseServer() {
 
         if (err != 0) {
             success = false;
-            log_error( "pulse: Error code %d (%s)", err, pa_strerror(err) );
+            log_error() << "pulse: Error code " << err << " " << pa_strerror(err);
 
             if (err == -1) {
                 log_debug() << "Is the home directory set?";
@@ -130,7 +125,7 @@ void PulseGateway::loadCallback(pa_context *context, uint32_t index, void *userd
     p->m_index = (int)index;
     int error = pa_context_errno(context);
     if (error != 0) {
-        log_error( "pulse: Error code %d (%s)", error, pa_strerror(error) );
+        log_error() << "pulse: Error code " << error << " " << pa_strerror(error);
     }
 
     log_debug() << "pulse: Loaded module " << p->m_index;
@@ -142,9 +137,9 @@ void PulseGateway::unloadCallback(pa_context *context, int success, void *userda
     PulseGateway *p = static_cast<PulseGateway*>(userdata);
 
     if (success) {
-        log_debug("pulse: Unloaded module %d", p->m_index);
+        log_debug() << "pulse: Unloaded module %d" << p->m_index;
     } else {
-        log_debug("pulse: Failed to unload module %d", p->m_index);
+        log_debug() << "pulse: Failed to unload module %d" << p->m_index;
     }
 
     pa_threaded_mainloop_signal(p->m_mainloop, 0);
@@ -166,22 +161,22 @@ void PulseGateway::stateCallback(pa_context *context, void *userdata) {
             userdata);
         break;
     case PA_CONTEXT_CONNECTING :
-        log_debug("pulse: Connecting");
+        log_debug() << "pulse: Connecting";
         break;
     case PA_CONTEXT_AUTHORIZING :
-        log_debug("pulse: Authorizing");
+        log_debug() << "pulse: Authorizing";
         break;
     case PA_CONTEXT_SETTING_NAME :
-        log_debug("pulse: Setting name");
+        log_debug() << "pulse: Setting name";
         break;
     case PA_CONTEXT_UNCONNECTED :
-        log_debug("pulse: Unconnected");
+        log_debug() << "pulse: Unconnected";
         break;
     case PA_CONTEXT_FAILED :
-        log_debug("pulse: Failed");
+        log_debug() << "pulse: Failed";
         break;
     case PA_CONTEXT_TERMINATED :
-        log_debug("pulse: Terminated");
+        log_debug() << "pulse: Terminated";
         break;
     }
 }

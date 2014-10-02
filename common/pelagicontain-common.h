@@ -10,7 +10,8 @@
 #include "pelagicontain-log.h"
 #include "pelagicore-common.h"
 
-#include <jansson.h>
+#include "jsonparser.h"
+using pelagicore::JSonElement;
 
 namespace pelagicontain {
 
@@ -134,136 +135,6 @@ public:
 
 private:
     Type m_value;
-
-};
-
-
-class JSonParser {
-
-    LOG_DECLARE_CLASS_CONTEXT("JSON", "JSON parser");
-
-public:
-    JSonParser(const std::string &config) {
-        if (config != "")
-            parseConfig(config);
-        else
-            parseConfig("{}");
-    }
-
-    JSonParser(json_t *element) {
-        m_root = element;
-        json_incref(m_root);
-    }
-
-    ~JSonParser() {
-        if (m_root) {
-            json_decref(m_root);
-        }
-    }
-
-    bool isArray() {
-        return json_is_array(m_root);
-    }
-
-    void read(const std::string &field, std::vector<JSonParser> &elements) {
-        json_t *value = json_object_get( m_root, field.c_str() );
-        if (value != nullptr) {
-
-            if ( json_is_array(value) ) {
-                for (size_t i = 0; i < json_array_size(value); i++) {
-                    json_t *arrayElement = json_array_get(value, i);
-                    elements.push_back( JSonParser(arrayElement) );
-                }
-            } else
-                log_error() << "Value is not an array";
-        }
-    }
-
-    size_t elementCount() {
-        return json_array_size(m_root);
-    }
-
-    JSonParser arrayElementAt(size_t index) {
-        if ( json_is_array(m_root) ) {
-            json_t *arrayElement = json_array_get(m_root, index);
-            return JSonParser(arrayElement);
-        } else
-            log_error() << "Value is not an array";
-
-        return JSonParser("");
-    }
-
-    void readString(const std::string &field, std::string &v) {
-        read(field, v);
-    }
-
-    void read(const std::string &field, std::string &v) {
-        json_t *value = json_object_get( m_root, field.c_str() );
-        if (value != nullptr) {
-            if ( json_is_string(value) ) {
-                v = json_string_value(value);
-            } else
-                log_error("Value is not a string.");
-
-            json_decref(value);
-        }
-    }
-
-    void readBoolean(const std::string &field, bool &v) {
-        return read(field, v);
-    }
-
-    void read(const std::string &field, bool &v) {
-        json_t *value = json_object_get( m_root, field.c_str() );
-        if (value != nullptr) {
-            if ( json_is_boolean(value) ) {
-                v = json_is_true(value);
-            } else
-                log_error("Value is not a bool.");
-
-            json_decref(value);
-        }
-    }
-
-    void readStringArray(const std::string &field, std::vector<std::string> &v) {
-        json_t *value = json_object_get( m_root, field.c_str() );
-        if (value != nullptr) {
-            if ( json_is_array(value) ) {
-                for (size_t i = 0; i < json_array_size(value); i++) {
-                    json_t *arrayElement = json_array_get(value, i);
-                    if ( json_is_string(arrayElement) )
-                        v.push_back( json_string_value(arrayElement) );
-                    else
-                        log_error() << "Value is not a string";
-
-                }
-            } else
-                log_error() << "Value is not an array";
-
-            json_decref(value);
-        }
-    }
-
-    json_t*root() {
-        return m_root;
-    }
-
-    bool isValid() {
-        return (m_root != nullptr);
-    }
-
-private:
-    void parseConfig(const std::string &config) {
-        json_error_t error;
-
-        // Get root JSON object
-        m_root = json_loads(config.c_str(), 0, &error);
-
-        if (m_root == nullptr)
-            log_error() << "Error on line " << error.line << ". " << error.text;
-    }
-
-    json_t *m_root;
 
 };
 

@@ -19,3 +19,18 @@ ReturnCode Gateway::createSymLinkInContainer(const std::string &source, const st
     waitpid(m_pid, &status, 0);
     return (status == 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
+
+bool Gateway::setConfig(const std::string &config) {
+    JSonElement rootElement(config);
+
+    bool success = true;
+
+    std::vector<JSonElement> elements;
+    rootElement.read(elements);
+    for (auto &element : elements) {
+        if ( isError( readConfigElement(element) ) )
+            success = false;
+    }
+
+    return success;
+}

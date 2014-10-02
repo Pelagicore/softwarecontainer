@@ -37,7 +37,11 @@ public:
      * \returns true if \p config was sucecssfully parsed
      *          false otherwise
      */
-    virtual bool setConfig(const std::string &config) = 0;
+    virtual bool setConfig(const std::string &config);
+
+    virtual ReturnCode readConfigElement(JSonElement &element) {
+        return ReturnCode::SUCCESS;
+    }
 
     /*! Applies any configuration set by setConfig()
      *

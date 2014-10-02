@@ -9,6 +9,9 @@
 #include "gateway.h"
 #include "systemcallinterface.h"
 
+/**
+ * To be removed
+ */
 class WaylandGateway : public Gateway {
 
     LOG_DECLARE_CLASS_CONTEXT("Wayl", "Wayland gateway");
@@ -30,7 +33,7 @@ public:
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
 
     bool setConfig(const std::string &config) override {
-        JSonParser parser(config);
+        JSonElement parser(config);
         m_enabled = false;
         parser.readBoolean("enabled", m_enabled);
         return true;

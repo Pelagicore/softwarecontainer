@@ -19,8 +19,7 @@ import conftest
 from common import ComponentTestHelper
 
 
-CONFIG = {
-    "devices": [
+CONFIG = [
         {
             "name": "/dev/random",
             "major": "1",
@@ -28,7 +27,6 @@ CONFIG = {
             "mode": "666"
         }
     ]
-}
 
 CONFIGS = {
     "devicenode": json.dumps(CONFIG)

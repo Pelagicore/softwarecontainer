@@ -20,10 +20,7 @@ public:
      */
     virtual std::string id();
 
-    /*!
-     *  Implements Gateway::setConfig
-     */
-    virtual bool setConfig(const std::string &config);
+    ReturnCode readConfigElement(JSonElement &element) override;
 
     /*!
      *  Implements Gateway::activate
@@ -48,8 +45,7 @@ private:
 
     /*! Set route to default gateway
      *
-     * Sets the route to the default gateway. The gateway IP address was parsed
-     * during the setConfig() step.
+     * Sets the route to the default gateway.
      * To be able to access anything outside the container, this method must be
      * called after the network interface has been enabled. This is also true for
      * cases when a network interface that was previously enabled has been disabled
@@ -90,16 +86,6 @@ private:
      * \return false If bridge interface is not available
      */
     bool isBridgeAvailable();
-
-    /*! Parse the JSON configuration passed down from Platform Access Manager
-     *
-     *  Returns true if the "internet-access" key is set to true and returns
-     *  false if not.
-     *
-     * \param config The JSON string containing the configuration
-     * \return true or false
-     */
-    bool isInternetAccessSet(const std::string &config);
 
     /*! Parse the JSON configuration passed down from Platform Access Manager
      *

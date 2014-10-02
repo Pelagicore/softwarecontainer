@@ -21,7 +21,7 @@ import conftest
 from common import ComponentTestHelper
 
 
-CONFIG = {
+CONFIG = [{
     "dbus-gateway-config-session": [
         {
             "direction": "*",
@@ -38,23 +38,23 @@ CONFIG = {
             "method": "Introspect"
         }
     ]
-}
+}]
 
 CONFIGS = {
     "dbus": json.dumps(CONFIG)
 }
 
-CONFIG_WITHOUT_PERMISSION = {
+CONFIG_WITHOUT_PERMISSION = [{
     "dbus-gateway-config-session": [],
     "dbus-gateway-config-system": []
-}
+}]
 
 CONFIGS_WITHOUT_PERMISSION = {
     "dbus-gateway": json.dumps(CONFIG_WITHOUT_PERMISSION)
 }
 
 CONFIGS_WITH_ERROR = {
-    "dbus-gateway": "{}"
+    "dbus-gateway": "[{}]"
 }
 
 # The app introspects PAM on D-Bus using dbus-send and writes the output to file

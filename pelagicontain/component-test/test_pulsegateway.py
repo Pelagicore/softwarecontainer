@@ -21,8 +21,8 @@ import conftest
 from common import ComponentTestHelper
 
 # Prepare configurations
-audio_enabled = {"audio": "true"}
-audio_disabled = {"audio": "false"}
+audio_enabled = [{"audio": True}]
+audio_disabled = [{"audio": False}]
 
 TEST_CONFIGS = [audio_enabled, audio_disabled]
 
@@ -195,7 +195,7 @@ class TestPulseGateway():
         helper.pelagicontain_iface().Launch(helper.app_id())
         time.sleep(3)
 
-        if "true" in config["audio"]:
+        if config[0]["audio"]:
             assert is_app_output_ok("0", container_path)
         else:
             assert is_app_output_ok("1", container_path)

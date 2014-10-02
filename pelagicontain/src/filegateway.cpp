@@ -6,51 +6,36 @@
 #include <string>
 #include "filegateway.h"
 
-bool FileGateway::setConfig(const std::string &config) {
+ReturnCode FileGateway::readConfigElement(JSonElement &element) {
 
-    log_info() << "called";
-    JSonParser parser(config);
+    std::string pathInHost;
+    std::string pathInContainer;
+    bool createSymlinkInContainer = false;
+    bool readOnly = false;
+    std::string envVarName;
+    std::string envVarValue;
 
-    std::vector<JSonParser> elements;
-    parser.read("files", elements);
+    element.read("path-host", pathInHost);
+    element.read("path-container", pathInContainer);
+    element.read("create-symlink", createSymlinkInContainer);
+    element.read("read-only", readOnly);
+    element.read("env-var-name", envVarName);
+    element.read("env-var-value", envVarValue);
 
-    for(auto &parser : elements) {
+    assert(pathInHost.size() != 0);
 
-        log_info() << "element";
+    // TODO : move mount to activate()
 
-        std::string pathInHost;
-        parser.readString("path-host", pathInHost);
+    std::string path = getContainer().bindMountFileInContainer(pathInHost, pathInContainer, readOnly);
 
-        std::string pathInContainer;
-        parser.readString("path-container", pathInContainer);
-
-        bool createSymlinkInContainer = false;
-        parser.read("create-symlink", createSymlinkInContainer);
-
-        bool readOnly = false;
-        parser.read("read-only", readOnly);
-
-        //		std:string envVariableName = false;
-        //		parser.read("env-var-name", readOnly);
-
-        std::string envVarName;
-        parser.read("env-var-name", envVarName);
-
-        std::string envVarValue;
-        parser.read("env-var-value", envVarValue);
-
-        std::string path = getContainer().bindMountFileInContainer(pathInHost, pathInContainer, readOnly);
-
-        if (envVarName.size() != 0) {
-            char value[1024];
-            snprintf( value, sizeof(value), envVarValue.c_str(), path.c_str() );
-            setEnvironmentVariable(envVarName, value);
-        }
-
-        if (createSymlinkInContainer)
-            createSymLinkInContainer(path, pathInHost);
-
+    if (envVarName.size() != 0) {
+        char value[1024];
+        snprintf( value, sizeof(value), envVarValue.c_str(), path.c_str() );
+        setEnvironmentVariable(envVarName, value);
     }
 
-    return true;
+    if (createSymlinkInContainer)
+        createSymLinkInContainer(path, pathInHost);
+
+    return ReturnCode::SUCCESS;
 }
