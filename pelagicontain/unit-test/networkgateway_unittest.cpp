@@ -82,7 +82,7 @@ protected:
  */
 TEST_F(NetworkGatewayTest, TestSetConfig) {
 
-    std::string config = "{\"internet-access\": false, \"gateway\":\"\"}";
+    std::string config = "[{\"internet-access\": false, \"gateway\":\"\"}]";
     NetworkGateway gw(systemCallInterface);
 
     bool success = gw.setConfig(config);
@@ -92,7 +92,7 @@ TEST_F(NetworkGatewayTest, TestSetConfig) {
 /*! Test NetworkGateway::activate is successful.
  */
 TEST_F(NetworkGatewayTest, TestActivate) {
-    std::string config = "{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}";
+    std::string config = "[{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}]";
     NetworkGateway gw(systemCallInterface);
 
     ASSERT_TRUE( gw.setConfig(config) );

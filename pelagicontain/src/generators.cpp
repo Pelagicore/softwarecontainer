@@ -11,7 +11,6 @@
  * Increase the counter and return an IP number based on that.
  */
 std::string Generator::gen_ip_addr(const char *ip_addr_net) {
-    static int counter = 0;
 
     counter++;
     if (counter < 2 || counter > 254) {

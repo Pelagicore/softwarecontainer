@@ -28,7 +28,7 @@ public:
      * \return A gateway IP address
      * \return NULL upon error
      */
-    static char*gen_gw_ip_addr(char *ip_addr_net);
+    char* gen_gw_ip_addr(char *ip_addr_net);
 
     /*! \brief Generate an IP address
      *
@@ -38,7 +38,7 @@ public:
      * \param ip_addr_net A 24 bit network portion of an IP address
      * \return A string representing an IP address
      */
-    static std::string gen_ip_addr(const char *ip_addr_net);
+    std::string gen_ip_addr(const char *ip_addr_net);
 
     /*! \brief Generate a container name
      *
@@ -48,6 +48,9 @@ public:
      * \return NULL upon failure
      */
     static std::string gen_ct_name();
+
+private:
+    int counter = 0;
 
 };
 

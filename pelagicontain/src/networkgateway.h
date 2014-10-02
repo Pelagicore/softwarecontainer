@@ -7,6 +7,7 @@
 
 #include "gateway.h"
 #include "systemcallinterface.h"
+#include "generators.h"
 
 class NetworkGateway : public Gateway {
     LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
@@ -103,6 +104,8 @@ private:
     bool m_internetAccess;
     bool m_interfaceInitialized;
     SystemcallAbstractInterface &m_systemCallInterface;
+
+    Generator m_generator;
 
 };
 
