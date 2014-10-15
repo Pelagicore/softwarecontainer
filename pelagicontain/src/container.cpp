@@ -28,10 +28,11 @@ public:
     ReturnCode clean() override {
         auto code = ReturnCode::FAILURE;
 
-        if(rmdir( m_path.c_str() ) == 0)
+        if(rmdir( m_path.c_str() ) == 0) {
             code = ReturnCode::SUCCESS;
-        else
+        } else {
             log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
+        }
 
         return code;
     }
@@ -48,10 +49,11 @@ public:
     ReturnCode clean() override {
         auto code = ReturnCode::FAILURE;
 
-        if(unlink( m_path.c_str() ) == 0)
+        if(unlink( m_path.c_str() ) == 0) {
             code = ReturnCode::SUCCESS;
-        else
+        } else {
             log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
+        }
 
         return code;
     }
@@ -68,10 +70,11 @@ public:
     ReturnCode clean() override {
         auto code = ReturnCode::FAILURE;
 
-        if(umount( m_path.c_str() ) == 0)
+        if(umount( m_path.c_str() ) == 0) {
             code = ReturnCode::SUCCESS;
-        else
+        } else {
             log_error() << "Can't unmount " << m_path << " . Error :" << strerror(errno);
+        }
 
         return code;
     }
@@ -118,8 +121,9 @@ ReturnCode Container::initialize() {
     allOk = allOk && isSuccess( createDirectory(applicationMountDir() + "/shared") );
     allOk = allOk && isSuccess( createDirectory(applicationMountDir() + "/home") );
 
-    if (!allOk)
+    if (!allOk) {
         log_error() << "Could not set up all needed directories";
+    }
 
     auto mountRes = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_BIND, NULL);
     assert(mountRes == 0);
@@ -135,12 +139,14 @@ ReturnCode Container::initialize() {
 }
 
 ReturnCode Container::createDirectory(const std::string &path) {
-    if ( isDirectory(path) )
+    if ( isDirectory(path) ) {
         return ReturnCode::SUCCESS;
+    }
 
     auto parent = parentPath(path);
-    if ( !isDirectory(parent) )
+    if ( !isDirectory(parent) ) {
         createDirectory(parent);
+    }
 
     if (mkdir(path.c_str(), S_IRWXU) == -1) {
         log_error() << "Could not create directory " << path << " / " << strerror(errno);
@@ -281,18 +287,21 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 
     // Add the variables set by the gateways
     for (auto &var : m_gatewayEnvironmentVariables) {
-        if (variables.count(var.first) != 0)
-            if ( m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first) )
+        if (variables.count(var.first) != 0) {
+            if ( m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first) ) {
                 log_warning() << "Variable set by gateway overriding original variable value: " << var.first << ". values: " <<
                 var.second;
+            }
+        }
 
         actualVariables[var.first] = var.second;
     }
 
     // prepare array of env variable strings to be set when launching the process in the container
     std::vector<std::string> strings;
-    for(auto &var : actualVariables)
+    for(auto &var : actualVariables) {
         strings.push_back( pelagicore::formatString( "%s=%s", var.first.c_str(), var.second.c_str() ) );
+    }
 
     const char *envVariablesArray[strings.size() + 1];
     for (size_t i = 0; i < strings.size(); i++) {
@@ -305,10 +314,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 
     pid_t attached_process_pid = 0;
 
-    //	while(attached_process_pid == 0) {
     m_container->attach(m_container, &Container::executeInContainerEntryFunction, &function, &options, &attached_process_pid);
-    //		log_debug() << "Waiting";
-    //		usleep(10 * 1000);	}
 
     log_info() << " Attached PID: " << attached_process_pid;
 
@@ -329,8 +335,9 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
     std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
     const char *args[executeCommandVec.size() + 1];
 
-    for(size_t i = 0; i < executeCommandVec.size(); i++)
+    for(size_t i = 0; i < executeCommandVec.size(); i++) {
         args[i] = executeCommandVec[i].c_str();
+    }
 
     args[executeCommandVec.size()] = nullptr;
 
@@ -343,8 +350,9 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
                                   if (workingDirectory.length() != 0) {
                                       auto ret = chdir( workingDirectory.c_str() );
-                                      if (ret != 0)
+                                      if (ret != 0) {
                                           log_error() << "Error when changing current directory : " << strerror(errno);
+                                      }
 
                                   }
                                   execvp(args[0], (char*const*) args);
@@ -360,8 +368,9 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 void Container::stop() {
     log_debug() << "Stopping the container";
 
-    if (m_container != nullptr)
+    if (m_container != nullptr) {
         m_container->stop(m_container);
+    }
 }
 
 void Container::destroy() {
@@ -369,8 +378,9 @@ void Container::destroy() {
 
     log_debug() << "Shutting down container " << toString() << " pid " << m_container->init_pid(m_container);
 
-    if (m_container->init_pid(m_container) > 1)
+    if (m_container->init_pid(m_container) > 1) {
         kill(m_container->init_pid(m_container), SIGTERM);
+    }
 
     auto timeout = 2;
     m_container->shutdown(m_container, timeout);
@@ -407,8 +417,9 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
 ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly) {
     int flags = MS_BIND;
 
-    if (readOnly)
+    if (readOnly) {
         flags |= MS_RDONLY;
+    }
 
     log_debug() << "Mounting " << (readOnly ? " readonly " : "read/write ") << src << " in " << dst << " / flags: " << flags;
 
@@ -450,7 +461,7 @@ bool Container::mountApplication(const std::string &appDirBase) {
 }
 
 ReturnCode Container::mountDevice(const std::string &pathInHost) {
-    log_warning() << "Mounting device in container : " << pathInHost;
+    log_debug() << "Mounting device in container : " << pathInHost;
     auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }

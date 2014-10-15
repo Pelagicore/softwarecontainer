@@ -29,8 +29,9 @@ bool isSocket(const std::string &path) {
 std::string parentPath(const std::string &path) {
     static constexpr const char *separator = "/";
     auto pos = path.rfind(separator);
-    if (pos == std::string::npos)
+    if (pos == std::string::npos) {
         pos = strlen(separator);
+    }
     std::string parentPath = path.substr(0, pos - strlen(separator) + 1);
     return parentPath;
 }

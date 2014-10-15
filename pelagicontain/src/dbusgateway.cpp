@@ -43,8 +43,9 @@ std::string DBusGateway::id() {
 bool DBusGateway::setConfig(const std::string &config) {
     JSonElement rootElement(config);
 
-    if ( !rootElement.isArray() )
+    if ( !rootElement.isArray() ) {
         return false;
+    }
 
     std::vector<JSonElement> elements;
     rootElement.read(elements);
@@ -55,8 +56,9 @@ bool DBusGateway::setConfig(const std::string &config) {
         return false;
     }
 
-    if (elements.size() == 1)
+    if (elements.size() == 1) {
         m_config = elements[0].dump();
+    }
 
     if(m_config.length() > 1) {
         m_hasBeenConfigured = true;

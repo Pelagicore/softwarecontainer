@@ -51,8 +51,9 @@ ReturnCode PelagicontainLib::checkWorkspace() {
                              cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
                          sigc::slot<void>(), nullptr,
                          nullptr, &returnCode);
-        if (returnCode != 0)
+        if (returnCode != 0) {
             return ReturnCode::FAILURE;
+        }
     }
 
     return ReturnCode::SUCCESS;
@@ -65,8 +66,9 @@ ReturnCode PelagicontainLib::preload() {
         containerRoot += "/";
     }
 
-    if ( isError( checkWorkspace() ) )
+    if ( isError( checkWorkspace() ) ) {
         return ReturnCode::FAILURE;
+    }
 
     if ( isError( container.initialize() ) ) {
         log_error() << "Could not setup container for preloading";
@@ -93,13 +95,17 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
         return ReturnCode::FAILURE;
     }
 
-    if (pelagicontain.getContainerState() != ContainerState::PRELOADED)
-        if ( isError( preload() ) )
+    if (pelagicontain.getContainerState() != ContainerState::PRELOADED) {
+        if ( isError( preload() ) ) {
             return ReturnCode::FAILURE;
+        }
+    }
 
-    if (bRegisterDBusInterface)
-        if (m_cookie.size() == 0)
+    if (bRegisterDBusInterface) {
+        if (m_cookie.size() == 0) {
             m_cookie = containerName;
+        }
+    }
 
     DBus::default_dispatcher = &dispatcher;
 
@@ -139,8 +145,9 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
     //    m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
     m_gateways.push_back( std::unique_ptr<Gateway>( new FileGateway() ) );
 
-    for (auto &gateway : m_gateways)
+    for (auto &gateway : m_gateways) {
         pelagicontain.addGateway(*gateway);
+    }
 
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
@@ -162,6 +169,8 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
             log_error() << "PAM not running, exiting";
             return ReturnCode::FAILURE;
         }
+        pamInterface->SetInterfaceVersion(2);
+
     }
 
     m_initialized = true;

@@ -9,9 +9,10 @@ ReturnCode Gateway::createSymLinkInContainer(const std::string &source, const st
     auto m_pid = getContainer().executeInContainer([ = ]() {
                                                        log_debug() << "symlink " << source << " to " << destination;
                                                        auto r = symlink( source.c_str(), destination.c_str() );
-                                                       if (r != 0)
+                                                       if (r != 0) {
                                                            log_error() << "Can't create symlink " << source << " to " <<
                                                            destination;
+                                                       }
                                                        return r;
                                                    });
 
@@ -28,8 +29,9 @@ bool Gateway::setConfig(const std::string &config) {
     std::vector<JSonElement> elements;
     rootElement.read(elements);
     for (auto &element : elements) {
-        if ( isError( readConfigElement(element) ) )
+        if ( isError( readConfigElement(element) ) ) {
             success = false;
+        }
     }
 
     return success;

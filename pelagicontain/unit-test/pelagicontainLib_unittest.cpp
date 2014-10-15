@@ -131,8 +131,9 @@ TEST(PelagicontainLib, MultithreadTest) {
 
     ASSERT_TRUE(finished);
 
-    if (finished)
+    if (finished) {
         t.join();
+    }
 
 }
 

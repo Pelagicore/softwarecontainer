@@ -244,8 +244,9 @@ int main(int argc, char * *argv) {
                                                        }
                                                    }, ml->get_context()->gobj() );
 
-        if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) )
+        if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) ) {
             lib.openTerminal(terminalCommand);
+        }
 
         log_debug() << "Entering main loop";
         ml->run();

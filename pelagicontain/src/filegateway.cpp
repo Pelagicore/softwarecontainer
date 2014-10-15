@@ -34,8 +34,9 @@ ReturnCode FileGateway::readConfigElement(JSonElement &element) {
         setEnvironmentVariable(envVarName, value);
     }
 
-    if (createSymlinkInContainer)
+    if (createSymlinkInContainer) {
         createSymLinkInContainer(path, pathInHost);
+    }
 
     return ReturnCode::SUCCESS;
 }

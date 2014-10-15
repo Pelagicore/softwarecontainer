@@ -90,8 +90,9 @@ void Pelagicontain::update(const GatewayConfiguration &configs) {
     log_debug() << "update called" << configs;
     setGatewayConfigs(configs);
     m_pamInterface->updateFinished(m_cookie);
-    if (m_launching)
+    if (m_launching) {
         launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
+    }
 }
 
 void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs) {
@@ -106,8 +107,9 @@ void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs) {
         }
     }
 
-    for (auto &gateway : m_gateways)
+    for (auto &gateway : m_gateways) {
         gateway->activate();
+    }
 
     m_containerState.setValueNotify(ContainerState::READY);
 
@@ -124,9 +126,11 @@ void Pelagicontain::shutdown() {
 }
 
 void Pelagicontain::shutdownGateways() {
-    for (auto &gateway : m_gateways)
-        if ( !gateway->teardown() )
+    for (auto &gateway : m_gateways) {
+        if ( !gateway->teardown() ) {
             log_warning() << "Could not tear down gateway cleanly";
+        }
+    }
 
     m_gateways.clear();
 }
