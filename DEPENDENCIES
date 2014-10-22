@@ -3,7 +3,7 @@ Build dependencies:
 * ivi-logging
 * pelagicore-utils
 * glibmm-2.4
-* pulse (can be disabled -DENABLE_PULSEGW=OFF)
+* pulse (can be disabled -DENABLE_PULSEGATEWAY=OFF)
 * jansson
 
 Runtime dependencies:
