@@ -17,6 +17,7 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 find_package(PkgConfig           REQUIRED)
 find_package(PelagicoreUtilities REQUIRED)
+find_package(IVILogging          REQUIRED)
 find_package(DBusCpp             REQUIRED)
 find_package(DBusCppGlib         REQUIRED)
 
