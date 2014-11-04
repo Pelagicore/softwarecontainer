@@ -56,7 +56,7 @@ bool IPCMessage::handleMessage(const char buf[], int length)
         if (msg[i] != '\0') {
             msg[i] = '\0';
         }
-        log_debug("Received \"%s\"", msg);
+        log_debug() << "Received " << msg;
 
         total += i;
 

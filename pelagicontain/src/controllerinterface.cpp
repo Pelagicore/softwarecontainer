@@ -160,7 +160,7 @@ bool ControllerInterface::startApp()
     if (canSend()) {
         char msg[] = {'1', '\0'};
 
-        log_debug("Sending: \"%s\"", msg);
+        log_debug() << "Sending:" << msg;
 
         int ret = send(m_connectionSocket, msg, sizeof(msg), 0);
         if (ret == -1) {
@@ -181,7 +181,7 @@ bool ControllerInterface::shutdown()
     if (canSend()) {
         char msg[] = {'2', '\0'};
 
-        log_debug("Sending: \"%s\"", msg);
+        log_debug() << "Sending: " << msg;
 
         int ret = send(m_connectionSocket, msg, sizeof(msg), 0);
         if (ret == -1) {
@@ -207,7 +207,7 @@ bool ControllerInterface::setEnvironmentVariable(const std::string &variable,
         memcpy(msg, command.c_str(), command.size());
         msg[command.size()] = '\0';
 
-        log_debug("Sending: \"%s\"", msg);
+        log_debug() << "Sending: " << msg;
 
         int ret = send(m_connectionSocket, msg, strlen(msg) + 1, 0);
         if (ret == -1) {
@@ -231,7 +231,7 @@ bool ControllerInterface::systemCall(const std::string &cmd)
         memcpy(msg, command.c_str(), command.size());
         msg[command.size()] = '\0';
 
-        log_debug("Sending: \"%s\"", msg);
+        log_debug() << "Sending: " << msg;
 
         int ret = send(m_connectionSocket, msg, strlen(msg) + 1, 0);
         if (ret == -1) {
