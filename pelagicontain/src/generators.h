@@ -15,7 +15,8 @@
  *  names, IP addresses and container names. By using these functions, unique
  *  names are ensured
  */
-class Generator {
+class Generator
+{
 
     LOG_DECLARE_CLASS_CONTEXT("GEN", "Generator");
 
@@ -28,7 +29,7 @@ public:
      * \return A gateway IP address
      * \return NULL upon error
      */
-    char* gen_gw_ip_addr(char *ip_addr_net);
+    char *gen_gw_ip_addr(char *ip_addr_net);
 
     /*! \brief Generate an IP address
      *

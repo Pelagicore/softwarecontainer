@@ -19,16 +19,20 @@
     #error Must define LXCTEMPLATE as path to lxc-pelagicontain
 #endif
 
-class DirectoryCleanUpHandler : public Container::CleanUpHandler {
+class DirectoryCleanUpHandler :
+    public Container::CleanUpHandler
+{
 public:
-    DirectoryCleanUpHandler(const std::string &path) {
+    DirectoryCleanUpHandler(const std::string &path)
+    {
         m_path = path;
     }
 
-    ReturnCode clean() override {
+    ReturnCode clean() override
+    {
         auto code = ReturnCode::FAILURE;
 
-        if(rmdir( m_path.c_str() ) == 0) {
+        if (rmdir( m_path.c_str() ) == 0) {
             code = ReturnCode::SUCCESS;
         } else {
             log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
@@ -40,16 +44,20 @@ public:
     std::string m_path;
 };
 
-class FileCleanUpHandler : public Container::CleanUpHandler {
+class FileCleanUpHandler :
+    public Container::CleanUpHandler
+{
 public:
-    FileCleanUpHandler(const std::string &path) {
+    FileCleanUpHandler(const std::string &path)
+    {
         m_path = path;
     }
 
-    ReturnCode clean() override {
+    ReturnCode clean() override
+    {
         auto code = ReturnCode::FAILURE;
 
-        if(unlink( m_path.c_str() ) == 0) {
+        if (unlink( m_path.c_str() ) == 0) {
             code = ReturnCode::SUCCESS;
         } else {
             log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
@@ -61,16 +69,20 @@ public:
     std::string m_path;
 };
 
-class MountCleanUpHandler : public Container::CleanUpHandler {
+class MountCleanUpHandler :
+    public Container::CleanUpHandler
+{
 public:
-    MountCleanUpHandler(const std::string &path) {
+    MountCleanUpHandler(const std::string &path)
+    {
         m_path = path;
     }
 
-    ReturnCode clean() override {
+    ReturnCode clean() override
+    {
         auto code = ReturnCode::FAILURE;
 
-        if(umount( m_path.c_str() ) == 0) {
+        if (umount( m_path.c_str() ) == 0) {
             code = ReturnCode::SUCCESS;
         } else {
             log_error() << "Can't unmount " << m_path << " . Error :" << strerror(errno);
@@ -94,7 +106,8 @@ public:
 Container::Container(const std::string &name, const std::string &configFile, const std::string &containerRoot) :
     m_configFile(configFile),
     m_name(name),
-    m_containerRoot(containerRoot) {
+    m_containerRoot(containerRoot)
+{
     log_debug() << "LXC version " << lxc_get_version();
     int stateCount = lxc_get_wait_states(nullptr);
     m_LXCContainerStates.resize(stateCount);
@@ -102,7 +115,8 @@ Container::Container(const std::string &name, const std::string &configFile, con
     assert( (int)LXCContainerStates::ELEMENT_COUNT == m_LXCContainerStates.size() );
 }
 
-ReturnCode Container::initialize() {
+ReturnCode Container::initialize()
+{
     std::string gatewayDir = gatewaysDir();
     if ( isError( createDirectory(gatewayDir) ) ) {
         log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
@@ -138,7 +152,8 @@ ReturnCode Container::initialize() {
     return allOk ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
-ReturnCode Container::createDirectory(const std::string &path) {
+ReturnCode Container::createDirectory(const std::string &path)
+{
     if ( isDirectory(path) ) {
         return ReturnCode::SUCCESS;
     }
@@ -160,7 +175,8 @@ ReturnCode Container::createDirectory(const std::string &path) {
 }
 
 
-Container::~Container() {
+Container::~Container()
+{
     // Clean up all created directories, files, and mount points
     for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
         if ( !isSuccess( (*it)->clean() ) ) {
@@ -179,7 +195,8 @@ Container::~Container() {
 
 }
 
-std::string Container::toString() {
+std::string Container::toString()
+{
     std::stringstream ss;
     ss << "LXCContainer "
        << "name: " << m_container->name
@@ -190,7 +207,8 @@ std::string Container::toString() {
     return ss.str();
 }
 
-void Container::create() {
+void Container::create()
+{
     const char *containerName = name();
 
     std::string containerPath = m_containerRoot;
@@ -225,10 +243,11 @@ void Container::create() {
 
 }
 
-pid_t Container::start() {
+pid_t Container::start()
+{
     pid_t pid;
 
-    if(isLXC_C_APIEnabled() && false) {
+    if (isLXC_C_APIEnabled() && false) {
 
         // TODO : check why starting the container via the C API fails here. We still use the command-line for that reason
 
@@ -254,12 +273,12 @@ pid_t Container::start() {
 
         try {
             Glib::spawn_async_with_pipes(
-                ".",
-                executeCommandVec,
-                envVarVec,
-                Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
-                sigc::slot<void>(),
-                &pid);
+                    ".",
+                    executeCommandVec,
+                    envVarVec,
+                    Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
+                    sigc::slot<void>(),
+                    &pid);
         } catch (const Glib::Error &ex) {
             log_error() << "spawn error: " << ex.what();
             pid = 0;
@@ -271,13 +290,15 @@ pid_t Container::start() {
 
 }
 
-int Container::executeInContainerEntryFunction(void *param) {
-    ContainerFunction *function = (ContainerFunction*) param;
+int Container::executeInContainerEntryFunction(void *param)
+{
+    ContainerFunction *function = (ContainerFunction *) param;
     return (*function)();
 }
 
 pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, int stdin, int stdout,
-                                    int stderr) {
+        int stderr)
+{
     lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
     options.stdin_fd = stdin;
     options.stdout_fd = stdout;
@@ -299,7 +320,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 
     // prepare array of env variable strings to be set when launching the process in the container
     std::vector<std::string> strings;
-    for(auto &var : actualVariables) {
+    for (auto &var : actualVariables) {
         strings.push_back( pelagicore::formatString( "%s=%s", var.first.c_str(), var.second.c_str() ) );
     }
 
@@ -308,7 +329,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
         envVariablesArray[i] = strings[i].c_str();
     }
     envVariablesArray[strings.size()] = nullptr;
-    options.extra_env_vars = (char**) envVariablesArray;  // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
+    options.extra_env_vars = (char * *) envVariablesArray;  // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
     log_debug() << "Env variables : " << strings;
 
@@ -323,19 +344,21 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     return attached_process_pid;
 }
 
-pid_t Container::attach(const std::string &commandLine) {
+pid_t Container::attach(const std::string &commandLine)
+{
     return attach(commandLine, m_gatewayEnvironmentVariables);
 }
 
 pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables, int stdin, int stdout, int stderr,
-                        const std::string &workingDirectory) {
+        const std::string &workingDirectory)
+{
 
     log_debug() << "Attach " << commandLine;
 
     std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
     const char *args[executeCommandVec.size() + 1];
 
-    for(size_t i = 0; i < executeCommandVec.size(); i++) {
+    for (size_t i = 0; i < executeCommandVec.size(); i++) {
         args[i] = executeCommandVec[i].c_str();
     }
 
@@ -345,27 +368,28 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
     return executeInContainer([&] () {
 
-                                  log_debug() << "Starting command line in container : " << commandLine <<
-                                  " . Working directory : " << workingDirectory;
+                log_debug() << "Starting command line in container : " << commandLine <<
+                " . Working directory : " << workingDirectory;
 
-                                  if (workingDirectory.length() != 0) {
-                                      auto ret = chdir( workingDirectory.c_str() );
-                                      if (ret != 0) {
-                                          log_error() << "Error when changing current directory : " << strerror(errno);
-                                      }
+                if (workingDirectory.length() != 0) {
+                    auto ret = chdir( workingDirectory.c_str() );
+                    if (ret != 0) {
+                        log_error() << "Error when changing current directory : " << strerror(errno);
+                    }
 
-                                  }
-                                  execvp(args[0], (char*const*) args);
+                }
+                execvp(args[0], (char *const *) args);
 
-                                  log_error() << "Error when executing the command in container : " << strerror(errno);
+                log_error() << "Error when executing the command in container : " << strerror(errno);
 
-                                  return 1;
+                return 1;
 
-                              }, variables, stdin, stdout, stderr);
+            }, variables, stdin, stdout, stderr);
 
 }
 
-void Container::stop() {
+void Container::stop()
+{
     log_debug() << "Stopping the container";
 
     if (m_container != nullptr) {
@@ -373,7 +397,8 @@ void Container::stop() {
     }
 }
 
-void Container::destroy() {
+void Container::destroy()
+{
     stop();
 
     log_debug() << "Shutting down container " << toString() << " pid " << m_container->init_pid(m_container);
@@ -389,7 +414,8 @@ void Container::destroy() {
 
 
 std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
-                                                bool readonly) {
+        bool readonly)
+{
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     touch(dst);
@@ -403,7 +429,8 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
 }
 
 std::string Container::bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
-                                                  bool readonly) {
+        bool readonly)
+{
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     log_debug() << "Creating folder : " << dst;
@@ -414,7 +441,8 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
     return gatewaysDirInContainer() + "/" + pathInContainer;
 }
 
-ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly) {
+ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
+{
     int flags = MS_BIND;
 
     if (readOnly) {
@@ -424,10 +452,10 @@ ReturnCode Container::bindMount(const std::string &src, const std::string &dst, 
     log_debug() << "Mounting " << (readOnly ? " readonly " : "read/write ") << src << " in " << dst << " / flags: " << flags;
 
     int mountRes = mount(src.c_str(), // source
-                         dst.c_str(), // target
-                         "",          // fstype
-                         flags,     // flags
-                         NULL);       // data
+            dst.c_str(),              // target
+            "",                       // fstype
+            flags,                  // flags
+            NULL);                    // data
 
     auto result = ReturnCode::FAILURE;
 
@@ -440,15 +468,16 @@ ReturnCode Container::bindMount(const std::string &src, const std::string &dst, 
     } else {
         // Failure
         log_error( "Could not mount into container: src=%s, dst=%s err=%s",
-                   src.c_str(),
-                   dst.c_str(),
-                   strerror(errno) );
+                src.c_str(),
+                dst.c_str(),
+                strerror(errno) );
     }
 
     return result;
 }
 
-bool Container::mountApplication(const std::string &appDirBase) {
+bool Container::mountApplication(const std::string &appDirBase)
+{
 
     bool allOk = true;
     allOk &= isSuccess( bindMount(appDirBase + "/bin", applicationMountDir() + "/bin") );
@@ -460,19 +489,21 @@ bool Container::mountApplication(const std::string &appDirBase) {
     return allOk;
 }
 
-ReturnCode Container::mountDevice(const std::string &pathInHost) {
+ReturnCode Container::mountDevice(const std::string &pathInHost)
+{
     log_debug() << "Mounting device in container : " << pathInHost;
     auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
 
-ReturnCode Container::systemCall(const std::string &cmd) {
+ReturnCode Container::systemCall(const std::string &cmd)
+{
 
     pid_t pid = executeInContainer([this, cmd = cmd]() {
-                                       log_info() << "Executing system command in container : " << cmd;
-                                       return system( cmd.c_str() );
-                                   }, m_gatewayEnvironmentVariables);
+                log_info() << "Executing system command in container : " << cmd;
+                return system( cmd.c_str() );
+            }, m_gatewayEnvironmentVariables);
 
     waitForProcessTermination(pid);
 
@@ -480,7 +511,8 @@ ReturnCode Container::systemCall(const std::string &cmd) {
 }
 
 
-ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::string &val) {
+ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::string &val)
+{
     log_debug() << "Setting env variable in container " << var << "=" << val;
     m_gatewayEnvironmentVariables[var] = val;
     return ReturnCode::SUCCESS;

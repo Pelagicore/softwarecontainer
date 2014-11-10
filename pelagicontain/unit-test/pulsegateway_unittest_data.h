@@ -4,7 +4,8 @@
  */
 
 
-struct pulseTestData {
+struct pulseTestData
+{
     const char *title;
     const char *data;
     const std::string audio;

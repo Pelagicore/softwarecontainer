@@ -80,34 +80,35 @@ void signalHandler(int signum)
     }
 }
 
-int main(int argc, char * *argv) {
+int main(int argc, char * *argv)
+{
     const char *summary = "Pelagicore container utility. "
-                          "Requires an absolute path to the container root, "
-                          "the command to run inside the container and "
-                          "an alphanumerical cookie string as first, second and"
-                          "third argument respectively";
+            "Requires an absolute path to the container root, "
+            "the command to run inside the container and "
+            "an alphanumerical cookie string as first, second and"
+            "third argument respectively";
     const char *paramsDescription = "[container root directory (abs path)] "
-                                    "[command] [cookie]";
+            "[command] [cookie]";
 
     pelagicore::CommandLineParser commandLineParser(summary,
-                                                    paramsDescription,
-                                                    PACKAGE_VERSION,
-                                                    "");
+            paramsDescription,
+            PACKAGE_VERSION,
+            "");
 
     std::string containerRoot;
     std::string cookie;
     const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG;
     commandLineParser.addOption(configFilePath,
-                                "with-config-file",
-                                'c',
-                                "Config file");
+            "with-config-file",
+            'c',
+            "Config file");
 
     //    const char* terminalCommand = "konsole -e";
     const char *terminalCommand = "";
     commandLineParser.addOption(terminalCommand,
-                                "terminal",
-                                't',
-                                "Example: konsole -e");
+            "terminal",
+            't',
+            "Example: konsole -e");
 
     if ( commandLineParser.parse(argc, argv) ) {
         return -1;
@@ -221,28 +222,28 @@ int main(int argc, char * *argv) {
 			}
 		}
     }
-    lib.getPelagicontain().getContainerState().addListener( [&] (ContainerState state) {
-                                                                if(state == ContainerState::TERMINATED) {
-                                                                    log_debug() <<
-                                                                    "Container terminated => stop main loop and quit";
-                                                                    ml->quit();
-                                                                }
-                                                            });
+    lib.getPelagicontain().getContainerState().addListener([&] (ContainerState state) {
+                if (state == ContainerState::TERMINATED) {
+                    log_debug() <<
+                    "Container terminated => stop main loop and quit";
+                    ml->quit();
+                }
+            });
 
     if ( !isError( lib.init(true) ) ) {
 
         // Register signalHandler with signals
         std::vector<int> signals = {SIGINT, SIGTERM};
         pelagicore::UNIXSignalGlibHandler handler( signals, [&] (int signum) {
-                                                       log_debug() << "caught signal " << signum;
-                                                       switch(signum) {
-                                                       case SIGCHLD :
-                                                           break;
-                                                       default :
-                                                           lib.shutdown();
-                                                           break;
-                                                       }
-                                                   }, ml->get_context()->gobj() );
+                    log_debug() << "caught signal " << signum;
+                    switch (signum) {
+                    case SIGCHLD :
+                        break;
+                    default :
+                        lib.shutdown();
+                        break;
+                    }
+                }, ml->get_context()->gobj() );
 
         if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) ) {
             lib.openTerminal(terminalCommand);
@@ -251,6 +252,7 @@ int main(int argc, char * *argv) {
         log_debug() << "Entering main loop";
         ml->run();
         log_debug() << "Main loop exited";
-    } else
+    } else {
         log_error() << "Could not initialize pelagicontain";
+    }
 }

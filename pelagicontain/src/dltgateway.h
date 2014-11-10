@@ -10,7 +10,9 @@
 /**
  * To be removed
  */
-class DLTGateway : public Gateway {
+class DLTGateway :
+    public Gateway
+{
 
     LOG_DECLARE_CLASS_CONTEXT("DLTG", "DLT gateway");
 
@@ -19,17 +21,21 @@ public:
     static constexpr const char *DLT_SOCKET_FOLDER = "/tmp/";
     static constexpr const char *SOCKET_FILE_NAME = "dlt";
 
-    DLTGateway() {
+    DLTGateway()
+    {
     }
 
-    ~DLTGateway() {
+    ~DLTGateway()
+    {
     }
 
-    std::string id() override {
+    std::string id() override
+    {
         return ID;
     }
 
-    bool setConfig(const std::string &config) override {
+    bool setConfig(const std::string &config) override
+    {
         JSonElement parser(config);
 
         parser.readBoolean(ENABLED_FIELD, m_enabled);
@@ -39,7 +45,8 @@ public:
         return true;
     }
 
-    bool activate() override {
+    bool activate() override
+    {
         if (m_enabled) {
             log_error() << "enabling DLT gateway";
             std::string d = logging::StringBuilder() << DLT_SOCKET_FOLDER << "/" << SOCKET_FILE_NAME;
@@ -50,7 +57,8 @@ public:
         return true;
     }
 
-    bool teardown() override {
+    bool teardown() override
+    {
         return true;
     }
 

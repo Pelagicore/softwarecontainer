@@ -15,7 +15,8 @@
  *  and is intended to be an abstraction of the acutal implementation.
  */
 class SystemcallInterface :
-    public SystemcallAbstractInterface {
+    public SystemcallAbstractInterface
+{
     LOG_DECLARE_CLASS_CONTEXT("SYSC", "System call interface");
 
 public:

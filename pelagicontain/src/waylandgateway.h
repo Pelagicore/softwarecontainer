@@ -12,34 +12,41 @@
 /**
  * To be removed
  */
-class WaylandGateway : public Gateway {
+class WaylandGateway :
+    public Gateway
+{
 
     LOG_DECLARE_CLASS_CONTEXT("Wayl", "Wayland gateway");
 
 public:
     static constexpr const char *ID = "wayland";
 
-    WaylandGateway() {
+    WaylandGateway()
+    {
     }
 
-    ~WaylandGateway() {
+    ~WaylandGateway()
+    {
     }
 
-    std::string id() override {
+    std::string id() override
+    {
         return ID;
     }
 
     static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
 
-    bool setConfig(const std::string &config) override {
+    bool setConfig(const std::string &config) override
+    {
         JSonElement parser(config);
         m_enabled = false;
         parser.readBoolean("enabled", m_enabled);
         return true;
     }
 
-    bool activate() override {
+    bool activate() override
+    {
         if (m_enabled) {
             const char *dir = getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME);
             if (dir != nullptr) {
@@ -56,7 +63,8 @@ public:
         return true;
     }
 
-    bool teardown() override {
+    bool teardown() override
+    {
         return true;
     }
 

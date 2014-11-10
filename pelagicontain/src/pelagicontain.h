@@ -13,7 +13,8 @@
 class Gateway;
 class PAMAbstractInterface;
 
-enum class ContainerState {
+enum class ContainerState
+{
     CREATED,
     PRELOADED,
     READY,
@@ -21,12 +22,14 @@ enum class ContainerState {
     TERMINATED
 };
 
-class ContainerListener {
+class ContainerListener
+{
 public:
     virtual void onContainerStateChanged(ContainerState state) = 0;
 };
 
-class Pelagicontain {
+class Pelagicontain
+{
 
     LOG_DECLARE_CLASS_CONTEXT("PCON", "Pelagicontain");
 
@@ -40,7 +43,8 @@ public:
 
     ~Pelagicontain();
 
-    void setPAM(PAMAbstractInterface &pamInterface) {
+    void setPAM(PAMAbstractInterface &pamInterface)
+    {
         m_pamInterface = &pamInterface;
     }
 
@@ -117,11 +121,13 @@ public:
 
     void shutdownContainer();
 
-    ObservableProperty<ContainerState>& getContainerState() {
+    ObservableProperty<ContainerState> &getContainerState()
+    {
         return m_containerState;
     }
 
-    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> &mainLoopContext) {
+    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> &mainLoopContext)
+    {
         m_mainLoopContext = &mainLoopContext;
     }
 
@@ -145,7 +151,7 @@ private:
 
     Container *m_container = nullptr;
     PAMAbstractInterface *m_pamInterface = nullptr;
-    std::vector<Gateway*> m_gateways;
+    std::vector<Gateway *> m_gateways;
     std::string m_appId;
     const std::string &m_cookie;
 

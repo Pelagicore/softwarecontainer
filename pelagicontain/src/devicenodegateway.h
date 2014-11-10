@@ -56,18 +56,22 @@
  *  -# mode: Permission mode, passed verbatim to chmod
  *
  */
-class DeviceNodeGateway : public Gateway {
+class DeviceNodeGateway :
+    public Gateway
+{
     LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
 
 public:
     DeviceNodeGateway();
-    ~DeviceNodeGateway() {
+    ~DeviceNodeGateway()
+    {
     }
 
     /*!
      *  Implements Gateway::id
      */
-    virtual std::string id() {
+    virtual std::string id()
+    {
         return "devicenode";
     }
 
@@ -88,7 +92,8 @@ public:
     virtual bool activate();
 
 private:
-    struct Device {
+    struct Device
+    {
         std::string name;
         std::string major;
         std::string minor;

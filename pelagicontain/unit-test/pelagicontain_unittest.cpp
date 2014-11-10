@@ -12,41 +12,50 @@
 #include "pamabstractinterface.h"
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
-class StubController {
+class StubController
+{
 public:
-    StubController() {
+    StubController()
+    {
     }
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable,
-                                              const std::string &value) {
+            const std::string &value)
+    {
         return ReturnCode::SUCCESS;
     }
 
-    virtual ReturnCode systemCall(const std::string &cmd) {
+    virtual ReturnCode systemCall(const std::string &cmd)
+    {
         return ReturnCode::SUCCESS;
     }
 };
 
 /* Mock the PAMAbstractInterface class */
 class MockPAMAbstractInterface :
-    public PAMAbstractInterface {
+    public PAMAbstractInterface
+{
 public:
     MOCK_METHOD2( registerClient,
-                  void(const std::string & cookie, const std::string & appId) );
+            void(const std::string & cookie, const std::string & appId) );
 
     MOCK_METHOD1( unregisterClient,
-                  void(const std::string & appId) );
+            void(const std::string & appId) );
 
     MOCK_METHOD1( updateFinished,
-                  void(const std::string & appId) );
+            void(const std::string & appId) );
 };
 
 class MockGateway :
-    public Gateway {
+    public Gateway
+{
 public:
-    MockGateway() : Gateway() {
+    MockGateway() :
+        Gateway()
+    {
     }
-    virtual std::string environment() {
+    virtual std::string environment()
+    {
         return "";
     }
 

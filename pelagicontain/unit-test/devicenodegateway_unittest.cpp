@@ -12,26 +12,32 @@
 
 using namespace pelagicore;
 
-class MockController {
+class MockController
+{
 public:
-    virtual bool startApp() {
+    virtual bool startApp()
+    {
         return true;
     }
 
-    virtual bool shutdown() {
+    virtual bool shutdown()
+    {
         return true;
     }
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable,
-                                              const std::string &value) {
+            const std::string &value)
+    {
         return ReturnCode::SUCCESS;
     }
 
-    virtual bool hasBeenStarted() const {
+    virtual bool hasBeenStarted() const
+    {
         return true;
     }
 
-    virtual bool initialize() {
+    virtual bool initialize()
+    {
         return true;
     }
 
@@ -55,10 +61,12 @@ TEST(DeviceNodeGatewayTest, TestIdEqualsdevicenode) {
 }
 
 class DeviceNodeGatewayValidConfig :
-    public testing::TestWithParam<testData> {};
+    public testing::TestWithParam<testData>
+{
+};
 
 INSTANTIATE_TEST_CASE_P( InstantiationName, DeviceNodeGatewayValidConfig,
-                         ::testing::ValuesIn(validConfigs) );
+        ::testing::ValuesIn(validConfigs) );
 
 TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     StrictMock<MockController> controllerInterface;
@@ -86,10 +94,12 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
 }
 
 class DeviceNodeGatewayInvalidConfig :
-    public testing::TestWithParam<testData> {};
+    public testing::TestWithParam<testData>
+{
+};
 
 INSTANTIATE_TEST_CASE_P( InstantiationName, DeviceNodeGatewayInvalidConfig,
-                         ::testing::ValuesIn(invalidConfigs) );
+        ::testing::ValuesIn(invalidConfigs) );
 
 TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
     StrictMock<MockController> controllerInterface;

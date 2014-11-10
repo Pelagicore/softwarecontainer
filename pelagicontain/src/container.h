@@ -18,18 +18,21 @@
  * implements the specifics behind the conceptual phases of 'Pereload', 'Launch',
  * and 'Shutdown'.
  */
-class Container {
+class Container
+{
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
 
     static constexpr const char *GATEWAYS_PATH = "/gateways";
     static constexpr const char *LATE_MOUNT_PATH = "/late_mounts";
 
 public:
-    class CleanUpHandler {
+    class CleanUpHandler
+    {
 protected:
         LOG_SET_CLASS_CONTEXT( Container::getDefaultContext() );
 public:
-        virtual ~CleanUpHandler() {
+        virtual ~CleanUpHandler()
+        {
         }
         virtual ReturnCode clean() = 0;
     };
@@ -67,8 +70,8 @@ public:
      * plus the ones passed as parameters here.
      */
     pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, int stdin = -1, int stdout = 1,
-                 int stderr = 2,
-                 const std::string &workingDirectory = "/");
+            int stderr = 2,
+            const std::string &workingDirectory = "/");
 
     /**
      * Start a process with the environment variables which have previously been set by the gateways
@@ -76,8 +79,7 @@ public:
     pid_t attach(const std::string &commandLine);
 
     pid_t executeInContainer(ContainerFunction function,
-                             const EnvironmentVariables &variables = EnvironmentVariables(), int stdin = -1, int stdout = 1,
-                             int stderr = 2);
+            const EnvironmentVariables &variables = EnvironmentVariables(), int stdin = -1, int stdout = 1, int stderr = 2);
 
     std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 
@@ -121,35 +123,42 @@ public:
      */
     ReturnCode initialize();
 
-    bool isInitialized() {
+    bool isInitialized()
+    {
         return m_initialized;
     }
 
     std::string toString();
 
-    const char*name() const {
+    const char *name() const
+    {
         return m_name.c_str();
     }
 
-    std::string gatewaysDirInContainer() const {
+    std::string gatewaysDirInContainer() const
+    {
         return GATEWAYS_PATH;
     }
 
-    std::string gatewaysDir() const {
+    std::string gatewaysDir() const
+    {
         // TODO: see how to put gatewaysDir into the late_mounts to save one mount
         //      return applicationMountDir() + GATEWAYS_PATH;
         return m_containerRoot + "/" + name() + GATEWAYS_PATH;
     }
 
-    std::string lateMountDir() const {
+    std::string lateMountDir() const
+    {
         return m_containerRoot + LATE_MOUNT_PATH;
     }
 
-    std::string applicationMountDir() const {
+    std::string applicationMountDir() const
+    {
         return lateMountDir() + "/" + m_name;
     }
 
-    const std::string& root() const {
+    const std::string &root() const
+    {
         return m_containerRoot;
     }
 
@@ -174,7 +183,7 @@ private:
      */
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
 
-    std::vector<CleanUpHandler*> m_cleanupHandlers;
+    std::vector<CleanUpHandler *> m_cleanupHandlers;
 
     /*
      * The LXC configuration file for this container
@@ -190,7 +199,7 @@ private:
 
     std::string m_containerRoot;
 
-    std::vector<const char*> m_LXCContainerStates;
+    std::vector<const char *> m_LXCContainerStates;
 
     EnvironmentVariables m_gatewayEnvironmentVariables;
 

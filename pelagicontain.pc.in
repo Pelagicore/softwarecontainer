@@ -8,4 +8,4 @@ Description: Pelagicontain
 Version: @VERSION@
 Requires: lxc glibmm-2.4 ivi-logging dbus-c++-glib-1 @ADDITIONAL_DEPENDENCIES@
 Libs: -lpelagicontainLib @DEVELOPMENT_LIBRARY_PATH@ -L${libdir}
-Cflags: -std=c++11 @DEVELOPMENT_INCLUDE_PATH@ -I${includedir}/pelagicontain
+Cflags: -std=c++11 @DEVELOPMENT_INCLUDE_PATH@ -I${includedir}/pelagicontain -I${libdir}/pelagicontain

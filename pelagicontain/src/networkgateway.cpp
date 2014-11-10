@@ -11,23 +11,27 @@
 
 
 NetworkGateway::NetworkGateway(SystemcallAbstractInterface
-                               &systemCallInterface) :
+        &systemCallInterface) :
     Gateway(),
     m_ip(""),
     m_gateway(""),
     m_internetAccess(false),
     m_interfaceInitialized(false),
-    m_systemCallInterface(systemCallInterface) {
+    m_systemCallInterface(systemCallInterface)
+{
 }
 
-NetworkGateway::~NetworkGateway() {
+NetworkGateway::~NetworkGateway()
+{
 }
 
-std::string NetworkGateway::id() {
+std::string NetworkGateway::id()
+{
     return "network";
 }
 
-ReturnCode NetworkGateway::readConfigElement(JSonElement &element) {
+ReturnCode NetworkGateway::readConfigElement(JSonElement &element)
+{
     ReturnCode returnCode = ReturnCode::SUCCESS;
 
     bool enableInternetAccess = false;
@@ -49,7 +53,8 @@ ReturnCode NetworkGateway::readConfigElement(JSonElement &element) {
     return returnCode;
 }
 
-bool NetworkGateway::activate() {
+bool NetworkGateway::activate()
+{
 
     if (m_gateway.size() == 0) {
         log_debug() << "Default gateway set to " << m_gateway;
@@ -78,11 +83,13 @@ bool NetworkGateway::activate() {
     return success;
 }
 
-const std::string NetworkGateway::ip() {
+const std::string NetworkGateway::ip()
+{
     return m_ip;
 }
 
-bool NetworkGateway::generateIP() {
+bool NetworkGateway::generateIP()
+{
     const char *ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
 
     m_ip = m_generator.gen_ip_addr(ipAddrNet);
@@ -91,14 +98,16 @@ bool NetworkGateway::generateIP() {
     return true;
 }
 
-bool NetworkGateway::setDefaultGateway() {
+bool NetworkGateway::setDefaultGateway()
+{
     std::string cmd = "route add default gw ";
     systemCall(cmd + m_gateway);
 
     return true;
 }
 
-bool NetworkGateway::up() {
+bool NetworkGateway::up()
+{
     std::string cmd;
 
     if (!m_interfaceInitialized) {
@@ -115,14 +124,16 @@ bool NetworkGateway::up() {
     return setDefaultGateway();
 }
 
-bool NetworkGateway::down() {
+bool NetworkGateway::down()
+{
     std::string cmd = "ifconfig eth0 down";
     systemCall(cmd);
 
     return true;
 }
 
-bool NetworkGateway::isBridgeAvailable() {
+bool NetworkGateway::isBridgeAvailable()
+{
     bool ret = false;
     std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 

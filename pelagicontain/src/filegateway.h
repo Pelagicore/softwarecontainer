@@ -21,30 +21,37 @@
         "env-var-name": "SOMEIP_SOCKET_PATH", // name of a environment variable to be set
         "env-var-value": "prefix-%s-suffix", // printf-like format string which specifies the value of the environment variable. The "%s" part of the string will be replaced at runtime by the actual location where the file is available in the container.
  */
-class FileGateway : public Gateway {
+class FileGateway :
+    public Gateway
+{
 
     LOG_DECLARE_CLASS_CONTEXT("File", "file gateway");
 
 public:
     static constexpr const char *ID = "file";
 
-    FileGateway() {
+    FileGateway()
+    {
     }
 
-    ~FileGateway() {
+    ~FileGateway()
+    {
     }
 
-    std::string id() override {
+    std::string id() override
+    {
         return ID;
     }
 
     ReturnCode readConfigElement(JSonElement &element) override;
 
-    bool activate() override {
+    bool activate() override
+    {
         return true;
     }
 
-    bool teardown() override {
+    bool teardown() override
+    {
         return true;
     }
 

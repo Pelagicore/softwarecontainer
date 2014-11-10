@@ -16,36 +16,42 @@ class PAMInterface;
 
 namespace pelagicontain {
 
-class PelagicontainLib {
+class PelagicontainLib
+{
 
     LOG_DECLARE_CLASS_CONTEXT("PC", "Pelagicontain library");
 
 public:
     PelagicontainLib(const char *containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
-                     , const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG);
+                , const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG);
 
     ~PelagicontainLib();
 
     /**
      * Set the main loop
      */
-    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext) {
+    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
+    {
         m_ml = mainLoopContext;
     }
 
-    void shutdown() {
+    void shutdown()
+    {
         pelagicontain.shutdown();
     }
 
-    const Container& getContainer() const {
+    const Container &getContainer() const
+    {
         return container;
     }
 
-    Container& getContainer() {
+    Container &getContainer()
+    {
         return container;
     }
 
-    bool isInitialized() {
+    bool isInitialized()
+    {
         return m_initialized;
     }
 
@@ -59,11 +65,13 @@ public:
 
     ReturnCode init(bool bRegisterDBusInterface = false);
 
-    Pelagicontain& getPelagicontain() {
+    Pelagicontain &getPelagicontain()
+    {
         return pelagicontain;
     }
 
-    void setCookie(const std::string &cookie) {
+    void setCookie(const std::string &cookie)
+    {
         m_cookie = cookie;
     }
 
@@ -112,44 +120,54 @@ private:
 /**
  * Abstract class for jobs which get executed inside a container
  */
-class JobAbstract {
+class JobAbstract
+{
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
     JobAbstract(PelagicontainLib &lib) :
-        m_lib(lib) {
+        m_lib(lib)
+    {
     }
 
-    void captureStdin() {
+    void captureStdin()
+    {
         pipe(m_stdin);
     }
 
-    void captureStdout() {
+    void captureStdout()
+    {
         pipe(m_stdout);
     }
 
-    void captureStderr() {
+    void captureStderr()
+    {
         pipe(m_stderr);
     }
 
-    int wait() {
+    int wait()
+    {
         return waitForProcessTermination(m_pid);
     }
 
-    int stdout() {
+    int stdout()
+    {
         return m_stdout[0];
     }
 
-    int stderr() {
+    int stderr()
+    {
         return m_stderr[0];
     }
 
-    int stdin() {
+    int stdin()
+    {
         return m_stdin[1];
     }
 
-    pid_t pid() {
+    pid_t pid()
+    {
         return m_pid;
     }
 
@@ -157,12 +175,14 @@ public:
      * That method always returns true as soon as the start() method has been called, even if the command fails to start,
      * since we don't know if the exec() occuring after the fork into the container actually succeeds...
      */
-    bool isRunning() {
+    bool isRunning()
+    {
         // TODO : find a way to test whether the exec() which occurs in the container succeeded
         return (m_pid != 0);
     }
 
-    void setEnvironnmentVariable(const std::string &key, const std::string &value) {
+    void setEnvironnmentVariable(const std::string &key, const std::string &value)
+    {
         m_env[key] = value;
     }
 
@@ -178,26 +198,33 @@ protected:
 /**
  * Use this class to execute a command line in a container
  */
-class CommandJob : public JobAbstract {
+class CommandJob :
+    public JobAbstract
+{
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    CommandJob(PelagicontainLib &lib, const std::string &command) : JobAbstract(lib) {
+    CommandJob(PelagicontainLib &lib, const std::string &command) :
+        JobAbstract(lib)
+    {
         m_command = command;
     }
 
-    ReturnCode setWorkingDirectory(const std::string &folder) {
+    ReturnCode setWorkingDirectory(const std::string &folder)
+    {
         m_workingDirectory = folder;
         return ReturnCode::SUCCESS;
     }
 
-    ReturnCode start() {
+    ReturnCode start()
+    {
         m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1], m_workingDirectory);
         return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
     }
 
-    std::string toString() const {
+    std::string toString() const
+    {
         return logging::StringBuilder() << "Pelagicontain job. command: " << m_command << " stdin:" << m_stdin[0]
                                         << " stdout:" << m_stdout[1];
     }
@@ -210,25 +237,32 @@ private:
 /**
  *
  */
-class FunctionJob : public JobAbstract {
+class FunctionJob :
+    public JobAbstract
+{
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    FunctionJob(PelagicontainLib &lib, std::function<int()> command) : JobAbstract(lib) {
+    FunctionJob(PelagicontainLib &lib, std::function<int()> command) :
+        JobAbstract(lib)
+    {
         m_command = command;
     }
 
-    ReturnCode start() {
+    ReturnCode start()
+    {
         m_pid = m_lib.getContainer().executeInContainer(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
         return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
     }
 
-    void setEnvironnmentVariable(const std::string &key, const std::string &value) {
+    void setEnvironnmentVariable(const std::string &key, const std::string &value)
+    {
         m_env[key] = value;
     }
 
-    std::string toString() const {
+    std::string toString() const
+    {
         return logging::StringBuilder() << "Pelagicontain job. " << " stdin:" << m_stdin[0]
                                         << " stdout:" << m_stdout[1];
     }

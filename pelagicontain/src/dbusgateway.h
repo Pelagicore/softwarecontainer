@@ -31,11 +31,13 @@
  *  dbus-proxy verbatim. This is to support future changes in the configuration
  *  format.
  */
-class DBusGateway : public Gateway {
+class DBusGateway :
+    public Gateway
+{
     LOG_DECLARE_CLASS_CONTEXT("DBUS", "DBus gateway");
 
 public:
-    enum ProxyType {SessionProxy, SystemProxy};
+    enum ProxyType { SessionProxy, SystemProxy };
 
     static constexpr const char *ID = "dbus";
 
@@ -44,7 +46,7 @@ public:
      * \param  type       SessionProxy or SystemProxy
      */
     DBusGateway(SystemcallAbstractInterface &systemcallInterface, ProxyType type, const std::string &gatewayDir,
-                const std::string &name);
+            const std::string &name);
     ~DBusGateway();
 
     /*!
@@ -101,7 +103,7 @@ public:
     virtual bool teardown();
 
 private:
-    const char*typeString();
+    const char *typeString();
     std::string socketName();
     bool isSocketCreated() const;
 

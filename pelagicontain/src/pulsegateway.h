@@ -31,12 +31,13 @@
  *  server at all.
  */
 class PulseGateway :
-    public Gateway {
+    public Gateway
+{
     LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
 
 public:
     PulseGateway(const std::string &gatewayDir
-                 , const std::string &containerName);
+            , const std::string &containerName);
     ~PulseGateway();
 
     /*!

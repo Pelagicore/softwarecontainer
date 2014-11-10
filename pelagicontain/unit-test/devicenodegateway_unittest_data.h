@@ -5,7 +5,8 @@
 
 #include <vector>
 
-struct testData {
+struct testData
+{
     const char *title;
     const char *data;
     const std::vector<std::string> names;
@@ -14,7 +15,8 @@ struct testData {
     const std::vector<std::string> modes;
 };
 
-void PrintTo(const testData &d, ::std::ostream *os) {
+void PrintTo(const testData &d, ::std::ostream *os)
+{
     *os << "Title: " << d.title;
     *os << "\nData: " << d.data;
 }

@@ -13,7 +13,8 @@
 class PelagicontainToDBusAdapter :
     public com::pelagicore::Pelagicontain_adaptor,
     public DBus::IntrospectableAdaptor,
-    public DBus::ObjectAdaptor {
+    public DBus::ObjectAdaptor
+{
 public:
     PelagicontainToDBusAdapter(DBus::Connection &conn, const std::string &objPath, Pelagicontain &pc);
     virtual std::string Echo(const std::string &argument);

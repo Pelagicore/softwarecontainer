@@ -14,7 +14,8 @@ class PAMInterface :
     public com::pelagicore::PAM_proxy,
     public DBus::IntrospectableProxy,
     public DBus::ObjectProxy,
-    public PAMAbstractInterface {
+    public PAMAbstractInterface
+{
 public:
     PAMInterface(DBus::Connection &connection);
 

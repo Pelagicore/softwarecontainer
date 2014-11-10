@@ -14,17 +14,20 @@
  *
  * Gateway base class for Pelagicontain
  */
-class Gateway {
+class Gateway
+{
     LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
 
 protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
 
 public:
-    Gateway() {
+    Gateway()
+    {
     };
 
-    virtual ~Gateway() {
+    virtual ~Gateway()
+    {
     };
 
     /*! Used by pelagicontain to map configurations to gateways */
@@ -39,7 +42,8 @@ public:
      */
     virtual bool setConfig(const std::string &config);
 
-    virtual ReturnCode readConfigElement(JSonElement &element) {
+    virtual ReturnCode readConfigElement(JSonElement &element)
+    {
         return ReturnCode::SUCCESS;
     }
 
@@ -55,21 +59,25 @@ public:
      *
      * \returns true upon successful clean-up, false otherwise
      */
-    virtual bool teardown() {
+    virtual bool teardown()
+    {
         return true;
     }
 
     ReturnCode createSymLinkInContainer(const std::string &source, const std::string &destination);
 
-    Container& getContainer() {
+    Container &getContainer()
+    {
         return *m_container;
     }
 
-    void setContainer(Container &container) {
+    void setContainer(Container &container)
+    {
         m_container = &container;
     }
 
-    ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) {
+    ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value)
+    {
         return getContainer().setEnvironmentVariable(variable, value);
     }
 
@@ -78,7 +86,8 @@ public:
      *
      * \return True if all went well, false if not
      */
-    ReturnCode systemCall(const std::string &cmd) {
+    ReturnCode systemCall(const std::string &cmd)
+    {
         return getContainer().systemCall(cmd);
     }
 

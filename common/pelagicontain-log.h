@@ -8,8 +8,9 @@
 #include <glibmm.h>
 
 template<typename LogDataType, typename =
-             typename std::enable_if<std::is_base_of<logging::LogDataCommon, LogDataType>::value>::type>
-LogDataType & operator<<(LogDataType &log, const Glib::ustring &s) {
+            typename std::enable_if<std::is_base_of<logging::LogDataCommon, LogDataType>::value>::type>
+LogDataType &operator<<(LogDataType &log, const Glib::ustring &s)
+{
     log << s.c_str();
     return log;
 }

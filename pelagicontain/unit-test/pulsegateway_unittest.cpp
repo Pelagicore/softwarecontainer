@@ -12,36 +12,43 @@
 
 using namespace pelagicore;
 
-class PulseMockController {
+class PulseMockController
+{
 public:
-    virtual bool startApp() {
+    virtual bool startApp()
+    {
         return true;
     }
 
-    virtual bool shutdown() {
+    virtual bool shutdown()
+    {
         return true;
     }
 
-    virtual bool hasBeenStarted() const {
+    virtual bool hasBeenStarted() const
+    {
         return true;
     }
 
-    virtual bool initialize() {
+    virtual bool initialize()
+    {
         return true;
     }
 
     MOCK_METHOD1( systemCall,
-                  ReturnCode(const std::string & cmd) );
+            ReturnCode(const std::string & cmd) );
 
     MOCK_METHOD2( setEnvironmentVariable,
-                  ReturnCode(const std::string & variable, const std::string & value) );
+            ReturnCode(const std::string & variable, const std::string & value) );
 };
 
 
 class MockSystemcallInterface :
-    public SystemcallAbstractInterface {
+    public SystemcallAbstractInterface
+{
 public:
-    virtual bool makeCall(const std::string &cmd, int &exitCode) {
+    virtual bool makeCall(const std::string &cmd, int &exitCode)
+    {
         exitCode = 0;
         return true;
     }
@@ -64,9 +71,11 @@ using::testing::StrEq;
 using::testing::A;
 
 class PulseGatewayTest :
-    public::testing::Test {
+    public::testing::Test
+{
 protected:
-    virtual void SetUp() {
+    virtual void SetUp()
+    {
         DefaultValue<bool>::Set(true);
 
         // ContainerName and gatewayDir must be passed to constructor
@@ -77,7 +86,8 @@ protected:
         gatewayDir = containerDir + "/gateways";
     }
 
-    virtual void TearDown() {
+    virtual void TearDown()
+    {
         using::testing::DefaultValue;
         DefaultValue<bool>::Clear();
     }
@@ -102,10 +112,12 @@ TEST_F(PulseGatewayTest, TestIdEqualspulseaudio) {
  *  causing errors, and that enables audio.
  */
 class PulseGatewayValidConfig :
-    public testing::TestWithParam<pulseTestData> {};
+    public testing::TestWithParam<pulseTestData>
+{
+};
 
 INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayValidConfig,
-                         ::testing::ValuesIn(validConfigs) );
+        ::testing::ValuesIn(validConfigs) );
 
 TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -115,8 +127,8 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
 
     DefaultValue<bool>::Set(true);
     EXPECT_CALL( controllerInterface, setEnvironmentVariable(
-                     A<const std::string &>(),
-                     A<const std::string &>() ) );
+                A<const std::string &>(),
+                A<const std::string &>() ) );
 
     bool success = gw.setConfig(config.data);
     DefaultValue<bool>::Clear();
@@ -135,10 +147,12 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
  *  causing parsing errors.
  */
 class PulseGatewayInvalidConfig :
-    public testing::TestWithParam<pulseTestData> {};
+    public testing::TestWithParam<pulseTestData>
+{
+};
 
 INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayInvalidConfig,
-                         ::testing::ValuesIn(invalidConfigs) );
+        ::testing::ValuesIn(invalidConfigs) );
 
 TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -156,10 +170,12 @@ TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
  *  causing errors, but that disables audio.
  */
 class PulseGatewayDisablingConfig :
-    public testing::TestWithParam<pulseTestData> {};
+    public testing::TestWithParam<pulseTestData>
+{
+};
 
 INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayDisablingConfig,
-                         ::testing::ValuesIn(disablingConfigs) );
+        ::testing::ValuesIn(disablingConfigs) );
 
 TEST_P(PulseGatewayDisablingConfig, TestCanParseDisablingConfig) {
     StrictMock<PulseMockController> controllerInterface;

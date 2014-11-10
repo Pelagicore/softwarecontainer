@@ -16,41 +16,51 @@
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
-class PelagicontainApp : public::testing::Test {
+class PelagicontainApp :
+    public::testing::Test
+{
 
 public:
-    PelagicontainApp() {
+    PelagicontainApp()
+    {
     }
 
-    void SetUp() override {
+    void SetUp() override
+    {
         ::testing::Test::SetUp();
         lib = std::unique_ptr<PelagicontainLib> ( new PelagicontainLib() );
         lib->setMainLoopContext(m_context);
         ASSERT_TRUE( isSuccess( lib->init() ) );
     }
 
-    void TearDown() override {
+    void TearDown() override
+    {
         ::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
     }
 
-    void run() {
+    void run()
+    {
         m_ml = Glib::MainLoop::create(m_context);
         m_ml->run();
     }
 
-    void exit() {
+    void exit()
+    {
         m_ml->quit();
     }
 
-    Glib::RefPtr<Glib::MainContext> getMainContext() {
+    Glib::RefPtr<Glib::MainContext> getMainContext()
+    {
         return m_context;
     }
 
-    void openTerminal() {
+    void openTerminal()
+    {
         lib->openTerminal("konsole -e");
     }
 
-    PelagicontainLib& getLib() {
+    PelagicontainLib &getLib()
+    {
         return *lib;
     }
 
@@ -124,7 +134,7 @@ TEST(PelagicontainLib, MultithreadTest) {
 
     std::thread t(f);
 
-    for (int i = 0; (i < TIMEOUT) && !finished; i++ ) {
+    for (int i = 0; (i < TIMEOUT) && !finished; i++) {
         log_info() << "Waiting for pelagicontain to be initialized";
         sleep(1);
     }
@@ -158,10 +168,10 @@ TEST_F(PelagicontainApp, TestStdin) {
 
     SignalConnectionsHandler connections;
     addProcessListener( connections, job.pid(), [&] (
-                            int pid, int exitCode) {
-                            log_debug() << "finished process :" << job.toString();
-                            exit();
-                        }, getMainContext() );
+                int pid, int exitCode) {
+                log_debug() << "finished process :" << job.toString();
+                exit();
+            }, getMainContext() );
 
     kill(job.pid(), SIGTERM);
 
@@ -179,10 +189,10 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapability) {
 
     SignalConnectionsHandler connections;
     addProcessListener( connections, job.pid(), [&] (
-                            int pid, int exitCode) {
-                            bNetworkAccessSucceeded = (exitCode == 0);
-                            exit();
-                        }, getMainContext() );
+                int pid, int exitCode) {
+                bNetworkAccessSucceeded = (exitCode == 0);
+                exit();
+            }, getMainContext() );
 
     run();
 
@@ -224,14 +234,14 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
     {
         GatewayConfiguration config;
         config[DBusGateway::ID] = "[{"
-                                  "\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
-                                  "\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}]";
+                "\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
+                "\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}]";
 
         getLib().getPelagicontain().setGatewayConfigs(config);
 
         CommandJob jobTrue(
-            getLib(),
-            "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                getLib(),
+                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
         ASSERT_TRUE(jobTrue.wait() == 0);
@@ -239,8 +249,8 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
 
     {
         CommandJob jobTrue(
-            getLib(),
-            "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                getLib(),
+                "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
         ASSERT_TRUE(jobTrue.wait() == 0);
@@ -255,8 +265,8 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithoutAccess) {
 
     {
         CommandJob jobTrue(
-            getLib(),
-            "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                getLib(),
+                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
         ASSERT_TRUE(jobTrue.wait() != 0);
@@ -264,8 +274,8 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithoutAccess) {
 
     {
         CommandJob jobTrue(
-            getLib(),
-            "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                getLib(),
+                "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
         // We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible

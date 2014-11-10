@@ -8,10 +8,12 @@
 
 
 DeviceNodeGateway::DeviceNodeGateway() :
-    Gateway() {
+    Gateway()
+{
 }
 
-ReturnCode DeviceNodeGateway::readConfigElement(JSonElement &element) {
+ReturnCode DeviceNodeGateway::readConfigElement(JSonElement &element)
+{
 
     DeviceNodeGateway::Device dev;
 
@@ -26,8 +28,9 @@ ReturnCode DeviceNodeGateway::readConfigElement(JSonElement &element) {
 }
 
 
-bool DeviceNodeGateway::activate() {
-    for(auto &dev : m_devList) {
+bool DeviceNodeGateway::activate()
+{
+    for (auto &dev : m_devList) {
         log_error() << "Mapping device " << dev.name;
 
         if (dev.major.length() != 0) {

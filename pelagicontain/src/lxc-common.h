@@ -1,3 +1,4 @@
-enum class LXCContainerStates {
+enum class LXCContainerStates
+{
     STOPPED, STARTING, RUNNING, STOPPING, ABORTING, FREEZING, FROZEN, THAWED, ELEMENT_COUNT
 };

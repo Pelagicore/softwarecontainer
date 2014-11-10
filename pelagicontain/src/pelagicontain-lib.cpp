@@ -27,20 +27,20 @@
 #include "paminterface.h"
 
 
-PelagicontainLib::PelagicontainLib(const char *containerRootFolder,
-                                   const char *configFilePath) : containerName( Generator::gen_ct_name() ),
-    containerConfig(configFilePath), containerRoot(containerRootFolder),
+PelagicontainLib::PelagicontainLib(const char *containerRootFolder, const char *configFilePath) :
+    containerName( Generator::gen_ct_name() ), containerConfig(configFilePath), containerRoot(containerRootFolder),
     containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"),
-    container(containerName, containerConfig,
-              containerRoot),
-    pelagicontain(m_cookie) {
+    container(containerName, containerConfig, containerRoot), pelagicontain(m_cookie)
+{
     pelagicontain.setMainLoopContext(m_ml);
 }
 
-PelagicontainLib::~PelagicontainLib() {
+PelagicontainLib::~PelagicontainLib()
+{
 }
 
-ReturnCode PelagicontainLib::checkWorkspace() {
+ReturnCode PelagicontainLib::checkWorkspace()
+{
 
     if ( !isDirectory(containerRoot) ) {
         std::string cmdLine = INSTALL_PREFIX;
@@ -48,9 +48,9 @@ ReturnCode PelagicontainLib::checkWorkspace() {
         log_debug() << "Creating workspace : " << cmdLine;
         int returnCode;
         Glib::spawn_sync("", Glib::shell_parse_argv(
-                             cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
-                         sigc::slot<void>(), nullptr,
-                         nullptr, &returnCode);
+                    cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
+                sigc::slot<void>(), nullptr,
+                nullptr, &returnCode);
         if (returnCode != 0) {
             return ReturnCode::FAILURE;
         }
@@ -59,7 +59,8 @@ ReturnCode PelagicontainLib::checkWorkspace() {
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode PelagicontainLib::preload() {
+ReturnCode PelagicontainLib::preload()
+{
 
     // Make sure path ends in '/' since it might not always be checked
     if (containerRoot.back() != '/') {
@@ -88,7 +89,8 @@ ReturnCode PelagicontainLib::preload() {
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
+ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
+{
 
     if (m_ml->gobj() == nullptr) {
         log_error() << "Main loop context must be set first !";
@@ -129,16 +131,16 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 
 #ifdef ENABLE_DBUSGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
-                                                        systemcallInterface,
-                                                        DBusGateway::SessionProxy,
-                                                        gatewayDir,
-                                                        containerName) ) );
+                    systemcallInterface,
+                    DBusGateway::SessionProxy,
+                    gatewayDir,
+                    containerName) ) );
 
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
-                                                        systemcallInterface,
-                                                        DBusGateway::SystemProxy,
-                                                        gatewayDir,
-                                                        containerName) ) );
+                    systemcallInterface,
+                    DBusGateway::SystemProxy,
+                    gatewayDir,
+                    containerName) ) );
 #endif
 
     //    m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );
@@ -153,8 +155,8 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
     // connect the watcher if the spawning went well.
     if (m_pcPid != 0) {
         addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
-                               pelagicontain.shutdownContainer();
-                           }, m_ml);
+                    pelagicontain.shutdownContainer();
+                }, m_ml);
     }
 
     if (bRegisterDBusInterface) {
@@ -179,7 +181,8 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface) {
 }
 
 
-ReturnCode PelagicontainLib::registerDBusService() {
+ReturnCode PelagicontainLib::registerDBusService()
+{
 
     /* The request_name call does not return anything but raises an
      * exception if the name cannot be requested.
@@ -191,13 +194,13 @@ ReturnCode PelagicontainLib::registerDBusService() {
 
     log_debug() << "Registering interface on DBUS";
 
-    m_pcAdapter = std::unique_ptr<PelagicontainToDBusAdapter
-                                  > ( new PelagicontainToDBusAdapter(*m_bus, objectPath, pelagicontain) );
+    m_pcAdapter = std::unique_ptr<PelagicontainToDBusAdapter> ( new PelagicontainToDBusAdapter(*m_bus, objectPath, pelagicontain) );
 
     return ReturnCode::SUCCESS;
 }
 
-void PelagicontainLib::openTerminal(const std::string &terminalCommand) const {
+void PelagicontainLib::openTerminal(const std::string &terminalCommand) const
+{
     std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << getContainer().name();
     log_info() << command;
     system( command.c_str() );

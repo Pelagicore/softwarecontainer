@@ -10,7 +10,8 @@
 /*
  * Increase the counter and return an IP number based on that.
  */
-std::string Generator::gen_ip_addr(const char *ip_addr_net) {
+std::string Generator::gen_ip_addr(const char *ip_addr_net)
+{
 
     counter++;
     if (counter < 2 || counter > 254) {
@@ -22,7 +23,8 @@ std::string Generator::gen_ip_addr(const char *ip_addr_net) {
     return std::string(ip);
 }
 
-std::string Generator::gen_ct_name() {
+std::string Generator::gen_ct_name()
+{
     static const char alphanum[] = "abcdefghijklmnopqrstuvwxyz";
     struct timeval time;
     char name[10];

@@ -21,7 +21,7 @@ TEST(GeneratorTest, TestIPCounter) {
     ASSERT_EQ(ip, "192.168.0.3");
 
     // Update so the counter is 253
-    for(int i = 3; i < 253; i++) {
+    for (int i = 3; i < 253; i++) {
         gen.gen_ip_addr(ip_addr_net);
     }
 

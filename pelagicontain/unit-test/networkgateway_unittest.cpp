@@ -10,26 +10,32 @@
 
 using namespace pelagicore;
 
-class MockController {
+class MockController
+{
 public:
-    virtual bool startApp() {
+    virtual bool startApp()
+    {
         return true;
     }
 
-    virtual bool shutdown() {
+    virtual bool shutdown()
+    {
         return true;
     }
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable,
-                                              const std::string &value) {
+            const std::string &value)
+    {
         return ReturnCode::SUCCESS;
     }
 
-    virtual bool hasBeenStarted() const {
+    virtual bool hasBeenStarted() const
+    {
         return true;
     }
 
-    virtual bool initialize() {
+    virtual bool initialize()
+    {
         return true;
     }
 
@@ -38,16 +44,18 @@ public:
 
 
 class MockSystemcallInterface :
-    public SystemcallAbstractInterface {
+    public SystemcallAbstractInterface
+{
 public:
-    virtual bool makeCall(const std::string &cmd, int &exitCode) {
+    virtual bool makeCall(const std::string &cmd, int &exitCode)
+    {
         exitCode = 0;
         return true;
     }
 
     MOCK_METHOD1( makeCall, bool(const std::string & cmd) );
     MOCK_METHOD3( makePopenCall,
-                  pid_t(const std::string & command, int *infp, int *outfp) );
+            pid_t(const std::string & command, int *infp, int *outfp) );
     MOCK_METHOD3( makePcloseCall, bool(pid_t pid, int infp, int outfp) );
 };
 
@@ -58,13 +66,16 @@ using::testing::Return;
 using::testing::NiceMock;
 
 class NetworkGatewayTest :
-    public::testing::Test {
+    public::testing::Test
+{
 protected:
-    virtual void SetUp() {
+    virtual void SetUp()
+    {
         DefaultValue<bool>::Set(true);
     }
 
-    virtual void TearDown() {
+    virtual void TearDown()
+    {
         using::testing::DefaultValue;
         DefaultValue<bool>::Clear();
     }

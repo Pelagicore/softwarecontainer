@@ -17,16 +17,19 @@ namespace pelagicontain {
 
 typedef std::map<std::string, std::string> GatewayConfiguration;
 
-enum class ReturnCode {
+enum class ReturnCode
+{
     FAILURE,
     SUCCESS
 };
 
-inline bool isError(ReturnCode code) {
+inline bool isError(ReturnCode code)
+{
     return (code != ReturnCode::SUCCESS);
 }
 
-inline bool isSuccess(ReturnCode code) {
+inline bool isSuccess(ReturnCode code)
+{
     return !isError(code);
 }
 
@@ -34,31 +37,37 @@ typedef std::map<std::string, std::string> EnvironmentVariables;
 
 static constexpr const char *APP_BINARY = "/appbin/containedapp";
 
-inline bool isLXC_C_APIEnabled() {
+inline bool isLXC_C_APIEnabled()
+{
     return true;
 }
 
-inline bool isContainerDeleteEnabled() {
+inline bool isContainerDeleteEnabled()
+{
     return false;
 }
 
 /**
  * That class contains references to sigc++ connections and automatically disconnects them on destruction
  */
-class SignalConnectionsHandler {
+class SignalConnectionsHandler
+{
 
 public:
     /**
      * Create a new connection
      */
-    sigc::connection& newConnection() {
+    sigc::connection &newConnection()
+    {
         m_connections.resize(m_connections.size() + 1);
         return m_connections[m_connections.size() - 1];
     }
 
-    ~SignalConnectionsHandler() {
-        for(auto &connection : m_connections)
+    ~SignalConnectionsHandler()
+    {
+        for (auto &connection : m_connections) {
             connection.disconnect();
+        }
     }
 
 private:
@@ -67,13 +76,15 @@ private:
 };
 
 inline void addProcessListener(SignalConnectionsHandler &connections, pid_t pid, std::function<void(pid_t, int)> function
-                               , Glib::RefPtr<Glib::MainContext> context // = Glib::MainContext::get_default()
-                               ) {
+            , Glib::RefPtr<Glib::MainContext> context                    // = Glib::MainContext::get_default()
+            )
+{
     auto connection = context->signal_child_watch().connect(function, pid);
     connections.newConnection() = connection;
 }
 
-inline int waitForProcessTermination(pid_t pid) {
+inline int waitForProcessTermination(pid_t pid)
+{
     int status;
     waitpid(pid, &status, 0);
     return status;
@@ -88,14 +99,18 @@ std::string parentPath(const std::string &path);
 ReturnCode touch(const std::string &path);
 
 template<typename Type>
-class ObservableProperty {
+class ObservableProperty
+{
 public:
     typedef std::function<void (const Type &)> Listener;
 
-    ObservableProperty(Type &value) : m_value(value) {
+    ObservableProperty(Type &value) :
+        m_value(value)
+    {
     }
 
-    void addListener(Listener listener) {
+    void addListener(Listener listener)
+    {
         m_listeners.push_back(listener);
     }
 
@@ -112,23 +127,30 @@ private:
 };
 
 template<typename Type>
-class ObservableWritableProperty : public ObservableProperty<Type> {
+class ObservableWritableProperty :
+    public ObservableProperty<Type>
+{
 public:
-    ObservableWritableProperty() : ObservableProperty<Type>(m_value) {
+    ObservableWritableProperty() :
+        ObservableProperty<Type>(m_value)
+    {
     }
 
-    void setValueNotify(Type value) {
+    void setValueNotify(Type value)
+    {
         m_value = value;
-        for(auto &listener : ObservableProperty<Type>::m_listeners) {
+        for (auto &listener : ObservableProperty<Type>::m_listeners) {
             listener( getValue() );
         }
     }
 
-    const Type& getValue() const {
+    const Type &getValue() const
+    {
         return m_value;
     }
 
-    ObservableWritableProperty & operator=(const Type &type) {
+    ObservableWritableProperty &operator=(const Type &type)
+    {
         m_value = type;
         return *this;
     }

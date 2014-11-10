@@ -6,7 +6,8 @@
 
 namespace pelagicontain {
 
-bool fileHasMode(const std::string &path, int mode) {
+bool fileHasMode(const std::string &path, int mode)
+{
     bool isDir = false;
     struct stat st;
     if (stat(path.c_str(), &st) == 0) {
@@ -18,15 +19,18 @@ bool fileHasMode(const std::string &path, int mode) {
 
 }
 
-bool isDirectory(const std::string &path) {
+bool isDirectory(const std::string &path)
+{
     return fileHasMode(path, S_IFDIR);
 }
 
-bool isSocket(const std::string &path) {
+bool isSocket(const std::string &path)
+{
     return fileHasMode(path, S_IFSOCK);
 }
 
-std::string parentPath(const std::string &path) {
+std::string parentPath(const std::string &path)
+{
     static constexpr const char *separator = "/";
     auto pos = path.rfind(separator);
     if (pos == std::string::npos) {
@@ -36,7 +40,8 @@ std::string parentPath(const std::string &path) {
     return parentPath;
 }
 
-ReturnCode touch(const std::string &path) {
+ReturnCode touch(const std::string &path)
+{
     auto fd = open(path.c_str(), O_WRONLY | O_CREAT | O_NOCTTY | O_NONBLOCK | O_LARGEFILE, 0666);
     if (fd != -1) {
         close(fd);

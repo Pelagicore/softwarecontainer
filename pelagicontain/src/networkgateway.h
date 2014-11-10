@@ -9,7 +9,9 @@
 #include "systemcallinterface.h"
 #include "generators.h"
 
-class NetworkGateway : public Gateway {
+class NetworkGateway :
+    public Gateway
+{
     LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
 
 public:
