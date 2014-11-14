@@ -31,7 +31,7 @@ ReturnCode DeviceNodeGateway::readConfigElement(JSonElement &element)
 bool DeviceNodeGateway::activate()
 {
     for (auto &dev : m_devList) {
-        log_error() << "Mapping device " << dev.name;
+        log_info() << "Mapping device " << dev.name;
 
         if (dev.major.length() != 0) {
             auto success = systemCall("mknod " + dev.name + " c " + dev.major + " " + dev.minor);

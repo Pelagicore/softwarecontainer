@@ -1,0 +1,3 @@
+- Gateway configurations are now arrays of elements. Therefore, each gateway should now be written in such a way that it accepts 0, 1 or multiple
+  configuration elements.
+- Automatic creation of workspace if it does not exist (by calling setup_pelagicontain.sh script)

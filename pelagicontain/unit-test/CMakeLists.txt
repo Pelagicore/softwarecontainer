@@ -55,12 +55,9 @@ TARGET_LINK_LIBRARIES(runUnitTestsPelagicontain
     ${TEST_LIBRARY_DEPENDENCIES}
 )
 
-add_executable(runUnitTestsPelagicontainLib
-    main.cpp
-    pelagicontainLib_unittest.cpp
-)
-TARGET_LINK_LIBRARIES(runUnitTestsPelagicontainLib
-    ${TEST_LIBRARY_DEPENDENCIES}
+add_gtest_test(pelagicontainLibTest
+    "main.cpp;pelagicontainLib_unittest.cpp"
+    "${TEST_LIBRARY_DEPENDENCIES}"
 )
 
 include_directories(../src)

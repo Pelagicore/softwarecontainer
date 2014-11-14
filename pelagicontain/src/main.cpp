@@ -41,7 +41,7 @@
 #include "UNIXSignalGlibHandler.h"
 
 
-//LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
+LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 /**
@@ -87,8 +87,7 @@ int main(int argc, char * *argv)
             "the command to run inside the container and "
             "an alphanumerical cookie string as first, second and"
             "third argument respectively";
-    const char *paramsDescription = "[container root directory (abs path)] "
-            "[command] [cookie]";
+    const char *paramsDescription = "[container root directory (abs path)] [cookie]";
 
     pelagicore::CommandLineParser commandLineParser(summary,
             paramsDescription,
