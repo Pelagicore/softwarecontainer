@@ -37,12 +37,13 @@ public:
     static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
 
-    bool setConfig(const std::string &config) override
+    ReturnCode readConfigElement(JSonElement &element) override
     {
-        JSonElement parser(config);
-        m_enabled = false;
-        parser.readBoolean("enabled", m_enabled);
-        return true;
+    	log_error() << "config : " << element.dump();
+		bool enabled;
+		element.readBoolean("enabled", enabled);
+		m_enabled |= enabled;
+        return ReturnCode::SUCCESS;
     }
 
     bool activate() override
