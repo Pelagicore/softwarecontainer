@@ -19,7 +19,7 @@
 #endif
 
 //#include "dltgateway.h"
-//#include "waylandgateway.h"
+#include "waylandgateway.h"
 #include "filegateway.h"
 
 #include "pelagicontaintodbusadapter.h"
@@ -144,7 +144,7 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
 #endif
 
     //    m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );
-    //    m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
+    m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
     m_gateways.push_back( std::unique_ptr<Gateway>( new FileGateway() ) );
 
     for (auto &gateway : m_gateways) {

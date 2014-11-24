@@ -39,10 +39,10 @@ public:
 
     ReturnCode readConfigElement(JSonElement &element) override
     {
-    	log_error() << "config : " << element.dump();
-		bool enabled;
-		element.readBoolean("enabled", enabled);
-		m_enabled |= enabled;
+        log_error() << "config : " << element.dump();
+        bool enabled;
+        element.readBoolean("enabled", enabled);
+        m_enabled |= enabled;
         return ReturnCode::SUCCESS;
     }
 
