@@ -57,9 +57,9 @@ void Pelagicontain::setApplicationID(const std::string &appId)
 {
     m_appId = appId;
 
-    log_debug() << "register client " << m_cookie << " / " << m_appId;
-
     if (m_container) {
+
+        log_debug() << "register client " << m_cookie << " / " << m_appId;
 
         std::string appDirBase = m_container->root() + "/" + appId;
 
@@ -113,6 +113,7 @@ void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
 
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();
+
         if (configs.count(gatewayId) != 0) {
             std::string config = configs.at(gatewayId);
             gateway->setConfig(config);

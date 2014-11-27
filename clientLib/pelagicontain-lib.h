@@ -50,7 +50,7 @@ public:
         return container;
     }
 
-    bool isInitialized()
+    bool isInitialized() const
     {
         return m_initialized;
     }

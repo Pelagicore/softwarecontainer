@@ -15,13 +15,14 @@ if(EXTRA_PKG_CONFIG_PATH)
 	message("Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
 endif(EXTRA_PKG_CONFIG_PATH)
 
+add_definitions(-DPACKAGE_VERSION="0.1")
+
 find_package(PkgConfig           REQUIRED)
 find_package(PelagicoreUtilities REQUIRED)
 find_package(IVILogging          REQUIRED)
-find_package(DBusCpp             REQUIRED)
-find_package(DBusCppGlib         REQUIRED)
 
-add_definitions(-DPACKAGE_VERSION="0.1")
+pkg_check_modules(DBUSCPP dbus-c++-glib-1 REQUIRED)
+add_definitions(${DBUSCPP_CFLAGS_OTHER})
 
 pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
 add_definitions(${GLIBMM_CFLAGS_OTHER})
@@ -55,8 +56,8 @@ include_directories(
 	clientLib
 	pelagicontain/src
 	${DBUS_INCLUDE_DIR}
-	${DBUSCPP_INCLUDE_DIR}
-	${DBUSCPPGLIB_INCLUDE_DIR}
+	${DBUSCPP_INCLUDE_DIRS}
+	${DBUSCPPGLIB_INCLUDE_DIRS}
 	${GLIBMM_INCLUDE_DIRS}
 	${LXC_INCLUDE_DIRS}
 	${CMAKE_CURRENT_BINARY_DIR}

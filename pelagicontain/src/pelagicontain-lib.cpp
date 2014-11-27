@@ -80,7 +80,7 @@ ReturnCode PelagicontainLib::preload()
 
     if (m_pcPid != 0) {
         log_debug() << "Started container with PID " << m_pcPid;
-        sleep(1);
+//        sleep(1);
     } else {
         // Fatal failure, only do necessary cleanup
         log_error() << "Could not start container, will shut down";
