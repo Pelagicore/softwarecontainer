@@ -5,7 +5,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "log-console.h"
+#include "ivi-logging-console.h"
 #include "log.h"
 
 LOG_DEFINE_APP_IDS("CON", "Controller");
