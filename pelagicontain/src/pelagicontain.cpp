@@ -9,7 +9,6 @@
 #include "gateway.h"
 #include "container.h"
 #include "pelagicontain.h"
-#include "paminterface.h"
 
 Pelagicontain::Pelagicontain(const std::string &cookie) :
     m_cookie(cookie)
@@ -41,7 +40,6 @@ void Pelagicontain::shutdownContainer()
 {
     m_container->destroy();
     shutdownGateways();
-    m_pamInterface->unregisterClient(m_cookie);
 
     m_containerState.setValueNotify(ContainerState::TERMINATED);
 }
@@ -65,7 +63,6 @@ void Pelagicontain::setApplicationID(const std::string &appId)
 
         // this should always be true except when unit-testing.
         if ( m_container->mountApplication(appDirBase) ) {
-            m_pamInterface->registerClient(m_cookie, m_appId);
         } else {
             log_error() << "Could not set up container for application, shutting down";
             // If we are here we should have been reached over D-Bus and are
@@ -96,11 +93,10 @@ pid_t Pelagicontain::launchCommand(const std::string &commandLine)
     return pid;
 }
 
-void Pelagicontain::update(const GatewayConfiguration &configs)
+void Pelagicontain::updateGatewayConfiguration(const GatewayConfiguration &configs)
 {
     log_debug() << "update called" << configs;
     setGatewayConfigs(configs);
-    m_pamInterface->updateFinished(m_cookie);
     if (m_launching) {
         launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
     }

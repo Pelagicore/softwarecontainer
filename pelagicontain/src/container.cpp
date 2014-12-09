@@ -329,7 +329,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
         envVariablesArray[i] = strings[i].c_str();
     }
     envVariablesArray[strings.size()] = nullptr;
-    options.extra_env_vars = (char * *) envVariablesArray;  // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
+    options.extra_env_vars = (char * *) envVariablesArray;    // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
     log_debug() << "Env variables : " << strings;
 

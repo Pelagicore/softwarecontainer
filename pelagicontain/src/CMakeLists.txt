@@ -52,7 +52,6 @@ macro(generate_dbus_hfile type xml h)
 endmacro(generate_dbus_hfile type xml h)
 
 if(DBUSBINDINGTOOL)
-    generate_dbus_hfile("proxy" "pam-service.xml" "pamproxy.h")
     generate_dbus_hfile("adaptor" "pelagicontain-service.xml" "dbusadaptor.h")
 else(DBUSBINDINGTOOL)
     MESSAGE(ERROR " Cannot find dbusxx-xml2cpp")
@@ -66,8 +65,6 @@ add_library(pelagicontainLib SHARED
     generators.cpp
     gateway.cpp
     pelagicontain.cpp
-    paminterface.cpp
-    pamproxy.h
     dbusadaptor.h
     systemcallinterface.cpp
     pelagicontain-lib.cpp

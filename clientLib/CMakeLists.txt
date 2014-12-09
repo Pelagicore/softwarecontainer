@@ -1,7 +1,5 @@
 set(HEADERS 
     pelagicontain-lib.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/paminterface.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/pamabstractinterface.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/pelagicontain.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/container.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/gateway.h

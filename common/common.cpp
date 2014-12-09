@@ -6,6 +6,8 @@
 
 namespace pelagicontain {
 
+LOG_DECLARE_CONTEXT(defaultLogContext, "MAIN", "Main context");
+
 bool fileHasMode(const std::string &path, int mode)
 {
     bool isDir = false;

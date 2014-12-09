@@ -14,7 +14,7 @@
 #include "waylandgateway.h"
 
 
-LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
+//LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
 class PelagicontainApp :
     public::testing::Test

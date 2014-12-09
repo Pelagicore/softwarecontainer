@@ -12,7 +12,6 @@
 #include "gateway.h"
 
 class PelagicontainToDBusAdapter;
-class PAMInterface;
 
 namespace pelagicontain {
 
@@ -105,8 +104,6 @@ private:
     std::unique_ptr<PelagicontainToDBusAdapter> m_pcAdapter;
 
     std::vector<std::unique_ptr<Gateway> > m_gateways;
-
-    std::unique_ptr<PAMInterface> pamInterface;
 
     bool m_initialized = false;
 

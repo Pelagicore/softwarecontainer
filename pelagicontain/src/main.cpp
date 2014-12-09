@@ -42,7 +42,7 @@
 
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
-LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
+//LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 /**
  * Remove the dirs created by main when we cleanup

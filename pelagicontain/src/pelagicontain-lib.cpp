@@ -24,7 +24,6 @@
 
 #include "pelagicontaintodbusadapter.h"
 #include "config.h"
-#include "paminterface.h"
 
 
 PelagicontainLib::PelagicontainLib(const char *containerRootFolder, const char *configFilePath) :
@@ -113,9 +112,6 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
 
     m_bus = new DBus::Connection( DBus::Connection::SessionBus() );
     dispatcher.attach( m_ml->gobj() );
-    pamInterface = std::unique_ptr<PAMInterface>( new PAMInterface(*m_bus) );
-
-    pelagicontain.setPAM( *pamInterface.get() );
 
 #ifdef ENABLE_NETWORKGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway(systemcallInterface) ) );
@@ -160,19 +156,7 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
     }
 
     if (bRegisterDBusInterface) {
-
         registerDBusService();
-
-        /* If we can't communicate with PAM then there is nothing we can
-         * do really, better to just exit.
-         */
-        bool pamRunning = m_bus->has_name("com.pelagicore.PAM");
-        if (!pamRunning) {
-            log_error() << "PAM not running, exiting";
-            return ReturnCode::FAILURE;
-        }
-        pamInterface->SetInterfaceVersion(2);
-
     }
 
     m_initialized = true;
@@ -183,7 +167,6 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
 
 ReturnCode PelagicontainLib::registerDBusService()
 {
-
     /* The request_name call does not return anything but raises an
      * exception if the name cannot be requested.
      */

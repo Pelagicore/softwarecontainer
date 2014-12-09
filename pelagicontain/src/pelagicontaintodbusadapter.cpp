@@ -29,7 +29,7 @@ void PelagicontainToDBusAdapter::LaunchCommand(const std::string &commandLine)
 
 void PelagicontainToDBusAdapter::Update(const std::map<std::string, std::string> &configs)
 {
-    m_pelagicontain->update(configs);
+    m_pelagicontain->updateGatewayConfiguration(configs);
 }
 
 void PelagicontainToDBusAdapter::SetContainerEnvironmentVariable(const std::string &var,

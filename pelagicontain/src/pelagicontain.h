@@ -11,7 +11,6 @@
 #include "container.h"
 
 class Gateway;
-class PAMAbstractInterface;
 
 enum class ContainerState
 {
@@ -42,11 +41,6 @@ public:
     Pelagicontain(const std::string &cookie);
 
     ~Pelagicontain();
-
-    void setPAM(PAMAbstractInterface &pamInterface)
-    {
-        m_pamInterface = &pamInterface;
-    }
 
     /*! Add a gateway.
      *
@@ -94,7 +88,7 @@ public:
      *
      * \param configs A map of gateway IDs and their respective configurations
      */
-    void update(const GatewayConfiguration &configs);
+    void updateGatewayConfiguration(const GatewayConfiguration &configs);
 
     /**
      * Set the gateway configuration and activate them
@@ -150,7 +144,6 @@ private:
     void onContainerShutdown(int pid, int exitCode);
 
     Container *m_container = nullptr;
-    PAMAbstractInterface *m_pamInterface = nullptr;
     std::vector<Gateway *> m_gateways;
     std::string m_appId;
     const std::string &m_cookie;
