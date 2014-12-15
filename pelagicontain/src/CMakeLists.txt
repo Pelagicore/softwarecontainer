@@ -66,7 +66,6 @@ add_library(pelagicontainLib SHARED
     gateway.cpp
     pelagicontain.cpp
     dbusadaptor.h
-    systemcallinterface.cpp
     pelagicontain-lib.cpp
 #    dltgateway.cpp
     filegateway.cpp

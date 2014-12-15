@@ -8,7 +8,6 @@
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
-#include "systemcallinterface.h"
 
 /*! DBus Gateway takes care of spawning and killing the DBus proxies.
  *
@@ -45,7 +44,7 @@ public:
      *
      * \param  type       SessionProxy or SystemProxy
      */
-    DBusGateway(SystemcallAbstractInterface &systemcallInterface, ProxyType type, const std::string &gatewayDir,
+    DBusGateway(ProxyType type, const std::string &gatewayDir,
             const std::string &name);
     ~DBusGateway();
 
@@ -106,8 +105,6 @@ private:
     const char *typeString();
     std::string socketName();
     bool isSocketCreated() const;
-
-    SystemcallAbstractInterface &m_systemcallInterface;
 
     // Socket used for exposing D-Bus in container
     std::string m_socket;

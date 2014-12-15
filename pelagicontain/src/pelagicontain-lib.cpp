@@ -114,7 +114,7 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
     dispatcher.attach( m_ml->gobj() );
 
 #ifdef ENABLE_NETWORKGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway(systemcallInterface) ) );
+    m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway() ) );
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
@@ -127,13 +127,11 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
 
 #ifdef ENABLE_DBUSGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
-                    systemcallInterface,
                     DBusGateway::SessionProxy,
                     gatewayDir,
                     containerName) ) );
 
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
-                    systemcallInterface,
                     DBusGateway::SystemProxy,
                     gatewayDir,
                     containerName) ) );

@@ -4,8 +4,6 @@ set(HEADERS
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/container.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/gateway.h
     ${PROJECT_SOURCE_DIR}/pelagicontain/src/pelagicontaintodbusadapter.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/systemcallinterface.h
-    ${PROJECT_SOURCE_DIR}/pelagicontain/src/systemcallabstractinterface.h
     ${PROJECT_SOURCE_DIR}/common/pelagicontain-common.h
     ${PROJECT_SOURCE_DIR}/common/pelagicontain-log.h
     ${PROJECT_BINARY_DIR}/pelagicontain-config.h

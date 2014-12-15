@@ -6,7 +6,6 @@
 #define NETWORKGATEWAY_H
 
 #include "gateway.h"
-#include "systemcallinterface.h"
 #include "generators.h"
 
 class NetworkGateway :
@@ -15,7 +14,7 @@ class NetworkGateway :
     LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
 
 public:
-    NetworkGateway(SystemcallAbstractInterface &systemCallInterface);
+    NetworkGateway();
     ~NetworkGateway();
 
     /*!
@@ -105,7 +104,6 @@ private:
     std::string m_gateway;
     bool m_internetAccess;
     bool m_interfaceInitialized;
-    SystemcallAbstractInterface &m_systemCallInterface;
 
     Generator m_generator;
 

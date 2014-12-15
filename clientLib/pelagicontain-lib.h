@@ -8,7 +8,6 @@
 #include <dbus-c++/glib-integration.h>
 
 #include "pelagicontain.h"
-#include "systemcallinterface.h"
 #include "gateway.h"
 
 class PelagicontainToDBusAdapter;
@@ -96,7 +95,6 @@ private:
 
     Glib::RefPtr<Glib::MainContext> m_ml;
 
-    SystemcallInterface systemcallInterface;
     Pelagicontain pelagicontain;
 
     DBus::Glib::BusDispatcher dispatcher;

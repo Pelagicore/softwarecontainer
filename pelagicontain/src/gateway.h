@@ -91,6 +91,10 @@ public:
         return getContainer().systemCall(cmd);
     }
 
+    pid_t makePopenCall(const std::string &command, int *infp, int *outfp);
+
+    bool makePcloseCall(pid_t pid, int infp, int outfp);
+
 protected:
     Container *m_container = nullptr;
 };

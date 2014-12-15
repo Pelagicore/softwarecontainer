@@ -10,9 +10,9 @@
 #include "dbusgateway.h"
 #include "pelagicontain-common.h"
 
-DBusGateway::DBusGateway(SystemcallAbstractInterface &systemcallInterface, ProxyType type, const std::string &gatewayDir,
+DBusGateway::DBusGateway(ProxyType type, const std::string &gatewayDir,
         const std::string &name) :
-    Gateway(), m_systemcallInterface(systemcallInterface), m_type(type), m_pid(-1), m_infp(-1), m_outfp(-1),
+    Gateway(), m_type(type), m_pid(-1), m_infp(-1), m_outfp(-1),
     m_hasBeenConfigured(false), m_dbusProxyStarted(false)
 {
     if (m_type == SessionProxy) {
@@ -90,7 +90,7 @@ bool DBusGateway::activate()
     std::string command = "dbus-proxy ";
     command += m_socket + " " + typeString();
     log_debug() << command;
-    m_pid = m_systemcallInterface.makePopenCall(command, &m_infp, &m_outfp);
+    m_pid = makePopenCall(command, &m_infp, &m_outfp);
     if (m_pid == -1) {
         log_error() << "Failed to launch " << command;
         return false;
@@ -151,7 +151,7 @@ bool DBusGateway::teardown()
 
     if (m_dbusProxyStarted) {
         if (m_pid != -1) {
-            if ( !m_systemcallInterface.makePcloseCall(m_pid, m_infp, m_outfp) ) {
+            if ( !makePcloseCall(m_pid, m_infp, m_outfp) ) {
                 log_error() << "makePcloseCall() returned error";
                 success = false;
             }

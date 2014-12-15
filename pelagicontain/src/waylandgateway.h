@@ -7,7 +7,6 @@
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
-#include "systemcallinterface.h"
 
 /**
  * To be removed

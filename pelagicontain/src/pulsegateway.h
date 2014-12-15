@@ -7,7 +7,6 @@
 
 #include <pulse/pulseaudio.h>
 #include "gateway.h"
-#include "systemcallinterface.h"
 
 /*! This Pelagicontain gateway is responsible for setting up a connection to the
  *  PulseAudio server running on the host system. The gateway decides whether to

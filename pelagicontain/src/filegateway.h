@@ -7,7 +7,6 @@
 #include <string>
 #include <unistd.h>
 #include "gateway.h"
-#include "systemcallinterface.h"
 
 /**
  * That gateway lets you map files (including socket files) or folders from the host into the container's filesystem.
