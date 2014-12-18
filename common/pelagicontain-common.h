@@ -15,7 +15,22 @@ using pelagicore::JSonElement;
 
 namespace pelagicontain {
 
+typedef uint32_t ContainerID;
+
+static constexpr ContainerID INVALID_CONTAINER_ID = -1;
+
+static constexpr pid_t INVALID_PID = -1;
+
 typedef std::map<std::string, std::string> GatewayConfiguration;
+
+enum class ContainerState
+{
+    CREATED,
+    PRELOADED,
+    READY,
+    //    RUNNING,
+    TERMINATED
+};
 
 enum class ReturnCode
 {
@@ -36,6 +51,9 @@ inline bool isSuccess(ReturnCode code)
 typedef std::map<std::string, std::string> EnvironmentVariables;
 
 static constexpr const char *APP_BINARY = "/appbin/containedapp";
+
+static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/PelagicontainAgent";
+static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.PelagicontainAgent";
 
 inline bool isLXC_C_APIEnabled()
 {
@@ -131,6 +149,11 @@ class ObservableWritableProperty :
     public ObservableProperty<Type>
 {
 public:
+    ObservableWritableProperty(Type value) :
+        ObservableProperty<Type>(m_value), m_value(value)
+    {
+    }
+
     ObservableWritableProperty() :
         ObservableProperty<Type>(m_value)
     {

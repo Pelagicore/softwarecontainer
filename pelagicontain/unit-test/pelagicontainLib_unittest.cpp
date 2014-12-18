@@ -14,7 +14,7 @@
 #include "waylandgateway.h"
 
 
-//LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
+LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
 class PelagicontainApp :
     public::testing::Test
@@ -128,7 +128,7 @@ TEST(PelagicontainLib, MultithreadTest) {
 
     auto f = [&]() {
         log_info() << "Initializing";
-        lib.init(true);
+        lib.init();
         finished = true;
     };
 
@@ -237,7 +237,7 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
                 "\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
                 "\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}]";
 
-        getLib().getPelagicontain().setGatewayConfigs(config);
+        getLib().setGatewayConfigs(config);
 
         CommandJob jobTrue(
                 getLib(),

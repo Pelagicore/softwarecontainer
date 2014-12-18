@@ -10,8 +10,7 @@
 #include "container.h"
 #include "pelagicontain.h"
 
-Pelagicontain::Pelagicontain(const std::string &cookie) :
-    m_cookie(cookie)
+Pelagicontain::Pelagicontain()
 {
     m_containerState = ContainerState::CREATED;
 }
@@ -49,35 +48,6 @@ void Pelagicontain::onContainerShutdown(int pid, int exitCode)
 {
     log_debug() << "Controller " << " exited with exit code " << exitCode;
     shutdownContainer();
-}
-
-void Pelagicontain::setApplicationID(const std::string &appId)
-{
-    m_appId = appId;
-
-    if (m_container) {
-
-        log_debug() << "register client " << m_cookie << " / " << m_appId;
-
-        std::string appDirBase = m_container->root() + "/" + appId;
-
-        // this should always be true except when unit-testing.
-        if ( m_container->mountApplication(appDirBase) ) {
-        } else {
-            log_error() << "Could not set up container for application, shutting down";
-            // If we are here we should have been reached over D-Bus and are
-            // running in the mainloop, so we should call Pelagicontain::shutdown
-            shutdown();
-        }
-    }
-
-}
-
-void Pelagicontain::launch(const std::string &appId)
-{
-    log_debug() << "Launch called with appId: " << appId;
-    m_launching = true;
-    setApplicationID(appId);
 }
 
 pid_t Pelagicontain::launchCommand(const std::string &commandLine)

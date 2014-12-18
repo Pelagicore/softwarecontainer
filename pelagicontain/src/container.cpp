@@ -94,6 +94,20 @@ public:
     std::string m_path;
 };
 
+std::vector<const char *> Container::s_LXCContainerStates;
+
+void Container::init_lxc()
+{
+    static bool bInitialized = false;
+    if (!bInitialized) {
+        int stateCount = lxc_get_wait_states(nullptr);
+        s_LXCContainerStates.resize(stateCount);
+        lxc_get_wait_states( s_LXCContainerStates.data() );
+        assert( (int)LXCContainerState::ELEMENT_COUNT == s_LXCContainerStates.size() );
+        bInitialized = true;
+    }
+}
+
 /* A directory need to exist and be set up in a special way.
  *
  * Basically something like:
@@ -108,11 +122,7 @@ Container::Container(const std::string &name, const std::string &configFile, con
     m_name(name),
     m_containerRoot(containerRoot)
 {
-    log_debug() << "LXC version " << lxc_get_version();
-    int stateCount = lxc_get_wait_states(nullptr);
-    m_LXCContainerStates.resize(stateCount);
-    lxc_get_wait_states( m_LXCContainerStates.data() );
-    assert( (int)LXCContainerStates::ELEMENT_COUNT == m_LXCContainerStates.size() );
+    init_lxc();
 }
 
 ReturnCode Container::initialize()
@@ -198,17 +208,21 @@ Container::~Container()
 std::string Container::toString()
 {
     std::stringstream ss;
-    ss << "LXCContainer "
-       << "name: " << m_container->name
-       << " / state:" << m_container->state(m_container)
-       << " / initPID:" << m_container->init_pid(m_container)
-       << " / LastError: " << m_container->error_string;
+    ss << "LXC " << name() << " ";
+    if (m_container != nullptr) {
+        ss << "name: " << m_container->name
+           << " / state:" << m_container->state(m_container)
+           << " / initPID:" << m_container->init_pid(m_container)
+           << " / LastError: " << m_container->error_string;
+    }
 
     return ss.str();
 }
 
 void Container::create()
 {
+    log_debug() << "Creating container " << toString();
+
     const char *containerName = name();
 
     std::string containerPath = m_containerRoot;
@@ -243,6 +257,15 @@ void Container::create()
 
 }
 
+void Container::waitForState(LXCContainerState state, int timeout)
+{
+    if ( strcmp( m_container->state(m_container), toString(state) ) ) {
+        log_debug() << "Waiting for container to change to state : " << toString(state);
+        bool b = m_container->wait(m_container, toString(state), timeout);
+        log_debug() << toString() << " " << b;
+    }
+}
+
 pid_t Container::start()
 {
     pid_t pid;
@@ -257,9 +280,7 @@ pid_t Container::start()
         char *emptyArgv[] = {"100000000", nullptr};
         m_container->start(m_container, true, emptyArgv);
 
-        log_debug() << "Container started : " << toString();
-
-        assert( m_container->is_running(m_container) );
+        log_debug() << "Container started__ : " << toString();
 
         pid = m_container->init_pid(m_container);
 
@@ -283,8 +304,11 @@ pid_t Container::start()
             log_error() << "spawn error: " << ex.what();
             pid = 0;
         }
-
     }
+
+    //    waitForState(LXCContainerState::RUNNING);
+
+    //    assert( m_container->is_running(m_container) );
 
     return pid;
 
@@ -299,6 +323,8 @@ int Container::executeInContainerEntryFunction(void *param)
 pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, int stdin, int stdout,
         int stderr)
 {
+    ensureContainerRunning();
+
     lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
     options.stdin_fd = stdin;
     options.stdout_fd = stdout;
@@ -331,7 +357,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     envVariablesArray[strings.size()] = nullptr;
     options.extra_env_vars = (char * *) envVariablesArray;    // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
-    log_debug() << "Env variables : " << strings;
+    log_debug() << "Starting function in container " << toString() << " " << std::endl << " Env variables : " << strings;
 
     pid_t attached_process_pid = 0;
 
@@ -339,7 +365,11 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
 
     log_info() << " Attached PID: " << attached_process_pid;
 
-    assert(attached_process_pid != 0);
+    if (attached_process_pid == 0) {
+        log_error() << "PID = 0";
+    }
+
+    //    assert(attached_process_pid != 0);
 
     return attached_process_pid;
 }
@@ -349,9 +379,11 @@ pid_t Container::attach(const std::string &commandLine)
     return attach(commandLine, m_gatewayEnvironmentVariables);
 }
 
-pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables, int stdin, int stdout, int stderr,
-        const std::string &workingDirectory)
+pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables,
+        const std::string &workingDirectory, int stdin, int stdout,
+        int stderr)
 {
+    ensureContainerRunning();
 
     log_debug() << "Attach " << commandLine;
 
@@ -394,7 +426,9 @@ void Container::stop()
 
     if (m_container != nullptr) {
         m_container->stop(m_container);
+        waitForState(LXCContainerState::STOPPED);
     }
+
 }
 
 void Container::destroy()
@@ -416,6 +450,8 @@ void Container::destroy()
 std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
         bool readonly)
 {
+    ensureContainerRunning();
+
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     touch(dst);
@@ -431,6 +467,8 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
 std::string Container::bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
         bool readonly)
 {
+    ensureContainerRunning();
+
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     log_debug() << "Creating folder : " << dst;
@@ -443,6 +481,8 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
 
 ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
 {
+    ensureContainerRunning();
+
     int flags = MS_BIND;
 
     if (readOnly) {
@@ -469,28 +509,16 @@ ReturnCode Container::bindMount(const std::string &src, const std::string &dst, 
         // Failure
         log_error( "Could not mount into container: src=%s, dst=%s err=%s",
                 src.c_str(),
-                dst.c_str(),
+                dst.c_str(), " / ",
                 strerror(errno) );
     }
 
     return result;
 }
 
-bool Container::mountApplication(const std::string &appDirBase)
-{
-
-    bool allOk = true;
-    allOk &= isSuccess( bindMount(appDirBase + "/bin", applicationMountDir() + "/bin") );
-    allOk &= isSuccess( bindMount(appDirBase + "/shared", applicationMountDir() + "/shared") );
-    allOk &= isSuccess( bindMount(appDirBase + "/home", applicationMountDir() + "/home") );
-
-    allOk = true;
-
-    return allOk;
-}
-
 ReturnCode Container::mountDevice(const std::string &pathInHost)
 {
+    ensureContainerRunning();
     log_debug() << "Mounting device in container : " << pathInHost;
     auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
@@ -499,6 +527,7 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
 
 ReturnCode Container::systemCall(const std::string &cmd)
 {
+    ensureContainerRunning();
 
     pid_t pid = executeInContainer([this, cmd = cmd]() {
                 log_info() << "Executing system command in container : " << cmd;

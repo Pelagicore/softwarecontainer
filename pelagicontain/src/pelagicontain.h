@@ -12,15 +12,6 @@
 
 class Gateway;
 
-enum class ContainerState
-{
-    CREATED,
-    PRELOADED,
-    READY,
-    RUNNING,
-    TERMINATED
-};
-
 class ContainerListener
 {
 public:
@@ -38,7 +29,7 @@ public:
      * \param cookie A unique identifier used to distinguish unique instances
      *  of Pelagicontain
      */
-    Pelagicontain(const std::string &cookie);
+    Pelagicontain();
 
     ~Pelagicontain();
 
@@ -60,19 +51,6 @@ public:
      * \return The PID of the container, '0' on error
      */
     pid_t preload(Container &container);
-
-    /*! Initiates the 'launch' phase.
-     *
-     * Registers Pelagicontain with Platform Access Manager and awaits the
-     * gateway configurations. This is the initial stage of the launch phase.
-     *
-     * \param appId An application identifier used to fetch what capabilities
-     *  the application wants access to
-     */
-    void launch(const std::string &appId);
-
-
-    void setApplicationID(const std::string &appId);
 
 
     pid_t launchCommand(const std::string &commandLine);
@@ -145,8 +123,6 @@ private:
 
     Container *m_container = nullptr;
     std::vector<Gateway *> m_gateways;
-    std::string m_appId;
-    const std::string &m_cookie;
 
     ObservableWritableProperty<ContainerState> m_containerState;
 

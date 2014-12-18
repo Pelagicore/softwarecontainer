@@ -10,8 +10,7 @@
 #include "dbusgateway.h"
 #include "pelagicontain-common.h"
 
-DBusGateway::DBusGateway(ProxyType type, const std::string &gatewayDir,
-        const std::string &name) :
+DBusGateway::DBusGateway(ProxyType type, const std::string &gatewayDir, const std::string &name) :
     Gateway(), m_type(type), m_pid(-1), m_infp(-1), m_outfp(-1),
     m_hasBeenConfigured(false), m_dbusProxyStarted(false)
 {

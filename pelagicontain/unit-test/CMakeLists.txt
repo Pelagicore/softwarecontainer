@@ -39,10 +39,11 @@ link_directories(
 )
 
 # Compile an executable that will run your unit tests and link it with gtest and gtest_main:
-add_gtest_test(pelagicontainUnitTest
-    "main.cpp;pelagicontain_unittest.cpp;generators_unittest.cpp;${GATEWAY_TEST_SRC}"
-    "${TEST_LIBRARY_DEPENDENCIES}"
-)
+#add_gtest_test(pelagicontainUnitTest
+#    "main.cpp;pelagicontain_unittest.cpp;generators_unittest.cpp;${GATEWAY_TEST_SRC}"
+#    "${TEST_LIBRARY_DEPENDENCIES}"
+#)
+# TODO : rework tests
 
 add_gtest_test(pelagicontainLibTest
     "main.cpp;pelagicontainLib_unittest.cpp"

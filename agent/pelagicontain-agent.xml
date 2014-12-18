@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/com/pelagicore/Pelagicontain">
+	<interface name="com.pelagicore.PelagicontainAgent">
+
+		<method name="CreateContainer">
+			<arg direction="out" type="u" name="containerID" />
+		</method>
+
+		<method name="LaunchCommand">
+			<arg direction="in" type="u" name="containerID" />
+			<arg direction="in" type="s" name="commandLine" />
+			<arg direction="in" type="s" name="workingDirectory" />
+			<arg direction="in" type="a{ss}" name="env" />
+			<arg direction="out" type="u" name="pid" />
+		</method>
+
+		<method name="ShutDownContainer">
+			<arg direction="in" type="u" name="containerID" />
+		</method>
+
+		<method name="BindMountFolderInContainer">
+			<arg direction="in" type="u" name="containerID" />
+			<arg direction="in" type="s" name="pathInHost" />
+			<arg direction="in" type="s" name="subPathInContainer" />
+			<arg direction="in" type="b" name="readOnly" />
+			<arg direction="out" type="s" name="pathInContainer" />
+		</method>
+
+		<method name="SetGatewayConfigs">
+			<!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList 
+				&lt; QString &gt; "/> -->
+			<annotation name="org.qtproject.QtDBus.QtTypeName.In0"
+				value="int" />
+			<arg direction="in" type="u" name="containerID" />
+			<arg direction="in" type="a{ss}" name="configs" />
+		</method>
+
+	</interface>
+</node>

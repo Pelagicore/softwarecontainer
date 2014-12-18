@@ -40,9 +40,11 @@
 
 #include "UNIXSignalGlibHandler.h"
 
+#include "pelagicontaintodbusadapter.h"
+#include "pelagicore-DBusCpp.h"
 
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
-//LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
+LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 /**
  * Remove the dirs created by main when we cleanup
@@ -156,7 +158,11 @@ int main(int argc, char * *argv)
 
     pelagicontain::PelagicontainLib lib(containerRoot.c_str(), configFilePath);
     lib.setMainLoopContext(mainContext);
-    lib.setCookie(cookie);
+
+    std::string busName = "com.pelagicore.Pelagicontain" + cookie;
+    pelagicore::GLibDBusCppFactory dbusGlibFactory;
+    dbusGlibFactory.getConnection().request_name(busName.c_str());
+    dbusGlibFactory.registerAdapter<PelagicontainToDBusAdapter>("/com/pelagicore/Pelagicontain", lib.getPelagicontain());
 
 #ifdef ENABLE_NETWORKGATEWAY
         NetworkGateway networkGateway(controllerInterface, systemcallInterface);
@@ -229,7 +235,7 @@ int main(int argc, char * *argv)
                 }
             });
 
-    if ( !isError( lib.init(true) ) ) {
+    if ( !isError( lib.init() ) ) {
 
         // Register signalHandler with signals
         std::vector<int> signals = {SIGINT, SIGTERM};

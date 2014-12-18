@@ -4,9 +4,7 @@
  */
 #include "pelagicontaintodbusadapter.h"
 
-PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(DBus::Connection &connection, const std::string &objPath,
-        Pelagicontain &pelagicontain) :
-    DBus::ObjectAdaptor(connection, objPath),
+PelagicontainToDBusAdapter::PelagicontainToDBusAdapter(Pelagicontain &pelagicontain) :
     m_pelagicontain(&pelagicontain)
 {
 
@@ -19,7 +17,8 @@ std::string PelagicontainToDBusAdapter::Echo(const std::string &argument)
 
 void PelagicontainToDBusAdapter::Launch(const std::string &appId)
 {
-    m_pelagicontain->launch(appId);
+	assert(false);
+    //    m_pelagicontain->launch(appId);
 }
 
 void PelagicontainToDBusAdapter::LaunchCommand(const std::string &commandLine)

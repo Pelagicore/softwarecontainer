@@ -45,100 +45,10 @@ public:
 
 };
 
-class MockSystemcallInterfaceDBusGWTest :
-    public SystemcallAbstractInterface
-{
-public:
-    MOCK_METHOD1( makeCall, bool(const std::string & cmd) );
-    MOCK_METHOD2( makeCall, bool(const std::string & cmd, int &exitCode) );
-    MOCK_METHOD3( makePopenCall,
-            pid_t(const std::string & command, int *infp, int *outfp) );
-    MOCK_METHOD3( makePcloseCall, bool(pid_t pid, int infp, int outfp) );
-};
-
 void close_fd_helper(pid_t pid, int infp, int outfp)
 {
     close(infp);
 }
-
-
-class SystemcallInterfaceStub :
-    public SystemcallAbstractInterface
-{
-public:
-    FILE *m_fileDescriptor = NULL;
-    pid_t m_pid = 999;
-    int m_infp = -1;
-    int m_outfp = -1;
-    std::string m_tmpfile;
-
-    SystemcallInterfaceStub()
-    {
-        char tmpfile[] = "tmpfile_XXXXXX";
-        int fd = mkstemp(tmpfile);
-        m_tmpfile = std::string(tmpfile);
-        m_fileDescriptor = fdopen(fd, "w+b");
-        m_infp = fileno(m_fileDescriptor);
-
-    }
-
-    virtual ~SystemcallInterfaceStub()
-    {
-        if (m_fileDescriptor != NULL) {
-            fclose(m_fileDescriptor);
-            unlink( m_tmpfile.c_str() );
-        }
-    }
-
-    virtual bool makeCall(const std::string &cmd)
-    {
-        return true;
-    }
-
-    virtual bool makeCall(const std::string &cmd, int &exitCode)
-    {
-        exitCode = 0;
-        return true;
-    }
-
-    pid_t makePopenCall(const std::string &command,
-            int *infp,
-            int *outfp)
-    {
-        *infp = m_infp;
-        *outfp = m_outfp;
-        return m_pid;
-    }
-
-    bool makePcloseCall(pid_t pid, int infp, int outfp)
-    {
-        if ( pid == m_pid
-                && (infp == m_infp || infp == -1)
-                && (outfp == m_outfp || outfp == -1) ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    std::string fileContent()
-    {
-        // Open file for reading. Don't reuse m_fileDescriptor here
-        // since it might have been closed previously
-        FILE *fdRead = fopen(m_tmpfile.c_str(), "r");
-
-        std::string content = "";
-        char buf[20];
-        rewind(fdRead);
-        while ( fgets(buf, 20, fdRead) ) {
-            content += buf;
-            std::cout << buf << std::endl;
-        }
-
-        fclose(fdRead);
-        return content;
-    }
-};
 
 
 using::testing::InSequence;
@@ -153,14 +63,13 @@ public:
     const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/gateways";
     const std::string m_containerName = "test";
     NiceMock<MockController> controllerInterface;
-    SystemcallInterfaceStub systemcallInterface;
 };
 
 /*! Test DBusGateway saves the config when DBusGateway::setConfig()
  * has been called.
  */
 TEST_F(DBusGatewayTest, TestSetConfig) {
-    DBusGateway gw(systemcallInterface,
+    DBusGateway gw(
             DBusGateway::SessionProxy,
             m_gatewayDir,
             m_containerName);
@@ -175,7 +84,7 @@ TEST_F(DBusGatewayTest, TestSetConfig) {
  * DBusGateway::activate() has been called.
  */
 TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
-    DBusGateway gw(systemcallInterface,
+    DBusGateway gw(
             DBusGateway::SessionProxy,
             m_gatewayDir,
             m_containerName);
@@ -196,7 +105,6 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     system( cmd_touch.c_str() );
 
     ASSERT_TRUE( gw.activate() );
-    EXPECT_EQ( config, systemcallInterface.fileContent() );
 
     // Teardown will remove the "socket" file created above.
     gw.teardown();
@@ -210,8 +118,7 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
  * should remove the file created by dbus-proxy.
  */
 TEST_F(DBusGatewayTest, TestActivateCall) {
-    NiceMock<MockSystemcallInterfaceDBusGWTest> systemcallInterfaceMock;
-    DBusGateway *gw = new DBusGateway(systemcallInterfaceMock,
+    DBusGateway *gw = new DBusGateway(
             DBusGateway::SessionProxy,
             m_gatewayDir,
             m_containerName);

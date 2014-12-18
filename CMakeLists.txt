@@ -81,7 +81,7 @@ add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 configure_file(pelagicontain.pc.in pelagicontain.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
-set(DEVELOPMENT_INCLUDE_PATH " -I${CMAKE_CURRENT_SOURCE_DIR}/clientLib -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain/src -I${CMAKE_CURRENT_SOURCE_DIR}/common #")
+set(DEVELOPMENT_INCLUDE_PATH " -I${CMAKE_CURRENT_SOURCE_DIR}/agent/lib -I${CMAKE_CURRENT_SOURCE_DIR}/clientLib -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain/src -I${CMAKE_CURRENT_SOURCE_DIR}/common #")
 set(DEVELOPMENT_LIBRARY_PATH " -L${CMAKE_CURRENT_BINARY_DIR}/clientLib -L${CMAKE_CURRENT_BINARY_DIR}/lib #" )
 configure_file(pelagicontain.pc.in pelagicontain-uninstalled.pc @ONLY)
 if(INSTALL_PKGCONFIG_UNINSTALLED_FILE)
@@ -93,5 +93,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-config.h DESTINATION ${C
 
 add_subdirectory(pelagicontain)
 add_subdirectory(clientLib)
+
+add_subdirectory(agent)
 
 add_subdirectory(doc)

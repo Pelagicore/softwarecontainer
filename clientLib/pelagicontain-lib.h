@@ -4,13 +4,14 @@
 #include <sys/wait.h>
 
 #include <glibmm.h>
-#include <dbus-c++/dbus.h>
-#include <dbus-c++/glib-integration.h>
+//#include <dbus-c++/dbus.h>
+//#include <dbus-c++/glib-integration.h>
 
 #include "pelagicontain.h"
 #include "gateway.h"
 
 class PelagicontainToDBusAdapter;
+class JobAbstract;
 
 namespace pelagicontain {
 
@@ -38,16 +39,6 @@ public:
         pelagicontain.shutdown();
     }
 
-    const Container &getContainer() const
-    {
-        return container;
-    }
-
-    Container &getContainer()
-    {
-        return container;
-    }
-
     bool isInitialized() const
     {
         return m_initialized;
@@ -61,35 +52,43 @@ public:
      */
     ReturnCode preload();
 
-    ReturnCode init(bool bRegisterDBusInterface = false);
+    ReturnCode init();
+
+    void setGatewayConfigs(const GatewayConfiguration &config)
+    {
+        pelagicontain.updateGatewayConfiguration(config);
+    }
+
+    const Container &getContainer() const
+    {
+        return container;
+    }
+
+    Container &getContainer()
+    {
+        return container;
+    }
 
     Pelagicontain &getPelagicontain()
     {
         return pelagicontain;
     }
 
-    void setCookie(const std::string &cookie)
-    {
-        m_cookie = cookie;
-    }
-
 private:
-    ReturnCode registerDBusService();
-
     /**
      * Check if the workspace is present and create it if needed
      */
     ReturnCode checkWorkspace();
 
     //	std::unique_ptr<DBus::Connection> m_bus;
-    DBus::Connection *m_bus;  // we don't use a unique_ptr here because the destructor of that object causes a SEGFAULT... TODO : fix
+    //    DBus::Connection *m_bus;  // we don't use a unique_ptr here because the destructor of that object causes a SEGFAULT... TODO : fix
 
     std::string containerName;
     std::string containerConfig;
     std::string containerRoot;
     std::string containerDir;
     std::string gatewayDir;
-    std::string m_cookie;
+    //    std::string m_cookie;
 
     Container container;
 
@@ -97,9 +96,9 @@ private:
 
     Pelagicontain pelagicontain;
 
-    DBus::Glib::BusDispatcher dispatcher;
+    //    DBus::Glib::BusDispatcher dispatcher;
 
-    std::unique_ptr<PelagicontainToDBusAdapter> m_pcAdapter;
+    //    std::unique_ptr<PelagicontainToDBusAdapter> m_pcAdapter;
 
     std::vector<std::unique_ptr<Gateway> > m_gateways;
 
@@ -109,6 +108,7 @@ private:
 
     pid_t m_pcPid = 0;
 
+    friend class JobAbstract;
 };
 
 
@@ -181,6 +181,11 @@ public:
         m_env[key] = value;
     }
 
+    Container &getContainer()
+    {
+        return m_lib.getContainer();
+    }
+
 protected:
     EnvironmentVariables m_env;
     PelagicontainLib &m_lib;
@@ -214,7 +219,7 @@ public:
 
     ReturnCode start()
     {
-        m_pid = m_lib.getContainer().attach(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1], m_workingDirectory);
+        m_pid = getContainer().attach(m_command, m_env, m_workingDirectory, m_stdin[0], m_stdout[1], m_stderr[1]);
         return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
     }
 
@@ -247,7 +252,7 @@ public:
 
     ReturnCode start()
     {
-        m_pid = m_lib.getContainer().executeInContainer(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+        m_pid = getContainer().executeInContainer(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
         return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
     }
 

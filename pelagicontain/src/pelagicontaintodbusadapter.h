@@ -11,12 +11,11 @@
 #include "pelagicontain.h"
 
 class PelagicontainToDBusAdapter :
-    public com::pelagicore::Pelagicontain_adaptor,
-    public DBus::IntrospectableAdaptor,
-    public DBus::ObjectAdaptor
+    public com::pelagicore::Pelagicontain_adaptor
 {
 public:
-    PelagicontainToDBusAdapter(DBus::Connection &conn, const std::string &objPath, Pelagicontain &pc);
+    PelagicontainToDBusAdapter(Pelagicontain &pc);
+    virtual ~PelagicontainToDBusAdapter() {}
     virtual std::string Echo(const std::string &argument);
     virtual void Launch(const std::string &appId);
     virtual void LaunchCommand(const std::string &commandLine);

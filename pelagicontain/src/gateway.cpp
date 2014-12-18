@@ -17,6 +17,8 @@ ReturnCode Gateway::createSymLinkInContainer(const std::string &source, const st
                 return r;
             });
 
+    assert(m_pid != 0);
+
     int status;
     waitpid(m_pid, &status, 0);
     return (status == 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;

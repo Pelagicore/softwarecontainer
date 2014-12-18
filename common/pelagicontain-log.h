@@ -16,5 +16,5 @@ LogDataType &operator<<(LogDataType &log, const Glib::ustring &s)
 }
 
 namespace pelagicontain {
-	LOG_IMPORT_DEFAULT_CONTEXT(defaultLogContext);
+//	LOG_IMPORT_DEFAULT_CONTEXT(defaultLogContext);
 }

@@ -1,4 +1,2 @@
-enum class LXCContainerStates
-{
-    STOPPED, STARTING, RUNNING, STOPPING, ABORTING, FREEZING, FROZEN, THAWED, ELEMENT_COUNT
-};
+#include <vector>
+#include <assert.h>

@@ -25,6 +25,20 @@ class Container
     static constexpr const char *GATEWAYS_PATH = "/gateways";
     static constexpr const char *LATE_MOUNT_PATH = "/late_mounts";
 
+    enum class LXCContainerState
+    {
+        STOPPED, STARTING, RUNNING, STOPPING, ABORTING, FREEZING, FROZEN, THAWED, ELEMENT_COUNT
+    };
+
+    static std::vector<const char *> s_LXCContainerStates;
+
+    static void init_lxc();
+
+    static const char *toString(LXCContainerState state)
+    {
+        return s_LXCContainerStates[static_cast<int>(state)];
+    }
+
 public:
     class CleanUpHandler
     {
@@ -69,9 +83,9 @@ public:
      * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, int stdin = -1, int stdout = 1,
-            int stderr = 2,
-            const std::string &workingDirectory = "/");
+    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, const std::string &workingDirectory = "/",
+            int stdin = -1, int stdout = 1,
+            int stderr = 2);
 
     /**
      * Start a process with the environment variables which have previously been set by the gateways
@@ -94,22 +108,12 @@ public:
 
     void stop();
 
-    /*!
-     * Setup the container for a specific app
-     *
-     * Setup the container so that the app specific directories are available
-     * inside the container. If any of these directories could not setup \c false
-     * is returned which is considered fatal, the app should not be started if
-     * this is the case. Method returns \c true if all directories could be
-     * made available
-     *
-     * \param appId A string with the application ID
-     *
-     * \return true or false
-     */
-    //    bool setApplication(const std::string &appId);
+    void waitForState(LXCContainerState state, int timeout = 20);
 
-    bool mountApplication(const std::string &path);
+    void ensureContainerRunning()
+    {
+        waitForState(LXCContainerState::RUNNING);
+    }
 
     /*!
      * Setup the container for preloading
@@ -198,8 +202,6 @@ private:
     struct lxc_container *m_container = nullptr;
 
     std::string m_containerRoot;
-
-    std::vector<const char *> m_LXCContainerStates;
 
     EnvironmentVariables m_gatewayEnvironmentVariables;
 

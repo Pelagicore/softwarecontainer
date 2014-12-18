@@ -12,8 +12,6 @@
 
 NetworkGateway::NetworkGateway() :
     Gateway(),
-    m_ip(""),
-    m_gateway(""),
     m_internetAccess(false),
     m_interfaceInitialized(false)
 {
@@ -135,7 +133,7 @@ bool NetworkGateway::isBridgeAvailable()
     bool ret = false;
     std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
 
-    if ( isSuccess(systemCall(cmd)) ) {
+    if ( isSuccess( systemCall(cmd) ) ) {
         ret = true;
     } else {
         log_error() << "No network bridge configured";

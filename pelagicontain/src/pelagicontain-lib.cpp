@@ -22,14 +22,13 @@
 #include "waylandgateway.h"
 #include "filegateway.h"
 
-#include "pelagicontaintodbusadapter.h"
 #include "config.h"
 
 
 PelagicontainLib::PelagicontainLib(const char *containerRootFolder, const char *configFilePath) :
     containerName( Generator::gen_ct_name() ), containerConfig(configFilePath), containerRoot(containerRootFolder),
     containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"),
-    container(containerName, containerConfig, containerRoot), pelagicontain(m_cookie)
+    container(containerName, containerConfig, containerRoot)
 {
     pelagicontain.setMainLoopContext(m_ml);
 }
@@ -79,7 +78,6 @@ ReturnCode PelagicontainLib::preload()
 
     if (m_pcPid != 0) {
         log_debug() << "Started container with PID " << m_pcPid;
-//        sleep(1);
     } else {
         // Fatal failure, only do necessary cleanup
         log_error() << "Could not start container, will shut down";
@@ -88,7 +86,7 @@ ReturnCode PelagicontainLib::preload()
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
+ReturnCode PelagicontainLib::init()
 {
 
     if (m_ml->gobj() == nullptr) {
@@ -102,16 +100,16 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
         }
     }
 
-    if (bRegisterDBusInterface) {
-        if (m_cookie.size() == 0) {
-            m_cookie = containerName;
-        }
-    }
-
-    DBus::default_dispatcher = &dispatcher;
-
-    m_bus = new DBus::Connection( DBus::Connection::SessionBus() );
-    dispatcher.attach( m_ml->gobj() );
+    //    if (bRegisterDBusInterface) {
+    //        if (m_cookie.size() == 0) {
+    //            m_cookie = containerName;
+    //        }
+    //    }
+    //
+    //    DBus::default_dispatcher = &dispatcher;
+    //
+    //    m_bus = new DBus::Connection( DBus::Connection::SessionBus() );
+    //    dispatcher.attach( m_ml->gobj() );
 
 #ifdef ENABLE_NETWORKGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway() ) );
@@ -153,9 +151,9 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
                 }, m_ml);
     }
 
-    if (bRegisterDBusInterface) {
-        registerDBusService();
-    }
+    //    if (bRegisterDBusInterface) {
+    //        registerDBusService();
+    //    }
 
     m_initialized = true;
 
@@ -163,26 +161,26 @@ ReturnCode PelagicontainLib::init(bool bRegisterDBusInterface)
 }
 
 
-ReturnCode PelagicontainLib::registerDBusService()
-{
-    /* The request_name call does not return anything but raises an
-     * exception if the name cannot be requested.
-     */
-    std::string name = "com.pelagicore.Pelagicontain" + m_cookie;
-    m_bus->request_name( name.c_str() );
-
-    std::string objectPath = "/com/pelagicore/Pelagicontain";
-
-    log_debug() << "Registering interface on DBUS";
-
-    m_pcAdapter = std::unique_ptr<PelagicontainToDBusAdapter> ( new PelagicontainToDBusAdapter(*m_bus, objectPath, pelagicontain) );
-
-    return ReturnCode::SUCCESS;
-}
+//ReturnCode PelagicontainLib::registerDBusService()
+//{
+//    /* The request_name call does not return anything but raises an
+//     * exception if the name cannot be requested.
+//     */
+//    std::string name = "com.pelagicore.Pelagicontain" + m_cookie;
+//    m_bus->request_name( name.c_str() );
+//
+//    std::string objectPath = "/com/pelagicore/Pelagicontain";
+//
+//    log_debug() << "Registering interface on DBUS";
+//
+//    m_pcAdapter = std::unique_ptr<PelagicontainToDBusAdapter> ( new PelagicontainToDBusAdapter(*m_bus, objectPath, pelagicontain) );
+//
+//    return ReturnCode::SUCCESS;
+//}
 
 void PelagicontainLib::openTerminal(const std::string &terminalCommand) const
 {
-    std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << getContainer().name();
+    std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << container.name();
     log_info() << command;
     system( command.c_str() );
 }
