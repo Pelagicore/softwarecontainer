@@ -389,11 +389,11 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
     std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
 
-    std::vector<char*> args;
+    std::vector<char *> args;
 
     for (size_t i = 0; i < executeCommandVec.size(); i++) {
-    	executeCommandVec[i].c_str(); // ensure the string is null-terminated. not sure thas is required.
-    	auto s = &executeCommandVec[i][0];
+        executeCommandVec[i].c_str(); // ensure the string is null-terminated. not sure thas is required.
+        auto s = &executeCommandVec[i][0];
         args.push_back(s);
     }
 
@@ -414,7 +414,7 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
                     }
 
                 }
-                execvp(args[0], args.data());
+                execvp( args[0], args.data() );
 
                 log_error() << "Error when executing the command in container : " << strerror(errno);
 
@@ -511,7 +511,7 @@ ReturnCode Container::bindMount(const std::string &src, const std::string &dst, 
         result = ReturnCode::SUCCESS;
     } else {
         // Failure
-        log_error() << "Could not mount into container: src="<< src << " , dst=" << dst << " err=" << strerror(errno);
+        log_error() << "Could not mount into container: src=" << src << " , dst=" << dst << " err=" << strerror(errno);
     }
 
     return result;
@@ -525,7 +525,8 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
-bool Container::mountApplication(const std::string &appDirBase) {
+bool Container::mountApplication(const std::string &appDirBase)
+{
 
     bool allOk = true;
     allOk &= isSuccess( bindMount(appDirBase + "/bin", applicationMountDir() + "/bin") );

@@ -161,8 +161,8 @@ int main(int argc, char * *argv)
 
     std::string busName = "com.pelagicore.Pelagicontain" + cookie;
     pelagicore::GLibDBusCppFactory dbusGlibFactory;
-    dbusGlibFactory.getConnection().request_name(busName.c_str());
-    dbusGlibFactory.registerAdapter<PelagicontainToDBusAdapter>("/com/pelagicore/Pelagicontain", lib.getPelagicontain());
+    dbusGlibFactory.getConnection().request_name( busName.c_str() );
+    dbusGlibFactory.registerAdapter<PelagicontainToDBusAdapter>( "/com/pelagicore/Pelagicontain", lib.getPelagicontain() );
 
 #ifdef ENABLE_NETWORKGATEWAY
         NetworkGateway networkGateway(controllerInterface, systemcallInterface);

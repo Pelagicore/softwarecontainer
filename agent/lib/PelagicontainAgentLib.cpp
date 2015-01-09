@@ -60,8 +60,9 @@ std::string Agent::bindMountFolderInContainer(ContainerID containerID, const std
     return getProxy().BindMountFolderInContainer(containerID, src, dst, readonly);
 }
 
-void Agent::mountLegacy(ContainerID containerID, const std::string &path) {
-	getProxy().MountLegacy(containerID, path);
+void Agent::mountLegacy(ContainerID containerID, const std::string &path)
+{
+    getProxy().MountLegacy(containerID, path);
 }
 
 void Agent::setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config)

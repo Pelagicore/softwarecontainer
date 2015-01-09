@@ -15,7 +15,9 @@ class PelagicontainToDBusAdapter :
 {
 public:
     PelagicontainToDBusAdapter(Pelagicontain &pc);
-    virtual ~PelagicontainToDBusAdapter() {}
+    virtual ~PelagicontainToDBusAdapter()
+    {
+    }
     virtual std::string Echo(const std::string &argument);
     virtual void Launch(const std::string &appId);
     virtual void LaunchCommand(const std::string &commandLine);
