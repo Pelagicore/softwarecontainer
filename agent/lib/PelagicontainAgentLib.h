@@ -32,6 +32,8 @@ public:
 
     std::string bindMountFolderInContainer(ContainerID containerID, const std::string &src, const std::string &dst, bool readonly);
 
+    void mountLegacy(ContainerID containerID, const std::string &path);
+
     void setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config);
 
     ReturnCode createContainer(ContainerID &containerID);
@@ -83,6 +85,11 @@ public:
         return m_agent.bindMountFolderInContainer(getContainerID(), src, dst, readonly);
     }
 
+    void MountLegacy(const std::string &path)
+    {
+        m_agent.mountLegacy(getContainerID(), path);
+    }
+
     void setGatewayConfigs(const GatewayConfiguration &config)
     {
         m_agent.setGatewayConfigs(getContainerID(), config);
@@ -126,9 +133,14 @@ public:
         m_pid = m_container.getAgent().startProcess(m_container.getContainerID(), m_cmdLine, m_workingDirectory, m_envVariables);
     }
 
-    void setEnvironnmentVariable(const std::string &key, const std::string &value)
+    void addEnvironnmentVariable(const std::string &key, const std::string &value)
     {
         m_envVariables[key] = value;
+    }
+
+    void setEnvironnmentVariables(const EnvironmentVariables &variables)
+    {
+        m_envVariables = variables;
     }
 
     pid_t pid() const

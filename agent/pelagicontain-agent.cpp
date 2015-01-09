@@ -103,6 +103,14 @@ public:
         }
     }
 
+    void MountLegacy(const uint32_t containerID, const std::string &path)
+    {
+        PelagicontainLib *container = nullptr;
+        if ( checkContainer(containerID, container) ) {
+            container->getContainer().mountApplication(path);
+        }
+    }
+
     std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
                 const std::string &subPathInContainer, bool readOnly)
     {
@@ -134,7 +142,7 @@ class PelagicontainAgentAdaptor :
 {
 
 public:
-    ~PelagicontainAgentAdaptor()
+    virtual ~PelagicontainAgentAdaptor()
     {
     }
 
@@ -160,6 +168,11 @@ public:
         return m_agent.bindMountFolderInContainer(containerID, pathInHost, subPathInContainer, readOnly);
     }
 
+    void MountLegacy(const uint32_t &containerID, const std::string &path) override
+    {
+        return m_agent.MountLegacy(containerID, path);
+    }
+
     void SetGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs) override
     {
         m_agent.setGatewayConfigs(containerID, configs);
@@ -178,7 +191,6 @@ public:
 
 int main(int argc, char * *argv)
 {
-
     log_debug() << "Starting pelagicontain agent";
 
     pelagicore::CommandLineParser commandLineParser("Pelagicontain agent", "", PACKAGE_VERSION, "");

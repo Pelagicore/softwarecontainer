@@ -9,7 +9,6 @@
 
 #include "gateway.h"
 #include "pelagicontain.h"
-#include "pamabstractinterface.h"
 
 /* We use this stub to let Pelagicontain work with it but ignore the calls */
 class StubController

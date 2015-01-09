@@ -388,13 +388,17 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
     log_debug() << "Attach " << commandLine;
 
     std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
-    const char *args[executeCommandVec.size() + 1];
+
+    std::vector<char*> args;
 
     for (size_t i = 0; i < executeCommandVec.size(); i++) {
-        args[i] = executeCommandVec[i].c_str();
+    	executeCommandVec[i].c_str(); // ensure the string is null-terminated. not sure thas is required.
+    	auto s = &executeCommandVec[i][0];
+        args.push_back(s);
     }
 
-    args[executeCommandVec.size()] = nullptr;
+    // We need a null terminated array
+    args.push_back(nullptr);
 
     //	for(size_t i=0; i <= executeCommandVec.size(); i++)	log_debug() << args[i];
 
@@ -410,7 +414,7 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
                     }
 
                 }
-                execvp(args[0], (char *const *) args);
+                execvp(args[0], args.data());
 
                 log_error() << "Error when executing the command in container : " << strerror(errno);
 
@@ -507,10 +511,7 @@ ReturnCode Container::bindMount(const std::string &src, const std::string &dst, 
         result = ReturnCode::SUCCESS;
     } else {
         // Failure
-        log_error( "Could not mount into container: src=%s, dst=%s err=%s",
-                src.c_str(),
-                dst.c_str(), " / ",
-                strerror(errno) );
+        log_error() << "Could not mount into container: src="<< src << " , dst=" << dst << " err=" << strerror(errno);
     }
 
     return result;
@@ -524,6 +525,17 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
+bool Container::mountApplication(const std::string &appDirBase) {
+
+    bool allOk = true;
+    allOk &= isSuccess( bindMount(appDirBase + "/bin", applicationMountDir() + "/bin") );
+    allOk &= isSuccess( bindMount(appDirBase + "/shared", applicationMountDir() + "/shared") );
+    allOk &= isSuccess( bindMount(appDirBase + "/home", applicationMountDir() + "/home") );
+
+    allOk = true;
+
+    return allOk;
+}
 
 ReturnCode Container::systemCall(const std::string &cmd)
 {

@@ -101,6 +101,11 @@ public:
 
     ReturnCode mountDevice(const std::string &pathInHost);
 
+    /**
+     * Old style mount. Used by headless launcher
+     */
+    bool mountApplication(const std::string &appDirBase);
+
     /*!
      * Calls the lxc-destroy command.
      */
