@@ -45,10 +45,15 @@ ReturnCode PelagicontainLib::checkWorkspace()
         cmdLine += "/bin/setup_pelagicontain.sh " + containerRoot;
         log_debug() << "Creating workspace : " << cmdLine;
         int returnCode;
-        Glib::spawn_sync("", Glib::shell_parse_argv(
-                    cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
-                sigc::slot<void>(), nullptr,
-                nullptr, &returnCode);
+        try {
+            Glib::spawn_sync("", Glib::shell_parse_argv(
+                        cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
+                    sigc::slot<void>(), nullptr,
+                    nullptr, &returnCode);
+        } catch (Glib::SpawnError e) {
+            log_debug() << "Failed to spawn " << cmdLine << std::endl;
+            returnCode = 1;
+        }
         if (returnCode != 0) {
             return ReturnCode::FAILURE;
         }
