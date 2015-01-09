@@ -51,10 +51,11 @@ ReturnCode PelagicontainLib::checkWorkspace()
                     sigc::slot<void>(), nullptr,
                     nullptr, &returnCode);
         } catch (Glib::SpawnError e) {
-            log_debug() << "Failed to spawn " << cmdLine << std::endl;
-            returnCode = 1;
+            log_error() << "Failed to spawn " << cmdLine << ": code " << e.code() << " msg: " << e.what();
+            return ReturnCode::FAILURE;
         }
         if (returnCode != 0) {
+            log_error() << "Return code of " << cmdLine << " is non-zero";
             return ReturnCode::FAILURE;
         }
     }
@@ -71,6 +72,7 @@ ReturnCode PelagicontainLib::preload()
     }
 
     if ( isError( checkWorkspace() ) ) {
+        log_error() << "Failed when checking workspace";
         return ReturnCode::FAILURE;
     }
 
@@ -101,6 +103,7 @@ ReturnCode PelagicontainLib::init()
 
     if (pelagicontain.getContainerState() != ContainerState::PRELOADED) {
         if ( isError( preload() ) ) {
+            log_error() << "Failed to preload container";
             return ReturnCode::FAILURE;
         }
     }
