@@ -276,7 +276,7 @@ pid_t Container::start()
 
         log_debug() << "Starting container";
 
-        char *argv[] = {"/bin/sleep", nullptr};
+        const char *argv[] = {"/bin/sleep", nullptr};
         char *emptyArgv[] = {"100000000", nullptr};
         m_container->start(m_container, true, emptyArgv);
 

@@ -65,7 +65,7 @@ pid_t Pelagicontain::launchCommand(const std::string &commandLine)
 
 void Pelagicontain::updateGatewayConfiguration(const GatewayConfiguration &configs)
 {
-    log_debug() << "update called" << configs;
+    log_debug() << "updateGatewayConfiguration called" << configs;
     setGatewayConfigs(configs);
     if (m_launching) {
         launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
