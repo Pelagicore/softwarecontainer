@@ -231,6 +231,18 @@ lxc.mount.entry = /usr $rootfs/usr none ro,bind 0 0
 lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0
 EOF
 
+# Bind-mount the directory containing init.lxc to /usr/sbin. This is typically
+# /usr/sbin on the host as well.
+INITLXCFILE=`which init.lxc`
+if [ $? -ne 0 ]; then
+    echo "Error in template: init.lxc not found, unable to mount containing directory to /usr/sbin in container"
+else
+    INITLXCDIR=$(dirname $INITLXCFILE)
+    cat <<EOF >> $path/config
+lxc.mount.entry = $INITLXCDIR $rootfs/usr/sbin none ro,bind 0 0
+EOF
+fi
+
 if [ -n "$GATEWAY_DIR" ]; then
 cat <<EOF >> $path/config
 lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0
