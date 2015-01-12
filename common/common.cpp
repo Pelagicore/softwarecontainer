@@ -2,11 +2,12 @@
 #include <string>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <fstream>
 #include "pelagicontain-common.h"
 
 namespace pelagicontain {
 
-LOG_DECLARE_CONTEXT(defaultLogContext, "MAIN", "Main context");
+LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 
 bool fileHasMode(const std::string &path, int mode)
 {
@@ -24,6 +25,13 @@ bool fileHasMode(const std::string &path, int mode)
 bool isDirectory(const std::string &path)
 {
     return fileHasMode(path, S_IFDIR);
+}
+
+bool isFile(const std::string &path)
+{
+    std::ifstream infile(path);
+    log_debug() << "isFile  " << path << " " << infile.good();
+    return infile.good();
 }
 
 bool isSocket(const std::string &path)
@@ -53,5 +61,19 @@ ReturnCode touch(const std::string &path)
 
 }
 
+ReturnCode writeToFile(const std::string &path, const std::string &content)
+{
+	std::ofstream out(path);
+	out << content;
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode readFromFile(const std::string &path, std::string &content) {
+	std::ifstream t(path);
+	std::stringstream buffer;
+	buffer << t.rdbuf();
+	content = buffer.str();
+	return ReturnCode::SUCCESS;
+}
 
 }

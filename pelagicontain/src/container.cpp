@@ -306,9 +306,9 @@ pid_t Container::start()
         }
     }
 
-    //    waitForState(LXCContainerState::RUNNING);
-
     //    assert( m_container->is_running(m_container) );
+
+    log_debug() << "To connect to this container : lxc-attach -n " << name();
 
     return pid;
 

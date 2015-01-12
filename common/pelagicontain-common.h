@@ -105,16 +105,19 @@ inline int waitForProcessTermination(pid_t pid)
 {
     int status;
     waitpid(pid, &status, 0);
-    return status;
+    return WEXITSTATUS(status);
 }
 
 /*
  * Check if path is a directory
  */
 bool isDirectory(const std::string &path);
+bool isFile(const std::string &path);
 bool isSocket(const std::string &path);
 std::string parentPath(const std::string &path);
 ReturnCode touch(const std::string &path);
+ReturnCode writeToFile(const std::string &path, const std::string &content);
+ReturnCode readFromFile(const std::string &path, std::string &content);
 
 template<typename Type>
 class ObservableProperty

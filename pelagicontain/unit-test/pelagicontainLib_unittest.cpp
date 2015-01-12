@@ -70,6 +70,7 @@ public:
 };
 
 
+
 //
 //TEST_F(PelagicontainApp, TestWayland) {
 //
@@ -114,6 +115,66 @@ public:
 //    //		ASSERT_TRUE(westonJob.wait() == 0);
 //
 //}
+
+static constexpr int EXISTENT = 1;
+static constexpr int NON_EXISTENT = 0;
+
+
+/**
+ * Test whether the mounting of files works properly
+ */
+TEST_F(PelagicontainApp, TestFileMounting) {
+
+	char tempFilename[] = "/tmp/blablaXXXXXX";
+	int fileDescriptor = mkstemp(tempFilename);
+
+	ASSERT_TRUE(fileDescriptor != 0);
+
+	// create a temporary file with some content
+	const char* content = "GFDGDFHDHRWG";
+	write(fileDescriptor, content, sizeof(content));
+	close(fileDescriptor);
+
+	FunctionJob job1(getLib(), [&] () {
+		return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
+	});
+	job1.start();
+	ASSERT_TRUE(job1.wait() == NON_EXISTENT);
+
+	auto pathInContainer = getLib().getContainer().bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), true);
+
+	FunctionJob job2(getLib(), [&] () {
+		return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
+	});
+	job2.start();
+	ASSERT_TRUE(job2.wait() == EXISTENT);
+}
+
+
+/**
+ * Test whether the mounting of folder works properly
+ */
+TEST_F(PelagicontainApp, TestFolderMounting) {
+
+	char tempFilename[] = "/tmp/blablaXXXXXX";
+	mkdtemp(tempFilename);
+
+	ASSERT_TRUE(isDirectory(tempFilename));
+
+	FunctionJob job1(getLib(), [&] () {
+		return isDirectory(tempFilename) ? EXISTENT : NON_EXISTENT;
+	});
+	job1.start();
+	ASSERT_TRUE(job1.wait() == NON_EXISTENT);
+
+	auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempFilename, basename(strdup(tempFilename)), true);
+
+	FunctionJob job2(getLib(), [&] () {
+		return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
+	});
+	job2.start();
+	ASSERT_TRUE(job2.wait() == EXISTENT);
+}
 
 
 
@@ -229,6 +290,9 @@ TEST_F(PelagicontainApp, TestJobReturnCode) {
 
 }
 
+/**
+ * Checks that DBUS daemons are accessible if the corresponding capability is enabled
+ */
 TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
 
     {
@@ -260,7 +324,9 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
 
 
 
-
+/**
+ * Checks that DBUS is not accessible if the corresponding capability is not enabled
+ */
 TEST_F(PelagicontainApp, TestDBusGatewayWithoutAccess) {
 
     {
