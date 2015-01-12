@@ -39,6 +39,13 @@
 			<arg direction="in" type="u" name="containerID" />
 			<arg direction="in" type="a{ss}" name="configs" />
 		</method>
+		
+   		<signal name="ProcessStateChanged">
+			<arg direction="out" type="u" name="containerID"/>
+			<arg direction="out" type="u" name="processID"/>
+			<arg direction="out" type="b" name="isRunning"/>
+			<arg direction="out" type="u" name="exitCode"/>
+		</signal>
 
 	</interface>
 </node>

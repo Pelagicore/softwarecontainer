@@ -37,10 +37,12 @@ public:
         m_mainLoopContext(mainLoopContext)
     {
         m_preloadCount = preloadCount;
-
         triggerPreload();
     }
 
+    /**
+     * Preload additional containers if needed
+     */
     void triggerPreload()
     {
         log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
@@ -51,6 +53,9 @@ public:
         }
     }
 
+    /**
+     * Check whether the given containerID is valid and return a reference to the actual container
+     */
     bool checkContainer(ContainerID containerID, PelagicontainLib * &container)
     {
         bool valid = ( ( containerID < m_containers.size() ) && (m_containers[containerID] != nullptr) );
@@ -63,9 +68,11 @@ public:
         return valid;
     }
 
+    /**
+     * Create a new container
+     */
     ContainerID createContainer()
     {
-
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
             container = m_preloadedContainers[0];
@@ -85,12 +92,19 @@ public:
         return id;
     }
 
+    /**
+     * Launch the given command in a the given container
+     */
     pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory,
-                EnvironmentVariables env)
+                EnvironmentVariables env, std::function<void (pid_t,int)> listener)
     {
         PelagicontainLib *container = nullptr;
         if ( checkContainer(containerID, container) ) {
-            return container->getContainer().attach(cmdLine, env, workingDirectory);
+            auto pid = container->getContainer().attach(cmdLine, env, workingDirectory);
+            addProcessListener(m_connections, pid, [container, listener](pid_t pid, int exitCode) {
+            	listener(pid, exitCode);
+            }, m_mainLoopContext);
+            return pid;
         }
         return -1;
     }
@@ -134,6 +148,7 @@ private:
     std::vector<PelagicontainLib *> m_preloadedContainers;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
+    SignalConnectionsHandler m_connections;
 
 };
 
@@ -154,7 +169,11 @@ public:
     uint32_t LaunchCommand(const uint32_t &containerID, const std::string &commandLine, const std::string &workingDirectory,
                 const std::map<std::string, std::string> &env)
     {
-        return m_agent.launchCommand(containerID, commandLine, workingDirectory, env);
+		return m_agent.launchCommand(containerID, commandLine, workingDirectory, env, [this, containerID](pid_t pid, int exitCode) {
+			ProcessStateChanged(containerID, pid, false, exitCode);
+            log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
+
+		});
     }
 
     void ShutDownContainer(const uint32_t &containerID) override

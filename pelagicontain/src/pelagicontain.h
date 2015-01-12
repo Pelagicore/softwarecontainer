@@ -15,6 +15,7 @@ class Gateway;
 class ContainerListener
 {
 public:
+	virtual ~ContainerListener() {}
     virtual void onContainerStateChanged(ContainerState state) = 0;
 };
 
@@ -31,7 +32,7 @@ public:
      */
     Pelagicontain();
 
-    ~Pelagicontain();
+    virtual ~Pelagicontain();
 
     /*! Add a gateway.
      *

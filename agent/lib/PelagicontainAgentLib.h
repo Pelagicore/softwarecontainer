@@ -12,6 +12,8 @@ class PelagicontainAgent_proxy;
 namespace pelagicontain {
 
 class AgentPrivateData;
+class AgentContainer;
+class AgentCommand;
 
 class Agent
 {
@@ -26,7 +28,7 @@ public:
      */
     void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
 
-    pid_t startProcess(ContainerID container, std::string &cmdLine, const std::string &workingDirectory, EnvironmentVariables env);
+    pid_t startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory, EnvironmentVariables env);
 
     void shutDown(ContainerID containerID);
 
@@ -38,11 +40,22 @@ public:
 
     ReturnCode createContainer(ContainerID &containerID);
 
+    AgentContainer* getContainer(ContainerID containerID) {
+    	return (m_containers.count(containerID) != 0) ? m_containers[containerID] : nullptr;
+    }
+
+    AgentCommand* getCommand(pid_t pid) {
+    	return (m_commands.count(pid) != 0) ? m_commands[pid] : nullptr;
+    }
+
 private:
     com::pelagicore::PelagicontainAgent_proxy &getProxy();
 
     Glib::RefPtr<Glib::MainContext> m_ml;
     AgentPrivateData *m_p = nullptr;
+
+    std::map<ContainerID, AgentContainer*> m_containers;
+    std::map<pid_t, AgentCommand*> m_commands;
 
 };
 
@@ -53,6 +66,11 @@ public:
     AgentContainer(Agent &agent) :
         m_agent(agent)
     {
+    }
+
+    ~AgentContainer() {
+    	// We stop the container on destruction
+    	shutdown();
     }
 
     ReturnCode init()
@@ -110,13 +128,19 @@ private:
     Agent &m_agent;
     ObservableWritableProperty<ContainerState> m_containerState = ContainerState::CREATED;
     ContainerID m_containerID;
-
 };
 
 class AgentCommand
 {
 
 public:
+
+	enum class ProcessState {
+		STOPPED,
+		RUNNING,
+		TERMINATED
+	};
+
     AgentCommand(AgentContainer &container, std::string cmd) :
         m_container(container), m_cmdLine(cmd)
     {
@@ -130,7 +154,7 @@ public:
 
     void start()
     {
-        m_pid = m_container.getAgent().startProcess(m_container.getContainerID(), m_cmdLine, m_workingDirectory, m_envVariables);
+        m_pid = m_container.getAgent().startProcess(*this, m_cmdLine, m_workingDirectory, m_envVariables);
     }
 
     void addEnvironnmentVariable(const std::string &key, const std::string &value)
@@ -158,12 +182,27 @@ public:
         return length;
     }
 
+    ObservableProperty<ProcessState> &getState()
+    {
+        return m_processState;
+    }
+
+	void setState(ProcessState state) {
+		m_processState.setValueNotify(state);
+	}
+
+    AgentContainer &getContainer() {
+    	return m_container;
+    }
+
 private:
+    ObservableWritableProperty<ProcessState> m_processState = ProcessState::STOPPED;
     AgentContainer &m_container;
     pid_t m_pid = INVALID_PID;
     std::string m_cmdLine;
     std::string m_workingDirectory;
     EnvironmentVariables m_envVariables;
+    SignalConnectionsHandler m_connections;
 
 };
 
