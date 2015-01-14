@@ -40,14 +40,10 @@ link_directories(
 )
 
 add_library(pelagicontainLib SHARED 
-    pelagicontaintodbusadapter.cpp
-    dbusmainloop.cpp
-    configparser.cpp
     container.cpp
     generators.cpp
     gateway.cpp
     pelagicontain.cpp
-    dbusadaptor.h
     pelagicontain-lib.cpp
 #    dltgateway.cpp
     filegateway.cpp

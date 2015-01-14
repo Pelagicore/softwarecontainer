@@ -231,8 +231,8 @@ int main(int argc, char * *argv)
     pelagicore::GLibDBusCppFactory glibDBusFactory(mainContext);
 
     // We try to use the system bus, and fallback to the session bus if the system bus can not be used
-//    auto connection = &glibDBusFactory.getSystemBusConnection();
-    auto connection = &glibDBusFactory.getSessionBusConnection();
+    auto connection = &glibDBusFactory.getSystemBusConnection();
+//    auto connection = &glibDBusFactory.getSessionBusConnection();
 
     try {
         connection->request_name(AGENT_BUS_NAME);

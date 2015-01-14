@@ -10,7 +10,6 @@
 #include "pelagicontain.h"
 #include "gateway.h"
 
-class PelagicontainToDBusAdapter;
 class JobAbstract;
 
 namespace pelagicontain {
