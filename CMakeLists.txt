@@ -70,6 +70,8 @@ if(ENABLE_TEST)
 	add_gmock()
 endif()
 
+option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
+
 add_coverage()
 
 install(FILES scripts/setup_pelagicontain.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

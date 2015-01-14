@@ -202,6 +202,10 @@ public:
         return m_agent.createContainer();
     }
 
+    void Ping() override
+    {
+    }
+
     PelagicontainAgent &m_agent;
 
 };
@@ -225,11 +229,24 @@ int main(int argc, char * *argv)
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
 
     pelagicore::GLibDBusCppFactory glibDBusFactory(mainContext);
-    glibDBusFactory.getConnection().request_name(AGENT_BUS_NAME);
+
+    // We try to use the system bus, and fallback to the session bus if the system bus can not be used
+//    auto connection = &glibDBusFactory.getSystemBusConnection();
+    auto connection = &glibDBusFactory.getSessionBusConnection();
+
+    try {
+        connection->request_name(AGENT_BUS_NAME);
+    }
+    catch(DBus::Error& error)
+    {
+    	log_warning() << "Can't own a name on the system bus => use session bus instead";
+    	connection = &glibDBusFactory.getSessionBusConnection();
+        connection->request_name(AGENT_BUS_NAME);
+    }
 
     PelagicontainAgent agent(mainContext, preloadCount);
 
-    auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(AGENT_OBJECT_PATH, agent);
+    auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
 
     // Register signalHandler with signals
     std::vector<int> signals = {SIGINT, SIGTERM};

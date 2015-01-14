@@ -39,24 +39,6 @@ link_directories(
     ${GLIBMM_LIBRARY_DIRS}
 )
 
-
-
-find_program(DBUSBINDINGTOOL "dbusxx-xml2cpp")
-macro(generate_dbus_hfile type xml h)
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${h}
-        COMMAND dbusxx-xml2cpp ${SHARED_SERVICE_INTERFACES_PATH}/${xml} --${type}=${h}
-        DEPENDS ${SHARED_SERVICE_INTERFACES_PATH}/${xml}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-endmacro(generate_dbus_hfile type xml h)
-
-if(DBUSBINDINGTOOL)
-    generate_dbus_hfile("adaptor" "pelagicontain-service.xml" "dbusadaptor.h")
-else(DBUSBINDINGTOOL)
-    MESSAGE(ERROR " Cannot find dbusxx-xml2cpp")
-endif(DBUSBINDINGTOOL)
-
 add_library(pelagicontainLib SHARED 
     pelagicontaintodbusadapter.cpp
     dbusmainloop.cpp

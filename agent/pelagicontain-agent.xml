@@ -2,6 +2,9 @@
 <node name="/com/pelagicore/Pelagicontain">
 	<interface name="com.pelagicore.PelagicontainAgent">
 
+		<method name="Ping">
+		</method>
+
 		<method name="CreateContainer">
 			<arg direction="out" type="u" name="containerID" />
 		</method>

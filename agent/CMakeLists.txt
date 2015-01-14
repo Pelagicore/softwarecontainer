@@ -40,3 +40,21 @@ TARGET_LINK_LIBRARIES( pelagicontain-agent-lib
 set_target_properties(pelagicontain-agent-lib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
 install(TARGETS pelagicontain-agent-lib DESTINATION lib)
+
+if (ENABLE_SYSTEMD)
+
+	add_definitions(-DENABLE_SYSTEMD)
+	IF(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
+		set(SYSTEMD_CONFIGURATION_FILES_DIR "/lib/systemd/system")
+		set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/etc/dbus-1/system.d")
+	ELSE()
+		set(SYSTEMD_CONFIGURATION_FILES_DIR "systemd/system")
+		set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "etc/dbus-1/system.d")
+	ENDIF()
+	
+	message("SystemD file installation enabled")
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain-agent.service.in  ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-agent.service)
+	INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
+	INSTALL(FILES pelagicontain-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR})
+
+endif()

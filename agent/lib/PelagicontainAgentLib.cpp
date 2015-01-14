@@ -29,7 +29,14 @@ struct AgentPrivateData
     AgentPrivateData(Glib::RefPtr<Glib::MainContext> mainLoopContext, Agent& agent) :
         m_gLibDBusCppFactory(mainLoopContext)
     {
-        m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+    	try {
+    		m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(m_gLibDBusCppFactory.getSystemBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+    		m_proxy->Ping();
+    	}
+    	catch(DBus::Error& error) {
+    		m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(m_gLibDBusCppFactory.getSessionBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+    		m_proxy->Ping();
+    	}
     }
 
     std::unique_ptr<PelagicontainAgentProxy> m_proxy;
