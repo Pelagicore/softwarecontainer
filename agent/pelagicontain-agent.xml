@@ -21,6 +21,11 @@
 			<arg direction="in" type="u" name="containerID" />
 		</method>
 
+		<method name="WriteToStdIn">
+			<arg direction="in" type="u" name="processID" />
+			<arg direction="in" type="ay" name="bytes" />
+		</method>
+
 		<method name="BindMountFolderInContainer">
 			<arg direction="in" type="u" name="containerID" />
 			<arg direction="in" type="s" name="pathInHost" />

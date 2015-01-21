@@ -14,6 +14,8 @@
 class StubController
 {
 public:
+	virtual ~StubController() { }
+
     StubController()
     {
     }

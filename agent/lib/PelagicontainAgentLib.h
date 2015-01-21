@@ -38,6 +38,8 @@ public:
 
     void setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config);
 
+    ReturnCode writeToStdIn(pid_t pid, const void* data, size_t length);
+
     ReturnCode createContainer(ContainerID &containerID);
 
     AgentContainer* getContainer(ContainerID containerID) {
@@ -177,9 +179,9 @@ public:
         //		assert(false);
     }
 
-    size_t write(const void *data, size_t length)
+    ReturnCode writeToStdIn(const void *data, size_t length)
     {
-        return length;
+    	return m_container.getAgent().writeToStdIn(m_pid, data, length);
     }
 
     ObservableProperty<ProcessState> &getState()

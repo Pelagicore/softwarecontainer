@@ -102,6 +102,13 @@ ReturnCode Agent::createContainer(ContainerID &containerID)
     return (containerID != INVALID_CONTAINER_ID) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
+ReturnCode Agent::writeToStdIn(pid_t pid, const void* data, size_t length) {
+	auto c = static_cast<const uint8_t*>(data);
+	std::vector<uint8_t> dataAsVector(c, c + length);
+	getProxy().WriteToStdIn(pid, dataAsVector);
+	return ReturnCode::SUCCESS;
+}
+
 void AgentPrivateData::PelagicontainAgentProxy::ProcessStateChanged(const uint32_t &containerID, const uint32_t& pid, const bool& isRunning, const uint32_t& exitCode) {
 	auto command = m_agent.getCommand(pid);
 	if(command != nullptr) {

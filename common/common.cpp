@@ -63,7 +63,8 @@ ReturnCode touch(const std::string &path)
 
 ReturnCode writeToFile(const std::string &path, const std::string &content)
 {
-	std::ofstream out(path);
+	log_debug() << "writing to " << path << " : " << content;
+	std::ofstream out(path); // TODO : error checking
 	out << content;
     return ReturnCode::SUCCESS;
 }

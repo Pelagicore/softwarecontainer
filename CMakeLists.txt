@@ -17,18 +17,12 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 add_definitions(-DPACKAGE_VERSION="0.1")
 
-find_package(PkgConfig           REQUIRED)
 find_package(PelagicoreUtilities REQUIRED)
 find_package(IVILogging          REQUIRED)
 
-pkg_check_modules(DBUSCPP dbus-c++-glib-1 REQUIRED)
-add_definitions(${DBUSCPP_CFLAGS_OTHER})
-
-pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
-add_definitions(${GLIBMM_CFLAGS_OTHER})
-
-pkg_check_modules(LXC REQUIRED lxc)
-add_definitions(${LXC_CFLAGS_OTHER})
+pkg_config_use_package(DBUSCPP dbus-c++-glib-1)
+pkg_config_use_package(GLIBMM glibmm-2.4)
+pkg_config_use_package(LXC lxc)
 
 if(ADDITIONAL_LD_LIBRARY_PATH)
     add_definitions(-DADDITIONAL_LD_LIBRARY_PATH=${ADDITIONAL_LD_LIBRARY_PATH})
@@ -55,11 +49,6 @@ include_directories(
 	common
 	clientLib
 	pelagicontain/src
-	${DBUS_INCLUDE_DIR}
-	${DBUSCPP_INCLUDE_DIRS}
-	${DBUSCPPGLIB_INCLUDE_DIRS}
-	${GLIBMM_INCLUDE_DIRS}
-	${LXC_INCLUDE_DIRS}
 	${CMAKE_CURRENT_BINARY_DIR}
 	${CMAKE_CURRENT_BINARY_DIR}/pelagicontain/src
 )

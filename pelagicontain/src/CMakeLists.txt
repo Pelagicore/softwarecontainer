@@ -31,14 +31,6 @@ gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
 
-find_package(SharedServiceInterfaces REQUIRED)
-
-link_directories(
-    ${DEPENDENCIES_LIBRARY_DIRS} 
-    ${PELAGICORE_UTILS_LIBRARY_DIRS} 
-    ${GLIBMM_LIBRARY_DIRS}
-)
-
 add_library(pelagicontainLib SHARED 
     container.cpp
     generators.cpp

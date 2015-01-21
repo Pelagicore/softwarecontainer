@@ -552,10 +552,17 @@ ReturnCode Container::systemCall(const std::string &cmd)
     return ReturnCode::SUCCESS;
 }
 
-
 ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::string &val)
 {
     log_debug() << "Setting env variable in container " << var << "=" << val;
     m_gatewayEnvironmentVariables[var] = val;
+
+    // We generate a file containing all variables for convenience when connecting to the container in command-line
+    StringBuilder s;
+    for(auto& var : m_gatewayEnvironmentVariables) {
+    	s << "export " << var.first << "='" << var.second << "'\n";
+    }
+    writeToFile(gatewaysDir() + "/env", s);
+
     return ReturnCode::SUCCESS;
 }

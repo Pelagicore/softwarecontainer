@@ -15,6 +15,8 @@ using namespace pelagicore;
 class MockController
 {
 public:
+	virtual ~MockController() { }
+
     virtual bool startApp()
     {
         return true;

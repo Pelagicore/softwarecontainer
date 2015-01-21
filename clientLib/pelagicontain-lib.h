@@ -125,6 +125,8 @@ public:
     {
     }
 
+    virtual ~JobAbstract() {}
+
     void captureStdin()
     {
         pipe(m_stdin);
@@ -178,6 +180,11 @@ public:
     void setEnvironnmentVariable(const std::string &key, const std::string &value)
     {
         m_env[key] = value;
+    }
+
+    void setEnvironnmentVariables(const EnvironmentVariables& env)
+    {
+        m_env = env;
     }
 
     Container &getContainer()

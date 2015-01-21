@@ -92,21 +92,47 @@ public:
         return id;
     }
 
+    bool checkJob(pid_t pid, CommandJob * & result) {
+    	for(auto& job : m_jobs) {
+    		if(job->pid() == pid) {
+    			result = job;
+    			return true;
+    		}
+    	}
+    	log_warning() << "Unknown PID: " << pid;
+    	return false;
+    }
+
+    void writeToStdIn(pid_t pid, const std::vector< uint8_t >& bytes) {
+    	CommandJob* job = nullptr;
+    	if(checkJob(pid, job)) {
+    		log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
+    		write(job->stdin(), bytes.data(), bytes.size());
+    	}
+    }
+
     /**
      * Launch the given command in a the given container
      */
     pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory,
-                EnvironmentVariables env, std::function<void (pid_t,int)> listener)
+                const EnvironmentVariables& env, std::function<void (pid_t,int)> listener)
     {
         PelagicontainLib *container = nullptr;
         if ( checkContainer(containerID, container) ) {
-            auto pid = container->getContainer().attach(cmdLine, env, workingDirectory);
-            addProcessListener(m_connections, pid, [container, listener](pid_t pid, int exitCode) {
+        	auto job = new CommandJob(*container, cmdLine);
+        	job->captureStdin();
+        	job->start();
+        	job->setEnvironnmentVariables(env);
+        	job->setWorkingDirectory(workingDirectory);
+            addProcessListener(m_connections, job->pid(), [container, listener](pid_t pid, int exitCode) {
             	listener(pid, exitCode);
             }, m_mainLoopContext);
-            return pid;
+
+            m_jobs.push_back(job);
+
+            return job->pid();
         }
-        return -1;
+        return INVALID_PID;
     }
 
     void shutdownContainer(ContainerID containerID)
@@ -146,6 +172,7 @@ public:
 private:
     std::vector<PelagicontainLib *> m_containers;
     std::vector<PelagicontainLib *> m_preloadedContainers;
+    std::vector<CommandJob*> m_jobs;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
@@ -206,6 +233,10 @@ public:
     {
     }
 
+    void WriteToStdIn(const uint32_t& containerID, const std::vector< uint8_t >& bytes) override {
+    	m_agent.writeToStdIn(containerID, bytes);
+    }
+
     PelagicontainAgent &m_agent;
 
 };
@@ -232,14 +263,13 @@ int main(int argc, char * *argv)
 
     // We try to use the system bus, and fallback to the session bus if the system bus can not be used
     auto connection = &glibDBusFactory.getSystemBusConnection();
-//    auto connection = &glibDBusFactory.getSessionBusConnection();
 
     try {
         connection->request_name(AGENT_BUS_NAME);
     }
     catch(DBus::Error& error)
     {
-    	log_warning() << "Can't own a name on the system bus => use session bus instead";
+    	log_warning() << "Can't own the name" << AGENT_BUS_NAME << " on the system bus => use session bus instead";
     	connection = &glibDBusFactory.getSessionBusConnection();
         connection->request_name(AGENT_BUS_NAME);
     }
