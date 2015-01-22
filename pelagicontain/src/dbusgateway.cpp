@@ -45,7 +45,7 @@ bool DBusGateway::setConfig(const std::string &config)
     }
 
     std::vector<JSonElement> elements;
-    rootElement.read(elements);
+    rootElement.readChildren(elements);
 
     if (elements.size() > 1) {
         // TODO : remove that limitation

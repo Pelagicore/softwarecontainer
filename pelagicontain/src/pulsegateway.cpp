@@ -56,7 +56,7 @@ std::string PulseGateway::id()
     return "pulseaudio";
 }
 
-ReturnCode PulseGateway::readConfigElement(JSonElement &element)
+ReturnCode PulseGateway::readConfigElement(const JSonElement &element)
 {
     bool enabled = false;
     element.read("audio", enabled);

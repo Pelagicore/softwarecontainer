@@ -36,7 +36,7 @@ public:
     static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
 
-    ReturnCode readConfigElement(JSonElement &element) override
+    ReturnCode readConfigElement(const JSonElement &element) override
     {
         log_error() << "config : " << element.dump();
         bool enabled;

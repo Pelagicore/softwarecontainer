@@ -26,7 +26,7 @@ std::string NetworkGateway::id()
     return "network";
 }
 
-ReturnCode NetworkGateway::readConfigElement(JSonElement &element)
+ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
 {
     ReturnCode returnCode = ReturnCode::SUCCESS;
 

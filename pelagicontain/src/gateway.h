@@ -42,7 +42,7 @@ public:
      */
     virtual bool setConfig(const std::string &config);
 
-    virtual ReturnCode readConfigElement(JSonElement &element)
+    virtual ReturnCode readConfigElement(const JSonElement &element)
     {
         return ReturnCode::SUCCESS;
     }

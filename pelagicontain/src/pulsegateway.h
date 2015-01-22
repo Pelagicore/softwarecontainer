@@ -44,7 +44,7 @@ public:
      */
     virtual std::string id();
 
-    ReturnCode readConfigElement(JSonElement &element) override;
+    ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
      *  Implements Gateway::activate

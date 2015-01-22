@@ -42,7 +42,7 @@ public:
         return ID;
     }
 
-    ReturnCode readConfigElement(JSonElement &element) override;
+    ReturnCode readConfigElement(const JSonElement &element) override;
 
     bool activate() override
     {

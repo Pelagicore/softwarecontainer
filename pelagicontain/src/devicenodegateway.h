@@ -75,7 +75,7 @@ public:
         return "devicenode";
     }
 
-    ReturnCode readConfigElement(JSonElement &element) override;
+    ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
      *  Implements Gateway::activate

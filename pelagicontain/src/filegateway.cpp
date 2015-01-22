@@ -6,7 +6,7 @@
 #include <string>
 #include "filegateway.h"
 
-ReturnCode FileGateway::readConfigElement(JSonElement &element)
+ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 {
 
     std::string pathInHost;

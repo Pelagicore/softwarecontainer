@@ -12,7 +12,7 @@ DeviceNodeGateway::DeviceNodeGateway() :
 {
 }
 
-ReturnCode DeviceNodeGateway::readConfigElement(JSonElement &element)
+ReturnCode DeviceNodeGateway::readConfigElement(const JSonElement &element)
 {
 
     DeviceNodeGateway::Device dev;
