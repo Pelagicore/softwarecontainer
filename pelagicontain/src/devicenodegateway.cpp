@@ -8,13 +8,12 @@
 
 
 DeviceNodeGateway::DeviceNodeGateway() :
-    Gateway()
+    Gateway(ID)
 {
 }
 
 ReturnCode DeviceNodeGateway::readConfigElement(const JSonElement &element)
 {
-
     DeviceNodeGateway::Device dev;
 
     element.read("name", dev.name);

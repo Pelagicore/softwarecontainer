@@ -29,27 +29,13 @@ class FileGateway :
 public:
     static constexpr const char *ID = "file";
 
-    FileGateway()
+    FileGateway() : Gateway(ID)
     {
-    }
-
-    ~FileGateway()
-    {
-    }
-
-    std::string id() override
-    {
-        return ID;
     }
 
     ReturnCode readConfigElement(const JSonElement &element) override;
 
     bool activate() override
-    {
-        return true;
-    }
-
-    bool teardown() override
     {
         return true;
     }

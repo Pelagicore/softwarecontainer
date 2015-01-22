@@ -35,14 +35,12 @@ class PulseGateway :
     LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
 
 public:
+
+    static constexpr const char* ID = "pulseaudio";
+
     PulseGateway(const std::string &gatewayDir
             , const std::string &containerName);
     ~PulseGateway();
-
-    /*!
-     *  Implements Gateway::id
-     */
-    virtual std::string id();
 
     ReturnCode readConfigElement(const JSonElement &element) override;
 

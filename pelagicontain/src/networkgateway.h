@@ -14,13 +14,11 @@ class NetworkGateway :
     LOG_DECLARE_CLASS_CONTEXT("NETG", "Network gateway");
 
 public:
+
+    static constexpr const char* ID = "network";
+
     NetworkGateway();
     ~NetworkGateway();
-
-    /*!
-     *  Implements Gateway::id
-     */
-    virtual std::string id();
 
     ReturnCode readConfigElement(const JSonElement &element) override;
 

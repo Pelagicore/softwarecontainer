@@ -22,16 +22,21 @@ protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
 
 public:
-    Gateway()
+    Gateway(const char* id)
     {
+        m_id = id;
     };
 
     virtual ~Gateway()
     {
     };
 
-    /*! Used by pelagicontain to map configurations to gateways */
-    virtual std::string id() = 0;
+    /**
+     * Returns the ID of the gateway
+     */
+    virtual const char* id() {
+        return m_id;
+    }
 
     /*! Configure this gateway according to the supplied JSON configuration
      * string
@@ -97,6 +102,7 @@ public:
 
 protected:
     Container *m_container = nullptr;
+    const char* m_id = nullptr;
 };
 
 #endif /* GATEWAY_H */

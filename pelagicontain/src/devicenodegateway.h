@@ -62,17 +62,12 @@ class DeviceNodeGateway :
     LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
 
 public:
+
+    static constexpr const char* ID = "devicenode";
+
     DeviceNodeGateway();
     ~DeviceNodeGateway()
     {
-    }
-
-    /*!
-     *  Implements Gateway::id
-     */
-    virtual std::string id()
-    {
-        return "devicenode";
     }
 
     ReturnCode readConfigElement(const JSonElement &element) override;

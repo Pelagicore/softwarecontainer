@@ -8,7 +8,7 @@
 #include <libgen.h>
 
 PulseGateway::PulseGateway(const std::string &gatewayDir, const std::string &containerName) :
-    Gateway(),
+    Gateway(ID),
     m_api(0),
     m_context(0),
     m_mainloop(NULL),
@@ -49,11 +49,6 @@ bool PulseGateway::teardown()
     log_debug() << "pulse: Teardown complete";
 
     return true;
-}
-
-std::string PulseGateway::id()
-{
-    return "pulseaudio";
 }
 
 ReturnCode PulseGateway::readConfigElement(const JSonElement &element)

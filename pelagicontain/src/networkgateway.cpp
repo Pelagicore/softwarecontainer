@@ -11,7 +11,7 @@
 
 
 NetworkGateway::NetworkGateway() :
-    Gateway(),
+    Gateway(ID),
     m_internetAccess(false),
     m_interfaceInitialized(false)
 {
@@ -19,11 +19,6 @@ NetworkGateway::NetworkGateway() :
 
 NetworkGateway::~NetworkGateway()
 {
-}
-
-std::string NetworkGateway::id()
-{
-    return "network";
 }
 
 ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)

@@ -19,6 +19,7 @@
 #endif
 
 //#include "dltgateway.h"
+#include "envgateway.h"
 #include "waylandgateway.h"
 #include "filegateway.h"
 
@@ -146,6 +147,7 @@ ReturnCode PelagicontainLib::init()
     //    m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );
     m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
     m_gateways.push_back( std::unique_ptr<Gateway>( new FileGateway() ) );
+    m_gateways.push_back( std::unique_ptr<Gateway>( new EnvironmentGateway() ) );
 
     for (auto &gateway : m_gateways) {
         pelagicontain.addGateway(*gateway);

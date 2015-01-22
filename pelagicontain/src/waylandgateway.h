@@ -20,7 +20,7 @@ class WaylandGateway :
 public:
     static constexpr const char *ID = "wayland";
 
-    WaylandGateway()
+    WaylandGateway() : Gateway(ID)
     {
     }
 
@@ -28,17 +28,11 @@ public:
     {
     }
 
-    std::string id() override
-    {
-        return ID;
-    }
-
     static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
 
     ReturnCode readConfigElement(const JSonElement &element) override
     {
-        log_error() << "config : " << element.dump();
         bool enabled;
         element.readBoolean("enabled", enabled);
         m_enabled |= enabled;
@@ -60,11 +54,6 @@ public:
             }
         }
 
-        return true;
-    }
-
-    bool teardown() override
-    {
         return true;
     }
 

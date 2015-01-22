@@ -48,11 +48,6 @@ public:
     ~DBusGateway();
 
     /*!
-     *  Implements Gateway::id
-     */
-    virtual std::string id();
-
-    /*!
      *  Implements Gateway::setConfig
      *
      *  Does not perform any thorough validation of \p config. \p config is
