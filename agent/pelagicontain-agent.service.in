@@ -9,4 +9,5 @@ BusName=com.pelagicore.PelagicontainAgent
 ExecStart=@CMAKE_INSTALL_PREFIX@/bin/pelagicontain-agent
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=basic.target
+
