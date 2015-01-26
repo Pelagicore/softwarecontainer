@@ -6,6 +6,7 @@
 		</method>
 
 		<method name="CreateContainer">
+			<arg direction="in" type="s" name="containerName" />
 			<arg direction="out" type="u" name="containerID" />
 		</method>
 
@@ -13,6 +14,7 @@
 			<arg direction="in" type="u" name="containerID" />
 			<arg direction="in" type="s" name="commandLine" />
 			<arg direction="in" type="s" name="workingDirectory" />
+			<arg direction="in" type="s" name="outputFile" />
 			<arg direction="in" type="a{ss}" name="env" />
 			<arg direction="out" type="u" name="pid" />
 		</method>

@@ -67,10 +67,10 @@ void Agent::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
     m_ml = mainLoopContext;
 }
 
-pid_t Agent::startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory,
+pid_t Agent::startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile,
             EnvironmentVariables env)
 {
-    auto pid = getProxy().LaunchCommand(command.getContainer().getContainerID(), cmdLine, workingDirectory, env);
+    auto pid = getProxy().LaunchCommand(command.getContainer().getContainerID(), cmdLine, workingDirectory, outputFile, env);
     m_commands[pid] = &command;
     return pid;
 }
@@ -96,9 +96,9 @@ void Agent::setGatewayConfigs(ContainerID containerID, const GatewayConfiguratio
     getProxy().SetGatewayConfigs(containerID, config);
 }
 
-ReturnCode Agent::createContainer(ContainerID &containerID)
+ReturnCode Agent::createContainer(const std::string& name, ContainerID &containerID)
 {
-    containerID = getProxy().CreateContainer();
+    containerID = getProxy().CreateContainer(name);
     return (containerID != INVALID_CONTAINER_ID) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 

@@ -2,6 +2,9 @@
 
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <glibmm.h>
 //#include <dbus-c++/dbus.h>
@@ -14,12 +17,14 @@ class JobAbstract;
 
 namespace pelagicontain {
 
+//LOG_DECLARE_CONTEXT(s_pelagicontainLibLogContext, "PCL", "Pelagicontain library");
+
 class PelagicontainLib
 {
-
-    LOG_DECLARE_CLASS_CONTEXT("PC", "Pelagicontain library");
-
 public:
+
+    LOG_DECLARE_CLASS_CONTEXT("PCL", "Pelagicontain library");
+
     PelagicontainLib(const char *containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
                 , const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG);
 
@@ -116,6 +121,7 @@ private:
  */
 class JobAbstract
 {
+    LOG_SET_CLASS_CONTEXT(PelagicontainLib::getDefaultContext());
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
@@ -130,6 +136,13 @@ public:
     void captureStdin()
     {
         pipe(m_stdin);
+    }
+
+    void setOutputFile(const std::string& path)
+    {
+        mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+        m_stdout[1] = m_stderr[1] = ::open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, mode);
+        log_debug() << "stdout/stderr redirected to " << path << " fd:" << m_stdout[0];
     }
 
     void captureStdout()

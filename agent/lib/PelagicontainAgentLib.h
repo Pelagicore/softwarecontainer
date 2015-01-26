@@ -28,7 +28,7 @@ public:
      */
     void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
 
-    pid_t startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory, EnvironmentVariables env);
+    pid_t startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile, EnvironmentVariables env);
 
     void shutDown(ContainerID containerID);
 
@@ -40,7 +40,7 @@ public:
 
     ReturnCode writeToStdIn(pid_t pid, const void* data, size_t length);
 
-    ReturnCode createContainer(ContainerID &containerID);
+    ReturnCode createContainer(const std::string& name, ContainerID &containerID);
 
     AgentContainer* getContainer(ContainerID containerID) {
     	return (m_containers.count(containerID) != 0) ? m_containers[containerID] : nullptr;
@@ -77,12 +77,16 @@ public:
 
     ReturnCode init()
     {
-        auto ret = m_agent.createContainer(m_containerID);
+        auto ret = m_agent.createContainer(m_name, m_containerID);
         if (ret == ReturnCode::SUCCESS) {
             m_containerState = ContainerState::PRELOADED;
         }
 
         return ret;
+    }
+
+    void setName(const std::string& name) {
+        m_name = name;
     }
 
     void shutdown()
@@ -130,6 +134,7 @@ private:
     Agent &m_agent;
     ObservableWritableProperty<ContainerState> m_containerState = ContainerState::CREATED;
     ContainerID m_containerID;
+    std::string m_name;
 };
 
 class AgentCommand
@@ -154,9 +159,15 @@ public:
         return ReturnCode::SUCCESS;
     }
 
+    ReturnCode setOutputFile(const std::string &file)
+    {
+        m_outputFile = file;
+        return ReturnCode::SUCCESS;
+    }
+
     void start()
     {
-        m_pid = m_container.getAgent().startProcess(*this, m_cmdLine, m_workingDirectory, m_envVariables);
+        m_pid = m_container.getAgent().startProcess(*this, m_cmdLine, m_workingDirectory, m_outputFile, m_envVariables);
     }
 
     void addEnvironnmentVariable(const std::string &key, const std::string &value)
@@ -203,6 +214,7 @@ private:
     pid_t m_pid = INVALID_PID;
     std::string m_cmdLine;
     std::string m_workingDirectory;
+    std::string m_outputFile;
     EnvironmentVariables m_envVariables;
     SignalConnectionsHandler m_connections;
 

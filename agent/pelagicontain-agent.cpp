@@ -114,16 +114,17 @@ public:
     /**
      * Launch the given command in a the given container
      */
-    pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory,
+    pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile,
                 const EnvironmentVariables& env, std::function<void (pid_t,int)> listener)
     {
         PelagicontainLib *container = nullptr;
         if ( checkContainer(containerID, container) ) {
         	auto job = new CommandJob(*container, cmdLine);
-        	job->captureStdin();
+            job->captureStdin();
+            job->setOutputFile(outputFile);
         	job->start();
         	job->setEnvironnmentVariables(env);
-        	job->setWorkingDirectory(workingDirectory);
+            job->setWorkingDirectory(workingDirectory);
             addProcessListener(m_connections, job->pid(), [container, listener](pid_t pid, int exitCode) {
             	listener(pid, exitCode);
             }, m_mainLoopContext);
@@ -193,10 +194,10 @@ public:
     {
     }
 
-    uint32_t LaunchCommand(const uint32_t &containerID, const std::string &commandLine, const std::string &workingDirectory,
+    uint32_t LaunchCommand(const uint32_t &containerID, const std::string &commandLine, const std::string &workingDirectory, const std::string &outputFile,
                 const std::map<std::string, std::string> &env)
     {
-		return m_agent.launchCommand(containerID, commandLine, workingDirectory, env, [this, containerID](pid_t pid, int exitCode) {
+		return m_agent.launchCommand(containerID, commandLine, workingDirectory, outputFile, env, [this, containerID](pid_t pid, int exitCode) {
 			ProcessStateChanged(containerID, pid, false, exitCode);
             log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
 
@@ -224,7 +225,7 @@ public:
         m_agent.setGatewayConfigs(containerID, configs);
     }
 
-    uint32_t CreateContainer() override
+    uint32_t CreateContainer(const std::string& name) override
     {
         return m_agent.createContainer();
     }
