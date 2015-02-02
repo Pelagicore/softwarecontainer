@@ -46,8 +46,7 @@ ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
 
 bool NetworkGateway::activate()
 {
-
-    if (m_gateway.size() == 0) {
+    if (m_gateway.size() != 0) {
         log_debug() << "Default gateway set to " << m_gateway;
     } else {
         m_internetAccess = false;

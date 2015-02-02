@@ -12,6 +12,7 @@
 
 #include "dbusgateway.h"
 #include "waylandgateway.h"
+#include "networkgateway.h"
 
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
@@ -75,7 +76,7 @@ public:
 //TEST_F(PelagicontainApp, TestWayland) {
 //
 //    GatewayConfiguration config;
-//    config[WaylandGateway::ID] = "{ \"enabled\" : true }";
+//    config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
 //
 //    getLib().getPelagicontain().setGatewayConfigs(config);
 //
@@ -240,7 +241,10 @@ TEST_F(PelagicontainApp, TestStdin) {
 }
 
 
-TEST_F(PelagicontainApp, TestNetworkInternetCapability) {
+/**
+ * We do not enable the network gateway so we expect the ping to fail
+ */
+TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
     CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
     job.start();
 
@@ -258,6 +262,34 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapability) {
     run();
 
     ASSERT_FALSE(bNetworkAccessSucceeded);
+}
+
+/**
+ * This test checks that an external is accessible after the network gateway has been enabled to access the internet.
+ */
+TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
+
+    GatewayConfiguration config;
+    config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"192.168.100.1\" } ]";
+    getLib().getPelagicontain().setGatewayConfigs(config);
+
+    CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
+    job.start();
+
+    ASSERT_TRUE( job.isRunning() );
+
+    bool bNetworkAccessSucceeded = false;
+
+    SignalConnectionsHandler connections;
+    addProcessListener( connections, job.pid(), [&] (
+                int pid, int exitCode) {
+                bNetworkAccessSucceeded = (exitCode == 0);
+                exit();
+            }, getMainContext() );
+
+    run();
+
+    ASSERT_TRUE(bNetworkAccessSucceeded);
 }
 
 

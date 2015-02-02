@@ -182,7 +182,7 @@ public:
 
     /**
      * That method always returns true as soon as the start() method has been called, even if the command fails to start,
-     * since we don't know if the exec() occuring after the fork into the container actually succeeds...
+     * since we don't know if the exec() occurring after the fork into the container actually succeeds...
      */
     bool isRunning()
     {
