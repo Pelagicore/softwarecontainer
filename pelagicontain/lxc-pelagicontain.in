@@ -148,12 +148,14 @@ case "\$1" in
         for i in \$dns ; do
             echo nameserver \$i >> /etc/resolv.conf
         done
+        echo "nameserver 10.0.3.1" >> /etc/resolv.conf
         ;;
 esac
 exit 0
 EOF
 
     cp /etc/resolv.conf $rootfs/etc/resolv.conf
+    echo "nameserver 10.0.3.1" >> $rootfs/etc/resolv.conf
 
     mkdir $rootfs/etc/pulse/
     cat <<EOF >> $rootfs/etc/pulse/client.conf

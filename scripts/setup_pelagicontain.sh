@@ -3,7 +3,7 @@
 # Example: ./setup_pelagicontain.sh /tmp/container
 
 BRCTL_CMD="brctl"
-BRIDGE="container-br0"
+BRIDGE="lxcbr0"
 
 clean=yes
 deploydir=$1

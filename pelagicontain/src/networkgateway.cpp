@@ -9,6 +9,7 @@
 #include "jansson.h"
 #include "generators.h"
 
+constexpr const char *NetworkGateway::BRIDGE_INTERFACE;
 
 NetworkGateway::NetworkGateway() :
     Gateway(ID),
@@ -90,8 +91,8 @@ bool NetworkGateway::generateIP()
 
 bool NetworkGateway::setDefaultGateway()
 {
-    std::string cmd = "route add default gw ";
-    systemCall(cmd + m_gateway);
+    std::string cmd = "route add default gw " + m_gateway;
+    systemCall(cmd);
 
     return true;
 }
@@ -122,10 +123,11 @@ bool NetworkGateway::down()
     return true;
 }
 
+
 bool NetworkGateway::isBridgeAvailable()
 {
     bool ret = false;
-    std::string cmd = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"" + m_gateway + "\"";
+    std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \"" << BRIDGE_INTERFACE << "\" | grep -q \"" << m_gateway << "\"";
 
     if ( isSuccess( systemCall(cmd) ) ) {
         ret = true;

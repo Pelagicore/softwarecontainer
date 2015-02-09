@@ -15,7 +15,7 @@ if(EXTRA_PKG_CONFIG_PATH)
 	message("Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
 endif(EXTRA_PKG_CONFIG_PATH)
 
-add_definitions(-DPACKAGE_VERSION="0.1")
+add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
 find_package(PelagicoreUtilities REQUIRED)
 find_package(IVILogging          REQUIRED)

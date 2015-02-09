@@ -154,16 +154,16 @@ void PulseGateway::unloadCallback(pa_context *context, int success, void *userda
 void PulseGateway::stateCallback(pa_context *context, void *userdata)
 {
     PulseGateway *p = static_cast<PulseGateway *>(userdata);
-    char socket[1031]; /* 1024 + 7 for "socket=" */
+
+    std::string s = StringBuilder() << "socket=" << p->m_socket;
 
     switch ( pa_context_get_state(context) ) {
     case PA_CONTEXT_READY :
         log_debug() << "Connection is up, loading module";
-        snprintf( socket, sizeof(socket), "socket=%s", p->m_socket.c_str() );
         pa_context_load_module(
                 context,
                 "module-native-protocol-unix",
-                socket,
+                s.c_str(),
                 loadCallback,
                 userdata);
         break;

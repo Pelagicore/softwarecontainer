@@ -175,6 +175,7 @@ TEST_F(PelagicontainApp, TestFolderMounting) {
 	});
 	job2.start();
 	ASSERT_TRUE(job2.wait() == EXISTENT);
+
 }
 
 
@@ -270,8 +271,11 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
 TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
 
     GatewayConfiguration config;
-    config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"192.168.100.1\" } ]";
+    config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"10.0.3.1\" } ]";
     getLib().getPelagicontain().setGatewayConfigs(config);
+
+    CommandJob job2(getLib(), "/bin/ping 8.8.8.8 -c 5");
+    job2.start();
 
     CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
     job.start();
