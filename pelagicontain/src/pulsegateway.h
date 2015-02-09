@@ -105,11 +105,11 @@ private:
      */
     std::string socketName();
 
-    pa_mainloop_api *m_api;
-    pa_context *m_context;
-    pa_threaded_mainloop *m_mainloop;
+    pa_mainloop_api *m_api = nullptr;
+    pa_context *m_context = nullptr;
+    pa_threaded_mainloop *m_mainloop = nullptr;
     std::string m_socket;
-    int m_index;
+    int m_index = -1;
     bool m_enableAudio = false;
 };
 
