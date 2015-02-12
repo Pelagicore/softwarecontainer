@@ -4,6 +4,8 @@
  */
 #include "gateway.h"
 
+constexpr const char *Gateway::XDG_RUNTIME_DIR_VARIABLE_NAME;
+
 ReturnCode Gateway::createSymLinkInContainer(const std::string &source, const std::string &destination)
 {
 

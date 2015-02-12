@@ -6,14 +6,14 @@ After=network.target
 Type=oneshot
 RemainAfterExit=yes
 
-#ExecStart=/usr/sbin/brctl addbr container-br0
-#ExecStart=/usr/sbin/brctl setfd container-br0 0
-#ExecStart=/sbin/ifconfig container-br0 192.168.100.1 netmask 255.255.255.0 promisc up
+#ExecStart=/usr/sbin/brctl addbr lxcbr0
+#ExecStart=/usr/sbin/brctl setfd lxcbr0 0
+#ExecStart=/sbin/ifconfig lxcbr0 192.168.100.1 netmask 255.255.255.0 promisc up
 #ExecStart=/usr/sbin/iptables -A FORWARD -j DROP
 #ExecStart=/usr/sbin/iptables -t nat -A POSTROUTING -j MASQUERADE
 
-#ExecStop=/sbin/ifconfig container-br0 down
-#ExecStop=/usr/sbin/brctl delbr container-br0
+#ExecStop=/sbin/ifconfig lxcbr0 down
+#ExecStop=/usr/sbin/brctl delbr lxcbr0
 
 [Install]
 WantedBy=multi-user.target

@@ -33,10 +33,11 @@ class PelagicontainAgent
 {
 
 public:
-    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount) :
+    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, uid_t userID) :
         m_mainLoopContext(mainLoopContext)
     {
         m_preloadCount = preloadCount;
+        m_userID = userID;
         triggerPreload();
     }
 
@@ -45,7 +46,7 @@ public:
      */
     void triggerPreload()
     {
-        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
+//        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
         while (m_preloadedContainers.size() != m_preloadCount) {
             auto container = new PelagicontainLib();
             container->preload();
@@ -122,6 +123,7 @@ public:
         	auto job = new CommandJob(*container, cmdLine);
             job->captureStdin();
             job->setOutputFile(outputFile);
+            job->setUserID(m_userID);
         	job->start();
         	job->setEnvironnmentVariables(env);
             job->setWorkingDirectory(workingDirectory);
@@ -177,6 +179,7 @@ private:
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
+    uid_t m_userID;
 
 };
 
@@ -200,7 +203,6 @@ public:
 		return m_agent.launchCommand(containerID, commandLine, workingDirectory, outputFile, env, [this, containerID](pid_t pid, int exitCode) {
 			ProcessStateChanged(containerID, pid, false, exitCode);
             log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
-
 		});
     }
 
@@ -246,16 +248,19 @@ public:
 
 int main(int argc, char * *argv)
 {
-    log_debug() << "Starting pelagicontain agent";
-
     pelagicore::CommandLineParser commandLineParser("Pelagicontain agent", "", PACKAGE_VERSION, "");
 
     int preloadCount = 3;
     commandLineParser.addOption(preloadCount, "preload", 'p', "Number of containers to preload");
 
+    int userID = 0;
+    commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
+
     if ( commandLineParser.parse(argc, argv) ) {
         exit(1);
     }
+
+    log_debug() << "Starting pelagicontain agent. User:" << userID;
 
     auto mainContext = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
@@ -275,7 +280,7 @@ int main(int argc, char * *argv)
         connection->request_name(AGENT_BUS_NAME);
     }
 
-    PelagicontainAgent agent(mainContext, preloadCount);
+    PelagicontainAgent agent(mainContext, preloadCount, userID);
 
     auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
 

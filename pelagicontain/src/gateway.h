@@ -21,6 +21,8 @@ class Gateway
 protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
 
+    static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
+
 public:
     Gateway(const char* id)
     {

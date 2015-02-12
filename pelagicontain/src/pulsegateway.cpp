@@ -60,8 +60,19 @@ bool PulseGateway::activate()
     if (m_enableAudio) {
         log_debug() << "Audio will be enabled";
         std::string val = getContainer().gatewaysDirInContainer() + "/" + socketName();
-        success &= isSuccess( setEnvironmentVariable("PULSE_SERVER", val) );
+//        success &= isSuccess( setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, val) );
         success &= connectToPulseServer();
+
+        const char *dir = getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME);
+        if (dir != nullptr) {
+            log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
+            std::string path = getContainer().bindMountFileInContainer(dir, SOCKET_FILE_NAME, false);
+//            setEnvironmentVariable( WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path) );
+        } else {
+//            log_error() << "Should enable pulseaudio gateway, but " << WAYLAND_RUNTIME_DIR_VARIABLE_NAME << " is not defined";
+            return false;
+        }
+
     } else {
         log_debug() << "Audio will be disabled";
     }

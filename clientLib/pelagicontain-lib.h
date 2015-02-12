@@ -121,6 +121,7 @@ private:
  */
 class JobAbstract
 {
+protected:
     LOG_SET_CLASS_CONTEXT(PelagicontainLib::getDefaultContext());
 
 public:
@@ -236,9 +237,16 @@ public:
         return ReturnCode::SUCCESS;
     }
 
+    ReturnCode setUserID(uid_t userID)
+    {
+        m_userID = userID;
+        log_error() << "CommandJob with " << m_userID;
+        return ReturnCode::SUCCESS;
+    }
+
     ReturnCode start()
     {
-        m_pid = getContainer().attach(m_command, m_env, m_workingDirectory, m_stdin[0], m_stdout[1], m_stderr[1]);
+        m_pid = getContainer().attach(m_command, m_env, m_userID, m_workingDirectory, m_stdin[0], m_stdout[1], m_stderr[1]);
         return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
     }
 
@@ -251,6 +259,7 @@ public:
 private:
     std::string m_command;
     std::string m_workingDirectory;
+    uid_t m_userID = Container::ROOT_UID;
 };
 
 /**

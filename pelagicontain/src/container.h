@@ -40,6 +40,9 @@ class Container
     }
 
 public:
+
+    static constexpr uid_t ROOT_UID = 0;
+
     class CleanUpHandler
     {
 protected:
@@ -83,17 +86,17 @@ public:
      * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, const std::string &workingDirectory = "/",
+    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID, const std::string &workingDirectory = "/",
             int stdin = -1, int stdout = 1,
             int stderr = 2);
 
     /**
      * Start a process with the environment variables which have previously been set by the gateways
      */
-    pid_t attach(const std::string &commandLine);
+    pid_t attach(const std::string &commandLine, uid_t userID = ROOT_UID);
 
     pid_t executeInContainer(ContainerFunction function,
-            const EnvironmentVariables &variables = EnvironmentVariables(), int stdin = -1, int stdout = 1, int stderr = 2);
+            const EnvironmentVariables &variables = EnvironmentVariables(), uid_t userID = ROOT_UID, int stdin = -1, int stdout = 1, int stderr = 2);
 
     std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 

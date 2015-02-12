@@ -82,10 +82,12 @@ ${ADDITIONAL_FOLDER_MOUNTS}
     # root user defined
     cat <<EOF >> $rootfs/etc/passwd
 root:x:0:0:root:/root:/bin/sh
+user:x:1000:1000::/:/bin/sh
 EOF
 
     cat <<EOF >> $rootfs/etc/group
 root:x:0:root
+user:x:1000:
 EOF
 
     # mount everything
@@ -250,6 +252,9 @@ cat <<EOF >> $path/config
 lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0
 EOF
 fi
+
+chmod o+rx $GATEWAY_DIR
+chmod g+rx $GATEWAY_DIR
 
 if [ -n "$MOUNT_DIR" ]; then
 cat <<EOF >> $path/config

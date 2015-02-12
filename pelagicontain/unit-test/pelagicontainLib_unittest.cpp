@@ -13,6 +13,7 @@
 #include "dbusgateway.h"
 #include "waylandgateway.h"
 #include "networkgateway.h"
+#include "pulsegateway.h"
 
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
@@ -48,6 +49,10 @@ public:
     void exit()
     {
         m_ml->quit();
+    }
+
+    void setGatewayConfigs(const GatewayConfiguration& config) {
+        getLib().getPelagicontain().setGatewayConfigs(config);
     }
 
     Glib::RefPtr<Glib::MainContext> getMainContext()
@@ -149,6 +154,7 @@ TEST_F(PelagicontainApp, TestFileMounting) {
 	});
 	job2.start();
 	ASSERT_TRUE(job2.wait() == EXISTENT);
+
 }
 
 
@@ -175,7 +181,6 @@ TEST_F(PelagicontainApp, TestFolderMounting) {
 	});
 	job2.start();
 	ASSERT_TRUE(job2.wait() == EXISTENT);
-
 }
 
 
@@ -211,6 +216,21 @@ TEST(PelagicontainLib, MultithreadTest) {
 }
 
 
+TEST_F(PelagicontainApp, TestPulseAudioEnabled) {
+
+    GatewayConfiguration config;
+    config[PulseGateway::ID] = "[ { \"audio\" : true } ]";
+    setGatewayConfigs(config);
+
+    CommandJob job(getLib(), "/usr/bin/paplay /usr/share/sounds/alsa/Rear_Center.wav");
+    job.start();
+    ASSERT_TRUE( job.isRunning() );
+
+
+    ASSERT_TRUE(job.wait() == 0);
+
+    run();
+}
 
 
 TEST_F(PelagicontainApp, TestStdin) {
@@ -246,7 +266,7 @@ TEST_F(PelagicontainApp, TestStdin) {
  * We do not enable the network gateway so we expect the ping to fail
  */
 TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
-    CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
+    CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
 
     ASSERT_TRUE( job.isRunning() );
@@ -274,10 +294,10 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
     config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"10.0.3.1\" } ]";
     getLib().getPelagicontain().setGatewayConfigs(config);
 
-    CommandJob job2(getLib(), "/bin/ping 8.8.8.8 -c 5");
+    CommandJob job2(getLib(), "ping 8.8.8.8 -c 5");
     job2.start();
 
-    CommandJob job(getLib(), "/bin/ping www.google.com -c 5");
+    CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
 
     ASSERT_TRUE( job.isRunning() );

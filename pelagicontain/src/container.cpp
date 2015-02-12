@@ -308,7 +308,7 @@ pid_t Container::start()
 
     //    assert( m_container->is_running(m_container) );
 
-    log_debug() << "To connect to this container : lxc-attach -n " << name();
+    log_info() << "To connect to this container : lxc-attach -n " << name();
 
     return pid;
 
@@ -320,7 +320,7 @@ int Container::executeInContainerEntryFunction(void *param)
     return (*function)();
 }
 
-pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, int stdin, int stdout,
+pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, uid_t userID, int stdin, int stdout,
         int stderr)
 {
     ensureContainerRunning();
@@ -329,6 +329,8 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     options.stdin_fd = stdin;
     options.stdout_fd = stdout;
     options.stderr_fd = stderr;
+
+    options.uid = userID;
 
     EnvironmentVariables actualVariables = variables;
 
@@ -357,7 +359,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     envVariablesArray[strings.size()] = nullptr;
     options.extra_env_vars = (char * *) envVariablesArray;    // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
-    log_debug() << "Starting function in container " << toString() << " " << std::endl << " Env variables : " << strings;
+    log_debug() << "Starting function in container " << toString() << "User:"<< userID << "" << std::endl << " Env variables : " << strings;
 
     pid_t attached_process_pid = 0;
 
@@ -374,18 +376,18 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     return attached_process_pid;
 }
 
-pid_t Container::attach(const std::string &commandLine)
+pid_t Container::attach(const std::string &commandLine, uid_t userID)
 {
-    return attach(commandLine, m_gatewayEnvironmentVariables);
+    return attach(commandLine, m_gatewayEnvironmentVariables, userID);
 }
 
-pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables,
+pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID,
         const std::string &workingDirectory, int stdin, int stdout,
         int stderr)
 {
     ensureContainerRunning();
 
-    log_debug() << "Attach " << commandLine;
+    log_debug() << "Attach " << commandLine << " UserID:" << userID;
 
     std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
 
@@ -420,7 +422,7 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
                 return 1;
 
-            }, variables, stdin, stdout, stderr);
+            }, variables, userID, stdin, stdout, stderr);
 
 }
 

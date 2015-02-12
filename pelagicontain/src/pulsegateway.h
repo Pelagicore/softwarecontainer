@@ -34,6 +34,9 @@ class PulseGateway :
 {
     LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
 
+    static constexpr const char *PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME = "PULSE_SERVER";
+    static constexpr const char *SOCKET_FILE_NAME = "native";
+
 public:
 
     static constexpr const char* ID = "pulseaudio";
