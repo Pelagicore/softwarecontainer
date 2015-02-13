@@ -6,8 +6,13 @@
 		</method>
 
 		<method name="CreateContainer">
-			<arg direction="in" type="s" name="containerName" />
+			<arg direction="in" type="s" name="containerIDPrefix" />
 			<arg direction="out" type="u" name="containerID" />
+		</method>
+
+		<method name="SetContainerName">
+			<arg direction="in" type="u" name="containerID" />
+			<arg direction="in" type="s" name="containerName" />
 		</method>
 
 		<method name="LaunchCommand">

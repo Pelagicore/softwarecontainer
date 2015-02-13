@@ -2,8 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#ifndef PELAGICONTAIN_H
-#define PELAGICONTAIN_H
+#pragma once
 
 #include <sys/types.h>
 #include <glibmm.h>
@@ -135,5 +134,3 @@ private:
     Glib::RefPtr<Glib::MainContext> *m_mainLoopContext = nullptr;
 
 };
-
-#endif /* PELAGICONTAIN_H */

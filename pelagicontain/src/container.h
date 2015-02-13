@@ -66,7 +66,7 @@ public:
      *  path to e.g. the configurations and application root
      * \param containedCommand The command to be executed inside the container
      */
-    Container(const std::string &name, const std::string &configFile, const std::string &containerRoot);
+    Container(const std::string &id, const std::string &name, const std::string &configFile, const std::string &containerRoot);
 
     ~Container();
 
@@ -142,9 +142,9 @@ public:
 
     std::string toString();
 
-    const char *name() const
+    const char *id() const
     {
-        return m_name.c_str();
+        return m_id.c_str();
     }
 
     std::string gatewaysDirInContainer() const
@@ -156,7 +156,7 @@ public:
     {
         // TODO: see how to put gatewaysDir into the late_mounts to save one mount
         //      return applicationMountDir() + GATEWAYS_PATH;
-        return m_containerRoot + "/" + name() + GATEWAYS_PATH;
+        return m_containerRoot + "/" + id() + GATEWAYS_PATH;
     }
 
     std::string lateMountDir() const
@@ -166,7 +166,7 @@ public:
 
     std::string applicationMountDir() const
     {
-        return lateMountDir() + "/" + m_name;
+        return lateMountDir() + "/" + m_id;
     }
 
     const std::string &root() const
@@ -181,7 +181,7 @@ public:
 private:
     static int executeInContainerEntryFunction(void *param);
 
-    /*
+    /**
      * Create a directory, and if successful append it to a list of dirs
      * to be deleted in the dtor. Since nestled dirs will need to be
      * deleted in reverse order to creation insert to the beginning of
@@ -189,7 +189,7 @@ private:
      */
     ReturnCode createDirectory(const std::string &path);
 
-    /*
+    /**
      * Create a bind mount. On success the mount will be added to a list of
      * mounts that will be unmounted in the dtor.
      */
@@ -197,15 +197,20 @@ private:
 
     std::vector<CleanUpHandler *> m_cleanupHandlers;
 
-    /*
+    /**
      * The LXC configuration file for this container
      */
     std::string m_configFile;
 
-    /*
+    /**
      * The unique name of the LXC container
      */
-    std::string m_name;
+    const std::string& m_id;
+
+    /**
+     * The name assigned to the container
+     */
+    const std::string& m_name;
 
     struct lxc_container *m_container = nullptr;
 

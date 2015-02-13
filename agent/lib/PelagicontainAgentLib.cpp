@@ -96,10 +96,16 @@ void Agent::setGatewayConfigs(ContainerID containerID, const GatewayConfiguratio
     getProxy().SetGatewayConfigs(containerID, config);
 }
 
-ReturnCode Agent::createContainer(const std::string& name, ContainerID &containerID)
+ReturnCode Agent::createContainer(const std::string& idPrefix, ContainerID &containerID)
 {
-    containerID = getProxy().CreateContainer(name);
+    containerID = getProxy().CreateContainer(idPrefix);
     return (containerID != INVALID_CONTAINER_ID) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+}
+
+ReturnCode Agent::setContainerName(ContainerID containerID, const std::string& name)
+{
+    getProxy().SetContainerName(containerID, name);
+    return ReturnCode::SUCCESS;
 }
 
 ReturnCode Agent::writeToStdIn(pid_t pid, const void* data, size_t length) {

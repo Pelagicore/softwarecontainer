@@ -27,9 +27,8 @@
 
 
 PelagicontainLib::PelagicontainLib(const char *containerRootFolder, const char *configFilePath) :
-    containerName( Generator::gen_ct_name() ), containerConfig(configFilePath), containerRoot(containerRootFolder),
-    containerDir(containerRoot + "/" + containerName), gatewayDir(containerDir + "/gateways"),
-    container(containerName, containerConfig, containerRoot)
+    containerConfig(configFilePath), containerRoot(containerRootFolder),
+    container(getContainerID(), m_containerName, containerConfig, containerRoot)
 {
     pelagicontain.setMainLoopContext(m_ml);
 }
@@ -38,9 +37,24 @@ PelagicontainLib::~PelagicontainLib()
 {
 }
 
+void PelagicontainLib::setContainerIDPrefix(const std::string &name) {
+    m_containerID = name + Generator::gen_ct_name();
+    log_debug() << "Assigned container ID " << m_containerID;
+}
+
+void PelagicontainLib::setContainerName(const std::string &name) {
+    m_containerName = name;
+    log_debug() << "Assigned container name: " << m_containerName << " / ID: " << m_containerID;
+}
+
+void PelagicontainLib::validateContainerID() {
+    if (m_containerID.size() == 0) {
+        setContainerIDPrefix("PLC-");
+    }
+}
+
 ReturnCode PelagicontainLib::checkWorkspace()
 {
-
     if ( !isDirectory(containerRoot) ) {
         std::string cmdLine = INSTALL_PREFIX;
         cmdLine += "/bin/setup_pelagicontain.sh " + containerRoot;
@@ -96,6 +110,7 @@ ReturnCode PelagicontainLib::preload()
 
 ReturnCode PelagicontainLib::init()
 {
+    validateContainerID();
 
     if (m_ml->gobj() == nullptr) {
         log_error() << "Main loop context must be set first !";
@@ -125,7 +140,7 @@ ReturnCode PelagicontainLib::init()
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway(gatewayDir, containerName) ) );
+    m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway(getGatewayDir(), getContainerID()) ) );
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
@@ -135,13 +150,13 @@ ReturnCode PelagicontainLib::init()
 #ifdef ENABLE_DBUSGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
                     DBusGateway::SessionProxy,
-                    gatewayDir,
-                    containerName) ) );
+                    getGatewayDir(),
+                    getContainerID()) ) );
 
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
                     DBusGateway::SystemProxy,
-                    gatewayDir,
-                    containerName) ) );
+                    getGatewayDir(),
+                    getContainerID()) ) );
 #endif
 
     //    m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );
@@ -190,7 +205,7 @@ ReturnCode PelagicontainLib::init()
 
 void PelagicontainLib::openTerminal(const std::string &terminalCommand) const
 {
-    std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << container.name();
+    std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << container.id();
     log_info() << command;
     system( command.c_str() );
 }

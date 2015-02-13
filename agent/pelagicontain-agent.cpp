@@ -33,11 +33,12 @@ class PelagicontainAgent
 {
 
 public:
-    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, uid_t userID) :
+    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, uid_t userID, bool shutdownContainers) :
         m_mainLoopContext(mainLoopContext)
     {
         m_preloadCount = preloadCount;
         m_userID = userID;
+        m_shutdownContainers = shutdownContainers;
         triggerPreload();
     }
 
@@ -72,7 +73,7 @@ public:
     /**
      * Create a new container
      */
-    ContainerID createContainer()
+    ContainerID createContainer(const std::string& prefix)
     {
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
@@ -85,6 +86,7 @@ public:
         m_containers.push_back(container);
         auto id = m_containers.size() - 1;
         log_debug() << "Created container with ID :" << id;
+        container->setContainerIDPrefix(prefix);
         container->setMainLoopContext(m_mainLoopContext);
         container->init();
 
@@ -138,12 +140,26 @@ public:
         return INVALID_PID;
     }
 
-    void shutdownContainer(ContainerID containerID)
+    void setContainerName(ContainerID containerID, const std::string &name)
     {
         PelagicontainLib *container = nullptr;
         if ( checkContainer(containerID, container) ) {
-            container->shutdown();
+            container->setContainerName(name);
         }
+    }
+
+    void shutdownContainer(ContainerID containerID)
+    {
+        if (m_shutdownContainers) {
+            PelagicontainLib *container = nullptr;
+            if ( checkContainer(containerID, container) ) {
+                container->shutdown();
+            }
+        }
+        else {
+            log_info() << "Not shutting down container" ;
+        }
+
     }
 
     void MountLegacy(const uint32_t containerID, const std::string &path)
@@ -180,7 +196,7 @@ private:
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     uid_t m_userID;
-
+    bool m_shutdownContainers = true;
 };
 
 class PelagicontainAgentAdaptor :
@@ -229,7 +245,12 @@ public:
 
     uint32_t CreateContainer(const std::string& name) override
     {
-        return m_agent.createContainer();
+        return m_agent.createContainer(name);
+    }
+
+    void SetContainerName(const uint32_t &containerID, const std::string& name) override
+    {
+        return m_agent.setContainerName(containerID, name);
     }
 
     void Ping() override
@@ -256,6 +277,9 @@ int main(int argc, char * *argv)
     int userID = 0;
     commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
 
+    bool shutdownContainers = true;
+    commandLineParser.addOption(shutdownContainers, "shutdown", 's', "If false, the containers will not be shutdown. Useful for debugging");
+
     if ( commandLineParser.parse(argc, argv) ) {
         exit(1);
     }
@@ -280,7 +304,7 @@ int main(int argc, char * *argv)
         connection->request_name(AGENT_BUS_NAME);
     }
 
-    PelagicontainAgent agent(mainContext, preloadCount, userID);
+    PelagicontainAgent agent(mainContext, preloadCount, userID, shutdownContainers);
 
     auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
 

@@ -117,8 +117,9 @@ void Container::init_lxc()
  * mount --make-shared <containerRoot>/late_mounts
  */
 
-Container::Container(const std::string &name, const std::string &configFile, const std::string &containerRoot) :
+Container::Container(const std::string &id, const std::string &name, const std::string &configFile, const std::string &containerRoot) :
     m_configFile(configFile),
+    m_id(id),
     m_name(name),
     m_containerRoot(containerRoot)
 {
@@ -208,7 +209,7 @@ Container::~Container()
 std::string Container::toString()
 {
     std::stringstream ss;
-    ss << "LXC " << name() << " ";
+    ss << "LXC " << id() << " ";
     if (m_container != nullptr) {
         ss << "name: " << m_container->name
            << " / state:" << m_container->state(m_container)
@@ -223,7 +224,7 @@ void Container::create()
 {
     log_debug() << "Creating container " << toString();
 
-    const char *containerName = name();
+    const char *containerID = id();
 
     std::string containerPath = m_containerRoot;
 
@@ -237,7 +238,7 @@ void Container::create()
     log_debug() << "Config file : " << configFile;
     log_debug() << "Template : " << LXCTEMPLATE;
 
-    m_container = lxc_container_new(containerName, nullptr);
+    m_container = lxc_container_new(containerID, nullptr);
 
     lxc_container_get(m_container);
 
@@ -286,7 +287,7 @@ pid_t Container::start()
 
     } else {
         std::vector<std::string> executeCommandVec;
-        std::string lxcCommand = StringBuilder() << "lxc-execute -n " << name() << " -- env " << "/bin/sleep 100000000";
+        std::string lxcCommand = StringBuilder() << "lxc-execute -n " << id() << " -- env " << "/bin/sleep 100000000";
         executeCommandVec = Glib::shell_parse_argv(lxcCommand);
         std::vector<std::string> envVarVec = {"MOUNT_DIR=" + lateMountDir()};
 
@@ -308,7 +309,7 @@ pid_t Container::start()
 
     //    assert( m_container->is_running(m_container) );
 
-    log_info() << "To connect to this container : lxc-attach -n " << name();
+    log_info() << "To connect to this container : lxc-attach -n " << id();
 
     return pid;
 

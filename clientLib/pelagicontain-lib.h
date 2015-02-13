@@ -7,8 +7,6 @@
 #include <stdlib.h>
 
 #include <glibmm.h>
-//#include <dbus-c++/dbus.h>
-//#include <dbus-c++/glib-integration.h>
 
 #include "pelagicontain.h"
 #include "gateway.h"
@@ -78,7 +76,29 @@ public:
         return pelagicontain;
     }
 
+    std::string getContainerDir()
+    {
+        return containerRoot + "/" + getContainerID();
+    }
+
+    std::string getGatewayDir()
+    {
+        return getContainerDir() + "/gateways";
+    }
+
+    void setContainerIDPrefix(const std::string &prefix);
+
+    void setContainerName(const std::string &name);
+
+    const std::string& getContainerID() {
+//        assert(m_containerName.size() != 0);
+        return m_containerID;
+    }
+
+    void validateContainerID();
+
 private:
+
     /**
      * Check if the workspace is present and create it if needed
      */
@@ -87,12 +107,11 @@ private:
     //	std::unique_ptr<DBus::Connection> m_bus;
     //    DBus::Connection *m_bus;  // we don't use a unique_ptr here because the destructor of that object causes a SEGFAULT... TODO : fix
 
-    std::string containerName;
+    std::string m_containerID;
     std::string containerConfig;
     std::string containerRoot;
-    std::string containerDir;
-    std::string gatewayDir;
-    //    std::string m_cookie;
+
+    std::string m_containerName;
 
     Container container;
 
@@ -100,19 +119,14 @@ private:
 
     Pelagicontain pelagicontain;
 
-    //    DBus::Glib::BusDispatcher dispatcher;
-
-    //    std::unique_ptr<PelagicontainToDBusAdapter> m_pcAdapter;
-
     std::vector<std::unique_ptr<Gateway> > m_gateways;
-
-    bool m_initialized = false;
 
     SignalConnectionsHandler m_connections;
 
     pid_t m_pcPid = 0;
 
-    friend class JobAbstract;
+    bool m_initialized = false;
+
 };
 
 
@@ -240,7 +254,6 @@ public:
     ReturnCode setUserID(uid_t userID)
     {
         m_userID = userID;
-        log_error() << "CommandJob with " << m_userID;
         return ReturnCode::SUCCESS;
     }
 

@@ -40,7 +40,9 @@ public:
 
     ReturnCode writeToStdIn(pid_t pid, const void* data, size_t length);
 
-    ReturnCode createContainer(const std::string& name, ContainerID &containerID);
+    ReturnCode createContainer(const std::string& idPrefix, ContainerID &containerID);
+
+    ReturnCode setContainerName(ContainerID containerID, const std::string& name);
 
     AgentContainer* getContainer(ContainerID containerID) {
     	return (m_containers.count(containerID) != 0) ? m_containers[containerID] : nullptr;
@@ -72,7 +74,7 @@ public:
 
     ~AgentContainer() {
     	// We stop the container on destruction
-    	shutdown();
+        shutdown();
     }
 
     ReturnCode init()
@@ -86,7 +88,7 @@ public:
     }
 
     void setName(const std::string& name) {
-        m_name = name;
+        auto ret = m_agent.setContainerName(m_containerID, name);
     }
 
     void shutdown()
