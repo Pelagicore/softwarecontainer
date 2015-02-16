@@ -38,8 +38,7 @@ class PulseGateway :
     static constexpr const char *SOCKET_FILE_NAME = "native";
 
 public:
-
-    static constexpr const char* ID = "pulseaudio";
+    static constexpr const char *ID = "pulseaudio";
 
     PulseGateway(const std::string &gatewayDir
             , const std::string &containerName);

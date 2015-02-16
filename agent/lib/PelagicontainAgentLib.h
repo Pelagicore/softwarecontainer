@@ -28,7 +28,9 @@ public:
      */
     void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
 
-    pid_t startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile, EnvironmentVariables env);
+    pid_t startProcess(AgentCommand &command, std::string &cmdLine, const std::string &workingDirectory,
+                const std::string &outputFile,
+                EnvironmentVariables env);
 
     void shutDown(ContainerID containerID);
 
@@ -38,18 +40,20 @@ public:
 
     void setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config);
 
-    ReturnCode writeToStdIn(pid_t pid, const void* data, size_t length);
+    ReturnCode writeToStdIn(pid_t pid, const void *data, size_t length);
 
-    ReturnCode createContainer(const std::string& idPrefix, ContainerID &containerID);
+    ReturnCode createContainer(const std::string &idPrefix, ContainerID &containerID);
 
-    ReturnCode setContainerName(ContainerID containerID, const std::string& name);
+    ReturnCode setContainerName(ContainerID containerID, const std::string &name);
 
-    AgentContainer* getContainer(ContainerID containerID) {
-    	return (m_containers.count(containerID) != 0) ? m_containers[containerID] : nullptr;
+    AgentContainer *getContainer(ContainerID containerID)
+    {
+        return (m_containers.count(containerID) != 0) ? m_containers[containerID] : nullptr;
     }
 
-    AgentCommand* getCommand(pid_t pid) {
-    	return (m_commands.count(pid) != 0) ? m_commands[pid] : nullptr;
+    AgentCommand *getCommand(pid_t pid)
+    {
+        return (m_commands.count(pid) != 0) ? m_commands[pid] : nullptr;
     }
 
 private:
@@ -58,8 +62,8 @@ private:
     Glib::RefPtr<Glib::MainContext> m_ml;
     AgentPrivateData *m_p = nullptr;
 
-    std::map<ContainerID, AgentContainer*> m_containers;
-    std::map<pid_t, AgentCommand*> m_commands;
+    std::map<ContainerID, AgentContainer *> m_containers;
+    std::map<pid_t, AgentCommand *> m_commands;
 
 };
 
@@ -72,8 +76,9 @@ public:
     {
     }
 
-    ~AgentContainer() {
-    	// We stop the container on destruction
+    ~AgentContainer()
+    {
+        // We stop the container on destruction
         shutdown();
     }
 
@@ -87,7 +92,8 @@ public:
         return ret;
     }
 
-    void setName(const std::string& name) {
+    void setName(const std::string &name)
+    {
         auto ret = m_agent.setContainerName(m_containerID, name);
     }
 
@@ -143,12 +149,12 @@ class AgentCommand
 {
 
 public:
-
-	enum class ProcessState {
-		STOPPED,
-		RUNNING,
-		TERMINATED
-	};
+    enum class ProcessState
+    {
+        STOPPED,
+        RUNNING,
+        TERMINATED
+    };
 
     AgentCommand(AgentContainer &container, std::string cmd) :
         m_container(container), m_cmdLine(cmd)
@@ -194,7 +200,7 @@ public:
 
     ReturnCode writeToStdIn(const void *data, size_t length)
     {
-    	return m_container.getAgent().writeToStdIn(m_pid, data, length);
+        return m_container.getAgent().writeToStdIn(m_pid, data, length);
     }
 
     ObservableProperty<ProcessState> &getState()
@@ -202,12 +208,14 @@ public:
         return m_processState;
     }
 
-	void setState(ProcessState state) {
-		m_processState.setValueNotify(state);
-	}
+    void setState(ProcessState state)
+    {
+        m_processState.setValueNotify(state);
+    }
 
-    AgentContainer &getContainer() {
-    	return m_container;
+    AgentContainer &getContainer()
+    {
+        return m_container;
     }
 
 private:

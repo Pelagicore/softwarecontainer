@@ -13,30 +13,35 @@ LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "SCAL", "Software container agent li
 
 struct AgentPrivateData
 {
-	class PelagicontainAgentProxy : public com::pelagicore::PelagicontainAgent_proxy {
+    class PelagicontainAgentProxy :
+        public com::pelagicore::PelagicontainAgent_proxy
+    {
 
-	public:
+public:
+        PelagicontainAgentProxy(Agent &agent) :
+            m_agent(agent)
+        {
+        }
 
-		PelagicontainAgentProxy(Agent& agent) : m_agent(agent) {
-		}
+        void ProcessStateChanged(const uint32_t &containerID, const uint32_t &pid, const bool &isRunning,
+                    const uint32_t &exitCode) override;
 
-		void ProcessStateChanged(const uint32_t &containerID, const uint32_t& pid, const bool& isRunning, const uint32_t& exitCode) override;
+private:
+        Agent &m_agent;
+    };
 
-	private:
-		Agent& m_agent;
-	};
-
-    AgentPrivateData(Glib::RefPtr<Glib::MainContext> mainLoopContext, Agent& agent) :
+    AgentPrivateData(Glib::RefPtr<Glib::MainContext> mainLoopContext, Agent &agent) :
         m_gLibDBusCppFactory(mainLoopContext)
     {
-    	try {
-    		m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(m_gLibDBusCppFactory.getSystemBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
-    		m_proxy->Ping();
-    	}
-    	catch(DBus::Error& error) {
-    		m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(m_gLibDBusCppFactory.getSessionBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
-    		m_proxy->Ping();
-    	}
+        try {
+            m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(
+                        m_gLibDBusCppFactory.getSystemBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+            m_proxy->Ping();
+        } catch (DBus::Error &error)    {
+            m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(
+                        m_gLibDBusCppFactory.getSessionBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+            m_proxy->Ping();
+        }
     }
 
     std::unique_ptr<PelagicontainAgentProxy> m_proxy;
@@ -67,7 +72,8 @@ void Agent::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
     m_ml = mainLoopContext;
 }
 
-pid_t Agent::startProcess(AgentCommand& command, std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile,
+pid_t Agent::startProcess(AgentCommand &command, std::string &cmdLine, const std::string &workingDirectory,
+            const std::string &outputFile,
             EnvironmentVariables env)
 {
     auto pid = getProxy().LaunchCommand(command.getContainer().getContainerID(), cmdLine, workingDirectory, outputFile, env);
@@ -96,33 +102,36 @@ void Agent::setGatewayConfigs(ContainerID containerID, const GatewayConfiguratio
     getProxy().SetGatewayConfigs(containerID, config);
 }
 
-ReturnCode Agent::createContainer(const std::string& idPrefix, ContainerID &containerID)
+ReturnCode Agent::createContainer(const std::string &idPrefix, ContainerID &containerID)
 {
     containerID = getProxy().CreateContainer(idPrefix);
     return (containerID != INVALID_CONTAINER_ID) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
-ReturnCode Agent::setContainerName(ContainerID containerID, const std::string& name)
+ReturnCode Agent::setContainerName(ContainerID containerID, const std::string &name)
 {
     getProxy().SetContainerName(containerID, name);
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode Agent::writeToStdIn(pid_t pid, const void* data, size_t length) {
-	auto c = static_cast<const uint8_t*>(data);
-	std::vector<uint8_t> dataAsVector(c, c + length);
-	getProxy().WriteToStdIn(pid, dataAsVector);
-	return ReturnCode::SUCCESS;
+ReturnCode Agent::writeToStdIn(pid_t pid, const void *data, size_t length)
+{
+    auto c = static_cast<const uint8_t *>(data);
+    std::vector<uint8_t> dataAsVector(c, c + length);
+    getProxy().WriteToStdIn(pid, dataAsVector);
+    return ReturnCode::SUCCESS;
 }
 
-void AgentPrivateData::PelagicontainAgentProxy::ProcessStateChanged(const uint32_t &containerID, const uint32_t& pid, const bool& isRunning, const uint32_t& exitCode) {
-	auto command = m_agent.getCommand(pid);
-	if(command != nullptr) {
-		command->setState(isRunning ? AgentCommand::ProcessState::RUNNING : AgentCommand::ProcessState::TERMINATED);
-	}
-	else
-		log_warning() << "Unknown pid : " << pid;
+void AgentPrivateData::PelagicontainAgentProxy::ProcessStateChanged(const uint32_t &containerID, const uint32_t &pid,
+            const bool &isRunning,
+            const uint32_t &exitCode)
+{
+    auto command = m_agent.getCommand(pid);
+    if (command != nullptr) {
+        command->setState(isRunning ? AgentCommand::ProcessState::RUNNING : AgentCommand::ProcessState::TERMINATED);
+    } else {
+        log_warning() << "Unknown pid : " << pid;
+    }
 }
 
 }
-

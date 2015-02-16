@@ -158,10 +158,10 @@ int main(int argc, char * *argv)
     pelagicontain::PelagicontainLib lib(containerRoot.c_str(), configFilePath);
     lib.setMainLoopContext(mainContext);
 
-//    std::string busName = "com.pelagicore.Pelagicontain" + cookie;
-//    pelagicore::GLibDBusCppFactory dbusGlibFactory;
-//    dbusGlibFactory.getConnection().request_name( busName.c_str() );
-//    dbusGlibFactory.registerAdapter<PelagicontainToDBusAdapter>( "/com/pelagicore/Pelagicontain", lib.getPelagicontain() );
+    //    std::string busName = "com.pelagicore.Pelagicontain" + cookie;
+    //    pelagicore::GLibDBusCppFactory dbusGlibFactory;
+    //    dbusGlibFactory.getConnection().request_name( busName.c_str() );
+    //    dbusGlibFactory.registerAdapter<PelagicontainToDBusAdapter>( "/com/pelagicore/Pelagicontain", lib.getPelagicontain() );
 
 #ifdef ENABLE_NETWORKGATEWAY
         NetworkGateway networkGateway(controllerInterface, systemcallInterface);

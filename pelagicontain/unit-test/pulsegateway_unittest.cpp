@@ -15,7 +15,9 @@ using namespace pelagicore;
 class PulseMockController
 {
 public:
-	virtual ~PulseMockController() { }
+    virtual ~PulseMockController()
+    {
+    }
 
     virtual bool startApp()
     {
@@ -49,7 +51,9 @@ class MockSystemcallInterface :
     public SystemcallAbstractInterface
 {
 public:
-	virtual ~MockSystemcallInterface() { }
+    virtual ~MockSystemcallInterface()
+    {
+    }
 
     virtual bool makeCall(const std::string &cmd, int &exitCode)
     {

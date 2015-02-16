@@ -33,7 +33,8 @@ class PelagicontainAgent
 {
 
 public:
-    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, uid_t userID, bool shutdownContainers) :
+    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, uid_t userID,
+                bool shutdownContainers) :
         m_mainLoopContext(mainLoopContext)
     {
         m_preloadCount = preloadCount;
@@ -47,7 +48,7 @@ public:
      */
     void triggerPreload()
     {
-//        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
+        //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
         while (m_preloadedContainers.size() != m_preloadCount) {
             auto container = new PelagicontainLib();
             container->preload();
@@ -73,7 +74,7 @@ public:
     /**
      * Create a new container
      */
-    ContainerID createContainer(const std::string& prefix)
+    ContainerID createContainer(const std::string &prefix)
     {
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
@@ -95,43 +96,47 @@ public:
         return id;
     }
 
-    bool checkJob(pid_t pid, CommandJob * & result) {
-    	for(auto& job : m_jobs) {
-    		if(job->pid() == pid) {
-    			result = job;
-    			return true;
-    		}
-    	}
-    	log_warning() << "Unknown PID: " << pid;
-    	return false;
+    bool checkJob(pid_t pid, CommandJob * &result)
+    {
+        for (auto &job : m_jobs) {
+            if (job->pid() == pid) {
+                result = job;
+                return true;
+            }
+        }
+        log_warning() << "Unknown PID: " << pid;
+        return false;
     }
 
-    void writeToStdIn(pid_t pid, const std::vector< uint8_t >& bytes) {
-    	CommandJob* job = nullptr;
-    	if(checkJob(pid, job)) {
-    		log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
-    		write(job->stdin(), bytes.data(), bytes.size());
-    	}
+    void writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes)
+    {
+        CommandJob *job = nullptr;
+        if ( checkJob(pid, job) ) {
+            log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
+            write( job->stdin(), bytes.data(), bytes.size() );
+        }
     }
 
     /**
      * Launch the given command in a the given container
      */
-    pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile,
-                const EnvironmentVariables& env, std::function<void (pid_t,int)> listener)
+    pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory,
+                const std::string &outputFile,
+                const EnvironmentVariables &env, std::function<void (pid_t,
+                        int)> listener)
     {
         PelagicontainLib *container = nullptr;
         if ( checkContainer(containerID, container) ) {
-        	auto job = new CommandJob(*container, cmdLine);
+            auto job = new CommandJob(*container, cmdLine);
             job->captureStdin();
             job->setOutputFile(outputFile);
             job->setUserID(m_userID);
-        	job->start();
-        	job->setEnvironnmentVariables(env);
+            job->start();
+            job->setEnvironnmentVariables(env);
             job->setWorkingDirectory(workingDirectory);
             addProcessListener(m_connections, job->pid(), [container, listener](pid_t pid, int exitCode) {
-            	listener(pid, exitCode);
-            }, m_mainLoopContext);
+                            listener(pid, exitCode);
+                        }, m_mainLoopContext);
 
             m_jobs.push_back(job);
 
@@ -155,9 +160,8 @@ public:
             if ( checkContainer(containerID, container) ) {
                 container->shutdown();
             }
-        }
-        else {
-            log_info() << "Not shutting down container" ;
+        } else {
+            log_info() << "Not shutting down container";
         }
 
     }
@@ -191,7 +195,7 @@ public:
 private:
     std::vector<PelagicontainLib *> m_containers;
     std::vector<PelagicontainLib *> m_preloadedContainers;
-    std::vector<CommandJob*> m_jobs;
+    std::vector<CommandJob *> m_jobs;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
@@ -213,13 +217,16 @@ public:
     {
     }
 
-    uint32_t LaunchCommand(const uint32_t &containerID, const std::string &commandLine, const std::string &workingDirectory, const std::string &outputFile,
-                const std::map<std::string, std::string> &env)
+    uint32_t LaunchCommand(const uint32_t &containerID, const std::string &commandLine, const std::string &workingDirectory,
+                const std::string &outputFile,
+                const std::map<std::string,
+                    std::string> &env)
     {
-		return m_agent.launchCommand(containerID, commandLine, workingDirectory, outputFile, env, [this, containerID](pid_t pid, int exitCode) {
-			ProcessStateChanged(containerID, pid, false, exitCode);
-            log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
-		});
+        return m_agent.launchCommand(containerID, commandLine, workingDirectory, outputFile, env,
+                    [this, containerID](pid_t pid, int exitCode) {
+                        ProcessStateChanged(containerID, pid, false, exitCode);
+                        log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
+                    });
     }
 
     void ShutDownContainer(const uint32_t &containerID) override
@@ -243,12 +250,12 @@ public:
         m_agent.setGatewayConfigs(containerID, configs);
     }
 
-    uint32_t CreateContainer(const std::string& name) override
+    uint32_t CreateContainer(const std::string &name) override
     {
         return m_agent.createContainer(name);
     }
 
-    void SetContainerName(const uint32_t &containerID, const std::string& name) override
+    void SetContainerName(const uint32_t &containerID, const std::string &name) override
     {
         return m_agent.setContainerName(containerID, name);
     }
@@ -257,8 +264,9 @@ public:
     {
     }
 
-    void WriteToStdIn(const uint32_t& containerID, const std::vector< uint8_t >& bytes) override {
-    	m_agent.writeToStdIn(containerID, bytes);
+    void WriteToStdIn(const uint32_t &containerID, const std::vector<uint8_t> &bytes) override
+    {
+        m_agent.writeToStdIn(containerID, bytes);
     }
 
     PelagicontainAgent &m_agent;
@@ -278,7 +286,8 @@ int main(int argc, char * *argv)
     commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
 
     bool shutdownContainers = true;
-    commandLineParser.addOption(shutdownContainers, "shutdown", 's', "If false, the containers will not be shutdown. Useful for debugging");
+    commandLineParser.addOption(shutdownContainers, "shutdown", 's',
+            "If false, the containers will not be shutdown. Useful for debugging");
 
     if ( commandLineParser.parse(argc, argv) ) {
         exit(1);
@@ -296,11 +305,9 @@ int main(int argc, char * *argv)
 
     try {
         connection->request_name(AGENT_BUS_NAME);
-    }
-    catch(DBus::Error& error)
-    {
-    	log_warning() << "Can't own the name" << AGENT_BUS_NAME << " on the system bus => use session bus instead";
-    	connection = &glibDBusFactory.getSessionBusConnection();
+    } catch (DBus::Error &error)    {
+        log_warning() << "Can't own the name" << AGENT_BUS_NAME << " on the system bus => use session bus instead";
+        connection = &glibDBusFactory.getSessionBusConnection();
         connection->request_name(AGENT_BUS_NAME);
     }
 

@@ -117,7 +117,8 @@ void Container::init_lxc()
  * mount --make-shared <containerRoot>/late_mounts
  */
 
-Container::Container(const std::string &id, const std::string &name, const std::string &configFile, const std::string &containerRoot) :
+Container::Container(const std::string &id, const std::string &name, const std::string &configFile,
+        const std::string &containerRoot) :
     m_configFile(configFile),
     m_id(id),
     m_name(name),
@@ -323,7 +324,8 @@ int Container::executeInContainerEntryFunction(void *param)
     return (*function)();
 }
 
-pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, uid_t userID, int stdin, int stdout,
+pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, uid_t userID, int stdin,
+        int stdout,
         int stderr)
 {
     ensureContainerRunning();
@@ -363,7 +365,8 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     envVariablesArray[strings.size()] = nullptr;
     options.extra_env_vars = (char * *) envVariablesArray;    // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
-    log_debug() << "Starting function in container " << toString() << "User:"<< userID << "" << std::endl << " Env variables : " << strings;
+    log_debug() << "Starting function in container " << toString() << "User:" << userID << "" << std::endl <<
+    " Env variables : " << strings;
 
     pid_t attached_process_pid = 0;
 
@@ -565,8 +568,8 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
 
     // We generate a file containing all variables for convenience when connecting to the container in command-line
     StringBuilder s;
-    for(auto& var : m_gatewayEnvironmentVariables) {
-    	s << "export " << var.first << "='" << var.second << "'\n";
+    for (auto &var : m_gatewayEnvironmentVariables) {
+        s << "export " << var.first << "='" << var.second << "'\n";
     }
     writeToFile(gatewaysDir() + "/env", s);
 

@@ -20,7 +20,6 @@ namespace pelagicontain {
 class PelagicontainLib
 {
 public:
-
     LOG_DECLARE_CLASS_CONTEXT("PCL", "Pelagicontain library");
 
     PelagicontainLib(const char *containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
@@ -90,15 +89,15 @@ public:
 
     void setContainerName(const std::string &name);
 
-    const std::string& getContainerID() {
-//        assert(m_containerName.size() != 0);
+    const std::string &getContainerID()
+    {
+        //        assert(m_containerName.size() != 0);
         return m_containerID;
     }
 
     void validateContainerID();
 
 private:
-
     /**
      * Check if the workspace is present and create it if needed
      */
@@ -136,7 +135,7 @@ private:
 class JobAbstract
 {
 protected:
-    LOG_SET_CLASS_CONTEXT(PelagicontainLib::getDefaultContext());
+    LOG_SET_CLASS_CONTEXT( PelagicontainLib::getDefaultContext() );
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
@@ -146,14 +145,16 @@ public:
     {
     }
 
-    virtual ~JobAbstract() {}
+    virtual ~JobAbstract()
+    {
+    }
 
     void captureStdin()
     {
         pipe(m_stdin);
     }
 
-    void setOutputFile(const std::string& path)
+    void setOutputFile(const std::string &path)
     {
         mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
         m_stdout[1] = m_stderr[1] = ::open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC, mode);
@@ -210,7 +211,7 @@ public:
         m_env[key] = value;
     }
 
-    void setEnvironnmentVariables(const EnvironmentVariables& env)
+    void setEnvironnmentVariables(const EnvironmentVariables &env)
     {
         m_env = env;
     }

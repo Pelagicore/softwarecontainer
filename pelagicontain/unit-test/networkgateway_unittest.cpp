@@ -13,7 +13,9 @@ using namespace pelagicore;
 class MockController
 {
 public:
-	virtual ~MockController() { }
+    virtual ~MockController()
+    {
+    }
 
     virtual bool startApp()
     {
@@ -49,7 +51,9 @@ class MockSystemcallInterface :
     public SystemcallAbstractInterface
 {
 public:
-	virtual ~MockSystemcallInterface() { }
+    virtual ~MockSystemcallInterface()
+    {
+    }
 
     virtual bool makeCall(const std::string &cmd, int &exitCode)
     {

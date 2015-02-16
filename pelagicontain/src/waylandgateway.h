@@ -23,7 +23,8 @@ class WaylandGateway :
 public:
     static constexpr const char *ID = "wayland";
 
-    WaylandGateway() : Gateway(ID)
+    WaylandGateway() :
+        Gateway(ID)
     {
     }
 

@@ -63,18 +63,19 @@ ReturnCode touch(const std::string &path)
 
 ReturnCode writeToFile(const std::string &path, const std::string &content)
 {
-	log_debug() << "writing to " << path << " : " << content;
-	std::ofstream out(path); // TODO : error checking
-	out << content;
+    log_debug() << "writing to " << path << " : " << content;
+    std::ofstream out(path);     // TODO : error checking
+    out << content;
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode readFromFile(const std::string &path, std::string &content) {
-	std::ifstream t(path);
-	std::stringstream buffer;
-	buffer << t.rdbuf();
-	content = buffer.str();
-	return ReturnCode::SUCCESS;
+ReturnCode readFromFile(const std::string &path, std::string &content)
+{
+    std::ifstream t(path);
+    std::stringstream buffer;
+    buffer << t.rdbuf();
+    content = buffer.str();
+    return ReturnCode::SUCCESS;
 }
 
 }

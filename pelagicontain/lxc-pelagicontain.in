@@ -81,10 +81,11 @@ ${ADDITIONAL_FOLDER_MOUNTS}
 
     # root user defined
 
-	# Create entry for root user in /etc/passwd, then append the content of the host's /etc/passwd to inherit the host's user
+	# Create entry for root user in /etc/passwd
     cat <<EOF >> $rootfs/etc/passwd
 root:x:0:0:root:/root:/bin/sh
 EOF
+	# Then append the content of the host's /etc/passwd to inherit the host's users
 	cat /etc/passwd | grep -v root >> $rootfs/etc/passwd
 
 	# Copy host's /etc/group

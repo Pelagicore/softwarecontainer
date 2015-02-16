@@ -14,7 +14,9 @@ class Gateway;
 class ContainerListener
 {
 public:
-	virtual ~ContainerListener() {}
+    virtual ~ContainerListener()
+    {
+    }
     virtual void onContainerStateChanged(ContainerState state) = 0;
 };
 

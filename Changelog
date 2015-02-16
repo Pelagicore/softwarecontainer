@@ -1,7 +1,15 @@
 V2 :
 - Gateway configurations are now arrays of elements. Therefore, each gateway should now be written in such a way that it accepts 0, 1 or multiple
   configuration elements.
-- Automatic creation of workspace if it does not exist (by calling setup_pelagicontain.sh script)
+- Automatic creation of workspace if it does not exist (by calling setup_pelagicontain.sh script). No need to perform any pre-initialization before being able to use pelagicontain
+- Use the LXC library to manipulate the containers instead of relying on the collection of command-line tools from LXC.
 - Lot of code clean up
-- Introduction of a small C++ wrapper for libjansson, which makes gateway code much cleaner and easy to read.
-- 
+- Introduction of a small C++ wrapper for libjansson, which makes gateway code much cleaner and easier to read.
+- Removal of the controller (process running inside the container). Removed need for an IPC between pelagicore and that controller.
+- Introduction of a client library providing the functionality of the pelagicontain executable in form of a C++ library. That library needs root privilege to be used. Addition of a set of tests focusing on that library.
+- Simplification of the internal design by removing some interfaces.
+- Removal of several severe limitations. Application code can be located anywhere on the file system. Application bundles do not have to contain the "bin", "shared" and "home" folders. Application main executable can be located anywhere. Any number of processes can be started in a container.
+- File gateway can be used to mount any file or folder from the host into a container.
+- Device gateway can replicate a device file of the host into the container
+- Removal of the dependency to RAM. Pelagicontain does not interact with RAM directly anymore. The registration of an application is in the responsibility of the launcher.
+- Introduction of an "Agent" component whose responsibility is to serve the requests of external unprivileged processes willing to manipulate containers, typically launcher components. That component is built on top of the client library and therefore has to run as root.

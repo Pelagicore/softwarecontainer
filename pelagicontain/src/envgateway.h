@@ -20,7 +20,8 @@ class EnvironmentGateway :
 public:
     static constexpr const char *ID = "env";
 
-    EnvironmentGateway() : Gateway(ID)
+    EnvironmentGateway() :
+        Gateway(ID)
     {
     }
 
@@ -36,7 +37,7 @@ public:
 
     bool activate() override
     {
-        for(auto& variable: m_variables) {
+        for (auto &variable : m_variables) {
             setEnvironmentVariable(variable.first, variable.second);
         }
         return true;

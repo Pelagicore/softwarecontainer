@@ -62,8 +62,7 @@ class DeviceNodeGateway :
     LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
 
 public:
-
-    static constexpr const char* ID = "devicenode";
+    static constexpr const char *ID = "devicenode";
 
     DeviceNodeGateway();
     ~DeviceNodeGateway()

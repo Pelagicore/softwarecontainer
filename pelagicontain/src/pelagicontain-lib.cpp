@@ -37,17 +37,20 @@ PelagicontainLib::~PelagicontainLib()
 {
 }
 
-void PelagicontainLib::setContainerIDPrefix(const std::string &name) {
+void PelagicontainLib::setContainerIDPrefix(const std::string &name)
+{
     m_containerID = name + Generator::gen_ct_name();
     log_debug() << "Assigned container ID " << m_containerID;
 }
 
-void PelagicontainLib::setContainerName(const std::string &name) {
+void PelagicontainLib::setContainerName(const std::string &name)
+{
     m_containerName = name;
     log_debug() << container.toString();
 }
 
-void PelagicontainLib::validateContainerID() {
+void PelagicontainLib::validateContainerID()
+{
     if (m_containerID.size() == 0) {
         setContainerIDPrefix("PLC-");
     }
@@ -140,7 +143,7 @@ ReturnCode PelagicontainLib::init()
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway(getGatewayDir(), getContainerID()) ) );
+    m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway( getGatewayDir(), getContainerID() ) ) );
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
@@ -151,12 +154,12 @@ ReturnCode PelagicontainLib::init()
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
                     DBusGateway::SessionProxy,
                     getGatewayDir(),
-                    getContainerID()) ) );
+                    getContainerID() ) ) );
 
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
                     DBusGateway::SystemProxy,
                     getGatewayDir(),
-                    getContainerID()) ) );
+                    getContainerID() ) ) );
 #endif
 
     //    m_gateways.push_back( std::unique_ptr<Gateway>( new DLTGateway() ) );

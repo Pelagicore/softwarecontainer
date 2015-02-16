@@ -29,7 +29,8 @@ class FileGateway :
 public:
     static constexpr const char *ID = "file";
 
-    FileGateway() : Gateway(ID)
+    FileGateway() :
+        Gateway(ID)
     {
     }
 

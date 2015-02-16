@@ -40,7 +40,6 @@ class Container
     }
 
 public:
-
     static constexpr uid_t ROOT_UID = 0;
 
     class CleanUpHandler
@@ -86,8 +85,8 @@ public:
      * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID, const std::string &workingDirectory = "/",
-            int stdin = -1, int stdout = 1,
+    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID,
+            const std::string &workingDirectory = "/", int stdin = -1, int stdout = 1,
             int stderr = 2);
 
     /**
@@ -96,7 +95,9 @@ public:
     pid_t attach(const std::string &commandLine, uid_t userID = ROOT_UID);
 
     pid_t executeInContainer(ContainerFunction function,
-            const EnvironmentVariables &variables = EnvironmentVariables(), uid_t userID = ROOT_UID, int stdin = -1, int stdout = 1, int stderr = 2);
+            const EnvironmentVariables &variables = EnvironmentVariables(), uid_t userID = ROOT_UID, int stdin = -1, int stdout =
+                1,
+            int stderr = 2);
 
     std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 
@@ -205,12 +206,12 @@ private:
     /**
      * The unique name of the LXC container
      */
-    const std::string& m_id;
+    const std::string &m_id;
 
     /**
      * The name assigned to the container
      */
-    const std::string& m_name;
+    const std::string &m_name;
 
     struct lxc_container *m_container = nullptr;
 

@@ -24,7 +24,7 @@ protected:
     static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
 
 public:
-    Gateway(const char* id)
+    Gateway(const char *id)
     {
         m_id = id;
     };
@@ -36,7 +36,8 @@ public:
     /**
      * Returns the ID of the gateway
      */
-    virtual const char* id() {
+    virtual const char *id()
+    {
         return m_id;
     }
 
@@ -104,7 +105,7 @@ public:
 
 protected:
     Container *m_container = nullptr;
-    const char* m_id = nullptr;
+    const char *m_id = nullptr;
 };
 
 #endif /* GATEWAY_H */

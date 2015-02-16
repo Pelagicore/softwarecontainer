@@ -28,10 +28,11 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 
     std::string path;
 
-    if (isDirectory(pathInHost))
+    if ( isDirectory(pathInHost) ) {
         path = getContainer().bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
-    else
+    } else {
         path = getContainer().bindMountFileInContainer(pathInHost, pathInContainer, readOnly);
+    }
 
     if (envVarName.size() != 0) {
         char value[1024];
