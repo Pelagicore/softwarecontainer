@@ -9,34 +9,27 @@ namespace pelagicontain {
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 
-bool fileHasMode(const std::string &path, int mode)
-{
-    bool isDir = false;
-    struct stat st;
+struct stat getStat(const std::string &path) {
+    struct stat st = {};
     if (stat(path.c_str(), &st) == 0) {
-        if ( (st.st_mode & mode) != 0 ) {
-            isDir = true;
-        }
+        return st;
     }
-    return isDir;
-
+    return st;
 }
 
 bool isDirectory(const std::string &path)
 {
-    return fileHasMode(path, S_IFDIR);
+     return S_ISDIR(getStat(path).st_mode);
 }
 
 bool isFile(const std::string &path)
 {
-    std::ifstream infile(path);
-    log_debug() << "isFile  " << path << " " << infile.good();
-    return infile.good();
+    return S_ISREG(getStat(path).st_mode);
 }
 
 bool isSocket(const std::string &path)
 {
-    return fileHasMode(path, S_IFSOCK);
+    return S_ISSOCK(getStat(path).st_mode);
 }
 
 std::string parentPath(const std::string &path)
