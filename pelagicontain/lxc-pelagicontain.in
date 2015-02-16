@@ -80,15 +80,15 @@ ${ADDITIONAL_FOLDER_MOUNTS}
     popd > /dev/null
 
     # root user defined
+
+	# Create entry for root user in /etc/passwd, then append the content of the host's /etc/passwd to inherit the host's user
     cat <<EOF >> $rootfs/etc/passwd
 root:x:0:0:root:/root:/bin/sh
-user:x:1000:1000::/:/bin/sh
 EOF
+	cat /etc/passwd | grep -v root >> $rootfs/etc/passwd
 
-    cat <<EOF >> $rootfs/etc/group
-root:x:0:root
-user:x:1000:
-EOF
+	# Copy host's /etc/group
+	cp /etc/group $rootfs/etc/group
 
     # mount everything
     cat <<EOF >> $rootfs/etc/init.d/rcS
