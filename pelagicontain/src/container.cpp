@@ -12,6 +12,9 @@
 #include <lxc/version.h>
 #include "lxc-common.h"
 
+#include <pwd.h>
+#include <grp.h>
+
 #include "container.h"
 #include "pelagicore-common.h"
 
@@ -388,6 +391,54 @@ pid_t Container::attach(const std::string &commandLine, uid_t userID)
     return attach(commandLine, m_gatewayEnvironmentVariables, userID);
 }
 
+ReturnCode Container::setUser(uid_t userID) {
+
+    log_warning() << "Setting env for userID : " << userID;
+
+    struct passwd *pw = getpwuid(userID);
+    if (pw != nullptr) {
+        std::vector<gid_t> groups;
+        int ngroups = 0;
+
+        if (getgrouplist(pw->pw_name, pw->pw_gid, nullptr, &ngroups) == -1) {
+//            log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
+        }
+
+        groups.resize(ngroups);
+
+        if (getgrouplist(pw->pw_name, pw->pw_gid, groups.data(), &ngroups) == -1) {
+            log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
+        }
+
+        StringBuilder s;
+        for(auto& gid : groups) {
+            s << " " << gid;
+        }
+
+        log_debug() << "setuid(" << userID  << ")" << "  setgid(" << pw->pw_gid << ")  " << "Groups " << s.str();
+
+        if(setgroups(groups.size(), groups.data()) != 0) {
+            log_error() << "setgroups failed";
+        }
+
+        if(setgid(pw->pw_gid) != 0) {
+            log_error() << "setgid failed";
+        }
+
+        if(setuid(userID) != 0) {
+            log_error() << "setuid failed";
+        }
+
+    }
+    else {
+        log_error() << "Error in getpwuid";
+        return ReturnCode::FAILURE;
+    }
+
+    return ReturnCode::SUCCESS;
+
+}
+
 pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID,
         const std::string &workingDirectory, int stdin, int stdout,
         int stderr)
@@ -411,25 +462,29 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
     //	for(size_t i=0; i <= executeCommandVec.size(); i++)	log_debug() << args[i];
 
+    // We execute the function as root but will switch to the real userID inside
     return executeInContainer([&] () {
 
-                log_debug() << "Starting command line in container : " << commandLine <<
-                " . Working directory : " << workingDirectory;
+        log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " << workingDirectory;
 
-                if (workingDirectory.length() != 0) {
-                    auto ret = chdir( workingDirectory.c_str() );
-                    if (ret != 0) {
-                        log_error() << "Error when changing current directory : " << strerror(errno);
-                    }
+        if (!isSuccess(setUser(userID))) {
+            return -1;
+        }
 
-                }
-                execvp( args[0], args.data() );
+        if (workingDirectory.length() != 0) {
+            auto ret = chdir( workingDirectory.c_str() );
+            if (ret != 0) {
+                log_error() << "Error when changing current directory : " << strerror(errno);
+            }
 
-                log_error() << "Error when executing the command in container : " << strerror(errno);
+        }
+        execvp( args[0], args.data() );
 
-                return 1;
+        log_error() << "Error when executing the command in container : " << strerror(errno);
 
-            }, variables, userID, stdin, stdout, stderr);
+        return 1;
+
+    }, variables, Container::ROOT_UID, stdin, stdout, stderr);
 
 }
 

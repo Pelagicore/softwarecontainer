@@ -94,6 +94,8 @@ public:
      */
     pid_t attach(const std::string &commandLine, uid_t userID = ROOT_UID);
 
+    ReturnCode setUser(uid_t userID);
+
     pid_t executeInContainer(ContainerFunction function,
             const EnvironmentVariables &variables = EnvironmentVariables(), uid_t userID = ROOT_UID, int stdin = -1, int stdout =
                 1,
