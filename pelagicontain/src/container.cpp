@@ -211,10 +211,12 @@ std::string Container::toString()
     std::stringstream ss;
     ss << "LXC " << id() << " ";
     if (m_container != nullptr) {
-        ss << "name: " << m_container->name
+        ss << "id: " << id()
+           << "name : " << m_name
            << " / state:" << m_container->state(m_container)
            << " / initPID:" << m_container->init_pid(m_container)
-           << " / LastError: " << m_container->error_string;
+           << " / LastError: " << m_container->error_string
+           << " / To connect to this container : lxc-attach -n " << id();
     }
 
     return ss.str();
@@ -332,6 +334,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     options.stderr_fd = stderr;
 
     options.uid = userID;
+    options.gid = userID;
 
     EnvironmentVariables actualVariables = variables;
 

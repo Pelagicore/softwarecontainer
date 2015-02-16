@@ -44,7 +44,7 @@ void PelagicontainLib::setContainerIDPrefix(const std::string &name) {
 
 void PelagicontainLib::setContainerName(const std::string &name) {
     m_containerName = name;
-    log_debug() << "Assigned container name: " << m_containerName << " / ID: " << m_containerID;
+    log_debug() << container.toString();
 }
 
 void PelagicontainLib::validateContainerID() {

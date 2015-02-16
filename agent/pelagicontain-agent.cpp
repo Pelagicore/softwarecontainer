@@ -271,7 +271,7 @@ int main(int argc, char * *argv)
 {
     pelagicore::CommandLineParser commandLineParser("Pelagicontain agent", "", PACKAGE_VERSION, "");
 
-    int preloadCount = 3;
+    int preloadCount = 0;
     commandLineParser.addOption(preloadCount, "preload", 'p', "Number of containers to preload");
 
     int userID = 0;
