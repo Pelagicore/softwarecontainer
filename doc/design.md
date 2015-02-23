@@ -35,6 +35,8 @@ An instance of pelagicontain handles only one container.
 
 # Building Block View
 
+![component-overview](images/component_overview.png  "Component Overview")
+
 # Runtime View
 
 # Deployment View
