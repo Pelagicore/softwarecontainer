@@ -5,6 +5,7 @@ Pelagicontain (aka Software Container) is used to run applications in a containe
 # Constraints
 
 # Context
+Pelagicontain, mainly pelagicontain-agent, is meant to be used by other components rather than the user interacting with it manually. In a typical case a "launcher", a component responsible for handling the lifecycle of applications, will use pelagicontain to run application in containers. This launcher is then responsible for providing the configuration for the different gateways that control what the application can access.
 
 # Solution Ideas and Strategy
 ## Introduction
@@ -50,9 +51,7 @@ An instance of pelagicontain handles only one container.
 # Risks
 
 # Glossary
-
-- RAM - Resource Access Manager
-- SC - Software Container
+- SC - Software Container (official name of pelagicontain)
 
 # Document TODO
 List of tasks related to this documentation.
