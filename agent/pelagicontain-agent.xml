@@ -17,6 +17,7 @@
 
 		<method name="LaunchCommand">
 			<arg direction="in" type="u" name="containerID" />
+			<arg direction="in" type="u" name="userID" />
 			<arg direction="in" type="s" name="commandLine" />
 			<arg direction="in" type="s" name="workingDirectory" />
 			<arg direction="in" type="s" name="outputFile" />

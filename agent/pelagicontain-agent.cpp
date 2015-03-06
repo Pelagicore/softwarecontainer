@@ -33,12 +33,11 @@ class PelagicontainAgent
 {
 
 public:
-    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, uid_t userID,
+    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount,
                 bool shutdownContainers) :
         m_mainLoopContext(mainLoopContext)
     {
         m_preloadCount = preloadCount;
-        m_userID = userID;
         m_shutdownContainers = shutdownContainers;
         triggerPreload();
     }
@@ -120,7 +119,7 @@ public:
     /**
      * Launch the given command in a the given container
      */
-    pid_t launchCommand(ContainerID containerID, const std::string &cmdLine, const std::string &workingDirectory,
+    pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine, const std::string &workingDirectory,
                 const std::string &outputFile,
                 const EnvironmentVariables &env, std::function<void (pid_t,
                         int)> listener)
@@ -130,7 +129,7 @@ public:
             auto job = new CommandJob(*container, cmdLine);
             job->captureStdin();
             job->setOutputFile(outputFile);
-            job->setUserID(m_userID);
+            job->setUserID(userID);
             job->start();
             job->setEnvironnmentVariables(env);
             job->setWorkingDirectory(workingDirectory);
@@ -199,7 +198,6 @@ private:
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
-    uid_t m_userID;
     bool m_shutdownContainers = true;
 };
 
@@ -217,12 +215,12 @@ public:
     {
     }
 
-    uint32_t LaunchCommand(const uint32_t &containerID, const std::string &commandLine, const std::string &workingDirectory,
+    uint32_t LaunchCommand(const uint32_t &containerID, const uint32_t& userID, const std::string &commandLine, const std::string &workingDirectory,
                 const std::string &outputFile,
                 const std::map<std::string,
                     std::string> &env)
     {
-        return m_agent.launchCommand(containerID, commandLine, workingDirectory, outputFile, env,
+        return m_agent.launchCommand(containerID, userID, commandLine, workingDirectory, outputFile, env,
                     [this, containerID](pid_t pid, int exitCode) {
                         ProcessStateChanged(containerID, pid, false, exitCode);
                         log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
@@ -282,8 +280,8 @@ int main(int argc, char * *argv)
     int preloadCount = 0;
     commandLineParser.addOption(preloadCount, "preload", 'p', "Number of containers to preload");
 
-    int userID = 0;
-    commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
+//    int userID = 0;
+//    commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
 
     bool shutdownContainers = true;
     commandLineParser.addOption(shutdownContainers, "shutdown", 's',
@@ -293,7 +291,7 @@ int main(int argc, char * *argv)
         exit(1);
     }
 
-    log_debug() << "Starting pelagicontain agent. User:" << userID;
+    log_debug() << "Starting pelagicontain agent";
 
     auto mainContext = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
@@ -311,7 +309,7 @@ int main(int argc, char * *argv)
         connection->request_name(AGENT_BUS_NAME);
     }
 
-    PelagicontainAgent agent(mainContext, preloadCount, userID, shutdownContainers);
+    PelagicontainAgent agent(mainContext, preloadCount, shutdownContainers);
 
     auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
 

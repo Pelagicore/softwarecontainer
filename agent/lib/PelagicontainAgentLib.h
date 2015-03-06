@@ -28,7 +28,7 @@ public:
      */
     void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
 
-    pid_t startProcess(AgentCommand &command, std::string &cmdLine, const std::string &workingDirectory,
+    pid_t startProcess(AgentCommand &command, std::string &cmdLine, uid_t userID, const std::string &workingDirectory,
                 const std::string &outputFile,
                 EnvironmentVariables env);
 
@@ -173,9 +173,15 @@ public:
         return ReturnCode::SUCCESS;
     }
 
+    ReturnCode setUserID(uid_t userID)
+    {
+        m_userID = userID;
+        return ReturnCode::SUCCESS;
+    }
+
     void start()
     {
-        m_pid = m_container.getAgent().startProcess(*this, m_cmdLine, m_workingDirectory, m_outputFile, m_envVariables);
+        m_pid = m_container.getAgent().startProcess(*this, m_cmdLine, m_userID, m_workingDirectory, m_outputFile, m_envVariables);
     }
 
     void addEnvironnmentVariable(const std::string &key, const std::string &value)
@@ -227,6 +233,7 @@ private:
     std::string m_outputFile;
     EnvironmentVariables m_envVariables;
     SignalConnectionsHandler m_connections;
+    uid_t m_userID = ROOT_UID;
 
 };
 

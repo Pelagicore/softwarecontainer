@@ -273,7 +273,7 @@ public:
 private:
     std::string m_command;
     std::string m_workingDirectory;
-    uid_t m_userID = Container::ROOT_UID;
+    uid_t m_userID = ROOT_UID;
 };
 
 /**

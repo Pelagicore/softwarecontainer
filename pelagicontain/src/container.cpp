@@ -484,7 +484,7 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
         return 1;
 
-    }, variables, Container::ROOT_UID, stdin, stdout, stderr);
+    }, variables, ROOT_UID, stdin, stdout, stderr);
 
 }
 

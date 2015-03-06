@@ -40,7 +40,6 @@ class Container
     }
 
 public:
-    static constexpr uid_t ROOT_UID = 0;
 
     class CleanUpHandler
     {

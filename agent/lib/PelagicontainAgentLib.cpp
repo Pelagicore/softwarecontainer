@@ -72,11 +72,11 @@ void Agent::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
     m_ml = mainLoopContext;
 }
 
-pid_t Agent::startProcess(AgentCommand &command, std::string &cmdLine, const std::string &workingDirectory,
+pid_t Agent::startProcess(AgentCommand &command, std::string &cmdLine, uid_t userID, const std::string &workingDirectory,
             const std::string &outputFile,
             EnvironmentVariables env)
 {
-    auto pid = getProxy().LaunchCommand(command.getContainer().getContainerID(), cmdLine, workingDirectory, outputFile, env);
+    auto pid = getProxy().LaunchCommand(command.getContainer().getContainerID(), userID, cmdLine, workingDirectory, outputFile, env);
     m_commands[pid] = &command;
     return pid;
 }

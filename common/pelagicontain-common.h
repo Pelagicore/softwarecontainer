@@ -55,6 +55,8 @@ static constexpr const char *APP_BINARY = "/appbin/containedapp";
 static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/PelagicontainAgent";
 static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.PelagicontainAgent";
 
+static constexpr uid_t ROOT_UID = 0;
+
 inline bool isLXC_C_APIEnabled()
 {
     return true;
