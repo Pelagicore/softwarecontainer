@@ -40,7 +40,6 @@ class Container
     }
 
 public:
-
     class CleanUpHandler
     {
 protected:
@@ -97,8 +96,7 @@ public:
 
     pid_t executeInContainer(ContainerFunction function,
             const EnvironmentVariables &variables = EnvironmentVariables(), uid_t userID = ROOT_UID, int stdin = -1, int stdout =
-                1,
-            int stderr = 2);
+                1, int stderr = 2);
 
     std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 

@@ -391,7 +391,8 @@ pid_t Container::attach(const std::string &commandLine, uid_t userID)
     return attach(commandLine, m_gatewayEnvironmentVariables, userID);
 }
 
-ReturnCode Container::setUser(uid_t userID) {
+ReturnCode Container::setUser(uid_t userID)
+{
 
     log_warning() << "Setting env for userID : " << userID;
 
@@ -401,7 +402,7 @@ ReturnCode Container::setUser(uid_t userID) {
         int ngroups = 0;
 
         if (getgrouplist(pw->pw_name, pw->pw_gid, nullptr, &ngroups) == -1) {
-//            log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
+            //            log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
         }
 
         groups.resize(ngroups);
@@ -411,26 +412,25 @@ ReturnCode Container::setUser(uid_t userID) {
         }
 
         StringBuilder s;
-        for(auto& gid : groups) {
+        for (auto &gid : groups) {
             s << " " << gid;
         }
 
-        log_debug() << "setuid(" << userID  << ")" << "  setgid(" << pw->pw_gid << ")  " << "Groups " << s.str();
+        log_debug() << "setuid(" << userID << ")" << "  setgid(" << pw->pw_gid << ")  " << "Groups " << s.str();
 
-        if(setgroups(groups.size(), groups.data()) != 0) {
+        if (setgroups( groups.size(), groups.data() ) != 0) {
             log_error() << "setgroups failed";
         }
 
-        if(setgid(pw->pw_gid) != 0) {
+        if (setgid(pw->pw_gid) != 0) {
             log_error() << "setgid failed";
         }
 
-        if(setuid(userID) != 0) {
+        if (setuid(userID) != 0) {
             log_error() << "setuid failed";
         }
 
-    }
-    else {
+    } else {
         log_error() << "Error in getpwuid";
         return ReturnCode::FAILURE;
     }
@@ -465,26 +465,27 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
     // We execute the function as root but will switch to the real userID inside
     return executeInContainer([&] () {
 
-        log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " << workingDirectory;
+                log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
+                workingDirectory;
 
-        if (!isSuccess(setUser(userID))) {
-            return -1;
-        }
+                if ( !isSuccess( setUser(userID) ) ) {
+                    return -1;
+                }
 
-        if (workingDirectory.length() != 0) {
-            auto ret = chdir( workingDirectory.c_str() );
-            if (ret != 0) {
-                log_error() << "Error when changing current directory : " << strerror(errno);
-            }
+                if (workingDirectory.length() != 0) {
+                    auto ret = chdir( workingDirectory.c_str() );
+                    if (ret != 0) {
+                        log_error() << "Error when changing current directory : " << strerror(errno);
+                    }
 
-        }
-        execvp( args[0], args.data() );
+                }
+                execvp( args[0], args.data() );
 
-        log_error() << "Error when executing the command in container : " << strerror(errno);
+                log_error() << "Error when executing the command in container : " << strerror(errno);
 
-        return 1;
+                return 1;
 
-    }, variables, ROOT_UID, stdin, stdout, stderr);
+            }, variables, ROOT_UID, stdin, stdout, stderr);
 
 }
 

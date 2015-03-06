@@ -37,7 +37,7 @@ private:
             m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(
                         m_gLibDBusCppFactory.getSystemBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
             m_proxy->Ping();
-        } catch (DBus::Error &error)    {
+        } catch (DBus::Error &error) {
             m_proxy = m_gLibDBusCppFactory.registerProxy<PelagicontainAgentProxy>(
                         m_gLibDBusCppFactory.getSessionBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
             m_proxy->Ping();
@@ -76,7 +76,8 @@ pid_t Agent::startProcess(AgentCommand &command, std::string &cmdLine, uid_t use
             const std::string &outputFile,
             EnvironmentVariables env)
 {
-    auto pid = getProxy().LaunchCommand(command.getContainer().getContainerID(), userID, cmdLine, workingDirectory, outputFile, env);
+    auto pid = getProxy().LaunchCommand(
+                command.getContainer().getContainerID(), userID, cmdLine, workingDirectory, outputFile, env);
     m_commands[pid] = &command;
     return pid;
 }

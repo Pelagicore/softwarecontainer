@@ -9,7 +9,8 @@ namespace pelagicontain {
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 
-struct stat getStat(const std::string &path) {
+struct stat getStat(const std::string &path)
+{
     struct stat st = {};
     if (stat(path.c_str(), &st) == 0) {
         return st;
@@ -19,7 +20,7 @@ struct stat getStat(const std::string &path) {
 
 bool isDirectory(const std::string &path)
 {
-     return S_ISDIR(getStat(path).st_mode);
+    return S_ISDIR(getStat(path).st_mode);
 }
 
 bool isFile(const std::string &path)

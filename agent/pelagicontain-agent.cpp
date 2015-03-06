@@ -33,8 +33,7 @@ class PelagicontainAgent
 {
 
 public:
-    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount,
-                bool shutdownContainers) :
+    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, bool shutdownContainers) :
         m_mainLoopContext(mainLoopContext)
     {
         m_preloadCount = preloadCount;
@@ -215,7 +214,8 @@ public:
     {
     }
 
-    uint32_t LaunchCommand(const uint32_t &containerID, const uint32_t& userID, const std::string &commandLine, const std::string &workingDirectory,
+    uint32_t LaunchCommand(const uint32_t &containerID, const uint32_t &userID, const std::string &commandLine,
+                const std::string &workingDirectory,
                 const std::string &outputFile,
                 const std::map<std::string,
                     std::string> &env)
@@ -280,8 +280,8 @@ int main(int argc, char * *argv)
     int preloadCount = 0;
     commandLineParser.addOption(preloadCount, "preload", 'p', "Number of containers to preload");
 
-//    int userID = 0;
-//    commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
+    //    int userID = 0;
+    //    commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
 
     bool shutdownContainers = true;
     commandLineParser.addOption(shutdownContainers, "shutdown", 's',
@@ -303,7 +303,7 @@ int main(int argc, char * *argv)
 
     try {
         connection->request_name(AGENT_BUS_NAME);
-    } catch (DBus::Error &error)    {
+    } catch (DBus::Error &error) {
         log_warning() << "Can't own the name" << AGENT_BUS_NAME << " on the system bus => use session bus instead";
         connection = &glibDBusFactory.getSessionBusConnection();
         connection->request_name(AGENT_BUS_NAME);
