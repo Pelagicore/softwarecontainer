@@ -55,6 +55,15 @@ void PelagicontainLib::validateContainerID()
     }
 }
 
+ReturnCode PelagicontainLib::deleteWorkspace(const std::string &containerRoot)
+{
+    if (isDirectory(containerRoot)) {
+        rmdir(containerRoot.c_str());
+    }
+
+    return existsInFileSystem(containerRoot) ? ReturnCode::FAILURE : ReturnCode::SUCCESS;
+}
+
 ReturnCode PelagicontainLib::checkWorkspace(const std::string &containerRoot)
 {
     if ( !isDirectory(containerRoot) ) {

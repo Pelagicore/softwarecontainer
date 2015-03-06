@@ -15,6 +15,7 @@ class JobAbstract;
 
 namespace pelagicontain {
 
+
 class PelagicontainLib
 {
 public:
@@ -94,11 +95,14 @@ public:
 
     void validateContainerID();
 
-private:
+    static ReturnCode deleteWorkspace(const std::string &containerRoot = PELAGICONTAIN_DEFAULT_WORKSPACE);
+
     /**
      * Check if the workspace is present and create it if needed
      */
     static ReturnCode checkWorkspace(const std::string &containerRoot = PELAGICONTAIN_DEFAULT_WORKSPACE);
+
+private:
 
     std::string m_containerID;
     std::string m_containerConfig;

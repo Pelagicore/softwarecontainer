@@ -116,6 +116,9 @@ inline int waitForProcessTermination(pid_t pid)
 bool isDirectory(const std::string &path);
 bool isFile(const std::string &path);
 bool isSocket(const std::string &path);
+
+bool existsInFileSystem(const std::string &path);
+
 std::string parentPath(const std::string &path);
 ReturnCode touch(const std::string &path);
 ReturnCode writeToFile(const std::string &path, const std::string &content);

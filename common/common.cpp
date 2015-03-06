@@ -33,6 +33,11 @@ bool isSocket(const std::string &path)
     return S_ISSOCK(getStat(path).st_mode);
 }
 
+bool existsInFileSystem(const std::string &path)
+{
+    return (getStat(path).st_mode != 0);
+}
+
 std::string parentPath(const std::string &path)
 {
     static constexpr const char *separator = "/";
