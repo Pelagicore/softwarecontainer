@@ -409,6 +409,7 @@ ReturnCode Container::setUser(uid_t userID)
 
         if (getgrouplist(pw->pw_name, pw->pw_gid, groups.data(), &ngroups) == -1) {
             log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
+            return ReturnCode::FAILURE;
         }
 
         StringBuilder s;
@@ -420,14 +421,17 @@ ReturnCode Container::setUser(uid_t userID)
 
         if (setgroups( groups.size(), groups.data() ) != 0) {
             log_error() << "setgroups failed";
+            return ReturnCode::FAILURE;
         }
 
         if (setgid(pw->pw_gid) != 0) {
             log_error() << "setgid failed";
+            return ReturnCode::FAILURE;
         }
 
         if (setuid(userID) != 0) {
             log_error() << "setuid failed";
+            return ReturnCode::FAILURE;
         }
 
     } else {

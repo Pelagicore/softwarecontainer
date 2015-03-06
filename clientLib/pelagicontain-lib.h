@@ -15,8 +15,6 @@ class JobAbstract;
 
 namespace pelagicontain {
 
-//LOG_DECLARE_CONTEXT(s_pelagicontainLibLogContext, "PCL", "Pelagicontain library");
-
 class PelagicontainLib
 {
 public:
@@ -37,7 +35,7 @@ public:
 
     void shutdown()
     {
-        pelagicontain.shutdown();
+        m_pelagicontain.shutdown();
     }
 
     bool isInitialized() const
@@ -57,27 +55,27 @@ public:
 
     void setGatewayConfigs(const GatewayConfiguration &config)
     {
-        pelagicontain.updateGatewayConfiguration(config);
+        m_pelagicontain.updateGatewayConfiguration(config);
     }
 
     const Container &getContainer() const
     {
-        return container;
+        return m_container;
     }
 
     Container &getContainer()
     {
-        return container;
+        return m_container;
     }
 
     Pelagicontain &getPelagicontain()
     {
-        return pelagicontain;
+        return m_pelagicontain;
     }
 
     std::string getContainerDir()
     {
-        return containerRoot + "/" + getContainerID();
+        return m_containerRoot + "/" + getContainerID();
     }
 
     std::string getGatewayDir()
@@ -91,7 +89,6 @@ public:
 
     const std::string &getContainerID()
     {
-        //        assert(m_containerName.size() != 0);
         return m_containerID;
     }
 
@@ -101,22 +98,19 @@ private:
     /**
      * Check if the workspace is present and create it if needed
      */
-    ReturnCode checkWorkspace();
-
-    //	std::unique_ptr<DBus::Connection> m_bus;
-    //    DBus::Connection *m_bus;  // we don't use a unique_ptr here because the destructor of that object causes a SEGFAULT... TODO : fix
+    static ReturnCode checkWorkspace(const std::string &containerRoot = PELAGICONTAIN_DEFAULT_WORKSPACE);
 
     std::string m_containerID;
-    std::string containerConfig;
-    std::string containerRoot;
+    std::string m_containerConfig;
+    std::string m_containerRoot;
 
     std::string m_containerName;
 
-    Container container;
+    Container m_container;
 
     Glib::RefPtr<Glib::MainContext> m_ml;
 
-    Pelagicontain pelagicontain;
+    Pelagicontain m_pelagicontain;
 
     std::vector<std::unique_ptr<Gateway> > m_gateways;
 
