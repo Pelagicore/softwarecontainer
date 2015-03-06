@@ -29,9 +29,23 @@ public:
     {
         std::string variableName;
         element.read("name", variableName);
+
         std::string variableValue;
         element.read("value", variableValue);
-        m_variables[variableName] = variableValue;
+
+        bool appendMode = false;
+        element.read("append", appendMode);
+
+        if (m_variables.count(variableName) == 0) {
+            m_variables[variableName] = variableValue;
+        } else {
+            if (appendMode) {
+                m_variables[variableName] += variableValue;
+            } else {
+                log_error() << "Env variable " << variableName << " already defined with value : " << m_variables[variableName];
+            }
+        }
+
         return ReturnCode::SUCCESS;
     }
 
