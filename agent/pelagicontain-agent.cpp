@@ -27,10 +27,14 @@ LOG_DEFINE_APP_IDS("PELA", "Pelagicontain agent");
 
 namespace pelagicontain {
 
+using std::unique_ptr;
+
 LOG_DECLARE_DEFAULT_CONTEXT(PAM_DefaultLogContext, "MAIN", "Main context");
 
 class PelagicontainAgent
 {
+
+    typedef unique_ptr<PelagicontainLib> PelagicontainLibPtr;
 
 public:
     PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, bool shutdownContainers) :
@@ -41,6 +45,10 @@ public:
         triggerPreload();
     }
 
+    ~PelagicontainAgent()
+    {
+    }
+
     /**
      * Preload additional containers if needed
      */
@@ -48,10 +56,21 @@ public:
     {
         //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
         while (m_preloadedContainers.size() != m_preloadCount) {
-            auto container = new PelagicontainLib();
+            auto container = new PelagicontainLib(m_pelagicontainWorkspace);
             container->preload();
-            m_preloadedContainers.push_back(container);
+            m_preloadedContainers.push_back( PelagicontainLibPtr(container) );
         }
+    }
+
+    void deleteContainer(ContainerID containerID) {
+
+        bool valid = ( ( containerID < m_containers.size() ) && (m_containers[containerID] != nullptr) );
+        if (valid) {
+            m_containers[containerID] = nullptr;
+        } else {
+            log_error() << "Invalid container ID " << containerID;
+        }
+
     }
 
     /**
@@ -61,7 +80,7 @@ public:
     {
         bool valid = ( ( containerID < m_containers.size() ) && (m_containers[containerID] != nullptr) );
         if (valid) {
-            container = m_containers[containerID];
+            container = m_containers[containerID].get();
         } else {
             log_error() << "Invalid container ID " << containerID;
         }
@@ -76,13 +95,13 @@ public:
     {
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
-            container = m_preloadedContainers[0];
+            container = m_preloadedContainers[0].release();
             m_preloadedContainers.erase( m_preloadedContainers.begin() );
         } else {
-            container = new PelagicontainLib();
+            container = new PelagicontainLib(m_pelagicontainWorkspace);
         }
 
-        m_containers.push_back(container);
+        m_containers.push_back( PelagicontainLibPtr(container) );
         auto id = m_containers.size() - 1;
         log_debug() << "Created container with ID :" << id;
         container->setContainerIDPrefix(prefix);
@@ -123,7 +142,7 @@ public:
                 const EnvironmentVariables &env, std::function<void (pid_t,
                         int)> listener)
     {
-        PelagicontainLib *container = nullptr;
+        PelagicontainLib *container;
         if ( checkContainer(containerID, container) ) {
             auto job = new CommandJob(*container, cmdLine);
             job->captureStdin();
@@ -132,7 +151,7 @@ public:
             job->start();
             job->setEnvironnmentVariables(env);
             job->setWorkingDirectory(workingDirectory);
-            addProcessListener(m_connections, job->pid(), [container, listener](pid_t pid, int exitCode) {
+            addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {
                             listener(pid, exitCode);
                         }, m_mainLoopContext);
 
@@ -157,11 +176,11 @@ public:
             PelagicontainLib *container = nullptr;
             if ( checkContainer(containerID, container) ) {
                 container->shutdown();
+                deleteContainer(containerID);
             }
         } else {
             log_info() << "Not shutting down container";
         }
-
     }
 
     void MountLegacy(const uint32_t containerID, const std::string &path)
@@ -191,13 +210,15 @@ public:
     }
 
 private:
-    std::vector<PelagicontainLib *> m_containers;
-    std::vector<PelagicontainLib *> m_preloadedContainers;
+    PelagicontainWorkspace m_pelagicontainWorkspace;
+    std::vector<PelagicontainLibPtr> m_containers;
+    std::vector<PelagicontainLibPtr> m_preloadedContainers;
     std::vector<CommandJob *> m_jobs;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
+
 };
 
 class PelagicontainAgentAdaptor :
