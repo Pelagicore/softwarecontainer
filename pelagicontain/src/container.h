@@ -33,7 +33,6 @@ class Container :
 
     static std::vector<const char *> s_LXCContainerStates;
     static const char *s_LXCRoot;
-    ;
 
     static void init_lxc();
 

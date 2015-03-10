@@ -92,9 +92,7 @@ bool NetworkGateway::generateIP()
 bool NetworkGateway::setDefaultGateway()
 {
     std::string cmd = "route add default gw " + m_gateway;
-    executeInContainer(cmd);
-
-    return true;
+    return isSuccess( executeInContainer(cmd) );
 }
 
 bool NetworkGateway::up()
@@ -108,7 +106,9 @@ bool NetworkGateway::up()
         cmd = "ifconfig eth0 up";
     }
 
-    executeInContainer(cmd);
+    if ( isError( executeInContainer(cmd) ) ) {
+        return false;
+    }
 
     /* The route to the default gateway must be added
        each time the interface is brought up again */
@@ -118,9 +118,7 @@ bool NetworkGateway::up()
 bool NetworkGateway::down()
 {
     std::string cmd = "ifconfig eth0 down";
-    executeInContainer(cmd);
-
-    return true;
+    return isSuccess( executeInContainer(cmd) );
 }
 
 

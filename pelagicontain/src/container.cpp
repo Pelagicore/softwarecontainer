@@ -84,25 +84,6 @@ ReturnCode Container::initialize()
     return allOk ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
-ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
-{
-    if ( isDirectory(path) ) {
-        return ReturnCode::SUCCESS;
-    }
-
-    createParentDirectory(path);
-
-    if (mkdir(path.c_str(), S_IRWXU) == -1) {
-        log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
-        return ReturnCode::FAILURE;
-    }
-
-    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(path) );
-    log_debug() << "Created directory " << path;
-
-    return ReturnCode::SUCCESS;
-}
-
 
 Container::~Container()
 {
@@ -455,8 +436,10 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     log_debug() << "Creating folder : " << dst;
-    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(dst) );
+    createDirectory(dst);
+//    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+//    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(dst) );
+
     auto s = bindMount(pathOnHost, dst, readonly);
 
     return gatewaysDirInContainer() + "/" + pathInContainer;

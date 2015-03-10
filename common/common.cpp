@@ -85,4 +85,23 @@ ReturnCode readFromFile(const std::string &path, std::string &content)
     return ReturnCode::SUCCESS;
 }
 
+ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
+{
+    if ( isDirectory(path) ) {
+        return ReturnCode::SUCCESS;
+    }
+
+    createParentDirectory(path);
+
+    if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
+        log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
+        return ReturnCode::FAILURE;
+    }
+
+    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(path) );
+    log_debug() << "Created directory " << path;
+
+    return ReturnCode::SUCCESS;
+}
+
 }

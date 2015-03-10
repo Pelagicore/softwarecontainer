@@ -254,8 +254,9 @@ lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0
 EOF
 fi
 
-chmod o+rx $GATEWAY_DIR
-chmod g+rx $GATEWAY_DIR
+# the gateway folder needs to be writable since wayland requires some extra files to be created by the client in the folder where the wayland socket is located
+chmod o+rwx $GATEWAY_DIR
+chmod g+rwx $GATEWAY_DIR
 
 if [ -n "$MOUNT_DIR" ]; then
 cat <<EOF >> $path/config
