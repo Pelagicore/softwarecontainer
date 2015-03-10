@@ -96,6 +96,10 @@ public:
     virtual bool teardown();
 
 private:
+    pid_t makePopenCall(const std::string &command, int *infp, int *outfp);
+
+    bool makePcloseCall(pid_t pid, int infp, int outfp);
+
     const char *typeString();
     std::string socketName();
     bool isSocketCreated() const;

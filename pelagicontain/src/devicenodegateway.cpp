@@ -33,9 +33,9 @@ bool DeviceNodeGateway::activate()
         log_info() << "Mapping device " << dev.name;
 
         if (dev.major.length() != 0) {
-            auto success = systemCall("mknod " + dev.name + " c " + dev.major + " " + dev.minor);
+            auto success = executeInContainer("mknod " + dev.name + " c " + dev.major + " " + dev.minor);
             if ( !isError(success) ) {
-                success = systemCall("chmod " + dev.mode + " " + dev.name);
+                success = executeInContainer("chmod " + dev.mode + " " + dev.name);
             } else {
                 log_error() << "Failed to create device " << dev.name;
                 return false;
@@ -46,7 +46,7 @@ bool DeviceNodeGateway::activate()
 
             // TODO : check if it is fine to authorize write access systematically
             std::string cmd = StringBuilder() << "chmod o+rwx " << dev.name;
-            getContainer().systemCall(cmd);
+            getContainer().executeInContainer(cmd);
         }
     }
 

@@ -10,30 +10,6 @@
 #include "gateway.h"
 #include "pelagicontain.h"
 
-/* We use this stub to let Pelagicontain work with it but ignore the calls */
-class StubController
-{
-public:
-    virtual ~StubController()
-    {
-    }
-
-    StubController()
-    {
-    }
-
-    virtual ReturnCode setEnvironmentVariable(const std::string &variable,
-            const std::string &value)
-    {
-        return ReturnCode::SUCCESS;
-    }
-
-    virtual ReturnCode systemCall(const std::string &cmd)
-    {
-        return ReturnCode::SUCCESS;
-    }
-};
-
 /* Mock the PAMAbstractInterface class */
 class MockPAMAbstractInterface :
     public PAMAbstractInterface
@@ -88,7 +64,6 @@ TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
 
     MockPAMAbstractInterface pam;
     Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
-    StubController controller;
     Pelagicontain pc(cookie);
     pc.setPAM(pam);
 
@@ -116,7 +91,6 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
     /* Nice mock, i.e. don't warn about uninteresting calls on this mock */
     NiceMock<MockPAMAbstractInterface> pam;
     Glib::RefPtr<Glib::MainLoop> mainloop = Glib::MainLoop::create();
-    StubController controller;
 
     MockGateway gw1, gw2, gw3;
 

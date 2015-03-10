@@ -92,7 +92,7 @@ bool NetworkGateway::generateIP()
 bool NetworkGateway::setDefaultGateway()
 {
     std::string cmd = "route add default gw " + m_gateway;
-    systemCall(cmd);
+    executeInContainer(cmd);
 
     return true;
 }
@@ -108,7 +108,7 @@ bool NetworkGateway::up()
         cmd = "ifconfig eth0 up";
     }
 
-    systemCall(cmd);
+    executeInContainer(cmd);
 
     /* The route to the default gateway must be added
        each time the interface is brought up again */
@@ -118,7 +118,7 @@ bool NetworkGateway::up()
 bool NetworkGateway::down()
 {
     std::string cmd = "ifconfig eth0 down";
-    systemCall(cmd);
+    executeInContainer(cmd);
 
     return true;
 }
@@ -129,7 +129,7 @@ bool NetworkGateway::isBridgeAvailable()
     bool ret = false;
     std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \"" << BRIDGE_INTERFACE << "\" | grep -q \"" << m_gateway << "\"";
 
-    if ( isSuccess( systemCall(cmd) ) ) {
+    if ( isSuccess( executeInContainer(cmd) ) ) {
         ret = true;
     } else {
         log_error() << "No network bridge configured";

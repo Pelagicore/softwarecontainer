@@ -65,6 +65,7 @@ public:
     static constexpr const char *ID = "devicenode";
 
     DeviceNodeGateway();
+
     ~DeviceNodeGateway()
     {
     }
@@ -74,12 +75,8 @@ public:
     /*!
      *  Implements Gateway::activate
      *
-     * This function will iterate over all devices and issue mknod and chmod commands using
-     * ControllerAbstractInterface::systemCall(), which are run in the
-     * container. Calls to ControllerAbstractInterface::systemCall() are
-     * executed in sequence, and if a call fails, any subsequent calls will not
-     * be executed.
-     *
+     * This function will iterate over all devices and issue mknod and chmod commands, which are run in the
+     * container.
      * \return true upon success; all commands executed successfully, false
      *              otherwise
      */

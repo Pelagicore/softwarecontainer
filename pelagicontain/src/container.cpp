@@ -488,7 +488,7 @@ bool Container::mountApplication(const std::string &appDirBase)
     return allOk;
 }
 
-ReturnCode Container::systemCall(const std::string &cmd)
+ReturnCode Container::executeInContainer(const std::string &cmd)
 {
     ensureContainerRunning();
 

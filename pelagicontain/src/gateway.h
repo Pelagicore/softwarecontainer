@@ -87,19 +87,12 @@ public:
         return getContainer().setEnvironmentVariable(variable, value);
     }
 
-    /*! Notifies the controller to issue the system call
-     *  defined in the cmd argument.
-     *
-     * \return True if all went well, false if not
+    /*! Execute the given command in the container
      */
-    ReturnCode systemCall(const std::string &cmd)
+    ReturnCode executeInContainer(const std::string &cmd)
     {
-        return getContainer().systemCall(cmd);
+        return getContainer().executeInContainer(cmd);
     }
-
-    pid_t makePopenCall(const std::string &command, int *infp, int *outfp);
-
-    bool makePcloseCall(pid_t pid, int infp, int outfp);
 
 protected:
     Container *m_container = nullptr;

@@ -178,7 +178,7 @@ public:
 
     ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
 
-    ReturnCode systemCall(const std::string &cmd);
+    ReturnCode executeInContainer(const std::string &cmd);
 
 private:
     static int executeInContainerEntryFunction(void *param);
