@@ -155,7 +155,9 @@ int main(int argc, char * *argv)
     DBus::default_dispatcher = &dispatcher;
     dispatcher.attach( mainContext->gobj() );
 
-    pelagicontain::PelagicontainLib lib(containerRoot.c_str(), configFilePath);
+    std::string configFilePathString = configFilePath;
+    PelagicontainWorkspace workspace(containerRoot, configFilePathString);
+    pelagicontain::PelagicontainLib lib(workspace);
     lib.setMainLoopContext(mainContext);
 
     //    std::string busName = "com.pelagicore.Pelagicontain" + cookie;

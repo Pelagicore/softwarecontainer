@@ -38,9 +38,18 @@ bool existsInFileSystem(const std::string &path)
     return (getStat(path).st_mode != 0);
 }
 
-std::string parentPath(const std::string &path)
+std::string parentPath(const std::string &path_)
 {
     static constexpr const char *separator = "/";
+    static constexpr const char separator_char = '/';
+
+    auto path = path_;
+
+    // Remove trailing backslashes
+    while ( (path.size() > 0) && (path[path.size() - 1] == separator_char) ) {
+        path.resize(path.size() - 1);
+    }
+
     auto pos = path.rfind(separator);
     if (pos == std::string::npos) {
         pos = strlen(separator);
@@ -57,12 +66,11 @@ ReturnCode touch(const std::string &path)
         return ReturnCode::FAILURE;
     }
     return ReturnCode::SUCCESS;
-
 }
 
 ReturnCode writeToFile(const std::string &path, const std::string &content)
 {
-    log_debug() << "writing to " << path << " : " << content;
+    log_verbose() << "writing to " << path << " : " << content;
     std::ofstream out(path);     // TODO : error checking
     out << content;
     return ReturnCode::SUCCESS;

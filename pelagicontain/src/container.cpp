@@ -18,86 +18,8 @@
 #include "container.h"
 #include "pelagicore-common.h"
 
-#ifndef LXCTEMPLATE
-    #error Must define LXCTEMPLATE as path to lxc-pelagicontain
-#endif
-
-class DirectoryCleanUpHandler :
-    public Container::CleanUpHandler
-{
-public:
-    DirectoryCleanUpHandler(const std::string &path)
-    {
-        m_path = path;
-    }
-
-    ReturnCode clean() override
-    {
-        auto code = ReturnCode::FAILURE;
-
-        if (rmdir( m_path.c_str() ) == 0) {
-            code = ReturnCode::SUCCESS;
-        } else {
-            log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
-        }
-
-        return code;
-    }
-
-    std::string m_path;
-};
-
-class FileCleanUpHandler :
-    public Container::CleanUpHandler
-{
-public:
-    FileCleanUpHandler(const std::string &path)
-    {
-        m_path = path;
-    }
-
-    ReturnCode clean() override
-    {
-        auto code = ReturnCode::FAILURE;
-
-        if (unlink( m_path.c_str() ) == 0) {
-            code = ReturnCode::SUCCESS;
-        } else {
-            log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
-        }
-
-        return code;
-    }
-
-    std::string m_path;
-};
-
-class MountCleanUpHandler :
-    public Container::CleanUpHandler
-{
-public:
-    MountCleanUpHandler(const std::string &path)
-    {
-        m_path = path;
-    }
-
-    ReturnCode clean() override
-    {
-        auto code = ReturnCode::FAILURE;
-
-        if (umount( m_path.c_str() ) == 0) {
-            code = ReturnCode::SUCCESS;
-        } else {
-            log_error() << "Can't unmount " << m_path << " . Error :" << strerror(errno);
-        }
-
-        return code;
-    }
-
-    std::string m_path;
-};
-
 std::vector<const char *> Container::s_LXCContainerStates;
+const char *Container::s_LXCRoot;
 
 void Container::init_lxc()
 {
@@ -108,6 +30,7 @@ void Container::init_lxc()
         lxc_get_wait_states( s_LXCContainerStates.data() );
         assert( (int)LXCContainerState::ELEMENT_COUNT == s_LXCContainerStates.size() );
         bInitialized = true;
+        s_LXCRoot = lxc_get_global_config_item(LXC_CONTAINERS_ROOT_CONFIG_ITEM);
     }
 }
 
@@ -154,32 +77,23 @@ ReturnCode Container::initialize()
         log_error() << "Could not set up all needed directories";
     }
 
-    auto mountRes = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_BIND, NULL);
-    assert(mountRes == 0);
-    mountRes = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_UNBINDABLE, NULL);
-    assert(mountRes == 0);
-    mountRes = mount(gatewayDir.c_str(), gatewayDir.c_str(), "", MS_SHARED, NULL);
-    assert(mountRes == 0);
-    m_cleanupHandlers.push_back( new MountCleanUpHandler(gatewayDir) );
+    createSharedMountPoint(gatewayDir);
 
     m_initialized = allOk;
 
     return allOk ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
-ReturnCode Container::createDirectory(const std::string &path)
+ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
 {
     if ( isDirectory(path) ) {
         return ReturnCode::SUCCESS;
     }
 
-    auto parent = parentPath(path);
-    if ( !isDirectory(parent) ) {
-        createDirectory(parent);
-    }
+    createParentDirectory(path);
 
     if (mkdir(path.c_str(), S_IRWXU) == -1) {
-        log_error() << "Could not create directory " << path << " / " << strerror(errno);
+        log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
         return ReturnCode::FAILURE;
     }
 
@@ -192,14 +106,6 @@ ReturnCode Container::createDirectory(const std::string &path)
 
 Container::~Container()
 {
-    // Clean up all created directories, files, and mount points
-    for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
-        if ( !isSuccess( (*it)->clean() ) ) {
-            log_error() << "Error";
-        }
-        delete *it;
-    }
-
     if ( isContainerDeleteEnabled() ) {
         destroy();
         if (m_container != nullptr) {
@@ -260,7 +166,9 @@ void Container::create()
 
     m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv);
 
-    log_debug() << "Container created";
+    m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
+
+    log_debug() << "Container created. RootFS: " << m_rootFSPath;
 
 }
 
@@ -300,6 +208,8 @@ pid_t Container::start()
         log_debug() << "Execute: " << lxcCommand;
 
         try {
+            //          log_debug() << "Sleep";sleep(2);
+            system("find /tmp/container");
             Glib::spawn_async_with_pipes(
                     ".",
                     executeCommandVec,
@@ -307,6 +217,7 @@ pid_t Container::start()
                     Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
                     sigc::slot<void>(),
                     &pid);
+            //            sleep(2); log_debug() << "Done";
         } catch (const Glib::Error &ex) {
             log_error() << "spawn error: " << ex.what();
             pid = 0;
@@ -393,8 +304,7 @@ pid_t Container::attach(const std::string &commandLine, uid_t userID)
 
 ReturnCode Container::setUser(uid_t userID)
 {
-
-    log_warning() << "Setting env for userID : " << userID;
+    log_info() << "Setting env for userID : " << userID;
 
     struct passwd *pw = getpwuid(userID);
     if (pw != nullptr) {
@@ -555,35 +465,7 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
 ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
 {
     ensureContainerRunning();
-
-    int flags = MS_BIND;
-
-    if (readOnly) {
-        flags |= MS_RDONLY;
-    }
-
-    log_debug() << "Mounting " << (readOnly ? " readonly " : "read/write ") << src << " in " << dst << " / flags: " << flags;
-
-    int mountRes = mount(src.c_str(), // source
-            dst.c_str(),              // target
-            "",                       // fstype
-            flags,                  // flags
-            NULL);                    // data
-
-    auto result = ReturnCode::FAILURE;
-
-    if (mountRes == 0) {
-        // Success
-        m_cleanupHandlers.push_back( new MountCleanUpHandler(dst) );
-
-        log_verbose() << "Mounted folder " << src << " in " << dst;
-        result = ReturnCode::SUCCESS;
-    } else {
-        // Failure
-        log_error() << "Could not mount into container: src=" << src << " , dst=" << dst << " err=" << strerror(errno);
-    }
-
-    return result;
+    return FileToolkitWithUndo::bindMount(src, dst, readOnly);
 }
 
 ReturnCode Container::mountDevice(const std::string &pathInHost)
@@ -596,7 +478,6 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
 
 bool Container::mountApplication(const std::string &appDirBase)
 {
-
     bool allOk = true;
     allOk &= isSuccess( bindMount(appDirBase + "/bin", applicationMountDir() + "/bin") );
     allOk &= isSuccess( bindMount(appDirBase + "/shared", applicationMountDir() + "/shared") );
@@ -631,7 +512,8 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
     for (auto &var : m_gatewayEnvironmentVariables) {
         s << "export " << var.first << "='" << var.second << "'\n";
     }
-    writeToFile(gatewaysDir() + "/env", s);
+    std::string path = gatewaysDir() + "/env";
+    FileToolkitWithUndo::writeToFile(path, s);
 
     return ReturnCode::SUCCESS;
 }

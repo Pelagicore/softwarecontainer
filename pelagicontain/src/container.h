@@ -7,9 +7,10 @@
 
 #include <string>
 #include <vector>
-#include <sys/mount.h>
 
 #include "pelagicontain-common.h"
+
+
 
 /*! Container is an abstraction of the specific containment technology used.
  *
@@ -18,12 +19,12 @@
  * implements the specifics behind the conceptual phases of 'Pereload', 'Launch',
  * and 'Shutdown'.
  */
-class Container
+class Container :
+    private FileToolkitWithUndo
 {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
 
     static constexpr const char *GATEWAYS_PATH = "/gateways";
-    static constexpr const char *LATE_MOUNT_PATH = "/late_mounts";
 
     enum class LXCContainerState
     {
@@ -31,6 +32,8 @@ class Container
     };
 
     static std::vector<const char *> s_LXCContainerStates;
+    static const char *s_LXCRoot;
+    ;
 
     static void init_lxc();
 
@@ -40,17 +43,6 @@ class Container
     }
 
 public:
-    class CleanUpHandler
-    {
-protected:
-        LOG_SET_CLASS_CONTEXT( Container::getDefaultContext() );
-public:
-        virtual ~CleanUpHandler()
-        {
-        }
-        virtual ReturnCode clean() = 0;
-    };
-
     /// A function to be executed in the container
     typedef std::function<int ()> ContainerFunction;
 
@@ -103,6 +95,11 @@ public:
     std::string bindMountFolderInContainer(const std::string &src, const std::string &dst, bool readonly = true);
 
     ReturnCode mountDevice(const std::string &pathInHost);
+
+    ReturnCode createSymLink(const std::string &source, const std::string &destination)
+    {
+        return FileToolkitWithUndo::createSymLink(source, destination);
+    }
 
     /**
      * Old style mount. Used by headless launcher
@@ -174,6 +171,11 @@ public:
         return m_containerRoot;
     }
 
+    const std::string &rootFS() const
+    {
+        return m_rootFSPath;
+    };
+
     ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
 
     ReturnCode systemCall(const std::string &cmd);
@@ -182,20 +184,10 @@ private:
     static int executeInContainerEntryFunction(void *param);
 
     /**
-     * Create a directory, and if successful append it to a list of dirs
-     * to be deleted in the dtor. Since nestled dirs will need to be
-     * deleted in reverse order to creation insert to the beginning of
-     * the list.
-     */
-    ReturnCode createDirectory(const std::string &path);
-
-    /**
      * Create a bind mount. On success the mount will be added to a list of
      * mounts that will be unmounted in the dtor.
      */
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
-
-    std::vector<CleanUpHandler *> m_cleanupHandlers;
 
     /**
      * The LXC configuration file for this container
@@ -206,6 +198,8 @@ private:
      * The unique name of the LXC container
      */
     const std::string &m_id;
+
+    std::string m_rootFSPath;
 
     /**
      * The name assigned to the container

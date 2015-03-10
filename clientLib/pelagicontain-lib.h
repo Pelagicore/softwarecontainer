@@ -15,14 +15,55 @@ class JobAbstract;
 
 namespace pelagicontain {
 
+class PelagicontainWorkspace :
+    private FileToolkitWithUndo
+{
 
-class PelagicontainLib
+    LOG_DECLARE_CLASS_CONTEXT("PCLW", "Pelagicontain library workspace");
+
+public:
+    PelagicontainWorkspace(const std::string &containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE,
+                const std::string &configFilePath = PELAGICONTAIN_DEFAULT_CONFIG) :
+        m_containerRoot(containerRootFolder), m_containerConfig(configFilePath)
+    {
+        // Make sure path ends in '/' since it might not always be checked
+        if (m_containerRoot.back() != '/') {
+            m_containerRoot += "/";
+        }
+
+        if ( isError( checkWorkspace() ) ) {
+            log_error() << "Failed when checking workspace";
+            assert(false);
+        }
+
+    }
+
+    ~PelagicontainWorkspace()
+    {
+        deleteWorkspace();
+    }
+
+    ReturnCode deleteWorkspace();
+
+    /**
+     * Check if the workspace is present and create it if needed
+     */
+    ReturnCode checkWorkspace();
+
+    std::string m_containerRoot;
+    std::string m_containerConfig;
+
+};
+
+PelagicontainWorkspace &getDefaultWorkspace();
+
+class PelagicontainLib :
+    private FileToolkitWithUndo
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "Pelagicontain library");
 
-    PelagicontainLib(const char *containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE
-                , const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG);
+    PelagicontainLib( PelagicontainWorkspace &workspace = getDefaultWorkspace() );
 
     ~PelagicontainLib();
 
@@ -76,7 +117,7 @@ public:
 
     std::string getContainerDir()
     {
-        return m_containerRoot + "/" + getContainerID();
+        return m_workspace.m_containerRoot + "/" + getContainerID();
     }
 
     std::string getGatewayDir()
@@ -95,19 +136,10 @@ public:
 
     void validateContainerID();
 
-    static ReturnCode deleteWorkspace(const std::string &containerRoot = PELAGICONTAIN_DEFAULT_WORKSPACE);
-
-    /**
-     * Check if the workspace is present and create it if needed
-     */
-    static ReturnCode checkWorkspace(const std::string &containerRoot = PELAGICONTAIN_DEFAULT_WORKSPACE);
-
 private:
+    PelagicontainWorkspace &m_workspace;
 
     std::string m_containerID;
-    std::string m_containerConfig;
-    std::string m_containerRoot;
-
     std::string m_containerName;
 
     Container m_container;

@@ -6,26 +6,6 @@
 
 constexpr const char *Gateway::XDG_RUNTIME_DIR_VARIABLE_NAME;
 
-ReturnCode Gateway::createSymLinkInContainer(const std::string &source, const std::string &destination)
-{
-
-    auto m_pid = getContainer().executeInContainer([ = ]() {
-                log_debug() << "symlink " << source << " to " << destination;
-                auto r = symlink( source.c_str(), destination.c_str() );
-                if (r != 0) {
-                    log_error() << "Can't create symlink " << source << " to " <<
-                    destination;
-                }
-                return r;
-            });
-
-    assert(m_pid != 0);
-
-    int status;
-    waitpid(m_pid, &status, 0);
-    return (status == 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
-}
-
 bool Gateway::setConfig(const std::string &config)
 {
     JSonElement rootElement(config);

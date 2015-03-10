@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sys/wait.h>
+#include <sys/mount.h>
 
 #include <map>
 #include <memory>
@@ -54,6 +55,8 @@ static constexpr const char *APP_BINARY = "/appbin/containedapp";
 
 static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/PelagicontainAgent";
 static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.PelagicontainAgent";
+
+static constexpr const char *LATE_MOUNT_PATH = "/late_mounts";
 
 static constexpr uid_t ROOT_UID = 0;
 
@@ -188,6 +191,222 @@ public:
 
 private:
     Type m_value;
+
+};
+
+
+
+class CleanUpHandler
+{
+protected:
+    LOG_DECLARE_CLASS_CONTEXT("CLEA", "Cleanup handler");
+public:
+    virtual ~CleanUpHandler()
+    {
+    }
+    virtual ReturnCode clean() = 0;
+};
+
+
+class DirectoryCleanUpHandler :
+    public CleanUpHandler
+{
+public:
+    DirectoryCleanUpHandler(const std::string &path)
+    {
+        m_path = path;
+    }
+
+    ReturnCode clean() override
+    {
+        auto code = ReturnCode::FAILURE;
+
+        while (true) {
+
+            if ( !existsInFileSystem(m_path) ) {
+                log_warning() << "Folder " << m_path << " does no exist";
+                return ReturnCode::SUCCESS;
+            }
+
+            if (rmdir( m_path.c_str() ) == 0) {
+                return ReturnCode::SUCCESS;
+            } else {
+                log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
+                sleep(1);
+            }
+        }
+
+        return code;
+    }
+
+    std::string m_path;
+};
+
+class FileCleanUpHandler :
+    public CleanUpHandler
+{
+public:
+    FileCleanUpHandler(const std::string &path)
+    {
+        m_path = path;
+    }
+
+    ReturnCode clean() override
+    {
+        auto code = ReturnCode::FAILURE;
+
+        if (unlink( m_path.c_str() ) == 0) {
+            code = ReturnCode::SUCCESS;
+        } else {
+            log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
+        }
+
+        return code;
+    }
+
+    std::string m_path;
+};
+
+class MountCleanUpHandler :
+    public CleanUpHandler
+{
+public:
+    MountCleanUpHandler(const std::string &path)
+    {
+        m_path = path;
+    }
+
+    ReturnCode clean() override
+    {
+        auto code = ReturnCode::FAILURE;
+
+        // Lazy unmount. Should be the equivalent of the "umount -l" command. The unmount will actually happen when no-one uses the resource anymore.
+        if (umount( m_path.c_str() ) == 0) {
+            code = ReturnCode::SUCCESS;
+            log_debug() << "Unmounted " << m_path;
+        } else {
+            log_warn() << "Can't unmount " << m_path << " . Error :" << strerror(errno) << ". Trying to force umount";
+            if (umount2(m_path.c_str(), MNT_FORCE) == 0) {
+                log_warn() << "Can't force unmount " << m_path << " . Error :" << strerror(errno) << ". Trying to force umount";
+            }
+        }
+
+        return code;
+    }
+
+    std::string m_path;
+};
+
+
+class FileToolkitWithUndo
+{
+    LOG_DECLARE_CLASS_CONTEXT("CLEA", "File toolkit");
+
+public:
+    ~FileToolkitWithUndo()
+    {
+        // Clean up all created directories, files, and mount points
+        for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
+            if ( !isSuccess( (*it)->clean() ) ) {
+                log_error() << "Error";
+            }
+            delete *it;
+        }
+    }
+
+    ReturnCode createParentDirectory(const std::string &path)
+    {
+        log_debug() << path;
+        auto parent = parentPath(path);
+        if ( !isDirectory(parent) ) {
+            createDirectory(parent);
+        }
+        return ReturnCode::SUCCESS;
+    }
+
+    /**
+     * Create a directory, and if successful append it to a list of dirs
+     * to be deleted in the dtor. Since nestled dirs will need to be
+     * deleted in reverse order to creation insert to the beginning of
+     * the list.
+     */
+    ReturnCode createDirectory(const std::string &path);
+
+    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly)
+    {
+
+        int flags = MS_BIND;
+
+        if (readOnly) {
+            flags |= MS_RDONLY;
+        }
+
+        log_debug() << "Mounting " << (readOnly ? " readonly " : "read/write ") << src << " in " << dst << " / flags: " << flags;
+
+        int mountRes = mount(src.c_str(), // source
+                    dst.c_str(),          // target
+                    "",                   // fstype
+                    flags,              // flags
+                    NULL);                // data
+
+        auto result = ReturnCode::FAILURE;
+
+        if (mountRes == 0) {
+            // Success
+            m_cleanupHandlers.push_back( new MountCleanUpHandler(dst) );
+
+            log_verbose() << "Mounted folder " << src << " in " << dst;
+            result = ReturnCode::SUCCESS;
+        } else {
+            // Failure
+            log_error() << "Could not mount into container: src=" << src << " , dst=" << dst << " err=" << strerror(errno);
+        }
+
+        return result;
+    }
+
+    ReturnCode createSharedMountPoint(const std::string &path)
+    {
+        // MS_MGC_VAL |
+        auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, NULL);
+        assert(mountRes == 0);
+        mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, NULL);
+        assert(mountRes == 0);
+        mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, NULL);
+        assert(mountRes == 0);
+        m_cleanupHandlers.push_back( new MountCleanUpHandler(path) );
+
+        return ReturnCode::SUCCESS;
+    }
+
+    ReturnCode writeToFile(const std::string &path, const std::string &content)
+    {
+        auto ret = pelagicontain::writeToFile(path, content);
+        if ( isError(ret) ) {
+            return ret;
+        }
+        m_cleanupHandlers.push_back( new FileCleanUpHandler(path) );
+        return ReturnCode::SUCCESS;
+    }
+
+    ReturnCode createSymLink(const std::string &source, const std::string &destination)
+    {
+        log_debug() << "creating symlink " << source << " pointing to " << destination;
+
+        createDirectory( parentPath(source) );
+
+        if (symlink( destination.c_str(), source.c_str() ) == 0) {
+            m_cleanupHandlers.push_back( new FileCleanUpHandler(source) );
+        } else {
+            log_error() << "Error creating symlink " << destination << " pointing to " << source << ". Error: " << strerror(errno);
+            return ReturnCode::FAILURE;
+        }
+
+        return ReturnCode::SUCCESS;
+    }
+
+protected:
+    std::vector<CleanUpHandler *> m_cleanupHandlers;
 
 };
 

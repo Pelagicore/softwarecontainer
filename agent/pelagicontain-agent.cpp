@@ -62,7 +62,8 @@ public:
         }
     }
 
-    void deleteContainer(ContainerID containerID) {
+    void deleteContainer(ContainerID containerID)
+    {
 
         bool valid = ( ( containerID < m_containers.size() ) && (m_containers[containerID] != nullptr) );
         if (valid) {

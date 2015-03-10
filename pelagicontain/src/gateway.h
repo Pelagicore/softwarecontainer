@@ -72,8 +72,6 @@ public:
         return true;
     }
 
-    ReturnCode createSymLinkInContainer(const std::string &source, const std::string &destination);
-
     Container &getContainer()
     {
         return *m_container;

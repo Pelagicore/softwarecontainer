@@ -24,10 +24,17 @@
 
 #include "config.h"
 
+namespace pelagicontain {
 
-PelagicontainLib::PelagicontainLib(const char *containerRootFolder, const char *configFilePath) :
-    m_containerConfig(configFilePath), m_containerRoot(containerRootFolder),
-    m_container(getContainerID(), m_containerName, m_containerConfig, m_containerRoot)
+PelagicontainWorkspace &getDefaultWorkspace()
+{
+    static PelagicontainWorkspace defaultWorkspace;
+    return defaultWorkspace;
+}
+
+PelagicontainLib::PelagicontainLib(PelagicontainWorkspace &workspace) :
+    m_workspace(workspace),
+    m_container(getContainerID(), m_containerName, m_workspace.m_containerConfig, m_workspace.m_containerRoot)
 {
     m_pelagicontain.setMainLoopContext(m_ml);
 }
@@ -55,27 +62,35 @@ void PelagicontainLib::validateContainerID()
     }
 }
 
-ReturnCode PelagicontainLib::deleteWorkspace(const std::string &containerRoot)
+ReturnCode PelagicontainWorkspace::deleteWorkspace()
 {
-    if (isDirectory(containerRoot)) {
-        rmdir(containerRoot.c_str());
+    if ( isDirectory(m_containerRoot) ) {
+        rmdir( m_containerRoot.c_str() );
     }
 
-    return existsInFileSystem(containerRoot) ? ReturnCode::FAILURE : ReturnCode::SUCCESS;
+    return existsInFileSystem(m_containerRoot) ? ReturnCode::FAILURE : ReturnCode::SUCCESS;
 }
 
-ReturnCode PelagicontainLib::checkWorkspace(const std::string &containerRoot)
+//FileToolkitWithUndo PelagicontainLib::s_fileToolkit;
+
+ReturnCode PelagicontainWorkspace::checkWorkspace()
 {
-    if ( !isDirectory(containerRoot) ) {
+    if ( !isDirectory(m_containerRoot) ) {
+
+        createDirectory(m_containerRoot);
+        std::string lateMountPath = m_containerRoot + LATE_MOUNT_PATH;
+        createDirectory(lateMountPath);
+        createSharedMountPoint(lateMountPath);
+
         std::string cmdLine = INSTALL_PREFIX;
-        cmdLine += "/bin/setup_pelagicontain.sh " + containerRoot;
+        cmdLine += "/bin/setup_pelagicontain.sh " + m_containerRoot;
         log_debug() << "Creating workspace : " << cmdLine;
         int returnCode;
         try {
             Glib::spawn_sync("", Glib::shell_parse_argv(
-                        cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
-                    sigc::slot<void>(), nullptr,
-                    nullptr, &returnCode);
+                            cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
+                        sigc::slot<void>(), nullptr,
+                        nullptr, &returnCode);
         } catch (Glib::SpawnError e) {
             log_error() << "Failed to spawn " << cmdLine << ": code " << e.code() << " msg: " << e.what();
             return ReturnCode::FAILURE;
@@ -91,16 +106,6 @@ ReturnCode PelagicontainLib::checkWorkspace(const std::string &containerRoot)
 
 ReturnCode PelagicontainLib::preload()
 {
-
-    // Make sure path ends in '/' since it might not always be checked
-    if (m_containerRoot.back() != '/') {
-        m_containerRoot += "/";
-    }
-
-    if ( isError( checkWorkspace(m_containerRoot) ) ) {
-        log_error() << "Failed when checking workspace";
-        return ReturnCode::FAILURE;
-    }
 
     if ( isError( m_container.initialize() ) ) {
         log_error() << "Could not setup container for preloading";
@@ -149,14 +154,14 @@ ReturnCode PelagicontainLib::init()
 
 #ifdef ENABLE_DBUSGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
-                    DBusGateway::SessionProxy,
-                    getGatewayDir(),
-                    getContainerID() ) ) );
+                        DBusGateway::SessionProxy,
+                        getGatewayDir(),
+                        getContainerID() ) ) );
 
     m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
-                    DBusGateway::SystemProxy,
-                    getGatewayDir(),
-                    getContainerID() ) ) );
+                        DBusGateway::SystemProxy,
+                        getGatewayDir(),
+                        getContainerID() ) ) );
 #endif
 
     m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
@@ -171,8 +176,8 @@ ReturnCode PelagicontainLib::init()
     // connect the watcher if the spawning went well.
     if (m_pcPid != 0) {
         addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
-                    m_pelagicontain.shutdownContainer();
-                }, m_ml);
+                        m_pelagicontain.shutdownContainer();
+                    }, m_ml);
     }
 
     m_initialized = true;
@@ -185,4 +190,6 @@ void PelagicontainLib::openTerminal(const std::string &terminalCommand) const
     std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << m_container.id();
     log_info() << command;
     system( command.c_str() );
+}
+
 }

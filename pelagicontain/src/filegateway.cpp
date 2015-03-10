@@ -41,7 +41,7 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
     }
 
     if (createSymlinkInContainer) {
-        createSymLinkInContainer(path, pathInHost);
+        getContainer().createSymLink(getContainer().rootFS() + pathInHost, path);
     }
 
     return ReturnCode::SUCCESS;
