@@ -130,7 +130,7 @@ void Container::create()
             m_configFile.c_str(),
             name());
 
-    log_debug() << lxcCommand;
+    log_debug() << (const char*) lxcCommand;
     system(lxcCommand);
 }
 
@@ -149,7 +149,7 @@ pid_t Container::execute()
     executeCommandVec = Glib::shell_parse_argv(std::string(lxcCommand));
     std::vector<std::string> envVarVec = {"MOUNT_DIR=" + m_mountDir};
 
-    log_debug() << lxcCommand;
+    log_debug() << (const char*) lxcCommand;
 
     pid_t pid;
     try {
