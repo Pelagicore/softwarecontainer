@@ -21,16 +21,6 @@ class Generator
     LOG_DECLARE_CLASS_CONTEXT("GEN", "Generator");
 
 public:
-    /*!  \brief Generate a gateway address
-     *
-     * Given the network portion of an IP address, this will output a suggested
-     * gateway IP address.
-     *
-     * \return A gateway IP address
-     * \return NULL upon error
-     */
-    char *gen_gw_ip_addr(char *ip_addr_net);
-
     /*! \brief Generate an IP address
      *
      * Calling this function will generate a new IP address. A counter is kept in
