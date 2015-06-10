@@ -33,25 +33,7 @@ DBusGateway::~DBusGateway()
 
 bool DBusGateway::setConfig(const std::string &config)
 {
-    JSonElement rootElement(config);
-
-    if ( !rootElement.isArray() ) {
-        return false;
-    }
-
-    std::vector<JSonElement> elements;
-    rootElement.readChildren(elements);
-
-    if (elements.size() > 1) {
-        // TODO : remove that limitation
-        log_error() << "The DBUS gateway currently supports only 1 configuration snippet";
-        return false;
-    }
-
-    if (elements.size() == 1) {
-        m_config = elements[0].dump();
-    }
-
+    m_config = config;
     if (m_config.length() > 1) {
         m_hasBeenConfigured = true;
         return true;
