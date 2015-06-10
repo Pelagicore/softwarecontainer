@@ -84,11 +84,9 @@ void signalHandler(int signum)
 int main(int argc, char * *argv)
 {
     const char *summary = "Pelagicore container utility. "
-            "Requires an absolute path to the container root, "
-            "the command to run inside the container and "
-            "an alphanumerical cookie string as first, second and"
-            "third argument respectively";
-    const char *paramsDescription = "[container root directory (abs path)] [cookie]";
+            "Requires an absolute path to the container root";
+
+    const char *paramsDescription = "[container root directory (abs path)]";
 
     pelagicore::CommandLineParser commandLineParser(summary,
             paramsDescription,
@@ -96,7 +94,6 @@ int main(int argc, char * *argv)
             "");
 
     std::string containerRoot;
-    std::string cookie;
     const char *configFilePath = PELAGICONTAIN_DEFAULT_CONFIG;
     commandLineParser.addOption(configFilePath,
             "with-config-file",
@@ -114,13 +111,12 @@ int main(int argc, char * *argv)
         return -1;
     }
 
-    if (argc < 3) {
+    if (argc < 2) {
         log_error() << "Invalid arguments";
         commandLineParser.printHelp();
         return -1;
     } else {
         containerRoot = std::string(argv[1]);
-        cookie = std::string(argv[2]);
     }
 
     if (containerRoot.c_str()[0] != '/') {
