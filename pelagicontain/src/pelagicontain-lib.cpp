@@ -18,6 +18,10 @@
 #include "devicenodegateway.h"
 #endif
 
+#ifdef ENABLE_CGROUPSGATEWAY
+#include "cgroupsgateway.h"
+#endif
+
 #include "envgateway.h"
 #include "waylandgateway.h"
 #include "filegateway.h"
@@ -167,6 +171,10 @@ ReturnCode PelagicontainLib::init()
                         DBusGateway::SystemProxy,
                         getGatewayDir(),
                         getContainerID())));
+#endif
+
+#ifdef ENABLE_CGROUPSGATEWAY
+    m_gateways.push_back(std::unique_ptr<Gateway>(new CgroupsGateway()));
 #endif
 
     m_gateways.push_back(std::unique_ptr<Gateway>(new WaylandGateway()));

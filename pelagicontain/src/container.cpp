@@ -245,6 +245,12 @@ pid_t Container::attach(const std::string &commandLine, uid_t userID)
     return attach(commandLine, m_gatewayEnvironmentVariables, userID);
 }
 
+ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
+{
+    bool success = m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
+    return success ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+}
+
 ReturnCode Container::setUser(uid_t userID)
 {
     log_info() << "Setting env for userID : " << userID;

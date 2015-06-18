@@ -85,6 +85,8 @@ public:
      */
     pid_t attach(const std::string &commandLine, uid_t userID = ROOT_UID);
 
+    ReturnCode setCgroupItem(std::string subsys, std::string value);
+
     ReturnCode setUser(uid_t userID);
 
     pid_t executeInContainer(ContainerFunction function,

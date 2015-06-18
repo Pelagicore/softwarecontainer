@@ -6,9 +6,6 @@
 #pragma once
 
 #include "gateway.h"
-#include "controllerinterface.h"
-#include "systemcallinterface.h"
-
 
 /*! The cgroups gateway sets cgroups related settings for the container.
  *
@@ -34,7 +31,11 @@
  * \endcode
  *
  * The root object is an array of seting key/value pair objects. Each key/value pair
+<<<<<<< 3187569eaad51dda79170e5bb753f15a208829b9
  * must have the 'name' and 'value' defined. With the above example config the calls
+=======
+ * must have the 'setting' and 'value' defined. With the above example config the calls
+>>>>>>> Added a cgroups gateway
  * to lxc-cgroup would set the following:
  * - lxc.cgroup.memory.limit_in_bytes to '128M'
  * - lxc.cgroup.cpu.shares to '256'
@@ -47,44 +48,15 @@ class CgroupsGateway: public Gateway
     LOG_DECLARE_CLASS_CONTEXT("CGRO", "Cgroups gateway");
 
 public:
-    CgroupsGateway(ControllerAbstractInterface &controllerInterface,
-                    SystemcallAbstractInterface &systemcallInterface,
-                    const std::string &containerName);
+    static constexpr const char *ID = "cgroups";
 
+    CgroupsGateway();
     ~CgroupsGateway() { }
 
-    /*!
-     *  Implements Gateway::id
-     */
-    virtual std::string id();
-
-    /*!
-     *  Implements Gateway::setConfig
-     *
-     * Parses the gateway config, which will be applied by a call to activate()
-     *
-     * \param config JSON configuration object as string
-     * \returns true if config could be parsed correctly, false otherwise
-     */
-    virtual bool setConfig(const std::string &config);
-
-    /*!
-     *  Implements Gateway::activate
-     *
-     * Calls lxc-cgroup to apply the settings from the gateway config one by one.
-     *
-     * \returns true if all calls to lxc-cgroup were successful, false otherwise
-     */
-    virtual bool activate();
+    ReturnCode readConfigElement(const JSonElement &element) override;
+    bool activate() override;
 
 private:
-    bool parseSettingsFromConfig(const std::string &config);
-
-    SystemcallAbstractInterface &m_systemcallInterface;
-    std::string m_containerName;
-
-    // Holds the settings parsed from the gateway config
-    std::vector<std::string> m_settings;
-
+    std::map<std::string, std::string> m_settings;
     bool m_hasBeenConfigured;
 };

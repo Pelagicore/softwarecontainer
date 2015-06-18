@@ -42,6 +42,10 @@
 
 #include "pelagicore-DBusCpp.h"
 
+#ifdef ENABLE_CGROUPSGATEWAY
+#include "cgroupsgateway.h"
+#endif
+
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
