@@ -58,11 +58,6 @@ bool CgroupsGateway::activate()
     return success;
 }
 
-bool CgroupsGateway::teardown()
-{
-    return true;
-}
-
 bool CgroupsGateway::parseSettingsFromConfig(const std::string &config)
 {
     json_error_t error;
