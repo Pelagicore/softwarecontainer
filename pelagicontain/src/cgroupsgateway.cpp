@@ -27,9 +27,13 @@ std::string CgroupsGateway::id()
 
 bool CgroupsGateway::setConfig(const std::string &config)
 {
-    m_settings = settingsFromConfig(config);
-    m_hasBeenConfigured = true;
-    return true;
+    bool parsingOk = parseSettingsFromConfig(config);
+    m_hasBeenConfigured = parsingOk;
+    if (!parsingOk) {
+        log_warning() << "Problems parsing CgroupsGateway configuration";
+    }
+
+    return parsingOk;
 }
 
 bool CgroupsGateway::activate()
@@ -59,7 +63,7 @@ bool CgroupsGateway::teardown()
     return true;
 }
 
-std::vector<std::string> CgroupsGateway::settingsFromConfig(const std::string &config)
+bool CgroupsGateway::parseSettingsFromConfig(const std::string &config)
 {
     json_error_t error;
     json_t *root;
@@ -69,35 +73,41 @@ std::vector<std::string> CgroupsGateway::settingsFromConfig(const std::string &c
     std::string settingString;
     std::string valueString;
     std::vector<std::string> settings;
+    bool parsingOk = true;
 
     root = json_loads(config.c_str(), 0, &error);
     if (!root) {
         log_error() << "Error on line " << error.line << ": " << error.text;
+        parsingOk = false;
         goto cleanup_parse_json;
     }
     if (!json_is_array(root)) {
         log_error() << "Error: root is not an array";
-        json_decref(root);
+        parsingOk = false;
+        goto cleanup_parse_json;
     }
 
     for (unsigned i = 0; i < json_array_size(root); i++) {
         data = json_array_get(root, i);
         if (!json_is_object(data)) {
             log_error() << "Error: data is not an object, index: " << i;
-            json_decref(root);
+            parsingOk = false;
+            goto cleanup_parse_json;
         }
 
         setting = json_object_get(data, "setting");
         if (!json_is_string(setting)) {
             log_error() << "Error: setting is not a string";
-            json_decref(root);
+            parsingOk = false;
+            goto cleanup_parse_json;
         }
         settingString = json_string_value(setting);
 
         value = json_object_get(data, "value");
         if (!json_is_string(value)) {
             log_error() << "Error, value is not a string";
-            json_decref(root);
+            parsingOk = false;
+            goto cleanup_parse_json;
         }
         valueString = json_string_value(value);
 
@@ -106,10 +116,12 @@ std::vector<std::string> CgroupsGateway::settingsFromConfig(const std::string &c
         settings.push_back(settingEntry);
     }
 
+    m_settings = settings;
+
 cleanup_parse_json:
     if (root) {
         json_decref(root);
     }
 
-    return settings;
+    return parsingOk;
 }

@@ -30,7 +30,7 @@ public:
     virtual bool teardown();
 
 private:
-    std::vector<std::string> settingsFromConfig(const std::string &config);
+    bool parseSettingsFromConfig(const std::string &config);
 
     SystemcallAbstractInterface &m_systemcallInterface;
     std::string m_containerName;
