@@ -3,6 +3,7 @@ option(ENABLE_PULSEGATEWAY "Enables pulse gateway" ON)
 option(ENABLE_NETWORKGATEWAY "Enables network gateway" ON)
 option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
 option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
+option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
 
 # Pulse is a special case since it has a dependency package
 if(ENABLE_PULSEGATEWAY)
@@ -28,6 +29,7 @@ gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
 gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
 gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
+gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
 
 find_package(SharedServiceInterfaces REQUIRED)
 

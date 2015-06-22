@@ -34,6 +34,10 @@
 #include "devicenodegateway.h"
 #endif
 
+#ifdef ENABLE_CGROUPSGATEWAY
+#include "cgroupsgateway.h"
+#endif
+
 LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
 LOG_DECLARE_DEFAULT_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
@@ -233,6 +237,12 @@ int main(int argc, char **argv)
                                                  DBusGateway::SystemProxy,
                                                  gatewayDir,
                                                  containerName));
+#endif
+
+#ifdef ENABLE_CGROUPSGATEWAY
+        pelagicontain->addGateway(new CgroupsGateway(controllerInterface,
+                                                    systemcallInterface,
+                                                    containerName));
 #endif
 
         pcPid = pelagicontain->preload(&container);
