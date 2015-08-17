@@ -15,7 +15,7 @@
 #include "CommandLineParser.h"
 #include "pelagicore-log.h"
 
-#include "UNIXSignalGlibHandler.h"
+#include "ivi-main-loop/UNIXSignalHandler.h"
 
 #include "pelagicore-DBusCpp.h"
 
@@ -297,6 +297,8 @@ public:
 
 int main(int argc, char * *argv)
 {
+	using ivi_main_loop::UNIXSignalHandler;
+
     pelagicore::CommandLineParser commandLineParser("Pelagicontain agent", "", PACKAGE_VERSION, "");
 
     int preloadCount = 0;
@@ -335,12 +337,15 @@ int main(int argc, char * *argv)
 
     auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
 
-    // Register signalHandler with signals
-    std::vector<int> signals = {SIGINT, SIGTERM};
-    pelagicore::UNIXSignalGlibHandler handler( signals, [&] (int signum) {
-                log_debug() << "caught signal " << signum;
-                ml->quit();
-            }, ml->get_context()->gobj() );
+    ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
+
+	// Register UNIX signal handler
+    auto signalHandler = [&] (int signal) {
+        log_debug() << "caught signal " << signal;
+        ml->quit();
+    };
+	UNIXSignalHandler handler(eventSourceManager);
+	handler.init(UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
 
     ml->run();
 

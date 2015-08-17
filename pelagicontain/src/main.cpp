@@ -38,7 +38,7 @@
 #include "cgroupsgateway.h"
 #endif
 
-#include "UNIXSignalGlibHandler.h"
+#include "ivi-main-loop/UNIXSignalHandler.h"
 
 #include "pelagicore-DBusCpp.h"
 
@@ -80,6 +80,7 @@ void signalHandler(int signum)
         pelagicontain->shutdown();
     }
 }
+using ivi_main_loop::UNIXSignalHandler;
 
 int main(int argc, char * *argv)
 {
@@ -234,18 +235,21 @@ int main(int argc, char * *argv)
 
     if ( !isError( lib.init() ) ) {
 
-        // Register signalHandler with signals
-        std::vector<int> signals = {SIGINT, SIGTERM};
-        pelagicore::UNIXSignalGlibHandler handler( signals, [&] (int signum) {
-                    log_debug() << "caught signal " << signum;
-                    switch (signum) {
-                    case SIGCHLD :
-                        break;
-                    default :
-                        lib.shutdown();
-                        break;
-                    }
-                }, ml->get_context()->gobj() );
+        ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
+
+    	// Register UNIX signal handler
+        auto signalHandler = [&] (int signal) {
+        	 log_debug() << "caught signal " << signal;
+        	                    switch (signal) {
+        	                    case SIGCHLD :
+        	                        break;
+        	                    default :
+        	                        lib.shutdown();
+        	                        break;
+        	                    }
+        };
+    	UNIXSignalHandler handler(eventSourceManager);
+    	handler.init(UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
 
         if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) ) {
             lib.openTerminal(terminalCommand);

@@ -189,8 +189,6 @@ pid_t Container::start()
         log_debug() << "Execute: " << lxcCommand;
 
         try {
-            //          log_debug() << "Sleep";sleep(2);
-            system("find /tmp/container");
             Glib::spawn_async_with_pipes(
                     ".",
                     executeCommandVec,
@@ -198,7 +196,6 @@ pid_t Container::start()
                     Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
                     sigc::slot<void>(),
                     &pid);
-            //            sleep(2); log_debug() << "Done";
         } catch (const Glib::Error &ex) {
             log_error() << "spawn error: " << ex.what();
             pid = 0;
