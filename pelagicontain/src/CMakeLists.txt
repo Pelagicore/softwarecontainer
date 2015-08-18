@@ -7,9 +7,8 @@ option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
 
 # Pulse is a special case since it has a dependency package
 if(ENABLE_PULSEGATEWAY)
-    pkg_check_modules(DEPENDENCIES REQUIRED libpulse jansson)
+    pkg_check_modules(DEPENDENCIES REQUIRED libpulse)
 else(ENABLE_PULSEGATEWAY)
-    pkg_check_modules(DEPENDENCIES REQUIRED jansson)
 endif(ENABLE_PULSEGATEWAY)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
@@ -52,6 +51,7 @@ TARGET_LINK_LIBRARIES( pelagicontainLib
     ${DBUSCPPGLIB_LIBRARIES}
     ${GLIBMM_LIBRARIES}
     ${LXC_LIBRARIES}
+    ${COMMON_DEPENDENCIES_LIBRARIES}
 )
 
 set_target_properties(pelagicontainLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
@@ -64,6 +64,7 @@ add_executable( pelagicontain
 
 TARGET_LINK_LIBRARIES( pelagicontain
     pelagicontainLib
+    ${COMMON_DEPENDENCIES_LIBRARIES}
 )
 
 install(TARGETS pelagicontain RUNTIME DESTINATION bin)

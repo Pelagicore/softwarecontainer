@@ -13,6 +13,7 @@ TARGET_LINK_LIBRARIES( pelagicontain-agent
     ${DBUSCPPGLIB_LIBRARIES}
     ${GLIBMM_LIBRARIES}
     ${LXC_LIBRARIES}
+    ${COMMON_DEPENDENCIES_LIBRARIES}
     pelagicontainLib
 )
 

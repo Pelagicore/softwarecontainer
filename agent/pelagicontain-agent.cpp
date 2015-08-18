@@ -344,8 +344,8 @@ int main(int argc, char * *argv)
         log_debug() << "caught signal " << signal;
         ml->quit();
     };
-	UNIXSignalHandler handler(eventSourceManager);
-	handler.init(UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
+	UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
+	handler.enable();
 
     ml->run();
 

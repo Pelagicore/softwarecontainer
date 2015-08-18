@@ -248,8 +248,8 @@ int main(int argc, char * *argv)
         	                        break;
         	                    }
         };
-    	UNIXSignalHandler handler(eventSourceManager);
-    	handler.init(UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
+    	UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
+    	handler.enable();
 
         if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) ) {
             lib.openTerminal(terminalCommand);
