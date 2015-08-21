@@ -119,6 +119,8 @@ void Container::create()
 
     const char *containerID = id();
 
+    assert(strlen(containerID) != 0);
+
     std::string containerPath = m_containerRoot;
 
     setenv("GATEWAY_DIR", (gatewaysDir() + "/").c_str(), true);
@@ -130,6 +132,8 @@ void Container::create()
     auto configFile = m_configFile.c_str();
     log_debug() << "Config file : " << configFile;
     log_debug() << "Template : " << LXCTEMPLATE;
+
+    log_debug() << "creating container with ID : " <<  containerID;
 
     m_container = lxc_container_new(containerID, nullptr);
 

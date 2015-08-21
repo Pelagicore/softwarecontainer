@@ -31,6 +31,7 @@ public:
     {
         ::testing::Test::SetUp();
         lib = std::unique_ptr<PelagicontainLib> ( new PelagicontainLib() );
+        lib->setContainerIDPrefix("Test-");
         lib->setMainLoopContext(m_context);
         ASSERT_TRUE( isSuccess( lib->init() ) );
     }

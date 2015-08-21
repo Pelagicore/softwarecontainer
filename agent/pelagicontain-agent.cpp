@@ -57,6 +57,7 @@ public:
         //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
         while (m_preloadedContainers.size() != m_preloadCount) {
             auto container = new PelagicontainLib(m_pelagicontainWorkspace);
+            container->setContainerIDPrefix("Preload-");
             container->preload();
             m_preloadedContainers.push_back( PelagicontainLibPtr(container) );
         }
