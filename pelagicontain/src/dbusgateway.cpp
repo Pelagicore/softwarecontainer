@@ -29,21 +29,45 @@ DBusGateway::DBusGateway(ProxyType type, const std::string &gatewayDir, const st
 
 DBusGateway::~DBusGateway()
 {
-}
-
-bool DBusGateway::setConfig(const std::string &config)
-{
-    m_config = config;
-    if (m_config.length() > 1) {
-        m_hasBeenConfigured = true;
-        return true;
+    if (m_pid != INVALID_PID) {
+        log_debug() << "Killing dbus proxy with pid " << m_pid;
+        kill(m_pid, SIGTERM);
     }
 
-    return false;
+    // TODO : fix dbus-proxy to delete the socket files when terminating
+}
+
+static constexpr const char *SESSION_CONFIG = "dbus-gateway-config-session";
+static constexpr const char *SYSTEM_CONFIG = "dbus-gateway-config-system";
+
+ReturnCode DBusGateway::readConfigElement(const JSonElement &element)
+{
+    auto sessionConfig = element[SESSION_CONFIG];
+    if (sessionConfig.isValid()) {
+        if (m_sessionBusConfig.size() != 0) {
+            m_sessionBusConfig += ",";
+        }
+        m_sessionBusConfig += sessionConfig.dump();
+    }
+
+    auto systemConfig = element[SYSTEM_CONFIG];
+    if (systemConfig.isValid()) {
+        if (m_systemBusConfig.size() != 0) {
+            m_systemBusConfig += ",";
+        }
+        m_systemBusConfig += systemConfig.dump();
+    }
+
+    m_hasBeenConfigured = true;
+
+    return ReturnCode::SUCCESS;
 }
 
 bool DBusGateway::activate()
 {
+    std::string config = (logging::StringBuilder() << "{\"" << SESSION_CONFIG << "\"" << ": " << m_sessionBusConfig
+                                                   << " , \"" << SYSTEM_CONFIG << "\"" << ": " << m_systemBusConfig << "}");
+
     if (!m_hasBeenConfigured) {
         log_warning() << "'Activate' called on non-configured gateway " << id();
         return false;
@@ -66,8 +90,8 @@ bool DBusGateway::activate()
     std::string command = "dbus-proxy ";
     command += m_socket + " " + typeString();
     log_debug() << command;
-    m_pid = makePopenCall(command, &m_infp, &m_outfp);
-    if (m_pid == -1) {
+    auto code = makePopenCall(command, m_infp, m_outfp, m_pid);
+    if (isError(code)) {
         log_error() << "Failed to launch " << command;
         return false;
     } else {
@@ -75,10 +99,12 @@ bool DBusGateway::activate()
         m_dbusProxyStarted = true;
     }
 
-    size_t count = sizeof(char) * m_config.length();
+    auto count = sizeof(char) * config.length();
 
-    ssize_t written = write(m_infp,
-            m_config.c_str(),
+    log_debug() << "Sending config " << config;
+
+    auto written = write(m_infp,
+            config.c_str(),
             count);
 
     // writing didn't work at all
@@ -92,7 +118,7 @@ bool DBusGateway::activate()
         close(m_infp);
         m_infp = -1;
         // dbus-proxy might take some time to create the bus socket
-        if ( isSocketCreated() ) {
+        if (isSocketCreated()) {
             log_debug() << "Found D-Bus socket: " << m_socket;
         } else {
             log_error() << "Did not find any D-Bus socket: " << m_socket;
@@ -126,8 +152,8 @@ bool DBusGateway::teardown()
     bool success = true;
 
     if (m_dbusProxyStarted) {
-        if (m_pid != -1) {
-            if ( !makePcloseCall(m_pid, m_infp, m_outfp) ) {
+        if (m_pid != INVALID_PID) {
+            if (!makePcloseCall(m_pid, m_infp, m_outfp)) {
                 log_error() << "makePcloseCall() returned error";
                 success = false;
             }
@@ -136,7 +162,7 @@ bool DBusGateway::teardown()
             success = false;
         }
 
-        if (unlink( m_socket.c_str() ) == -1) {
+        if (unlink(m_socket.c_str()) == -1) {
             log_error() << "Could not remove " << m_socket << ": " << strerror(errno);
             success = false;
         }
@@ -157,38 +183,34 @@ const char *DBusGateway::typeString()
 std::string DBusGateway::socketName()
 {
     // Return the filename after stripping directory info
-    std::string socket( m_socket.c_str() );
+    std::string socket(m_socket.c_str());
     return socket.substr(socket.rfind('/') + 1);
 }
 
 
-pid_t DBusGateway::makePopenCall(const std::string &command,
-        int *infp,
-        int *outfp)
+ReturnCode DBusGateway::makePopenCall(const std::string &command, int &infp, int &outfp, pid_t &pid)
 {
-    int READ = 0;
-    int WRITE = 1;
+    static constexpr int READ = 0;
+    static constexpr int WRITE = 1;
 
     int stdinfp[2], stdoutfp[2];
-    pid_t pid;
 
     if (pipe(stdinfp) != 0 || pipe(stdoutfp) != 0) {
         log_error() << "Failed to open STDIN and STDOUT to dbus-proxy";
-        return -1;
+        return ReturnCode::FAILURE;
     }
 
     pid = fork();
 
     if (pid < 0) {
-        return pid;
+        return ReturnCode::FAILURE;
     } else if (pid == 0) {
         close(stdinfp[WRITE]);
         dup2(stdinfp[READ], READ);
         close(stdoutfp[READ]);
         dup2(stdoutfp[WRITE], WRITE);
 
-        // Set group id to the same as pid, that way we can kill the
-        // shells children on close.
+        // Set group id to the same as pid, that way we can kill the shells children on close.
         setpgid(0, 0);
 
         execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
@@ -196,19 +218,10 @@ pid_t DBusGateway::makePopenCall(const std::string &command,
         exit(1);
     }
 
-    if (infp == NULL) {
-        close(stdinfp[WRITE]);
-    } else {
-        *infp = stdinfp[WRITE];
-    }
+    infp = stdinfp[WRITE];
+    outfp = stdoutfp[READ];
 
-    if (outfp == NULL) {
-        close(stdoutfp[READ]);
-    } else {
-        *outfp = stdoutfp[READ];
-    }
-
-    return pid;
+    return ReturnCode::SUCCESS;
 }
 
 bool DBusGateway::makePcloseCall(pid_t pid, int infp, int outfp)
@@ -224,7 +237,7 @@ bool DBusGateway::makePcloseCall(pid_t pid, int infp, int outfp)
         }
     }
 
-    // the negative pid mekes it to kill the whole group, not only the shell
+    // the negative pid makes it kill the whole group, not only the shell
     int killed = kill(-pid, SIGKILL);
 
     return (killed == 0);

@@ -47,21 +47,7 @@ public:
     DBusGateway(ProxyType type, const std::string &gatewayDir, const std::string &name);
     ~DBusGateway();
 
-    /*!
-     *  Implements Gateway::setConfig
-     *
-     *  Does not perform any thorough validation of \p config. \p config is
-     *  expected to be a JSON object, and is thus verified to be at least two
-     *  characters long (an empty JSON object).
-     *
-     *  The \p config is passed along verbatim to the dbus-proxy binary in
-     *  activate().
-     *
-     *  \param config JSON object used to configure dbus-proxy
-     *  \return true when configuration is deemed valid (at least one char long)
-     *  \return false when configuration is invalid
-     */
-    virtual bool setConfig(const std::string &config);
+    virtual ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
      *  Implements Gateway::activate
@@ -96,7 +82,7 @@ public:
     virtual bool teardown();
 
 private:
-    pid_t makePopenCall(const std::string &command, int *infp, int *outfp);
+    ReturnCode makePopenCall(const std::string &command, int &infp, int &outfp, pid_t &pid);
 
     bool makePcloseCall(pid_t pid, int infp, int outfp);
 
@@ -110,11 +96,11 @@ private:
     // Session or system, depending on the type of gateway being started
     ProxyType m_type;
 
-    // Holds the configuration set by setConfig()
-    std::string m_config;
+    std::string m_sessionBusConfig;
+    std::string m_systemBusConfig;
 
     // pid of dbus-proxy instance
-    pid_t m_pid;
+    pid_t m_pid = INVALID_PID;
 
     // STDIN and STDOUT for dbus-proxy instance
     int m_infp;

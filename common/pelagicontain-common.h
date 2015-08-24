@@ -174,7 +174,7 @@ public:
     {
         m_value = value;
         for (auto &listener : ObservableProperty<Type>::m_listeners) {
-            listener( getValue() );
+            listener(getValue());
         }
     }
 
@@ -221,14 +221,15 @@ public:
     {
         auto code = ReturnCode::FAILURE;
 
-        while (true) {
+        //        while (true)
+        {
 
-            if ( !existsInFileSystem(m_path) ) {
+            if (!existsInFileSystem(m_path)) {
                 log_warning() << "Folder " << m_path << " does no exist";
                 return ReturnCode::SUCCESS;
             }
 
-            if (rmdir( m_path.c_str() ) == 0) {
+            if (rmdir(m_path.c_str()) == 0) {
                 return ReturnCode::SUCCESS;
             } else {
                 log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
@@ -255,7 +256,7 @@ public:
     {
         auto code = ReturnCode::FAILURE;
 
-        if (unlink( m_path.c_str() ) == 0) {
+        if (unlink(m_path.c_str()) == 0) {
             code = ReturnCode::SUCCESS;
         } else {
             log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
@@ -281,7 +282,7 @@ public:
         auto code = ReturnCode::FAILURE;
 
         // Lazy unmount. Should be the equivalent of the "umount -l" command. The unmount will actually happen when no-one uses the resource anymore.
-        if (umount( m_path.c_str() ) == 0) {
+        if (umount(m_path.c_str()) == 0) {
             code = ReturnCode::SUCCESS;
             log_debug() << "Unmounted " << m_path;
         } else {
@@ -307,7 +308,7 @@ public:
     {
         // Clean up all created directories, files, and mount points
         for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
-            if ( !isSuccess( (*it)->clean() ) ) {
+            if (!isSuccess((*it)->clean())) {
                 log_error() << "Error";
             }
             delete *it;
@@ -318,7 +319,7 @@ public:
     {
         log_debug() << path;
         auto parent = parentPath(path);
-        if ( !isDirectory(parent) ) {
+        if (!isDirectory(parent)) {
             createDirectory(parent);
         }
         return ReturnCode::SUCCESS;
@@ -353,7 +354,7 @@ public:
 
         if (mountRes == 0) {
             // Success
-            m_cleanupHandlers.push_back( new MountCleanUpHandler(dst) );
+            m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
 
             log_verbose() << "Mounted folder " << src << " in " << dst;
             result = ReturnCode::SUCCESS;
@@ -374,7 +375,7 @@ public:
         assert(mountRes == 0);
         mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, NULL);
         assert(mountRes == 0);
-        m_cleanupHandlers.push_back( new MountCleanUpHandler(path) );
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
 
         return ReturnCode::SUCCESS;
     }
@@ -382,10 +383,10 @@ public:
     ReturnCode writeToFile(const std::string &path, const std::string &content)
     {
         auto ret = pelagicontain::writeToFile(path, content);
-        if ( isError(ret) ) {
+        if (isError(ret)) {
             return ret;
         }
-        m_cleanupHandlers.push_back( new FileCleanUpHandler(path) );
+        m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
         return ReturnCode::SUCCESS;
     }
 
@@ -393,10 +394,10 @@ public:
     {
         log_debug() << "creating symlink " << source << " pointing to " << destination;
 
-        createDirectory( parentPath(source) );
+        createDirectory(parentPath(source));
 
-        if (symlink( destination.c_str(), source.c_str() ) == 0) {
-            m_cleanupHandlers.push_back( new FileCleanUpHandler(source) );
+        if (symlink(destination.c_str(), source.c_str()) == 0) {
+            m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
         } else {
             log_error() << "Error creating symlink " << destination << " pointing to " << source << ". Error: " << strerror(errno);
             return ReturnCode::FAILURE;
