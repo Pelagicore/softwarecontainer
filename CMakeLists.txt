@@ -20,7 +20,7 @@ add_definitions(-DPACKAGE_VERSION="${VERSION}")
 find_package(PelagicoreUtilities REQUIRED)
 find_package(IVILogging          REQUIRED)
 
-pkg_config_use_package(COMMON_DEPENDENCIES "dbus-c++-glib-1;glibmm-2.4;lxc;ivi-main-loop")
+pkg_config_use_package(COMMON_DEPENDENCIES "dbus-c++-glib-1;glibmm-2.4;lxc;ivi-main-loop;jsonparser")
 
 if(ADDITIONAL_LD_LIBRARY_PATH)
     add_definitions(-DADDITIONAL_LD_LIBRARY_PATH=${ADDITIONAL_LD_LIBRARY_PATH})
