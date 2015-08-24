@@ -14,7 +14,7 @@ TEST(GeneratorTest, TestIPCounter) {
 
     // We start from 0 (no really, we start from 2)
     std::string ip = gen.gen_ip_addr(ip_addr_net);
-    ASSERT_FALSE( ip.empty() );
+    ASSERT_FALSE(ip.empty());
     ASSERT_EQ(ip, "192.168.0.2");
 
     ip = gen.gen_ip_addr(ip_addr_net);

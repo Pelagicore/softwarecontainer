@@ -34,7 +34,7 @@ bool DeviceNodeGateway::activate()
 
         if (dev.major.length() != 0) {
             auto success = executeInContainer("mknod " + dev.name + " c " + dev.major + " " + dev.minor);
-            if ( !isError(success) ) {
+            if (!isError(success)) {
                 success = executeInContainer("chmod " + dev.mode + " " + dev.name);
             } else {
                 log_error() << "Failed to create device " << dev.name;

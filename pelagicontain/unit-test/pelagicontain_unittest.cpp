@@ -15,14 +15,14 @@ class MockPAMAbstractInterface :
     public PAMAbstractInterface
 {
 public:
-    MOCK_METHOD2( registerClient,
-            void(const std::string & cookie, const std::string & appId) );
+    MOCK_METHOD2(registerClient,
+            void(const std::string & cookie, const std::string & appId));
 
-    MOCK_METHOD1( unregisterClient,
-            void(const std::string & appId) );
+    MOCK_METHOD1(unregisterClient,
+            void(const std::string & appId));
 
-    MOCK_METHOD1( updateFinished,
-            void(const std::string & appId) );
+    MOCK_METHOD1(updateFinished,
+            void(const std::string & appId));
 };
 
 class MockGateway :
@@ -38,10 +38,10 @@ public:
         return "";
     }
 
-    MOCK_METHOD0( id, std::string() );
-    MOCK_METHOD1( setConfig, bool(const std::string & config) );
-    MOCK_METHOD0( activate, bool() );
-    MOCK_METHOD0( teardown, bool() );
+    MOCK_METHOD0(id, std::string());
+    MOCK_METHOD1(setConfig, bool(const std::string & config));
+    MOCK_METHOD0(activate, bool());
+    MOCK_METHOD0(teardown, bool());
 };
 
 using::testing::InSequence;
@@ -70,12 +70,12 @@ TEST(PelagicontainTest, DISABLED_TestInteractionWithPAM) {
     /* The calls should be made in the specific order as below: */
     {
         InSequence sequence;
-        EXPECT_CALL( pam, registerClient(cookie, appId) ).Times(1);
-        EXPECT_CALL( pam, updateFinished(cookie) ).Times(1);
+        EXPECT_CALL(pam, registerClient(cookie, appId)).Times(1);
+        EXPECT_CALL(pam, updateFinished(cookie)).Times(1);
     }
 
     pc.launch(appId);
-    pc.update( std::map<std::string, std::string>({{"", ""}}) );
+    pc.update(std::map<std::string, std::string>({{"", ""}}));
 }
 
 /*! Test Pelagicontain calls Gateway::setConfig and Gateway::activate when
@@ -100,18 +100,18 @@ TEST(PelagicontainTest, TestCallUpdateShouldSetGatewayConfigsAndActivate) {
 
     {
         InSequence sequence;
-        EXPECT_CALL( gw1, id() ).Times(1).WillOnce( Return(gw1Id) );
-        EXPECT_CALL( gw1, setConfig(_) ).Times(1);
+        EXPECT_CALL(gw1, id()).Times(1).WillOnce(Return(gw1Id));
+        EXPECT_CALL(gw1, setConfig(_)).Times(1);
 
-        EXPECT_CALL( gw2, id() ).Times(1).WillOnce( Return(gw2Id) );
-        EXPECT_CALL( gw2, setConfig(_) ).Times(1);
+        EXPECT_CALL(gw2, id()).Times(1).WillOnce(Return(gw2Id));
+        EXPECT_CALL(gw2, setConfig(_)).Times(1);
 
-        EXPECT_CALL( gw3, id() ).Times(1).WillOnce( Return(gw3Id) );
-        EXPECT_CALL( gw3, setConfig(_) ).Times(1);
+        EXPECT_CALL(gw3, id()).Times(1).WillOnce(Return(gw3Id));
+        EXPECT_CALL(gw3, setConfig(_)).Times(1);
 
-        EXPECT_CALL( gw1, activate() ).Times(1);
-        EXPECT_CALL( gw2, activate() ).Times(1);
-        EXPECT_CALL( gw3, activate() ).Times(1);
+        EXPECT_CALL(gw1, activate()).Times(1);
+        EXPECT_CALL(gw2, activate()).Times(1);
+        EXPECT_CALL(gw3, activate()).Times(1);
     }
 
     const std::string cookie = "unimportant-cookie";

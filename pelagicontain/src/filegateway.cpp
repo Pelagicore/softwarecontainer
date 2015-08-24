@@ -28,7 +28,7 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 
     std::string path;
 
-    if ( isDirectory(pathInHost) ) {
+    if (isDirectory(pathInHost)) {
         path = getContainer().bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
     } else {
         path = getContainer().bindMountFileInContainer(pathInHost, pathInContainer, readOnly);
@@ -36,7 +36,7 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 
     if (envVarName.size() != 0) {
         char value[1024];
-        snprintf( value, sizeof(value), envVarValue.c_str(), path.c_str() );
+        snprintf(value, sizeof(value), envVarValue.c_str(), path.c_str());
         setEnvironmentVariable(envVarName, value);
     }
 

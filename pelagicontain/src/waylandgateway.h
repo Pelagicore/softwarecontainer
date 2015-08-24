@@ -49,7 +49,7 @@ public:
                 log_info() << "enabling Wayland gateway. Socket dir:" << dir;
                 std::string d = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
                 std::string path = getContainer().bindMountFileInContainer(d, SOCKET_FILE_NAME, false);
-                setEnvironmentVariable( WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path) );
+                setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
             } else {
                 log_error() << "Should enable wayland gateway, but " << WAYLAND_RUNTIME_DIR_VARIABLE_NAME << " is not defined";
                 return false;

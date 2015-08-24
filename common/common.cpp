@@ -46,7 +46,7 @@ std::string parentPath(const std::string &path_)
     auto path = path_;
 
     // Remove trailing backslashes
-    while ( (path.size() > 0) && (path[path.size() - 1] == separator_char) ) {
+    while ((path.size() > 0) && (path[path.size() - 1] == separator_char)) {
         path.resize(path.size() - 1);
     }
 
@@ -87,7 +87,7 @@ ReturnCode readFromFile(const std::string &path, std::string &content)
 
 ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
 {
-    if ( isDirectory(path) ) {
+    if (isDirectory(path)) {
         return ReturnCode::SUCCESS;
     }
 
@@ -98,7 +98,7 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
         return ReturnCode::FAILURE;
     }
 
-    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(path) );
+    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(path));
     log_debug() << "Created directory " << path;
 
     return ReturnCode::SUCCESS;

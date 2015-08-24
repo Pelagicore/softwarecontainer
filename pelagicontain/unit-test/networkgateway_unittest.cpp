@@ -43,7 +43,7 @@ public:
         return true;
     }
 
-    MOCK_METHOD1( systemCall, ReturnCode(const std::string & cmd) );
+    MOCK_METHOD1(systemCall, ReturnCode(const std::string & cmd));
 };
 
 
@@ -61,10 +61,10 @@ public:
         return true;
     }
 
-    MOCK_METHOD1( makeCall, bool(const std::string & cmd) );
-    MOCK_METHOD3( makePopenCall,
-            pid_t(const std::string & command, int *infp, int *outfp) );
-    MOCK_METHOD3( makePcloseCall, bool(pid_t pid, int infp, int outfp) );
+    MOCK_METHOD1(makeCall, bool(const std::string & cmd));
+    MOCK_METHOD3(makePopenCall,
+            pid_t(const std::string & command, int *infp, int *outfp));
+    MOCK_METHOD3(makePcloseCall, bool(pid_t pid, int infp, int outfp));
 };
 
 using::testing::DefaultValue;
@@ -114,16 +114,16 @@ TEST_F(NetworkGatewayTest, TestActivate) {
     std::string config = "[{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}]";
     NetworkGateway gw(systemCallInterface);
 
-    ASSERT_TRUE( gw.setConfig(config) );
+    ASSERT_TRUE(gw.setConfig(config));
 
     std::string cmd_0 = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"10.0.3.1\"";
     std::string cmd_1 = "route add default gw 10.0.3.1";
 
     {
         InSequence sequence;
-        EXPECT_CALL( systemCallInterface, makeCall(cmd_0) ).Times(1);
-        EXPECT_CALL( controllerInterface, systemCall(_) ).Times(1);
-        EXPECT_CALL( controllerInterface, systemCall(cmd_1) ).Times(1);
+        EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(_)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     bool success = gw.activate();
@@ -137,7 +137,7 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
     std::string config = "{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}";
     NetworkGateway gw(systemCallInterface);
 
-    ASSERT_TRUE( gw.setConfig(config) );
+    ASSERT_TRUE(gw.setConfig(config));
 
     std::string cmd_0 = "ifconfig | grep -C 2 \"container-br0\" | grep -q \"10.0.3.1\"";
     std::string cmd_1 = "route add default gw 10.0.3.1";
@@ -145,9 +145,9 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
 
     {
         InSequence sequence;
-        EXPECT_CALL( systemCallInterface, makeCall(cmd_0) ).Times(1);
-        EXPECT_CALL( controllerInterface, systemCall(_) ).Times(1);
-        EXPECT_CALL( controllerInterface, systemCall(cmd_1) ).Times(1);
+        EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(_)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     bool success = gw.activate();
@@ -155,9 +155,9 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
 
     {
         InSequence sequence;
-        EXPECT_CALL( systemCallInterface, makeCall(cmd_0) ).Times(1);
-        EXPECT_CALL( controllerInterface, systemCall(cmd_2) ).Times(1);
-        EXPECT_CALL( controllerInterface, systemCall(cmd_1) ).Times(1);
+        EXPECT_CALL(systemCallInterface, makeCall(cmd_0)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_2)).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     success = gw.activate();
@@ -175,7 +175,7 @@ TEST_F(NetworkGatewayTest, TestActivateNoConfig) {
 
     {
         InSequence sequence;
-        EXPECT_CALL( controllerInterface, systemCall(cmd_1) ).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     bool success = gw.activate();
@@ -189,13 +189,13 @@ TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
     std::string config = "{\"internet-access\": \"true\"}";
     NetworkGateway gw(systemCallInterface);
 
-    ASSERT_TRUE( gw.setConfig(config) );
+    ASSERT_TRUE(gw.setConfig(config));
 
     std::string cmd_1 = "ifconfig eth0 down";
 
     {
         InSequence sequence;
-        EXPECT_CALL( controllerInterface, systemCall(cmd_1) ).Times(1);
+        EXPECT_CALL(controllerInterface, systemCall(cmd_1)).Times(1);
     }
 
     bool success = gw.activate();
@@ -209,12 +209,12 @@ TEST_F(NetworkGatewayTest, TestActivateNoBridge) {
     std::string config = "{\"internet-access\": \"true\", \"gateway\":\"10.0.3.1\"}";
     NetworkGateway gw(systemCallInterface);
 
-    ASSERT_TRUE( gw.setConfig(config) );
+    ASSERT_TRUE(gw.setConfig(config));
 
     DefaultValue<bool>::Set(false);
 
     bool success = gw.activate();
-    EXPECT_CALL( systemCallInterface, makeCall(_) ).Times(0);
+    EXPECT_CALL(systemCallInterface, makeCall(_)).Times(0);
     ASSERT_TRUE(!success);
 
     DefaultValue<bool>::Clear();

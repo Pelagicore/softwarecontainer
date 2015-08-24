@@ -99,7 +99,7 @@ public:
 
     void shutdown()
     {
-        m_agent.shutDown( getContainerID() );
+        m_agent.shutDown(getContainerID());
     }
 
     bool isInitialized()

@@ -27,8 +27,8 @@ void Container::init_lxc()
     if (!bInitialized) {
         int stateCount = lxc_get_wait_states(nullptr);
         s_LXCContainerStates.resize(stateCount);
-        lxc_get_wait_states( s_LXCContainerStates.data() );
-        assert( (int)LXCContainerState::ELEMENT_COUNT == s_LXCContainerStates.size() );
+        lxc_get_wait_states(s_LXCContainerStates.data());
+        assert((int)LXCContainerState::ELEMENT_COUNT == s_LXCContainerStates.size());
         bInitialized = true;
         s_LXCRoot = lxc_get_global_config_item(LXC_CONTAINERS_ROOT_CONFIG_ITEM);
     }
@@ -56,22 +56,22 @@ Container::Container(const std::string &id, const std::string &name, const std::
 ReturnCode Container::initialize()
 {
     std::string gatewayDir = gatewaysDir();
-    if ( isError( createDirectory(gatewayDir) ) ) {
+    if (isError(createDirectory(gatewayDir))) {
         log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
     }
 
     // Make sure the directory for "late mounts" exists
-    if ( !isDirectory( lateMountDir() ) ) {
+    if (!isDirectory(lateMountDir())) {
         log_error() << "Directory " << lateMountDir() << " does not exist";
         return ReturnCode::FAILURE;
     }
 
     // Create directories needed for mounting, will be removed in dtor
     bool allOk = true;
-    allOk = allOk && isSuccess( createDirectory( applicationMountDir() ) );
-    allOk = allOk && isSuccess( createDirectory(applicationMountDir() + "/bin") );
-    allOk = allOk && isSuccess( createDirectory(applicationMountDir() + "/shared") );
-    allOk = allOk && isSuccess( createDirectory(applicationMountDir() + "/home") );
+    allOk = allOk && isSuccess(createDirectory(applicationMountDir()));
+    allOk = allOk && isSuccess(createDirectory(applicationMountDir() + "/bin"));
+    allOk = allOk && isSuccess(createDirectory(applicationMountDir() + "/shared"));
+    allOk = allOk && isSuccess(createDirectory(applicationMountDir() + "/home"));
 
     if (!allOk) {
         log_error() << "Could not set up all needed directories";
@@ -87,7 +87,7 @@ ReturnCode Container::initialize()
 
 Container::~Container()
 {
-    if ( isContainerDeleteEnabled() ) {
+    if (isContainerDeleteEnabled()) {
         destroy();
         if (m_container != nullptr) {
             lxc_container_put(m_container);
@@ -133,7 +133,7 @@ void Container::create()
     log_debug() << "Config file : " << configFile;
     log_debug() << "Template : " << LXCTEMPLATE;
 
-    log_debug() << "creating container with ID : " <<  containerID;
+    log_debug() << "creating container with ID : " << containerID;
 
     m_container = lxc_container_new(containerID, nullptr);
 
@@ -159,7 +159,7 @@ void Container::create()
 
 void Container::waitForState(LXCContainerState state, int timeout)
 {
-    if ( strcmp( m_container->state(m_container), toString(state) ) ) {
+    if (strcmp(m_container->state(m_container), toString(state))) {
         log_debug() << "Waiting for container to change to state : " << toString(state);
         bool b = m_container->wait(m_container, toString(state), timeout);
         log_debug() << toString() << " " << b;
@@ -239,7 +239,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     // Add the variables set by the gateways
     for (auto &var : m_gatewayEnvironmentVariables) {
         if (variables.count(var.first) != 0) {
-            if ( m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first) ) {
+            if (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {
                 log_warning() << "Variable set by gateway overriding original variable value: " << var.first << ". values: " <<
                 var.second;
             }
@@ -251,7 +251,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     // prepare array of env variable strings to be set when launching the process in the container
     std::vector<std::string> strings;
     for (auto &var : actualVariables) {
-        strings.push_back( pelagicore::formatString( "%s=%s", var.first.c_str(), var.second.c_str() ) );
+        strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
     }
 
     const char *envVariablesArray[strings.size() + 1];
@@ -311,7 +311,7 @@ ReturnCode Container::setUser(uid_t userID)
 
         log_debug() << "setuid(" << userID << ")" << "  setgid(" << pw->pw_gid << ")  " << "Groups " << s.str();
 
-        if (setgroups( groups.size(), groups.data() ) != 0) {
+        if (setgroups(groups.size(), groups.data()) != 0) {
             log_error() << "setgroups failed";
             return ReturnCode::FAILURE;
         }
@@ -364,18 +364,18 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
                 log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
                 workingDirectory;
 
-                if ( !isSuccess( setUser(userID) ) ) {
+                if (!isSuccess(setUser(userID))) {
                     return -1;
                 }
 
                 if (workingDirectory.length() != 0) {
-                    auto ret = chdir( workingDirectory.c_str() );
+                    auto ret = chdir(workingDirectory.c_str());
                     if (ret != 0) {
                         log_error() << "Error when changing current directory : " << strerror(errno);
                     }
 
                 }
-                execvp( args[0], args.data() );
+                execvp(args[0], args.data());
 
                 log_error() << "Error when executing the command in container : " << strerror(errno);
 
@@ -420,7 +420,7 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     touch(dst);
-    m_cleanupHandlers.push_back( new FileCleanUpHandler(dst) );
+    m_cleanupHandlers.push_back(new FileCleanUpHandler(dst));
     auto s = bindMount(pathOnHost, dst, readonly);
 
     std::string actualPathInContainer = gatewaysDirInContainer();
@@ -438,8 +438,8 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
 
     log_debug() << "Creating folder : " << dst;
     createDirectory(dst);
-//    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-//    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(dst) );
+    //    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    //    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(dst) );
 
     auto s = bindMount(pathOnHost, dst, readonly);
 
@@ -463,9 +463,9 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
 bool Container::mountApplication(const std::string &appDirBase)
 {
     bool allOk = true;
-    allOk &= isSuccess( bindMount(appDirBase + "/bin", applicationMountDir() + "/bin") );
-    allOk &= isSuccess( bindMount(appDirBase + "/shared", applicationMountDir() + "/shared") );
-    allOk &= isSuccess( bindMount(appDirBase + "/home", applicationMountDir() + "/home") );
+    allOk &= isSuccess(bindMount(appDirBase + "/bin", applicationMountDir() + "/bin"));
+    allOk &= isSuccess(bindMount(appDirBase + "/shared", applicationMountDir() + "/shared"));
+    allOk &= isSuccess(bindMount(appDirBase + "/home", applicationMountDir() + "/home"));
 
     allOk = true;
 
@@ -478,7 +478,7 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
 
     pid_t pid = executeInContainer([this, cmd = cmd]() {
                 log_info() << "Executing system command in container : " << cmd;
-                return system( cmd.c_str() );
+                return system(cmd.c_str());
             }, m_gatewayEnvironmentVariables);
 
     waitForProcessTermination(pid);

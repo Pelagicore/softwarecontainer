@@ -121,8 +121,8 @@ bool PulseGateway::connectToPulseServer()
 std::string PulseGateway::socketName()
 {
     char socket[1024];
-    snprintf( socket, sizeof(socket), "%s", m_socket.c_str() );
-    return std::string( basename(socket) );
+    snprintf(socket, sizeof(socket), "%s", m_socket.c_str());
+    return std::string(basename(socket));
 }
 
 void PulseGateway::loadCallback(pa_context *context, uint32_t index, void *userdata)
@@ -156,7 +156,7 @@ void PulseGateway::stateCallback(pa_context *context, void *userdata)
 {
     PulseGateway *p = static_cast<PulseGateway *>(userdata);
 
-    switch ( pa_context_get_state(context) ) {
+    switch (pa_context_get_state(context)) {
     case PA_CONTEXT_READY : {
         std::string s = StringBuilder() << "socket=" << p->m_socket;
         log_debug() << "Connection is up, loading module " << s;

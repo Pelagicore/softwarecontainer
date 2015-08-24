@@ -109,7 +109,7 @@ void Pelagicontain::shutdown()
 void Pelagicontain::shutdownGateways()
 {
     for (auto &gateway : m_gateways) {
-        if ( !gateway->teardown() ) {
+        if (!gateway->teardown()) {
             log_warning() << "Could not tear down gateway cleanly";
         }
     }

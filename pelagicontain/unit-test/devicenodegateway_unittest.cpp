@@ -41,7 +41,7 @@ public:
         return true;
     }
 
-    MOCK_METHOD1( systemCall, ReturnCode(const std::string & cmd) );
+    MOCK_METHOD1(systemCall, ReturnCode(const std::string & cmd));
 };
 
 using::testing::InSequence;
@@ -65,8 +65,8 @@ class DeviceNodeGatewayValidConfig :
 {
 };
 
-INSTANTIATE_TEST_CASE_P( InstantiationName, DeviceNodeGatewayValidConfig,
-        ::testing::ValuesIn(validConfigs) );
+INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayValidConfig,
+        ::testing::ValuesIn(validConfigs));
 
 TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
     StrictMock<MockController> controllerInterface;
@@ -74,7 +74,7 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
 
     struct testData config = GetParam();
 
-    ASSERT_TRUE( gw.setConfig(config.data) );
+    ASSERT_TRUE(gw.setConfig(config.data));
 
     DefaultValue<bool>::Set(true);
     for (uint i = 0; i < config.names.size(); i++) {
@@ -86,8 +86,8 @@ TEST_P(DeviceNodeGatewayValidConfig, TestCanParseValidConfig) {
         std::string mknodCmd = "mknod " + name + " c " + major + " " + minor;
         std::string chmodCmd = "chmod " + mode + " " + name;
 
-        EXPECT_CALL( controllerInterface, systemCall( StrEq( mknodCmd.c_str() ) ) );
-        EXPECT_CALL( controllerInterface, systemCall( StrEq( chmodCmd.c_str() ) ) );
+        EXPECT_CALL(controllerInterface, systemCall(StrEq(mknodCmd.c_str())));
+        EXPECT_CALL(controllerInterface, systemCall(StrEq(chmodCmd.c_str())));
     }
     gw.activate();
     DefaultValue<bool>::Clear();
@@ -98,13 +98,13 @@ class DeviceNodeGatewayInvalidConfig :
 {
 };
 
-INSTANTIATE_TEST_CASE_P( InstantiationName, DeviceNodeGatewayInvalidConfig,
-        ::testing::ValuesIn(invalidConfigs) );
+INSTANTIATE_TEST_CASE_P(InstantiationName, DeviceNodeGatewayInvalidConfig,
+        ::testing::ValuesIn(invalidConfigs));
 
 TEST_P(DeviceNodeGatewayInvalidConfig, handlesInvalidConfig) {
     StrictMock<MockController> controllerInterface;
     DeviceNodeGateway gw;
 
     struct testData config = GetParam();
-    ASSERT_FALSE( gw.setConfig(config.data) );
+    ASSERT_FALSE(gw.setConfig(config.data));
 }

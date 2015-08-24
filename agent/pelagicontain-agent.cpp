@@ -59,14 +59,14 @@ public:
             auto container = new PelagicontainLib(m_pelagicontainWorkspace);
             container->setContainerIDPrefix("Preload-");
             container->preload();
-            m_preloadedContainers.push_back( PelagicontainLibPtr(container) );
+            m_preloadedContainers.push_back(PelagicontainLibPtr(container));
         }
     }
 
     void deleteContainer(ContainerID containerID)
     {
 
-        bool valid = ( ( containerID < m_containers.size() ) && (m_containers[containerID] != nullptr) );
+        bool valid = ((containerID < m_containers.size()) && (m_containers[containerID] != nullptr));
         if (valid) {
             m_containers[containerID] = nullptr;
         } else {
@@ -80,7 +80,7 @@ public:
      */
     bool checkContainer(ContainerID containerID, PelagicontainLib * &container)
     {
-        bool valid = ( ( containerID < m_containers.size() ) && (m_containers[containerID] != nullptr) );
+        bool valid = ((containerID < m_containers.size()) && (m_containers[containerID] != nullptr));
         if (valid) {
             container = m_containers[containerID].get();
         } else {
@@ -98,12 +98,12 @@ public:
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
             container = m_preloadedContainers[0].release();
-            m_preloadedContainers.erase( m_preloadedContainers.begin() );
+            m_preloadedContainers.erase(m_preloadedContainers.begin());
         } else {
             container = new PelagicontainLib(m_pelagicontainWorkspace);
         }
 
-        m_containers.push_back( PelagicontainLibPtr(container) );
+        m_containers.push_back(PelagicontainLibPtr(container));
         auto id = m_containers.size() - 1;
         log_debug() << "Created container with ID :" << id;
         container->setContainerIDPrefix(prefix);
@@ -130,9 +130,9 @@ public:
     void writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes)
     {
         CommandJob *job = nullptr;
-        if ( checkJob(pid, job) ) {
+        if (checkJob(pid, job)) {
             log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
-            write( job->stdin(), bytes.data(), bytes.size() );
+            write(job->stdin(), bytes.data(), bytes.size());
         }
     }
 
@@ -145,7 +145,7 @@ public:
                         int)> listener)
     {
         PelagicontainLib *container;
-        if ( checkContainer(containerID, container) ) {
+        if (checkContainer(containerID, container)) {
             auto job = new CommandJob(*container, cmdLine);
             job->captureStdin();
             job->setOutputFile(outputFile);
@@ -167,7 +167,7 @@ public:
     void setContainerName(ContainerID containerID, const std::string &name)
     {
         PelagicontainLib *container = nullptr;
-        if ( checkContainer(containerID, container) ) {
+        if (checkContainer(containerID, container)) {
             container->setContainerName(name);
         }
     }
@@ -176,7 +176,7 @@ public:
     {
         if (m_shutdownContainers) {
             PelagicontainLib *container = nullptr;
-            if ( checkContainer(containerID, container) ) {
+            if (checkContainer(containerID, container)) {
                 container->shutdown();
                 deleteContainer(containerID);
             }
@@ -188,7 +188,7 @@ public:
     void MountLegacy(const uint32_t containerID, const std::string &path)
     {
         PelagicontainLib *container = nullptr;
-        if ( checkContainer(containerID, container) ) {
+        if (checkContainer(containerID, container)) {
             container->getContainer().mountApplication(path);
         }
     }
@@ -197,7 +197,7 @@ public:
                 const std::string &subPathInContainer, bool readOnly)
     {
         PelagicontainLib *container = nullptr;
-        if ( checkContainer(containerID, container) ) {
+        if (checkContainer(containerID, container)) {
             return container->getContainer().bindMountFolderInContainer(pathInHost, subPathInContainer, readOnly);
         }
         return "";
@@ -206,7 +206,7 @@ public:
     void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs)
     {
         PelagicontainLib *container = nullptr;
-        if ( checkContainer(containerID, container) ) {
+        if (checkContainer(containerID, container)) {
             container->getPelagicontain().updateGatewayConfiguration(configs);
         }
     }
@@ -298,7 +298,7 @@ public:
 
 int main(int argc, char * *argv)
 {
-	using ivi_main_loop::UNIXSignalHandler;
+    using ivi_main_loop::UNIXSignalHandler;
 
     pelagicore::CommandLineParser commandLineParser("Pelagicontain agent", "", PACKAGE_VERSION, "");
 
@@ -312,7 +312,7 @@ int main(int argc, char * *argv)
     commandLineParser.addOption(shutdownContainers, "shutdown", 's',
             "If false, the containers will not be shutdown. Useful for debugging");
 
-    if ( commandLineParser.parse(argc, argv) ) {
+    if (commandLineParser.parse(argc, argv)) {
         exit(1);
     }
 
@@ -340,13 +340,13 @@ int main(int argc, char * *argv)
 
     ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
 
-	// Register UNIX signal handler
+    // Register UNIX signal handler
     auto signalHandler = [&] (int signal) {
         log_debug() << "caught signal " << signal;
         ml->quit();
     };
-	UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
-	handler.enable();
+    UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
+    handler.enable();
 
     ml->run();
 

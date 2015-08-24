@@ -64,8 +64,8 @@ void PelagicontainLib::validateContainerID()
 
 ReturnCode PelagicontainWorkspace::deleteWorkspace()
 {
-    if ( isDirectory(m_containerRoot) ) {
-        rmdir( m_containerRoot.c_str() );
+    if (isDirectory(m_containerRoot)) {
+        rmdir(m_containerRoot.c_str());
     }
 
     return existsInFileSystem(m_containerRoot) ? ReturnCode::FAILURE : ReturnCode::SUCCESS;
@@ -75,7 +75,7 @@ ReturnCode PelagicontainWorkspace::deleteWorkspace()
 
 ReturnCode PelagicontainWorkspace::checkWorkspace()
 {
-    if ( !isDirectory(m_containerRoot) ) {
+    if (!isDirectory(m_containerRoot)) {
 
         createDirectory(m_containerRoot);
         std::string lateMountPath = m_containerRoot + LATE_MOUNT_PATH;
@@ -107,7 +107,7 @@ ReturnCode PelagicontainWorkspace::checkWorkspace()
 ReturnCode PelagicontainLib::preload()
 {
 
-    if ( isError( m_container.initialize() ) ) {
+    if (isError(m_container.initialize())) {
         log_error() << "Could not setup container for preloading";
         return ReturnCode::FAILURE;
     }
@@ -134,39 +134,39 @@ ReturnCode PelagicontainLib::init()
     }
 
     if (m_pelagicontain.getContainerState() != ContainerState::PRELOADED) {
-        if ( isError( preload() ) ) {
+        if (isError(preload())) {
             log_error() << "Failed to preload container";
             return ReturnCode::FAILURE;
         }
     }
 
 #ifdef ENABLE_NETWORKGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new NetworkGateway() ) );
+    m_gateways.push_back(std::unique_ptr<Gateway>(new NetworkGateway()));
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new PulseGateway( getGatewayDir(), getContainerID() ) ) );
+    m_gateways.push_back(std::unique_ptr<Gateway>(new PulseGateway(getGatewayDir(), getContainerID())));
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new DeviceNodeGateway() ) );
+    m_gateways.push_back(std::unique_ptr<Gateway>(new DeviceNodeGateway()));
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
+    m_gateways.push_back(std::unique_ptr<Gateway>(new DBusGateway(
                         DBusGateway::SessionProxy,
                         getGatewayDir(),
-                        getContainerID() ) ) );
+                        getContainerID())));
 
-    m_gateways.push_back( std::unique_ptr<Gateway>( new DBusGateway(
+    m_gateways.push_back(std::unique_ptr<Gateway>(new DBusGateway(
                         DBusGateway::SystemProxy,
                         getGatewayDir(),
-                        getContainerID() ) ) );
+                        getContainerID())));
 #endif
 
-    m_gateways.push_back( std::unique_ptr<Gateway>( new WaylandGateway() ) );
-    m_gateways.push_back( std::unique_ptr<Gateway>( new FileGateway() ) );
-    m_gateways.push_back( std::unique_ptr<Gateway>( new EnvironmentGateway() ) );
+    m_gateways.push_back(std::unique_ptr<Gateway>(new WaylandGateway()));
+    m_gateways.push_back(std::unique_ptr<Gateway>(new FileGateway()));
+    m_gateways.push_back(std::unique_ptr<Gateway>(new EnvironmentGateway()));
 
     for (auto &gateway : m_gateways) {
         m_pelagicontain.addGateway(*gateway);
@@ -189,7 +189,7 @@ void PelagicontainLib::openTerminal(const std::string &terminalCommand) const
 {
     std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << m_container.id();
     log_info() << command;
-    system( command.c_str() );
+    system(command.c_str());
 }
 
 }

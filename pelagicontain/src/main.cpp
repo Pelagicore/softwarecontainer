@@ -108,7 +108,7 @@ int main(int argc, char * *argv)
             't',
             "Example: konsole -e");
 
-    if ( commandLineParser.parse(argc, argv) ) {
+    if (commandLineParser.parse(argc, argv)) {
         return -1;
     }
 
@@ -150,7 +150,7 @@ int main(int argc, char * *argv)
 
     DBus::Glib::BusDispatcher dispatcher;
     DBus::default_dispatcher = &dispatcher;
-    dispatcher.attach( mainContext->gobj() );
+    dispatcher.attach(mainContext->gobj());
 
     std::string configFilePathString = configFilePath;
     PelagicontainWorkspace workspace(containerRoot, configFilePathString);
@@ -233,25 +233,26 @@ int main(int argc, char * *argv)
                 }
             });
 
-    if ( !isError( lib.init() ) ) {
+    if (!isError(lib.init())) {
 
         ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
 
-    	// Register UNIX signal handler
+        // Register UNIX signal handler
         auto signalHandler = [&] (int signal) {
-        	 log_debug() << "caught signal " << signal;
-        	                    switch (signal) {
-        	                    case SIGCHLD :
-        	                        break;
-        	                    default :
-        	                        lib.shutdown();
-        	                        break;
-        	                    }
+            log_debug() << "caught signal " << signal;
+            switch (signal) {
+            case SIGCHLD :
+                break;
+            default :
+                lib.shutdown();
+                break;
+            }
         };
-    	UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
-    	handler.enable();
+        UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM,
+                                                                                                               signalHandler}});
+        handler.enable();
 
-        if ( (terminalCommand != nullptr) && (strlen(terminalCommand) != 0) ) {
+        if ((terminalCommand != nullptr) && (strlen(terminalCommand) != 0)) {
             lib.openTerminal(terminalCommand);
         }
 

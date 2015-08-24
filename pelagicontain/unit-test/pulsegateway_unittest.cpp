@@ -39,11 +39,11 @@ public:
         return true;
     }
 
-    MOCK_METHOD1( systemCall,
-            ReturnCode(const std::string & cmd) );
+    MOCK_METHOD1(systemCall,
+            ReturnCode(const std::string & cmd));
 
-    MOCK_METHOD2( setEnvironmentVariable,
-            ReturnCode(const std::string & variable, const std::string & value) );
+    MOCK_METHOD2(setEnvironmentVariable,
+            ReturnCode(const std::string & variable, const std::string & value));
 };
 
 
@@ -61,11 +61,11 @@ public:
         return true;
     }
 
-    MOCK_METHOD1( makeCall, bool(const std::string & cmd) );
+    MOCK_METHOD1(makeCall, bool(const std::string & cmd));
 
-    MOCK_METHOD3( makePopenCall, pid_t(const std::string & command, int *infp, int *outfp) );
+    MOCK_METHOD3(makePopenCall, pid_t(const std::string & command, int *infp, int *outfp));
 
-    MOCK_METHOD3( makePcloseCall, bool(pid_t pid, int infp, int outfp) );
+    MOCK_METHOD3(makePcloseCall, bool(pid_t pid, int infp, int outfp));
 
 };
 
@@ -124,8 +124,8 @@ class PulseGatewayValidConfig :
 {
 };
 
-INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayValidConfig,
-        ::testing::ValuesIn(validConfigs) );
+INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayValidConfig,
+        ::testing::ValuesIn(validConfigs));
 
 TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -134,9 +134,9 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     struct pulseTestData config = GetParam();
 
     DefaultValue<bool>::Set(true);
-    EXPECT_CALL( controllerInterface, setEnvironmentVariable(
+    EXPECT_CALL(controllerInterface, setEnvironmentVariable(
                 A<const std::string &>(),
-                A<const std::string &>() ) );
+                A<const std::string &>()));
 
     bool success = gw.setConfig(config.data);
     DefaultValue<bool>::Clear();
@@ -145,7 +145,7 @@ TEST_P(PulseGatewayValidConfig, DISABLED_TestCanParseValidConfig) {
     success = gw.activate();
     ASSERT_TRUE(success);
 
-    ASSERT_TRUE( gw.teardown() );
+    ASSERT_TRUE(gw.teardown());
 }
 
 
@@ -159,8 +159,8 @@ class PulseGatewayInvalidConfig :
 {
 };
 
-INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayInvalidConfig,
-        ::testing::ValuesIn(invalidConfigs) );
+INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayInvalidConfig,
+        ::testing::ValuesIn(invalidConfigs));
 
 TEST_P(PulseGatewayInvalidConfig, TestCanParseInvalidConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -182,8 +182,8 @@ class PulseGatewayDisablingConfig :
 {
 };
 
-INSTANTIATE_TEST_CASE_P( InstantiationName, PulseGatewayDisablingConfig,
-        ::testing::ValuesIn(disablingConfigs) );
+INSTANTIATE_TEST_CASE_P(InstantiationName, PulseGatewayDisablingConfig,
+        ::testing::ValuesIn(disablingConfigs));
 
 TEST_P(PulseGatewayDisablingConfig, TestCanParseDisablingConfig) {
     StrictMock<PulseMockController> controllerInterface;
@@ -191,7 +191,7 @@ TEST_P(PulseGatewayDisablingConfig, TestCanParseDisablingConfig) {
 
     struct pulseTestData config = GetParam();
 
-    EXPECT_CALL( controllerInterface, setEnvironmentVariable(_, _) ).Times(0);
+    EXPECT_CALL(controllerInterface, setEnvironmentVariable(_, _)).Times(0);
 
     bool success = gw.setConfig(config.data);
     ASSERT_TRUE(success);

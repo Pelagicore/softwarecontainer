@@ -15,7 +15,7 @@ bool Gateway::setConfig(const std::string &config)
     std::vector<JSonElement> elements;
     rootElement.readChildren(elements);
     for (auto &element : elements) {
-        if ( isError( readConfigElement(element) ) ) {
+        if (isError(readConfigElement(element))) {
             success = false;
         }
     }

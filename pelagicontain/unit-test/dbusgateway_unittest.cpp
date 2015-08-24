@@ -45,7 +45,7 @@ public:
         return true;
     }
 
-    MOCK_METHOD1( systemCall, ReturnCode(const std::string & cmd) );
+    MOCK_METHOD1(systemCall, ReturnCode(const std::string & cmd));
 
 };
 
@@ -95,7 +95,7 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
 
     std::string config = "{}";
 
-    ASSERT_TRUE( gw.setConfig(config) );
+    ASSERT_TRUE(gw.setConfig(config));
 
     // DBusGateway relies on dbus-proxy to create a socket and since dbus-proxy
     // will not be started during these tests we need to create a file so
@@ -103,12 +103,12 @@ TEST_F(DBusGatewayTest, TestActivateStdInWrite) {
     std::string socketFile = m_gatewayDir + "/sess_" + m_containerName + ".sock";
     std::string cmd_mkdir = "mkdir -p ";
     cmd_mkdir += m_gatewayDir;
-    system( cmd_mkdir.c_str() );
+    system(cmd_mkdir.c_str());
     std::string cmd_touch = "touch ";
     cmd_touch += socketFile;
-    system( cmd_touch.c_str() );
+    system(cmd_touch.c_str());
 
-    ASSERT_TRUE( gw.activate() );
+    ASSERT_TRUE(gw.activate());
 
     // Teardown will remove the "socket" file created above.
     gw.teardown();
@@ -130,15 +130,15 @@ TEST_F(DBusGatewayTest, TestActivateCall) {
     // create sock file which teardown will remove
     std::string cmd_mkdir = "mkdir -p ";
     cmd_mkdir += m_gatewayDir;
-    system( cmd_mkdir.c_str() );
+    system(cmd_mkdir.c_str());
     std::string cmd_touch = "touch ";
     cmd_touch += m_gatewayDir;
     cmd_touch += "/sess_test.sock";
-    system( cmd_touch.c_str() );
+    system(cmd_touch.c_str());
 
     std::string config = "{}";
 
-    ASSERT_TRUE( gw->setConfig(config) );
+    ASSERT_TRUE(gw->setConfig(config));
 
     FILE *tmp = tmpfile();
     int infp = fileno(tmp);
@@ -151,16 +151,16 @@ TEST_F(DBusGatewayTest, TestActivateCall) {
                     "/tmp/dbusgateway-unit-test/gateways/sess_test.sock "
                     "session",
                     _, _)
-                ).WillOnce( DoAll( ::testing::SetArgPointee<1>(infp), Return(999) ) );
+                ).WillOnce(DoAll(::testing::SetArgPointee<1>(infp), Return(999)));
 
         EXPECT_CALL(
                 systemcallInterfaceMock,
                 makePcloseCall(_, _, _)
-                ).WillOnce( DoAll( ::testing::Invoke(close_fd_helper), Return(true) ) );
+                ).WillOnce(DoAll(::testing::Invoke(close_fd_helper), Return(true)));
     }
 
-    ASSERT_TRUE( gw->activate() );
-    ASSERT_TRUE( gw->teardown() );
+    ASSERT_TRUE(gw->activate());
+    ASSERT_TRUE(gw->teardown());
 
     delete gw;
 }

@@ -27,11 +27,11 @@ public:
     Gateway(const char *id)
     {
         m_id = id;
-    };
+    }
 
     virtual ~Gateway()
     {
-    };
+    }
 
     /**
      * Returns the ID of the gateway
@@ -44,8 +44,8 @@ public:
     /*! Configure this gateway according to the supplied JSON configuration
      * string
      *
-     * \param config JSON string containing gatway-specific JSON configuration
-     * \returns true if \p config was sucecssfully parsed
+     * \param config JSON string containing gateway-specific JSON configuration
+     * \returns true if \p config was successfully parsed
      *          false otherwise
      */
     virtual bool setConfig(const std::string &config);

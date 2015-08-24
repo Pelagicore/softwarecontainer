@@ -30,10 +30,10 @@ public:
     void SetUp() override
     {
         ::testing::Test::SetUp();
-        lib = std::unique_ptr<PelagicontainLib> ( new PelagicontainLib() );
+        lib = std::unique_ptr<PelagicontainLib> (new PelagicontainLib());
         lib->setContainerIDPrefix("Test-");
         lib->setMainLoopContext(m_context);
-        ASSERT_TRUE( isSuccess( lib->init() ) );
+        ASSERT_TRUE(isSuccess(lib->init()));
     }
 
     void TearDown() override
@@ -127,25 +127,52 @@ public:
 
 TEST_F(PelagicontainApp, FileGateway) {
 
-    ASSERT_TRUE( isDirectory("/tmp") );
+    ASSERT_TRUE(isDirectory("/tmp"));
 
     char tempFilename[] = "/tmp/blablaXXXXXX";
     int fileDescriptor = mkstemp(tempFilename);
     close(fileDescriptor);
-    ASSERT_TRUE( isFile(tempFilename) );
-    ASSERT_FALSE( isDirectory(tempFilename) );
-    ASSERT_FALSE( isSocket(tempFilename) );
+    ASSERT_TRUE(isFile(tempFilename));
+    ASSERT_FALSE(isDirectory(tempFilename));
+    ASSERT_FALSE(isSocket(tempFilename));
     ASSERT_TRUE(unlink(tempFilename) == 0);
 
     const char *socketPath = "/run/user/1000/X11-display";
-    ASSERT_TRUE( isSocket(socketPath) );
-    ASSERT_FALSE( isFile(socketPath) );
-    ASSERT_FALSE( isDirectory(socketPath) );
+    ASSERT_TRUE(isSocket(socketPath));
+    ASSERT_FALSE(isFile(socketPath));
+    ASSERT_FALSE(isDirectory(socketPath));
 
     const char *unexistingFile = "/run/user/10jhgj00/X11-dgfdgdagisplay";
-    ASSERT_FALSE( isSocket(unexistingFile) );
-    ASSERT_FALSE( isFile(unexistingFile) );
-    ASSERT_FALSE( isDirectory(unexistingFile) );
+    ASSERT_FALSE(isSocket(unexistingFile));
+    ASSERT_FALSE(isFile(unexistingFile));
+    ASSERT_FALSE(isDirectory(unexistingFile));
+
+}
+
+TEST_F(PelagicontainApp, Dummy) {
+    json_error_t error;
+
+    std::string config =
+            "{\"dbus-gateway-config-session\": [], \"dbus-gateway-config-system\": [{\"object-path\": \"/com/pelagicore/TemperatureService\", \"interface\": \"org.freedesktop.DBus.Introspectable\", \"direction\": \"outgoing\", \"method\": \"Introspect\"}, {\"object-path\": \"/com/pelagicore/TemperatureService\", \"interface\": \"com.pelagicore.TemperatureService\", \"direction\": \"outgoing\", \"method\": \"Echo\"}, {\"object-path\": \"/com/pelagicore/TemperatureService\", \"interface\": \"com.pelagicore.TemperatureService\", \"direction\": \"outgoing\", \"method\": \"SetTemperature\"}]}";
+    std::string config2 = "{ \"dbus\" : \"fdfds\" }";
+
+    log_info() << "Parsing " << config;
+
+    JSonElement el(config);
+
+    std::vector<JSonElement> elements;
+    el.read("dbus-gateway-config-session", elements);
+
+    JSonElement el2(el);
+
+    // Get root JSON object
+    auto m_root = json_loads(config.c_str(), 0, &error);
+
+    log_debug() << "--------------- pointer " << logging::pointerToString(m_root);
+
+    //	json_decref(m_root);
+
+    log_info() << "----------fffff-----";
 
 }
 
@@ -165,7 +192,7 @@ TEST_F(PelagicontainApp, TestFileMounting) {
 
     // create a temporary file with some content
     const char *content = "GFDGDFHDHRWG";
-    write( fileDescriptor, content, sizeof(content) );
+    write(fileDescriptor, content, sizeof(content));
     close(fileDescriptor);
 
     FunctionJob job1(getLib(), [&] () {
@@ -174,7 +201,7 @@ TEST_F(PelagicontainApp, TestFileMounting) {
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
-    auto pathInContainer = getLib().getContainer().bindMountFileInContainer(tempFilename, basename( strdup(tempFilename) ), true);
+    auto pathInContainer = getLib().getContainer().bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), true);
 
     FunctionJob job2(getLib(), [&] () {
                 return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
@@ -193,7 +220,7 @@ TEST_F(PelagicontainApp, TestFolderMounting) {
     char tempFilename[] = "/tmp/blablaXXXXXX";
     mkdtemp(tempFilename);
 
-    ASSERT_TRUE( isDirectory(tempFilename) );
+    ASSERT_TRUE(isDirectory(tempFilename));
 
     FunctionJob job1(getLib(), [&] () {
                 return isDirectory(tempFilename) ? EXISTENT : NON_EXISTENT;
@@ -201,8 +228,8 @@ TEST_F(PelagicontainApp, TestFolderMounting) {
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
-    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempFilename, basename( strdup(
-                    tempFilename) ), true);
+    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempFilename, basename(strdup(
+                    tempFilename)), true);
 
     FunctionJob job2(getLib(), [&] () {
                 return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
@@ -218,7 +245,7 @@ TEST(PelagicontainLib, MultithreadTest) {
     static const int TIMEOUT = 20;
 
     PelagicontainLib lib;
-    lib.setMainLoopContext( Glib::MainContext::get_default() );
+    lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;
 
@@ -252,7 +279,7 @@ TEST_F(PelagicontainApp, TestPulseAudioEnabled) {
 
     CommandJob job(getLib(), "/usr/bin/paplay /usr/share/sounds/alsa/Rear_Center.wav");
     job.start();
-    ASSERT_TRUE( job.isRunning() );
+    ASSERT_TRUE(job.isRunning());
 
 
     ASSERT_TRUE(job.wait() == 0);
@@ -266,23 +293,23 @@ TEST_F(PelagicontainApp, TestStdin) {
     job.captureStdin();
     job.captureStdout();
     job.start();
-    ASSERT_TRUE( job.isRunning() );
+    ASSERT_TRUE(job.isRunning());
 
     const char outputBytes[] = "test string";
     char inputBytes[sizeof(outputBytes)] = {};
 
-    auto writtenBytesCount = write( job.stdin(), outputBytes, sizeof(outputBytes) );
-    ASSERT_EQ( writtenBytesCount, sizeof(outputBytes) );
+    auto writtenBytesCount = write(job.stdin(), outputBytes, sizeof(outputBytes));
+    ASSERT_EQ(writtenBytesCount, sizeof(outputBytes));
 
-    auto readBytesCount = read( job.stdout(), inputBytes, sizeof(inputBytes) );
-    ASSERT_EQ( readBytesCount, sizeof(outputBytes) );
+    auto readBytesCount = read(job.stdout(), inputBytes, sizeof(inputBytes));
+    ASSERT_EQ(readBytesCount, sizeof(outputBytes));
 
     SignalConnectionsHandler connections;
-    addProcessListener( connections, job.pid(), [&] (
+    addProcessListener(connections, job.pid(), [&] (
                 int pid, int exitCode) {
                 log_debug() << "finished process :" << job.toString();
                 exit();
-            }, getMainContext() );
+            }, getMainContext());
 
     kill(job.pid(), SIGTERM);
 
@@ -297,16 +324,16 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
     CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
 
-    ASSERT_TRUE( job.isRunning() );
+    ASSERT_TRUE(job.isRunning());
 
     bool bNetworkAccessSucceeded = false;
 
     SignalConnectionsHandler connections;
-    addProcessListener( connections, job.pid(), [&] (
+    addProcessListener(connections, job.pid(), [&] (
                 int pid, int exitCode) {
                 bNetworkAccessSucceeded = (exitCode == 0);
                 exit();
-            }, getMainContext() );
+            }, getMainContext());
 
     run();
 
@@ -328,16 +355,16 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
     CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
 
-    ASSERT_TRUE( job.isRunning() );
+    ASSERT_TRUE(job.isRunning());
 
     bool bNetworkAccessSucceeded = false;
 
     SignalConnectionsHandler connections;
-    addProcessListener( connections, job.pid(), [&] (
+    addProcessListener(connections, job.pid(), [&] (
                 int pid, int exitCode) {
                 bNetworkAccessSucceeded = (exitCode == 0);
                 exit();
-            }, getMainContext() );
+            }, getMainContext());
 
     run();
 
@@ -384,6 +411,8 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
         config[DBusGateway::ID] = "[{"
                 "\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
                 "\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}]";
+
+        log_error() << config[DBusGateway::ID];
 
         getLib().setGatewayConfigs(config);
 
@@ -436,5 +465,5 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithoutAccess) {
 
 
 TEST_F(PelagicontainApp, InitTest) {
-    ASSERT_TRUE( getLib().isInitialized() );
+    ASSERT_TRUE(getLib().isInitialized());
 }

@@ -36,7 +36,7 @@ ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
     element.read("gateway", gateway);
     if (gateway.size() != 0) {
         m_gateway = gateway;
-        if ( (m_gateway.size() != 0) && ( m_gateway.compare(gateway) ) ) {
+        if ((m_gateway.size() != 0) && (m_gateway.compare(gateway))) {
             log_error() << "Contradiction in gateway";
             returnCode = ReturnCode::FAILURE;
         }
@@ -57,8 +57,8 @@ bool NetworkGateway::activate()
     bool success = false;
     bool ready = false;
 
-    if ( isBridgeAvailable() ) {
-        if ( generateIP() ) {
+    if (isBridgeAvailable()) {
+        if (generateIP()) {
             ready = true;
         }
     }
@@ -92,7 +92,7 @@ bool NetworkGateway::generateIP()
 bool NetworkGateway::setDefaultGateway()
 {
     std::string cmd = "route add default gw " + m_gateway;
-    return isSuccess( executeInContainer(cmd) );
+    return isSuccess(executeInContainer(cmd));
 }
 
 bool NetworkGateway::up()
@@ -106,7 +106,7 @@ bool NetworkGateway::up()
         cmd = "ifconfig eth0 up";
     }
 
-    if ( isError( executeInContainer(cmd) ) ) {
+    if (isError(executeInContainer(cmd))) {
         return false;
     }
 
@@ -118,7 +118,7 @@ bool NetworkGateway::up()
 bool NetworkGateway::down()
 {
     std::string cmd = "ifconfig eth0 down";
-    return isSuccess( executeInContainer(cmd) );
+    return isSuccess(executeInContainer(cmd));
 }
 
 
@@ -127,7 +127,7 @@ bool NetworkGateway::isBridgeAvailable()
     bool ret = false;
     std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \"" << BRIDGE_INTERFACE << "\" | grep -q \"" << m_gateway << "\"";
 
-    if ( isSuccess( executeInContainer(cmd) ) ) {
+    if (isSuccess(executeInContainer(cmd))) {
         ret = true;
     } else {
         log_error() << "No network bridge configured";

@@ -31,7 +31,7 @@ public:
             m_containerRoot += "/";
         }
 
-        if ( isError( checkWorkspace() ) ) {
+        if (isError(checkWorkspace())) {
             log_error() << "Failed when checking workspace";
             assert(false);
         }
@@ -63,7 +63,7 @@ class PelagicontainLib :
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "Pelagicontain library");
 
-    PelagicontainLib( PelagicontainWorkspace &workspace = getDefaultWorkspace() );
+    PelagicontainLib(PelagicontainWorkspace &workspace = getDefaultWorkspace());
 
     ~PelagicontainLib();
 
@@ -165,7 +165,7 @@ private:
 class JobAbstract
 {
 protected:
-    LOG_SET_CLASS_CONTEXT( PelagicontainLib::getDefaultContext() );
+    LOG_SET_CLASS_CONTEXT(PelagicontainLib::getDefaultContext());
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
