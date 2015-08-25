@@ -168,6 +168,56 @@ TEST_F(PelagicontainApp, CommonFunctions) {
 
 }
 
+static constexpr int EXISTENT = 1;
+static constexpr int NON_EXISTENT = 0;
+
+TEST_F(PelagicontainApp, FileGateway) {
+
+    // Make sure we can't access the file
+    FunctionJob job1(getLib(), [&] () {
+        return isDirectory("/var/testFile") ? EXISTENT : NON_EXISTENT;
+    });
+    job1.start();
+    ASSERT_TRUE(job1.wait() == NON_EXISTENT);
+
+    ASSERT_TRUE(isDirectory("/tmp"));
+    char tempFilename[] = "/tmp/fileGatewayXXXXXX";
+    int fd = mkstemp(tempFilename);
+    close(fd);
+
+    GatewayConfiguration config;
+
+    std::string containerPath = "/var/testFile";
+    std::string configStr = "[ { \"path-host\" : " + std::string(tempFilename) +
+     ", \"path-container\" : " + containerPath +
+     ", \"create-symlink\" : false"
+     ", \"read-only\": true } ]";
+
+    config[FileGateway::ID] = configStr;
+    setGatewayConfigs(config);
+
+    // Now the file should be available
+    FunctionJob job2(getLib(), [&] () {
+        return isDirectory(containerPath) ? EXISTENT : NON_EXISTENT;
+    });
+    job2.start();
+    ASSERT_TRUE(job2.wait() == EXISTENT);
+
+    // Write some data to the file and make sure we can read it
+    fd = open(tempFilename, O_APPEND);
+    std::string testData = "testdata";
+    write(fd, testData.c_str(), strlen(testData.c_str()));
+
+    std::string readData;
+    FunctionJob job3(getLib(), [&] () {
+        readFromFile(containerPath, readData);
+        return 0;
+    });
+    job3.start();
+    job3.wait();
+    ASSERT_TRUE(testData == readData);
+}
+
 TEST_F(PelagicontainApp, Dummy) {
     json_error_t error;
 
@@ -194,9 +244,6 @@ TEST_F(PelagicontainApp, Dummy) {
     log_info() << "----------fffff-----";
 
 }
-
-static constexpr int EXISTENT = 1;
-static constexpr int NON_EXISTENT = 0;
 
 
 /**
