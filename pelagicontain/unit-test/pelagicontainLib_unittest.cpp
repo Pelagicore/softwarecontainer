@@ -471,34 +471,31 @@ TEST_F(PelagicontainApp, TestJobReturnCode) {
  * Checks that DBUS daemons are accessible if the corresponding capability is enabled
  */
 TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
+    GatewayConfiguration config;
+    config[DBusGateway::ID] = "[{"
+        "\"dbus-gateway-config-session\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }], "
+        "\"dbus-gateway-config-system\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }]"
+    "}]";
 
-    {
-        GatewayConfiguration config;
-        config[DBusGateway::ID] = "[{"
-                "\"dbus-gateway-config-session\": [ {            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }], "
-                "\"dbus-gateway-config-system\": [{            \"direction\": \"*\",            \"interface\": \"*\",            \"object-path\": \"*\",            \"method\": \"*\"        }]}]";
+    log_error() << config[DBusGateway::ID];
+    getLib().setGatewayConfigs(config);
 
-        log_error() << config[DBusGateway::ID];
-
-        getLib().setGatewayConfigs(config);
-
-        CommandJob jobTrue(
-                getLib(),
-                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue.start();
-
-        ASSERT_TRUE(jobTrue.wait() == 0);
-    }
 
     {
         CommandJob jobTrue(
                 getLib(),
                 "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
-
         ASSERT_TRUE(jobTrue.wait() == 0);
     }
 
+    {
+        CommandJob jobTrue(
+                getLib(),
+                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+        jobTrue.start();
+        ASSERT_TRUE(jobTrue.wait() == 0);
+    }
 }
 
 
