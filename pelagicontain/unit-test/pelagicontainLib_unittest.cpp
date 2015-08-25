@@ -4,6 +4,10 @@
  */
 
 #include <thread>
+#include <sys/un.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -14,6 +18,7 @@
 #include "waylandgateway.h"
 #include "networkgateway.h"
 #include "pulsegateway.h"
+#include "filegateway.h"
 
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
@@ -125,10 +130,14 @@ public:
 //}
 
 
-TEST_F(PelagicontainApp, FileGateway) {
+/*
+ * Tests the convenience functions in common.cpp
+ */
+TEST_F(PelagicontainApp, CommonFunctions) {
 
     ASSERT_TRUE(isDirectory("/tmp"));
 
+    // Create a temp file and check so it is a file
     char tempFilename[] = "/tmp/blablaXXXXXX";
     int fileDescriptor = mkstemp(tempFilename);
     close(fileDescriptor);
@@ -137,10 +146,20 @@ TEST_F(PelagicontainApp, FileGateway) {
     ASSERT_FALSE(isSocket(tempFilename));
     ASSERT_TRUE(unlink(tempFilename) == 0);
 
-    const char *socketPath = "/run/user/1000/X11-display";
-    ASSERT_TRUE(isSocket(socketPath));
-    ASSERT_FALSE(isFile(socketPath));
-    ASSERT_FALSE(isDirectory(socketPath));
+    // New temp file
+    fileDescriptor = mkstemp(tempFilename);
+    close(fileDescriptor);
+
+    // Create a socket
+    int sock = socket (PF_LOCAL, SOCK_DGRAM, 0);
+    struct sockaddr_un addr;
+    strcpy(addr.sun_path, tempFilename);
+    addr.sun_family = AF_UNIX;
+    bind(sock, (struct sockaddr *) &addr, strlen(addr.sun_path) + sizeof (addr.sun_family));
+
+    ASSERT_TRUE(isSocket(tempFilename));
+    ASSERT_FALSE(isFile(tempFilename));
+    ASSERT_FALSE(isDirectory(tempFilename));
 
     const char *unexistingFile = "/run/user/10jhgj00/X11-dgfdgdagisplay";
     ASSERT_FALSE(isSocket(unexistingFile));
