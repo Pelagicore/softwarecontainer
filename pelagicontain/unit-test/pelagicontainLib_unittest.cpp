@@ -336,19 +336,27 @@ TEST(PelagicontainLib, MultithreadTest) {
 
 }
 
-
 TEST_F(PelagicontainApp, TestPulseAudioEnabled) {
 
     GatewayConfiguration config;
     config[PulseGateway::ID] = "[ { \"audio\" : true } ]";
     setGatewayConfigs(config);
 
-    CommandJob job(getLib(), "/usr/bin/paplay /usr/share/sounds/alsa/Rear_Center.wav");
-    job.start();
-    ASSERT_TRUE(job.isRunning());
+    // We need access to the test file, so we bind mount it
+    char soundFile[] = "/usr/share/sounds/alsa/Rear_Center.wav";
+    auto pathInContainer = getLib().getContainer().bindMountFileInContainer(soundFile, basename(strdup(soundFile)), true);
 
+    // Make sure the file is there
+    FunctionJob job1(getLib(), [&] () {
+        return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
+    });
+    job1.start();
+    ASSERT_TRUE(job1.wait() == EXISTENT);
 
-    ASSERT_TRUE(job.wait() == 0);
+    CommandJob job2(getLib(), "/usr/bin/paplay " + pathInContainer);
+    job2.start();
+    ASSERT_TRUE(job2.isRunning());
+    ASSERT_TRUE(job2.wait() == 0);
 
     run();
 }
