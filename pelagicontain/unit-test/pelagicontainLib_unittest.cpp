@@ -7,6 +7,7 @@
 #include <sys/un.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <stdlib.h>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -180,52 +181,246 @@ TEST_F(PelagicontainApp, CommonFunctions) {
 static constexpr int EXISTENT = 1;
 static constexpr int NON_EXISTENT = 0;
 
-TEST_F(PelagicontainApp, FileGateway) {
+TEST_F(PelagicontainApp, FileGatewayReadOnly) {
 
-    // Make sure we can't access the file
-    FunctionJob job1(getLib(), [&] () {
-        return isDirectory("/var/testFile") ? EXISTENT : NON_EXISTENT;
-    });
-    job1.start();
-    ASSERT_TRUE(job1.wait() == NON_EXISTENT);
-
+    // Make sure /tmp exists in both host and container
     ASSERT_TRUE(isDirectory("/tmp"));
-    char tempFilename[] = "/tmp/fileGatewayXXXXXX";
-    int fd = mkstemp(tempFilename);
-    close(fd);
+    FunctionJob job0(getLib(), [&] () {
+        return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
+    });
+    job0.start();
+    ASSERT_TRUE(job0.wait() == EXISTENT);
 
+    // Create two temporary files
+    char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
+    char tempFilename2[] = "/tmp/fileGatewayXXXXXX";
+    int fd1 = mkstemp(tempFilename1);
+    int fd2 = mkstemp(tempFilename2);
+
+    // We could indeed create them.
+    ASSERT_TRUE(fd1 != 0);
+    ASSERT_TRUE(fd2 != 0);
+
+    close(fd1);
+    close(fd2);
+
+    // They will be mapped to these files
+    std::string containerPath1 = "testFile1";
+    std::string containerPath2 = "testFile2";
+
+    // tempFilename2 will be symlinked into the container, so it will be
+    // available at the same path inside as outside. Make sure it's not
+    // there before we've mounted it.
+    FunctionJob jobNotMounted(getLib(), [&] () {
+        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
+    });
+    jobNotMounted.start();
+    ASSERT_TRUE(jobNotMounted.wait() == NON_EXISTENT);
+
+    // We configure the FileGateway to have both files mounted to their
+    // respective locations. The first one's location can be found through
+    // an environment variable, the other will have the same name inside
+    // the container as outside.
+    std::string envVarName = "TEST_FILE_PATH";
     GatewayConfiguration config;
-
-    std::string containerPath = "/var/testFile";
-    std::string configStr = "[ { \"path-host\" : " + std::string(tempFilename) +
-     ", \"path-container\" : " + containerPath +
-     ", \"create-symlink\" : false"
-     ", \"read-only\": true } ]";
-
+    std::string configStr =
+    "["
+        "{"
+            "  \"path-host\" : \"" + std::string(tempFilename1) + "\""
+            ", \"path-container\" : \"" + containerPath1 + "\""
+            ", \"create-symlink\" : false"
+            ", \"read-only\": true"
+            ", \"env-var-name\": \"" + envVarName + "\""
+            ", \"env-var-value\": \"%s\""
+        "},"
+        "{"
+            "  \"path-host\" : \"" + std::string(tempFilename2) + "\""
+            ", \"path-container\" : \"" + containerPath2 + "\""
+            ", \"create-symlink\" : true"
+            ", \"read-only\": true"
+        "}"
+    "]";
     config[FileGateway::ID] = configStr;
     setGatewayConfigs(config);
 
-    // Now the file should be available
-    FunctionJob job2(getLib(), [&] () {
-        return isDirectory(containerPath) ? EXISTENT : NON_EXISTENT;
+    // Make sure the environment variables are available
+    FunctionJob jobEnv(getLib(), [&] () {
+        return getenv(envVarName.c_str()) != NULL ? EXISTENT : NON_EXISTENT;
     });
-    job2.start();
-    ASSERT_TRUE(job2.wait() == EXISTENT);
+    jobEnv.start();
+    ASSERT_TRUE(jobEnv.wait() == EXISTENT);
 
-    // Write some data to the file and make sure we can read it
-    fd = open(tempFilename, O_APPEND);
+    // Now the files pointed out by the env var should be available
+    FunctionJob jobEnvFile(getLib(), [&] () {
+        std::string envVal = getenv(envVarName.c_str());
+        return isFile(envVal) ? EXISTENT : NON_EXISTENT;
+    });
+    jobEnvFile.start();
+    ASSERT_TRUE(jobEnvFile.wait() == EXISTENT);
+
+    // The files with symlinks should be available at its original location,
+    // but inside the container
+    FunctionJob jobSymlink(getLib(), [&] () {
+        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
+    });
+    jobSymlink.start();
+    ASSERT_TRUE(jobSymlink.wait() == EXISTENT);
+
+    // Write some data to the files outside the container and make sure we can
+    // read it inside the container
     std::string testData = "testdata";
-    write(fd, testData.c_str(), strlen(testData.c_str()));
+    writeToFile(tempFilename1, testData);
+    writeToFile(tempFilename2, testData);
 
-    std::string readData;
-    FunctionJob job3(getLib(), [&] () {
-        readFromFile(containerPath, readData);
+    // Test if we can read the data back into a variable
+    FunctionJob jobReadData(getLib(), [&] () {
+        std::string envVal = getenv(envVarName.c_str());
+        std::string readBack;
+        readFromFile(envVal, readBack);
+        return readBack == testData ? 0 : 1;
+    });
+    jobReadData.start();
+    ASSERT_TRUE(jobReadData.wait() == 0);
+
+    // Check the mount status here.
+    CommandJob job2(getLib(), "/bin/mount");
+    job2.start();
+    job2.wait();
+
+    // Make sure we can't write to the file
+    std::string badData = "This data should never be read";
+    FunctionJob jobWriteDataRO(getLib(), [&] () {
+        std::string envVal = getenv(envVarName.c_str());
+        writeToFile(envVal, badData);
         return 0;
     });
-    job3.start();
-    job3.wait();
-    ASSERT_TRUE(testData == readData);
+    jobWriteDataRO.start();
+    jobWriteDataRO.wait();
+
+    std::string readBack = "";
+    readFromFile(tempFilename1, readBack);
+    ASSERT_EQ(testData, readBack);
+
+    // Remove the temp files
+    ASSERT_TRUE(unlink(tempFilename1) == 0);
+    ASSERT_TRUE(unlink(tempFilename2) == 0);
 }
+
+TEST_F(PelagicontainApp, FileGatewayReadWrite) {
+    // Make sure /tmp exists in both host and container
+    ASSERT_TRUE(isDirectory("/tmp"));
+    FunctionJob job0(getLib(), [&] () {
+        return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
+    });
+    job0.start();
+    ASSERT_TRUE(job0.wait() == EXISTENT);
+
+    // Create two temporary files
+    char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
+    char tempFilename2[] = "/tmp/fileGatewayXXXXXX";
+    int fd1 = mkstemp(tempFilename1);
+    int fd2 = mkstemp(tempFilename2);
+
+    // We could indeed create them.
+    ASSERT_TRUE(fd1 != 0);
+    ASSERT_TRUE(fd2 != 0);
+
+    close(fd1);
+    close(fd2);
+
+    // They will be mapped to these files
+    std::string containerPath1 = "testFile1";
+    std::string containerPath2 = "testFile2";
+
+    // tempFilename2 will be symlinked into the container, so it will be
+    // available at the same path inside as outside. Make sure it's not
+    // there before we've mounted it.
+    FunctionJob jobNotMounted(getLib(), [&] () {
+        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
+    });
+    jobNotMounted.start();
+    ASSERT_TRUE(jobNotMounted.wait() == NON_EXISTENT);
+
+    std::string envVarName = "TEST_FILE_PATH";
+    GatewayConfiguration config;
+    std::string configStr =
+    "["
+        "{" // The files below are mounted read-only
+            "  \"path-host\" : \"" + std::string(tempFilename1) + "\""
+            ", \"path-container\" : \"" + containerPath1 + "\""
+            ", \"create-symlink\" : false"
+            ", \"read-only\": false"
+            ", \"env-var-name\": \"" + envVarName + "\""
+            ", \"env-var-value\": \"%s\""
+        "},"
+        "{"
+            "  \"path-host\" : \"" + std::string(tempFilename2) + "\""
+            ", \"path-container\" : \"" + containerPath2 + "\""
+            ", \"create-symlink\" : true"
+            ", \"read-only\": false"
+        "}"
+    "]";
+    config[FileGateway::ID] = configStr;
+    setGatewayConfigs(config);
+
+    // Make sure the environment variables are available
+    FunctionJob jobEnv(getLib(), [&] () {
+        return getenv(envVarName.c_str()) != NULL ? EXISTENT : NON_EXISTENT;
+    });
+    jobEnv.start();
+    ASSERT_TRUE(jobEnv.wait() == EXISTENT);
+
+    // Now the files pointed out by the env var should be available
+    FunctionJob jobEnvFile(getLib(), [&] () {
+        std::string envVal = getenv(envVarName.c_str());
+        return isFile(envVal) ? EXISTENT : NON_EXISTENT;
+    });
+    jobEnvFile.start();
+    ASSERT_TRUE(jobEnvFile.wait() == EXISTENT);
+
+    // The files with symlinks should be available at its original location,
+    // but inside the container
+    FunctionJob jobSymlink(getLib(), [&] () {
+        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
+    });
+    jobSymlink.start();
+    ASSERT_TRUE(jobSymlink.wait() == EXISTENT);
+
+    // Write some data to the files outside the container and make sure we can
+    // read it inside the container
+    std::string testData = "testdata";
+    writeToFile(tempFilename1, testData);
+    writeToFile(tempFilename2, testData);
+
+    // Test if we can read the data back into a variable
+    FunctionJob jobReadData(getLib(), [&] () {
+        std::string envVal = getenv(envVarName.c_str());
+        std::string readBack;
+        readFromFile(envVal, readBack);
+        return readBack == testData ? 0 : 1;
+    });
+    jobReadData.start();
+    ASSERT_TRUE(jobReadData.wait() == 0);
+
+    // Make sure we can write to the file
+    std::string newData = "This data should have been written";
+    FunctionJob jobWriteData(getLib(), [&] () {
+        std::string envVal = getenv(envVarName.c_str());
+        writeToFile(envVal, newData);
+        return 0;
+    });
+    jobWriteData.start();
+    jobWriteData.wait();
+
+    std::string readBack = "";
+    readFromFile(tempFilename1, readBack);
+    ASSERT_EQ(newData, readBack);
+
+    // Let's remove the temp files also
+    ASSERT_TRUE(unlink(tempFilename1) == 0);
+    ASSERT_TRUE(unlink(tempFilename2) == 0);
+}
+
 
 TEST_F(PelagicontainApp, Dummy) {
     json_error_t error;
