@@ -144,6 +144,15 @@ TEST_F(PelagicontainApp, CommonFunctions) {
     ASSERT_TRUE(isFile(tempFilename));
     ASSERT_FALSE(isDirectory(tempFilename));
     ASSERT_FALSE(isSocket(tempFilename));
+
+    // Let's use the same file and test the read/write functions
+    std::string testData = "testData";
+    std::string readBack;
+    writeToFile(tempFilename, testData);
+    readFromFile(tempFilename, readBack);
+    ASSERT_EQ(testData, readBack);
+
+    // And remove the file
     ASSERT_TRUE(unlink(tempFilename) == 0);
 
     // New temp file
