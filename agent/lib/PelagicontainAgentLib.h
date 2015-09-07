@@ -94,7 +94,7 @@ public:
 
     void setName(const std::string &name)
     {
-        auto ret = m_agent.setContainerName(m_containerID, name);
+        m_agent.setContainerName(m_containerID, name);
     }
 
     void shutdown()
