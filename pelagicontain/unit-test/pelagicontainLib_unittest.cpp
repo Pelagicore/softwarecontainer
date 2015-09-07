@@ -509,6 +509,97 @@ TEST_F(PelagicontainApp, TestFolderMounting) {
 }
 
 
+/**
+ * Test whether the mounting of sockets works properly
+ */
+TEST_F(PelagicontainApp, TestUnixSocket) {
+
+    char tempFilename[] = "/tmp/blablaXXXXXX";
+    char *tempDirname = mkdtemp(tempFilename);
+
+    ASSERT_TRUE(isDirectory(tempDirname));
+
+    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempDirname, basename(strdup(
+                    tempDirname)), true);
+    char *tmp = new char[pathInContainer.size() +1];
+    std::copy(pathInContainer.begin(), pathInContainer.end(), tmp);
+    tmp[pathInContainer.size()] = '\0';
+    char *tempUnixSocket = strcat(tmp, "/socket");
+    delete[] tmp;
+
+    FunctionJob job1(getLib(), [&] () {
+                int fd, fd2, done, n;
+                char str[100];
+                socklen_t t;
+                sockaddr_un local, remote;
+                local.sun_family = AF_UNIX;
+                strcpy(local.sun_path, tempUnixSocket);
+                fd = socket(AF_UNIX, SOCK_STREAM, 0);
+                bind(fd, (sockaddr*)(&local), sizeof(local));
+                listen(fd, 100);
+
+                log_info() << "Server waiting for a connection...\n";
+                t = sizeof(remote);
+                if ((fd2 = accept(fd, (struct sockaddr *)&remote, &t)) == -1) {
+                    return 0;
+                }
+
+                log_info() << "Server Connected.\n";
+
+                done = 0;
+                do {
+                    n = recv(fd2, str, 100, 0);
+                    if (n <= 0) {
+                        if (n < 0) perror("recv");
+                        done = 1;
+                    }
+
+                } while (!done);
+
+                close(fd2);
+
+                return done == 1 ? EXISTENT : NON_EXISTENT;
+            });
+    log_info() << "before job1.\n";
+
+    job1.start();
+    ASSERT_TRUE(job1.wait() == EXISTENT);
+    log_info() << "after job1.\n";
+
+    FunctionJob job2(getLib(), [&] () {
+
+                int s, len;
+                struct sockaddr_un remote;
+                char str[] = "TestData";
+
+                if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
+                    return NON_EXISTENT;
+                }
+
+                log_info() << "Client trying to connect...\n";
+
+                remote.sun_family = AF_UNIX;
+                strcpy(remote.sun_path, tempUnixSocket);
+                len = strlen(remote.sun_path) + sizeof(remote.sun_family);
+                if (connect(s, (struct sockaddr *)&remote, len) == -1) {
+                    return NON_EXISTENT;
+                }
+
+                log_info() << "Client Connected.\n";
+
+                if (send(s, str, strlen(str), 0) == -1) {
+                    return NON_EXISTENT;
+                }
+
+                close(s);
+                return EXISTENT;
+            });
+
+    job2.start();
+    ASSERT_TRUE(job2.wait() == EXISTENT);
+    log_info() << "close.\n";
+}
+
 
 TEST(PelagicontainLib, MultithreadTest) {
 
