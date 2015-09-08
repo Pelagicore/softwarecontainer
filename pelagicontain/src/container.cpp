@@ -141,7 +141,7 @@ void Container::create()
 
     log_debug() << toString();
 
-    char *argv[] = {"lxc-create", nullptr};
+    char *argv[] = {(char *)"lxc-create", nullptr};
 
     int flags = 0;
 
@@ -170,15 +170,13 @@ pid_t Container::start()
 {
     pid_t pid;
 
-    if (isLXC_C_APIEnabled() && false) {
-
-        // TODO : check why starting the container via the C API fails here. We still use the command-line for that reason
+    if (isLXC_C_APIEnabled() && true) {
 
         log_debug() << "Starting container";
 
-        const char *argv[] = {"/bin/sleep", nullptr};
-        char *emptyArgv[] = {"100000000", nullptr};
-        m_container->start(m_container, true, emptyArgv);
+        //char *argv[] = {"/bin/sleep", "100000000", nullptr};
+        //char *emptyArgv[] = {(char *)"100000000", nullptr};
+        m_container->start(m_container, false, NULL);
 
         log_debug() << "Container started__ : " << toString();
 

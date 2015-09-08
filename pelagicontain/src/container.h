@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include <lxc/lxccontainer.h>
+
 #include "pelagicontain-common.h"
 
 
