@@ -119,6 +119,7 @@ ReturnCode PelagicontainLib::preload()
     } else {
         // Fatal failure, only do necessary cleanup
         log_error() << "Could not start container, will shut down";
+        return ReturnCode::FAILURE;
     }
 
     return ReturnCode::SUCCESS;
