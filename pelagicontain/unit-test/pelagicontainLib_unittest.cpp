@@ -508,6 +508,7 @@ TEST_F(PelagicontainApp, TestFolderMounting) {
     ASSERT_TRUE(job2.wait() == EXISTENT);
 }
 
+#include <stdlib.h>
 
 /**
  * Test whether the mounting of sockets works properly
@@ -521,13 +522,14 @@ TEST_F(PelagicontainApp, TestUnixSocket) {
 
     auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempDirname, basename(strdup(
                     tempDirname)), true);
-    char *tmp = new char[pathInContainer.size() +1];
+    char *tmp = new char[pathInContainer.size() + 8];
     std::copy(pathInContainer.begin(), pathInContainer.end(), tmp);
     tmp[pathInContainer.size()] = '\0';
     char *tempUnixSocket = strcat(tmp, "/socket");
-    delete[] tmp;
+
 
     FunctionJob job1(getLib(), [&] () {
+
                 int fd, fd2, done, n;
                 char str[100];
                 socklen_t t;
@@ -538,13 +540,10 @@ TEST_F(PelagicontainApp, TestUnixSocket) {
                 bind(fd, (sockaddr*)(&local), sizeof(local));
                 listen(fd, 100);
 
-                log_info() << "Server waiting for a connection...\n";
                 t = sizeof(remote);
                 if ((fd2 = accept(fd, (struct sockaddr *)&remote, &t)) == -1) {
                     return 0;
                 }
-
-                log_info() << "Server Connected.\n";
 
                 done = 0;
                 do {
@@ -560,44 +559,55 @@ TEST_F(PelagicontainApp, TestUnixSocket) {
 
                 return done == 1 ? EXISTENT : NON_EXISTENT;
             });
-    log_info() << "before job1.\n";
 
-    job1.start();
-    ASSERT_TRUE(job1.wait() == EXISTENT);
-    log_info() << "after job1.\n";
 
-    FunctionJob job2(getLib(), [&] () {
+    pid_t forkpid = fork();
 
-                int s, len;
-                struct sockaddr_un remote;
-                char str[] = "TestData";
+    if(forkpid >= 0) // fork was successful
+    {
+        if(forkpid == 0) // child process
+        {
+            int s, len;
+            struct sockaddr_un remote;
+            char str[] = "TestData";
 
-                if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
-                    return NON_EXISTENT;
-                }
+            sleep(1);
 
-                log_info() << "Client trying to connect...\n";
+            if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
+                _exit(NON_EXISTENT);
+            }
 
-                remote.sun_family = AF_UNIX;
-                strcpy(remote.sun_path, tempUnixSocket);
-                len = strlen(remote.sun_path) + sizeof(remote.sun_family);
-                if (connect(s, (struct sockaddr *)&remote, len) == -1) {
-                    return NON_EXISTENT;
-                }
+            char *x = new char[strlen(tempDirname) + 8];
+            strcpy(x, tempDirname);
+            strcat(x, "/socket");
 
-                log_info() << "Client Connected.\n";
+            remote.sun_family = AF_UNIX;
+            strcpy(remote.sun_path, x);
+            len = strlen(remote.sun_path) + sizeof(remote.sun_family);
+            if (connect(s, (struct sockaddr *)&remote, len) == -1) {
+                _exit(NON_EXISTENT);
+            }
 
-                if (send(s, str, strlen(str), 0) == -1) {
-                    return NON_EXISTENT;
-                }
 
-                close(s);
-                return EXISTENT;
-            });
+            if (send(s, str, strlen(str), 0) == -1) {
+                _exit(NON_EXISTENT);
+            }
 
-    job2.start();
-    ASSERT_TRUE(job2.wait() == EXISTENT);
-    log_info() << "close.\n";
+            close(s);
+            _exit(EXISTENT);
+        }
+        else //Parent process
+        {
+            job1.start();
+            ASSERT_TRUE(job1.wait() == EXISTENT);
+        }
+    }
+    else // fork failed
+    {
+        printf("\n Fork failed, quitting!!!!!!\n");
+        return;
+    }
+
 }
 
 
