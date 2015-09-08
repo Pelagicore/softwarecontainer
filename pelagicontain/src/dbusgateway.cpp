@@ -43,30 +43,35 @@ static constexpr const char *SYSTEM_CONFIG = "dbus-gateway-config-system";
 ReturnCode DBusGateway::readConfigElement(const JSonElement &element)
 {
     auto sessionConfig = element[SESSION_CONFIG];
-    if (sessionConfig.isValid()) {
-        if (m_sessionBusConfig.size() != 0) {
-            m_sessionBusConfig += ",";
+    if (sessionConfig.isValid() && sessionConfig.isArray()) {
+        for(unsigned int i = 0; i < sessionConfig.elementCount(); i++) {
+            JSonElement child = sessionConfig.arrayElementAt(i);
+            if (m_sessionBusConfig.size() != 0) {
+                m_sessionBusConfig += ",";
+            }
+            m_sessionBusConfig += child.dump();
         }
-        m_sessionBusConfig += sessionConfig.dump();
     }
 
     auto systemConfig = element[SYSTEM_CONFIG];
-    if (systemConfig.isValid()) {
-        if (m_systemBusConfig.size() != 0) {
-            m_systemBusConfig += ",";
+    if (systemConfig.isValid() && systemConfig.isArray()) {
+        for(unsigned int i = 0; i < systemConfig.elementCount(); i++) {
+            JSonElement child = systemConfig.arrayElementAt(i);
+            if (m_systemBusConfig.size() != 0) {
+                m_systemBusConfig += ",";
+            }
+            m_systemBusConfig += child.dump();
         }
-        m_systemBusConfig += systemConfig.dump();
     }
 
     m_hasBeenConfigured = true;
-
     return ReturnCode::SUCCESS;
 }
 
 bool DBusGateway::activate()
 {
-    std::string config = (logging::StringBuilder() << "{\"" << SESSION_CONFIG << "\"" << ": " << m_sessionBusConfig
-                                                   << " , \"" << SYSTEM_CONFIG << "\"" << ": " << m_systemBusConfig << "}");
+    std::string config = (logging::StringBuilder() << "{\"" << SESSION_CONFIG << "\"" << ": [" << m_sessionBusConfig << "]"
+                                                   << " , \"" << SYSTEM_CONFIG << "\"" << ": [" << m_systemBusConfig << "]}");
 
     if (!m_hasBeenConfigured) {
         log_warning() << "'Activate' called on non-configured gateway " << id();

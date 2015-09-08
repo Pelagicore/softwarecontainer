@@ -16,6 +16,7 @@ bool Gateway::setConfig(const std::string &config)
     rootElement.readChildren(elements);
     for (auto &element : elements) {
         if (isError(readConfigElement(element))) {
+            log_warning() << "Could not read config element";
             success = false;
         }
     }
