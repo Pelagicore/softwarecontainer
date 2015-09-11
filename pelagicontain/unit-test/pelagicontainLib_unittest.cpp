@@ -487,25 +487,38 @@ TEST_F(PelagicontainApp, TestFileMounting) {
  */
 TEST_F(PelagicontainApp, TestFolderMounting) {
 
-    char tempFilename[] = "/tmp/blablaXXXXXX";
-    mkdtemp(tempFilename);
-
-    ASSERT_TRUE(isDirectory(tempFilename));
+    char tempDirname[] = "/tmp/blablaXXXXXX";
+    mkdtemp(tempDirname);
+    ASSERT_TRUE(isDirectory(tempDirname));
 
     FunctionJob job1(getLib(), [&] () {
-                return isDirectory(tempFilename) ? EXISTENT : NON_EXISTENT;
+                return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
             });
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
-    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempFilename, basename(strdup(
-                    tempFilename)), true);
+    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempDirname, basename(strdup(
+                    tempDirname)), true);
 
     FunctionJob job2(getLib(), [&] () {
                 return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
             });
     job2.start();
     ASSERT_TRUE(job2.wait() == EXISTENT);
+
+    // Write some data to a file inside the directory
+    char *tempFilename = strcat(tempDirname, "/bluhuXXXXXX");
+    int fileDescriptor = mkstemp(tempFilename);
+    const char *content = "GFDGDFHDHRWG";
+    write(fileDescriptor, content, sizeof(content));
+    close(fileDescriptor);
+    ASSERT_TRUE(isFile(tempFilename));
+
+    FunctionJob job3(getLib(), [&] () {
+                return isFile(pathInContainer + "/" + basename(strdup(tempFilename))) ? EXISTENT : NON_EXISTENT;
+            });
+    job3.start();
+    ASSERT_TRUE(job3.wait() == EXISTENT);
 }
 
 #include <stdlib.h>
