@@ -56,7 +56,7 @@ public:
      *  path to e.g. the configurations and application root
      * \param containedCommand The command to be executed inside the container
      */
-    Container(const std::string &id, const std::string &name, const std::string &configFile, const std::string &containerRoot);
+    Container(const std::string &id, const std::string &name, const std::string &configFile, const std::string &containerRoot, int shutdownTimeout = 2);
 
     ~Container();
 
@@ -214,6 +214,8 @@ private:
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
     bool m_initialized = false;
+
+    int m_shutdownTimeout = 2;
 };
 
 #endif //CONTAINER_H

@@ -44,11 +44,12 @@ void Container::init_lxc()
  */
 
 Container::Container(const std::string &id, const std::string &name, const std::string &configFile,
-        const std::string &containerRoot) :
+        const std::string &containerRoot, int shutdownTimeout) :
     m_configFile(configFile),
     m_id(id),
     m_name(name),
-    m_containerRoot(containerRoot)
+    m_containerRoot(containerRoot),
+    m_shutdownTimeout(shutdownTimeout)
 {
     init_lxc();
 }
@@ -404,8 +405,21 @@ void Container::destroy()
         kill(m_container->init_pid(m_container), SIGTERM);
     }
 
-    auto timeout = 2;
-    m_container->shutdown(m_container, timeout);
+    // Shutdown with timeout
+    bool success = m_container->shutdown(m_container, m_shutdownTimeout);
+    if (!success) {
+        log_warning() << "Failed to cleanly shutdown container " << toString() << ", forcing";
+        success = m_container->stop(m_container);
+        if (!success) {
+            log_warning() << "Failed to force kill the container " << toString();
+        }
+    }
+
+    // Destroy it!
+    success = m_container->destroy(m_container);
+    if (!success) {
+        log_warning() << "Failed to destroy the container " << toString();
+    }
 
 }
 
