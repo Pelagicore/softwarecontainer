@@ -185,14 +185,6 @@ public:
         }
     }
 
-    void MountLegacy(const uint32_t containerID, const std::string &path)
-    {
-        PelagicontainLib *container = nullptr;
-        if (checkContainer(containerID, container)) {
-            container->getContainer().mountApplication(path);
-        }
-    }
-
     std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
                 const std::string &subPathInContainer, bool readOnly)
     {
@@ -259,11 +251,6 @@ public:
                 const std::string &subPathInContainer, const bool &readOnly) override
     {
         return m_agent.bindMountFolderInContainer(containerID, pathInHost, subPathInContainer, readOnly);
-    }
-
-    void MountLegacy(const uint32_t &containerID, const std::string &path) override
-    {
-        return m_agent.MountLegacy(containerID, path);
     }
 
     void SetGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs) override

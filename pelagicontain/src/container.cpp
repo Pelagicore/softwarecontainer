@@ -34,15 +34,6 @@ void Container::init_lxc()
     }
 }
 
-/* A directory need to exist and be set up in a special way.
- *
- * Basically something like:
- * mkdir -p <containerRoot>/late_mounts
- * mount --bind <containerRoot>/late_mounts <containerRoot>/late_mounts
- * mount --make-unbindable <containerRoot>/late_mounts
- * mount --make-shared <containerRoot>/late_mounts
- */
-
 Container::Container(const std::string &id, const std::string &name, const std::string &configFile,
         const std::string &containerRoot, int shutdownTimeout) :
     m_configFile(configFile),
@@ -59,30 +50,13 @@ ReturnCode Container::initialize()
     std::string gatewayDir = gatewaysDir();
     if (isError(createDirectory(gatewayDir))) {
         log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
-    }
-
-    // Make sure the directory for "late mounts" exists
-    if (!isDirectory(lateMountDir())) {
-        log_error() << "Directory " << lateMountDir() << " does not exist";
         return ReturnCode::FAILURE;
     }
 
-    // Create directories needed for mounting, will be removed in dtor
-    bool allOk = true;
-    allOk = allOk && isSuccess(createDirectory(applicationMountDir()));
-    allOk = allOk && isSuccess(createDirectory(applicationMountDir() + "/bin"));
-    allOk = allOk && isSuccess(createDirectory(applicationMountDir() + "/shared"));
-    allOk = allOk && isSuccess(createDirectory(applicationMountDir() + "/home"));
-
-    if (!allOk) {
-        log_error() << "Could not set up all needed directories";
-    }
-
     createSharedMountPoint(gatewayDir);
+    m_initialized = true;
 
-    m_initialized = allOk;
-
-    return allOk ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+    return ReturnCode::SUCCESS;
 }
 
 
@@ -119,41 +93,29 @@ void Container::create()
     log_debug() << "Creating container " << toString();
 
     const char *containerID = id();
-
     assert(strlen(containerID) != 0);
 
-    std::string containerPath = m_containerRoot;
-
-    setenv("GATEWAY_DIR", (gatewaysDir() + "/").c_str(), true);
-    setenv("MOUNT_DIR", (containerPath + LATE_MOUNT_PATH).c_str(), true);
-
+    setenv("GATEWAY_DIR", gatewaysDir().c_str(), true);
     log_debug() << "GATEWAY_DIR : " << getenv("GATEWAY_DIR");
-    log_debug() << "MOUNT_DIR : " << getenv("MOUNT_DIR");
 
     auto configFile = m_configFile.c_str();
     log_debug() << "Config file : " << configFile;
     log_debug() << "Template : " << LXCTEMPLATE;
-
     log_debug() << "creating container with ID : " << containerID;
 
     m_container = lxc_container_new(containerID, nullptr);
-
     lxc_container_get(m_container);
 
     log_debug() << toString();
 
     char *argv[] = {(char *)"lxc-create", nullptr};
-
     int flags = 0;
-
     struct bdev_specs specs = {};
 
     m_container->load_config(m_container, configFile);
-
     m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv);
 
     m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
-
     log_debug() << "Container created. RootFS: " << m_rootFSPath;
 
 }
@@ -171,7 +133,7 @@ pid_t Container::start()
 {
     pid_t pid;
 
-    if (isLXC_C_APIEnabled() && true) {
+    if (isLXC_C_APIEnabled() && false) {
 
         log_debug() << "Starting container";
 
@@ -187,7 +149,7 @@ pid_t Container::start()
         std::vector<std::string> executeCommandVec;
         std::string lxcCommand = StringBuilder() << "lxc-execute -n " << id() << " -- env " << "/bin/sleep 100000000";
         executeCommandVec = Glib::shell_parse_argv(lxcCommand);
-        std::vector<std::string> envVarVec = {"MOUNT_DIR=" + lateMountDir()};
+        std::vector<std::string> envVarVec = { };
 
         log_debug() << "Execute: " << lxcCommand;
 
@@ -470,18 +432,6 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
     log_debug() << "Mounting device in container : " << pathInHost;
     auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
-}
-
-bool Container::mountApplication(const std::string &appDirBase)
-{
-    bool allOk = true;
-    allOk &= isSuccess(bindMount(appDirBase + "/bin", applicationMountDir() + "/bin"));
-    allOk &= isSuccess(bindMount(appDirBase + "/shared", applicationMountDir() + "/shared"));
-    allOk &= isSuccess(bindMount(appDirBase + "/home", applicationMountDir() + "/home"));
-
-    allOk = true;
-
-    return allOk;
 }
 
 ReturnCode Container::executeInContainer(const std::string &cmd)

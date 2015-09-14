@@ -49,9 +49,6 @@ $rootfs/usr/lib \
 $rootfs/lib64 \
 $rootfs/usr/lib64 \
 $rootfs/deployed_app \
-$rootfs/appbin \
-$rootfs/appshared \
-$rootfs/apphome \
 $rootfs/gateways \
 $rootfs/${CMAKE_INSTALL_PREFIX} \
 ${ADDITIONAL_FOLDER_MOUNTS}
@@ -232,7 +229,6 @@ lxc.mount.entry = /usr/lib $rootfs/usr/lib none ro,bind 0 0
 lxc.mount.entry = /usr/sbin $rootfs/usr/sbin none ro,bind 0 0
 #lxc.mount.entry = /etc/fonts $rootfs/etc/fonts none ro,bind 0 0
 lxc.mount.entry = /usr $rootfs/usr none ro,bind 0 0
-#lxc.mount.entry = / $rootfs/host none ro,bind 0 0
 lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0
 EOF
 
@@ -257,14 +253,6 @@ fi
 # the gateway folder needs to be writable since wayland requires some extra files to be created by the client in the folder where the wayland socket is located
 chmod o+rwx $GATEWAY_DIR
 chmod g+rwx $GATEWAY_DIR
-
-if [ -n "$MOUNT_DIR" ]; then
-cat <<EOF >> $path/config
-lxc.mount.entry = $MOUNT_DIR/$name/bin appbin none ro,bind 0 0
-lxc.mount.entry = $MOUNT_DIR/$name/shared appshared none rw,bind 0 0
-lxc.mount.entry = $MOUNT_DIR/$name/home apphome none rw,bind 0 0
-EOF
-fi
 
     libdirs="\
         lib \

@@ -102,11 +102,6 @@ public:
         return FileToolkitWithUndo::createSymLink(source, destination);
     }
 
-    /**
-     * Old style mount. Used by headless launcher
-     */
-    bool mountApplication(const std::string &appDirBase);
-
     /*!
      * Calls the lxc-destroy command.
      */
@@ -125,9 +120,8 @@ public:
      * Setup the container for preloading
      *
      * Setup the container so directories are available for later use when
-     * setApplication is called. If the 'late_mount' directory is missing
-     * or any subddirectory to it could not be created, \c false is returned,
-     * if all went well, \c true is returned.
+     * setApplication is called.
+     * If all went well, \c true is returned, \c false otherwise
      *
      * \return true or false
      */
@@ -152,19 +146,7 @@ public:
 
     std::string gatewaysDir() const
     {
-        // TODO: see how to put gatewaysDir into the late_mounts to save one mount
-        //      return applicationMountDir() + GATEWAYS_PATH;
         return m_containerRoot + "/" + id() + GATEWAYS_PATH;
-    }
-
-    std::string lateMountDir() const
-    {
-        return m_containerRoot + LATE_MOUNT_PATH;
-    }
-
-    std::string applicationMountDir() const
-    {
-        return lateMountDir() + "/" + m_id;
     }
 
     const std::string &root() const

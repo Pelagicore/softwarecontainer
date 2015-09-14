@@ -42,11 +42,6 @@
 			<arg direction="out" type="s" name="pathInContainer" />
 		</method>
 
-		<method name="MountLegacy">
-			<arg direction="in" type="u" name="containerID" />
-			<arg direction="in" type="s" name="path" />
-		</method>
-
 		<method name="SetGatewayConfigs">
 			<!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList 
 				&lt; QString &gt; "/> -->
