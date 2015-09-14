@@ -150,9 +150,9 @@ public:
             job->captureStdin();
             job->setOutputFile(outputFile);
             job->setUserID(userID);
-            job->start();
             job->setEnvironnmentVariables(env);
             job->setWorkingDirectory(workingDirectory);
+            job->start();
             addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {
                             listener(pid, exitCode);
                         }, m_mainLoopContext);
