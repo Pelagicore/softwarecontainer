@@ -34,7 +34,11 @@ PelagicontainWorkspace &getDefaultWorkspace()
 
 PelagicontainLib::PelagicontainLib(PelagicontainWorkspace &workspace) :
     m_workspace(workspace),
-    m_container(getContainerID(), m_containerName, m_workspace.m_containerConfig, m_workspace.m_containerRoot)
+    m_container( getContainerID()
+               , m_containerName
+               , m_workspace.m_containerConfig
+               , m_workspace.m_containerRoot
+               , m_workspace.m_containerShutdownTimeout)
 {
     m_pelagicontain.setMainLoopContext(m_ml);
 }

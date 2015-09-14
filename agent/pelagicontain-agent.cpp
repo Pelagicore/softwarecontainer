@@ -18,7 +18,6 @@
 #include "ivi-main-loop/UNIXSignalHandler.h"
 
 #include "pelagicore-DBusCpp.h"
-
 #include "PelagicontainAgent_dbuscpp_adaptor.h"
 
 #include "pelagicontain-lib.h"
@@ -37,12 +36,17 @@ class PelagicontainAgent
     typedef unique_ptr<PelagicontainLib> PelagicontainLibPtr;
 
 public:
-    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, bool shutdownContainers) :
-        m_mainLoopContext(mainLoopContext)
+    PelagicontainAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
+                     , int preloadCount
+                     , bool shutdownContainers
+                     , int shutdownTimeout)
+        : m_mainLoopContext(mainLoopContext)
+        , m_preloadCount(preloadCount)
+        , m_shutdownContainers(shutdownContainers)
+        , m_shutdownTimeout(shutdownTimeout)
     {
-        m_preloadCount = preloadCount;
-        m_shutdownContainers = shutdownContainers;
         triggerPreload();
+        m_pelagicontainWorkspace.m_containerShutdownTimeout = m_shutdownTimeout;
     }
 
     ~PelagicontainAgent()
@@ -65,7 +69,6 @@ public:
 
     void deleteContainer(ContainerID containerID)
     {
-
         bool valid = ((containerID < m_containers.size()) && (m_containers[containerID] != nullptr));
         if (valid) {
             m_containers[containerID] = nullptr;
@@ -212,6 +215,7 @@ private:
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
+    int m_shutdownTimeout;
 
 };
 
@@ -299,6 +303,10 @@ int main(int argc, char * *argv)
     commandLineParser.addOption(shutdownContainers, "shutdown", 's',
             "If false, the containers will not be shutdown. Useful for debugging");
 
+    int timeout = 2;
+    commandLineParser.addOption(timeout, "timeout", 't',
+            "Timeout in seconds to wait for containers to shutdown");
+
     if (commandLineParser.parse(argc, argv)) {
         exit(1);
     }
@@ -321,7 +329,7 @@ int main(int argc, char * *argv)
         connection->request_name(AGENT_BUS_NAME);
     }
 
-    PelagicontainAgent agent(mainContext, preloadCount, shutdownContainers);
+    PelagicontainAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
 
     auto pp = glibDBusFactory.registerAdapter<PelagicontainAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
 

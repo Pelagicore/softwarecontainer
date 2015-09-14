@@ -22,9 +22,13 @@ class PelagicontainWorkspace :
     LOG_DECLARE_CLASS_CONTEXT("PCLW", "Pelagicontain library workspace");
 
 public:
-    PelagicontainWorkspace(const std::string &containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE,
-                const std::string &configFilePath = PELAGICONTAIN_DEFAULT_CONFIG) :
-        m_containerRoot(containerRootFolder), m_containerConfig(configFilePath)
+    PelagicontainWorkspace(
+            const std::string &containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE,
+            const std::string &configFilePath = PELAGICONTAIN_DEFAULT_CONFIG,
+            int containerShutdownTimeout = 2)
+        : m_containerRoot(containerRootFolder)
+        , m_containerConfig(configFilePath)
+        , m_containerShutdownTimeout(containerShutdownTimeout)
     {
         // Make sure path ends in '/' since it might not always be checked
         if (m_containerRoot.back() != '/') {
@@ -52,6 +56,7 @@ public:
 
     std::string m_containerRoot;
     std::string m_containerConfig;
+    int m_containerShutdownTimeout;
 
 };
 
