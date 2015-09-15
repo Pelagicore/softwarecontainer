@@ -36,8 +36,6 @@ public:
 
     std::string bindMountFolderInContainer(ContainerID containerID, const std::string &src, const std::string &dst, bool readonly);
 
-    void mountLegacy(ContainerID containerID, const std::string &path);
-
     void setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config);
 
     ReturnCode writeToStdIn(pid_t pid, const void *data, size_t length);
@@ -115,11 +113,6 @@ public:
     std::string bindMountFolderInContainer(const std::string &src, const std::string &dst, bool readonly = true)
     {
         return m_agent.bindMountFolderInContainer(getContainerID(), src, dst, readonly);
-    }
-
-    void MountLegacy(const std::string &path)
-    {
-        m_agent.mountLegacy(getContainerID(), path);
     }
 
     void setGatewayConfigs(const GatewayConfiguration &config)
