@@ -25,7 +25,7 @@ public:
     PelagicontainWorkspace(
             const std::string &containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE,
             const std::string &configFilePath = PELAGICONTAIN_DEFAULT_CONFIG,
-            int containerShutdownTimeout = 2)
+            unsigned int containerShutdownTimeout = 2)
         : m_containerRoot(containerRootFolder)
         , m_containerConfig(configFilePath)
         , m_containerShutdownTimeout(containerShutdownTimeout)
@@ -56,7 +56,7 @@ public:
 
     std::string m_containerRoot;
     std::string m_containerConfig;
-    int m_containerShutdownTimeout;
+    unsigned int m_containerShutdownTimeout;
 
 };
 
@@ -83,6 +83,11 @@ public:
     void shutdown()
     {
         m_pelagicontain.shutdown();
+    }
+
+    void shutdown(unsigned int timeout)
+    {
+        m_pelagicontain.shutdown(timeout);
     }
 
     bool isInitialized() const

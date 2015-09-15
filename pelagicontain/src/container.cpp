@@ -359,6 +359,11 @@ void Container::stop()
 
 void Container::destroy()
 {
+    destroy(m_shutdownTimeout);
+}
+
+void Container::destroy(unsigned int timeout)
+{
     stop();
 
     log_debug() << "Shutting down container " << toString() << " pid " << m_container->init_pid(m_container);
@@ -368,7 +373,7 @@ void Container::destroy()
     }
 
     // Shutdown with timeout
-    bool success = m_container->shutdown(m_container, m_shutdownTimeout);
+    bool success = m_container->shutdown(m_container, timeout);
     if (!success) {
         log_warning() << "Failed to cleanly shutdown container " << toString() << ", forcing";
         success = m_container->stop(m_container);

@@ -87,6 +87,11 @@ void Agent::shutDown(ContainerID containerID)
     getProxy().ShutDownContainer(containerID);
 }
 
+void Agent::shutDown(ContainerID containerID, unsigned int timeout)
+{
+    getProxy().ShutDownContainerWithTimeout(containerID, timeout);
+}
+
 std::string Agent::bindMountFolderInContainer(ContainerID containerID, const std::string &src, const std::string &dst,
             bool readonly)
 {

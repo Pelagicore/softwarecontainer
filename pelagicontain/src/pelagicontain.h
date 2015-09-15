@@ -82,6 +82,7 @@ public:
      * the Pelagicontain component.
      */
     void shutdown();
+    void shutdown(unsigned int timeout);
 
     /*! Sets environment variable inside the container.
      *
@@ -94,6 +95,7 @@ public:
     void setContainerEnvironmentVariable(const std::string &var, const std::string &val);
 
     void shutdownContainer();
+    void shutdownContainer(unsigned int timeout);
 
     ObservableProperty<ContainerState> &getContainerState()
     {

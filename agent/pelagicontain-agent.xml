@@ -29,6 +29,11 @@
 			<arg direction="in" type="u" name="containerID" />
 		</method>
 
+		<method name="ShutDownContainerWithTimeout">
+			<arg direction="in" type="u" name="containerID" />
+			<arg direction="in" type="u" name="timeout" />
+		</method>
+
 		<method name="WriteToStdIn">
 			<arg direction="in" type="u" name="processID" />
 			<arg direction="in" type="ay" name="bytes" />

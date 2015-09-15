@@ -33,6 +33,7 @@ public:
                 EnvironmentVariables env);
 
     void shutDown(ContainerID containerID);
+    void shutDown(ContainerID containerID, unsigned int timeout);
 
     std::string bindMountFolderInContainer(ContainerID containerID, const std::string &src, const std::string &dst, bool readonly);
 
@@ -98,6 +99,11 @@ public:
     void shutdown()
     {
         m_agent.shutDown(getContainerID());
+    }
+
+    void shutdown(unsigned int timeout)
+    {
+        m_agent.shutDown(getContainerID(), timeout);
     }
 
     bool isInitialized()

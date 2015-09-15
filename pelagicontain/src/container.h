@@ -106,6 +106,7 @@ public:
      * Calls the lxc-destroy command.
      */
     void destroy();
+    void destroy(unsigned int timeout);
 
     void stop();
 

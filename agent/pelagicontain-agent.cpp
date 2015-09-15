@@ -43,10 +43,9 @@ public:
         : m_mainLoopContext(mainLoopContext)
         , m_preloadCount(preloadCount)
         , m_shutdownContainers(shutdownContainers)
-        , m_shutdownTimeout(shutdownTimeout)
     {
         triggerPreload();
-        m_pelagicontainWorkspace.m_containerShutdownTimeout = m_shutdownTimeout;
+        m_pelagicontainWorkspace.m_containerShutdownTimeout = shutdownTimeout;
     }
 
     ~PelagicontainAgent()
@@ -177,6 +176,11 @@ public:
 
     void shutdownContainer(ContainerID containerID)
     {
+        shutdownContainer(containerID, m_pelagicontainWorkspace.m_containerShutdownTimeout);
+    }
+
+    void shutdownContainer(ContainerID containerID, unsigned int timeout)
+    {
         if (m_shutdownContainers) {
             PelagicontainLib *container = nullptr;
             if (checkContainer(containerID, container)) {
@@ -215,8 +219,6 @@ private:
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
-    int m_shutdownTimeout;
-
 };
 
 class PelagicontainAgentAdaptor :
@@ -244,6 +246,11 @@ public:
                         ProcessStateChanged(containerID, pid, false, exitCode);
                         log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
                     });
+    }
+
+    void ShutDownContainerWithTimeout(const uint32_t &containerID, const uint32_t &timeout)
+    {
+        m_agent.shutdownContainer(containerID, timeout);
     }
 
     void ShutDownContainer(const uint32_t &containerID) override

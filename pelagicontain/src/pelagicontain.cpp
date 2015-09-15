@@ -43,6 +43,14 @@ void Pelagicontain::shutdownContainer()
     m_containerState.setValueNotify(ContainerState::TERMINATED);
 }
 
+void Pelagicontain::shutdownContainer(unsigned int timeout)
+{
+    m_container->destroy(timeout);
+    shutdownGateways();
+
+    m_containerState.setValueNotify(ContainerState::TERMINATED);
+}
+
 
 void Pelagicontain::onContainerShutdown(int pid, int exitCode)
 {
@@ -104,6 +112,12 @@ void Pelagicontain::shutdown()
 {
     log_debug() << "shutdown called"; // << logging::getStackTrace();
     shutdownContainer();
+}
+
+void Pelagicontain::shutdown(unsigned int timeout)
+{
+    log_debug() << "shutdown called"; // << logging::getStackTrace();
+    shutdownContainer(timeout);
 }
 
 void Pelagicontain::shutdownGateways()
