@@ -6,43 +6,52 @@
 #include <string>
 #include "filegateway.h"
 
+FileGateway::FileGateway()
+    : Gateway(ID)
+    , m_settings({})
+{
+}
+
 ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 {
-    std::string pathInHost;
-    std::string pathInContainer;
-    bool createSymlinkInContainer = false;
-    bool readOnly = false;
-    std::string envVarName;
-    std::string envVarValue;
+    file_setting setting;
+    element.read("path-host", setting.pathInHost);
+    element.read("path-container", setting.pathInContainer);
+    element.read("create-symlink", setting.createSymlinkInContainer);
+    element.read("read-only", setting.readOnly);
+    element.read("env-var-name", setting.envVarName);
+    element.read("env-var-value", setting.envVarValue);
+    assert(setting.pathInHost.size() != 0);
 
-    element.read("path-host", pathInHost);
-    element.read("path-container", pathInContainer);
-    element.read("create-symlink", createSymlinkInContainer);
-    element.read("read-only", readOnly);
-    element.read("env-var-name", envVarName);
-    element.read("env-var-value", envVarValue);
-
-    assert(pathInHost.size() != 0);
-
-    // TODO : move mount to activate()
-
-    std::string path;
-
-    if (isDirectory(pathInHost)) {
-        path = getContainer().bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
-    } else {
-        path = getContainer().bindMountFileInContainer(pathInHost, pathInContainer, readOnly);
-    }
-
-    if (envVarName.size() != 0) {
-        char value[1024];
-        snprintf(value, sizeof(value), envVarValue.c_str(), path.c_str());
-        setEnvironmentVariable(envVarName, value);
-    }
-
-    if (createSymlinkInContainer) {
-        getContainer().createSymLink(getContainer().rootFS() + pathInHost, path);
-    }
-
+    m_settings.push_back(setting);
     return ReturnCode::SUCCESS;
+}
+
+bool FileGateway::activate()
+{
+    for (file_setting &setting : m_settings) {
+        std::string path;
+
+        if (isDirectory(setting.pathInHost)) {
+            path = getContainer().bindMountFolderInContainer(setting.pathInHost
+                    , setting.pathInContainer
+                    , setting.readOnly);
+        } else {
+            path = getContainer().bindMountFileInContainer(setting.pathInHost
+                    , setting.pathInContainer
+                    , setting.readOnly);
+        }
+
+        if (setting.envVarName.size() != 0) {
+            char value[1024];
+            snprintf(value, sizeof(value), setting.envVarValue.c_str(), path.c_str());
+            setEnvironmentVariable(setting.envVarName, value);
+        }
+
+        if (setting.createSymlinkInContainer) {
+            getContainer().createSymLink(getContainer().rootFS() + setting.pathInHost, path);
+        }
+    }
+
+    return true;
 }

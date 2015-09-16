@@ -29,18 +29,22 @@ class FileGateway :
 public:
     static constexpr const char *ID = "file";
 
-    FileGateway() :
-        Gateway(ID)
-    {
-    }
+    FileGateway();
 
     ReturnCode readConfigElement(const JSonElement &element) override;
-
-    bool activate() override
-    {
-        return true;
-    }
+    bool activate() override;
 
 private:
-    bool m_enabled = false;
+    bool m_hasBeenConfigured = false;
+
+    struct file_setting {
+        std::string pathInHost;
+        std::string pathInContainer;
+        bool createSymlinkInContainer;
+        bool readOnly;
+        std::string envVarName;
+        std::string envVarValue;
+    };
+
+    std::vector<file_setting> m_settings;
 };
