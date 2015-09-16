@@ -31,7 +31,8 @@ bool CgroupsGateway::activate()
         }
     }
 
-    return success == ReturnCode::SUCCESS ? true : false;
+    m_hasBeenConfigured = success == ReturnCode::SUCCESS;
+    return m_hasBeenConfigured;
 }
 
 ReturnCode CgroupsGateway::readConfigElement(const JSonElement &element)
