@@ -37,16 +37,16 @@ pid_t Pelagicontain::preload(Container &container)
 
 void Pelagicontain::shutdownContainer()
 {
-    m_container->destroy();
     shutdownGateways();
+    m_container->destroy();
 
     m_containerState.setValueNotify(ContainerState::TERMINATED);
 }
 
 void Pelagicontain::shutdownContainer(unsigned int timeout)
 {
-    m_container->destroy(timeout);
     shutdownGateways();
+    m_container->destroy(timeout);
 
     m_containerState.setValueNotify(ContainerState::TERMINATED);
 }
