@@ -3,6 +3,7 @@
  *   All rights reserved.
  */
 
+#include <vector>
 #include <fstream>
 #include <unistd.h>
 #include <sys/mount.h>
@@ -10,13 +11,15 @@
 #include <sys/types.h>
 #include <lxc/lxccontainer.h>
 #include <lxc/version.h>
-#include "lxc-common.h"
 
+#include <assert.h>
 #include <pwd.h>
 #include <grp.h>
 
 #include "container.h"
 #include "pelagicore-common.h"
+
+static constexpr const char *LXC_CONTAINERS_ROOT_CONFIG_ITEM = "lxc.lxcpath";
 
 std::vector<const char *> Container::s_LXCContainerStates;
 const char *Container::s_LXCRoot;
