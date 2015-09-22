@@ -105,9 +105,6 @@ private:
 
     ObservableWritableProperty<ContainerState> m_containerState;
 
-    // Keeps track of if someone has called launch
-    bool m_launching = false;
-
     SignalConnectionsHandler m_connections;
 
     Glib::RefPtr<Glib::MainContext> *m_mainLoopContext = nullptr;

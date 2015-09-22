@@ -68,9 +68,6 @@ void Pelagicontain::updateGatewayConfiguration(const GatewayConfiguration &confi
 {
     log_debug() << "updateGatewayConfiguration called" << configs;
     setGatewayConfigs(configs);
-    if (m_launching) {
-        launchCommand(APP_BINARY);  // We launch the application with hardcoded path immediately for backward compatibility. TODO : remove
-    }
 }
 
 void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)

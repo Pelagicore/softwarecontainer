@@ -48,7 +48,6 @@ $rootfs/lib \
 $rootfs/usr/lib \
 $rootfs/lib64 \
 $rootfs/usr/lib64 \
-$rootfs/deployed_app \
 $rootfs/gateways \
 $rootfs/${CMAKE_INSTALL_PREFIX} \
 ${ADDITIONAL_FOLDER_MOUNTS}
@@ -211,7 +210,6 @@ copy_configuration()
     path=$1
     rootfs=$2
     name=$3
-    deploy_dir=$4
 
 grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
 cat <<EOF >> $path/config
@@ -265,13 +263,6 @@ chmod g+rwx $GATEWAY_DIR
             echo "lxc.mount.entry = /$dir $dir none ro,bind 0 0" >> $path/config
         fi
     done
-
-# Run a script before the pivot_mount and the following unmounts happens in
-# lxc-execute in order to avoid the unmount of 'late_mounts' to propagate to
-# the outside of the container.
-cat <<EOF >> $path/config
-lxc.hook.mount = @LXC_HOOK_SCRIPT_MAKESLAVE@
-EOF
 }
 
 usage()
