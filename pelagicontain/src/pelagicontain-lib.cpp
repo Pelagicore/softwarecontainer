@@ -26,7 +26,7 @@
 #include "waylandgateway.h"
 #include "filegateway.h"
 
-#include "config.h"
+//#include "config.h"
 
 namespace pelagicontain {
 

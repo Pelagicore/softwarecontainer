@@ -39,7 +39,6 @@ add_library(pelagicontainLib SHARED
 #    dltgateway.cpp
     filegateway.cpp
     waylandgateway.cpp
-    ${PROJECT_SOURCE_DIR}/common/config.cpp
     ${PROJECT_SOURCE_DIR}/common/common.cpp
     ${GATEWAY_SOURCES}
 )
