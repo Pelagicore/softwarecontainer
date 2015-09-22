@@ -96,9 +96,9 @@ bool PulseGateway::connectToPulseServer()
 
         int err = pa_context_connect(
                 m_context,          /* context */
-                NULL,                /* default server */
-                PA_CONTEXT_NOFAIL,   /* keep reconnection on failure */
-                NULL);               /* use default spawn api */
+                nullptr,            /* default server */
+                PA_CONTEXT_NOFAIL,  /* keep reconnection on failure */
+                nullptr);           /* use default spawn api */
 
         if (err != 0) {
             success = false;

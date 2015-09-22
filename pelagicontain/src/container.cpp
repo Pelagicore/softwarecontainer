@@ -140,7 +140,7 @@ pid_t Container::start()
 
         log_debug() << "Starting container";
 
-        if (!m_container->start(m_container, false, NULL)) {
+        if (!m_container->start(m_container, false, nullptr)) {
             log_error() << "Error starting container";
             pid = 0;
         } else {

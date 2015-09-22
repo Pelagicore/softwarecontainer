@@ -348,7 +348,7 @@ public:
                     dst.c_str(),          // target
                     "",                   // fstype
                     flags,              // flags
-                    NULL);                // data
+                    nullptr);                // data
 
         auto result = ReturnCode::FAILURE;
 
@@ -369,11 +369,11 @@ public:
     ReturnCode createSharedMountPoint(const std::string &path)
     {
         // MS_MGC_VAL |
-        auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, NULL);
+        auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
         assert(mountRes == 0);
-        mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, NULL);
+        mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, nullptr);
         assert(mountRes == 0);
-        mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, NULL);
+        mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, nullptr);
         assert(mountRes == 0);
         m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
 

@@ -29,7 +29,7 @@ std::string Generator::gen_ct_name()
     struct timeval time;
     char name[10];
 
-    gettimeofday(&time, NULL);
+    gettimeofday(&time, nullptr);
     srand((time.tv_sec * 1000) + (time.tv_usec / 1000));
 
     for (size_t i = 0; i < sizeof(name); i++) {

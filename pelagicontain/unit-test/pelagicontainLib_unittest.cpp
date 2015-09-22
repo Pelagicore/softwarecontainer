@@ -245,7 +245,7 @@ TEST_F(PelagicontainApp, FileGatewayReadOnly) {
 
     // Make sure the environment variables are available
     FunctionJob jobEnv(getLib(), [&] () {
-        return getenv(envVarName.c_str()) != NULL ? EXISTENT : NON_EXISTENT;
+        return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
     });
     jobEnv.start();
     ASSERT_TRUE(jobEnv.wait() == EXISTENT);
@@ -365,7 +365,7 @@ TEST_F(PelagicontainApp, FileGatewayReadWrite) {
 
     // Make sure the environment variables are available
     FunctionJob jobEnv(getLib(), [&] () {
-        return getenv(envVarName.c_str()) != NULL ? EXISTENT : NON_EXISTENT;
+        return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
     });
     jobEnv.start();
     ASSERT_TRUE(jobEnv.wait() == EXISTENT);

@@ -218,7 +218,7 @@ ReturnCode DBusGateway::makePopenCall(const std::string &command, int &infp, int
         // Set group id to the same as pid, that way we can kill the shells children on close.
         setpgid(0, 0);
 
-        execl("/bin/sh", "sh", "-c", command.c_str(), NULL);
+        execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
         log_error() << "execl : " << strerror(errno);
         exit(1);
     }
