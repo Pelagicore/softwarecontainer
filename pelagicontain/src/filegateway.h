@@ -37,7 +37,7 @@ public:
 private:
     bool m_hasBeenConfigured = false;
 
-    struct file_setting {
+    struct FileSetting {
         std::string pathInHost;
         std::string pathInContainer;
         bool createSymlinkInContainer;
@@ -46,5 +46,5 @@ private:
         std::string envVarValue;
     };
 
-    std::vector<file_setting> m_settings;
+    std::vector<FileSetting> m_settings;
 };

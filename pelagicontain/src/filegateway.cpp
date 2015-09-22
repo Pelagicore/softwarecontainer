@@ -14,7 +14,7 @@ FileGateway::FileGateway()
 
 ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 {
-    file_setting setting;
+    FileSetting setting;
     element.read("path-host", setting.pathInHost);
     element.read("path-container", setting.pathInContainer);
     element.read("create-symlink", setting.createSymlinkInContainer);
@@ -29,7 +29,7 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 
 bool FileGateway::activate()
 {
-    for (file_setting &setting : m_settings) {
+    for (FileSetting &setting : m_settings) {
         std::string path;
 
         if (isDirectory(setting.pathInHost)) {
