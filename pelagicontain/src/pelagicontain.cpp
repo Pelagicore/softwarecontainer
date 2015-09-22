@@ -51,13 +51,6 @@ void Pelagicontain::shutdownContainer(unsigned int timeout)
     m_containerState.setValueNotify(ContainerState::TERMINATED);
 }
 
-
-void Pelagicontain::onContainerShutdown(int pid, int exitCode)
-{
-    log_debug() << "Controller " << " exited with exit code " << exitCode;
-    shutdownContainer();
-}
-
 pid_t Pelagicontain::launchCommand(const std::string &commandLine)
 {
     log_debug() << "launchCommand called with commandLine: " << commandLine;
@@ -100,12 +93,6 @@ void Pelagicontain::setGatewayConfigs(const GatewayConfiguration &configs)
 
     m_containerState.setValueNotify(ContainerState::READY);
 
-}
-
-
-void Pelagicontain::setContainerEnvironmentVariable(const std::string &var, const std::string &val)
-{
-    m_container->setEnvironmentVariable(var, val);
 }
 
 void Pelagicontain::shutdown()

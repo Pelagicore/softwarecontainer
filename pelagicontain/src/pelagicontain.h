@@ -84,16 +84,6 @@ public:
     void shutdown();
     void shutdown(unsigned int timeout);
 
-    /*! Sets environment variable inside the container.
-     *
-     * Notifies the controller to set the environment variable passed as
-     * argument inside the container.
-     *
-     * \param var The name of the environment variable to be set
-     * \param val The value that the environement variable should be set to
-     */
-    void setContainerEnvironmentVariable(const std::string &var, const std::string &val);
-
     void shutdownContainer();
     void shutdownContainer(unsigned int timeout);
 
@@ -109,21 +99,6 @@ public:
 
 private:
     void shutdownGateways();
-
-    /*! Handle shutdown of the controller process inside a container
-     *
-     * Called by a SignalChildWatch source when the pid belonging to the
-     * controller exits. Takes care of:
-     *  - Cleaning up LXC
-     *  - Issuing Pelagicontain::shutdownGateways()
-     *  - PAMAbstractInterface::unregisterClient()
-     *  - Killing the main event loop (and thus exiting Pelagicontain)
-     *
-     * \param pid pid of the controller as spawned by Pelagicontain::preload()
-     * \param exitCode exit code of \a pid
-     *
-     */
-    void onContainerShutdown(int pid, int exitCode);
 
     Container *m_container = nullptr;
     std::vector<Gateway *> m_gateways;
