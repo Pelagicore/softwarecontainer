@@ -406,7 +406,7 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
 
     touch(dst);
     m_cleanupHandlers.push_back(new FileCleanUpHandler(dst));
-    auto s = bindMount(pathOnHost, dst, readonly);
+    bindMount(pathOnHost, dst, readonly);
 
     std::string actualPathInContainer = gatewaysDirInContainer();
     actualPathInContainer += +"/" + pathInContainer;
@@ -426,7 +426,7 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
     //    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     //    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(dst) );
 
-    auto s = bindMount(pathOnHost, dst, readonly);
+    bindMount(pathOnHost, dst, readonly);
 
     return gatewaysDirInContainer() + "/" + pathInContainer;
 }
