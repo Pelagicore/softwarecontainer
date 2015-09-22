@@ -8,7 +8,6 @@ option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
 # Pulse is a special case since it has a dependency package
 if(ENABLE_PULSEGATEWAY)
     pkg_check_modules(DEPENDENCIES REQUIRED libpulse)
-else(ENABLE_PULSEGATEWAY)
 endif(ENABLE_PULSEGATEWAY)
 add_definitions(${DEPENDENCIES_CFLAGS})
 
@@ -36,7 +35,6 @@ add_library(pelagicontainLib SHARED
     gateway.cpp
     pelagicontain.cpp
     pelagicontain-lib.cpp
-#    dltgateway.cpp
     filegateway.cpp
     waylandgateway.cpp
     ${PROJECT_SOURCE_DIR}/common/common.cpp
