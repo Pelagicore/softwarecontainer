@@ -56,14 +56,3 @@ TARGET_LINK_LIBRARIES( pelagicontainLib
 set_target_properties(pelagicontainLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
 install(TARGETS pelagicontainLib DESTINATION lib)
-
-add_executable( pelagicontain
-    main.cpp
-)
-
-TARGET_LINK_LIBRARIES( pelagicontain
-    pelagicontainLib
-    ${COMMON_DEPENDENCIES_LIBRARIES}
-)
-
-install(TARGETS pelagicontain RUNTIME DESTINATION bin)
