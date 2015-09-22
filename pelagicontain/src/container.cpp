@@ -108,7 +108,7 @@ void Container::create()
 
     log_debug() << toString();
 
-    char *argv[] = {(char *)"lxc-create", nullptr};
+    char *argv[] = {};
     int flags = 0;
     struct bdev_specs specs = {};
 
@@ -137,13 +137,13 @@ pid_t Container::start()
 
         log_debug() << "Starting container";
 
-        //char *argv[] = {"/bin/sleep", "100000000", nullptr};
-        //char *emptyArgv[] = {(char *)"100000000", nullptr};
-        m_container->start(m_container, false, NULL);
-
-        log_debug() << "Container started__ : " << toString();
-
-        pid = m_container->init_pid(m_container);
+        if (!m_container->start(m_container, false, NULL)) {
+            log_error() << "Error starting container";
+            pid = 0;
+        } else {
+            log_debug() << "Container started: " << toString();
+            pid = m_container->init_pid(m_container);
+        }
 
     } else {
         std::vector<std::string> executeCommandVec;
@@ -168,11 +168,8 @@ pid_t Container::start()
     }
 
     //    assert( m_container->is_running(m_container) );
-
     log_info() << "To connect to this container : lxc-attach -n " << id();
-
     return pid;
-
 }
 
 int Container::executeInContainerEntryFunction(void *param)
@@ -357,10 +354,13 @@ void Container::stop()
     log_debug() << "Stopping the container";
 
     if (m_container != nullptr) {
-        m_container->stop(m_container);
-        waitForState(LXCContainerState::STOPPED);
+        if (m_container->stop(m_container)) {
+            log_debug() << "Container stopped, waiting for stop state";
+            waitForState(LXCContainerState::STOPPED);
+        } else {
+            log_error() << "Unable to stop container";
+        }
     }
-
 }
 
 void Container::destroy()
@@ -381,11 +381,7 @@ void Container::destroy(unsigned int timeout)
     // Shutdown with timeout
     bool success = m_container->shutdown(m_container, timeout);
     if (!success) {
-        log_warning() << "Failed to cleanly shutdown container " << toString() << ", forcing";
-        success = m_container->stop(m_container);
-        if (!success) {
-            log_warning() << "Failed to force kill the container " << toString();
-        }
+        log_warning() << "Failed to cleanly shutdown container " << toString();
     }
 
     // Destroy it!

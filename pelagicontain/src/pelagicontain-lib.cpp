@@ -114,7 +114,6 @@ ReturnCode PelagicontainWorkspace::checkWorkspace()
 
 ReturnCode PelagicontainLib::preload()
 {
-
     if (isError(m_container.initialize())) {
         log_error() << "Could not setup container for preloading";
         return ReturnCode::FAILURE;
