@@ -19,17 +19,7 @@ public:
     {
     }
 
-    virtual bool startApp()
-    {
-        return true;
-    }
-
     virtual bool shutdown()
-    {
-        return true;
-    }
-
-    virtual bool hasBeenStarted() const
     {
         return true;
     }

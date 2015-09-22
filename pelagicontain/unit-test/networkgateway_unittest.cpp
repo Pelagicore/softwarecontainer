@@ -17,11 +17,6 @@ public:
     {
     }
 
-    virtual bool startApp()
-    {
-        return true;
-    }
-
     virtual bool shutdown()
     {
         return true;
@@ -31,11 +26,6 @@ public:
             const std::string &value)
     {
         return ReturnCode::SUCCESS;
-    }
-
-    virtual bool hasBeenStarted() const
-    {
-        return true;
     }
 
     virtual bool initialize()

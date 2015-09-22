@@ -33,10 +33,6 @@ public:
         Gateway()
     {
     }
-    virtual std::string environment()
-    {
-        return "";
-    }
 
     MOCK_METHOD0(id, std::string());
     MOCK_METHOD1(setConfig, bool(const std::string & config));
