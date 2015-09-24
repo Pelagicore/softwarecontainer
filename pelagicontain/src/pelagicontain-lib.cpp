@@ -84,14 +84,10 @@ ReturnCode PelagicontainWorkspace::deleteWorkspace()
 ReturnCode PelagicontainWorkspace::checkWorkspace()
 {
     if (!isDirectory(m_containerRoot)) {
-
         createDirectory(m_containerRoot);
-        std::string lateMountPath = m_containerRoot + LATE_MOUNT_PATH;
-        createDirectory(lateMountPath);
-        createSharedMountPoint(lateMountPath);
 
         std::string cmdLine = INSTALL_PREFIX;
-        cmdLine += "/bin/setup_pelagicontain.sh " + m_containerRoot;
+        cmdLine += "/bin/setup_pelagicontain.sh";
         log_debug() << "Creating workspace : " << cmdLine;
         int returnCode;
         try {
