@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-# Example: ./setup_pelagicontain.sh /tmp/container
-
 BRCTL_CMD="brctl"
 BRIDGE="lxcbr0"
 
