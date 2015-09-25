@@ -70,19 +70,37 @@ ReturnCode touch(const std::string &path)
 
 ReturnCode writeToFile(const std::string &path, const std::string &content)
 {
+    ReturnCode ret = ReturnCode::SUCCESS;
     log_verbose() << "writing to " << path << " : " << content;
-    std::ofstream out(path);     // TODO : error checking
-    out << content;
-    return ReturnCode::SUCCESS;
+    std::ofstream out(path);
+    if (out.is_open()) {
+        out << content;
+        if (!out.good()) {
+            ret = ReturnCode::FAILURE;
+        }
+        out.close();
+    } else {
+        ret = ReturnCode::FAILURE;
+    }
+    return ret;
 }
 
 ReturnCode readFromFile(const std::string &path, std::string &content)
 {
+    ReturnCode ret = ReturnCode::SUCCESS;
     std::ifstream t(path);
-    std::stringstream buffer;
-    buffer << t.rdbuf();
-    content = buffer.str();
-    return ReturnCode::SUCCESS;
+    if (t.is_open()) {
+        std::stringstream buffer;
+        buffer << t.rdbuf();
+        content = buffer.str();
+        if (!t.good()) {
+            ret = ReturnCode::FAILURE;
+        }
+        t.close();
+    } else {
+        ret = ReturnCode::FAILURE;
+    }
+    return ret;
 }
 
 ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)

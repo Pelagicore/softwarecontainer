@@ -176,6 +176,12 @@ TEST_F(PelagicontainApp, CommonFunctions) {
     ASSERT_FALSE(isFile(unexistingFile));
     ASSERT_FALSE(isDirectory(unexistingFile));
 
+    // Reading from a nonexixsting file should fail
+    ReturnCode c1 = readFromFile(unexistingFile, readBack);
+    ASSERT_EQ(c1, ReturnCode::FAILURE);
+
+    ReturnCode c2 = writeToFile(unexistingFile, testData);
+    ASSERT_EQ(c2, ReturnCode::FAILURE);
 }
 
 static constexpr int EXISTENT = 1;
