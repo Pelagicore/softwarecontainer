@@ -34,7 +34,7 @@ add_library(pelagicontainLib SHARED
     generators.cpp
     gateway.cpp
     pelagicontain.cpp
-    pelagicontain-lib.cpp
+    libpelagicontain.cpp
     filegateway.cpp
     waylandgateway.cpp
     ${PROJECT_SOURCE_DIR}/common/common.cpp
@@ -52,10 +52,10 @@ TARGET_LINK_LIBRARIES( pelagicontainLib
 )
 
 set(HEADERS
-    pelagicontain-lib.h
-    ${PROJECT_SOURCE_DIR}/libpelagicontain/src/pelagicontain.h
-    ${PROJECT_SOURCE_DIR}/libpelagicontain/src/container.h
-    ${PROJECT_SOURCE_DIR}/libpelagicontain/src/gateway.h
+    libpelagicontain.h
+    pelagicontain.h
+    container.h
+    gateway.h
     ${PROJECT_SOURCE_DIR}/common/pelagicontain-common.h
     ${PROJECT_SOURCE_DIR}/common/pelagicontain-log.h
     ${PROJECT_BINARY_DIR}/pelagicontain-config.h

@@ -46,6 +46,6 @@ link_directories(
 # TODO : rework tests
 
 add_gtest_test(pelagicontainLibTest
-    "main.cpp;pelagicontainLib_unittest.cpp"
+    "main.cpp;pelagicontainlib_unittest.cpp"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )

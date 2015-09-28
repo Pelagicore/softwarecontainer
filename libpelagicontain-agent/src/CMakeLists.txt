@@ -2,7 +2,7 @@
 generate_dbuscpp_hfile(${CMAKE_SOURCE_DIR}/agent/pelagicontain-agent.xml "PelagicontainAgentLib")
 
 add_library(pelagicontain-agent-lib SHARED
-    PelagicontainAgentLib.cpp
+    libpelagicontainagent.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/PelagicontainAgentLib_dbuscpp_proxy.h
 )
 
@@ -14,7 +14,7 @@ TARGET_LINK_LIBRARIES( pelagicontain-agent-lib
 )
 
 set(HEADERS
-    PelagicontainAgentLib.h
+    libpelagicontainagent.h
 )
 
 install(FILES ${HEADERS} DESTINATION include/pelagicontain)

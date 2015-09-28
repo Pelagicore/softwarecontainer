@@ -13,7 +13,7 @@
 #include "gtest/gtest.h"
 
 #include "generators.h"
-#include "pelagicontain-lib.h"
+#include "libpelagicontain.h"
 
 #include "dbusgateway.h"
 #include "waylandgateway.h"

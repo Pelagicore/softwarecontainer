@@ -2,7 +2,7 @@
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain-agent.xml "PelagicontainAgent")
 
 add_executable(pelagicontain-agent
-	src/pelagicontain-agent.cpp
+	src/pelagicontainagent.cpp
 	PelagicontainAgent_dbuscpp_adaptor.h
 )
 

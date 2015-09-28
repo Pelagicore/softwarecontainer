@@ -1,4 +1,4 @@
-#include "PelagicontainAgentLib.h"
+#include "libpelagicontainagent.h"
 #include "PelagicontainAgentLib_dbuscpp_proxy.h"
 
 #include "pelagicore-DBusCpp.h"

@@ -1,4 +1,4 @@
-#include "pelagicontain-lib.h"
+#include "libpelagicontain.h"
 
 #include "generators.h" /* used for gen_ct_name */
 

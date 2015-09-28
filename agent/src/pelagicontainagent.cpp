@@ -20,7 +20,7 @@
 #include "pelagicore-DBusCpp.h"
 #include "PelagicontainAgent_dbuscpp_adaptor.h"
 
-#include "pelagicontain-lib.h"
+#include "libpelagicontain.h"
 
 LOG_DEFINE_APP_IDS("PELA", "Pelagicontain agent");
 
