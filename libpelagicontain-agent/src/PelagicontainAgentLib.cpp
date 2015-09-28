@@ -1,5 +1,5 @@
 #include "PelagicontainAgentLib.h"
-#include "PelagicontainAgent_dbuscpp_proxy.h"
+#include "PelagicontainAgentLib_dbuscpp_proxy.h"
 
 #include "pelagicore-DBusCpp.h"
 

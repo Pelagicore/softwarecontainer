@@ -9,8 +9,8 @@ if(ENABLE_TEST)
 endif(ENABLE_TEST)
 
 configure_file(
-	${PROJECT_SOURCE_DIR}/pelagicontain/lxc-pelagicontain.in
-	${CMAKE_BINARY_DIR}/pelagicontain/lxc-pelagicontain
+	${PROJECT_SOURCE_DIR}/libpelagicontain/lxc-pelagicontain.in
+	${CMAKE_BINARY_DIR}/libpelagicontain/lxc-pelagicontain
 )
-install(PROGRAMS ${CMAKE_BINARY_DIR}/pelagicontain/lxc-pelagicontain DESTINATION ${LXC_TEMPLATE_DIR})
+install(PROGRAMS ${CMAKE_BINARY_DIR}/libpelagicontain/lxc-pelagicontain DESTINATION ${LXC_TEMPLATE_DIR})
 install(FILES pelagicontain.conf DESTINATION ${SYS_CONFIG_DIR})

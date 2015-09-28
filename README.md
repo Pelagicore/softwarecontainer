@@ -1,8 +1,7 @@
 This package includes the Pelagicontain component
 
-
-
-
+Building
+--------
 To build the project documentation set -DENABLE_DOC=1 when running cmake.
 
 The project Doxygen docs contain info about Pelagicontain in general,
@@ -16,6 +15,7 @@ To disable support for various gateways at compile time, set
 -DENABLE_DBUSGATEWAY=OFF (for dbus).
 
 NOTE ON D-BUS RUNNING ON DESKTOP SYSTEMS
+----------------------------------------
 
 You need to do some D-Bus magic in order to get this running. The problem is:
 Typically you need root access to start pelagicontain (since the lxc commands
@@ -34,6 +34,7 @@ pelagicontain /home/myuser/deploy /deployed_app/dbus_app
 exit
 
 CONFIGURING THE DBUS PROXY
+--------------------------
 The D-Bus proxy is launched "outside" the container, and will look for two rule
 files. One for the SESSION bus, and one for the SYSTEM bus. The configuration
 files should be placed in the directory used for app deployment, so, if you
@@ -46,6 +47,7 @@ sys_proxy_config   -- for SYSTEM rules
 
 
 NOTE ON PULSEAUDIO
+------------------
 
 In order to pulseaudio to work inside the container it needs to be running when
 the container is started. This is the case because when pelagicontainer sets
