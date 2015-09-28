@@ -2,3 +2,8 @@ build/
 *.sw*
 *.pyc
 *.py~
+*.config
+*.creator
+*.creator.user
+*.files
+*.includes
