@@ -1,1 +1,1 @@
-This directory contains headers and sources for libpelagicontain-agent.
+This directory contains sources for libpelagicontain-agent.
