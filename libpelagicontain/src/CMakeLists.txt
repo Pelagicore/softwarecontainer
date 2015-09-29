@@ -51,17 +51,7 @@ TARGET_LINK_LIBRARIES( pelagicontainLib
     ${COMMON_DEPENDENCIES_LIBRARIES}
 )
 
-set(HEADERS
-    libpelagicontain.h
-    pelagicontain.h
-    container.h
-    gateway.h
-    ${PROJECT_SOURCE_DIR}/common/pelagicontain-common.h
-    ${PROJECT_SOURCE_DIR}/common/pelagicontain-log.h
-    ${PROJECT_BINARY_DIR}/pelagicontain-config.h
-)
-
-set_target_properties(pelagicontainLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
+include_directories(${LIBPELAGICONTAIN_DIR}/include)
 
 install(TARGETS pelagicontainLib DESTINATION lib)
-install(FILES ${HEADERS} DESTINATION include/pelagicontain)
+set_target_properties(pelagicontainLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})

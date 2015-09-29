@@ -41,11 +41,11 @@ message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
 include_directories(
-	common
-	clientLib
-	libpelagicontain/src
-	${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_CURRENT_BINARY_DIR}/libpelagicontain/src
+    common
+    libpelagicontain/src
+    libpelagicontain/include
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/libpelagicontain/src
 )
 
 option(ENABLE_TEST "Enables unit testing" ON)
@@ -76,6 +76,8 @@ configure_file(pelagicontain-config.h.in pelagicontain-config.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pelagicontain)
 
 add_subdirectory(libpelagicontain)
+
 add_subdirectory(agent)
 add_subdirectory(libpelagicontain-agent)
+
 add_subdirectory(doc)

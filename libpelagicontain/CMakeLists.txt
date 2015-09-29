@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.6)
-
 add_definitions(-DLXCTEMPLATE="${LXC_TEMPLATE_DIR}/lxc-pelagicontain")
 
+SET(LIBPELAGICONTAIN_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+add_subdirectory(include)
 add_subdirectory(src)
 
 if(ENABLE_TEST)

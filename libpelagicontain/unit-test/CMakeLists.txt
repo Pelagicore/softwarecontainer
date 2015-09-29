@@ -34,6 +34,7 @@ set(TEST_LIBRARY_DEPENDENCIES
     pelagicontainLib
 )
 
+include_directories(${LIBPELAGICONTAIN_DIR}/include)
 link_directories(
 	${DEPENDENCIES_LIBRARY_DIRS} ${PELAGICORE_UTILS_LIBRARY_DIRS}
 )

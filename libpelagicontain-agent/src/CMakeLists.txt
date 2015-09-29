@@ -13,7 +13,7 @@ TARGET_LINK_LIBRARIES( pelagicontain-agent-lib
     ${GLIBMM_LIBRARIES}
 )
 
-include_directories(${AGENTLIB_DIR}/include)
+include_directories(${LIBPELAGICONTAINAGENT_DIR}/include)
 
 install(TARGETS pelagicontain-agent-lib DESTINATION lib)
 set_target_properties(pelagicontain-agent-lib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
