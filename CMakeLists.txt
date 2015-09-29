@@ -75,6 +75,7 @@ endif()
 configure_file(pelagicontain-config.h.in pelagicontain-config.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pelagicontain)
 
+add_subdirectory(common)
 add_subdirectory(libpelagicontain)
 
 add_subdirectory(agent)
