@@ -195,7 +195,7 @@ ReturnCode PelagicontainLib::init()
 
 void PelagicontainLib::openTerminal(const std::string &terminalCommand) const
 {
-    std::string command = logging::StringBuilder() << terminalCommand << " lxc-attach -n " << m_container.id();
+    std::string command = logging::StringBuilder() << "lxc-attach -n " << m_container.id() << " " << terminalCommand;
     log_info() << command;
     system(command.c_str());
 }
