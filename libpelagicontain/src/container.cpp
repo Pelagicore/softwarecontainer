@@ -107,9 +107,6 @@ ReturnCode Container::create()
     log_debug() << "creating container with ID : " << containerID;
 
     m_container = lxc_container_new(containerID, nullptr);
-    lxc_container_get(m_container);
-
-    log_debug() << toString();
 
     char *argv[] = {};
     int flags = 0;
@@ -144,11 +141,12 @@ pid_t Container::start()
 {
     pid_t pid;
 
-    if (isLXC_C_APIEnabled() && false) {
+    if (isLXC_C_APIEnabled()) {
 
         log_debug() << "Starting container";
+    	char* const args[] = { "env", "/bin/sleep" , "100000000", nullptr};
 
-        if (!m_container->start(m_container, false, nullptr)) {
+        if (!m_container->start(m_container, false, args)) {
             log_error() << "Error starting container";
             pid = 0;
         } else {
