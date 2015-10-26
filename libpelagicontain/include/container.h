@@ -63,7 +63,7 @@ public:
     /*!
      * Calls the lxc-create command.
      */
-    void create();
+    ReturnCode create();
 
     /*!
      * Start the container

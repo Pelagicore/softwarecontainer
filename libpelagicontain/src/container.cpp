@@ -91,7 +91,7 @@ std::string Container::toString()
     return ss.str();
 }
 
-void Container::create()
+ReturnCode Container::create()
 {
     log_debug() << "Creating container " << toString();
 
@@ -107,20 +107,25 @@ void Container::create()
     log_debug() << "creating container with ID : " << containerID;
 
     m_container = lxc_container_new(containerID, nullptr);
-    lxc_container_get(m_container);
-
-    log_debug() << toString();
 
     char *argv[] = {};
     int flags = 0;
     struct bdev_specs specs = {};
 
-    m_container->load_config(m_container, configFile);
-    m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv);
+    if (!m_container->load_config(m_container, configFile)) {
+    	log_error() << "Error loading container config";
+    	return ReturnCode::FAILURE;
+    }
+
+    if (!m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv)) {
+    	log_error() << "Error creating container";
+    	return ReturnCode::FAILURE;
+    }
 
     m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
     log_debug() << "Container created. RootFS: " << m_rootFSPath;
 
+    return ReturnCode::SUCCESS;
 }
 
 void Container::waitForState(LXCContainerState state, int timeout)
@@ -136,11 +141,12 @@ pid_t Container::start()
 {
     pid_t pid;
 
-    if (isLXC_C_APIEnabled() && false) {
+    if (isLXC_C_APIEnabled()) {
 
         log_debug() << "Starting container";
+    	char* const args[] = { "env", "/bin/sleep" , "100000000", nullptr};
 
-        if (!m_container->start(m_container, false, nullptr)) {
+        if (!m_container->start(m_container, false, args)) {
             log_error() << "Error starting container";
             pid = 0;
         } else {
@@ -448,7 +454,7 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
 {
     ensureContainerRunning();
 
-    pid_t pid = executeInContainer([this, cmd = cmd]() {
+    pid_t pid = executeInContainer([this, cmd]() {
                 log_info() << "Executing system command in container : " << cmd;
                 return system(cmd.c_str());
             }, m_gatewayEnvironmentVariables);
