@@ -82,9 +82,9 @@ public:
     virtual bool teardown();
 
 private:
-    ReturnCode makePopenCall(const std::string &command, int &infp, int &outfp, pid_t &pid);
+    ReturnCode makePopenCall(const std::string &command, int &infp, pid_t &pid);
 
-    bool makePcloseCall(pid_t pid, int infp, int outfp);
+    bool makePcloseCall(pid_t pid, int infp);
 
     const char *typeString();
     std::string socketName();
@@ -102,9 +102,8 @@ private:
     // pid of dbus-proxy instance
     pid_t m_pid = INVALID_PID;
 
-    // STDIN and STDOUT for dbus-proxy instance
-    int m_infp;
-    int m_outfp;
+    // STDIN for dbus-proxy instance
+    int m_infp = INVALID_FD;
 
     // Keeps track of whether setConfig() has been run or not
     bool m_hasBeenConfigured;
