@@ -91,8 +91,8 @@ bool DBusGateway::activate()
     }
 
     // Write configuration
-    std::string config = (logging::StringBuilder() << "{\"" << SESSION_CONFIG << "\"" << ": [" << m_sessionBusConfig << "]"
-                                                   << " , \"" << SYSTEM_CONFIG << "\"" << ": [" << m_systemBusConfig << "]}");
+    std::string config = "{\"" + std::string(SESSION_CONFIG) + "\": [" + m_sessionBusConfig + "]"
+                       + ", \"" + std::string(SYSTEM_CONFIG) + "\": [" + m_systemBusConfig + "]}";
     log_debug() << "Sending config " << config;
     auto count = sizeof(char) * config.length();
     auto written = write(m_infp,
@@ -180,6 +180,11 @@ std::string DBusGateway::socketName()
 }
 
 
+/*
+ * Opens a channel to some command and captures the input file descriptor and
+ * pid for future writing and control. Output from the call is directed
+ * towards /dev/null
+ */
 ReturnCode DBusGateway::makePopenCall(const std::string &command, int &infp, pid_t &pid)
 {
     static constexpr int READ = 0;
@@ -198,14 +203,22 @@ ReturnCode DBusGateway::makePopenCall(const std::string &command, int &infp, pid
     } else if (pid == 0) {
         close(stdinfp[WRITE]);
         dup2(stdinfp[READ], READ);
-        dup2(open("/dev/null", O_WRONLY), WRITE);
 
-        // Set group id to the same as pid, that way we can kill the shells children on close.
-        setpgid(0, 0);
+        int nullfd = open("/dev/null", O_WRONLY);
+        if (nullfd == INVALID_FD) {
+            log_error() << "could not open /dev/null: " << strerror(errno);
+            exit(1);
+        } else {
+            dup2(nullfd, WRITE);
 
-        execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
-        log_error() << "execl : " << strerror(errno);
-        exit(1);
+            // Set group id to the same as pid, that way we can kill the shells children on close.
+            setpgid(0, 0);
+
+            execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
+            log_error() << "execl : " << strerror(errno);
+            close(nullfd);
+            exit(1);
+        }
     }
 
     infp = stdinfp[WRITE];
