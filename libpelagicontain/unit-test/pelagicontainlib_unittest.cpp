@@ -721,21 +721,7 @@ TEST_F(PelagicontainApp, TestStdin) {
 TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
     CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
-
-    ASSERT_TRUE(job.isRunning());
-
-    bool bNetworkAccessSucceeded = false;
-
-    SignalConnectionsHandler connections;
-    addProcessListener(connections, job.pid(), [&] (
-                int pid, int exitCode) {
-                bNetworkAccessSucceeded = (exitCode == 0);
-                exit();
-            }, getMainContext());
-
-    run();
-
-    ASSERT_FALSE(bNetworkAccessSucceeded);
+    ASSERT_TRUE(job.wait() != 0);
 }
 
 /**
@@ -749,24 +735,11 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
 
     CommandJob job2(getLib(), "ping 8.8.8.8 -c 5");
     job2.start();
+    ASSERT_TRUE(job2.wait() == 0);
 
     CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
-
-    ASSERT_TRUE(job.isRunning());
-
-    bool bNetworkAccessSucceeded = false;
-
-    SignalConnectionsHandler connections;
-    addProcessListener(connections, job.pid(), [&] (
-                int pid, int exitCode) {
-                bNetworkAccessSucceeded = (exitCode == 0);
-                exit();
-            }, getMainContext());
-
-    run();
-
-    ASSERT_TRUE(bNetworkAccessSucceeded);
+    ASSERT_TRUE(job.wait() == 0);
 }
 
 
