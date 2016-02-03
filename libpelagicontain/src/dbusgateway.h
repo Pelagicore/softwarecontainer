@@ -82,9 +82,6 @@ public:
     virtual bool teardown();
 
 private:
-    ReturnCode makePopenCall(const std::string &command, int &infp, pid_t &pid);
-
-    bool makePcloseCall(pid_t pid, int infp);
 
     const char *typeString();
     std::string socketName();
@@ -96,8 +93,8 @@ private:
     // Session or system, depending on the type of gateway being started
     ProxyType m_type;
 
-    std::string m_sessionBusConfig;
-    std::string m_systemBusConfig;
+    json_t *m_sessionBusConfig;
+    json_t *m_systemBusConfig;
 
     // pid of dbus-proxy instance
     pid_t m_pid = INVALID_PID;

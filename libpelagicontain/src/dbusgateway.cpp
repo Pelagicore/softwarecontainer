@@ -11,16 +11,21 @@
 #include "dbusgateway.h"
 #include "pelagicontain-common.h"
 
-DBusGateway::DBusGateway(ProxyType type, const std::string &gatewayDir, const std::string &name) :
-    Gateway(ID),
-    m_type(type),
-    m_hasBeenConfigured(false),
-    m_dbusProxyStarted(false)
+DBusGateway::DBusGateway(ProxyType type
+                       , const std::string &gatewayDir
+                       , const std::string &name)
+    : Gateway(ID)
+    , m_type(type)
+    , m_hasBeenConfigured(false)
+    , m_dbusProxyStarted(false)
 {
     m_socket = gatewayDir 
              + (m_type == SessionProxy ? "/sess_" : "/sys_")
              + name 
              + ".sock";
+
+    m_sessionBusConfig = json_array();
+    m_systemBusConfig = json_array();
 }
 
 DBusGateway::~DBusGateway()
@@ -42,10 +47,7 @@ ReturnCode DBusGateway::readConfigElement(const JSonElement &element)
     if (sessionConfig.isValid() && sessionConfig.isArray()) {
         for(unsigned int i = 0; i < sessionConfig.elementCount(); i++) {
             JSonElement child = sessionConfig.arrayElementAt(i);
-            if (m_sessionBusConfig.size() != 0) {
-                m_sessionBusConfig += ",";
-            }
-            m_sessionBusConfig += child.dump();
+            json_array_append(m_sessionBusConfig, (json_t*)child.root());
         }
     }
 
@@ -53,10 +55,7 @@ ReturnCode DBusGateway::readConfigElement(const JSonElement &element)
     if (systemConfig.isValid() && systemConfig.isArray()) {
         for(unsigned int i = 0; i < systemConfig.elementCount(); i++) {
             JSonElement child = systemConfig.arrayElementAt(i);
-            if (m_systemBusConfig.size() != 0) {
-                m_systemBusConfig += ",";
-            }
-            m_systemBusConfig += child.dump();
+            json_array_append(m_systemBusConfig, (json_t*)child.root());
         }
     }
 
@@ -91,8 +90,11 @@ bool DBusGateway::activate()
     }
 
     // Write configuration
-    std::string config = "{\"" + std::string(SESSION_CONFIG) + "\": [" + m_sessionBusConfig + "]"
-                       + ", \"" + std::string(SYSTEM_CONFIG) + "\": [" + m_systemBusConfig + "]}";
+    json_t *jsonConfig = json_object();
+    json_object_set(jsonConfig, SESSION_CONFIG, m_sessionBusConfig);
+    json_object_set(jsonConfig, SYSTEM_CONFIG, m_systemBusConfig);
+    std::string config = std::string(json_dumps(jsonConfig, JSON_COMPACT));
+
     log_debug() << "Sending config " << config;
     auto count = sizeof(char) * config.length();
     auto written = write(m_infp,
@@ -180,62 +182,4 @@ std::string DBusGateway::socketName()
 }
 
 
-/*
- * Opens a channel to some command and captures the input file descriptor and
- * pid for future writing and control. Output from the call is directed
- * towards /dev/null
- */
-ReturnCode DBusGateway::makePopenCall(const std::string &command, int &infp, pid_t &pid)
-{
-    static constexpr int READ = 0;
-    static constexpr int WRITE = 1;
 
-    int stdinfp[2];
-    if (pipe(stdinfp) != 0) {
-        log_error() << "Failed to open STDIN to dbus-proxy";
-        return ReturnCode::FAILURE;
-    }
-
-    pid = fork();
-
-    if (pid < 0) {
-        return ReturnCode::FAILURE;
-    } else if (pid == 0) {
-        close(stdinfp[WRITE]);
-        dup2(stdinfp[READ], READ);
-
-        int nullfd = open("/dev/null", O_WRONLY);
-        if (nullfd == INVALID_FD) {
-            log_error() << "could not open /dev/null: " << strerror(errno);
-            exit(1);
-        } else {
-            dup2(nullfd, WRITE);
-
-            // Set group id to the same as pid, that way we can kill the shells children on close.
-            setpgid(0, 0);
-
-            execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
-            log_error() << "execl : " << strerror(errno);
-            close(nullfd);
-            exit(1);
-        }
-    }
-
-    infp = stdinfp[WRITE];
-
-    return ReturnCode::SUCCESS;
-}
-
-bool DBusGateway::makePcloseCall(pid_t pid, int infp)
-{
-    if (infp > -1) {
-        if (close(infp) == -1) {
-            log_warning() << "Failed to close STDIN to dbus-proxy";
-        }
-    }
-
-    // the negative pid makes it kill the whole group, not only the shell
-    int killed = kill(-pid, SIGKILL);
-
-    return (killed == 0);
-}
