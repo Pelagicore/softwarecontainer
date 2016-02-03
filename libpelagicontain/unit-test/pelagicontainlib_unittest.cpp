@@ -830,7 +830,26 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
     }
 }
 
+// Regression test against previously reported bug.
+TEST_F(PelagicontainApp, TestDBusGatewayOutputBuffer) {
+    GatewayConfiguration config;
+    config[DBusGateway::ID] = "[{"
+        "\"dbus-gateway-config-session\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }], "
+        "\"dbus-gateway-config-system\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }]"
+    "}]";
 
+    log_error() << config[DBusGateway::ID];
+    getLib().setGatewayConfigs(config);
+
+    for(int i=0; i<2000; i++) {
+        printf("Call %i of 2000\n", i);
+        CommandJob jobTrue(
+                getLib(),
+                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+        jobTrue.start();
+        ASSERT_TRUE(jobTrue.wait() == 0);
+    }
+}
 
 /**
  * Checks that DBUS is not accessible if the corresponding capability is not enabled

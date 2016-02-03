@@ -19,8 +19,8 @@ namespace pelagicontain {
 typedef uint32_t ContainerID;
 
 static constexpr ContainerID INVALID_CONTAINER_ID = -1;
-
 static constexpr pid_t INVALID_PID = -1;
+static constexpr int INVALID_FD = -1;
 
 typedef std::map<std::string, std::string> GatewayConfiguration;
 
