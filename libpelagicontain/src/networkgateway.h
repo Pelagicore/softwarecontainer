@@ -88,17 +88,6 @@ private:
      */
     bool isBridgeAvailable();
 
-    /*! Parse the JSON configuration passed down from Platform Access Manager
-     *
-     *  Returns the string value of the "gateway" key. If there is an error
-     *  or the value is an empty string, an empty string is returned.
-     *
-     * \param config The JSON string containing the configuration
-     * \return An empty string if invalid or empty key, otherwise string with
-     *         gateway
-     */
-    std::string gatewayFromConfig(const std::string &config);
-
     std::string m_ip;
     std::string m_gateway;
     bool m_internetAccess;
