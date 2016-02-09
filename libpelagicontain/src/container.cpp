@@ -81,7 +81,7 @@ std::string Container::toString()
     ss << "LXC " << id() << " ";
     if (m_container != nullptr) {
         ss << "id: " << id()
-           << "name : " << m_name
+           << " name : " << m_name
            << " / state:" << m_container->state(m_container)
            << " / initPID:" << m_container->init_pid(m_container)
            << " / LastError: " << m_container->error_string
@@ -141,7 +141,7 @@ pid_t Container::start()
 {
     pid_t pid;
 
-    if (isLXC_C_APIEnabled()) {
+    if (isLXC_C_APIEnabled() && false) {
 
         log_debug() << "Starting container";
     	char* const args[] = { "env", "/bin/sleep" , "100000000", nullptr};
