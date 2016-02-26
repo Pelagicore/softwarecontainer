@@ -15,7 +15,7 @@
 #include "CommandLineParser.h"
 #include "pelagicore-log.h"
 
-#include "ivi-main-loop/UNIXSignalHandler.h"
+#include "ivi-main-loop/ivi-main-loop-unix-signal.h"
 
 #include "pelagicore-DBusCpp.h"
 #include "PelagicontainAgent_dbuscpp_adaptor.h"
