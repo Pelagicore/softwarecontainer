@@ -108,7 +108,7 @@ ReturnCode Container::create()
 
     m_container = lxc_container_new(containerID, nullptr);
 
-    char *argv[] = {};
+    char *argv[] = { nullptr };
     int flags = 0;
     struct bdev_specs specs = {};
 
