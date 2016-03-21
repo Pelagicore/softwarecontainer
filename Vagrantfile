@@ -24,10 +24,13 @@ Vagrant.configure(2) do |config|
         apt-get install -y libglib2.0-dev
 
         # For pelagicontain
-        apt-get install -y libdbus-c++-dev libdbus-c++-1-0v5 libdbus-1-dev libglibmm-2.4-dev libglibmm-2.4 lxc-dev libpulse-dev unzip
+        apt-get install -y libdbus-c++-dev libdbus-c++-1-0v5 libdbus-1-dev libglibmm-2.4-dev libglibmm-2.4 lxc-dev libpulse-dev unzip bridge-utils
 
         # For jsonparser
         apt-get install -y libjansson-dev libjansson4
+
+        # For pelagicontain examples
+        apt-get install -y dbus-x11
     SHELL
 
     # Add known hosts
@@ -83,5 +86,12 @@ Vagrant.configure(2) do |config|
         cd build
         cmake ..
         make && sudo make install
+    SHELL
+
+    # Run an example (note, running as root)
+    config.vm.provision "shell", inline: <<-SHELL
+        cd pelagicontain/examples/simple
+        make
+        ./launch.sh
     SHELL
 end
