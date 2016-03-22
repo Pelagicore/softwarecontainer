@@ -17,6 +17,8 @@ To disable support for various gateways at compile time, set
 * -DENABLE_DBUSGATEWAY=OFF (for dbus)
 * -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
 
+Examples are built using -DENABLE_EXAMPLES=1
+
 For a concrete example of building Pelagicontain and setting up dependencies,
 see Vagrantfile in this repository.
 

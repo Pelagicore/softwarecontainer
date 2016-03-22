@@ -81,4 +81,9 @@ add_subdirectory(libpelagicontain)
 add_subdirectory(agent)
 add_subdirectory(libpelagicontain-agent)
 
+option (ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
+if (ENABLE_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
 add_subdirectory(doc)
