@@ -8,10 +8,28 @@
 # container later, in order to access the 'simple' binary.
 SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 
-echo "Using system bus -- configure this in $0"
+help() {
+    echo "$0 [-b [system|session]]"
+    echo ""
+    echo "  -b    what type of dbus to use, session or system"
+    exit
+}
+
+
 BUS="system"
-# Uncomment the line below to use the session bus
-#BUS="session"
+while getopts ":b:h" opt; do
+    case $opt in 
+    b)
+        BUS="$OPTARG"
+        ;;
+    h)
+        help
+        ;;
+    *)
+        echo "Unknown option $OPTARG"
+        help
+    esac
+done
 
 # Create a new session D-Bus bus
 eval `dbus-launch --sh-syntax`
