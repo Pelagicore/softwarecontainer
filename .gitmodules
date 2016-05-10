@@ -1,0 +1,3 @@
+[submodule "cookbook"]
+	path = cookbook
+	url = git@git.pelagicore.net:pelagicore-utils/vagrant-cookbook.git
