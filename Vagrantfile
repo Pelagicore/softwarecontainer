@@ -13,10 +13,10 @@ Vagrant.configure(2) do |config|
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh" 
 
-    config.vm.provision "shell", inline: <<-SHELL
-        echo -e "Acquire::http::Proxy \\"http://10.8.36.16:3142\\";\n" > /etc/apt/apt.conf.d/80proxysettings
-        apt-get update -y
-    SHELL
+    # Use apt-cacher on main server
+    config.vm.provision "shell", 
+        args: ['10.8.36.16'],
+        path: "cookbook/system-config/apt-cacher.sh" 
 
     # Upgrade machine to testing distro & install build dependencies
     config.vm.provision "shell", path: "cookbook/deps/testing-upgrade.sh"
