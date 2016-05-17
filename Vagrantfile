@@ -55,4 +55,10 @@ Vagrant.configure(2) do |config|
         make
         sudo ./launch.sh -b session
     SHELL
+
+    # clang analysis of the code
+    config.vm.provision "shell", privileged: false, 
+        args: ["clang", "git@git.pelagicore.net:application-management/pelagicontain.git", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
+        path: "cookbook/build/clang-code-analysis.sh"
+
 end
