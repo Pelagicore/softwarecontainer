@@ -44,8 +44,8 @@ Vagrant.configure(2) do |config|
 
     # Build and install project
     config.vm.provision "shell", privileged: false, 
-        args: ["pelagicontain", "git@git.pelagicore.net:application-management/pelagicontain.git", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
-        path: "cookbook/build/cmake-git-builder.sh"
+        args: ["pelagicontain", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
+        path: "cookbook/build/cmake-builder.sh"
 
 
     # Run an example (note, running as root)
@@ -58,7 +58,7 @@ Vagrant.configure(2) do |config|
 
     # clang analysis of the code
     config.vm.provision "shell", privileged: false, 
-        args: ["clang", "git@git.pelagicore.net:application-management/pelagicontain.git", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
+        args: ["clang", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
         path: "cookbook/build/clang-code-analysis.sh"
 
 end
