@@ -58,12 +58,8 @@ Vagrant.configure(2) do |config|
     SHELL
 
     config.vm.provision "shell", inline: <<-SHELL
-        cd pelagicontain/build/libpelagicontain/unit-test
-        eval $(dbus-launch --sh-syntax)
-        echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
-
-        ./pelagicontainLibTest --gtest_filter=-PelagicontainApp.FileGatewayReadOnly:PelagicontainApp.TestPulseAudioEnabled
-
+        cd pelagicontain/build
+        ./run-tests.sh
     SHELL
 
     # Run an example (note, running as root)
