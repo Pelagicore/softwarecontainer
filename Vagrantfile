@@ -42,11 +42,29 @@ Vagrant.configure(2) do |config|
         args: ["jsonparser", "git@git.pelagicore.net:pelagicore-utils/jsonparser.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
+    config.vm.provision "shell", privileged: false, 
+        args: ["dbus-proxy", "git@git.pelagicore.net:application-management/dbus-proxy.git"],
+        path: "cookbook/build/cmake-git-builder.sh"
+
     # Build and install project
     config.vm.provision "shell", privileged: false, 
-        args: ["pelagicontain", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
+        args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1"],
         path: "cookbook/build/cmake-builder.sh"
 
+    # Build documentation and run unit tests
+    config.vm.provision "shell", privileged: false, inline: <<-SHELL
+        cd pelagicontain/build
+        make doc
+    SHELL
+
+    config.vm.provision "shell", inline: <<-SHELL
+        cd pelagicontain/build/libpelagicontain/unit-test
+        eval $(dbus-launch --sh-syntax)
+        echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
+
+        ./pelagicontainLibTest --gtest_filter=-PelagicontainApp.FileGatewayReadOnly:PelagicontainApp.TestPulseAudioEnabled
+
+    SHELL
 
     # Run an example (note, running as root)
     config.vm.provision "shell", privileged: false, inline: <<-SHELL
