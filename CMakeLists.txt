@@ -72,6 +72,7 @@ option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
 	enable_testing()
 	add_gmock()
+    configure_file(run-tests.sh run-tests.sh COPYONLY)
 endif()
 
 option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
