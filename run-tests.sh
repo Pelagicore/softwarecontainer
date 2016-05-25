@@ -10,7 +10,10 @@ pid=$!
 ./libpelagicontain/unit-test/pelagicontainLibTest \
     --gtest_filter=-PelagicontainApp.FileGatewayReadOnly:PelagicontainApp.TestPulseAudioEnabled \
     --gtest_output=xml
+retval=$?
 
 if ! kill $pid > /dev/null 2>&1 ; then
     echo "Failed to kill pulseaudio at pid $pid"
 fi
+
+return $retval
