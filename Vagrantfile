@@ -21,6 +21,7 @@ Vagrant.configure(2) do |config|
     # Upgrade machine to testing distro & install build dependencies
     config.vm.provision "shell", path: "cookbook/deps/testing-upgrade.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
+    config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
 
     # Add known hosts
     config.vm.provision "shell", privileged: false, path: "cookbook/system-config/pelagicore-ssh-conf.sh"
