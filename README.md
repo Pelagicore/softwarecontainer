@@ -32,6 +32,8 @@ Vagrant can be used to quickly set up a virtualized environment for building.
 On a debian-based system, issue the following commands to build using Vagrant:
 
 ```
+git submodule init
+git submodule update
 ssh-keygen -f vagrant_key
 
 # MANUAL STEP: Add vagrant_key.pub to GitLab in order to access sources
