@@ -8,7 +8,7 @@ To build the project documentation set -DENABLE_DOC=1 when running cmake.
 The project Doxygen docs contain info about Pelagicontain in general,
 how to run Pelagicontain and how to run the component tests.
 
-To run the unit-tests build the project with -DENABLE_COVERAGE=1 -DBUILD_TESTS=ON
+To run the unit-tests build the project with -DENABLE_COVERAGE=1 -DENABLE_TESTS=ON
 
 To disable support for various gateways at compile time, set
 * -DENABLE_PULSEGATEWAY=OFF (for pulse)
@@ -21,6 +21,9 @@ Examples are built using -DENABLE_EXAMPLES=1
 
 For a concrete example of building Pelagicontain and setting up dependencies,
 see Vagrantfile in this repository.
+
+For an  example on how to build this code, please take a look at the
+Vagrantfile. 
 
 Building in Vagrant
 -------------------
@@ -38,6 +41,10 @@ vagrant up
 ```
 
 The vagrant machine can then be inspected by running `vagrant ssh`
+
+This will create an environment for building pelagicontain, download all the 
+requirements, build the ones necessary to build, build pelagicontain, run unit
+tests and perform a clang code analysis run on the code. 
 
 Dependencies
 ------------
@@ -60,6 +67,7 @@ Dependencies
 - unzip
 - libjansson-dev
 - libjansson4
+- vagrant-cookbook - optional, if you want to build using vagrant
 
 
 Running
@@ -67,6 +75,17 @@ Running
 You normally only want to run the pelagicontain-agent, which requires root
 privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
+
+Testing
+-------
+
+There are currently two level of tests, the unit tests written in gtest/gmock
+available in */unit-test/* and built when building the rest of the system if
+-DENABLE_TESTS=ON is defined to cmake. The tests are run using run-tests.sh in
+the CI environment so adding them there is a requirement. 
+
+Secondly, there are also component tests i the directory component-test/ which
+will be run using run-tests.sh. 
 
 Note on PulseAudio
 ------------------
