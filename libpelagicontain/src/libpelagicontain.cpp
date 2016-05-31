@@ -3,28 +3,28 @@
 #include "generators.h" /* used for gen_ct_name */
 
 #ifdef ENABLE_PULSEGATEWAY
-#include "pulsegateway.h"
+#include "gateway/pulsegateway.h"
 #endif
 
 #ifdef ENABLE_NETWORKGATEWAY
-#include "networkgateway.h"
+#include "gateway/networkgateway.h"
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-#include "dbusgateway.h"
+#include "gateway/dbusgateway.h"
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-#include "devicenodegateway.h"
+#include "gateway/devicenodegateway.h"
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
-#include "cgroupsgateway.h"
+#include "gateway/cgroupsgateway.h"
 #endif
 
-#include "envgateway.h"
-#include "waylandgateway.h"
-#include "filegateway.h"
+#include "gateway/envgateway.h"
+#include "gateway/waylandgateway.h"
+#include "gateway/filegateway.h"
 
 //#include "config.h"
 

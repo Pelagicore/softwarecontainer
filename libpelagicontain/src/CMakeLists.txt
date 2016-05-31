@@ -16,7 +16,7 @@ SET(GATEWAY_SOURCES "")
 macro(gateway_support flag strname filename)
     if (${flag})
         MESSAGE(INFO " Compiling with gateway support for ${strname}")
-        LIST(APPEND GATEWAY_SOURCES ${filename})
+        LIST(APPEND GATEWAY_SOURCES gateway/${filename})
         ADD_DEFINITIONS(-D${flag})
     else(${flag})
         MESSAGE(INFO " Compiling without gateway support for ${strname}")
@@ -29,15 +29,17 @@ gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
 
+SET(DEFAULT_GATEWAYS TRUE)
+gateway_support(DEFAULT_GATEWAYS file filegateway.cpp)
+gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.cpp)
+
 add_library(pelagicontainLib SHARED 
     container.cpp
     generators.cpp
-    gateway.cpp
     pelagicontain.cpp
     libpelagicontain.cpp
-    filegateway.cpp
-    waylandgateway.cpp
     ${PROJECT_SOURCE_DIR}/common/common.cpp
+    gateway/gateway.cpp
     ${GATEWAY_SOURCES}
 )
 

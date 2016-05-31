@@ -15,11 +15,11 @@
 #include "generators.h"
 #include "libpelagicontain.h"
 
-#include "dbusgateway.h"
-#include "waylandgateway.h"
-#include "networkgateway.h"
-#include "pulsegateway.h"
-#include "filegateway.h"
+#include "gateway/dbusgateway.h"
+#include "gateway/waylandgateway.h"
+#include "gateway/networkgateway.h"
+#include "gateway/pulsegateway.h"
+#include "gateway/filegateway.h"
 
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
