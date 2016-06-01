@@ -85,50 +85,46 @@ public:
 
 
 
-//
-//TEST_F(PelagicontainApp, TestWayland) {
-//
-//    GatewayConfiguration config;
-//    config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
-//
-//    getLib().getPelagicontain().setGatewayConfigs(config);
-//
-//    //		openTerminal();
-//    //		sleep(10000);
-//
-//    FunctionJob jobTrue(getLib(), [] (){
-//
-//                            bool ERROR = 1;
-//                            bool SUCCESS = 0;
-//
-//                            const char *waylandDir = getenv("XDG_RUNTIME_DIR");
-//
-//                            log_debug() << "Wayland dir : " << waylandDir;
-//
-//                            if (waylandDir == nullptr)
-//                                return ERROR;
-//
-//                            std::string socketPath = StringBuilder() << waylandDir << "/" << WaylandGateway::SOCKET_FILE_NAME;
-//
-//                            log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
-//
-//                            if ( !isSocket(socketPath) )
-//                                return ERROR;
-//
-//                            return SUCCESS;
-//
-//                        });
-//    jobTrue.start();
-//
-//    ASSERT_TRUE(jobTrue.wait() == 0);
-//
-//    //		CommandJob westonJob(lib,
-//    //				"/usr/bin/weston-terminal");
-//    //		westonJob.start();
-//    //
-//    //		ASSERT_TRUE(westonJob.wait() == 0);
-//
-//}
+
+TEST_F(PelagicontainApp, TestWayland) {
+
+    GatewayConfiguration config;
+    config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
+
+    getLib().getPelagicontain().setGatewayConfigs(config);
+
+    //		openTerminal();
+    //		sleep(10000);
+
+    FunctionJob jobTrue(getLib(), [] (){
+
+        bool ERROR = 1;
+        bool SUCCESS = 0;
+
+        const char *waylandDir = getenv("XDG_RUNTIME_DIR");
+        log_debug() << "Wayland dir : " << waylandDir;
+        if (waylandDir == nullptr) {
+            return ERROR;
+        }
+
+        std::string socketPath = StringBuilder() << waylandDir << "/" << WaylandGateway::SOCKET_FILE_NAME;
+        log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
+
+        if ( !isSocket(socketPath) ) {
+            return ERROR;
+        }
+
+        return SUCCESS;
+
+    });
+    jobTrue.start();
+    ASSERT_TRUE(jobTrue.wait() == 0);
+
+    CommandJob westonJob(getLib(),"/usr/bin/weston-terminal");
+    westonJob.start();
+    ASSERT_TRUE(westonJob.wait() == 0);
+
+}
 
 
 /*
