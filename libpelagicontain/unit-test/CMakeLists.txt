@@ -11,17 +11,17 @@ endmacro()
 
 gateway_support_unit(ENABLE_PULSEGATEWAY pulsegateway_unittest.cpp)
 gateway_support_unit(ENABLE_PULSEGATEWAY pulsegateway_unittest_data.h)
-gateway_support_unit(ENABLE_PULSEGATEWAY ../src/pulsegateway.cpp)
+gateway_support_unit(ENABLE_PULSEGATEWAY ../src/gateway/pulsegateway.cpp)
 
 gateway_support_unit(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
-gateway_support_unit(ENABLE_NETWORKGATEWAY ../src/networkgateway.cpp)
+gateway_support_unit(ENABLE_NETWORKGATEWAY ../src/gateway/networkgateway.cpp)
 
 gateway_support_unit(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
-gateway_support_unit(ENABLE_DBUSGATEWAY ../src/dbusgateway.cpp)
+gateway_support_unit(ENABLE_DBUSGATEWAY ../src/gateway/dbusgateway.cpp)
 
 gateway_support_unit(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
 gateway_support_unit(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest_data.h)
-gateway_support_unit(ENABLE_DEVICENODEGATEWAY ../src/devicenodegateway.cpp)
+gateway_support_unit(ENABLE_DEVICENODEGATEWAY ../src/gateway/devicenodegateway.cpp)
 
 set(TEST_LIBRARY_DEPENDENCIES 
 	${PELAGICORE_UTILS_LIBRARIES}
