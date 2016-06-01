@@ -12,7 +12,11 @@ echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 pulseaudio --system &
 ppid=$!
 
-weston &
+export XDG_RUNTIME_DIR=/run/user/$UID/wayland/
+mkdir -p $XDG_RUNTIME_DIR
+chmod 0700 $XDG_RUNTIME_DIR
+echo "XDG_RUNTIME_DIR is $XDG_RUNTIME_DIR"
+weston --backend=headless-backend.so &
 wpid=$!
 
 # BUG: The first time these tests are run after reboot/restart, it crashes. This is a workaraound that should be removed
