@@ -31,11 +31,7 @@
  * \endcode
  *
  * The root object is an array of seting key/value pair objects. Each key/value pair
-<<<<<<< 3187569eaad51dda79170e5bb753f15a208829b9
- * must have the 'name' and 'value' defined. With the above example config the calls
-=======
  * must have the 'setting' and 'value' defined. With the above example config the calls
->>>>>>> Added a cgroups gateway
  * to lxc-cgroup would set the following:
  * - lxc.cgroup.memory.limit_in_bytes to '128M'
  * - lxc.cgroup.cpu.shares to '256'
