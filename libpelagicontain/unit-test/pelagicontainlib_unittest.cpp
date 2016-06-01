@@ -120,7 +120,7 @@ TEST_F(PelagicontainApp, TestWayland) {
     jobTrue.start();
     ASSERT_TRUE(jobTrue.wait() == 0);
 
-    CommandJob westonJob(getLib(),"/usr/bin/weston-terminal");
+    CommandJob westonJob(getLib(),"/usr/bin/weston-info");
     westonJob.start();
     ASSERT_TRUE(westonJob.wait() == 0);
 
