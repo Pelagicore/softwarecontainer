@@ -1,5 +1,49 @@
+/*
+ *   Copyright (C) 2014 Pelagicore AB
+ *   All rights reserved.
+ */
+
+#include <string>
+#include <unistd.h>
 #include "waylandgateway.h"
 
-// no clue why the following lines are needed
+// TODO: no clue why the following lines are needed
 constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
+
+WaylandGateway::WaylandGateway() :
+    Gateway(ID)
+{
+}
+
+WaylandGateway::~WaylandGateway()
+{
+}
+
+
+ReturnCode WaylandGateway::readConfigElement(const JSonElement &element)
+{
+    bool enabled;
+    element.readBoolean("enabled", enabled);
+    m_enabled = enabled;
+    return ReturnCode::SUCCESS;
+}
+
+bool WaylandGateway::activate()
+{
+    if (m_enabled) {
+        const char *dir = getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME);
+        if (dir != nullptr) {
+            log_info() << "enabling Wayland gateway. Socket dir:" << dir;
+            std::string d = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
+            std::string path = getContainer().bindMountFileInContainer(d, SOCKET_FILE_NAME, false);
+            setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
+        } else {
+            log_error() << "Should enable wayland gateway, but " << WAYLAND_RUNTIME_DIR_VARIABLE_NAME << " is not defined";
+            return false;
+        }
+    } else {
+        log_info() << "Wayland gateway disabled";
+    }
+    return true;
+}

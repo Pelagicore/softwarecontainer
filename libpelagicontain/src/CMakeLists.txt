@@ -30,6 +30,7 @@ gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
 
 SET(DEFAULT_GATEWAYS TRUE)
+gateway_support(DEFAULT_GATEWAYS env envgateway.cpp)
 gateway_support(DEFAULT_GATEWAYS file filegateway.cpp)
 gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.cpp)
 
@@ -38,9 +39,9 @@ add_library(pelagicontainLib SHARED
     generators.cpp
     pelagicontain.cpp
     libpelagicontain.cpp
-    ${PROJECT_SOURCE_DIR}/common/common.cpp
     gateway/gateway.cpp
     ${GATEWAY_SOURCES}
+    ${PROJECT_SOURCE_DIR}/common/common.cpp
 )
 
 TARGET_LINK_LIBRARIES( pelagicontainLib
