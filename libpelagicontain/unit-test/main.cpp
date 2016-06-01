@@ -8,7 +8,7 @@
 #include "ivi-logging-console.h"
 #include "pelagicontain-common.h"
 
-LOG_DEFINE_APP_IDS("PCON", "Pelagicontain");
+LOG_DEFINE_APP_IDS("PCON", "Pelagicontain Unit Test");
 LOG_DECLARE_CONTEXT(Pelagicontain_DefaultLogContext, "PCON", "Main context");
 
 int main(int argc, char * *argv)

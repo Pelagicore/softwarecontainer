@@ -17,6 +17,8 @@
 
 #include "ivi-main-loop/ivi-main-loop-unix-signal.h"
 
+#include <ivi-profiling.h>
+
 #include "pelagicore-DBusCpp.h"
 #include "PelagicontainAgent_dbuscpp_adaptor.h"
 
@@ -318,6 +320,7 @@ int main(int argc, char * *argv)
         exit(1);
     }
 
+    profilepoint("softwareContainerStart");
     log_debug() << "Starting pelagicontain agent";
 
     auto mainContext = Glib::MainContext::get_default();
