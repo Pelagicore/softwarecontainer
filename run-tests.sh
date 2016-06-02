@@ -27,12 +27,16 @@ wpid=$!
     --gtest_output=xml
 retval=$?
 
+if ! kill $wpid > /dev/null 2>&1 ; then
+    echo "Failed to kill weston at pid $wpid"
+fi
+
 if ! kill $ppid > /dev/null 2>&1 ; then
     echo "Failed to kill pulseaudio at pid $ppid"
 fi
 
-if ! kill $wpid > /dev/null 2>&1 ; then
-    echo "Failed to kill weston at pid $wpid"
+if ! kill $DBUS_SESSION_BUS_PID > /dev/null 2>&1 ; then
+    echo "Failed to kill D-Bus session bus at pid $DBUS_SESSION_BUS_PID"
 fi
 
 exit $retval

@@ -36,7 +36,7 @@ public:
     void SetUp() override
     {
         ::testing::Test::SetUp();
-        lib = std::unique_ptr<PelagicontainLib> (new PelagicontainLib());
+        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib());
         lib->setContainerIDPrefix("Test-");
         lib->setMainLoopContext(m_context);
         ASSERT_TRUE(isSuccess(lib->init()));
@@ -44,6 +44,7 @@ public:
 
     void TearDown() override
     {
+	lib.reset();
         ::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
     }
 
