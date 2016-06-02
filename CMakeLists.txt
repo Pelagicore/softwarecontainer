@@ -68,6 +68,11 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/libpelagicontain/src
 )
 
+option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
+if(ENABLE_PROFILING)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILING_ENABLED=1")
+endif()
+
 option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
 	enable_testing()

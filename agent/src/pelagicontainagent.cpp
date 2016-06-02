@@ -99,6 +99,7 @@ public:
      */
     ContainerID createContainer(const std::string &prefix)
     {
+        profilepoint("createContainerStart");
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
             container = m_preloadedContainers[0].release();
@@ -162,6 +163,8 @@ public:
                         }, m_mainLoopContext);
 
             m_jobs.push_back(job);
+
+            profilepoint("launchCommandEnd");
 
             return job->pid();
         }
