@@ -49,6 +49,7 @@ PelagicontainLib::PelagicontainLib(PelagicontainWorkspace &workspace) :
 
 PelagicontainLib::~PelagicontainLib()
 {
+    shutdown();
 }
 
 void PelagicontainLib::setContainerIDPrefix(const std::string &name)
