@@ -17,6 +17,8 @@
 
 #include "ivi-main-loop/ivi-main-loop-unix-signal.h"
 
+#include <ivi-profiling.h>
+
 #include "pelagicore-DBusCpp.h"
 #include "PelagicontainAgent_dbuscpp_adaptor.h"
 
@@ -97,6 +99,7 @@ public:
      */
     ContainerID createContainer(const std::string &prefix)
     {
+        profilepoint("createContainerStart");
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
             container = m_preloadedContainers[0].release();
@@ -160,6 +163,8 @@ public:
                         }, m_mainLoopContext);
 
             m_jobs.push_back(job);
+
+            profilepoint("launchCommandEnd");
 
             return job->pid();
         }
@@ -318,6 +323,7 @@ int main(int argc, char * *argv)
         exit(1);
     }
 
+    profilepoint("softwareContainerStart");
     log_debug() << "Starting pelagicontain agent";
 
     auto mainContext = Glib::MainContext::get_default();
