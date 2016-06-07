@@ -5,6 +5,7 @@
 
 # Authors:
 # Daniel Lezcano <daniel.lezcano@free.fr>
+# Tobias Olausson <tobias.olausson@pelagicore.com>
 
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,32 +27,31 @@ install_busybox()
     name=$2
     res=0
     tree="\
-$rootfs/selinux \
-$rootfs/dev \
-$rootfs/home \
-$rootfs/root \
-$rootfs/etc \
-$rootfs/etc/init.d \
-$rootfs/bin \
-$rootfs/usr/bin \
-$rootfs/sbin \
-$rootfs/usr/sbin \
-$rootfs/proc \
-$rootfs/mnt \
-$rootfs/tmp \
-$rootfs/var/log \
-$rootfs/usr/share/udhcpc \
-$rootfs/dev/pts \
-$rootfs/dev/shm \
-$rootfs/dev/dri \
-$rootfs/lib \
-$rootfs/usr/lib \
-$rootfs/lib64 \
-$rootfs/usr/lib64 \
-$rootfs/gateways \
-$rootfs/${CMAKE_INSTALL_PREFIX} \
-${ADDITIONAL_FOLDER_MOUNTS}
-"
+        $rootfs/bin \
+        $rootfs/dev \
+        $rootfs/dev/pts \
+        $rootfs/dev/shm \
+        $rootfs/dev/dri \
+        $rootfs/etc \
+        $rootfs/etc/init.d \
+        $rootfs/etc/pulse \
+        $rootfs/home \
+        $rootfs/lib \
+        $rootfs/lib64 \
+        $rootfs/mnt \
+        $rootfs/proc \
+        $rootfs/root \
+        $rootfs/sbin \
+        $rootfs/usr/bin \
+        $rootfs/usr/lib \
+        $rootfs/usr/lib64 \
+        $rootfs/usr/sbin \
+        $rootfs/usr/share/udhcpc \
+        $rootfs/tmp \
+        $rootfs/var/log \
+        $rootfs/gateways \
+        $rootfs/${CMAKE_INSTALL_PREFIX} \
+        ${ADDITIONAL_FOLDER_MOUNTS}"
 
     mkdir -p $tree || return 1
     chmod 755 $tree || return 1
@@ -75,17 +75,9 @@ ${ADDITIONAL_FOLDER_MOUNTS}
 
     popd > /dev/null
 
-    # root user defined
-
-	# Create entry for root user in /etc/passwd
-    cat <<EOF >> $rootfs/etc/passwd
-root:x:0:0:root:/root:/bin/sh
-EOF
-	# Then append the content of the host's /etc/passwd to inherit the host's users
-	cat /etc/passwd | grep -v root >> $rootfs/etc/passwd
-
-	# Copy host's /etc/group
-	cp /etc/group $rootfs/etc/group
+    # Create entry for root user in /etc/passwd
+    echo "root:x:0:0:root:/root:/bin/sh" >> $rootfs/etc/passwd
+    echo "root:x:0:root" >> $rootfs/etc/group
 
     # mount everything
     cat <<EOF >> $rootfs/etc/init.d/rcS
@@ -152,32 +144,20 @@ case "\$1" in
 esac
 exit 0
 EOF
-
+    chmod 744 $rootfs/usr/share/udhcpc/default.script
+    echo "disable-shm=yes" >> $rootfs/etc/pulse/client.conf
+    echo `dbus-uuidgen` >> $rootfs/etc/machine-id # For D-Bus
     cp /etc/resolv.conf $rootfs/etc/resolv.conf
     echo "nameserver 10.0.3.1" >> $rootfs/etc/resolv.conf
 
-    mkdir $rootfs/etc/pulse/
-    cat <<EOF >> $rootfs/etc/pulse/client.conf
-disable-shm=yes
-EOF
-    chmod 744 $rootfs/usr/share/udhcpc/default.script
-
-    # Create an uuid for D-Bus
-    cat <<EOF >> $rootfs/etc/machine-id
-`dbus-uuidgen`
-EOF
-
     return $res
 }
-
-
 
 configure_busybox()
 {
     rootfs=$1
 
     which busybox >/dev/null 2>&1
-
     if [ $? -ne 0 ]; then
         echo "busybox executable is not accessible"
         return 1
@@ -191,13 +171,11 @@ configure_busybox()
     fi
 
     # symlink busybox for the commands it supports
-    # it would be nice to just use "chroot $rootfs busybox --install -s /bin"
-    # but that only works right in a chroot with busybox >= 1.19.0
     pushd $rootfs/bin > /dev/null || return 1
-    ./busybox --help | grep 'Currently defined functions:' -A300 | \
-      grep -v 'Currently defined functions:' | tr , '\n' | \
-      xargs -n1 ln -s busybox
-    popd > /dev/null
+    for comm in $(./busybox --list); do
+        ln -s busybox $comm
+    done
+    popd > /dev/null || return 1
 
     # relink /sbin/init
     ln $rootfs/bin/busybox $rootfs/sbin/init
@@ -211,65 +189,49 @@ copy_configuration()
     rootfs=$2
     name=$3
 
-grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
-cat <<EOF >> $path/config
-lxc.utsname = $name
-lxc.tty = 1
-lxc.pts = 1
+    grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
+    echo "lxc.utsname = $name" >> $path/config
+    echo "lxc.tty = 1" >> $path/config
+    echo "lxc.pts = 1" >> $path/config
+    echo "lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0" >> $path/config
 
-# When using LXC with apparmor, uncomment the next line to run unconfined:
-#lxc.aa_profile = unconfined
-EOF
+    # Bind-mount the directory containing init.lxc to /usr/sbin. This is typically
+    # /usr/sbin on the host as well.
+    INITLXCFILE=`which init.lxc`
+    if [ $? -ne 0 ]; then
+        echo "Error in template: init.lxc not found, unable to mount containing directory to /usr/sbin in container"
+    else
+        INITLXCDIR=$(dirname $INITLXCFILE)
+        echo "lxc.mount.entry = $INITLXCDIR $rootfs/usr/sbin none ro,bind 0 0" >> $path/config
+    fi
 
-cat <<EOF >> $path/config
-lxc.mount.entry = /lib $rootfs/lib none ro,bind 0 0
-lxc.mount.entry = /usr/lib $rootfs/usr/lib none ro,bind 0 0
-lxc.mount.entry = /usr/sbin $rootfs/usr/sbin none ro,bind 0 0
-#lxc.mount.entry = /etc/fonts $rootfs/etc/fonts none ro,bind 0 0
-lxc.mount.entry = /usr $rootfs/usr none ro,bind 0 0
-lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0
-EOF
+    if [ -n "$GATEWAY_DIR" ]; then
+        echo "lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0" >> $path/config
 
-# Bind-mount the directory containing init.lxc to /usr/sbin. This is typically
-# /usr/sbin on the host as well.
-INITLXCFILE=`which init.lxc`
-if [ $? -ne 0 ]; then
-    echo "Error in template: init.lxc not found, unable to mount containing directory to /usr/sbin in container"
-else
-    INITLXCDIR=$(dirname $INITLXCFILE)
-    cat <<EOF >> $path/config
-lxc.mount.entry = $INITLXCDIR $rootfs/usr/sbin none ro,bind 0 0
-EOF
-fi
+        # the gateway folder needs to be writable since wayland requires some extra
+        # files to be created by the client in the folder where the wayland socket
+        # is located
+        chmod o+rwx $GATEWAY_DIR
+        chmod g+rwx $GATEWAY_DIR
+    fi
 
-if [ -n "$GATEWAY_DIR" ]; then
-cat <<EOF >> $path/config
-lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0
-EOF
-fi
-
-# the gateway folder needs to be writable since wayland requires some extra files to be created by the client in the folder where the wayland socket is located
-chmod o+rwx $GATEWAY_DIR
-chmod g+rwx $GATEWAY_DIR
-
-    libdirs="\
+    mountdirs="\
+        usr \
         lib \
-        usr/lib \
         lib64 \
+        usr/lib \
         usr/lib64"
 
-    for dir in $libdirs; do
-        if [ -d "/$dir" ] && [ -d "$rootfs/$dir" ]; then
-            echo "lxc.mount.entry = /$dir $dir none ro,bind 0 0" >> $path/config
-        fi
+    for dir in $mountdirs; do
+	if [ -d "/$dir" ] && [ -d "$rootfs/$dir" ]; then
+	    echo "lxc.mount.entry = /$dir $dir none ro,bind 0 0" >> $path/config
+	fi
     done
 }
 
 usage()
 {
-    cat <<EOF
-$1 -h|--help -p|--path=<path>|--rootfs=<path>
-EOF
+    echo "$1 -h|--help -p|--path=<path>|--rootfs=<path>"
     return 0
 }
 
