@@ -50,7 +50,7 @@ Vagrant.configure(2) do |config|
 
     # Build and install project
     config.vm.provision "shell", privileged: false, 
-        args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1"],
+        args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
         path: "cookbook/build/cmake-builder.sh"
 
     # Build documentation and run unit tests
@@ -72,6 +72,9 @@ Vagrant.configure(2) do |config|
         cmake .
         make
         sudo ./launch.sh -b session
+
+        cd ~/pelagicontain/service-test/timing-profiling
+        sudo ./run-test.sh
     SHELL
 
     # clang analysis of the code
