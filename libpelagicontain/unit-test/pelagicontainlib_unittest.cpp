@@ -69,11 +69,6 @@ public:
         return m_context;
     }
 
-    void openTerminal()
-    {
-        lib->openTerminal("konsole -e");
-    }
-
     PelagicontainLib &getLib()
     {
         return *lib;
@@ -93,12 +88,7 @@ TEST_F(PelagicontainApp, TestWayland) {
     config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
 
     getLib().getPelagicontain().setGatewayConfigs(config);
-
-    //		openTerminal();
-    //		sleep(10000);
-
     FunctionJob jobTrue(getLib(), [] (){
-
         bool ERROR = 1;
         bool SUCCESS = 0;
 
@@ -284,11 +274,6 @@ TEST_F(PelagicontainApp, FileGatewayReadOnly) {
     });
     jobReadData.start();
     ASSERT_TRUE(jobReadData.wait() == 0);
-
-    // Check the mount status here.
-    CommandJob job2(getLib(), "/bin/mount");
-    job2.start();
-    job2.wait();
 
     // Make sure we can't write to the file
     std::string badData = "This data should never be read";
@@ -719,6 +704,10 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
     CommandJob job(getLib(), "ping www.google.com -c 5");
     job.start();
     ASSERT_TRUE(job.wait() != 0);
+
+    CommandJob job2(getLib(), "ping 8.8.8.8 -c 5");
+    job2.start();
+    ASSERT_TRUE(job2.wait() != 0);
 }
 
 /**
@@ -758,15 +747,6 @@ TEST_F(PelagicontainApp, TestJobReturnCode) {
     CommandJob jobFalse(getLib(), "/bin/false");
     jobFalse.start();
     ASSERT_FALSE(jobFalse.wait() == 0);
-
-    //	addProcessListener(jobFalse.pid(), [&] (
-    //			int pid, int exitCode) {
-    ////		log_error () << exitCode;
-    //		app.exit();
-    //	}, app.getMainContext());
-    //
-    //	app.run();
-
 }
 
 /**

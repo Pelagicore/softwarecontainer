@@ -181,6 +181,8 @@ ReturnCode PelagicontainLib::init()
         m_pelagicontain.addGateway(*gateway);
     }
 
+    // TODO: When this is used together with spawning using lxc.init, we get
+    //       glib errors about ECHILD
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
     if (m_pcPid != 0) {
@@ -190,7 +192,6 @@ ReturnCode PelagicontainLib::init()
     }
 
     m_initialized = true;
-
     return ReturnCode::SUCCESS;
 }
 
