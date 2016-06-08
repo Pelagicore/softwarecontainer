@@ -73,7 +73,7 @@ Vagrant.configure(2) do |config|
         make
         sudo ./launch.sh -b session
 
-        cd ~/pelagicontain/service-test/timing-profiling
+        cd ~/pelagicontain/service-test
         sudo ./run-test.sh
     SHELL
 
