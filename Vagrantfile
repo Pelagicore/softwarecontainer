@@ -8,13 +8,14 @@ cpus = 3
 
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
-    #config.vm.box = "pelagibuild"
-    #
     config.vm.provider "virtualbox" do |vb|
+        vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
         vb.memory = ram * 1024
         vb.cpus = cpus
     end
 
+    # Sync the reppo root with this path in the VM
+    config.vm.synced_folder "./", "/home/vagrant/pelagicontain/", create: true
 
     # Deploy a private key used to clone gits from pelagicore.net
     config.vm.provision "file", source: vagrant_private_key_file, destination: "/home/vagrant/.ssh/id_rsa"
@@ -63,28 +64,31 @@ Vagrant.configure(2) do |config|
         args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
         path: "cookbook/build/cmake-builder.sh"
 
-    # run tests (note, running as root)
-    config.vm.provision "shell", inline: <<-SHELL
-        # BUG: Workaround, this conf is copied to a bad location by make install. 
-        sudo cp /usr/local/etc/dbus-1/system.d/pelagicontain-agent.conf /etc/dbus-1/system.d/
-        cd pelagicontain/build
-        ./run-tests.sh
-    SHELL
+    if ENV['CI_BUILD'] then
 
-    # Run an example (note, running as root)
-    config.vm.provision "shell", privileged: false, inline: <<-SHELL
-        cd pelagicontain/examples/simple
-        cmake .
-        make
-        sudo ./launch.sh -b session
+        # run tests (note, running as root)
+        config.vm.provision "shell", inline: <<-SHELL
+            # BUG: Workaround, this conf is copied to a bad location by make install.
+            sudo cp /usr/local/etc/dbus-1/system.d/pelagicontain-agent.conf /etc/dbus-1/system.d/
+            cd pelagicontain/build
+            ./run-tests.sh
+        SHELL
 
-        cd ~/pelagicontain/service-test
-        sudo ./run-test.sh
-    SHELL
+        # Run an example (note, running as root)
+        config.vm.provision "shell", privileged: false, inline: <<-SHELL
+            cd pelagicontain/examples/simple
+            cmake .
+            make
+            sudo ./launch.sh -b session
 
-    # clang analysis of the code
-    config.vm.provision "shell", privileged: false, 
-        args: ["clang", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
-        path: "cookbook/build/clang-code-analysis.sh"
+            cd ~/pelagicontain/service-test
+            sudo ./run-test.sh
+        SHELL
+
+        # clang analysis of the code
+        config.vm.provision "shell", privileged: false,
+            args: ["clang", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
+            path: "cookbook/build/clang-code-analysis.sh"
+    end
 
 end
