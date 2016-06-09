@@ -60,6 +60,8 @@ Vagrant.configure(2) do |config|
     SHELL
 
     config.vm.provision "shell", inline: <<-SHELL
+        # BUG: Workaround, this conf is copied to a bad location by make install. 
+        sudo cp /usr/local/etc/dbus-1/system.d/pelagicontain-agent.conf /etc/dbus-1/system.d/
         cd pelagicontain/build
         ./run-tests.sh
     SHELL
