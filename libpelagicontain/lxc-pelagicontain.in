@@ -1,154 +1,64 @@
 #!/bin/bash -e
 
 #
-# lxc: linux Container library
-
-# Authors:
-# Daniel Lezcano <daniel.lezcano@free.fr>
+# This LXC template is based on the busybox one shipped with LXC.
+# Original author: Daniel Lezcano <daniel.lezcano@free.fr>
+#
+# Pelagicore maintainer:
 # Tobias Olausson <tobias.olausson@pelagicore.com>
+#
+# LXC is free software, released under GNU LGPL 2.1
+#
+# Reader's guide: to get the full understanding of how the containers are
+# set up in this system, make sure to read the lxc configuration file
+# for this project (pelagicontain.conf) where pty allocation, and some
+# further mount points, as well as networking set up, is listed.
+#
 
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-
-install_busybox()
+create_rootfs()
 {
     rootfs=$1
     name=$2
     res=0
+
+    # This is the rootfs tree in the container. Apart from the files we
+    # create below, this will be empty, and most directories will be bind
+    # mounted from the host into the container (/lib etc, see below and
+    # the configuration file).
+
     tree="\
         $rootfs/bin \
         $rootfs/dev \
-        $rootfs/dev/pts \
-        $rootfs/dev/shm \
-        $rootfs/dev/dri \
         $rootfs/etc \
-        $rootfs/etc/init.d \
         $rootfs/etc/pulse \
         $rootfs/home \
         $rootfs/lib \
         $rootfs/lib64 \
-        $rootfs/mnt \
         $rootfs/proc \
         $rootfs/root \
         $rootfs/sbin \
-        $rootfs/usr/bin \
         $rootfs/usr/lib \
         $rootfs/usr/lib64 \
         $rootfs/usr/sbin \
-        $rootfs/usr/share/udhcpc \
         $rootfs/tmp \
-        $rootfs/var/log \
         $rootfs/gateways \
         $rootfs/${CMAKE_INSTALL_PREFIX} \
         ${ADDITIONAL_FOLDER_MOUNTS}"
 
+    # The tree needs to be writeable for the owner and read/execute for all
     mkdir -p $tree || return 1
     chmod 755 $tree || return 1
 
-    pushd $rootfs/dev > /dev/null || return 1
-
-    # minimal devices needed for busybox
-    mknod tty c 5 0       || res=1
-    mknod console c 5 1   || res=1
-    chmod 666 tty console || res=1
-    mknod tty0 c 4 0      || res=1
-    mknod tty1 c 4 0      || res=1
-    mknod tty5 c 4 0      || res=1
-    chmod 666 tty0        || res=1
-    mknod ram0 b 1 0      || res=1
-    chmod 600 ram0        || res=1
-    mknod null c 1 3      || res=1
-    chmod 666 null        || res=1
-    mknod urandom c 1 9   || res=1
-    chmod 666 urandom     || res=1
-
-    popd > /dev/null
-
-    # Create entry for root user in /etc/passwd
+    # Create entry for root user in /etc/passwd and /etc/group
     echo "root:x:0:0:root:/root:/bin/sh" >> $rootfs/etc/passwd
     echo "root:x:0:root" >> $rootfs/etc/group
 
-    # mount everything
-    cat <<EOF >> $rootfs/etc/init.d/rcS
-#!/bin/sh
-/bin/syslogd
-/bin/mount -a
-/bin/udhcpc
-EOF
-
-    # executable
-    chmod 744 $rootfs/etc/init.d/rcS || return 1
-
-    # mount points
-    cat <<EOF >> $rootfs/etc/fstab
-proc  /proc      proc    defaults     0      0
-shm   /dev/shm   tmpfs   defaults     0      0
-EOF
-
-    # writable and readable for other
-    chmod 644 $rootfs/etc/fstab || return 1
-
-    # launch rcS first then make a console available
-    # and propose a shell on the tty, the last one is
-    # not needed
-    cat <<EOF >> $rootfs/etc/inittab
-::sysinit:/etc/init.d/rcS
-tty1::respawn:/bin/getty -L tty1 115200 vt100
-console::askfirst:/bin/sh
-EOF
-    # writable and readable for other
-    chmod 644 $rootfs/etc/inittab || return 1
-
-    cat <<EOF >> $rootfs/usr/share/udhcpc/default.script
-#!/bin/sh
-case "\$1" in
-    deconfig)
-        ip addr flush dev \$interface
-        ;;
-
-    renew|bound)
-        # flush all the routes
-        if [ -n "\$router" ]; then
-            ip route del default 2> /dev/null
-        fi
-
-        # check broadcast
-        if [ -n "\$broadcast" ]; then
-            broadcast="broadcast \$broadcast"
-        fi
-
-        # add a new ip address
-        ip addr add \$ip/\$mask \$broadcast dev \$interface
-
-        if [ -n "\$router" ]; then
-            ip route add default via \$router dev \$interface
-        fi
-
-        [ -n "\$domain" ] && echo search \$domain > /etc/resolv.conf
-        for i in \$dns ; do
-            echo nameserver \$i >> /etc/resolv.conf
-        done
-        echo "nameserver 10.0.3.1" >> /etc/resolv.conf
-        ;;
-esac
-exit 0
-EOF
-    chmod 744 $rootfs/usr/share/udhcpc/default.script
+    # We don't have an shm fs mounted, so tell pulse not to use it.
     echo "disable-shm=yes" >> $rootfs/etc/pulse/client.conf
-    echo `dbus-uuidgen` >> $rootfs/etc/machine-id # For D-Bus
+    # We generate a unique machine id for D-Bus.
+    dbus-uuidgen --ensure=$rootfs/etc/machine-id
+    # Copy DNS info into the guest.
     cp /etc/resolv.conf $rootfs/etc/resolv.conf
-    echo "nameserver 10.0.3.1" >> $rootfs/etc/resolv.conf
 
     return $res
 }
@@ -163,22 +73,17 @@ configure_busybox()
         return 1
     fi
 
-    # copy busybox in the rootfs
+    # Copy the busybox binary into the rootfs
     cp $(which busybox) $rootfs/bin
     if [ $? -ne 0 ]; then
         echo "failed to copy busybox in the rootfs"
         return 1
     fi
 
-    # symlink busybox for the commands it supports
+    # Symlink to busybox for the commands it supports
     pushd $rootfs/bin > /dev/null || return 1
-    for comm in $(./busybox --list); do
-        ln -s busybox $comm
-    done
+    ./busybox --list | xargs -n1 -P 25 ln -s busybox
     popd > /dev/null || return 1
-
-    # relink /sbin/init
-    ln $rootfs/bin/busybox $rootfs/sbin/init
 
     return 0
 }
@@ -189,10 +94,8 @@ copy_configuration()
     rootfs=$2
     name=$3
 
-    grep -q "^lxc.rootfs" $path/config 2>/dev/null || echo "lxc.rootfs = $rootfs" >> $path/config
-    echo "lxc.utsname = $name" >> $path/config
-    echo "lxc.tty = 1" >> $path/config
-    echo "lxc.pts = 1" >> $path/config
+    # Set some non-static mount points, the rest are already in the config file
+    echo "lxc.rootfs = $rootfs" >> $path/config
     echo "lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0" >> $path/config
 
     # Bind-mount the directory containing init.lxc to /usr/sbin. This is typically
@@ -200,33 +103,18 @@ copy_configuration()
     INITLXCFILE=`which init.lxc`
     if [ $? -ne 0 ]; then
         echo "Error in template: init.lxc not found, unable to mount containing directory to /usr/sbin in container"
-    else
-        INITLXCDIR=$(dirname $INITLXCFILE)
-        echo "lxc.mount.entry = $INITLXCDIR $rootfs/usr/sbin none ro,bind 0 0" >> $path/config
+        return 1
     fi
+    echo "lxc.mount.entry = $(dirname $INITLXCFILE) $rootfs/usr/sbin none ro,bind 0 0" >> $path/config
 
+    # If the gateway dir variable is set, add a mount entry for that one also.
+    # The gateway folder needs to be writable since wayland requires some extra
+    # files to be created by the client in the folder where the wayland socket
+    # is located
     if [ -n "$GATEWAY_DIR" ]; then
         echo "lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0" >> $path/config
-
-        # the gateway folder needs to be writable since wayland requires some extra
-        # files to be created by the client in the folder where the wayland socket
-        # is located
-        chmod o+rwx $GATEWAY_DIR
-        chmod g+rwx $GATEWAY_DIR
+        chmod go+rwx $GATEWAY_DIR
     fi
-
-    mountdirs="\
-        usr \
-        lib \
-        lib64 \
-        usr/lib \
-        usr/lib64"
-
-    for dir in $mountdirs; do
-	if [ -d "/$dir" ] && [ -d "$rootfs/$dir" ]; then
-	    echo "lxc.mount.entry = /$dir $dir none ro,bind 0 0" >> $path/config
-	fi
-    done
 }
 
 usage()
@@ -264,7 +152,7 @@ if [ -z "$path" ]; then
     exit 1
 fi
 
-# detect rootfs
+# detect rootfs (either from contents in config, or by using $path
 if [ -z "$rootfs" ]; then
     config="$path/config"
     if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
@@ -274,15 +162,15 @@ if [ -z "$rootfs" ]; then
     fi
 fi
 
-install_busybox $rootfs $name
+create_rootfs $rootfs $name
 if [ $? -ne 0 ]; then
-    echo "failed to install busybox's rootfs"
+    echo "failed to create pelagicontain rootfs"
     exit 1
 fi
 
 configure_busybox $rootfs
 if [ $? -ne 0 ]; then
-    echo "failed to configure busybox template"
+    echo "failed to configure busybox in the rootfs"
     exit 1
 fi
 
