@@ -15,9 +15,10 @@ The LXC template SoftwareContainer uses does three things currently:
 
 Create basic rootfs
 ^^^^^^^^^^^^^^^^^^^
-The rootfs created is a basic FHS-like [#fhs] structure, although stripped down, with the added /gateways directory, as well as 
-taking two variables when being run by CMake - ``${CMAKE_INSTALL_PREFIX}`` and ``${ADDITIONAL_FOLDER_MOUNTS}``. 
-Furthermore, this steps creates a root user and group, and then sets some configuration options in three places:
+The rootfs created is a basic FHS-like [#fhs] structure, although stripped down, with the added /gateways directory. It also
+creates the paths pointed to by two variables that are being substituted by CMake - ``${CMAKE_INSTALL_PREFIX}`` and
+``${ADDITIONAL_FOLDER_MOUNTS}``. Furthermore, this steps creates a root user and group, and then sets some configuration
+options in three places:
 
 * ``/etc/pulse/client.conf`` - tell pulse not to use shm
 * ``/etc/machine-id`` - populated with a dbus-uuid
@@ -59,7 +60,7 @@ This configuration tells LXC to create a veth interface, connected to lxcbr0 (no
 
 Device and pty/tty allocation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-LXC has a directive called "autodev", which, when set, creates all needed devices automatically.
+LXC has a directive called "autodev", creates all needed devices automatically when set.
 This is used in conjunction with telling LXC to allocate tty and pty devices.
 
 Mount entries
@@ -68,7 +69,7 @@ The static mount entries tells LXC to bind mount /usr, /lib, /usr/lib and /proc 
 
 Full example:
 ^^^^^^^^^^^^^
-literalinclude:: ../../../libpelagicontain/pelagicontain.conf
+.. literalinclude:: ../../../libpelagicontain/pelagicontain.conf
     :language: bash
 
 LXC API

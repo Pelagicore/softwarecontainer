@@ -57,7 +57,7 @@ Vagrant.configure(2) do |config|
     # run tests (note, running as root)
     config.vm.provision "shell", inline: <<-SHELL
         cd pelagicontain/build
-        sudo ./run-tests.sh
+        ./run-tests.sh
     SHELL
 
     # Run an example (note, running as root)
