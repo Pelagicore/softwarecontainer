@@ -1,18 +1,30 @@
 #!/bin/bash
 
 logName="dlt.log"
+appStarts=3
+
 
 measure() {
     startName=$1
     endName=$2
+    pointsToFind=1
+    if [ "$3" != "" ] ; then 
+        pointsToFind=$3
+    fi
 
 # BUG: Use these if getting from dlt logs
 #    start=`cat $logName |grep profilerPoint | grep $startName |tr -s '[[:space:]]' | cut -d " " -f 14|tr -d "]"`
 #    end=`cat $logName |grep profilerPoint | grep $endName |tr -s '[[:space:]]' | cut -d " " -f 14|tr -d "]"`
-    start=`cat $logName |grep profilerPoint | grep $startName |tr -s '[[:space:]]' | cut -d " " -f 5`
-    end=`cat $logName |grep profilerPoint | grep $endName |tr -s '[[:space:]]' | cut -d " " -f 5`
+    declare -a start
+    declare -a end
+    for i in `seq 1 $pointstoFind`; do 
+        start[$i]=`cat $logName |grep profilerPoint | grep $startName | sed "${i}q;d" |tr -s '[[:space:]]' | cut -d " " -f 5`
+        end[$i]=`cat $logName |grep profilerPoint | grep $endName | sed "${i}q;d" | tr -s '[[:space:]]' | cut -d " " -f 5`
+        retval=`echo "${end[$i]}-${start[$i]}" |bc`
+        echo "YVALUE=$retval" > "result-${startName}-${endName}-${i}.properties"
+        echo "${key} ${arr[${key}]} result number $i => $retval"
+    done
 
-    retval=`echo "$end-$start" |bc`
 }
 
 # BUG: ivi-logging and dlt is not friends, when we need timing between 
@@ -31,7 +43,7 @@ measure() {
 
 # Run the actual test cases
 echo "### Running launch.sh script ###"
-./launch.sh -b system | tee $logName
+./launch.sh -b system -n $appStarts | tee $logName
 
 # # Shutdown the environment used by the tests
 # if ! kill $rpid > /dev/null 2>&1 ; then
@@ -49,9 +61,6 @@ arr["createContainerStart"]=launchCommandEnd
 arr["softwareContainerStart"]=createContainerStart
 
 for key in ${!arr[@]}; do
-    measure ${key} ${arr[${key}]}
-    # TODO Something useful by jenkins?
-    echo "YVALUE=$retval" > "result-${key}-${arr[${key}]}.properties"
-    echo "${key} ${arr[${key}]} => $retval"
+    measure ${key} ${arr[${key}]} $appStarts
 done
 
