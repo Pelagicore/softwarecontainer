@@ -3,9 +3,18 @@
 
 vagrant_private_key_file="vagrant_key"
 
+ram = 4 #GB
+cpus = 3
+
 Vagrant.configure(2) do |config|
-    config.vm.box = "debian/jessie64"
+    config.vm.box = "debian/contrib-jessie64"
     #config.vm.box = "pelagibuild"
+    #
+    config.vm.provider "virtualbox" do |vb|
+        vb.memory = ram * 1024
+        vb.cpus = cpus
+    end
+
 
     # Deploy a private key used to clone gits from pelagicore.net
     config.vm.provision "file", source: vagrant_private_key_file, destination: "/home/vagrant/.ssh/id_rsa"
