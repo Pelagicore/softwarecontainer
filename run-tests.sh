@@ -12,6 +12,9 @@ echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 pulseaudio --system &
 ppid=$!
 
+# BUG: ivi-logging and dlt does not work together in pelagicontain for some reason
+#      Everything in the pelagicontainLibTest hangs and stops dead if DLT backend 
+#      is enabled.
 # # Setup environment for tests
 # echo "### Starting dlt-daemon ###"
 # dlt-daemon &
@@ -45,6 +48,9 @@ if ! kill $ppid > /dev/null 2>&1 ; then
     echo "Failed to kill pulseaudio at pid $ppid"
 fi
 
+# BUG: ivi-logging and dlt does not work together in pelagicontain for some reason
+#      Everything in the pelagicontainLibTest hangs and stops dead if DLT backend 
+#      is enabled.
 # # Shutdown the environment used by the tests
 # if ! kill $rpid > /dev/null 2>&1 ; then
 #     echo "Failed to kill dlt-receiver"
