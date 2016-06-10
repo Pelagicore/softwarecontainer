@@ -11,18 +11,21 @@ measure() {
     if [ "$3" != "" ] ; then 
         pointsToFind=$3
     fi
+    echo "pointsTofind: $pointsToFind"
 
 # BUG: Use these if getting from dlt logs
 #    start=`cat $logName |grep profilerPoint | grep $startName |tr -s '[[:space:]]' | cut -d " " -f 14|tr -d "]"`
 #    end=`cat $logName |grep profilerPoint | grep $endName |tr -s '[[:space:]]' | cut -d " " -f 14|tr -d "]"`
     declare -a start
     declare -a end
-    for i in `seq 1 $pointstoFind`; do 
+    for i in `seq 1 $pointsToFind`; do 
+        echo "run $i"
         start[$i]=`cat $logName |grep profilerPoint | grep $startName | sed "${i}q;d" |tr -s '[[:space:]]' | cut -d " " -f 5`
         end[$i]=`cat $logName |grep profilerPoint | grep $endName | sed "${i}q;d" | tr -s '[[:space:]]' | cut -d " " -f 5`
         retval=`echo "${end[$i]}-${start[$i]}" |bc`
         echo "YVALUE=$retval" > "result-${startName}-${endName}-${i}.properties"
         echo "${key} ${arr[${key}]} result number $i => $retval"
+        echo "end $i points: $pointsToFind"
     done
 
 }
@@ -56,11 +59,7 @@ echo "### Running launch.sh script ###"
 
 # Final measurements and output in reasonable format
 echo "### Final measurements ###"
-declare -A arr
-arr["createContainerStart"]=launchCommandEnd
-arr["softwareContainerStart"]=createContainerStart
 
-for key in ${!arr[@]}; do
-    measure ${key} ${arr[${key}]} $appStarts
-done
+measure createContainerStart launchCommandEnd 3
+measure softwareContainerStart createContainerStart 1
 
