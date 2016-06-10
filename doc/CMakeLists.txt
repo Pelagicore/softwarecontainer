@@ -2,61 +2,64 @@
 # First, Sphinx for documentation that is not code
 #
 
-find_package(Sphinx REQUIRED)
- 
-if(NOT DEFINED SPHINX_THEME)
-    set(SPHINX_THEME default)
-endif()
- 
-if(NOT DEFINED SPHINX_THEME_DIR)
-    set(SPHINX_THEME_DIR)
-endif()
- 
-# configured documentation tools and intermediate build results
-set(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
- 
-# Sphinx cache with pickled ReST documents
-set(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_doctrees")
- 
-# HTML output directory
-set(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
+if(ENABLE_DOC)
+    find_package(Sphinx REQUIRED)
 
-# PDF output directory
-set(SPHINX_PDF_DIR "${CMAKE_CURRENT_BINARY_DIR}/pdflatex")
+    if(NOT DEFINED SPHINX_THEME)
+        set(SPHINX_THEME default)
+    endif()
  
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in"
-    "${BINARY_BUILD_DIR}/conf.py"
-    @ONLY)
+    if(NOT DEFINED SPHINX_THEME_DIR)
+        set(SPHINX_THEME_DIR)
+    endif()
 
-add_custom_target(html
-    ${SPHINX_EXECUTABLE}
-        -q -b html
-        -c "${BINARY_BUILD_DIR}"
-        -d "${SPHINX_CACHE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}"
-        "${SPHINX_HTML_DIR}"
-    COMMENT "Building HTML documentation with Sphinx"
-)
+    # configured documentation tools and intermediate build results
+    set(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
 
-add_custom_target(latexpdf
-    ${SPHINX_EXECUTABLE}
-        -q -b latex
-        -c "${BINARY_BUILD_DIR}"
-        -d "${SPHINX_CACHE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}"
-        "${SPHINX_PDF_DIR}"
-    COMMAND make -C "${SPHINX_PDF_DIR}" all-pdf > /dev/null
-    COMMENT "Building Latex/PDF documentation with Sphinx")
+    # Sphinx cache with pickled ReST documents
+    set(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_doctrees")
 
-#
-# TODO: "doc" is taken by doxygen.
-# 
-add_custom_target(docs ALL)
-add_dependencies(docs html latexpdf)
+    # HTML output directory
+    set(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
+
+    # PDF output directory
+    set(SPHINX_PDF_DIR "${CMAKE_CURRENT_BINARY_DIR}/pdflatex")
+
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in"
+        "${BINARY_BUILD_DIR}/conf.py"
+        @ONLY)
+
+    add_custom_target(html
+        ${SPHINX_EXECUTABLE}
+            -q -b html
+            -c "${BINARY_BUILD_DIR}"
+            -d "${SPHINX_CACHE_DIR}"
+            "${CMAKE_CURRENT_SOURCE_DIR}"
+            "${SPHINX_HTML_DIR}"
+        COMMENT "Building HTML documentation with Sphinx"
+    )
+
+    add_custom_target(latexpdf
+        ${SPHINX_EXECUTABLE}
+            -q -b latex
+            -c "${BINARY_BUILD_DIR}"
+            -d "${SPHINX_CACHE_DIR}"
+            "${CMAKE_CURRENT_SOURCE_DIR}"
+            "${SPHINX_PDF_DIR}"
+        COMMAND make -C "${SPHINX_PDF_DIR}" all-pdf > /dev/null
+        COMMENT "Building Latex/PDF documentation with Sphinx")
+
+    #
+    # TODO: "doc" is taken by doxygen/pelagicore-utils.
+    #
+    add_custom_target(docs ALL)
+    add_dependencies(docs html latexpdf)
+endif(ENABLE_DOC)
 
 #
 # Then, doxygen for stuff that is code.
+# The doxygen macro in Pelagicore-utils will check for ENABLE_DOC by itself
 #
 
 find_package(PelagicoreUtilities)
