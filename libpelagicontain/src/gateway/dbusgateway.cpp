@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2014 Pelagicore AB
+ *   Copyright (C) 2014-2016 Pelagicore AB
  *   All rights reserved.
  */
 #include <iostream>
