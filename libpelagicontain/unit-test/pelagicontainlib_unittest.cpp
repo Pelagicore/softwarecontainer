@@ -792,10 +792,9 @@ TEST_F(PelagicontainApp, TestDBusGatewayOutputBuffer) {
     getLib().setGatewayConfigs(config);
 
     for(int i=0; i<2000; i++) {
-        printf("Call %i of 2000\n", i);
         CommandJob jobTrue(
                 getLib(),
-                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
         ASSERT_TRUE(jobTrue.wait() == 0);
     }
