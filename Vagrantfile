@@ -64,27 +64,12 @@ Vagrant.configure(2) do |config|
         args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
         path: "cookbook/build/cmake-builder.sh"
 
+    config.vm.provision "shell", inline: <<-SHELL
+        # BUG: Workaround, this conf is copied to a bad location by make install.
+        sudo cp /usr/local/etc/dbus-1/system.d/pelagicontain-agent.conf /etc/dbus-1/system.d/
+    SHELL
+
     if ENV['CI_BUILD'] then
-
-        # run tests (note, running as root)
-        config.vm.provision "shell", inline: <<-SHELL
-            # BUG: Workaround, this conf is copied to a bad location by make install.
-            sudo cp /usr/local/etc/dbus-1/system.d/pelagicontain-agent.conf /etc/dbus-1/system.d/
-            cd pelagicontain/build
-            ./run-tests.sh
-        SHELL
-
-        # Run an example (note, running as root)
-        config.vm.provision "shell", privileged: false, inline: <<-SHELL
-            cd pelagicontain/examples/simple
-            cmake .
-            make
-            sudo ./launch.sh -b session
-
-            cd ~/pelagicontain/service-test
-            sudo ./run-test.sh
-        SHELL
-
         # clang analysis of the code
         config.vm.provision "shell", privileged: false,
             args: ["clang", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
