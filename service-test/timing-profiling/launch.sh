@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This is an example of a misbehaving application being launched in a
 # container, the example will launch simple.c in a container, and observe that
@@ -8,7 +8,7 @@
 # container later, in order to access the 'simple' binary.
 SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
 
-help() {
+function help() {
     echo "$0 [-b [system|session]]"
     echo ""
     echo "  -b    what type of dbus to use, session or system"
@@ -44,13 +44,13 @@ pelagicontain-agent &
 AGENTPID="$!"
 
 # Let the agent start up
-sleep 2
+sleep 3
 
 export PCCMD="dbus-send --${BUS} --print-reply --dest=com.pelagicore.PelagicontainAgent /com/pelagicore/PelagicontainAgent"
 
 declare -a containerIds
 
-for i in `seq 1 $APPS`; do 
+for i in `seq 0 $APPS`; do 
     echo "### CreateContainer ###"
     # Create a new container
     containerIds[$i]=$($PCCMD com.pelagicore.PelagicontainAgent.CreateContainer string:prefix | while read row; do echo $row|grep uint32|cut -d " " -f 2; done)
