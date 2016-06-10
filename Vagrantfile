@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
     end
 
     # Sync the reppo root with this path in the VM
-    # config.vm.synced_folder "./", "/home/vagrant/pelagicontain/", create: true
+    config.vm.synced_folder "./", "/home/vagrant/pelagicontain/", create: true
 
     # Deploy a private key used to clone gits from pelagicore.net
     config.vm.provision "file", source: vagrant_private_key_file, destination: "/home/vagrant/.ssh/id_rsa"
@@ -61,7 +61,7 @@ Vagrant.configure(2) do |config|
 
     # Build and install project
     config.vm.provision "shell", privileged: false, 
-        args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1", "COPY_VAGRANT"],
+        args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
         path: "cookbook/build/cmake-builder.sh"
 
     if ENV['CI_BUILD'] then
