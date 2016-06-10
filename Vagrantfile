@@ -10,8 +10,8 @@ Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
     config.vm.provider "virtualbox" do |vb|
         vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
-        vb.memory = ram * 1024
-        vb.cpus = cpus
+        #vb.memory = ram * 1024
+        #vb.cpus = cpus
     end
 
     # Sync the reppo root with this path in the VM
