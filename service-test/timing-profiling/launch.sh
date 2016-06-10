@@ -12,15 +12,20 @@ help() {
     echo "$0 [-b [system|session]]"
     echo ""
     echo "  -b    what type of dbus to use, session or system"
+    echo "  -n    Number of times to launch app"
     exit
 }
 
 
 BUS="system"
-while getopts ":b:h" opt; do
+APPS=1
+while getopts ":b:n:h" opt; do
     case $opt in 
     b)
         BUS="$OPTARG"
+        ;;
+    n)
+        APPS="$OPTARG"
         ;;
     h)
         help
@@ -43,24 +48,30 @@ sleep 2
 
 export PCCMD="dbus-send --${BUS} --print-reply --dest=com.pelagicore.PelagicontainAgent /com/pelagicore/PelagicontainAgent"
 
-echo "### CreateContainer ###"
-# Create a new container
-containerId=$($PCCMD com.pelagicore.PelagicontainAgent.CreateContainer string:prefix | while read row; do echo $row|grep uint32|cut -d " " -f 2; done)
+declare -a containerIds
 
-echo "### BindMountFolderInContainer ###"
-# Expose a directory to the container
-$PCCMD com.pelagicore.PelagicontainAgent.BindMountFolderInContainer uint32:0 string:${SCRIPTPATH} string:app boolean:true
+for i in `seq 1 $APPS`; do 
+    echo "### CreateContainer ###"
+    # Create a new container
+    containerIds[$i]=$($PCCMD com.pelagicore.PelagicontainAgent.CreateContainer string:prefix | while read row; do echo $row|grep uint32|cut -d " " -f 2; done)
 
-echo "### LaunchCommand ###"
-# Run the simple example
-$PCCMD com.pelagicore.PelagicontainAgent.LaunchCommand uint32:0 uint32:0 string:/gateways/app/simple string:/gateways/app/ string:/tmp/stdout dict:string:string:""
+    echo "### BindMountFolderInContainer ###"
+    # Expose a directory to the container
+    $PCCMD com.pelagicore.PelagicontainAgent.BindMountFolderInContainer uint32:${containerIds[$i]} string:${SCRIPTPATH} string:app boolean:true
+
+    echo "### LaunchCommand ###"
+    # Run the simple example
+    $PCCMD com.pelagicore.PelagicontainAgent.LaunchCommand uint32:${containerIds[$i]} uint32:0 string:/gateways/app/simple string:/gateways/app/ string:/tmp/stdout dict:string:string:""
+done 
 
 # Let the example run for a while
 sleep 30
 
-echo "### LaunchCommand ###"
-# Run the simple example
-$PCCMD com.pelagicore.PelagicontainAgent.ShutDownContainer uint32:$containerId
+for i in `seq 1 $APPS`; do
+    echo "### ShutdownCommand ###"
+    # Run the simple example
+    $PCCMD com.pelagicore.PelagicontainAgent.ShutDownContainer uint32:${containerIds[$i]}
+done
 
 # Clean up
 kill $AGENTPID
