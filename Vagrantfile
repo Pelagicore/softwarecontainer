@@ -36,7 +36,8 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/deps/sphinx-dependencies.sh"
 
     # Add known hosts
-    config.vm.provision "shell", privileged: false, path: "cookbook/system-config/pelagicore-ssh-conf.sh"
+    config.vm.provision "shell", privileged: false,
+        path: "cookbook/system-config/pelagicore-ssh-conf.sh"
 
     # Install dependencies via git
     config.vm.provision "shell", privileged: false, 
@@ -74,5 +75,10 @@ Vagrant.configure(2) do |config|
         config.vm.provision "shell", privileged: false,
             args: ["pelagicontain", "clang", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1"],
             path: "cookbook/build/clang-code-analysis.sh"
+
+        config.vm.provision "shell", inline: <<-SHELL
+            cd pelagicontain
+            sudo ./run-all-tests.sh
+        SHELL
     end
 end
