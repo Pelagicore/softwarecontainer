@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
         #vb.cpus = cpus
     end
 
-    # Sync the reppo root with this path in the VM
+    # Sync the repo root with this path in the VM
     config.vm.synced_folder "./", "/home/vagrant/pelagicontain/", create: true
 
     # Deploy a private key used to clone gits from pelagicore.net
@@ -72,8 +72,7 @@ Vagrant.configure(2) do |config|
     if ENV['CI_BUILD'] then
         # clang analysis of the code
         config.vm.provision "shell", privileged: false,
-            args: ["clang", "-DENABLE_DOC=1 -DBUILD_TESTS=ON -DENABLE_COVERAGE=1"],
+            args: ["pelagicontain", "clang", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1"],
             path: "cookbook/build/clang-code-analysis.sh"
     end
-
 end
