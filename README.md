@@ -112,3 +112,12 @@ lines:
 > MAIN [Warning] Can't own the namecom.pelagicore.PelagicontainAgent on the system
 > bus => use session bus instead         | pelagicontainagent.cpp:337
 
+# License and Copyright
+
+Copyright (c) 2016 Pelagicore AB
+
+The source code included here is licensed under the LGPL 2.1. Please
+see the "LICENSE" file for more information. Text documents are
+licensed under creative commons 4.0
+
+SPDX-License-Identifier: CC-BY-4.0
