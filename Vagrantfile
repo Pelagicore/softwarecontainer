@@ -29,6 +29,7 @@ Vagrant.configure(2) do |config|
         path: "cookbook/system-config/apt-cacher.sh" 
 
     # Upgrade machine to testing distro & install build dependencies
+    config.vm.provision "shell", path: "cookbook/deps/select-apt-mirror.sh"
     config.vm.provision "shell", path: "cookbook/deps/testing-upgrade.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
