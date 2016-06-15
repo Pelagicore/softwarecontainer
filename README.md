@@ -1,4 +1,6 @@
-This package includes the Pelagicontain component
+# Pelagicontain
+
+This package includes the Pelagicontain component.
 
 # Building
 
