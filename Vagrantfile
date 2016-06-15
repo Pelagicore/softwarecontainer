@@ -65,11 +65,6 @@ Vagrant.configure(2) do |config|
         args: ["pelagicontain", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
         path: "cookbook/build/cmake-builder.sh"
 
-    config.vm.provision "shell", inline: <<-SHELL
-        # BUG: Workaround, this conf is copied to a bad location by make install.
-        sudo cp /usr/local/etc/dbus-1/system.d/pelagicontain-agent.conf /etc/dbus-1/system.d/
-    SHELL
-
     if ENV['CI_BUILD'] then
         # clang analysis of the code
         config.vm.provision "shell", privileged: false,
