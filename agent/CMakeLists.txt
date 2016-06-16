@@ -20,6 +20,13 @@ target_link_libraries( pelagicontain-agent
 
 install(TARGETS pelagicontain-agent DESTINATION bin)
 
+#
+# When we install config files, we check for if prefix is /usr, and we treat
+# this as installing system-wide, which means some config files should also
+# be installed system-wide to other locations than they would otherwise have
+# been installed to.
+#
+
 # Install the D-Bus configuration file
 if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
     set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/usr/share/dbus-1/system.d/")
