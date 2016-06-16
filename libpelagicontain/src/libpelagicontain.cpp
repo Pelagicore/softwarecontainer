@@ -1,5 +1,4 @@
 #include "libpelagicontain.h"
-
 #include "generators.h" /* used for gen_ct_name */
 
 #ifdef ENABLE_PULSEGATEWAY
@@ -25,8 +24,6 @@
 #include "gateway/envgateway.h"
 #include "gateway/waylandgateway.h"
 #include "gateway/filegateway.h"
-
-//#include "config.h"
 
 namespace pelagicontain {
 
@@ -85,25 +82,30 @@ ReturnCode PelagicontainWorkspace::deleteWorkspace()
 ReturnCode PelagicontainWorkspace::checkWorkspace()
 {
     if (!isDirectory(m_containerRoot)) {
-        createDirectory(m_containerRoot);
-
-        std::string cmdLine = INSTALL_PREFIX;
-        cmdLine += "/bin/setup_pelagicontain.sh";
-        log_debug() << "Creating workspace : " << cmdLine;
-        int returnCode;
-        try {
-            Glib::spawn_sync("", Glib::shell_parse_argv(
-                            cmdLine), static_cast<Glib::SpawnFlags>(0) /*value available as Glib::SPAWN_DEFAULT in recent glibmm*/,
-                        sigc::slot<void>(), nullptr,
-                        nullptr, &returnCode);
-        } catch (Glib::SpawnError e) {
-            log_error() << "Failed to spawn " << cmdLine << ": code " << e.code() << " msg: " << e.what();
+        if(isError(createDirectory(m_containerRoot))) {
             return ReturnCode::FAILURE;
         }
-        if (returnCode != 0) {
-            log_error() << "Return code of " << cmdLine << " is non-zero";
-            return ReturnCode::FAILURE;
-        }
+    }
+    
+    // TODO: Have a way to check for the bridge using C/C++ instead of a
+    // shell script. Libbridge and/or netfilter?
+    std::string cmdLine = INSTALL_PREFIX;
+    cmdLine += "/bin/setup_pelagicontain.sh";
+    log_debug() << "Creating workspace : " << cmdLine;
+    int returnCode;
+    try {
+        log_debug() << "Calling spawn_sync()";
+        Glib::spawn_sync("", Glib::shell_parse_argv(cmdLine),
+                         static_cast<Glib::SpawnFlags>(0), // Glib::SPAWN_DEFAULT in newer versions of glibmm
+                         sigc::slot<void>(), nullptr,
+                         nullptr, &returnCode);
+    } catch (Glib::SpawnError e) {
+        log_error() << "Failed to spawn " << cmdLine << ": code " << e.code() << " msg: " << e.what();
+        return ReturnCode::FAILURE;
+    }
+    if (returnCode != 0) {
+        log_error() << "Return code of " << cmdLine << " is non-zero";
+        return ReturnCode::FAILURE;
     }
 
     return ReturnCode::SUCCESS;
