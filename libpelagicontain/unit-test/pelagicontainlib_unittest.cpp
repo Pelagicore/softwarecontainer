@@ -44,7 +44,6 @@ public:
 
     void TearDown() override
     {
-	lib.reset();
         ::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
     }
 
@@ -87,7 +86,7 @@ TEST_F(PelagicontainApp, TestWayland) {
     GatewayConfiguration config;
     config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
 
-    getLib().getPelagicontain().setGatewayConfigs(config);
+    setGatewayConfigs(config);
     FunctionJob jobTrue(getLib(), [] (){
         bool ERROR = 1;
         bool SUCCESS = 0;
@@ -717,7 +716,7 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
 
     GatewayConfiguration config;
     config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"10.0.3.1\" } ]";
-    getLib().getPelagicontain().setGatewayConfigs(config);
+    setGatewayConfigs(config);
 
     CommandJob job2(getLib(), "ping 8.8.8.8 -c 5");
     job2.start();
@@ -760,7 +759,7 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
     "}]";
 
     log_error() << config[DBusGateway::ID];
-    getLib().setGatewayConfigs(config);
+    setGatewayConfigs(config);
 
 
     {
@@ -789,7 +788,7 @@ TEST_F(PelagicontainApp, TestDBusGatewayOutputBuffer) {
     "}]";
 
     log_error() << config[DBusGateway::ID];
-    getLib().setGatewayConfigs(config);
+    setGatewayConfigs(config);
 
     for(int i=0; i<2000; i++) {
         CommandJob jobTrue(
