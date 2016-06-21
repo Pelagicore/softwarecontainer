@@ -76,15 +76,17 @@ class Receiver(threading.Thread):
             msgQueue.put("pelagicontainStarted")
 
     def run(self):
-        self._loop = gobject.MainLoop()
-        self._bus = dbus.SystemBus()
+        import dbus.mainloop.glib
+        self._gloop = gobject.MainLoop()
+        self._loop = dbus.mainloop.glib.DBusGMainLoop()
+        self._bus = dbus.SystemBus(mainloop=self._loop)
         self._bus.add_signal_receiver(self.handler, dbus_interface="org.freedesktop.DBus", signal_name="NameOwnerChanged")
-        self._loop.run()
+        self._gloop.run()
 
     def terminate(self):
         if self._loop is not None:
-            self._loop.quit()
-            self._loop = None
+            self._gloop.quit()
+            self._gloop = None
 
     def __del__(self):
         self.terminate()
@@ -124,6 +126,8 @@ def runTest(numStarts=3, logFile=None):
 
         rec = Receiver(logFile=logFile)
         rec.start()
+
+        time.sleep(0.5)
 
         print "Start pelagicontain-agent"
         agent = subprocess.Popen("pelagicontain-agent", stdout=logFile, stderr=logFile)
@@ -189,7 +193,10 @@ def getPythonPoint(logFile, pointName, matchNumber=1):
         if re.search(pointName, line):
             match = match + 1
             if match == matchNumber:
+                print removeAnsi(string.split(line)[2]) + "\n" + line
                 return removeAnsi(string.split(line)[2])
+    print "Nothing found! " + pointName + " " + str(matchNumber)
+    return 0
 
 
 def getLogPoint(logFile, pointName, matchNumber=1):
@@ -203,10 +210,14 @@ def getLogPoint(logFile, pointName, matchNumber=1):
     match = 0
     logFile.seek(0)
     for line in logFile:
-        if re.search(pointName, line):
+        if pointName in line:
             match = match + 1
+            print "Got match " + str(match)
             if match == matchNumber:
+                print removeAnsi(string.split(line)[4]) + "\n" + line
                 return removeAnsi(string.split(line)[4])
+    print "Nothing found! " + pointName + " " + str(matchNumber)
+    return 0
 
 
 def writeMeasurement(fileName, value, url=None):
@@ -224,11 +235,13 @@ def writeMeasurement(fileName, value, url=None):
 def measure(logFile):
     if logFile is None:
         return False
+    for line in logFile:
+        print line
 
-    start = "dbusAvailable"
-    end = "createContainerStart"
+    start = "softwareContainerStart"
+    end = "dbusAvailable"
     writeMeasurement("result-" + start + "-" + end + "-1.properties",
-                     float(getLogPoint(logFile, end)) - float(getPythonPoint(logFile, start)))
+                     float(getPythonPoint(logFile, end)) - float(getLogPoint(logFile, start)))
 
     for i in range(1, 4):
         start = "createContainerStart"
