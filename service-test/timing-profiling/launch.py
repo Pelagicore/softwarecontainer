@@ -253,6 +253,9 @@ def measure(logFile):
 def main():
     logfile = tempfile.TemporaryFile()
     runTest(logFile=logfile)
+
+    time.sleep(1)
+
     logfile.seek(0)
     measure(logfile)
 
