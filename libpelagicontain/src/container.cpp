@@ -62,7 +62,6 @@ ReturnCode Container::initialize()
     return ReturnCode::SUCCESS;
 }
 
-
 Container::~Container()
 {
     if (isContainerDeleteEnabled()) {
@@ -107,16 +106,19 @@ ReturnCode Container::create()
     log_debug() << "creating container with ID : " << containerID;
 
     m_container = lxc_container_new(containerID, nullptr);
+    if (!m_container) {
+        log_error() << "Error creating a new container";
+        return ReturnCode::FAILURE;
+    }
+
+    if (!m_container->load_config(m_container, configFile)) {
+        log_error() << "Error loading container config";
+        return ReturnCode::FAILURE;
+    }
 
     char *argv[] = { nullptr };
     int flags = 0;
     struct bdev_specs specs = {};
-
-    if (!m_container->load_config(m_container, configFile)) {
-    	log_error() << "Error loading container config";
-    	return ReturnCode::FAILURE;
-    }
-
     if (!m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv)) {
     	log_error() << "Error creating container";
     	return ReturnCode::FAILURE;
@@ -130,7 +132,8 @@ ReturnCode Container::create()
 
 void Container::waitForState(LXCContainerState state, int timeout)
 {
-    if (strcmp(m_container->state(m_container), toString(state))) {
+    const char* currentState = m_container->state(m_container);
+    if (strcmp(currentState, toString(state))) {
         log_debug() << "Waiting for container to change to state : " << toString(state);
         bool b = m_container->wait(m_container, toString(state), timeout);
         log_debug() << toString() << " " << b;
@@ -140,11 +143,13 @@ void Container::waitForState(LXCContainerState state, int timeout)
 pid_t Container::start()
 {
     pid_t pid;
-
     if (isLXC_C_APIEnabled() && false) {
-
         log_debug() << "Starting container";
-    	char* const args[] = { "env", "/bin/sleep" , "100000000", nullptr};
+
+        char commandEnv[] = "env";
+        char commandSleep[] = "/bin/sleep";
+        char commandSleepTime[] = "100000000";
+        char* const args[] = { commandEnv, commandSleep, commandSleepTime, nullptr};
 
         if (!m_container->start(m_container, false, args)) {
             log_error() << "Error starting container";
@@ -398,7 +403,6 @@ void Container::destroy(unsigned int timeout)
     if (!success) {
         log_warning() << "Failed to destroy the container " << toString();
     }
-
 }
 
 
