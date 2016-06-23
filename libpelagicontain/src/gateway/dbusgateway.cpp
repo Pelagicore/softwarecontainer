@@ -89,6 +89,7 @@ bool DBusGateway::activate()
                                     , Glib::SPAWN_STDOUT_TO_DEV_NULL // Redirect stdout
                                         | Glib::SPAWN_STDERR_TO_DEV_NULL // Redirect stderr
                                         | Glib::SPAWN_SEARCH_PATH // Search $PATH
+                                        | Glib::SPAWN_DO_NOT_REAP_CHILD // Lets us do waitpid
                                     , sigc::slot<void>() // child setup
                                     , &m_pid
                                     , &m_infp // stdin
@@ -151,21 +152,28 @@ bool DBusGateway::isSocketCreated() const
 bool DBusGateway::teardown()
 {
     bool success = true;
-    if (m_dbusProxyStarted) {
-        if (m_pid != INVALID_PID && kill(m_pid, 0)) {
-            log_debug() << "Killing dbus proxy with pid " << m_pid;
-            kill(m_pid, SIGTERM);
-            waitpid(m_pid, nullptr, WEXITED); // Wait until it exits
-        }
+    if (!m_dbusProxyStarted) {
+        log_warn() << "Trying to tear down dbus-gateway that has not been started";
+    }
 
-        if (access(m_socket.c_str(), F_OK) != -1) {
-            if (unlink(m_socket.c_str()) == -1) {
-                log_error() << "Could not remove " << m_socket << ": " << strerror(errno);
-                success = false;
-            }
+    if (m_pid != INVALID_PID) {
+        log_debug() << "Killing dbus-proxy with pid " << m_pid;
+        kill(m_pid, SIGKILL);
+        log_debug() << "Waiting for dbus-proxy pid to exit";
+        waitpid(m_pid, nullptr, 0); // Wait until it exits
+        log_debug() << "Calling Glib::spawn_close_pid";
+        Glib::spawn_close_pid(m_pid);
+    } else {
+        log_debug() << "dbus-proxy pid not set or already dead: " << m_pid;
+    }
+
+    if (access(m_socket.c_str(), F_OK) != -1) {
+        if (unlink(m_socket.c_str()) == -1) {
+            log_error() << "Could not remove " << m_socket << ": " << strerror(errno);
+            success = false;
         }
     } else {
-        log_warn() << "Trying to tear down dbus-gateway that has not been started";
+        log_debug() << "Socket not accessible, has it been removed already?";
     }
 
     return success;
