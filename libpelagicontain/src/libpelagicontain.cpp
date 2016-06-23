@@ -94,7 +94,6 @@ ReturnCode PelagicontainWorkspace::checkWorkspace()
     log_debug() << "Creating workspace : " << cmdLine;
     int returnCode;
     try {
-        log_debug() << "Calling spawn_sync()";
         Glib::spawn_sync("", Glib::shell_parse_argv(cmdLine),
                          static_cast<Glib::SpawnFlags>(0), // Glib::SPAWN_DEFAULT in newer versions of glibmm
                          sigc::slot<void>(), nullptr,
@@ -191,8 +190,10 @@ ReturnCode PelagicontainLib::init()
         addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
                         m_pelagicontain.shutdownContainer();
                     }, m_ml);
+    } else {
+        log_error() << "Pelagicontain pid is 0, this is an error!";
+        return ReturnCode::FAILURE;
     }
-
     m_initialized = true;
     return ReturnCode::SUCCESS;
 }

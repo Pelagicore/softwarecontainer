@@ -29,12 +29,13 @@ void Pelagicontain::addGateway(Gateway &gateway)
 pid_t Pelagicontain::preload(Container &container)
 {
     m_container = &container;
-    if (isError(m_container->create()))
+    if (isError(m_container->create())) {
     	return INVALID_PID;
-
-    pid_t pid = m_container->start();
-    m_containerState.setValueNotify(ContainerState::PRELOADED);
-    return pid;
+    } else {
+        pid_t pid = m_container->start();
+        m_containerState.setValueNotify(ContainerState::PRELOADED);
+        return pid;
+    }
 }
 
 void Pelagicontain::shutdownContainer()

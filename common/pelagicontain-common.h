@@ -74,12 +74,10 @@ class SignalConnectionsHandler
 
 public:
     /**
-     * Create a new connection
+     * Add a new connection
      */
-    sigc::connection &newConnection()
-    {
-        m_connections.resize(m_connections.size() + 1);
-        return m_connections[m_connections.size() - 1];
+    void addConnection(sigc::connection &connection) {
+        m_connections.push_back(connection);
     }
 
     ~SignalConnectionsHandler()
@@ -98,8 +96,9 @@ inline void addProcessListener(SignalConnectionsHandler &connections, pid_t pid,
             , Glib::RefPtr<Glib::MainContext> context                    // = Glib::MainContext::get_default()
             )
 {
-    auto connection = context->signal_child_watch().connect(function, pid);
-    connections.newConnection() = connection;
+    Glib::SignalChildWatch watch = context->signal_child_watch();
+    auto connection = watch.connect(function,pid);
+    connections.addConnection(connection);
 }
 
 inline int waitForProcessTermination(pid_t pid)
@@ -217,22 +216,17 @@ public:
     {
         auto code = ReturnCode::FAILURE;
 
-        //        while (true)
-        {
-
-            if (!existsInFileSystem(m_path)) {
-                log_warning() << "Folder " << m_path << " does no exist";
-                return ReturnCode::SUCCESS;
-            }
-
-            if (rmdir(m_path.c_str()) == 0) {
-                return ReturnCode::SUCCESS;
-            } else {
-                log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
-                sleep(1);
-            }
+        if (!existsInFileSystem(m_path)) {
+            log_warning() << "Folder " << m_path << " does no exist";
+            return ReturnCode::SUCCESS;
         }
 
+        if (rmdir(m_path.c_str()) == 0) {
+            return ReturnCode::SUCCESS;
+        } else {
+            log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
+            sleep(1);
+        }
         return code;
     }
 
