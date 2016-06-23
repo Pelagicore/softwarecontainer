@@ -100,6 +100,7 @@ public:
     ContainerID createContainer(const std::string &prefix)
     {
         profilepoint("createContainerStart");
+        profilefunction("createContainerFunction");
         PelagicontainLib *container;
         if (m_preloadedContainers.size() != 0) {
             container = m_preloadedContainers[0].release();
@@ -149,6 +150,7 @@ public:
                 const EnvironmentVariables &env, std::function<void (pid_t,
                         int)> listener)
     {
+        profilefunction("launchCommandFunction");
         PelagicontainLib *container;
         if (checkContainer(containerID, container)) {
             auto job = new CommandJob(*container, cmdLine);
@@ -186,6 +188,7 @@ public:
 
     void shutdownContainer(ContainerID containerID, unsigned int timeout)
     {
+        profilefunction("shutdownContainerFunction");
         if (m_shutdownContainers) {
             PelagicontainLib *container = nullptr;
             if (checkContainer(containerID, container)) {
@@ -200,6 +203,7 @@ public:
     std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
                 const std::string &subPathInContainer, bool readOnly)
     {
+        profilefunction("bindMountFolderInContainerFunction");
         PelagicontainLib *container = nullptr;
         if (checkContainer(containerID, container)) {
             return container->getContainer().bindMountFolderInContainer(pathInHost, subPathInContainer, readOnly);
@@ -209,6 +213,7 @@ public:
 
     void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs)
     {
+        profilefunction("setGatewayConfigsFunction");
         PelagicontainLib *container = nullptr;
         if (checkContainer(containerID, container)) {
             container->getPelagicontain().updateGatewayConfiguration(configs);

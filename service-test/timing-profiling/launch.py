@@ -36,6 +36,7 @@ measurements and output it to files as expected by Jenkins.
 
 import gobject
 import dbus
+import json
 import time
 import threading
 import os
@@ -105,6 +106,22 @@ class ContainerApp():
     def bindMountFolderInContainer(self):
         self._pca_iface.BindMountFolderInContainer(self.containerId, self._path, "app", True)
 
+    def networkGateway(self):
+        configuration = {"network": json.dumps([{"internet-access": True, "gateway": "10.0.3.1"}])}
+        self._pca_iface.SetGatewayConfigs(self.containerId, configuration)
+        
+    def dbusGateway(self):
+        configuration = [{
+            "dbus-gateway-config-session": [{
+                "direction": "outgoing",
+                "interface": "com.dbusproxyoutsideservice.SampleInterface",
+                "object-path": "*",
+                "method": "*"
+            }],
+            "dbus-gateway-config-system": []
+        }]
+        self._pca_iface.SetGatewayConfigs(self.containerId, {"network": json.dumps(configuration)})
+
     def launchCommand(self):
         if self._pca_iface.LaunchCommand(self.containerId, 0, "/gateways/app/simple", "/gateways/app", "/tmp/stdout", {"": ""}) is -1:
             print "Failed to launch process in container"
@@ -116,6 +133,8 @@ class ContainerApp():
     def start(self):
         self.createContainer()
         self.bindMountFolderInContainer()
+        #TODO: networkGateway ?
+        self.dbusGateway()
         self.launchCommand()
 
     def terminate(self):
@@ -193,9 +212,23 @@ def getPythonPoint(logFile, pointName, matchNumber=1):
         if re.search(pointName, line):
             match = match + 1
             if match == matchNumber:
-                print removeAnsi(string.split(line)[2]) + "\n" + line
                 return removeAnsi(string.split(line)[2])
     print "Nothing found! " + pointName + " " + str(matchNumber)
+    return 0
+
+
+def getFunctionLog(logFile, functionName, matchNumber=1):
+    """
+    """
+    match = 0
+    logFile.seek(0)
+    for line in logFile:
+        if re.search(functionName + " end", line):
+            match = match + 1
+            if match == matchNumber:
+                print line
+                return removeAnsi(string.split(line)[6])
+    print "Nothing found! " + functionName + " " + str(matchNumber)
     return 0
 
 
@@ -212,9 +245,7 @@ def getLogPoint(logFile, pointName, matchNumber=1):
     for line in logFile:
         if pointName in line:
             match = match + 1
-            print "Got match " + str(match)
             if match == matchNumber:
-                print removeAnsi(string.split(line)[4]) + "\n" + line
                 return removeAnsi(string.split(line)[4])
     print "Nothing found! " + pointName + " " + str(matchNumber)
     return 0
@@ -235,6 +266,7 @@ def writeMeasurement(fileName, value, url=None):
 def measure(logFile):
     if logFile is None:
         return False
+
     for line in logFile:
         print line
 
@@ -248,6 +280,16 @@ def measure(logFile):
         end = "launchCommandEnd"
         writeMeasurement("result-" + start + "-" + end + "-" + str(i) + ".properties",
                          float(getLogPoint(logFile, end, i)) - float(getLogPoint(logFile, start, i)))
+
+    # TODO: We might want to separate the setGatewayConfigsFunction part into a 
+    #       separate step when we add more configs. 
+    profilePoints = ["createContainerFunction",
+                     "bindMountFolderInContainerFunction",
+                     "setGatewayConfigsFunction",
+                     "launchCommandFunction",
+                     "shutdownContainerFunction"]
+    for value in profilePoints:
+        writeMeasurement("result-" + value + ".properties", float(getFunctionLog(logFile, value)))
 
 
 def main():
