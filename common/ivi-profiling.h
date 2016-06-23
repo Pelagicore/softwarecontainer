@@ -31,14 +31,14 @@ public:
 
     PProfiler(std::string s) { 
         clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &m_time1); 
-        log_error() << "profiler " << s << " start " << format(m_time1);
+        log_warn() << "profiler " << s << " start " << format(m_time1);
         m_s = s;
     };
 
     ~PProfiler() {
         clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &m_time2); 
         timespec d = diff(m_time1, m_time2);
-        log_error() << "profiler " << m_s << " end " << format(m_time2) << " " << format(d); 
+        log_warn() << "profiler " << m_s << " end " << format(m_time2) << " " << format(d);
     };
 
     static void point(std::string s)
