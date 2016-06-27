@@ -408,35 +408,6 @@ TEST_F(PelagicontainApp, FileGatewayReadWrite) {
     ASSERT_TRUE(unlink(tempFilename2) == 0);
 }
 
-
-TEST_F(PelagicontainApp, Dummy) {
-    json_error_t error;
-
-    std::string config =
-            "{\"dbus-gateway-config-session\": [], \"dbus-gateway-config-system\": [{\"object-path\": \"/com/pelagicore/TemperatureService\", \"interface\": \"org.freedesktop.DBus.Introspectable\", \"direction\": \"outgoing\", \"method\": \"Introspect\"}, {\"object-path\": \"/com/pelagicore/TemperatureService\", \"interface\": \"com.pelagicore.TemperatureService\", \"direction\": \"outgoing\", \"method\": \"Echo\"}, {\"object-path\": \"/com/pelagicore/TemperatureService\", \"interface\": \"com.pelagicore.TemperatureService\", \"direction\": \"outgoing\", \"method\": \"SetTemperature\"}]}";
-    std::string config2 = "{ \"dbus\" : \"fdfds\" }";
-
-    log_info() << "Parsing " << config;
-
-    JSonElement el(config);
-
-    std::vector<JSonElement> elements;
-    el.read("dbus-gateway-config-session", elements);
-
-    JSonElement el2(el);
-
-    // Get root JSON object
-    auto m_root = json_loads(config.c_str(), 0, &error);
-
-    log_debug() << "--------------- pointer " << logging::pointerToString(m_root);
-
-    //	json_decref(m_root);
-
-    log_info() << "----------fffff-----";
-
-}
-
-
 /**
  * Test whether the mounting of files works properly
  */
@@ -761,11 +732,10 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
     log_error() << config[DBusGateway::ID];
     setGatewayConfigs(config);
 
-
     {
         CommandJob jobTrue(
                 getLib(),
-                "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                "/usr/bin/dbus-send --system --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
         ASSERT_TRUE(jobTrue.wait() == 0);
     }
@@ -773,7 +743,7 @@ TEST_F(PelagicontainApp, TestDBusGatewayWithAccess) {
     {
         CommandJob jobTrue(
                 getLib(),
-                "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
+                "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
         ASSERT_TRUE(jobTrue.wait() == 0);
     }

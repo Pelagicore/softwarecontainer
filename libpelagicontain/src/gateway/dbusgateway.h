@@ -5,8 +5,6 @@
 #ifndef DBUSGATEWAY_H
 #define DBUSGATEWAY_H
 
-#include <string>
-#include <unistd.h>
 #include "gateway.h"
 
 /*! DBus Gateway takes care of spawning and killing the DBus proxies.
@@ -172,8 +170,6 @@ public:
     virtual bool teardown();
 
 private:
-
-    const char *typeString();
     std::string socketName();
     bool isSocketCreated() const;
 

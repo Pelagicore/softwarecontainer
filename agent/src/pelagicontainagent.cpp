@@ -154,7 +154,9 @@ public:
         PelagicontainLib *container;
         if (checkContainer(containerID, container)) {
             auto job = new CommandJob(*container, cmdLine);
-            job->captureStdin();
+            // Capturing this leaves an open pipe for every container, even
+            // after it has terminated.
+            // job->captureStdin();
             job->setOutputFile(outputFile);
             job->setUserID(userID);
             job->setEnvironnmentVariables(env);

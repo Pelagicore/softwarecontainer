@@ -96,10 +96,6 @@ public:
 protected:
     Container *m_container = nullptr;
     const char *m_id = nullptr;
-
-    /* Use these to do something like popen/pclose */
-    ReturnCode makePopenCall(const std::string &command, int &infp, pid_t &pid);
-    bool makePcloseCall(pid_t pid, int infp);
 };
 
 #endif /* GATEWAY_H */
