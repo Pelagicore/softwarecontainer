@@ -38,6 +38,7 @@ ssh-keygen -f vagrant_key
 
 # MANUAL STEP: Add vagrant_key.pub to GitLab in order to access sources
 
+sudo apt install virtualbox
 sudo apt install vagrant
 vagrant up
 ```
