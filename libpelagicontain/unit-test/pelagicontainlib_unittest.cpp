@@ -619,7 +619,8 @@ TEST_F(PelagicontainApp, TestPulseAudioEnabled) {
     setGatewayConfigs(config);
 
     // We need access to the test file, so we bind mount it
-    char soundFile[] = "/usr/share/sounds/alsa/Rear_Center.wav";
+    std::string soundFileCPP = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
+    const char *soundFile = soundFileCPP.c_str();
     auto pathInContainer = getLib().getContainer().bindMountFileInContainer(soundFile, basename(strdup(soundFile)), true);
 
     // Make sure the file is there
