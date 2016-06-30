@@ -309,7 +309,7 @@ public:
     {
         log_debug() << path;
         auto parent = parentPath(path);
-        if (!isDirectory(parent)) {
+        if (!isDirectory(parent) && parent != "") {
             createDirectory(parent);
         }
         return ReturnCode::SUCCESS;
