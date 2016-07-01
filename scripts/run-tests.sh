@@ -13,9 +13,11 @@ fi
 eval $(dbus-launch --sh-syntax)
 echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 
-# TODO: pulseaudio needs to be setup properly for PelagicontainApp.TestPulseAudioEnabled to work
-pulseaudio --system &
+PULSE_SERVER=/tmp/pulse.sock
+pulseaudio --daemonize
 ppid=$!
+pactl load-module module-native-protocol-unix auth-anonymous=1 socket=$PULSE_SERVER
+export PULSE_SERVER=$PULSE_SERVER
 
 # BUG: ivi-logging and dlt does not work together in pelagicontain for some reason
 #      Everything in the pelagicontainLibTest hangs and stops dead if DLT backend 
@@ -38,10 +40,10 @@ weston --backend=headless-backend.so &
 wpid=$!
 
 # BUG: The first time these tests are run after reboot/restart, it crashes. This is a workaraound that should be removed
-./libpelagicontain/unit-test/pelagicontainLibTest 
+./libpelagicontain/unit-test/pelagicontainLibTest
 
 ./libpelagicontain/unit-test/pelagicontainLibTest \
-    --gtest_filter=-PelagicontainApp.FileGatewayReadOnly:PelagicontainApp.TestPulseAudioEnabled \
+    --gtest_filter=-"*FileGatewayReadOnly" \
     --gtest_output=xml
 retval=$?
 
@@ -49,8 +51,11 @@ if ! kill $wpid > /dev/null 2>&1 ; then
     echo "Failed to kill weston at pid $wpid"
 fi
 
-if ! kill $ppid > /dev/null 2>&1 ; then
-    echo "Failed to kill pulseaudio at pid $ppid"
+pactl exit
+if kill -0 $ppid > /dev/null 2>&1 ; then
+    if ! kill $ppid > /dev/null 2>&1 ; then
+        echo "Failed to kill pulseaudio at pid $ppid"
+    fi
 fi
 
 # BUG: ivi-logging and dlt does not work together in pelagicontain for some reason

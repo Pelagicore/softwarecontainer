@@ -110,7 +110,7 @@ TEST_F(PelagicontainApp, TestWayland) {
     jobTrue.start();
     ASSERT_TRUE(jobTrue.wait() == 0);
 
-    CommandJob westonJob(getLib(),"/usr/bin/weston-info");
+    CommandJob westonJob(getLib(),"/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
     westonJob.start();
     ASSERT_TRUE(westonJob.wait() == 0);
 
@@ -634,8 +634,6 @@ TEST_F(PelagicontainApp, TestPulseAudioEnabled) {
     job2.start();
     ASSERT_TRUE(job2.isRunning());
     ASSERT_TRUE(job2.wait() == 0);
-
-    run();
 }
 
 
@@ -672,11 +670,11 @@ TEST_F(PelagicontainApp, TestStdin) {
  * We do not enable the network gateway so we expect the ping to fail
  */
 TEST_F(PelagicontainApp, TestNetworkInternetCapabilityDisabled) {
-    CommandJob job(getLib(), "ping www.google.com -c 5");
+    CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_TRUE(job.wait() != 0);
 
-    CommandJob job2(getLib(), "ping 8.8.8.8 -c 5");
+    CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
     ASSERT_TRUE(job2.wait() != 0);
 }
@@ -690,11 +688,11 @@ TEST_F(PelagicontainApp, TestNetworkInternetCapabilityEnabled) {
     config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"10.0.3.1\" } ]";
     setGatewayConfigs(config);
 
-    CommandJob job2(getLib(), "ping 8.8.8.8 -c 5");
+    CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
     ASSERT_TRUE(job2.wait() == 0);
 
-    CommandJob job(getLib(), "ping www.google.com -c 5");
+    CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_TRUE(job.wait() == 0);
 }
