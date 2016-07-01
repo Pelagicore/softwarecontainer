@@ -35,13 +35,12 @@ class PulseGateway :
     LOG_DECLARE_CLASS_CONTEXT("PULS", "Pulse gateway");
 
     static constexpr const char *PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME = "PULSE_SERVER";
-    static constexpr const char *SOCKET_FILE_NAME = "native";
+    static constexpr const char *SOCKET_FILE_NAME = "pulse_socket";
 
 public:
     static constexpr const char *ID = "pulseaudio";
 
-    PulseGateway(const std::string &gatewayDir
-            , const std::string &containerName);
+    PulseGateway();
     ~PulseGateway();
 
     ReturnCode readConfigElement(const JSonElement &element) override;
@@ -66,52 +65,6 @@ public:
     virtual bool teardown();
 
 private:
-    /*! Creates a mainloop, sets a PulseAudio context, and sets callbacks for PulseAudio.
-     *
-     * \returns true upon success (PulseAudio server connect call and mainloop
-     *               setup successfully), false otherwise.
-     */
-    bool connectToPulseServer();
-
-    /*! Static callback called by PulseAudio when module has been loaded
-     *
-     * \param context The pa_context passed from PulseAudio
-     * \param index The index of the loaded module
-     * \param userdata Pointer to the calling PulseGateway object
-     *
-     */
-    static void loadCallback(pa_context *context, uint32_t idx, void *userdata);
-
-    /*! Static callback called by PulseAudio when module has been unloaded
-     *
-     * \param context The pa_context passed from PulseAudio
-     * \param index The index of the loaded module
-     * \param userdata Pointer to the calling PulseGateway object
-     *
-     */
-    static void unloadCallback(pa_context *context, int success, void *userdata);
-
-    /*! Static callback called by PulseAudio when the PulseAudio server has changed state
-     *
-     * \param context The pa_context passed from PulseAudio
-     * \param index The index of the loaded module
-     * \param userdata Pointer to the calling PulseGateway object
-     *
-     */
-    static void stateCallback(pa_context *c, void *userdata);
-
-    /*! Returns the name of the socket, i.e. the filename part of the path
-     *  to the socket.
-     *
-     * \return std::string The socket name
-     */
-    std::string socketName();
-
-    pa_mainloop_api *m_api = nullptr;
-    pa_context *m_context = nullptr;
-    pa_threaded_mainloop *m_mainloop = nullptr;
-    std::string m_socket;
-    int m_index = -1;
     bool m_enableAudio = false;
 };
 
