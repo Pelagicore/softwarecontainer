@@ -151,7 +151,7 @@ ReturnCode PelagicontainLib::init()
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-    m_gateways.push_back(std::unique_ptr<Gateway>(new PulseGateway(getGatewayDir(), getContainerID())));
+    m_gateways.push_back(std::unique_ptr<Gateway>(new PulseGateway()));
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY

@@ -325,35 +325,34 @@ public:
 
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly)
     {
+        unsigned long flags = MS_BIND;
+        const char *fstype = nullptr;
+        const void *data = nullptr;
+        log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
-        int flags = MS_BIND;
+        int mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
+        if (mountRes == 0) {
+            log_verbose() << "Bind-mounted folder " << src << " in " << dst;
+            m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
+        } else {
+            log_error() << "Could not mount into container: src=" << src << " , dst=" << dst << " err=" << strerror(errno);
+            return ReturnCode::FAILURE;
+        }
 
         if (readOnly) {
-            flags |= MS_RDONLY;
+            flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
+
+            log_debug() << "Re-mounting read-only" << src << " in " << dst << ", flags: " << flags;
+            mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
+            if (mountRes != 0) {
+                // Failure
+                log_error() << "Could not re-mount " << src << " , read-only on " << dst << " err=" << strerror(errno);
+                return ReturnCode::FAILURE;
+            }
         }
 
-        log_debug() << "Mounting " << (readOnly ? " readonly " : "read/write ") << src << " in " << dst << " / flags: " << flags;
+        return ReturnCode::SUCCESS;
 
-        int mountRes = mount(src.c_str(), // source
-                    dst.c_str(),          // target
-                    "",                   // fstype
-                    flags,              // flags
-                    nullptr);                // data
-
-        auto result = ReturnCode::FAILURE;
-
-        if (mountRes == 0) {
-            // Success
-            m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
-
-            log_verbose() << "Mounted folder " << src << " in " << dst;
-            result = ReturnCode::SUCCESS;
-        } else {
-            // Failure
-            log_error() << "Could not mount into container: src=" << src << " , dst=" << dst << " err=" << strerror(errno);
-        }
-
-        return result;
     }
 
     ReturnCode createSharedMountPoint(const std::string &path)
