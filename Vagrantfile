@@ -34,6 +34,7 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/wayland-dependencies.sh"
+    config.vm.provision "shell", path: "cookbook/deps/pulseaudio-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/sphinx-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/pytest-and-dbus-testing-dependencies.sh"
 
@@ -75,7 +76,7 @@ Vagrant.configure(2) do |config|
 
         config.vm.provision "shell", inline: <<-SHELL
             cd pelagicontain
-            sudo ./run-all-tests.sh
+            sudo su -c ./run-all-tests.sh
         SHELL
     end
 end
