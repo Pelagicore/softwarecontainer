@@ -145,10 +145,9 @@ public:
     /**
      * Launch the given command in a the given container
      */
-    pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine, const std::string &workingDirectory,
-                const std::string &outputFile,
-                const EnvironmentVariables &env, std::function<void (pid_t,
-                        int)> listener)
+    pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine,
+                        const std::string &workingDirectory, const std::string &outputFile,
+                        const EnvironmentVariables &env, std::function<void (pid_t, int)> listener)
     {
         profilefunction("launchCommandFunction");
         PelagicontainLib *container;

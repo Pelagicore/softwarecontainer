@@ -300,13 +300,15 @@ public:
 
     ReturnCode start()
     {
-        m_pid = getContainer().attach(m_command, m_env, m_userID, m_workingDirectory, m_stdin[0], m_stdout[1], m_stderr[1]);
+        m_pid = getContainer().attach(m_command, m_env, m_userID, m_workingDirectory,
+                                      m_stdin[0], m_stdout[1], m_stderr[1]);
         return (m_pid != 0) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
     }
 
     std::string toString() const
     {
-        return logging::StringBuilder() << "Pelagicontain job. command: " << m_command << " stdin:" << m_stdin[0]
+        return logging::StringBuilder() << "Pelagicontain job. command: "
+                                        << m_command << " stdin:" << m_stdin[0]
                                         << " stdout:" << m_stdout[1];
     }
 
