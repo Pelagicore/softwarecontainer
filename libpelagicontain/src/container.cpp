@@ -16,6 +16,9 @@
 #include <pwd.h>
 #include <grp.h>
 
+#include <errno.h>
+#include <string.h>
+
 #include "container.h"
 #include "pelagicore-common.h"
 
@@ -212,8 +215,8 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     for (auto &var : m_gatewayEnvironmentVariables) {
         if (variables.count(var.first) != 0) {
             if (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {
-                log_warning() << "Variable set by gateway overriding original variable value: " << var.first << ". values: " <<
-                var.second;
+                log_warning() << "Variable set by gateway overriding original variable value: "
+                              << var.first << ". values: " << var.second;
             }
         }
 
@@ -233,20 +236,21 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
     envVariablesArray[strings.size()] = nullptr;
     options.extra_env_vars = (char * *) envVariablesArray;    // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
 
-    log_debug() << "Starting function in container " << toString() << "User:" << userID << "" << std::endl <<
-    " Env variables : " << strings;
+    log_debug() << "Starting function in container "
+                << toString() << "User:" << userID
+                << "" << std::endl << " Env variables : " << strings;
 
     pid_t attached_process_pid = 0;
 
-    m_container->attach(m_container, &Container::executeInContainerEntryFunction, &function, &options, &attached_process_pid);
-
-    log_info() << " Attached PID: " << attached_process_pid;
-
-    if (attached_process_pid == 0) {
+    int attach_res = m_container->attach(m_container,
+                                         &Container::executeInContainerEntryFunction,
+                                         &function, &options, &attached_process_pid);
+    if (attach_res == 0) {
+        log_info() << " Attached PID: " << attached_process_pid;
+    } else  {
+        log_error() << "Attach call to LXC container failed: " << std::string(strerror(errno));
         log_error() << "PID = 0";
     }
-
-    //    assert(attached_process_pid != 0);
 
     return attached_process_pid;
 }
