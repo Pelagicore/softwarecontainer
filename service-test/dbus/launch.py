@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+""" copyright Pelagicore AB 2016 """
+
 import os
 import time
 import subprocess

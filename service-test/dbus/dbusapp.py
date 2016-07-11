@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-""" copyright Pelagicore AB """
+
+""" copyright Pelagicore AB 2016 """
 
 import os
 from gi.repository import GObject
