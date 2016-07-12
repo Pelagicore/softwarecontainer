@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 #
 # This LXC template is based on the busybox one shipped with LXC.
@@ -81,9 +81,8 @@ configure_busybox()
     fi
 
     # Symlink to busybox for the commands it supports
-    pushd $rootfs/bin > /dev/null || return 1
+    cd $rootfs/bin || return 1
     ./busybox --list | xargs -n1 -P 25 ln -s busybox
-    popd > /dev/null || return 1
 
     return 0
 }

@@ -1,11 +1,13 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 BRCTL_CMD="brctl"
 BRIDGE="lxcbr0"
 
 # Set up system
 echo "Checking system prerequisites..."
-if [[ -n $($BRCTL_CMD show | grep $BRIDGE) ]]; then
+
+BRIDGE_AVAILABLE=$($BRCTL_CMD show | grep $BRIDGE)
+if [ -n "$BRIDGE_AVAILABLE" ]; then
     echo "Found $BRIDGE"
 else
     echo "$BRIDGE was NOT FOUND, attempting to add..."
