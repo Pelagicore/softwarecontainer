@@ -146,7 +146,6 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingMissing) {
     givenContainerIsSet();
     const std::string config = "[\
                  {\
-                   \"setting\": [\"a\", \"b\"],\
                    \"value\": \"256\"\
                  }\
               ]";
