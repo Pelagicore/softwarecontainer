@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 #
 # Don't run this from the scripts/ directory. It is copied into the build dir
 # by CMake, and it is there it should be run.
 #
 
+UID=$(id -u)
 if [ $UID != 0 ]; then
     echo "This script must be run as root"
     exit 1

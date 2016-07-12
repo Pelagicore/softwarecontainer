@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 BRCTL_CMD="brctl"
 BRIDGE="lxcbr0"
