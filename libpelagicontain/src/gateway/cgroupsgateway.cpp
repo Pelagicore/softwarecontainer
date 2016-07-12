@@ -22,28 +22,35 @@ bool CgroupsGateway::activate()
         return false;
     }
 
+    if (!hasContainer()) {
+        log_warning() << "activate was called on CgroupsGateway which has no associated container";
+        return false;
+    }
+
     ReturnCode success = ReturnCode::FAILURE;
     for (auto& setting: m_settings) {
         success = getContainer().setCgroupItem(setting.first, setting.second);
         if (success != ReturnCode::SUCCESS) {
-            log_error() << "Error activating Cgroups Gateway";
+            log_error() << "Error activating Cgroups Gateway, could not set cgroup item "
+                        << setting.first << ": " << setting.second;
             break;
         }
     }
 
-    m_hasBeenConfigured = success == ReturnCode::SUCCESS;
-    return m_hasBeenConfigured;
+    return success == ReturnCode::SUCCESS;
 }
 
 ReturnCode CgroupsGateway::readConfigElement(const JSonElement &element)
 {
     if (!element.isValid()) {
         log_error() << "Error: invalid JSON data";
+        m_hasBeenConfigured = false;
         return ReturnCode::FAILURE;
     }
 
     if (!element.isObject()) {
         log_error() << "Error: Elements must be JSON objects";
+        m_hasBeenConfigured = false;
         return ReturnCode::FAILURE;
     }
 
@@ -54,6 +61,7 @@ ReturnCode CgroupsGateway::readConfigElement(const JSonElement &element)
     setting = json_object_get(data, "setting");
     if (!json_is_string(setting)) {
         log_error() << "Error: setting is not a string";
+        m_hasBeenConfigured = false;
         return ReturnCode::FAILURE;
     }
     std::string settingString = json_string_value(setting);
@@ -61,11 +69,17 @@ ReturnCode CgroupsGateway::readConfigElement(const JSonElement &element)
     value = json_object_get(data, "value");
     if (!json_is_string(value)) {
         log_error() << "Error, value is not a string";
+        m_hasBeenConfigured = false;
         return ReturnCode::FAILURE;
     }
 
     std::string valueString = json_string_value(value);
+    if (m_settings.count(settingString) == 0) {
+        log_warning() << "setting '" << settingString << "' is set more than once may be problematic.";
+    }
     m_settings.insert( std::pair<std::string, std::string>(settingString, valueString) );
+
+    m_hasBeenConfigured = true;
     return ReturnCode::SUCCESS;
 }
 

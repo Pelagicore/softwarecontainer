@@ -71,6 +71,11 @@ public:
         return true;
     }
 
+    bool hasContainer()
+    {
+        return m_container != nullptr;
+    }
+
     Container &getContainer()
     {
         return *m_container;
