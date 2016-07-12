@@ -74,7 +74,7 @@ ReturnCode CgroupsGateway::readConfigElement(const JSonElement &element)
     }
 
     std::string valueString = json_string_value(value);
-    if (m_settings.count(settingString) == 0) {
+    if (m_settings.count(settingString) > 0) {
         log_warning() << "setting '" << settingString << "' is set more than once may be problematic.";
     }
     m_settings.insert( std::pair<std::string, std::string>(settingString, valueString) );
