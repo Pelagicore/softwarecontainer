@@ -10,7 +10,6 @@ constexpr const char *Gateway::XDG_RUNTIME_DIR_VARIABLE_NAME;
 
 bool Gateway::setConfig(const std::string &config)
 {
-    bool success = true;
     json_error_t error;
     json_t *root = json_loads(config.c_str(), 0, &error);
     if (!root) {
@@ -23,9 +22,9 @@ bool Gateway::setConfig(const std::string &config)
             json_t *element = json_array_get(root, i);
             if (isError(readConfigElement(element))) {
                 log_warning() << "Could not read config element";
-                success = false;
+                return false;
             }
         }
     }
-    return success;
+    return true;
 }
