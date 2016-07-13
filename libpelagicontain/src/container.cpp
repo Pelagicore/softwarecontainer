@@ -137,7 +137,8 @@ void Container::waitForState(LXCContainerState state, int timeout)
 {
     const char* currentState = m_container->state(m_container);
     if (strcmp(currentState, toString(state))) {
-        log_debug() << "Waiting for container to change to state : " << toString(state);
+        log_debug() << "Waiting for container to change from " << currentState
+                    << " to state : " << toString(state);
         bool b = m_container->wait(m_container, toString(state), timeout);
         log_debug() << toString() << " " << b;
     }
@@ -388,7 +389,6 @@ void Container::destroy()
 
 void Container::destroy(unsigned int timeout)
 {
-    stop();
 
     log_debug() << "Shutting down container " << toString() << " pid " << m_container->init_pid(m_container);
 
@@ -400,6 +400,7 @@ void Container::destroy(unsigned int timeout)
     bool success = m_container->shutdown(m_container, timeout);
     if (!success) {
         log_warning() << "Failed to cleanly shutdown container " << toString();
+        stop();
     }
 
     // Destroy it!
