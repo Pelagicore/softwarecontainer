@@ -647,10 +647,10 @@ TEST_F(PelagicontainApp, TestStdin) {
     const char outputBytes[] = "test string";
     char inputBytes[sizeof(outputBytes)] = {};
 
-    auto writtenBytesCount = write(job.stdin(), outputBytes, sizeof(outputBytes));
+    unsigned int writtenBytesCount = write(job.stdin(), outputBytes, sizeof(outputBytes));
     ASSERT_EQ(writtenBytesCount, sizeof(outputBytes));
 
-    auto readBytesCount = read(job.stdout(), inputBytes, sizeof(inputBytes));
+    unsigned int readBytesCount = read(job.stdout(), inputBytes, sizeof(inputBytes));
     ASSERT_EQ(readBytesCount, sizeof(outputBytes));
 
     SignalConnectionsHandler connections;
