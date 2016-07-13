@@ -119,7 +119,7 @@ ReturnCode PelagicontainLib::preload()
 
     m_pcPid = m_pelagicontain.preload(m_container);
 
-    if (m_pcPid != 0) {
+    if (m_pcPid != INVALID_PID) {
         log_debug() << "Started container with PID " << m_pcPid;
     } else {
         // Fatal failure, only do necessary cleanup
@@ -186,7 +186,7 @@ ReturnCode PelagicontainLib::init()
     //       glib errors about ECHILD
     // The pid might not valid if there was an error spawning. We should only
     // connect the watcher if the spawning went well.
-    if (m_pcPid != 0) {
+    if (m_pcPid != INVALID_PID) {
         addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
                         m_pelagicontain.shutdownContainer();
                     }, m_ml);

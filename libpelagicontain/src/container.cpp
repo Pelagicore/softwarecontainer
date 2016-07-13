@@ -119,10 +119,8 @@ ReturnCode Container::create()
         return ReturnCode::FAILURE;
     }
 
-    char *argv[] = { nullptr };
     int flags = 0;
-    struct bdev_specs specs = {};
-    if (!m_container->create(m_container, LXCTEMPLATE, nullptr, &specs, flags, argv)) {
+    if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
     	log_error() << "Error creating container";
     	return ReturnCode::FAILURE;
     }
