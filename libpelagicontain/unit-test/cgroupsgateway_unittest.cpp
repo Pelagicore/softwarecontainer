@@ -27,7 +27,7 @@ public:
     void SetUp() override
     {
         ::testing::Test::SetUp();
-        cgw = new CgroupsGateway();
+        cgw = std::unique_ptr<CgroupsGateway>(new CgroupsGateway());
 
         lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib());
         lib->setContainerIDPrefix("Test-");
@@ -38,20 +38,18 @@ public:
     void TearDown() override
     {
         ::testing::Test::TearDown();
-        lib->shutdown();
+
+        // Ensuring that the reset is done in correct order
         lib.reset();
-        delete cgw;
+        cgw.reset();
     }
 
     void givenContainerIsSet() {
         lib->getPelagicontain().addGateway(*cgw);
     }
 
-    CgroupsGateway *cgw;
-    ReturnCode container_create_result = ReturnCode::FAILURE;
-
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    Glib::RefPtr<Glib::MainLoop> m_ml;
+    std::unique_ptr<CgroupsGateway> cgw;
     std::unique_ptr<PelagicontainLib> lib;
 };
 
