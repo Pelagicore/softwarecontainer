@@ -435,9 +435,6 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
 
     log_debug() << "Creating folder : " << dst;
     createDirectory(dst);
-    //    mkdir(dst.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    //    m_cleanupHandlers.push_back( new DirectoryCleanUpHandler(dst) );
-
     bindMount(pathOnHost, dst, readonly);
 
     return gatewaysDirInContainer() + "/" + pathInContainer;
