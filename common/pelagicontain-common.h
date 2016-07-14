@@ -103,7 +103,7 @@ inline void addProcessListener(SignalConnectionsHandler &connections, pid_t pid,
 
 inline int waitForProcessTermination(pid_t pid)
 {
-    int status;
+    int status = 0;
     waitpid(pid, &status, 0);
     return WEXITSTATUS(status);
 }

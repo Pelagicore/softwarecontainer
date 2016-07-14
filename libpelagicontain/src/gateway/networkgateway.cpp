@@ -55,16 +55,10 @@ bool NetworkGateway::activate()
     }
 
     bool success = false;
-    bool ready = false;
 
     if (isBridgeAvailable()) {
-        if (generateIP()) {
-            ready = true;
-        }
-    }
-
-    if (ready) {
         if (m_internetAccess) {
+            generateIP();
             success = up();
         } else {
             success = down();
@@ -81,6 +75,7 @@ const std::string NetworkGateway::ip()
 
 bool NetworkGateway::generateIP()
 {
+    log_debug() << "Generating ip-address";
     const char *ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
 
     m_ip = m_generator.gen_ip_addr(ipAddrNet);
@@ -91,12 +86,18 @@ bool NetworkGateway::generateIP()
 
 bool NetworkGateway::setDefaultGateway()
 {
+    log_debug() << "Attempting to set default gateway";
     std::string cmd = "route add default gw " + m_gateway;
-    return isSuccess(executeInContainer(cmd));
+    if (isError(executeInContainer(cmd))) {
+        log_error() << "Could not set default gateway.";
+        return false;
+    }
+    return true;
 }
 
 bool NetworkGateway::up()
 {
+    log_debug() << "Attempting to configure eth0 to 'up state'";
     std::string cmd;
 
     if (!m_interfaceInitialized) {
@@ -107,6 +108,7 @@ bool NetworkGateway::up()
     }
 
     if (isError(executeInContainer(cmd))) {
+        log_error() << "Configuring eth0 to 'up state' failed.";
         return false;
     }
 
@@ -117,21 +119,28 @@ bool NetworkGateway::up()
 
 bool NetworkGateway::down()
 {
+    log_debug() << "Attempting to configure eth0 to 'down state'";
     std::string cmd = "ifconfig eth0 down";
-    return isSuccess(executeInContainer(cmd));
+    if (isError(executeInContainer(cmd))) {
+        log_error() << "Configuring eth0 to 'down state' failed.";
+        return false;
+    }
+    return true;
 }
 
 
 bool NetworkGateway::isBridgeAvailable()
 {
-    bool ret = false;
-    std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \"" << BRIDGE_INTERFACE << "\" | grep -q \"" << m_gateway << "\"";
+    log_debug() << "Checking bridge availability";
+    std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \""
+                                      << BRIDGE_INTERFACE << "\" | grep -q \""
+                                      << m_gateway << "\"";
 
     if (isSuccess(executeInContainer(cmd))) {
-        ret = true;
+        return true;
     } else {
         log_error() << "No network bridge configured";
     }
 
-    return ret;
+    return false;
 }

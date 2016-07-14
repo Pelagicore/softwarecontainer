@@ -460,10 +460,16 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
 
     pid_t pid = executeInContainer([this, cmd]() {
                 log_info() << "Executing system command in container : " << cmd;
-                return system(cmd.c_str());
+                const int result = execl("/bin/sh", "sh", "-c", cmd.c_str(), 0);
+                log_debug() << "Excution of system command " << cmd << " resulted in status " << result;
+                return result;
             }, m_gatewayEnvironmentVariables);
 
-    waitForProcessTermination(pid);
+    const int commandResponse = waitForProcessTermination(pid);
+    if  (commandResponse != 0) {
+        log_debug() << "Exectution of command " << cmd << " in container failed";
+        return ReturnCode::FAILURE;
+    }
 
     return ReturnCode::SUCCESS;
 }
