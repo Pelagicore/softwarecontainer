@@ -297,7 +297,7 @@ public:
         // Clean up all created directories, files, and mount points
         for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
             // Cleaning functions will do their own error/warning output
-            if(isError(*it)->clean()) {
+            if(isError((*it)->clean())) {
                 success = false;
             }
             delete *it;
