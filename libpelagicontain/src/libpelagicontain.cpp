@@ -71,7 +71,9 @@ void PelagicontainLib::validateContainerID()
 ReturnCode PelagicontainWorkspace::checkWorkspace()
 {
     if (!isDirectory(m_containerRoot)) {
+        log_debug() << "Container root " << m_containerRoot << " does not exist, trying to create";
         if(isError(createDirectory(m_containerRoot))) {
+            log_debug() << "Failed to create container root directory";
             return ReturnCode::FAILURE;
         }
     }

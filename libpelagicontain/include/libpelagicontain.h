@@ -18,7 +18,6 @@ namespace pelagicontain {
 class PelagicontainWorkspace :
     private FileToolkitWithUndo
 {
-
     LOG_DECLARE_CLASS_CONTEXT("PCLW", "Pelagicontain library workspace");
 
 public:
@@ -54,7 +53,6 @@ public:
     std::string m_containerRoot;
     std::string m_containerConfig;
     unsigned int m_containerShutdownTimeout;
-
 };
 
 PelagicontainWorkspace &getDefaultWorkspace();

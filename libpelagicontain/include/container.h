@@ -193,6 +193,7 @@ private:
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
     bool m_initialized = false;
+    bool m_created = false;
 
     int m_shutdownTimeout = 2;
 };

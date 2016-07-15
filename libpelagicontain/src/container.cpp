@@ -67,14 +67,14 @@ ReturnCode Container::initialize()
 
 Container::~Container()
 {
-    if (isContainerDeleteEnabled()) {
-        destroy();
-        if (m_container != nullptr) {
-            lxc_container_put(m_container);
-            m_container = nullptr;
+    if (m_container != nullptr) {
+        if (m_created) {
+            destroy();
         }
-    }
 
+        lxc_container_put(m_container);
+        m_container = nullptr;
+    }
 }
 
 std::string Container::toString()
@@ -98,7 +98,10 @@ ReturnCode Container::create()
     log_debug() << "Creating container " << toString();
 
     const char *containerID = id();
-    assert(strlen(containerID) != 0);
+    if (strlen(containerID) == 0) {
+        log_error() << "ContainerID cannot be empty";
+        return ReturnCode::FAILURE;
+    }
 
     setenv("GATEWAY_DIR", gatewaysDir().c_str(), true);
     log_debug() << "GATEWAY_DIR : " << getenv("GATEWAY_DIR");
@@ -113,18 +116,22 @@ ReturnCode Container::create()
         log_error() << "Error creating a new container";
         return ReturnCode::FAILURE;
     }
+    log_debug() << "Successfully created container struct";
 
     if (!m_container->load_config(m_container, configFile)) {
         log_error() << "Error loading container config";
         return ReturnCode::FAILURE;
     }
+    log_debug() << "Successfully loaded container config";
 
     int flags = 0;
     if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
     	log_error() << "Error creating container";
     	return ReturnCode::FAILURE;
     }
+    log_debug() << "Successfully created container";
 
+    m_created = true;
     m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
     log_debug() << "Container created. RootFS: " << m_rootFSPath;
 
@@ -144,6 +151,14 @@ void Container::waitForState(LXCContainerState state, int timeout)
 
 pid_t Container::start()
 {
+    if (!m_created) {
+        log_warning() << "Trying to start container that isn't created. Creating...";
+        if(isError(create())) {
+            log_error() << "Failed to create container, can't start";
+            return INVALID_PID;
+        }
+    }
+
     pid_t pid;
     if (isLXC_C_APIEnabled() && false) {
         log_debug() << "Starting container";
@@ -155,7 +170,7 @@ pid_t Container::start()
 
         if (!m_container->start(m_container, false, args)) {
             log_error() << "Error starting container";
-            pid = 0;
+            return INVALID_PID;
         } else {
             log_debug() << "Container started: " << toString();
             pid = m_container->init_pid(m_container);
@@ -179,7 +194,7 @@ pid_t Container::start()
                     &pid);
         } catch (const Glib::Error &ex) {
             log_error() << "spawn error: " << ex.what();
-            pid = 0;
+            pid = INVALID_PID;
         }
     }
 
@@ -239,8 +254,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
                 << toString() << "User:" << userID
                 << "" << std::endl << " Env variables : " << strings;
 
-    pid_t attached_process_pid = 0;
-
+    pid_t attached_process_pid = INVALID_PID;
     int attach_res = m_container->attach(m_container,
                                          &Container::executeInContainerEntryFunction,
                                          &function, &options, &attached_process_pid);
@@ -248,7 +262,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
         log_info() << " Attached PID: " << attached_process_pid;
     } else  {
         log_error() << "Attach call to LXC container failed: " << std::string(strerror(errno));
-        log_error() << "PID = 0";
+        log_error() << "PID = " << INVALID_PID;
     }
 
     return attached_process_pid;
@@ -387,8 +401,12 @@ void Container::destroy()
 
 void Container::destroy(unsigned int timeout)
 {
+    if (!m_created) {
+        log_warning() << "Trying to destroy container that has not been created. Aborting";
+        return;
+    }
 
-    log_debug() << "Shutting down container " << toString() << " pid " << m_container->init_pid(m_container);
+    log_debug() << "Shutting down container " << toString() << " pid: " << m_container->init_pid(m_container);
 
     if (m_container->init_pid(m_container) > 1) {
         kill(m_container->init_pid(m_container), SIGTERM);
