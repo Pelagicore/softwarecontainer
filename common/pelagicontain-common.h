@@ -2,6 +2,8 @@
 
 #include <sys/wait.h>
 #include <sys/mount.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include <map>
 #include <memory>
@@ -214,20 +216,18 @@ public:
 
     ReturnCode clean() override
     {
-        auto code = ReturnCode::FAILURE;
-
         if (!existsInFileSystem(m_path)) {
-            log_warning() << "Folder " << m_path << " does no exist";
+            log_warning() << "Folder " << m_path << " does not exist";
             return ReturnCode::SUCCESS;
         }
 
         if (rmdir(m_path.c_str()) == 0) {
+            log_debug() << "rmdir'd " << m_path;
             return ReturnCode::SUCCESS;
         } else {
             log_error() << "Can't rmdir " << m_path << " . Error :" << strerror(errno);
-            sleep(1);
+            return ReturnCode::FAILURE;
         }
-        return code;
     }
 
     std::string m_path;
@@ -244,15 +244,13 @@ public:
 
     ReturnCode clean() override
     {
-        auto code = ReturnCode::FAILURE;
-
         if (unlink(m_path.c_str()) == 0) {
-            code = ReturnCode::SUCCESS;
+            log_debug() << "Unlinked " << m_path;
+            return ReturnCode::SUCCESS;
         } else {
             log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
+            return ReturnCode::FAILURE;
         }
-
-        return code;
     }
 
     std::string m_path;
@@ -269,20 +267,19 @@ public:
 
     ReturnCode clean() override
     {
-        auto code = ReturnCode::FAILURE;
-
-        // Lazy unmount. Should be the equivalent of the "umount -l" command. The unmount will actually happen when no-one uses the resource anymore.
-        if (umount(m_path.c_str()) == 0) {
-            code = ReturnCode::SUCCESS;
+        // Lazy unmount. Should be the equivalent of the "umount -l" command.
+        if (umount2(m_path.c_str(), MNT_DETACH) == 0) {
             log_debug() << "Unmounted " << m_path;
+            return ReturnCode::SUCCESS;
         } else {
             log_warn() << "Can't unmount " << m_path << " . Error :" << strerror(errno) << ". Trying to force umount";
-            if (umount2(m_path.c_str(), MNT_FORCE) == 0) {
-                log_warn() << "Can't force unmount " << m_path << " . Error :" << strerror(errno) << ". Trying to force umount";
+            if (umount2(m_path.c_str(), MNT_FORCE) != 0) {
+                log_warn() << "Can't force unmount " << m_path << " . Error :" << strerror(errno);
+                return ReturnCode::FAILURE;
             }
+            log_debug() << "Managed to force unmount " << m_path;
+            return ReturnCode::SUCCESS;
         }
-
-        return code;
     }
 
     std::string m_path;
@@ -296,19 +293,25 @@ class FileToolkitWithUndo
 public:
     ~FileToolkitWithUndo()
     {
+        bool success = true;
         // Clean up all created directories, files, and mount points
         for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
-            if (!isSuccess((*it)->clean())) {
-                log_error() << "Error";
+            // Cleaning functions will do their own error/warning output
+            if(isError(*it)->clean()) {
+                success = false;
             }
             delete *it;
+        }
+
+        if(!success) {
+            log_error() << "One or more cleanup handlers returned error status, please check the log";
         }
     }
 
     ReturnCode createParentDirectory(const std::string &path)
     {
-        log_debug() << path;
-        auto parent = parentPath(path);
+        log_debug() << "Creating parent directories for " << path;
+        std::string parent = parentPath(path);
         if (!isDirectory(parent) && parent != "") {
             createDirectory(parent);
         }
@@ -321,7 +324,24 @@ public:
      * deleted in reverse order to creation insert to the beginning of
      * the list.
      */
-    ReturnCode createDirectory(const std::string &path);
+    ReturnCode createDirectory(const std::string &path)
+    {
+        if (isDirectory(path)) {
+            return ReturnCode::SUCCESS;
+        }
+
+        createParentDirectory(path);
+
+        if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
+            log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
+            return ReturnCode::FAILURE;
+        }
+
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(path));
+        log_debug() << "Created directory " << path;
+
+        return ReturnCode::SUCCESS;
+    }
 
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly)
     {
