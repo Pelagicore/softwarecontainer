@@ -313,7 +313,10 @@ public:
         log_debug() << "Creating parent directories for " << path;
         std::string parent = parentPath(path);
         if (!isDirectory(parent) && parent != "") {
-            createDirectory(parent);
+            if(isError(createDirectory(parent))) {
+                log_error() << "Could not create directory " << parent;
+                return ReturnCode::FAILURE;
+            }
         }
         return ReturnCode::SUCCESS;
     }
@@ -330,7 +333,10 @@ public:
             return ReturnCode::SUCCESS;
         }
 
-        createParentDirectory(path);
+        if(isError(createParentDirectory(path))) {
+            log_error() << "Couldn't create parent directory for " << path;
+            return ReturnCode::FAILURE;
+        }
 
         if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
             log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
