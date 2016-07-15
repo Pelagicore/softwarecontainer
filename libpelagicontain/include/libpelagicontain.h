@@ -44,10 +44,7 @@ public:
 
     ~PelagicontainWorkspace()
     {
-        deleteWorkspace();
     }
-
-    ReturnCode deleteWorkspace();
 
     /**
      * Check if the workspace is present and create it if needed

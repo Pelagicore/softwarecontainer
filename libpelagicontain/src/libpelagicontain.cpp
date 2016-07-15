@@ -68,17 +68,6 @@ void PelagicontainLib::validateContainerID()
     }
 }
 
-ReturnCode PelagicontainWorkspace::deleteWorkspace()
-{
-    if (isDirectory(m_containerRoot)) {
-        rmdir(m_containerRoot.c_str());
-    }
-
-    return existsInFileSystem(m_containerRoot) ? ReturnCode::FAILURE : ReturnCode::SUCCESS;
-}
-
-//FileToolkitWithUndo PelagicontainLib::s_fileToolkit;
-
 ReturnCode PelagicontainWorkspace::checkWorkspace()
 {
     if (!isDirectory(m_containerRoot)) {
