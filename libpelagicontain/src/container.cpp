@@ -440,12 +440,6 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
     return gatewaysDirInContainer() + "/" + pathInContainer;
 }
 
-ReturnCode Container::bindMount(const std::string &src, const std::string &dst, bool readOnly)
-{
-    ensureContainerRunning();
-    return FileToolkitWithUndo::bindMount(src, dst, readOnly);
-}
-
 ReturnCode Container::mountDevice(const std::string &pathInHost)
 {
     ensureContainerRunning();
