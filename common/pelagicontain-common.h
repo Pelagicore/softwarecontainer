@@ -63,11 +63,6 @@ inline bool isLXC_C_APIEnabled()
     return true;
 }
 
-inline bool isContainerDeleteEnabled()
-{
-    return false;
-}
-
 /**
  * That class contains references to sigc++ connections and automatically disconnects them on destruction
  */
@@ -391,6 +386,7 @@ public:
         mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, nullptr);
         assert(mountRes == 0);
         m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
+        log_debug() << "Created shared mount point at " << path;
 
         return ReturnCode::SUCCESS;
     }
@@ -402,6 +398,7 @@ public:
             return ret;
         }
         m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
+        log_debug() << "Successfully wrote to " << path;
         return ReturnCode::SUCCESS;
     }
 
@@ -413,6 +410,7 @@ public:
 
         if (symlink(destination.c_str(), source.c_str()) == 0) {
             m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
+            log_debug() << "Successfully created symlink from " << source << " to " << destination;
         } else {
             log_error() << "Error creating symlink " << destination << " pointing to " << source << ". Error: " << strerror(errno);
             return ReturnCode::FAILURE;

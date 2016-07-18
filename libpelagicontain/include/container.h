@@ -170,12 +170,6 @@ private:
     static int executeInContainerEntryFunction(void *param);
 
     /**
-     * Create a bind mount. On success the mount will be added to a list of
-     * mounts that will be unmounted in the dtor.
-     */
-    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly = true);
-
-    /**
      * The LXC configuration file for this container
      */
     std::string m_configFile;
@@ -199,6 +193,7 @@ private:
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
     bool m_initialized = false;
+    bool m_created = false;
 
     int m_shutdownTimeout = 2;
 };
