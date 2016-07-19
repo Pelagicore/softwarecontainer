@@ -136,7 +136,7 @@ bool NetworkGateway::isBridgeAvailable()
                                       << BRIDGE_INTERFACE << "\" | grep -q \""
                                       << m_gateway << "\"";
 
-    if (isSuccess(executeInContainer(cmd))) {
+    if (system(cmd.c_str()) == 0) {
         return true;
     } else {
         log_error() << "No network bridge configured";
