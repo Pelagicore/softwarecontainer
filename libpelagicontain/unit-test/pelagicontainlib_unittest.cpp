@@ -36,7 +36,8 @@ public:
     void SetUp() override
     {
         ::testing::Test::SetUp();
-        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib());
+        workspace = std::unique_ptr<PelagicontainWorkspace>(new PelagicontainWorkspace());
+        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib(*workspace));
         lib->setContainerIDPrefix("Test-");
         lib->setMainLoopContext(m_context);
         ASSERT_TRUE(isSuccess(lib->init()));
@@ -45,6 +46,8 @@ public:
     void TearDown() override
     {
         ::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
+        lib.reset();
+        workspace.reset();
     }
 
     void run()
@@ -75,6 +78,7 @@ public:
 
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> m_ml;
+    std::unique_ptr<PelagicontainWorkspace> workspace;
     std::unique_ptr<PelagicontainLib> lib;
 };
 
