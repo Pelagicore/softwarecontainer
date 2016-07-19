@@ -60,6 +60,7 @@ class TestDBus(unittest.TestCase):
         try:
 
             ca.start()
+            ca.dbusGateway()
             ca.launchCommand('{}/dbusapp.py server'.format(ca.getBindDir()))
 
             time.sleep(0.5)
@@ -78,6 +79,7 @@ class TestDBus(unittest.TestCase):
             serv.start()
 
             ca.start()
+            ca.dbusGateway()
             ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
 
             self.assertTrue(serv.wait_until_requests())

@@ -89,9 +89,9 @@ private:
 
 };
 
-inline void addProcessListener(SignalConnectionsHandler &connections, pid_t pid, std::function<void(pid_t, int)> function
-            , Glib::RefPtr<Glib::MainContext> context                    // = Glib::MainContext::get_default()
-            )
+inline void addProcessListener(SignalConnectionsHandler &connections,
+                               pid_t pid, std::function<void(pid_t, int)> function,
+                               Glib::RefPtr<Glib::MainContext> context)
 {
     Glib::SignalChildWatch watch = context->signal_child_watch();
     auto connection = watch.connect(function,pid);
@@ -356,18 +356,21 @@ public:
             log_verbose() << "Bind-mounted folder " << src << " in " << dst;
             m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
         } else {
-            log_error() << "Could not mount into container: src=" << src << " , dst=" << dst << " err=" << strerror(errno);
+            log_error() << "Could not mount into container: src=" << src
+                        << " , dst=" << dst << " err=" << strerror(errno);
             return ReturnCode::FAILURE;
         }
 
         if (readOnly) {
             flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
 
-            log_debug() << "Re-mounting read-only" << src << " in " << dst << ", flags: " << flags;
+            log_debug() << "Re-mounting read-only" << src << " in "
+                        << dst << ", flags: " << flags;
             mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
             if (mountRes != 0) {
                 // Failure
-                log_error() << "Could not re-mount " << src << " , read-only on " << dst << " err=" << strerror(errno);
+                log_error() << "Could not re-mount " << src << " , read-only on "
+                            << dst << " err=" << strerror(errno);
                 return ReturnCode::FAILURE;
             }
         }
@@ -412,7 +415,9 @@ public:
             m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
             log_debug() << "Successfully created symlink from " << source << " to " << destination;
         } else {
-            log_error() << "Error creating symlink " << destination << " pointing to " << source << ". Error: " << strerror(errno);
+            log_error() << "Error creating symlink " << destination
+                        << " pointing to " << source << ". Error: "
+                        << strerror(errno);
             return ReturnCode::FAILURE;
         }
 

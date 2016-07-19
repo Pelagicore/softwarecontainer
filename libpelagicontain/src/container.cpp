@@ -59,9 +59,12 @@ ReturnCode Container::initialize()
         return ReturnCode::FAILURE;
     }
 
-    createSharedMountPoint(gatewayDir);
-    m_initialized = true;
+    if (isError(createSharedMountPoint(gatewayDir))) {
+        log_error() << "Could not create shared mount point for dir: " << gatewayDir;
+        return ReturnCode::FAILURE;
+    }
 
+    m_initialized = true;
     return ReturnCode::SUCCESS;
 }
 
@@ -126,8 +129,8 @@ ReturnCode Container::create()
 
     int flags = 0;
     if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
-    	log_error() << "Error creating container";
-    	return ReturnCode::FAILURE;
+        log_error() << "Error creating container";
+        return ReturnCode::FAILURE;
     }
     log_debug() << "Successfully created container";
 

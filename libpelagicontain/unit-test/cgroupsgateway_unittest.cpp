@@ -29,7 +29,8 @@ public:
         ::testing::Test::SetUp();
         cgw = std::unique_ptr<CgroupsGateway>(new CgroupsGateway());
 
-        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib());
+        workspace = std::unique_ptr<PelagicontainWorkspace>(new PelagicontainWorkspace());
+        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib(*workspace));
         lib->setContainerIDPrefix("Test-");
         lib->setMainLoopContext(m_context);
         ASSERT_TRUE(isSuccess(lib->init()));
@@ -42,6 +43,7 @@ public:
         // Ensuring that the reset is done in correct order
         lib.reset();
         cgw.reset();
+        workspace.reset();
     }
 
     void givenContainerIsSet() {
@@ -51,6 +53,7 @@ public:
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     std::unique_ptr<CgroupsGateway> cgw;
     std::unique_ptr<PelagicontainLib> lib;
+    std::unique_ptr<PelagicontainWorkspace> workspace;
 };
 
 

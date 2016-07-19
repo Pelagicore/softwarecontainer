@@ -94,6 +94,7 @@ class ContainerApp():
         if response is -1:
             print "Failed to launch process in container"
             return -1
+        return response
 
     def getBindDir(self):
         return self.__bind_dir
@@ -104,8 +105,6 @@ class ContainerApp():
     def start(self):
         self.__createContainer()
         self.__bind_dir = self.bindMountFolderInContainer("/..", "app")
-        #TODO: networkGateway ?
-        self.dbusGateway()
 
     def terminate(self):
         self.shutdown()
