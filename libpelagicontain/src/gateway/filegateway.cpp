@@ -20,8 +20,9 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
     element.read("create-symlink", setting.createSymlinkInContainer);
     element.read("read-only", setting.readOnly);
     element.read("env-var-name", setting.envVarName);
-    element.read("env-var-value", setting.envVarValue);
     assert(setting.pathInHost.size() != 0);
+    element.read("env-var-prefix", setting.envVarPrefix);
+    element.read("env-var-suffix", setting.envVarSuffix);
 
     m_settings.push_back(setting);
     return ReturnCode::SUCCESS;
@@ -48,8 +49,19 @@ bool FileGateway::activate()
             setEnvironmentVariable(setting.envVarName, value);
         }
 
-        if (setting.createSymlinkInContainer) {
-            getContainer().createSymLink(getContainer().rootFS() + setting.pathInHost, path);
+            if (path.size() == 0) {
+               log_error() << "Bind mount failed";
+               return false;
+            }
+
+            if (setting.envVarName.size() != 0) {
+                std::string value = StringBuilder() << setting.envVarPrefix << path << setting.envVarSuffix;
+                setEnvironmentVariable(setting.envVarName, value);
+            }
+
+            if (setting.createSymlinkInContainer) {
+                getContainer().createSymLink(getContainer().rootFS() + setting.pathInHost, path);
+            }
         }
     }
 
