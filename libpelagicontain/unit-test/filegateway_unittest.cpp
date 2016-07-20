@@ -54,6 +54,12 @@ public:
         lib->getPelagicontain().addGateway(*gw);
     }
 
+    bool runInShell(std::string cmd) {
+        CommandJob job(*lib, "sh -c \"" + cmd + "\"");
+        job.start();
+        return job.wait() == 0;
+    }
+
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     std::unique_ptr<FileGateway> gw;
     std::unique_ptr<PelagicontainLib> lib;
@@ -83,7 +89,7 @@ TEST_F(FileGatewayTest, TestActivateWithEmptyValidJSONConf) {
 
 TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     givenContainerIsSet();
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-host\" : \"" + FILE_PATH + "\""
@@ -96,11 +102,9 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
 
 TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
     givenContainerIsSet();
-    CommandJob job(*lib, "cat " + FILE_PATH);
-    ASSERT_EQ(job.start(), ReturnCode::SUCCESS);
-    ASSERT_TRUE(job.wait() != 0);
-
-    const std::string config = 
+    const std::string cmd = "cat " + FILE_PATH;
+    ASSERT_FALSE(runInShell(cmd));
+    const std::string config =
     "["
         "{"
             "  \"path-host\" : \"" + FILE_PATH + "\""
@@ -111,17 +115,18 @@ TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_TRUE(gw->activate());
 
-    ASSERT_EQ(job.start(), ReturnCode::SUCCESS);
-    ASSERT_TRUE(job.wait() == 0);
+    ASSERT_TRUE(runInShell(cmd));
 }
 
 TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     givenContainerIsSet();
-    CommandJob job(*lib, "printenv | grep " + ENV_VAR_NAME + " | grep " + PREFIX + " | grep " + SUFFIX);
-    ASSERT_EQ(job.start(), ReturnCode::SUCCESS);
-    ASSERT_TRUE(job.wait() != 0);
+    const std::string cmd =  "printenv"
+                             "| grep " + ENV_VAR_NAME +
+                             "| grep " + PREFIX +
+                             "| grep " + SUFFIX;
+    ASSERT_FALSE(runInShell(cmd));
 
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-host\" : \"" + FILE_PATH + "\""
@@ -134,13 +139,12 @@ TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_TRUE(gw->activate());
 
-    ASSERT_EQ(job.start(), ReturnCode::SUCCESS);
-    ASSERT_TRUE(job.wait() == 0);
+    ASSERT_TRUE(runInShell(cmd));
 }
 
 TEST_F(FileGatewayTest, TestActivateWithNoPathToHost) {
     givenContainerIsSet();
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-container\" : \"" + CONTAINER_PATH + "\""
@@ -157,7 +161,7 @@ TEST_F(FileGatewayTest, TestActivateWithNoPathToHost) {
 
 TEST_F(FileGatewayTest, TestActivateWithEmptyPathToHost) {
     givenContainerIsSet();
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-host\" : \"\""
@@ -174,7 +178,7 @@ TEST_F(FileGatewayTest, TestActivateWithEmptyPathToHost) {
 }
 TEST_F(FileGatewayTest, TestActivateWithNoPathInContainer) {
     givenContainerIsSet();
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-home\" : \"" + FILE_PATH + "\""
@@ -191,7 +195,7 @@ TEST_F(FileGatewayTest, TestActivateWithNoPathInContainer) {
 
 TEST_F(FileGatewayTest, TestActivateWithEmptyPathInContainer) {
     givenContainerIsSet();
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-home\" : \"" + FILE_PATH + "\""
@@ -208,7 +212,7 @@ TEST_F(FileGatewayTest, TestActivateWithEmptyPathInContainer) {
 }
 
 TEST_F(FileGatewayTest, TestActivateWithNoContainer) {
-    const std::string config = 
+    const std::string config =
     "["
         "{"
             "  \"path-host\" : \"" + FILE_PATH + "\""

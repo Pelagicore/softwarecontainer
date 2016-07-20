@@ -20,9 +20,18 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
     element.read("create-symlink", setting.createSymlinkInContainer);
     element.read("read-only", setting.readOnly);
     element.read("env-var-name", setting.envVarName);
-    assert(setting.pathInHost.size() != 0);
     element.read("env-var-prefix", setting.envVarPrefix);
     element.read("env-var-suffix", setting.envVarSuffix);
+
+    if (setting.pathInHost.size() == 0) {
+        log_error() << "FileGateway config is lacking 'path-host' setting";
+        return ReturnCode::FAILURE;
+    }
+
+    if (setting.pathInContainer.size() == 0) {
+        log_error() << "FileGateway config is lacking 'path-container' setting";
+        return ReturnCode::FAILURE;
+    }
 
     m_settings.push_back(setting);
     return ReturnCode::SUCCESS;
@@ -30,24 +39,19 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
 
 bool FileGateway::activate()
 {
-    for (FileSetting &setting : m_settings) {
-        std::string path;
+    if (hasContainer() && m_settings.size() > 0) {
+        for (FileSetting &setting : m_settings) {
+            std::string path;
 
-        if (isDirectory(setting.pathInHost)) {
-            path = getContainer().bindMountFolderInContainer(setting.pathInHost
-                    , setting.pathInContainer
-                    , setting.readOnly);
-        } else {
-            path = getContainer().bindMountFileInContainer(setting.pathInHost
-                    , setting.pathInContainer
-                    , setting.readOnly);
-        }
-
-        if (setting.envVarName.size() != 0) {
-            char value[1024];
-            snprintf(value, sizeof(value), setting.envVarValue.c_str(), path.c_str());
-            setEnvironmentVariable(setting.envVarName, value);
-        }
+            if (isDirectory(setting.pathInHost)) {
+                path = getContainer().bindMountFolderInContainer(setting.pathInHost
+                        , setting.pathInContainer
+                        , setting.readOnly);
+            } else {
+                path = getContainer().bindMountFileInContainer(setting.pathInHost
+                        , setting.pathInContainer
+                        , setting.readOnly);
+            }
 
             if (path.size() == 0) {
                log_error() << "Bind mount failed";
@@ -63,7 +67,9 @@ bool FileGateway::activate()
                 getContainer().createSymLink(getContainer().rootFS() + setting.pathInHost, path);
             }
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
