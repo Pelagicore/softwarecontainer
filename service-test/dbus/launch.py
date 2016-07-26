@@ -56,23 +56,39 @@ class TestDBus(unittest.TestCase):
 
     def test_query_in(self):
         """ Launch server in container and test if a client can communicate with it from the host system """
-        ca = ContainerApp()
-        try:
+        for x in range(0, 10):
+            ca = ContainerApp()
+            try:
+                ca.start()
+                ca.dbusGateway()
+                ca.launchCommand('{}/dbusapp.py server'.format(ca.getBindDir()))
 
-            ca.start()
-            ca.dbusGateway()
-            ca.launchCommand('{}/dbusapp.py server'.format(ca.getBindDir()))
-
-            time.sleep(0.5)
-            client = dbusapp.Client()
-            client.run()
-            self.assertTrue(client.check_all_good_resp())
-
-        finally: 
-            ca.terminate()
+                time.sleep(0.5)
+                client = dbusapp.Client()
+                client.run()
+                self.assertTrue(client.check_all_good_resp())
+            finally:
+                ca.terminate()
 
     def test_query_out(self):
         """ Launch client in container and test if it communicates out """
+        for x in range(0, 10):
+            serv = dbusapp.Server()
+            serv.start()
+            ca = ContainerApp()
+            try:
+                ca.start()
+                ca.dbusGateway()
+                ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
+
+                self.assertTrue(serv.wait_until_requests())
+            finally:
+                ca.terminate()
+                serv.terminate()
+                serv = None
+
+    def test_spam_out(self):
+        """ Launch client in container and stress test the communication out """
         ca = ContainerApp()
         try:
             serv = dbusapp.Server()
@@ -80,13 +96,18 @@ class TestDBus(unittest.TestCase):
 
             ca.start()
             ca.dbusGateway()
-            ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
 
-            self.assertTrue(serv.wait_until_requests())
-            serv.terminate()
+            clients = 100
+
+            for x in range(0, clients):
+                ca.launchCommand('{}/dbusapp.py client --size 2048'.format(ca.getBindDir()))
+
+            self.assertTrue(serv.wait_until_requests(multiplier=clients))
 
         finally:
             ca.terminate()
+            serv.terminate()
+            serv = None
 
     @classmethod
     def tearDownClass(cls):

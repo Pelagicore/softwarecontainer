@@ -10,6 +10,7 @@ import pydbus
 import threading
 import time
 import argparse
+import random
 
 
 from dbus.mainloop.glib import DBusGMainLoop
@@ -19,6 +20,7 @@ OPATH = "/Object"
 IFACE = "com.service.TestInterface"
 
 NR_OF_REQUESTS = 1000
+CLIENT_MESSAGE_SIZE = 256
 
 class Service(dbus.service.Object):
     def __init__(self, bus):
@@ -45,15 +47,21 @@ class Server(threading.Thread):
         self.service = Service(bus)
         self.__loop.run()
 
-    def wait_until_requests(self, timeout=1):
+    def wait_until_requests(self, multiplier=1, timeout=1):
         if self.service is None:
             print("Server not started yet, aborting wait...")
             return False
-
-        return wait_until(lambda : self.service.requests == NR_OF_REQUESTS, timeout)
+        expected_requests = NR_OF_REQUESTS * multiplier
+        ans = wait_until(lambda : self.service.requests == expected_requests, timeout)
+        return ans
 
     def terminate(self):
-        self.__loop.quit()
+        self.service.remove_from_connection()
+        self.service = None
+        if self.__loop is not None:
+            self.__loop.quit()
+            self.__loop = None
+
 
 def wait_until(somepredicate, timeout, period=0.25, *args, **kwargs):
     mustend = time.time() + timeout
@@ -64,13 +72,14 @@ def wait_until(somepredicate, timeout, period=0.25, *args, **kwargs):
 
 class Client():
 
-    def __init__(self):
+    def __init__(self, message_size=CLIENT_MESSAGE_SIZE):
         self.bus = pydbus.SessionBus()
         self.good_resp = 0
+        self.message_size = message_size
 
     def run(self):
         self.good_resp = 0
-        inp = "DBusTestMessage"
+        inp = str(random.getrandbits(self.message_size))
         remote_object = self.bus.get(
             BUS_NAME, OPATH
         )
@@ -87,6 +96,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('mode', choices=["client", "server"],
                     help='Run the dbusapp as "server" or "client"')
+    parser.add_argument('--size', type=int, default=CLIENT_MESSAGE_SIZE,
+                    help='Size of the messages sent by client')
 
     args = parser.parse_args()
     if args.mode == "server":
