@@ -28,7 +28,6 @@ class Receiver(threading.Thread):
             print(msg)
 
     def handler(self, gob, gob2, gob3):
-        self.log("pythonProfilingPoint dbusAvailable %.09f %s %s %s" % (time.time(), gob, gob2, gob3))
         if gob == "com.pelagicore.PelagicontainAgent":
             """
             Put pelagicontainStarted on the message queue, this is picked up by
@@ -63,6 +62,7 @@ class ContainerApp():
                                              "/com/pelagicore/PelagicontainAgent")
         self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.PelagicontainAgent")
         self.__bind_dir = None
+        self.containerId = None
 
     def __createContainer(self):
         self.containerId = self._pca_iface.CreateContainer("prefix")
@@ -99,12 +99,10 @@ class ContainerApp():
     def getBindDir(self):
         return self.__bind_dir
 
-    def shutdown(self):
-        self._pca_iface.ShutDownContainer(self.containerId)
-
     def start(self):
         self.__createContainer()
         self.__bind_dir = self.bindMountFolderInContainer("/..", "app")
 
     def terminate(self):
-        self.shutdown()
+        if self.containerId is not None:
+            self._pca_iface.ShutDownContainer(self.containerId)
