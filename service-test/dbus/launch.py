@@ -99,10 +99,16 @@ class TestDBus(unittest.TestCase):
 
             clients = 100
 
+            t0 = time.time()
             for x in range(0, clients):
                 ca.launchCommand('{}/dbusapp.py client --size 2048'.format(ca.getBindDir()))
-
+            t1 = time.time()
             self.assertTrue(serv.wait_until_requests(multiplier=clients))
+            t2 = time.time()
+            print("\n")
+            print("Clients started:              {0:.4f} seconds\n".format(t1 - t0))
+            print("Server received all messages: {0:.4f} seconds\n".format(t2 - t1))
+            print("Total time:                   {0:.4f} seconds\n".format(t2 - t0))
 
         finally:
             ca.terminate()
