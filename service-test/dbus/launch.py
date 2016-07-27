@@ -98,10 +98,11 @@ class TestDBus(unittest.TestCase):
             ca.dbusGateway()
 
             clients = 100
+            message_size = 8192 # Bytes
 
             t0 = time.time()
             for x in range(0, clients):
-                ca.launchCommand('{}/dbusapp.py client --size 2048'.format(ca.getBindDir()))
+                ca.launchCommand('{}/dbusapp.py client --size {}'.format(ca.getBindDir(), message_size))
             t1 = time.time()
             self.assertTrue(serv.wait_until_requests(multiplier=clients))
             t2 = time.time()

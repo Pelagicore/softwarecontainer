@@ -11,6 +11,7 @@ import threading
 import time
 import argparse
 import random
+import operator
 
 
 from dbus.mainloop.glib import DBusGMainLoop
@@ -79,10 +80,9 @@ class Client():
 
     def run(self):
         self.good_resp = 0
-        inp = str(random.getrandbits(self.message_size))
-        remote_object = self.bus.get(
-            BUS_NAME, OPATH
-        )
+        alphab = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        inp = reduce(operator.add, [random.choice(alphab) for x in range(0, self.message_size - 37)])
+        remote_object = self.bus.get(BUS_NAME, OPATH)
 
         for _ in range(0, NR_OF_REQUESTS):
             ans = remote_object.Bounce(inp)
