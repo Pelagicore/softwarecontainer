@@ -65,7 +65,7 @@ class ContainerApp():
         self.containerId = None
 
     def __createContainer(self):
-        self.containerId = self._pca_iface.CreateContainer("prefix")
+        self.containerId = self._pca_iface.CreateContainer("prefix-dbus-")
 
     def bindMountFolderInContainer(self, relpath, dirname):
         return self._pca_iface.BindMountFolderInContainer(self.containerId, self._path + relpath, dirname, True)
@@ -73,7 +73,7 @@ class ContainerApp():
     def networkGateway(self):
         configuration = {"network": json.dumps([{"internet-access": True, "gateway": "10.0.3.1"}])}
         self._pca_iface.SetGatewayConfigs(self.containerId, configuration)
-        
+
     def dbusGateway(self):
         connection = os.environ.get("DBUS_SESSION_BUS_ADDRESS")
         configuration = [{

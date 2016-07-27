@@ -29,6 +29,8 @@ class TestDBus(unittest.TestCase):
 
         cls.agentHandler = PelagicontainAgentHandler(cls.logFile)
 
+    def grepForDBusProxy(self):
+        return os.system('ps -aux | grep dbus-proxy | grep -v "grep" | grep prefix-dbus- > /dev/null')
 
     def test_query_in(self):
         """ Launch server in container and test if a client can communicate with it from the host system """
@@ -91,6 +93,12 @@ class TestDBus(unittest.TestCase):
             ca.terminate()
             serv.terminate()
             serv = None
+
+    def setUp(self):
+        self.assertNotEqual(self.grepForDBusProxy(), 0, msg="dbus-proxy not shutdown")
+
+    def tearDown(self):
+        self.assertNotEqual(self.grepForDBusProxy(), 0, msg="dbus-proxy not shutdown")
 
     @classmethod
     def tearDownClass(cls):
