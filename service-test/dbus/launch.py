@@ -12,15 +12,13 @@ import unittest
 from pydbus import SessionBus
 from pelagipy import Receiver
 from pelagipy import ContainerApp
+from pelagipy import PelagicontainAgentHandler
 
 class TestDBus(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.logFile = open("test.log", "w")
-
-        cls.rec = Receiver(logFile=cls.logFile)
-        cls.rec.start()
         time.sleep(0.5)
 
         """ Setting up dbus environement variables for session buss """
@@ -29,29 +27,7 @@ class TestDBus(unittest.TestCase):
             sp = var.split('=', 1)
             os.environ[sp[0]] = sp[1][:-1]
 
-        """ Starting pelagicontain-agent """
-        cls.agent = subprocess.Popen("pelagicontain-agent", stdout=cls.logFile, stderr=cls.logFile)
-
-        try:
-            """
-            Wait for the pelagicontainStarted message to appear on the
-            msgQueue, this is evoked when pelagicontain-agent is ready to
-            perform work. If we timeout tear down what we have started so far.
-            """
-            while cls.rec.msgQueue.get(block=True, timeout=5) != "pelagicontainStarted":
-                pass
-        except Queue.Empty as e:
-            cls.agent.terminate()
-            cls.rec.terminate()
-            raise Exception("Pelagicontain DBus interface not seen", e)
-
-        if cls.agent.poll() is not None:
-            """
-            Make sure we are not trying to perform anything against a dead
-            pelagicontain-agent
-            """
-            cls.rec.terminate()
-            raise Exception("Pelagicontain-agent has died for some reason")
+        cls.agentHandler = PelagicontainAgentHandler(cls.logFile)
 
 
     def test_query_in(self):
@@ -118,10 +94,8 @@ class TestDBus(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.agent.terminate()
-        cls.rec.terminate()
+        cls.agentHandler.terminate()
         cls.logFile.close()
-
 
 if __name__ == "__main__":
     unittest.main()

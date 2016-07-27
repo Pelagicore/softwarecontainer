@@ -9,7 +9,7 @@ import time
 import threading
 import os
 import Queue
-
+import subprocess
 
 class Receiver(threading.Thread):
     """
@@ -106,3 +106,39 @@ class ContainerApp():
     def terminate(self):
         if self.containerId is not None:
             self._pca_iface.ShutDownContainer(self.containerId)
+
+
+
+class PelagicontainAgentHandler():
+
+    def __init__(self, logFile=subprocess.STDOUT):
+        self.rec = Receiver(logFile=logFile)
+        self.rec.start()
+
+        """ Starting pelagicontain-agent """
+        self.agent = subprocess.Popen("pelagicontain-agent", stdout=logFile, stderr=logFile)
+
+        try:
+            """
+            Wait for the pelagicontainStarted message to appear on the
+            msgQueue, this is evoked when pelagicontain-agent is ready to
+            perform work. If we timeout tear down what we have started so far.
+            """
+            while self.rec.msgQueue.get(block=True, timeout=5) != "pelagicontainStarted":
+                pass
+        except Queue.Empty as e:
+            self.agent.terminate()
+            self.rec.terminate()
+            raise Exception("Pelagicontain DBus interface not seen", e)
+
+        if self.agent.poll() is not None:
+            """
+            Make sure we are not trying to perform anything against a dead
+            pelagicontain-agent
+            """
+            self.rec.terminate()
+            raise Exception("Pelagicontain-agent has died for some reason")
+
+    def terminate(self):
+        self.agent.terminate()
+        self.rec.terminate()
