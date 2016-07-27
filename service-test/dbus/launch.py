@@ -12,15 +12,13 @@ import unittest
 from pydbus import SessionBus
 from pelagipy import Receiver
 from pelagipy import ContainerApp
+from pelagipy import PelagicontainAgentHandler
 
 class TestDBus(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.logFile = open("test.log", "w")
-
-        cls.rec = Receiver(logFile=cls.logFile)
-        cls.rec.start()
         time.sleep(0.5)
 
         """ Setting up dbus environement variables for session buss """
@@ -29,30 +27,10 @@ class TestDBus(unittest.TestCase):
             sp = var.split('=', 1)
             os.environ[sp[0]] = sp[1][:-1]
 
-        """ Starting pelagicontain-agent """
-        cls.agent = subprocess.Popen("pelagicontain-agent", stdout=cls.logFile, stderr=cls.logFile)
+        cls.agentHandler = PelagicontainAgentHandler(cls.logFile)
 
-        try:
-            """
-            Wait for the pelagicontainStarted message to appear on the
-            msgQueue, this is evoked when pelagicontain-agent is ready to
-            perform work. If we timeout tear down what we have started so far.
-            """
-            while cls.rec.msgQueue.get(block=True, timeout=5) != "pelagicontainStarted":
-                pass
-        except Queue.Empty as e:
-            cls.agent.terminate()
-            cls.rec.terminate()
-            raise Exception("Pelagicontain DBus interface not seen", e)
-
-        if cls.agent.poll() is not None:
-            """
-            Make sure we are not trying to perform anything against a dead
-            pelagicontain-agent
-            """
-            cls.rec.terminate()
-            raise Exception("Pelagicontain-agent has died for some reason")
-
+    def grepForDBusProxy(self):
+        return os.system('ps -aux | grep dbus-proxy | grep -v "grep" | grep prefix-dbus- > /dev/null')
 
     def test_query_in(self):
         """ Launch server in container and test if a client can communicate with it from the host system """
@@ -98,10 +76,11 @@ class TestDBus(unittest.TestCase):
             ca.dbusGateway()
 
             clients = 100
+            message_size = 8192 # Bytes
 
             t0 = time.time()
             for x in range(0, clients):
-                ca.launchCommand('{}/dbusapp.py client --size 2048'.format(ca.getBindDir()))
+                ca.launchCommand('{}/dbusapp.py client --size {}'.format(ca.getBindDir(), message_size))
             t1 = time.time()
             self.assertTrue(serv.wait_until_requests(multiplier=clients))
             t2 = time.time()
@@ -115,12 +94,16 @@ class TestDBus(unittest.TestCase):
             serv.terminate()
             serv = None
 
+    def setUp(self):
+        self.assertNotEqual(self.grepForDBusProxy(), 0, msg="dbus-proxy not shutdown")
+
+    def tearDown(self):
+        self.assertNotEqual(self.grepForDBusProxy(), 0, msg="dbus-proxy not shutdown")
+
     @classmethod
     def tearDownClass(cls):
-        cls.agent.terminate()
-        cls.rec.terminate()
+        cls.agentHandler.terminate()
         cls.logFile.close()
-
 
 if __name__ == "__main__":
     unittest.main()
