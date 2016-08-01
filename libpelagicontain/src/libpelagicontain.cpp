@@ -78,6 +78,7 @@ ReturnCode PelagicontainWorkspace::checkWorkspace()
         }
     }
     
+#ifdef ENABLE_NETWORKGATEWAY
     // TODO: Have a way to check for the bridge using C/C++ instead of a
     // shell script. Libbridge and/or netfilter?
     std::string cmdLine = INSTALL_PREFIX;
@@ -97,6 +98,7 @@ ReturnCode PelagicontainWorkspace::checkWorkspace()
         log_error() << "Return code of " << cmdLine << " is non-zero";
         return ReturnCode::FAILURE;
     }
+#endif
 
     return ReturnCode::SUCCESS;
 }
