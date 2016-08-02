@@ -3,22 +3,10 @@
  *   All rights reserved.
  */
 
-#include <thread>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <stdlib.h>
-
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
-
-#include "generators.h"
-#include "libpelagicontain.h"
-
+#include "gateway_test.h"
 #include "gateway/cgroupsgateway.h"
 
-class CgroupsGatewayTest :
-    public::testing::Test
+class CgroupsGatewayTest : public GatewayTest
 {
 
 public:
@@ -26,34 +14,9 @@ public:
 
     void SetUp() override
     {
-        ::testing::Test::SetUp();
-        cgw = std::unique_ptr<CgroupsGateway>(new CgroupsGateway());
-
-        workspace = std::unique_ptr<PelagicontainWorkspace>(new PelagicontainWorkspace());
-        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib(*workspace));
-        lib->setContainerIDPrefix("Test-");
-        lib->setMainLoopContext(m_context);
-        ASSERT_TRUE(isSuccess(lib->init()));
+        gw = std::unique_ptr<Gateway>(new CgroupsGateway());
+        GatewayTest::SetUp();
     }
-
-    void TearDown() override
-    {
-        ::testing::Test::TearDown();
-
-        // Ensuring that the reset is done in correct order
-        lib.reset();
-        cgw.reset();
-        workspace.reset();
-    }
-
-    void givenContainerIsSet() {
-        lib->getPelagicontain().addGateway(*cgw);
-    }
-
-    Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    std::unique_ptr<CgroupsGateway> cgw;
-    std::unique_ptr<PelagicontainLib> lib;
-    std::unique_ptr<PelagicontainWorkspace> workspace;
 };
 
 
@@ -62,7 +25,7 @@ public:
 TEST_F(CgroupsGatewayTest, TestActivateWithNoConf) {
 
     givenContainerIsSet();
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->activate());
 
 }
 
@@ -70,8 +33,8 @@ TEST_F(CgroupsGatewayTest, TestActivateWithEmptyValidJSONConf) {
     givenContainerIsSet();
     const std::string config = "[]";
 
-    ASSERT_TRUE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestActivateWithNoContainer) {
@@ -82,8 +45,8 @@ TEST_F(CgroupsGatewayTest, TestActivateWithNoContainer) {
                                   }\
                                ]";
 
-    ASSERT_TRUE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestActivateWithValidConf) {
@@ -96,16 +59,16 @@ TEST_F(CgroupsGatewayTest, TestActivateWithValidConf) {
                                ]";
 
 
-    ASSERT_TRUE(cgw->setConfig(config));
-    ASSERT_TRUE(cgw->activate());
+    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_TRUE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithInvalidJSON) {
     givenContainerIsSet();
 
     std::string config = "hasdlaskndldn";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithNoneJSONObjects) {
@@ -113,8 +76,8 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithNoneJSONObjects) {
     const std::string config = "[\
                  123,\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfBefore) {
@@ -126,8 +89,8 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfBefore) {
                    \"value\": \"256\"\
                  }\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfAfter) {
@@ -139,8 +102,8 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfAfter) {
                  },\
                  123\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingMissing) {
@@ -150,8 +113,8 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingMissing) {
                    \"value\": \"256\"\
                  }\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingNotString) {
@@ -162,8 +125,8 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingNotString) {
                    \"value\": \"256\"\
                  }\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithValueMissing) {
@@ -173,8 +136,8 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithValueMissing) {
                    \"setting\": \"cpu.shares\",\
                  }\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithValueNotString) {
@@ -185,6 +148,6 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithValueNotString) {
                    \"value\": [\"a\", \"b\"],\
                  }\
               ]";
-    ASSERT_FALSE(cgw->setConfig(config));
-    ASSERT_FALSE(cgw->activate());
+    ASSERT_FALSE(gw->setConfig(config));
+    ASSERT_FALSE(gw->activate());
 }
