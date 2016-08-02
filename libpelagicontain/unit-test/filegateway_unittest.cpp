@@ -3,22 +3,10 @@
  *   All rights reserved.
  */
 
-#include <thread>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <stdlib.h>
-
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
-
-#include "generators.h"
-#include "libpelagicontain.h"
-
+#include "gateway_test.h"
 #include "gateway/filegateway.h"
 
-class FileGatewayTest :
-    public::testing::Test
+class FileGatewayTest : public GatewayTest
 {
 
 public:
@@ -26,32 +14,21 @@ public:
 
     void SetUp() override
     {
-        ::testing::Test::SetUp();
         gw = std::unique_ptr<FileGateway>(new FileGateway());
+        GatewayTest::SetUp();
 
-        workspace = std::unique_ptr<PelagicontainWorkspace>(new PelagicontainWorkspace());
-        lib = std::unique_ptr<PelagicontainLib>(new PelagicontainLib(*workspace));
-        lib->setContainerIDPrefix("Test-");
-        lib->setMainLoopContext(m_context);
-        ASSERT_TRUE(isSuccess(lib->init()));
+        // Create file
         std::string cmd = "echo " + FILE_CONTENT + " > " + FILE_PATH;
         ASSERT_TRUE(system(cmd.c_str()) == 0);
     }
 
     void TearDown() override
     {
-        ::testing::Test::TearDown();
+        GatewayTest::TearDown();
 
-        // Ensuring that the reset is done in correct order
-        lib.reset();
-        gw.reset();
-        workspace.reset();
+        // Remove file
         std::string cmd = "rm " + FILE_PATH;
         system(cmd.c_str());
-    }
-
-    void givenContainerIsSet() {
-        lib->getPelagicontain().addGateway(*gw);
     }
 
     bool runInShell(std::string cmd) {
@@ -59,11 +36,6 @@ public:
         job.start();
         return job.wait() == 0;
     }
-
-    Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    std::unique_ptr<FileGateway> gw;
-    std::unique_ptr<PelagicontainLib> lib;
-    std::unique_ptr<PelagicontainWorkspace> workspace;
 
     const std::string FILE_CONTENT = "ahdkhqweuyreqiwenomndlaskmd";
     const std::string FILE_PATH = "/tmp/filename.txt";

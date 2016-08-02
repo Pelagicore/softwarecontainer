@@ -20,6 +20,6 @@ link_directories(
 )
 
 add_gtest_test(pelagicontainLibTest
-    "main.cpp;pelagicontainlib_unittest.cpp;cgroupsgateway_unittest.cpp;filegateway_unittest.cpp;envgateway_unittest.cpp"
+    "main.cpp;gateway_test.cpp;pelagicontainlib_unittest.cpp;cgroupsgateway_unittest.cpp;filegateway_unittest.cpp;envgateway_unittest.cpp"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )
