@@ -133,7 +133,7 @@ public:
      * \param  type       SessionProxy or SystemProxy
      */
     DBusGateway(ProxyType type, const std::string &gatewayDir, const std::string &name);
-    ~DBusGateway();
+    virtual ~DBusGateway();
 
     virtual ReturnCode readConfigElement(const JSonElement &element) override;
 
@@ -194,6 +194,9 @@ private:
     // Keeps track of whether the dbus-proxy program has been started
     // this is used for deciding what teardown is necessary
     bool m_dbusProxyStarted;
+
+    virtual bool startDBusProxy(const std::vector<std::string> &commandVec, const std::vector<std::string> &envVec);
+    virtual bool testDBusConnection(const std::string &config);
 };
 
 #endif /* DBUSGATEWAY_H */
