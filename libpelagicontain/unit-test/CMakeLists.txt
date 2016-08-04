@@ -19,7 +19,17 @@ link_directories(
     ${PELAGICORE_UTILS_LIBRARY_DIRS}
 )
 
+set(TEST_FILES
+    main.cpp
+    gateway_test.cpp
+    pelagicontainlib_unittest.cpp
+    cgroupsgateway_unittest.cpp
+    filegateway_unittest.cpp
+    envgateway_unittest.cpp
+    dbusgateway_unittest.cpp
+)
+
 add_gtest_test(pelagicontainLibTest
-    "main.cpp;gateway_test.cpp;pelagicontainlib_unittest.cpp;cgroupsgateway_unittest.cpp;filegateway_unittest.cpp;envgateway_unittest.cpp"
+    "${TEST_FILES}"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )
