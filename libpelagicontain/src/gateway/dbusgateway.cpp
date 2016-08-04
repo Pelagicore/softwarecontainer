@@ -68,6 +68,7 @@ bool DBusGateway::activate()
     std::vector<std::string> commandVec = { "dbus-proxy"
                                           , m_socket
                                           , m_type == SessionProxy ? "session" : "system" };
+
     // Give the dbus-proxy access to the real dbus bus address.
     std::vector<std::string> envVec;
     if (char *envValue = getenv(variable.c_str())) {
@@ -81,26 +82,9 @@ bool DBusGateway::activate()
                    << " and no " + variable + " set in host environment, this could be a problem";
     }
 
-    // Spawn dbus-proxy with access to its stdin.
-    try {
-        Glib::spawn_async_with_pipes( "."
-                                    , commandVec
-                                    , envVec
-                                    , Glib::SPAWN_STDOUT_TO_DEV_NULL // Redirect stdout
-                                        | Glib::SPAWN_STDERR_TO_DEV_NULL // Redirect stderr
-                                        | Glib::SPAWN_SEARCH_PATH // Search $PATH
-                                        | Glib::SPAWN_DO_NOT_REAP_CHILD // Lets us do waitpid
-                                    , sigc::slot<void>() // child setup
-                                    , &m_pid
-                                    , &m_infp // stdin
-                                    );
-    } catch (const Glib::Error &ex) {
-        log_error() << "Failed to launch dbus-proxy";
+    if (!startDBusProxy(commandVec, envVec)) {
         return false;
     }
-
-    log_debug() << "Started dbus-proxy: " << m_pid;
-    m_dbusProxyStarted = true;
 
     // Write configuration
     json_t *jsonConfig = json_object();
@@ -108,6 +92,11 @@ bool DBusGateway::activate()
     json_object_set(jsonConfig, SYSTEM_CONFIG, m_systemBusConfig);
     std::string config = std::string(json_dumps(jsonConfig, JSON_COMPACT));
 
+    return testDBusConnection(config);
+}
+
+bool DBusGateway::testDBusConnection(const std::string &config)
+{
     log_debug() << "Sending config " << config;
     unsigned int count = sizeof(char) * config.length();
     ssize_t written = write(m_infp, config.c_str(), count);
@@ -133,6 +122,32 @@ bool DBusGateway::activate()
         log_error() << "Failed to write to STDIN of dbus-proxy!";
         return false;
     }
+}
+
+bool DBusGateway::startDBusProxy(const std::vector<std::string> &commandVec, const std::vector<std::string> &envVec)
+{
+    // Spawn dbus-proxy with access to its stdin.
+    try {
+        Glib::spawn_async_with_pipes( "."
+                                    , commandVec
+                                    , envVec
+                                    , Glib::SPAWN_STDOUT_TO_DEV_NULL // Redirect stdout
+                                        | Glib::SPAWN_STDERR_TO_DEV_NULL // Redirect stderr
+                                        | Glib::SPAWN_SEARCH_PATH // Search $PATH
+                                        | Glib::SPAWN_DO_NOT_REAP_CHILD // Lets us do waitpid
+                                    , sigc::slot<void>() // child setup
+                                    , &m_pid
+                                    , &m_infp // stdin
+                                    );
+    } catch (const Glib::Error &ex) {
+        log_error() << "Failed to launch dbus-proxy";
+        return false;
+    }
+
+    log_debug() << "Started dbus-proxy: " << m_pid;
+    m_dbusProxyStarted = true;
+
+    return true;
 }
 
 bool DBusGateway::isSocketCreated() const
