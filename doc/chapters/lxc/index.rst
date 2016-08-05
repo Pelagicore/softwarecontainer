@@ -46,7 +46,7 @@ Full example
 ^^^^^^^^^^^^
 This is the full template used.
 
-.. literalinclude:: ../../../libpelagicontain/lxc-pelagicontain.in
+.. literalinclude:: ../../../libsoftwarecontainer/lxc-softwarecontainer.in
     :language: bash
 
 LXC Configuration file
@@ -69,7 +69,7 @@ The static mount entries tells LXC to bind mount /usr, /lib, /usr/lib and /proc 
 
 Full example:
 ^^^^^^^^^^^^^
-.. literalinclude:: ../../../libpelagicontain/pelagicontain.conf
+.. literalinclude:: ../../../libsoftwarecontainer/softwarecontainer.conf
     :language: bash
 
 LXC API

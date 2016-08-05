@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: softwarecontainer
+Description: SoftwareContainer
+Version: @VERSION@
+Requires: lxc glibmm-2.4 ivi-logging dbus-c++-glib-1 jsonparser @ADDITIONAL_DEPENDENCIES@
+Libs: -lsoftwarecontainerLib -lsoftwarecontainer-agent-lib @DEVELOPMENT_LIBRARY_PATH@ -L${libdir} 
+Cflags: -std=c++11 @DEVELOPMENT_INCLUDE_PATH@ -I${includedir}/softwarecontainer -I${libdir}/softwarecontainer

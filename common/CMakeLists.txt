@@ -1,7 +1,7 @@
 
 set(HEADERS
-    pelagicontain-common.h
-    pelagicontain-log.h
+    softwarecontainer-common.h
+    softwarecontainer-log.h
 )
 
-install(FILES ${HEADERS} DESTINATION include/pelagicontain)
+install(FILES ${HEADERS} DESTINATION include/softwarecontainer)

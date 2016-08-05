@@ -1,0 +1,5 @@
+#pragma once
+
+static constexpr const char* PELAGICONTAIN_DEFAULT_CONFIG = "@SYS_CONFIG_DIR@/softwarecontainer.conf";
+
+static constexpr const char* PELAGICONTAIN_DEFAULT_WORKSPACE = "/tmp/container/";

@@ -4,15 +4,15 @@
 Introduction
 ============
 This test suite is used to measure timing values between different parts of
-pelagicontain, both inside the core application, and outside it. The suite sets
-up all the necessary components to interact with pelagicontain-agent, and issues
+softwarecontainer, both inside the core application, and outside it. The suite sets
+up all the necessary components to interact with softwarecontainer-agent, and issues
 commands to it using dbus.
 
 
 Goals
 =====
-* Run pelagicontain-agent and get profiling values from it into a log file
-* Run several apps inside containers using pelagicontain-agent and get profiling
+* Run softwarecontainer-agent and get profiling values from it into a log file
+* Run several apps inside containers using softwarecontainer-agent and get profiling
   values from these runs.
 * Terminate everything and get profiling values from this.
 
@@ -26,7 +26,7 @@ Each App is started using the ContainerApp objects which is basically just a
 convenience class wrapping up some dbus functionality.
 
 Once all apps have been spun up and are running, they are terminated and
-pelagicontain-agent is spun down as well as the Receiver.
+softwarecontainer-agent is spun down as well as the Receiver.
 
 All the output plus some extra data from the Receiver is logged to a physical file.
 When everything is finished, we go through the file to gather pertinent data, and do
@@ -68,13 +68,13 @@ class Receiver(threading.Thread):
 
     def handler(self, gob, gob2, gob3):
         self.log("pythonProfilingPoint dbusAvailable %.09f %s %s %s" % (time.time(), gob, gob2, gob3))
-        if gob == "com.pelagicore.PelagicontainAgent":
+        if gob == "com.pelagicore.SoftwareContainerAgent":
             """
-            Put pelagicontainStarted on the message queue, this is picked up by
-            other threads which should continue running when pelagicontain-agent
+            Put softwarecontainerStarted on the message queue, this is picked up by
+            other threads which should continue running when softwarecontainer-agent
             is ready to work.
             """
-            msgQueue.put("pelagicontainStarted")
+            msgQueue.put("softwarecontainerStarted")
 
     def run(self):
         import dbus.mainloop.glib
@@ -97,8 +97,8 @@ class ContainerApp():
     def __init__(self):
         self._path = os.path.dirname(os.path.realpath(__file__))
         self._bus = dbus.SystemBus()
-        self._pca_obj = self._bus.get_object("com.pelagicore.PelagicontainAgent", "/com/pelagicore/PelagicontainAgent")
-        self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.PelagicontainAgent")
+        self._pca_obj = self._bus.get_object("com.pelagicore.SoftwareContainerAgent", "/com/pelagicore/SoftwareContainerAgent")
+        self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.SoftwareContainerAgent")
 
     def createContainer(self):
         self.containerId = self._pca_iface.CreateContainer("prefix")
@@ -148,19 +148,19 @@ def runTest(numStarts=3, logFile=None):
 
         time.sleep(0.5)
 
-        print "Start pelagicontain-agent"
-        agent = subprocess.Popen("pelagicontain-agent", stdout=logFile, stderr=logFile)
+        print "Start softwarecontainer-agent"
+        agent = subprocess.Popen("softwarecontainer-agent", stdout=logFile, stderr=logFile)
 
         try:
             """
-            Wait for hte pelagicontainStarted message to appear on the
-            msgQueue, this is evoked when pelagicontain-agent is ready to
+            Wait for hte softwarecontainerStarted message to appear on the
+            msgQueue, this is evoked when softwarecontainer-agent is ready to
             perform work. If we timeout tear down what we have started so far.
             """
-            while msgQueue.get(block=True, timeout=5) != "pelagicontainStarted":
+            while msgQueue.get(block=True, timeout=5) != "softwarecontainerStarted":
                 pass
         except Queue.Empty as e:
-            print "Pelagicontain DBus interface not seen"
+            print "SoftwareContainer DBus interface not seen"
             agent.terminate()
             rec.terminate()
             sys.exit(-1)
@@ -168,16 +168,16 @@ def runTest(numStarts=3, logFile=None):
         if agent.poll() is not None:
             """
             Make sure we are not trying to perform anything against a dead
-            pelagicontain-agent
+            softwarecontainer-agent
             """
-            print "Pelagicontain-agent has died for some reason"
+            print "SoftwareContainer-agent has died for some reason"
             rec.terminate()
             sys.exit(-1)
 
         apps = []
         for app in range(0, numStarts):
             """
-            Start numStarts apps in pelagicontain.
+            Start numStarts apps in softwarecontainer.
             """
             print "Start app " + str(app)
             container = ContainerApp()

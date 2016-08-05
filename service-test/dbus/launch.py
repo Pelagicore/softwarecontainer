@@ -12,7 +12,7 @@ import unittest
 from pydbus import SessionBus
 from pelagipy import Receiver
 from pelagipy import ContainerApp
-from pelagipy import PelagicontainAgentHandler
+from pelagipy import SoftwareContainerAgentHandler
 
 class TestDBus(unittest.TestCase):
 
@@ -27,7 +27,7 @@ class TestDBus(unittest.TestCase):
             sp = var.split('=', 1)
             os.environ[sp[0]] = sp[1][:-1]
 
-        cls.agentHandler = PelagicontainAgentHandler(cls.logFile)
+        cls.agentHandler = SoftwareContainerAgentHandler(cls.logFile)
 
     def grepForDBusProxy(self):
         return os.system('ps -aux | grep dbus-proxy | grep -v "grep" | grep prefix-dbus- > /dev/null')

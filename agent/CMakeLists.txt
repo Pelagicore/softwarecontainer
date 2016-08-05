@@ -1,12 +1,12 @@
 
-generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain-agent.xml "PelagicontainAgent")
+generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
-add_executable(pelagicontain-agent
-    src/pelagicontainagent.cpp
-    PelagicontainAgent_dbuscpp_adaptor.h
+add_executable(softwarecontainer-agent
+    src/softwarecontaineragent.cpp
+    SoftwareContainerAgent_dbuscpp_adaptor.h
 )
 
-target_link_libraries( pelagicontain-agent
+target_link_libraries( softwarecontainer-agent
     ${PELAGICORE_UTILS_LIBRARIES}
     ${DEPENDENCIES_LIBRARIES}
     ${DBUS_LIBRARIES}
@@ -15,10 +15,10 @@ target_link_libraries( pelagicontain-agent
     ${GLIBMM_LIBRARIES}
     ${LXC_LIBRARIES}
     ${COMMON_DEPENDENCIES_LIBRARIES}
-    pelagicontainLib
+    softwarecontainerLib
 )
 
-install(TARGETS pelagicontain-agent DESTINATION bin)
+install(TARGETS softwarecontainer-agent DESTINATION bin)
 
 #
 # When we install config files, we check for if prefix is /usr, and we treat
@@ -33,7 +33,7 @@ if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
 else()
     set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/etc/dbus-1/system.d")
 endif()
-install(FILES pelagicontain-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR})
+install(FILES softwarecontainer-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR})
 
 # Install systemd configuration
 if (ENABLE_SYSTEMD)
@@ -44,6 +44,6 @@ if (ENABLE_SYSTEMD)
     else()
         set(SYSTEMD_CONFIGURATION_FILES_DIR "systemd/system")
     endif()
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain-agent.service.in  ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-agent.service)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.service.in  ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
 endif()

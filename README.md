@@ -1,13 +1,13 @@
-# Pelagicontain
+# SoftwareContainer
 
-This package includes the Pelagicontain component.
+This package includes the SoftwareContainer component.
 
 # Building
 
 To build the project documentation set -DENABLE_DOC=1 when running cmake.
 
-The project Doxygen docs contain info about Pelagicontain in general,
-how to run Pelagicontain and how to run the component tests.
+The project Doxygen docs contain info about SoftwareContainer in general,
+how to run SoftwareContainer and how to run the component tests.
 
 To run the unit-tests build the project with -DENABLE_COVERAGE=1 -DENABLE_TESTS=ON
 
@@ -20,7 +20,7 @@ To disable support for various gateways at compile time, set
 
 Examples are built using -DENABLE_EXAMPLES=1
 
-For a concrete example of building Pelagicontain and setting up dependencies,
+For a concrete example of building SoftwareContainer and setting up dependencies,
 see Vagrantfile in this repository.
 
 For an  example on how to build this code, please take a look at the
@@ -45,8 +45,8 @@ vagrant up
 
 The vagrant machine can then be inspected by running `vagrant ssh`
 
-This will create an environment for building pelagicontain, download all the
-requirements, build the ones necessary to build, build pelagicontain, run unit
+This will create an environment for building softwarecontainer, download all the
+requirements, build the ones necessary to build, build softwarecontainer, run unit
 tests and perform a clang code analysis run on the code. 
 
 # Dependencies
@@ -74,7 +74,7 @@ tests and perform a clang code analysis run on the code.
 
 # Running
 
-You normally only want to run the pelagicontain-agent, which requires root
+You normally only want to run the softwarecontainer-agent, which requires root
 privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
 
@@ -90,28 +90,28 @@ will be run using run-tests.sh.
 
 # TroubleShooting
 
-pelagicontain is not very complex to begin with but due to a lot of
+softwarecontainer is not very complex to begin with but due to a lot of
 dependencies there may be some issues with running it. Here are a few common
 pitfalls that might be good to be aware of.
 
 ## Note on PulseAudio
 
 In order to pulseaudio to work inside the container it needs to be running when
-the container is started. This is the case because when pelagicontainer sets
+the container is started. This is the case because when softwarecontainer sets
 up the container it will create a new socket to the pulseaudio server.
 
 ## DBus service files
 
-pelagicontain-agent requires dbus for it to work, this also means that you
-need to setup the DBus policies for the pelagicontain-agent to work. This is
+softwarecontainer-agent requires dbus for it to work, this also means that you
+need to setup the DBus policies for the softwarecontainer-agent to work. This is
 automatically done when you make install the project, but if you install to
 somewhere else than the root directory, the DBus policy configuration will wind
 up in <prefix>/etc/dbus-1/system.d/ instead of /etc/dbus-1/system.d. If you
 don't have the correctly setup configuration, you will get an error along these
 lines:
 
-> MAIN [Warning] Can't own the namecom.pelagicore.PelagicontainAgent on the system
-> bus => use session bus instead         | pelagicontainagent.cpp:337
+> MAIN [Warning] Can't own the namecom.pelagicore.SoftwareContainerAgent on the system
+> bus => use session bus instead         | softwarecontaineragent.cpp:337
 
 # License and Copyright
 

@@ -1,1 +1,1 @@
-Source code for the pelagicontain-agent.
+Source code for the softwarecontainer-agent.
