@@ -2,9 +2,9 @@
 #include <string>
 #include <fcntl.h>
 #include <fstream>
-#include "pelagicontain-common.h"
+#include "softwarecontainer-common.h"
 
-namespace pelagicontain {
+namespace softwarecontainer {
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 

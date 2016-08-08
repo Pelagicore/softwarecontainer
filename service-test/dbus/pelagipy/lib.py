@@ -28,13 +28,13 @@ class Receiver(threading.Thread):
             print(msg)
 
     def handler(self, gob, gob2, gob3):
-        if gob == "com.pelagicore.PelagicontainAgent":
+        if gob == "com.pelagicore.SoftwareContainerAgent":
             """
-            Put pelagicontainStarted on the message queue, this is picked up by
-            other threads which should continue running when pelagicontain-agent
+            Put softwarecontainerStarted on the message queue, this is picked up by
+            other threads which should continue running when softwarecontainer-agent
             is ready to work.
             """
-            self.msgQueue.put("pelagicontainStarted")
+            self.msgQueue.put("softwarecontainerStarted")
 
     def run(self):
         import dbus.mainloop.glib
@@ -58,9 +58,9 @@ class ContainerApp():
     def __init__(self):
         self._path = os.path.dirname(os.path.realpath(__file__))
         self._bus = dbus.SystemBus()
-        self._pca_obj = self._bus.get_object("com.pelagicore.PelagicontainAgent",
-                                             "/com/pelagicore/PelagicontainAgent")
-        self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.PelagicontainAgent")
+        self._pca_obj = self._bus.get_object("com.pelagicore.SoftwareContainerAgent",
+                                             "/com/pelagicore/SoftwareContainerAgent")
+        self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.SoftwareContainerAgent")
         self.__bind_dir = None
         self.containerId = None
 
@@ -109,35 +109,35 @@ class ContainerApp():
 
 
 
-class PelagicontainAgentHandler():
+class SoftwareContainerAgentHandler():
 
     def __init__(self, logFile=subprocess.STDOUT):
         self.rec = Receiver(logFile=logFile)
         self.rec.start()
 
-        """ Starting pelagicontain-agent """
-        self.agent = subprocess.Popen("pelagicontain-agent", stdout=logFile, stderr=logFile)
+        """ Starting softwarecontainer-agent """
+        self.agent = subprocess.Popen("softwarecontainer-agent", stdout=logFile, stderr=logFile)
 
         try:
             """
-            Wait for the pelagicontainStarted message to appear on the
-            msgQueue, this is evoked when pelagicontain-agent is ready to
+            Wait for the softwarecontainerStarted message to appear on the
+            msgQueue, this is evoked when softwarecontainer-agent is ready to
             perform work. If we timeout tear down what we have started so far.
             """
-            while self.rec.msgQueue.get(block=True, timeout=5) != "pelagicontainStarted":
+            while self.rec.msgQueue.get(block=True, timeout=5) != "softwarecontainerStarted":
                 pass
         except Queue.Empty as e:
             self.agent.terminate()
             self.rec.terminate()
-            raise Exception("Pelagicontain DBus interface not seen", e)
+            raise Exception("SoftwareContainer DBus interface not seen", e)
 
         if self.agent.poll() is not None:
             """
             Make sure we are not trying to perform anything against a dead
-            pelagicontain-agent
+            softwarecontainer-agent
             """
             self.rec.terminate()
-            raise Exception("Pelagicontain-agent has died for some reason")
+            raise Exception("SoftwareContainer-agent has died for some reason")
 
     def terminate(self):
         self.agent.terminate()

@@ -1,1 +1,1 @@
-Various scripts used by pelagicontain.
+Various scripts used by softwarecontainer.

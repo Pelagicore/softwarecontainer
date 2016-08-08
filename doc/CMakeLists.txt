@@ -68,9 +68,9 @@ set_doxygen_tag("INPUT" "${PROJECT_SOURCE_DIR}/doc
                          ${PROJECT_SOURCE_DIR}/agent
                          ${PROJECT_SOURCE_DIR}/common
                          ${PROJECT_SOURCE_DIR}/examples
-                         ${PROJECT_SOURCE_DIR}/libpelagicontain 
-                         ${PROJECT_SOURCE_DIR}/libpelagicontain-agent"
+                         ${PROJECT_SOURCE_DIR}/libsoftwarecontainer 
+                         ${PROJECT_SOURCE_DIR}/libsoftwarecontainer-agent"
 )
 set_doxygen_tag("EXCLUDE_PATTERNS" "*/unit-test/* */component-test/*")
-add_doxygen_doc(pelagicontain)
+add_doxygen_doc(softwarecontainer)
 

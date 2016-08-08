@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(pelagicontain)
+project(softwarecontainer)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake_modules)
 
@@ -62,10 +62,10 @@ message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
 include_directories(
     common
-    libpelagicontain/src
-    libpelagicontain/include
+    libsoftwarecontainer/src
+    libsoftwarecontainer/include
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/libpelagicontain/src
+    ${CMAKE_CURRENT_BINARY_DIR}/libsoftwarecontainer/src
 )
 
 option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
@@ -84,28 +84,28 @@ option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
 
 add_coverage()
 
-install(FILES scripts/setup_pelagicontain.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install(FILES scripts/setup_softwarecontainer.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 
-configure_file(pelagicontain.pc.in pelagicontain.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+configure_file(softwarecontainer.pc.in softwarecontainer.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
-set(DEVELOPMENT_INCLUDE_PATH " -I${CMAKE_CURRENT_SOURCE_DIR}/agent/lib -I${CMAKE_CURRENT_SOURCE_DIR}/clientLib -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/pelagicontain/src -I${CMAKE_CURRENT_SOURCE_DIR}/common #")
+set(DEVELOPMENT_INCLUDE_PATH " -I${CMAKE_CURRENT_SOURCE_DIR}/agent/lib -I${CMAKE_CURRENT_SOURCE_DIR}/clientLib -I${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer/src -I${CMAKE_CURRENT_SOURCE_DIR}/common #")
 set(DEVELOPMENT_LIBRARY_PATH " -L${CMAKE_CURRENT_BINARY_DIR}/clientLib -L${CMAKE_CURRENT_BINARY_DIR}/lib #" )
-configure_file(pelagicontain.pc.in pelagicontain-uninstalled.pc @ONLY)
+configure_file(softwarecontainer.pc.in softwarecontainer-uninstalled.pc @ONLY)
 if(INSTALL_PKGCONFIG_UNINSTALLED_FILE)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-uninstalled.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-uninstalled.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 endif()
 
-configure_file(pelagicontain-config.h.in pelagicontain-config.h @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pelagicontain-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pelagicontain)
+configure_file(softwarecontainer-config.h.in softwarecontainer-config.h @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/softwarecontainer)
 
 add_subdirectory(common)
-add_subdirectory(libpelagicontain)
+add_subdirectory(libsoftwarecontainer)
 
 add_subdirectory(agent)
-add_subdirectory(libpelagicontain-agent)
+add_subdirectory(libsoftwarecontainer-agent)
 
 option (ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 if (ENABLE_EXAMPLES)

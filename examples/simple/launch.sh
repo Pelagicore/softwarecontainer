@@ -38,28 +38,28 @@ eval `dbus-launch --sh-syntax`
 env
 
 # Launch a new agent
-pelagicontain-agent &
+softwarecontainer-agent &
 AGENTPID="$!"
 
 # Let the agent start up
 sleep 2
 
-export PCCMD="dbus-send --${BUS} --print-reply --dest=com.pelagicore.PelagicontainAgent /com/pelagicore/PelagicontainAgent"
+export PCCMD="dbus-send --${BUS} --print-reply --dest=com.pelagicore.SoftwareContainerAgent /com/pelagicore/SoftwareContainerAgent"
 
 # Introspect the agent
 $PCCMD org.freedesktop.DBus.Introspectable.Introspect
 
 # Ping the agent
-$PCCMD com.pelagicore.PelagicontainAgent.Ping
+$PCCMD com.pelagicore.SoftwareContainerAgent.Ping
 
 # Create a new container
-$PCCMD com.pelagicore.PelagicontainAgent.CreateContainer string:prefix
+$PCCMD com.pelagicore.SoftwareContainerAgent.CreateContainer string:prefix
 
 # Expose a directory to the container
-$PCCMD com.pelagicore.PelagicontainAgent.BindMountFolderInContainer uint32:0 string:${SCRIPTPATH} string:app boolean:true
+$PCCMD com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer uint32:0 string:${SCRIPTPATH} string:app boolean:true
 
 # Run the simple example
-$PCCMD com.pelagicore.PelagicontainAgent.LaunchCommand uint32:0 uint32:0 string:/gateways/app/simple string:/gateways/app/ string:/tmp/stdout dict:string:string:""
+$PCCMD com.pelagicore.SoftwareContainerAgent.LaunchCommand uint32:0 uint32:0 string:/gateways/app/simple string:/gateways/app/ string:/tmp/stdout dict:string:string:""
 
 # Let the example run for a while
 sleep 30

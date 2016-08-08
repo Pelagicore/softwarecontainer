@@ -1,1 +1,1 @@
-Documentation for pelagicontain.
+Documentation for softwarecontainer.
