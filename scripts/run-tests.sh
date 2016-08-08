@@ -40,9 +40,6 @@ echo "XDG_RUNTIME_DIR is $XDG_RUNTIME_DIR"
 weston --backend=headless-backend.so &
 wpid=$!
 
-# BUG: The first time these tests are run after reboot/restart, it crashes. This is a workaraound that should be removed
-./libsoftwarecontainer/unit-test/softwarecontainerLibTest
-
 ./libsoftwarecontainer/unit-test/softwarecontainerLibTest \
     --gtest_filter=-"*FileGatewayReadOnly" \
     --gtest_output=xml
