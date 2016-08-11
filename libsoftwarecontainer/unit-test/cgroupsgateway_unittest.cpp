@@ -11,26 +11,24 @@ class CgroupsGatewayTest : public GatewayTest
 
 public:
     CgroupsGatewayTest() { }
+    CgroupsGateway *gw;
 
     void SetUp() override
     {
-        gw = std::unique_ptr<Gateway>(new CgroupsGateway());
+        gw = new CgroupsGateway();
         GatewayTest::SetUp();
     }
 };
 
-
-
-
 TEST_F(CgroupsGatewayTest, TestActivateWithNoConf) {
 
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     ASSERT_FALSE(gw->activate());
 
 }
 
 TEST_F(CgroupsGatewayTest, TestActivateWithEmptyValidJSONConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[]";
 
     ASSERT_TRUE(gw->setConfig(config));
@@ -50,7 +48,7 @@ TEST_F(CgroupsGatewayTest, TestActivateWithNoContainer) {
 }
 
 TEST_F(CgroupsGatewayTest, TestActivateWithValidConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                                   {\
                                     \"setting\": \"cpu.shares\",\
@@ -64,7 +62,7 @@ TEST_F(CgroupsGatewayTest, TestActivateWithValidConf) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithInvalidJSON) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
 
     std::string config = "hasdlaskndldn";
     ASSERT_FALSE(gw->setConfig(config));
@@ -72,7 +70,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithInvalidJSON) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithNoneJSONObjects) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  123,\
               ]";
@@ -81,7 +79,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithNoneJSONObjects) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfBefore) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  123,\
                  {\
@@ -94,7 +92,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfBefore) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfAfter) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  {\
                    \"setting\": \"cpu.shares\",\
@@ -107,7 +105,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithPartiallyValidConfAfter) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingMissing) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  {\
                    \"value\": \"256\"\
@@ -118,7 +116,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingMissing) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingNotString) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  {\
                    \"setting\": [\"a\", \"b\"],\
@@ -130,7 +128,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithSettingNotString) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithValueMissing) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  {\
                    \"setting\": \"cpu.shares\",\
@@ -141,7 +139,7 @@ TEST_F(CgroupsGatewayTest, TestSetConfigWithValueMissing) {
 }
 
 TEST_F(CgroupsGatewayTest, TestSetConfigWithValueNotString) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                  {\
                    \"setting\": \"cpu.shares\",\

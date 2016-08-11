@@ -217,7 +217,7 @@ public:
         profilefunction("setGatewayConfigsFunction");
         SoftwareContainerLib *container = nullptr;
         if (checkContainer(containerID, container)) {
-            container->getSoftwareContainer().updateGatewayConfiguration(configs);
+            container->updateGatewayConfiguration(configs);
         }
     }
 

@@ -41,12 +41,11 @@ SoftwareContainerLib::SoftwareContainerLib(SoftwareContainerWorkspace &workspace
                , m_workspace.m_containerRoot
                , m_workspace.m_containerShutdownTimeout)
 {
-    m_softwarecontainer.setMainLoopContext(m_ml);
+    m_containerState = ContainerState::CREATED;
 }
 
 SoftwareContainerLib::~SoftwareContainerLib()
 {
-    shutdown();
 }
 
 void SoftwareContainerLib::setContainerIDPrefix(const std::string &name)
@@ -105,21 +104,26 @@ ReturnCode SoftwareContainerWorkspace::checkWorkspace()
 
 ReturnCode SoftwareContainerLib::preload()
 {
+    log_debug() << "Initializing container";
     if (isError(m_container.initialize())) {
         log_error() << "Could not setup container for preloading";
         return ReturnCode::FAILURE;
     }
 
-    m_pcPid = m_softwarecontainer.preload(m_container);
-
-    if (m_pcPid != INVALID_PID) {
-        log_debug() << "Started container with PID " << m_pcPid;
-    } else {
-        // Fatal failure, only do necessary cleanup
-        log_error() << "Could not start container, will shut down";
+    log_debug() << "Creating container";
+    if (isError(m_container.create())) {
         return ReturnCode::FAILURE;
     }
 
+    log_debug() << "Starting container";
+    m_pcPid = m_container.start();
+    if (m_pcPid == INVALID_PID) {
+        log_error() << "Could not start the container during preload";
+        return ReturnCode::FAILURE;
+    }
+
+    log_debug() << "Started container with PID " << m_pcPid;
+    m_containerState.setValueNotify(ContainerState::PRELOADED);
     return ReturnCode::SUCCESS;
 }
 
@@ -127,12 +131,12 @@ ReturnCode SoftwareContainerLib::init()
 {
     validateContainerID();
 
-    if (m_ml->gobj() == nullptr) {
+    if (m_mainLoopContext->gobj() == nullptr) {
         log_error() << "Main loop context must be set first !";
         return ReturnCode::FAILURE;
     }
 
-    if (m_softwarecontainer.getContainerState() != ContainerState::PRELOADED) {
+    if (getContainerState() != ContainerState::PRELOADED) {
         if (isError(preload())) {
             log_error() << "Failed to preload container";
             return ReturnCode::FAILURE;
@@ -140,40 +144,29 @@ ReturnCode SoftwareContainerLib::init()
     }
 
 #ifdef ENABLE_NETWORKGATEWAY
-    m_gateways.push_back(std::unique_ptr<Gateway>(new NetworkGateway()));
+    addGateway(new NetworkGateway());
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-    m_gateways.push_back(std::unique_ptr<Gateway>(new PulseGateway()));
+    addGateway(new PulseGateway());
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-    m_gateways.push_back(std::unique_ptr<Gateway>(new DeviceNodeGateway()));
+    addGateway(new DeviceNodeGateway());
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-    m_gateways.push_back(std::unique_ptr<Gateway>(new DBusGateway(
-                        DBusGateway::SessionProxy,
-                        getGatewayDir(),
-                        getContainerID())));
-
-    m_gateways.push_back(std::unique_ptr<Gateway>(new DBusGateway(
-                        DBusGateway::SystemProxy,
-                        getGatewayDir(),
-                        getContainerID())));
+    addGateway(new DBusGateway( DBusGateway::SessionProxy, getGatewayDir(), getContainerID()));
+    addGateway(new DBusGateway( DBusGateway::SystemProxy, getGatewayDir(), getContainerID()));
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
-    m_gateways.push_back(std::unique_ptr<Gateway>(new CgroupsGateway()));
+    addGateway(new CgroupsGateway());
 #endif
 
-    m_gateways.push_back(std::unique_ptr<Gateway>(new WaylandGateway()));
-    m_gateways.push_back(std::unique_ptr<Gateway>(new FileGateway()));
-    m_gateways.push_back(std::unique_ptr<Gateway>(new EnvironmentGateway()));
-
-    for (auto &gateway : m_gateways) {
-        m_softwarecontainer.addGateway(*gateway);
-    }
+    addGateway(new WaylandGateway());
+    addGateway(new FileGateway());
+    addGateway(new EnvironmentGateway());
 
     // TODO: When this is used together with spawning using lxc.init, we get
     //       glib errors about ECHILD
@@ -181,14 +174,21 @@ ReturnCode SoftwareContainerLib::init()
     // connect the watcher if the spawning went well.
     if (m_pcPid != INVALID_PID) {
         addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
-                        m_softwarecontainer.shutdownContainer();
-                    }, m_ml);
+            shutdown(m_workspace.m_containerShutdownTimeout);
+        }, m_mainLoopContext);
     } else {
-        log_error() << "SoftwareContainer pid is 0, this is an error!";
+        log_error() << "SoftwareContainer pid is " << INVALID_PID << ", this is an error!";
         return ReturnCode::FAILURE;
     }
+
     m_initialized = true;
     return ReturnCode::SUCCESS;
+}
+
+void SoftwareContainerLib::addGateway(Gateway *gateway)
+{
+    gateway->setContainer(m_container);
+    m_gateways.push_back(std::unique_ptr<Gateway>(gateway));
 }
 
 void SoftwareContainerLib::openTerminal(const std::string &terminalCommand) const
@@ -196,6 +196,89 @@ void SoftwareContainerLib::openTerminal(const std::string &terminalCommand) cons
     std::string command = logging::StringBuilder() << "lxc-attach -n " << m_container.id() << " " << terminalCommand;
     log_info() << command;
     system(command.c_str());
+}
+
+
+pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
+{
+    /*
+    if (m_mainLoopContext == nullptr) {
+        log_error() << "Main loop context needs to be set before calling launchCommand";
+        return INVALID_PID;
+    }
+    */
+
+    log_debug() << "launchCommand called with commandLine: " << commandLine;
+    pid_t pid = m_container.attach(commandLine);
+    if (pid == INVALID_PID) {
+        log_error() << "Attach returned invalid pid, launchCommand fails";
+        return INVALID_PID;
+    }
+
+    // TODO: Why do we shutdown as soon as one process exits?
+    addProcessListener(m_connections, pid, [&](pid_t pid, int returnCode) {
+        shutdown();
+    }, m_mainLoopContext);
+
+    return pid;
+}
+
+void SoftwareContainerLib::updateGatewayConfiguration(const GatewayConfiguration &configs)
+{
+    log_debug() << "updateGatewayConfiguration called" << configs;
+    setGatewayConfigs(configs);
+}
+
+void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs)
+{
+    // Go through the received configs and see if they match any of
+    // the running gateways, if so: set their respective config
+
+    for (auto &gateway : m_gateways) {
+        std::string gatewayId = gateway->id();
+
+        if (configs.count(gatewayId) != 0) {
+            std::string config = configs.at(gatewayId);
+            gateway->setConfig(config);
+        }
+    }
+
+    for (auto &gateway : m_gateways) {
+        gateway->activate();
+    }
+
+    m_containerState.setValueNotify(ContainerState::READY);
+
+}
+
+ReturnCode SoftwareContainerLib::shutdown(unsigned int timeout)
+{
+    log_debug() << "shutdown called"; // << logging::getStackTrace();
+    if(isError(shutdownGateways())) {
+        log_error() << "Could not shut down all gateways cleanly, check the log";
+    }
+
+    if(isError(m_container.destroy(timeout))) {
+        log_error() << "Could not destroy the container during shutdown";
+        return ReturnCode::FAILURE;
+    }
+
+    m_containerState.setValueNotify(ContainerState::TERMINATED);
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode SoftwareContainerLib::shutdownGateways()
+{
+    ReturnCode status = ReturnCode::SUCCESS;
+    for (auto &gateway : m_gateways) {
+        if (!gateway->teardown()) {
+            log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
+            status = ReturnCode::FAILURE;
+        }
+    }
+
+    m_gateways.clear();
+    return status;
 }
 
 }

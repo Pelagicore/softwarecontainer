@@ -1,7 +1,6 @@
 
 set(HEADERS
     libsoftwarecontainer.h
-    softwarecontainer.h
     container.h
     gateway.h
 )

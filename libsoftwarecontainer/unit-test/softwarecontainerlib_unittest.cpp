@@ -63,7 +63,7 @@ public:
 
     void setGatewayConfigs(const GatewayConfiguration &config)
     {
-        getLib().getSoftwareContainer().setGatewayConfigs(config);
+        getLib().setGatewayConfigs(config);
     }
 
     Glib::RefPtr<Glib::MainContext> getMainContext()

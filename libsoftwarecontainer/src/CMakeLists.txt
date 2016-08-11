@@ -37,7 +37,6 @@ gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.cpp)
 add_library(softwarecontainerLib SHARED 
     container.cpp
     generators.cpp
-    softwarecontainer.cpp
     libsoftwarecontainer.cpp
     gateway/gateway.cpp
     ${GATEWAY_SOURCES}
