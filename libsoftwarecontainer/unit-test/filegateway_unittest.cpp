@@ -3,10 +3,10 @@
  *   All rights reserved.
  */
 
-#include "gateway_test.h"
+#include "softwarecontainer_test.h"
 #include "gateway/filegateway.h"
 
-class FileGatewayTest : public GatewayTest
+class FileGatewayTest : public SoftwareContainerGatewayTest
 {
 
 public:
@@ -16,7 +16,7 @@ public:
     void SetUp() override
     {
         gw = new FileGateway();
-        GatewayTest::SetUp();
+        SoftwareContainerLibTest::SetUp();
 
         // Create file
         std::string cmd = "echo " + FILE_CONTENT + " > " + FILE_PATH;
@@ -25,7 +25,7 @@ public:
 
     void TearDown() override
     {
-        GatewayTest::TearDown();
+        SoftwareContainerLibTest::TearDown();
 
         // Remove file
         std::string cmd = "rm " + FILE_PATH;

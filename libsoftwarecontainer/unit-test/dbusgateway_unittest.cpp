@@ -2,7 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#include "gateway_test.h"
+#include "softwarecontainer_test.h"
 #include "gateway/dbusgateway.h"
 #include "softwarecontainer-common.h"
 
@@ -25,7 +25,7 @@ using::testing::_;
 using::testing::Return;
 using::testing::NiceMock;
 
-class DBusGatewayTest : public GatewayTest
+class DBusGatewayTest : public SoftwareContainerGatewayTest
 {
 public:
     MockDBusGateway *gw;
@@ -33,7 +33,7 @@ public:
     void SetUp() override
     {
         gw = new MockDBusGateway(DBusGateway::SessionProxy, m_gatewayDir, m_containerName);
-        GatewayTest::SetUp();
+        SoftwareContainerLibTest::SetUp();
     }
 
     const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/";

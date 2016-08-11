@@ -2,19 +2,18 @@
  *   Copyright (C) 2016 Pelagicore AB
  *   All rights reserved.
  */
-#include "gateway_test.h"
+#include "softwarecontainer_test.h"
 #include "gateway/envgateway.h"
-class EnvironmentGatewayTest : public GatewayTest
+class EnvironmentGatewayTest : public SoftwareContainerGatewayTest
 {
 
 public:
-    EnvironmentGatewayTest(): GatewayTest(){ }
     EnvironmentGateway *gw;
 
     void SetUp() override
     {
         gw = new EnvironmentGateway();
-        GatewayTest::SetUp();
+        SoftwareContainerLibTest::SetUp();
     }
 
     const std::string NAME  = "Environment_variable_test_name";

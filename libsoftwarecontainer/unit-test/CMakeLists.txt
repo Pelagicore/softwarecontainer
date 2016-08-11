@@ -21,7 +21,7 @@ link_directories(
 
 set(TEST_FILES
     main.cpp
-    gateway_test.cpp
+    softwarecontainer_test.cpp
     softwarecontainerlib_unittest.cpp
     cgroupsgateway_unittest.cpp
     filegateway_unittest.cpp

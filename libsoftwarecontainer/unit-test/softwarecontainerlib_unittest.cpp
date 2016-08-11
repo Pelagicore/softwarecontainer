@@ -3,17 +3,7 @@
  *   All rights reserved.
  */
 
-#include <thread>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <stdlib.h>
-
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
-
-#include "generators.h"
-#include "libsoftwarecontainer.h"
+#include "softwarecontainer_test.h"
 
 #include "gateway/dbusgateway.h"
 #include "gateway/waylandgateway.h"
@@ -24,42 +14,10 @@
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
-class SoftwareContainerApp :
-    public::testing::Test
+class SoftwareContainerApp : public SoftwareContainerLibTest
 {
 
 public:
-    SoftwareContainerApp()
-    {
-    }
-
-    void SetUp() override
-    {
-        ::testing::Test::SetUp();
-        workspace = std::unique_ptr<SoftwareContainerWorkspace>(new SoftwareContainerWorkspace());
-        lib = std::unique_ptr<SoftwareContainerLib>(new SoftwareContainerLib(*workspace));
-        lib->setContainerIDPrefix("Test-");
-        lib->setMainLoopContext(m_context);
-        ASSERT_TRUE(isSuccess(lib->init()));
-    }
-
-    void TearDown() override
-    {
-        ::testing::Test::TearDown();  // Remember to tear down the base fixture after cleaning up FooTest!
-        lib.reset();
-        workspace.reset();
-    }
-
-    void run()
-    {
-        m_ml = Glib::MainLoop::create(m_context);
-        m_ml->run();
-    }
-
-    void exit()
-    {
-        m_ml->quit();
-    }
 
     void setGatewayConfigs(const GatewayConfiguration &config)
     {
@@ -75,11 +33,6 @@ public:
     {
         return *lib;
     }
-
-    Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    Glib::RefPtr<Glib::MainLoop> m_ml;
-    std::unique_ptr<SoftwareContainerWorkspace> workspace;
-    std::unique_ptr<SoftwareContainerLib> lib;
 };
 
 

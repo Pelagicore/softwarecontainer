@@ -3,14 +3,25 @@
  * All rights reserved.
  */
 
-#include "gateway_test.h"
+#include "softwarecontainer_test.h"
 
-void GatewayTest::givenContainerIsSet(Gateway *gw)
+void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
 {
     lib->addGateway(gw);
 }
 
-void GatewayTest::SetUp()
+void SoftwareContainerLibTest::run()
+{
+    m_ml = Glib::MainLoop::create(m_context);
+    m_ml->run();
+}
+
+void SoftwareContainerLibTest::exit()
+{
+    m_ml->quit();
+}
+
+void SoftwareContainerLibTest::SetUp()
 {
     ::testing::Test::SetUp();
     workspace = std::unique_ptr<SoftwareContainerWorkspace>(new SoftwareContainerWorkspace());
@@ -20,7 +31,7 @@ void GatewayTest::SetUp()
     ASSERT_TRUE(isSuccess(lib->init()));
 }
 
-void GatewayTest::TearDown()
+void SoftwareContainerLibTest::TearDown()
 {
     ::testing::Test::TearDown();
     lib.reset();
