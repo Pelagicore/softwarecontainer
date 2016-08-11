@@ -54,25 +54,6 @@ Container::Container(const std::string &id, const std::string &name, const std::
     init_lxc();
 }
 
-ReturnCode Container::initialize()
-{
-    if (m_state < ContainerState::PREPARED) {
-        std::string gatewayDir = gatewaysDir();
-        if (isError(createDirectory(gatewayDir))) {
-            log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
-            return ReturnCode::FAILURE;
-        }
-
-        if (isError(createSharedMountPoint(gatewayDir))) {
-            log_error() << "Could not create shared mount point for dir: " << gatewayDir;
-            return ReturnCode::FAILURE;
-        }
-
-        m_state = ContainerState::PREPARED;
-    }
-    return ReturnCode::SUCCESS;
-}
-
 Container::~Container()
 {
     if (m_container != nullptr) {
@@ -90,6 +71,25 @@ Container::~Container()
         lxc_container_put(m_container);
         m_container = nullptr;
     }
+}
+
+ReturnCode Container::initialize()
+{
+    if (m_state < ContainerState::PREPARED) {
+        std::string gatewayDir = gatewaysDir();
+        if (isError(createDirectory(gatewayDir))) {
+            log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
+            return ReturnCode::FAILURE;
+        }
+
+        if (isError(createSharedMountPoint(gatewayDir))) {
+            log_error() << "Could not create shared mount point for dir: " << gatewayDir;
+            return ReturnCode::FAILURE;
+        }
+
+        m_state = ContainerState::PREPARED;
+    }
+    return ReturnCode::SUCCESS;
 }
 
 std::string Container::toString()
@@ -168,6 +168,21 @@ ReturnCode Container::create()
     }
 
     return status;
+}
+
+ReturnCode Container::ensureContainerRunning()
+{
+    if (m_state < ContainerState::STARTED) {
+        log_error() << "Containter is not in state STARTED, state is " << ((int)m_state);
+        log_error() << logging::getStackTrace();
+        return ReturnCode::FAILURE;
+    }
+
+    if (!m_container->is_running(m_container)) {
+        return waitForState(LXCContainerState::RUNNING);
+    }
+
+    return ReturnCode::SUCCESS;
 }
 
 ReturnCode Container::waitForState(LXCContainerState state, int timeout)
@@ -588,4 +603,24 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
     FileToolkitWithUndo::writeToFile(path, s);
 
     return ReturnCode::SUCCESS;
+}
+
+const char *Container::id() const
+{
+    return m_id.c_str();
+}
+
+std::string Container::gatewaysDirInContainer() const
+{
+    return GATEWAYS_PATH;
+}
+
+std::string Container::gatewaysDir() const
+{
+    return m_containerRoot + "/" + id() + GATEWAYS_PATH;
+}
+
+const std::string &Container::rootFS() const
+{
+    return m_rootFSPath;
 }
