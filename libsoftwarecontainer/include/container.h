@@ -105,18 +105,36 @@ public:
     }
 
     /*!
-     * Calls the lxc-destroy command.
+     * Calls shutdown, and then destroys the container
      */
-    void destroy();
-    void destroy(unsigned int timeout);
+    ReturnCode destroy();
+    ReturnCode destroy(unsigned int timeout);
 
-    void stop();
+    /*
+     * Calls shutdown on the lxc container
+     */
+    ReturnCode shutdown();
+    ReturnCode shutdown(unsigned int timeout);
 
-    void waitForState(LXCContainerState state, int timeout = 20);
+    /*
+     * Calls lxc-stop (force stop)
+     */
+    ReturnCode stop();
 
-    void ensureContainerRunning()
+    ReturnCode waitForState(LXCContainerState state, int timeout = 20);
+    ReturnCode ensureContainerRunning()
     {
-        waitForState(LXCContainerState::RUNNING);
+        if (m_state < ContainerState::STARTED) {
+            log_error() << "Containter is not in state STARTED, state is " << ((int)m_state);
+            log_error() << logging::getStackTrace();
+            return ReturnCode::FAILURE;
+        }
+
+        if (!m_container->is_running(m_container)) {
+            return waitForState(LXCContainerState::RUNNING);
+        }
+
+        return ReturnCode::SUCCESS;
     }
 
     /*!
@@ -129,11 +147,6 @@ public:
      * \return true or false
      */
     ReturnCode initialize();
-
-    bool isInitialized()
-    {
-        return m_initialized;
-    }
 
     std::string toString();
 
@@ -152,15 +165,10 @@ public:
         return m_containerRoot + "/" + id() + GATEWAYS_PATH;
     }
 
-    const std::string &root() const
-    {
-        return m_containerRoot;
-    }
-
     const std::string &rootFS() const
     {
         return m_rootFSPath;
-    };
+    }
 
     ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
 
@@ -186,16 +194,25 @@ private:
      */
     const std::string &m_name;
 
+    /*
+     * Pointer to the LXC container
+     */
     struct lxc_container *m_container = nullptr;
 
     std::string m_containerRoot;
 
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
-    bool m_initialized = false;
-    bool m_created = false;
-
     int m_shutdownTimeout = 2;
+
+    enum class ContainerState : unsigned int {
+        DEFAULT = 0,
+        PREPARED = 1,
+        DESTROYED = 2,
+        CREATED = 3,
+        STARTED = 4,
+    };
+    ContainerState m_state = ContainerState::DEFAULT;
 };
 
 #endif //CONTAINER_H

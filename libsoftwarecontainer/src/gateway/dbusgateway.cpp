@@ -169,6 +169,7 @@ bool DBusGateway::teardown()
     bool success = true;
     if (!m_dbusProxyStarted) {
         log_warn() << "Trying to tear down dbus-gateway that has not been started";
+        return false;
     }
 
     if (m_pid != INVALID_PID) {
@@ -179,9 +180,7 @@ bool DBusGateway::teardown()
          * is set. It seems dbus-proxy does not react to SIGTERM.
          */
         kill(m_pid, SIGKILL);
-        log_debug() << "Waiting for dbus-proxy pid to exit";
         waitpid(m_pid, nullptr, 0); // Wait until it exits
-        log_debug() << "Calling Glib::spawn_close_pid";
         Glib::spawn_close_pid(m_pid);
     } else {
         log_debug() << "dbus-proxy pid not set or already dead: " << m_pid;

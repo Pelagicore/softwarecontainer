@@ -5,9 +5,9 @@
 
 #include "gateway_test.h"
 
-void GatewayTest::givenContainerIsSet()
+void GatewayTest::givenContainerIsSet(Gateway *gw)
 {
-    lib->getSoftwareContainer().addGateway(*gw);
+    lib->addGateway(gw);
 }
 
 void GatewayTest::SetUp()
@@ -18,13 +18,11 @@ void GatewayTest::SetUp()
     lib->setContainerIDPrefix("Test-");
     lib->setMainLoopContext(m_context);
     ASSERT_TRUE(isSuccess(lib->init()));
-    ASSERT_TRUE(gw != nullptr); // Ensure that gw is initialized
 }
 
 void GatewayTest::TearDown()
 {
     ::testing::Test::TearDown();
     lib.reset();
-    gw.reset();
     workspace.reset();
 }

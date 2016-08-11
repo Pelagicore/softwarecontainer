@@ -28,17 +28,12 @@ using::testing::NiceMock;
 class DBusGatewayTest : public GatewayTest
 {
 public:
+    MockDBusGateway *gw;
 
     void SetUp() override
     {
-        gw = std::unique_ptr<MockDBusGateway>(new MockDBusGateway(DBusGateway::SessionProxy,
-                                          m_gatewayDir, m_containerName));
+        gw = new MockDBusGateway(DBusGateway::SessionProxy, m_gatewayDir, m_containerName);
         GatewayTest::SetUp();
-    }
-
-    void TearDown() override
-    {
-        GatewayTest::TearDown();
     }
 
     const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/";
@@ -47,18 +42,18 @@ public:
 
 TEST_F(DBusGatewayTest, TestNoContainer) {
     ASSERT_FALSE(gw->activate());
+    delete gw;
 }
 
 TEST_F(DBusGatewayTest, TestSetConfig) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[]";
 
     ASSERT_TRUE(gw->setConfig(config));
 }
 
 TEST_F(DBusGatewayTest, TestActivate) {
-    MockDBusGateway mgw(DBusGateway::SessionProxy, m_gatewayDir, m_containerName);
-    lib->getSoftwareContainer().addGateway(mgw);
+    lib->addGateway(gw);
     const std::string config = "[{"
             "\"dbus-gateway-config-session\": [{"
                "\"direction\": \"*\","
@@ -70,9 +65,9 @@ TEST_F(DBusGatewayTest, TestActivate) {
     ::testing::DefaultValue<bool>::Set(true);
     {
         ::testing::InSequence sequence;
-        EXPECT_CALL(mgw, startDBusProxy(_, _));
-        EXPECT_CALL(mgw, testDBusConnection(_));
+        EXPECT_CALL(*gw, startDBusProxy(_, _));
+        EXPECT_CALL(*gw, testDBusConnection(_));
     }
-    ASSERT_TRUE(mgw.setConfig(config));
-    ASSERT_TRUE(mgw.activate());
+    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_TRUE(gw->activate());
 }

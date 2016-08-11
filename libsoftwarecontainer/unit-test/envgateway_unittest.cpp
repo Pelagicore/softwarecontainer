@@ -9,10 +9,11 @@ class EnvironmentGatewayTest : public GatewayTest
 
 public:
     EnvironmentGatewayTest(): GatewayTest(){ }
+    EnvironmentGateway *gw;
 
     void SetUp() override
     {
-        gw = std::unique_ptr<Gateway>(new EnvironmentGateway());
+        gw = new EnvironmentGateway();
         GatewayTest::SetUp();
     }
 
@@ -22,12 +23,12 @@ public:
 
 
 TEST_F(EnvironmentGatewayTest, TestActivateWithNoConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(EnvironmentGatewayTest, TestActivateWithEmptyConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[]";
 
     ASSERT_TRUE(gw->setConfig(config));
@@ -35,7 +36,7 @@ TEST_F(EnvironmentGatewayTest, TestActivateWithEmptyConf) {
 }
 
 TEST_F(EnvironmentGatewayTest, TestActivateWithEmptyJSonObjectConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[{}]";
 
     ASSERT_FALSE(gw->setConfig(config));
@@ -52,10 +53,11 @@ TEST_F(EnvironmentGatewayTest, TestActivateWithNoContainer) {
 
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_FALSE(gw->activate());
+    delete gw;
 }
 
 TEST_F(EnvironmentGatewayTest, TestActivateWithMinimumValidConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                                   {\
                                     \"name\": \"" + NAME  + "\",\
@@ -68,7 +70,7 @@ TEST_F(EnvironmentGatewayTest, TestActivateWithMinimumValidConf) {
 }
 
 TEST_F(EnvironmentGatewayTest, TestActivateWithAppend) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                                   {\
                                     \"name\": \"" + NAME  + "\",\
@@ -83,7 +85,7 @@ TEST_F(EnvironmentGatewayTest, TestActivateWithAppend) {
 }
 
 TEST_F(EnvironmentGatewayTest, TestActivateWithRepetedConfNoAppend) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[\
                                   {\
                                     \"name\": \"" + NAME  + "\",\

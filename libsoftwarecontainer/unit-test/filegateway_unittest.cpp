@@ -11,10 +11,11 @@ class FileGatewayTest : public GatewayTest
 
 public:
     FileGatewayTest() { }
+    FileGateway *gw;
 
     void SetUp() override
     {
-        gw = std::unique_ptr<FileGateway>(new FileGateway());
+        gw = new FileGateway();
         GatewayTest::SetUp();
 
         // Create file
@@ -46,12 +47,12 @@ public:
 };
 
 TEST_F(FileGatewayTest, TestActivateWithNoConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     ASSERT_FALSE(gw->activate());
 }
 
 TEST_F(FileGatewayTest, TestActivateWithEmptyValidJSONConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config = "[]";
 
     ASSERT_TRUE(gw->setConfig(config));
@@ -60,7 +61,7 @@ TEST_F(FileGatewayTest, TestActivateWithEmptyValidJSONConf) {
 
 
 TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config =
     "["
         "{"
@@ -73,7 +74,7 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
 }
 
 TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string cmd = "cat " + FILE_PATH;
     ASSERT_FALSE(runInShell(cmd));
     const std::string config =
@@ -91,7 +92,7 @@ TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
 }
 
 TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string cmd =  "printenv"
                              "| grep " + ENV_VAR_NAME +
                              "| grep " + PREFIX +
@@ -115,7 +116,7 @@ TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
 }
 
 TEST_F(FileGatewayTest, TestActivateWithNoPathToHost) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config =
     "["
         "{"
@@ -132,7 +133,7 @@ TEST_F(FileGatewayTest, TestActivateWithNoPathToHost) {
 }
 
 TEST_F(FileGatewayTest, TestActivateWithEmptyPathToHost) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config =
     "["
         "{"
@@ -149,7 +150,7 @@ TEST_F(FileGatewayTest, TestActivateWithEmptyPathToHost) {
     ASSERT_FALSE(gw->activate());
 }
 TEST_F(FileGatewayTest, TestActivateWithNoPathInContainer) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config =
     "["
         "{"
@@ -166,7 +167,7 @@ TEST_F(FileGatewayTest, TestActivateWithNoPathInContainer) {
 }
 
 TEST_F(FileGatewayTest, TestActivateWithEmptyPathInContainer) {
-    givenContainerIsSet();
+    givenContainerIsSet(gw);
     const std::string config =
     "["
         "{"
@@ -198,4 +199,5 @@ TEST_F(FileGatewayTest, TestActivateWithNoContainer) {
     "]";
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_FALSE(gw->activate());
+    delete gw;
 }

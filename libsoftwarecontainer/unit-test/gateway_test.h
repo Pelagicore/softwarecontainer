@@ -26,10 +26,9 @@ public:
 
     void SetUp() override;
     void TearDown() override;
-    void givenContainerIsSet();
+    void givenContainerIsSet(Gateway *gw);
 
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    std::unique_ptr<Gateway> gw;
     std::unique_ptr<SoftwareContainerLib> lib;
     std::unique_ptr<SoftwareContainerWorkspace> workspace;
 };

@@ -34,9 +34,12 @@ void Container::init_lxc()
         int stateCount = lxc_get_wait_states(nullptr);
         s_LXCContainerStates.resize(stateCount);
         lxc_get_wait_states(s_LXCContainerStates.data());
-        assert((int)LXCContainerState::ELEMENT_COUNT == s_LXCContainerStates.size());
-        bInitialized = true;
-        s_LXCRoot = lxc_get_global_config_item(LXC_CONTAINERS_ROOT_CONFIG_ITEM);
+        if ((int)LXCContainerState::ELEMENT_COUNT != s_LXCContainerStates.size()) {
+            log_error() << "Internal SC/LXC state mis-match, fatal error";
+        } else {
+            bInitialized = true;
+            s_LXCRoot = lxc_get_global_config_item(LXC_CONTAINERS_ROOT_CONFIG_ITEM);
+        }
     }
 }
 
@@ -53,28 +56,37 @@ Container::Container(const std::string &id, const std::string &name, const std::
 
 ReturnCode Container::initialize()
 {
-    std::string gatewayDir = gatewaysDir();
-    if (isError(createDirectory(gatewayDir))) {
-        log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
-        return ReturnCode::FAILURE;
-    }
+    if (m_state < ContainerState::PREPARED) {
+        std::string gatewayDir = gatewaysDir();
+        if (isError(createDirectory(gatewayDir))) {
+            log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
+            return ReturnCode::FAILURE;
+        }
 
-    if (isError(createSharedMountPoint(gatewayDir))) {
-        log_error() << "Could not create shared mount point for dir: " << gatewayDir;
-        return ReturnCode::FAILURE;
-    }
+        if (isError(createSharedMountPoint(gatewayDir))) {
+            log_error() << "Could not create shared mount point for dir: " << gatewayDir;
+            return ReturnCode::FAILURE;
+        }
 
-    m_initialized = true;
+        m_state = ContainerState::PREPARED;
+    }
     return ReturnCode::SUCCESS;
 }
 
 Container::~Container()
 {
     if (m_container != nullptr) {
-        if (m_created) {
+        // These will check the current state
+
+        if (m_state >= ContainerState::STARTED) {
+            shutdown();
+        }
+
+        if (m_state >= ContainerState::CREATED) {
             destroy();
         }
 
+        // Any existing container
         lxc_container_put(m_container);
         m_container = nullptr;
     }
@@ -98,7 +110,13 @@ std::string Container::toString()
 
 ReturnCode Container::create()
 {
+    if (m_state >= ContainerState::CREATED) {
+        log_warning() << "Container already created";
+        return ReturnCode::FAILURE;
+    }
+
     log_debug() << "Creating container " << toString();
+    ReturnCode status = ReturnCode::SUCCESS;
 
     const char *containerID = id();
     if (strlen(containerID) == 0) {
@@ -117,49 +135,61 @@ ReturnCode Container::create()
     m_container = lxc_container_new(containerID, nullptr);
     if (!m_container) {
         log_error() << "Error creating a new container";
-        return ReturnCode::FAILURE;
+        status = ReturnCode::FAILURE;
+    } else {
+        log_debug() << "Successfully created container struct";
     }
-    log_debug() << "Successfully created container struct";
 
-    if (!m_container->load_config(m_container, configFile)) {
-        log_error() << "Error loading container config";
-        return ReturnCode::FAILURE;
+    if (isSuccess(status)) {
+        if (!m_container->load_config(m_container, configFile)) {
+            log_error() << "Error loading container config";
+            status = ReturnCode::FAILURE;
+        } else {
+            log_debug() << "Successfully loaded container config";
+        }
     }
-    log_debug() << "Successfully loaded container config";
 
-    int flags = 0;
-    if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
-        log_error() << "Error creating container";
-        return ReturnCode::FAILURE;
+    if (isSuccess(status)) {
+        int flags = 0;
+        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
+            log_error() << "Error creating container";
+            status = ReturnCode::FAILURE;
+        } else {
+            log_debug() << "Successfully created container";
+            m_state = ContainerState::CREATED;
+            m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
+            log_debug() << "Container created. RootFS: " << m_rootFSPath;
+        }
     }
-    log_debug() << "Successfully created container";
 
-    m_created = true;
-    m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
-    log_debug() << "Container created. RootFS: " << m_rootFSPath;
+    if(isError(status)) {
+        lxc_container_put(m_container);
+        m_container = nullptr;
+    }
 
-    return ReturnCode::SUCCESS;
+    return status;
 }
 
-void Container::waitForState(LXCContainerState state, int timeout)
+ReturnCode Container::waitForState(LXCContainerState state, int timeout)
 {
     const char* currentState = m_container->state(m_container);
     if (strcmp(currentState, toString(state))) {
         log_debug() << "Waiting for container to change from " << currentState
                     << " to state : " << toString(state);
         bool b = m_container->wait(m_container, toString(state), timeout);
-        log_debug() << toString() << " " << b;
+        if (b) {
+            log_error() << "Container did not reach" << toString(state) << " in time";
+            return ReturnCode::FAILURE;
+        }
     }
+    return ReturnCode::SUCCESS;
 }
 
 pid_t Container::start()
 {
-    if (!m_created) {
-        log_warning() << "Trying to start container that isn't created. Creating...";
-        if(isError(create())) {
-            log_error() << "Failed to create container, can't start";
-            return INVALID_PID;
-        }
+    if (m_state < ContainerState::CREATED) {
+        log_warning() << "Trying to start container that isn't created. Please create the container first";
+        return INVALID_PID;
     }
 
     pid_t pid;
@@ -177,6 +207,7 @@ pid_t Container::start()
         } else {
             log_debug() << "Container started: " << toString();
             pid = m_container->init_pid(m_container);
+            m_state = ContainerState::STARTED;
         }
 
     } else {
@@ -195,6 +226,7 @@ pid_t Container::start()
                     Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
                     sigc::slot<void>(),
                     &pid);
+            m_state = ContainerState::STARTED;
         } catch (const Glib::Error &ex) {
             log_error() << "spawn error: " << ex.what();
             pid = INVALID_PID;
@@ -216,7 +248,11 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
         int stdout,
         int stderr)
 {
-    ensureContainerRunning();
+
+    if(isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't execute";
+        return INVALID_PID;
+    }
 
     lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
     options.stdin_fd = stdin;
@@ -251,7 +287,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
         envVariablesArray[i] = strings[i].c_str();
     }
     envVariablesArray[strings.size()] = nullptr;
-    options.extra_env_vars = (char * *) envVariablesArray;    // TODO : get LXC fixed so that extra_env_vars points to an array of const char* instead of char*
+    options.extra_env_vars = (char * *) envVariablesArray;
 
     log_debug() << "Starting function in container "
                 << toString() << "User:" << userID
@@ -337,12 +373,14 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
         const std::string &workingDirectory, int stdin, int stdout,
         int stderr)
 {
-    ensureContainerRunning();
+    if(isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't attach";
+        return INVALID_PID;
+    }
 
     log_debug() << "Attach " << commandLine << " UserID:" << userID;
 
     std::vector<std::string> executeCommandVec = Glib::shell_parse_argv(commandLine);
-
     std::vector<char *> args;
 
     for (size_t i = 0; i < executeCommandVec.size(); i++) {
@@ -354,11 +392,8 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
     // We need a null terminated array
     args.push_back(nullptr);
 
-    //	for(size_t i=0; i <= executeCommandVec.size(); i++)	log_debug() << args[i];
-
     // We execute the function as root but will switch to the real userID inside
     return executeInContainer([&] () {
-
                 log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
                 workingDirectory;
 
@@ -376,64 +411,100 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
                 execvp(args[0], args.data());
 
                 log_error() << "Error when executing the command in container : " << strerror(errno);
-
                 return 1;
-
             }, variables, ROOT_UID, stdin, stdout, stderr);
-
 }
 
-void Container::stop()
+ReturnCode Container::stop()
 {
-    log_debug() << "Stopping the container";
-
-    if (m_container != nullptr) {
+    ReturnCode ret = ReturnCode::SUCCESS;
+    if (m_state >= ContainerState::STARTED) {
+        log_debug() << "Stopping the container";
         if (m_container->stop(m_container)) {
             log_debug() << "Container stopped, waiting for stop state";
             waitForState(LXCContainerState::STOPPED);
         } else {
             log_error() << "Unable to stop container";
+            ret = ReturnCode::FAILURE;
         }
+    } else {
+        log_error() << "Can't stop container that has not been started";
+        ret = ReturnCode::FAILURE;
     }
+
+    return ret;
 }
 
-void Container::destroy()
+ReturnCode Container::shutdown()
 {
-    destroy(m_shutdownTimeout);
+    return shutdown(m_shutdownTimeout);
 }
 
-void Container::destroy(unsigned int timeout)
+ReturnCode Container::shutdown(unsigned int timeout)
 {
-    if (!m_created) {
-        log_warning() << "Trying to destroy container that has not been created. Aborting";
-        return;
+    if (m_state < ContainerState::STARTED) {
+        log_error() << "Trying to shutdown container that has not been started. Aborting";
+        return ReturnCode::FAILURE;
     }
 
     log_debug() << "Shutting down container " << toString() << " pid: " << m_container->init_pid(m_container);
 
-    if (m_container->init_pid(m_container) > 1) {
+    if (m_container->init_pid(m_container) != INVALID_PID) {
         kill(m_container->init_pid(m_container), SIGTERM);
     }
 
     // Shutdown with timeout
     bool success = m_container->shutdown(m_container, timeout);
     if (!success) {
-        log_warning() << "Failed to cleanly shutdown container " << toString();
-        stop();
+        log_warning() << "Failed to cleanly shutdown container, forcing stop" << toString();
+        if(isError(stop())) {
+            log_error() << "Failed to force stop the container" << toString();
+            return ReturnCode::FAILURE;
+        }
+    }
+
+    m_state = ContainerState::CREATED;
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode Container::destroy()
+{
+    return destroy(m_shutdownTimeout);
+}
+
+ReturnCode Container::destroy(unsigned int timeout)
+{
+    if (m_state < ContainerState::CREATED) {
+        log_error() << "Trying to destroy container that has not been created. Aborting destroy";
+        return ReturnCode::FAILURE;
+    }
+
+    if (m_state >= ContainerState::STARTED) {
+        if(isError(shutdown(timeout))) {
+            log_error() << "Could not shutdown container. Aborting destroy";
+            return ReturnCode::FAILURE;
+        }
     }
 
     // Destroy it!
-    success = m_container->destroy(m_container);
+    bool success = m_container->destroy(m_container);
     if (!success) {
-        log_warning() << "Failed to destroy the container " << toString();
+        log_error() << "Failed to destroy the container " << toString();
+        return ReturnCode::FAILURE;
     }
+
+    m_state = ContainerState::DESTROYED;
+    return ReturnCode::SUCCESS;
 }
 
 
 std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
         bool readonly)
 {
-    ensureContainerRunning();
+    if(isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't bind-mount file";
+        return "";
+    }
 
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
@@ -450,7 +521,10 @@ std::string Container::bindMountFileInContainer(const std::string &pathOnHost, c
 std::string Container::bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
         bool readonly)
 {
-    ensureContainerRunning();
+    if(isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't bind-mount folder";
+        return "";
+    }
 
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
@@ -463,7 +537,10 @@ std::string Container::bindMountFolderInContainer(const std::string &pathOnHost,
 
 ReturnCode Container::mountDevice(const std::string &pathInHost)
 {
-    ensureContainerRunning();
+    if(isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't mount device";
+        return ReturnCode::FAILURE;
+    }
     log_debug() << "Mounting device in container : " << pathInHost;
     auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
     return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
@@ -471,7 +548,10 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
 
 ReturnCode Container::executeInContainer(const std::string &cmd)
 {
-    ensureContainerRunning();
+    if (isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't execute in container";
+        return ReturnCode::FAILURE;
+    }
 
     pid_t pid = executeInContainer([this, cmd]() {
                 log_info() << "Executing system command in container : " << cmd;
@@ -481,7 +561,7 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
             }, m_gatewayEnvironmentVariables);
 
     const int commandResponse = waitForProcessTermination(pid);
-    if  (commandResponse != 0) {
+    if (commandResponse != 0) {
         log_debug() << "Exectution of command " << cmd << " in container failed";
         return ReturnCode::FAILURE;
     }
@@ -491,6 +571,11 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
 
 ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::string &val)
 {
+    if (m_state < ContainerState::CREATED) {
+        log_error() << "Can't set environment variable for non-created container";
+        return ReturnCode::FAILURE;
+    }
+
     log_debug() << "Setting env variable in container " << var << "=" << val;
     m_gatewayEnvironmentVariables[var] = val;
 

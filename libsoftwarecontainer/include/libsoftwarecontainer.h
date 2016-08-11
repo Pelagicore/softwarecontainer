@@ -8,7 +8,6 @@
 
 #include <glibmm.h>
 
-#include "softwarecontainer.h"
 #include "gateway.h"
 
 class JobAbstract;
@@ -72,23 +71,22 @@ public:
      */
     void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
     {
-        m_ml = mainLoopContext;
+        m_mainLoopContext = mainLoopContext;
     }
 
-    void shutdown()
+    ReturnCode shutdown()
     {
-        m_softwarecontainer.shutdown();
+        return shutdown(m_workspace.m_containerShutdownTimeout);
     }
 
-    void shutdown(unsigned int timeout)
-    {
-        m_softwarecontainer.shutdown(timeout);
-    }
+    ReturnCode shutdown(unsigned int timeout);
 
     bool isInitialized() const
     {
         return m_initialized;
     }
+
+    void addGateway(Gateway *gateway);
 
     void openTerminal(const std::string &terminalCommand) const;
 
@@ -100,24 +98,9 @@ public:
 
     ReturnCode init();
 
-    void setGatewayConfigs(const GatewayConfiguration &config)
-    {
-        m_softwarecontainer.updateGatewayConfiguration(config);
-    }
-
-    const Container &getContainer() const
-    {
-        return m_container;
-    }
-
     Container &getContainer()
     {
         return m_container;
-    }
-
-    SoftwareContainer &getSoftwareContainer()
-    {
-        return m_softwarecontainer;
     }
 
     std::string getContainerDir()
@@ -141,26 +124,48 @@ public:
 
     void validateContainerID();
 
+    ObservableProperty<ContainerState> &getContainerState()
+    {
+        return m_containerState;
+    }
+
+    pid_t launchCommand(const std::string &commandLine);
+
+    /*! Continues the 'launch' phase by allowing gateway configurations to
+     *  be set.
+     *
+     * Platform Access Manager calls this method after SoftwareContainer has
+     * registered as a client, and passes all gateway configurations as
+     * argument. SoftwareContainer sets the gateway configurations and activates
+     * all gateways as a result of this call. The contained application
+     * is then started.
+     *
+     * \param configs A map of gateway IDs and their respective configurations
+     */
+    void updateGatewayConfiguration(const GatewayConfiguration &configs);
+
+    /**
+     * Set the gateway configuration and activate them
+     */
+    void setGatewayConfigs(const GatewayConfiguration &configs);
+
 private:
+    ReturnCode shutdownGateways();
+
     SoftwareContainerWorkspace &m_workspace;
 
     std::string m_containerID;
     std::string m_containerName;
+    ObservableWritableProperty<ContainerState> m_containerState;
 
     Container m_container;
-
-    Glib::RefPtr<Glib::MainContext> m_ml;
-
-    SoftwareContainer m_softwarecontainer;
-
+    pid_t m_pcPid = INVALID_PID;
     std::vector<std::unique_ptr<Gateway> > m_gateways;
 
+    Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     SignalConnectionsHandler m_connections;
 
-    pid_t m_pcPid = 0;
-
     bool m_initialized = false;
-
 };
 
 
