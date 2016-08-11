@@ -16,19 +16,28 @@
 #include "generators.h"
 #include "libsoftwarecontainer.h"
 
-
-class GatewayTest : public ::testing::Test
+class SoftwareContainerLibTest : public ::testing::Test
 {
 public:
-
-    GatewayTest() { }
-    ~GatewayTest() { }
+    SoftwareContainerLibTest() { }
+    ~SoftwareContainerLibTest() { }
 
     void SetUp() override;
     void TearDown() override;
-    void givenContainerIsSet(Gateway *gw);
+    void run();
+    void exit();
 
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
+    Glib::RefPtr<Glib::MainLoop> m_ml;
     std::unique_ptr<SoftwareContainerLib> lib;
     std::unique_ptr<SoftwareContainerWorkspace> workspace;
+};
+
+class SoftwareContainerGatewayTest : public SoftwareContainerLibTest
+{
+public:
+    SoftwareContainerGatewayTest() { }
+    ~SoftwareContainerGatewayTest() { }
+
+    void givenContainerIsSet(Gateway *gw);
 };

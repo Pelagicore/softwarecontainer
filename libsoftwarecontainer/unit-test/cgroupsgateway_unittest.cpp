@@ -3,10 +3,10 @@
  *   All rights reserved.
  */
 
-#include "gateway_test.h"
+#include "softwarecontainer_test.h"
 #include "gateway/cgroupsgateway.h"
 
-class CgroupsGatewayTest : public GatewayTest
+class CgroupsGatewayTest : public SoftwareContainerGatewayTest
 {
 
 public:
@@ -16,7 +16,7 @@ public:
     void SetUp() override
     {
         gw = new CgroupsGateway();
-        GatewayTest::SetUp();
+        SoftwareContainerLibTest::SetUp();
     }
 };
 
