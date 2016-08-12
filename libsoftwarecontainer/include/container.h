@@ -33,15 +33,15 @@ class Container :
         STOPPED, STARTING, RUNNING, STOPPING, ABORTING, FREEZING, FROZEN, THAWED, ELEMENT_COUNT
     };
 
-    static std::vector<const char *> s_LXCContainerStates;
-    static const char *s_LXCRoot;
-
-    static void init_lxc();
-
     static const char *toString(LXCContainerState state)
     {
         return s_LXCContainerStates[static_cast<int>(state)];
     }
+
+    static std::vector<const char *> s_LXCContainerStates;
+    static const char *s_LXCRoot;
+
+    static void init_lxc();
 
 public:
     /// A function to be executed in the container
@@ -122,56 +122,25 @@ public:
     ReturnCode stop();
 
     ReturnCode waitForState(LXCContainerState state, int timeout = 20);
-    ReturnCode ensureContainerRunning()
-    {
-        if (m_state < ContainerState::STARTED) {
-            log_error() << "Containter is not in state STARTED, state is " << ((int)m_state);
-            log_error() << logging::getStackTrace();
-            return ReturnCode::FAILURE;
-        }
-
-        if (!m_container->is_running(m_container)) {
-            return waitForState(LXCContainerState::RUNNING);
-        }
-
-        return ReturnCode::SUCCESS;
-    }
+    ReturnCode ensureContainerRunning();
 
     /*!
      * Setup the container for preloading
      *
      * Setup the container so directories are available for later use when
      * setApplication is called.
-     * If all went well, \c true is returned, \c false otherwise
-     *
      * \return true or false
      */
     ReturnCode initialize();
 
     std::string toString();
 
-    const char *id() const
-    {
-        return m_id.c_str();
-    }
-
-    std::string gatewaysDirInContainer() const
-    {
-        return GATEWAYS_PATH;
-    }
-
-    std::string gatewaysDir() const
-    {
-        return m_containerRoot + "/" + id() + GATEWAYS_PATH;
-    }
-
-    const std::string &rootFS() const
-    {
-        return m_rootFSPath;
-    }
+    const char *id() const;
+    std::string gatewaysDirInContainer() const;
+    std::string gatewaysDir() const;
+    const std::string &rootFS() const;
 
     ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
-
     ReturnCode executeInContainer(const std::string &cmd);
 
 private:

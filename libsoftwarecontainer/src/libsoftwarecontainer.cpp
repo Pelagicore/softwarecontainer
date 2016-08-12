@@ -48,6 +48,12 @@ SoftwareContainerLib::~SoftwareContainerLib()
 {
 }
 
+void SoftwareContainerLib::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
+{
+    m_mainLoopContext = mainLoopContext;
+}
+
+
 void SoftwareContainerLib::setContainerIDPrefix(const std::string &name)
 {
     m_containerID = name + Generator::gen_ct_name();
@@ -170,8 +176,8 @@ ReturnCode SoftwareContainerLib::init()
 
     // TODO: When this is used together with spawning using lxc.init, we get
     //       glib errors about ECHILD
-    // The pid might not valid if there was an error spawning. We should only
-    // connect the watcher if the spawning went well.
+    // TODO: The pid might not valid if there was an error spawning. We should only
+    //       connect the watcher if the spawning went well.
     if (m_pcPid != INVALID_PID) {
         addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
             shutdown(m_workspace.m_containerShutdownTimeout);
@@ -251,6 +257,11 @@ void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs
 
 }
 
+ReturnCode SoftwareContainerLib::shutdown()
+{
+    return shutdown(m_workspace.m_containerShutdownTimeout);
+}
+
 ReturnCode SoftwareContainerLib::shutdown(unsigned int timeout)
 {
     log_debug() << "shutdown called"; // << logging::getStackTrace();
@@ -279,6 +290,36 @@ ReturnCode SoftwareContainerLib::shutdownGateways()
 
     m_gateways.clear();
     return status;
+}
+
+bool SoftwareContainerLib::isInitialized() const
+{
+    return m_initialized;
+}
+
+Container &SoftwareContainerLib::getContainer()
+{
+    return m_container;
+}
+
+std::string SoftwareContainerLib::getContainerDir()
+{
+    return m_workspace.m_containerRoot + "/" + getContainerID();
+}
+
+std::string SoftwareContainerLib::getGatewayDir()
+{
+    return getContainerDir() + "/gateways";
+}
+
+const std::string &SoftwareContainerLib::getContainerID()
+{
+    return m_containerID;
+}
+
+ObservableProperty<ContainerState> &SoftwareContainerLib::getContainerState()
+{
+    return m_containerState;
 }
 
 }

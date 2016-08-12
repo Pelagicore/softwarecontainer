@@ -10,8 +10,6 @@
 
 #include "gateway.h"
 
-class JobAbstract;
-
 namespace softwarecontainer {
 
 class SoftwareContainerWorkspace :
@@ -37,7 +35,6 @@ public:
             log_error() << "Failed when checking workspace";
             assert(false);
         }
-
     }
 
     ~SoftwareContainerWorkspace()
@@ -69,22 +66,15 @@ public:
     /**
      * Set the main loop
      */
-    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
-    {
-        m_mainLoopContext = mainLoopContext;
-    }
+    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
 
-    ReturnCode shutdown()
-    {
-        return shutdown(m_workspace.m_containerShutdownTimeout);
-    }
-
+    /* 
+     * Shutdown the container
+     */ 
+    ReturnCode shutdown();
     ReturnCode shutdown(unsigned int timeout);
 
-    bool isInitialized() const
-    {
-        return m_initialized;
-    }
+    bool isInitialized() const;
 
     void addGateway(Gateway *gateway);
 
@@ -95,39 +85,19 @@ public:
      * That method can be called before setting the main loop context
      */
     ReturnCode preload();
-
     ReturnCode init();
 
-    Container &getContainer()
-    {
-        return m_container;
-    }
-
-    std::string getContainerDir()
-    {
-        return m_workspace.m_containerRoot + "/" + getContainerID();
-    }
-
-    std::string getGatewayDir()
-    {
-        return getContainerDir() + "/gateways";
-    }
+    Container &getContainer();
+    const std::string &getContainerID();
+    std::string getContainerDir();
+    std::string getGatewayDir();
 
     void setContainerIDPrefix(const std::string &prefix);
-
     void setContainerName(const std::string &name);
-
-    const std::string &getContainerID()
-    {
-        return m_containerID;
-    }
 
     void validateContainerID();
 
-    ObservableProperty<ContainerState> &getContainerState()
-    {
-        return m_containerState;
-    }
+    ObservableProperty<ContainerState> &getContainerState();
 
     pid_t launchCommand(const std::string &commandLine);
 
