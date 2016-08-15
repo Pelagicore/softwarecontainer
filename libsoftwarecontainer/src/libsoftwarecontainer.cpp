@@ -250,7 +250,9 @@ void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs
     }
 
     for (auto &gateway : m_gateways) {
-        gateway->activate();
+        if (gateway->isConfigured()) {
+            gateway->activate();
+        }
     }
 
     m_containerState.setValueNotify(ContainerState::READY);
@@ -282,9 +284,11 @@ ReturnCode SoftwareContainerLib::shutdownGateways()
 {
     ReturnCode status = ReturnCode::SUCCESS;
     for (auto &gateway : m_gateways) {
-        if (!gateway->teardown()) {
-            log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
-            status = ReturnCode::FAILURE;
+        if (gateway->isActivated()) {
+            if (!gateway->teardown()) {
+                log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
+                status = ReturnCode::FAILURE;
+            }
         }
     }
 

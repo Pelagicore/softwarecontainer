@@ -78,9 +78,14 @@ public:
         m_container = &container;
     }
 
-    const GatewayState getState()
+    bool isConfigured()
     {
-        return m_state;
+        return m_state >= GatewayState::CONFIGURED;
+    }
+
+    bool isActivated()
+    {
+        return m_state >= GatewayState::ACTIVATED;
     }
 
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value)
