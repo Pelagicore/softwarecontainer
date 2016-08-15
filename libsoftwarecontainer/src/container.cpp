@@ -224,7 +224,6 @@ pid_t Container::start()
             pid = m_container->init_pid(m_container);
             m_state = ContainerState::STARTED;
         }
-
     } else {
         std::vector<std::string> executeCommandVec;
         std::string lxcCommand = StringBuilder() << "lxc-execute -n " << id() << " -- env " << "/bin/sleep 100000000";
@@ -316,7 +315,7 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
         log_info() << " Attached PID: " << attached_process_pid;
     } else  {
         log_error() << "Attach call to LXC container failed: " << std::string(strerror(errno));
-        log_error() << "PID = " << INVALID_PID;
+        attached_process_pid = INVALID_PID;
     }
 
     return attached_process_pid;
@@ -330,7 +329,7 @@ pid_t Container::attach(const std::string &commandLine, uid_t userID)
 ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
 {
     bool success = m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
-    return success ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+    return bool2ReturnCode(success);
 }
 
 ReturnCode Container::setUser(uid_t userID)
@@ -575,9 +574,13 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
                 return result;
             }, m_gatewayEnvironmentVariables);
 
-    const int commandResponse = waitForProcessTermination(pid);
-    if (commandResponse != 0) {
-        log_debug() << "Exectution of command " << cmd << " in container failed";
+    if (pid != INVALID_PID) {
+        const int commandResponse = waitForProcessTermination(pid);
+        if (commandResponse != 0) {
+            log_debug() << "Exectution of command " << cmd << " in container failed";
+            return ReturnCode::FAILURE;
+        }
+    } else {
         return ReturnCode::FAILURE;
     }
 

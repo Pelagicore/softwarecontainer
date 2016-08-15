@@ -106,7 +106,7 @@ void Agent::setGatewayConfigs(ContainerID containerID, const GatewayConfiguratio
 ReturnCode Agent::createContainer(const std::string &idPrefix, ContainerID &containerID)
 {
     containerID = getProxy().CreateContainer(idPrefix);
-    return (containerID != INVALID_CONTAINER_ID) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+    return bool2ReturnCode(containerID != INVALID_CONTAINER_ID);
 }
 
 ReturnCode Agent::setContainerName(ContainerID containerID, const std::string &name)

@@ -41,6 +41,11 @@ enum class ReturnCode
     SUCCESS
 };
 
+inline ReturnCode bool2ReturnCode(bool b)
+{
+    return b ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+}
+
 inline bool isError(ReturnCode code)
 {
     return (code != ReturnCode::SUCCESS);
