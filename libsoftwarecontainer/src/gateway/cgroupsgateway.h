@@ -50,9 +50,9 @@ public:
     ~CgroupsGateway() { }
 
     ReturnCode readConfigElement(const JSonElement &element) override;
-    bool activate() override;
+    bool activateGateway() override;
+    bool teardownGateway() override;
 
 private:
     std::map<std::string, std::string> m_settings;
-    bool m_hasBeenConfigured;
 };

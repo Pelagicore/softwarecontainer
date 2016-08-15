@@ -2,8 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#ifndef NETWORKGATEWAY_H
-#define NETWORKGATEWAY_H
+#pragma once
 
 #include "gateway.h"
 #include "generators.h"
@@ -24,9 +23,14 @@ public:
     ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
-     *  Implements Gateway::activate
+     *  Implements Gateway::activateGateway
      */
-    virtual bool activate();
+    bool activateGateway() override;
+
+    /*!
+     * Implements Gateway::teardownGateway
+     */
+    bool teardownGateway() override;
 
     /*! Returns the IP of the container
      */
@@ -94,7 +98,4 @@ private:
     bool m_interfaceInitialized;
 
     Generator m_generator;
-
 };
-
-#endif /* NETWORKGATEWAY_H */

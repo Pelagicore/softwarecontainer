@@ -5,10 +5,7 @@
 #ifndef GATEWAY_H
 #define GATEWAY_H
 
-#include <string>
 #include "container.h"
-
-#include <wait.h>
 
 /*! Gateway base class
  *
@@ -18,12 +15,13 @@ class Gateway
 {
     LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
 
-protected:
-    static constexpr const char *ENABLED_FIELD = "enabled";
-
-    static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
-
 public:
+    enum class GatewayState : unsigned int {
+        CREATED = 0,
+        CONFIGURED = 1,
+        ACTIVATED = 2,
+    };
+
     Gateway(const char *id)
     {
         m_id = id;
@@ -49,27 +47,21 @@ public:
      *          false otherwise
      */
     virtual bool setConfig(const std::string &config);
-    virtual ReturnCode readConfigElement(const JSonElement &element)
-    {
-        return ReturnCode::SUCCESS;
-    }
+    virtual ReturnCode readConfigElement(const JSonElement &element) = 0;
 
     /*! Applies any configuration set by setConfig()
      *
      * \returns true upon successful application of configuration
      *          false otherwise
      */
-    virtual bool activate() = 0;
+    virtual bool activate();
 
     /*! Restore system to the state prior to launching of gateway. Any cleanup
      * code (removal of files, virtual interfaces, etc) should be placed here.
      *
      * \returns true upon successful clean-up, false otherwise
      */
-    virtual bool teardown()
-    {
-        return true;
-    }
+    virtual bool teardown();
 
     bool hasContainer()
     {
@@ -86,6 +78,11 @@ public:
         m_container = &container;
     }
 
+    const GatewayState getState()
+    {
+        return m_state;
+    }
+
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value)
     {
         return getContainer().setEnvironmentVariable(variable, value);
@@ -99,8 +96,16 @@ public:
     }
 
 protected:
+    static constexpr const char *ENABLED_FIELD = "enabled";
+    static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
+
     Container *m_container = nullptr;
     const char *m_id = nullptr;
+
+    GatewayState m_state = GatewayState::CREATED;
+
+    virtual bool activateGateway() = 0;
+    virtual bool teardownGateway() = 0;
 };
 
 #endif /* GATEWAY_H */

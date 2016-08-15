@@ -14,11 +14,6 @@ PulseGateway::~PulseGateway()
 {
 }
 
-bool PulseGateway::teardown()
-{
-    return true;
-}
-
 ReturnCode PulseGateway::readConfigElement(const JSonElement &element)
 {
     bool enabled = false;
@@ -27,9 +22,8 @@ ReturnCode PulseGateway::readConfigElement(const JSonElement &element)
     return ReturnCode::SUCCESS;
 }
 
-bool PulseGateway::activate()
+bool PulseGateway::activateGateway()
 {
-    bool success = true;
     if (m_enableAudio) {
         log_debug() << "Audio will be enabled";
         const char *dir = getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME);
@@ -41,10 +35,13 @@ bool PulseGateway::activate()
             log_error() << "Should enable pulseaudio gateway, but " << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
             return false;
         }
-
     } else {
         log_debug() << "Audio will be disabled";
     }
-    return success;
+    return true;
 }
 
+bool PulseGateway::teardownGateway()
+{
+    return true;
+}

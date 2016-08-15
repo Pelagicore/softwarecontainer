@@ -54,8 +54,9 @@ public:
 
     EnvironmentGateway();
     ~EnvironmentGateway();
-    ReturnCode readConfigElement(const JSonElement &element) override;
-    bool activate() override;
+    ReturnCode readConfigElement(const JSonElement &element);
+    bool activateGateway();
+    bool teardownGateway();
 
 private:
     bool m_enabled = false;

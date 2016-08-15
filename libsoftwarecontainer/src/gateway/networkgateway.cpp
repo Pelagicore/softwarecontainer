@@ -24,8 +24,6 @@ NetworkGateway::~NetworkGateway()
 
 ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
 {
-    ReturnCode returnCode = ReturnCode::SUCCESS;
-
     bool enableInternetAccess = false;
     element.read("internet-access", enableInternetAccess);
     m_internetAccess |= enableInternetAccess;
@@ -38,14 +36,14 @@ ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
         m_gateway = gateway;
         if ((m_gateway.size() != 0) && (m_gateway.compare(gateway))) {
             log_error() << "Contradiction in gateway";
-            returnCode = ReturnCode::FAILURE;
+            return ReturnCode::FAILURE;
         }
     }
 
-    return returnCode;
+    return ReturnCode::SUCCESS;
 }
 
-bool NetworkGateway::activate()
+bool NetworkGateway::activateGateway()
 {
     if (m_gateway.size() != 0) {
         log_debug() << "Default gateway set to " << m_gateway;
@@ -55,7 +53,6 @@ bool NetworkGateway::activate()
     }
 
     bool success = false;
-
     if (isBridgeAvailable()) {
         if (m_internetAccess) {
             generateIP();
@@ -64,8 +61,12 @@ bool NetworkGateway::activate()
             success = down();
         }
     }
-
     return success;
+}
+
+bool NetworkGateway::teardownGateway()
+{
+    return true;
 }
 
 const std::string NetworkGateway::ip()

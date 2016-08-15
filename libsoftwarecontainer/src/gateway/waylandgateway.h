@@ -22,8 +22,9 @@ public:
     WaylandGateway();
     ~WaylandGateway();
 
-    ReturnCode readConfigElement(const JSonElement &element) override;
-    bool activate() override;
+    ReturnCode readConfigElement(const JSonElement &element);
+    virtual bool activateGateway();
+    virtual bool teardownGateway();
 
 private:
     bool m_enabled = false;

@@ -24,7 +24,6 @@
 class FileGateway :
     public Gateway
 {
-
     LOG_DECLARE_CLASS_CONTEXT("File", "file gateway");
 
 public:
@@ -33,11 +32,10 @@ public:
     FileGateway();
 
     ReturnCode readConfigElement(const JSonElement &element) override;
-    bool activate() override;
+    bool activateGateway() override;
+    bool teardownGateway() override;
 
 private:
-    bool m_hasBeenConfigured = false;
-
     struct FileSetting {
         std::string pathInHost;
         std::string pathInContainer;

@@ -73,14 +73,19 @@ public:
     ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
-     *  Implements Gateway::activate
+     *  Implements Gateway::activateGateway
      *
      * This function will iterate over all devices and issue mknod and chmod commands, which are run in the
      * container.
      * \return true upon success; all commands executed successfully, false
      *              otherwise
      */
-    virtual bool activate();
+    virtual bool activateGateway() override;
+
+    /*!
+     * Implements Gateway::teardownGateway
+     */
+    virtual bool teardownGateway() override;
 
 private:
     struct Device
