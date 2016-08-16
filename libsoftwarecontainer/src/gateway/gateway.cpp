@@ -51,3 +51,41 @@ bool Gateway::teardown() {
 
     return teardownGateway();
 }
+
+
+bool Gateway::hasContainer()
+{
+    return m_container != nullptr;
+}
+
+Container &Gateway::getContainer()
+{
+    return *m_container;
+}
+
+void Gateway::setContainer(Container &container)
+{
+    m_container = &container;
+}
+
+bool Gateway::isConfigured()
+{
+    return m_state >= GatewayState::CONFIGURED;
+}
+
+bool Gateway::isActivated()
+{
+    return m_state >= GatewayState::ACTIVATED;
+}
+
+ReturnCode Gateway::setEnvironmentVariable(const std::string &variable, const std::string &value)
+{
+    return getContainer().setEnvironmentVariable(variable, value);
+}
+
+/*! Execute the given command in the container
+ */
+ReturnCode Gateway::executeInContainer(const std::string &cmd)
+{
+    return getContainer().executeInContainer(cmd);
+}

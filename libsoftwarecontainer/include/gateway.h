@@ -10,6 +10,13 @@
 /*! Gateway base class
  *
  * Gateway base class for SoftwareContainer
+ *
+ * Gateways can be in one of three states:
+ * * Created - the gateway object exists
+ * * Configured - the gateway has successfully recieved and processed some
+ *                configuration data, ready for activation
+ * * Activated - the gateway is active and running.
+ *
  */
 class Gateway
 {
@@ -25,6 +32,7 @@ public:
     Gateway(const char *id)
     {
         m_id = id;
+        m_state = GatewayState::CREATED;
     }
 
     virtual ~Gateway()
@@ -63,42 +71,25 @@ public:
      */
     virtual bool teardown();
 
-    bool hasContainer()
-    {
-        return m_container != nullptr;
-    }
+    /*! Check if the gateway has an associated container */
+    bool hasContainer();
 
-    Container &getContainer()
-    {
-        return *m_container;
-    }
+    /*! Get a reference to the associated container */
+    Container &getContainer();
 
-    void setContainer(Container &container)
-    {
-        m_container = &container;
-    }
+    /*! Set the associated contaitner for this gateway */
+    void setContainer(Container &container);
 
-    bool isConfigured()
-    {
-        return m_state >= GatewayState::CONFIGURED;
-    }
+    /*! Is the gateway configured or not? */
+    bool isConfigured();
 
-    bool isActivated()
-    {
-        return m_state >= GatewayState::ACTIVATED;
-    }
+    /*! Is the gateway activated or not? */
+    bool isActivated();
 
-    ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value)
-    {
-        return getContainer().setEnvironmentVariable(variable, value);
-    }
+    ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value);
 
-    /*! Execute the given command in the container
-     */
-    ReturnCode executeInContainer(const std::string &cmd)
-    {
-        return getContainer().executeInContainer(cmd);
-    }
+    /*! Execute the given command in the container */
+    ReturnCode executeInContainer(const std::string &cmd);
 
 protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
@@ -106,7 +97,6 @@ protected:
 
     Container *m_container = nullptr;
     const char *m_id = nullptr;
-
     GatewayState m_state = GatewayState::CREATED;
 
     virtual bool activateGateway() = 0;
