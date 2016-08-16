@@ -24,12 +24,12 @@ WaylandGateway::~WaylandGateway()
 ReturnCode WaylandGateway::readConfigElement(const JSonElement &element)
 {
     bool enabled;
-    element.readBoolean("enabled", enabled);
+    element.readBoolean(ENABLED_FIELD, enabled);
     m_enabled = enabled;
     return ReturnCode::SUCCESS;
 }
 
-bool WaylandGateway::activate()
+bool WaylandGateway::activateGateway()
 {
     if (m_enabled) {
         const char *dir = getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME);
@@ -45,5 +45,10 @@ bool WaylandGateway::activate()
     } else {
         log_info() << "Wayland gateway disabled";
     }
+    return true;
+}
+
+bool WaylandGateway::teardownGateway()
+{
     return true;
 }

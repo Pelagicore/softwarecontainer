@@ -51,20 +51,24 @@ ReturnCode EnvironmentGateway::readConfigElement(const JSonElement &element)
     return ReturnCode::SUCCESS;
 }
 
-bool EnvironmentGateway::activate()
+bool EnvironmentGateway::activateGateway()
 {
-    if (!hasContainer()) {
-        log_error() << "activate was called on an EnvironmentGateway which has no associated container";
-        return false;
-    }
-
     if (m_variables.empty()) {
-        log_error() << "activate was called on an EnvironmentGatewey which has not been configured with any environment variables";
+        log_error() << "No environment variables set in gateway";
         return false;
     }
 
     for (auto &variable : m_variables) {
-        setEnvironmentVariable(variable.first, variable.second);
+        if (isError(setEnvironmentVariable(variable.first, variable.second))) {
+            log_error() << "Could not set environment variable " << variable.first << " for the container";
+            return false;
+        }
     }
+
+    return true;
+}
+
+bool EnvironmentGateway::teardownGateway()
+{
     return true;
 }

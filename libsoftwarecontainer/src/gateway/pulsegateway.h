@@ -2,8 +2,7 @@
  *   Copyright (C) 2014 Pelagicore AB
  *   All rights reserved.
  */
-#ifndef PULSEGATEWAY_H
-#define PULSEGATEWAY_H
+#pragma once
 
 #include <pulse/pulseaudio.h>
 #include "gateway.h"
@@ -46,7 +45,7 @@ public:
     ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
-     *  Implements Gateway::activate
+     *  Implements Gateway::activateGateway
      *
      *  If audio is to be enabled, then calling this function results in a call
      *  to connectToPulseServer.
@@ -54,18 +53,14 @@ public:
      * \returns true upon success (PulseAudio server connect call and mainloop
      *               setup successfully), false otherwise.
      */
-    virtual bool activate();
+    virtual bool activateGateway() override;
 
-    /*! Implements Gateway::teardown
-     *
-     *  Unloads eventual PulseAudio modules and disconnects from the PulseAudio server.
-     *
-     *  \return true When teardown is complete.
+    /*!
+     * Implements Gateway::teardownGateway
      */
-    virtual bool teardown();
+    virtual bool teardownGateway() override;
 
 private:
     bool m_enableAudio = false;
 };
 
-#endif /* PULSEGATEWAY_H */

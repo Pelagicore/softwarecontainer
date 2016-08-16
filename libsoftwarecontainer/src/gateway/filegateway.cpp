@@ -37,9 +37,9 @@ ReturnCode FileGateway::readConfigElement(const JSonElement &element)
     return ReturnCode::SUCCESS;
 }
 
-bool FileGateway::activate()
+bool FileGateway::activateGateway()
 {
-    if (hasContainer() && m_settings.size() > 0) {
+    if (m_settings.size() > 0) {
         for (FileSetting &setting : m_settings) {
             std::string path;
 
@@ -67,9 +67,13 @@ bool FileGateway::activate()
                 getContainer().createSymLink(getContainer().rootFS() + setting.pathInHost, path);
             }
         }
-
         return true;
     }
 
     return false;
+}
+
+bool FileGateway::teardownGateway()
+{
+    return true;
 }

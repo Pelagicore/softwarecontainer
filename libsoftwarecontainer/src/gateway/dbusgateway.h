@@ -138,7 +138,7 @@ public:
     virtual ReturnCode readConfigElement(const JSonElement &element) override;
 
     /*!
-     *  Implements Gateway::activate
+     *  Implements Gateway::activateGateway
      *
      *  Starts the dbus-proxy binary and feeds it the configuration set in
      *  setConfig(). This function will also set up the correct environment
@@ -154,9 +154,9 @@ public:
      *  \return false if dbus-proxy failed to execute or accept input on STDIN,
      *          or when environment variable could not be set.
      */
-    virtual bool activate();
+    virtual bool activateGateway();
 
-    /*! Implements Gateway::teardown
+    /*! Implements Gateway::teardownGateway
      *
      *  This function will clean up processes launched and file descriptors
      *  opened during the lifetime of the gatway. Specifically it will close
@@ -167,7 +167,7 @@ public:
      *          could not be closed, or if the socket created by the dbus-proxy
      *          could not be removed.
      */
-    virtual bool teardown();
+    virtual bool teardownGateway() override;
 
 private:
     std::string socketName();
@@ -187,13 +187,6 @@ private:
 
     // STDIN for dbus-proxy instance
     int m_infp = INVALID_FD;
-
-    // Keeps track of whether setConfig() has been run or not
-    bool m_hasBeenConfigured;
-
-    // Keeps track of whether the dbus-proxy program has been started
-    // this is used for deciding what teardown is necessary
-    bool m_dbusProxyStarted;
 
     virtual bool startDBusProxy(const std::vector<std::string> &commandVec, const std::vector<std::string> &envVec);
     virtual bool testDBusConnection(const std::string &config);

@@ -27,7 +27,7 @@ ReturnCode DeviceNodeGateway::readConfigElement(const JSonElement &element)
 }
 
 
-bool DeviceNodeGateway::activate()
+bool DeviceNodeGateway::activateGateway()
 {
     for (auto &dev : m_devList) {
         log_info() << "Mapping device " << dev.name;
@@ -50,5 +50,11 @@ bool DeviceNodeGateway::activate()
         }
     }
 
+    m_state = GatewayState::ACTIVATED;
+    return true;
+}
+
+bool DeviceNodeGateway::teardownGateway()
+{
     return true;
 }

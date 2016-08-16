@@ -9,9 +9,8 @@ DBusGateway::DBusGateway(ProxyType type
                        , const std::string &name)
     : Gateway(ID)
     , m_type(type)
-    , m_hasBeenConfigured(false)
-    , m_dbusProxyStarted(false)
 {
+    m_state = GatewayState::CREATED;
     m_socket = gatewayDir 
              + (m_type == SessionProxy ? "/sess_" : "/sys_")
              + name 
@@ -23,7 +22,9 @@ DBusGateway::DBusGateway(ProxyType type
 
 DBusGateway::~DBusGateway()
 {
-    teardown();
+    if (m_state == GatewayState::ACTIVATED) {
+        teardown();
+    }
 }
 
 static constexpr const char *SESSION_CONFIG = "dbus-gateway-config-session";
@@ -47,17 +48,12 @@ ReturnCode DBusGateway::readConfigElement(const JSonElement &element)
         }
     }
 
-    m_hasBeenConfigured = true;
+    m_state = GatewayState::CONFIGURED;
     return ReturnCode::SUCCESS;
 }
 
-bool DBusGateway::activate()
+bool DBusGateway::activateGateway()
 {
-    if (!m_hasBeenConfigured) {
-        log_warning() << "'Activate' called on non-configured gateway " << id();
-        return false;
-    }
-
     // set DBUS_{SESSION,SYSTEM}_BUS_ADDRESS env variable
     std::string variable = std::string("DBUS_")
                          + (m_type == SessionProxy ? "SESSION" : "SYSTEM")
@@ -145,7 +141,7 @@ bool DBusGateway::startDBusProxy(const std::vector<std::string> &commandVec, con
     }
 
     log_debug() << "Started dbus-proxy: " << m_pid;
-    m_dbusProxyStarted = true;
+    m_state = GatewayState::ACTIVATED;
 
     return true;
 }
@@ -164,13 +160,9 @@ bool DBusGateway::isSocketCreated() const
     return true;
 }
 
-bool DBusGateway::teardown()
+bool DBusGateway::teardownGateway()
 {
     bool success = true;
-    if (!m_dbusProxyStarted) {
-        log_warn() << "Trying to tear down dbus-gateway that has not been started";
-        return false;
-    }
 
     if (m_pid != INVALID_PID) {
         log_debug() << "Killing dbus-proxy with pid " << m_pid;
@@ -179,7 +171,7 @@ bool DBusGateway::teardown()
          * the system to hang on waitpid - even if Glib::SPAWN_DO_NOT_REAP_CHILD
          * is set. It seems dbus-proxy does not react to SIGTERM.
          */
-        kill(m_pid, SIGKILL);
+        kill(m_pid, SIGTERM);
         waitpid(m_pid, nullptr, 0); // Wait until it exits
         Glib::spawn_close_pid(m_pid);
     } else {
