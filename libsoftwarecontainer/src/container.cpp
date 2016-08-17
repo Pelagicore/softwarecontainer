@@ -200,14 +200,18 @@ ReturnCode Container::waitForState(LXCContainerState state, int timeout)
     return ReturnCode::SUCCESS;
 }
 
-pid_t Container::start()
+ReturnCode Container::start(pid_t *pid)
 {
     if (m_state < ContainerState::CREATED) {
         log_warning() << "Trying to start container that isn't created. Please create the container first";
-        return INVALID_PID;
+        return ReturnCode::FAILURE;
     }
 
-    pid_t pid;
+    if (pid == nullptr) {
+        log_error() << "Supplied pid argument is nullptr";
+        return ReturnCode::FAILURE;
+    }
+
     if (isLXC_C_APIEnabled() && false) {
         log_debug() << "Starting container";
 
@@ -218,10 +222,10 @@ pid_t Container::start()
 
         if (!m_container->start(m_container, false, args)) {
             log_error() << "Error starting container";
-            return INVALID_PID;
+            return ReturnCode::FAILURE;
         } else {
             log_debug() << "Container started: " << toString();
-            pid = m_container->init_pid(m_container);
+            *pid = m_container->init_pid(m_container);
             m_state = ContainerState::STARTED;
         }
     } else {
@@ -239,17 +243,17 @@ pid_t Container::start()
                     envVarVec,
                     Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
                     sigc::slot<void>(),
-                    &pid);
+                    pid);
             m_state = ContainerState::STARTED;
         } catch (const Glib::Error &ex) {
             log_error() << "spawn error: " << ex.what();
-            pid = INVALID_PID;
+            return ReturnCode::FAILURE;
         }
     }
 
     //    assert( m_container->is_running(m_container) );
     log_info() << "To connect to this container : lxc-attach -n " << id();
-    return pid;
+    return ReturnCode::SUCCESS;
 }
 
 int Container::executeInContainerEntryFunction(void *param)
@@ -258,14 +262,17 @@ int Container::executeInContainerEntryFunction(void *param)
     return (*function)();
 }
 
-pid_t Container::executeInContainer(ContainerFunction function, const EnvironmentVariables &variables, uid_t userID, int stdin,
-        int stdout,
-        int stderr)
+ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid, const EnvironmentVariables &variables, uid_t userID,
+                                         int stdin, int stdout, int stderr)
 {
+    if (pid == nullptr) {
+        log_error() << "Supplied pid argument is nullptr";
+        return ReturnCode::FAILURE;
+    }
 
-    if(isError(ensureContainerRunning())) {
+    if (isError(ensureContainerRunning())) {
         log_error() << "Container is not running or in bad state, can't execute";
-        return INVALID_PID;
+        return ReturnCode::FAILURE;
     }
 
     lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
@@ -307,24 +314,18 @@ pid_t Container::executeInContainer(ContainerFunction function, const Environmen
                 << toString() << "User:" << userID
                 << "" << std::endl << " Env variables : " << strings;
 
-    pid_t attached_process_pid = INVALID_PID;
     int attach_res = m_container->attach(m_container,
                                          &Container::executeInContainerEntryFunction,
-                                         &function, &options, &attached_process_pid);
+                                         &function, &options, pid);
     if (attach_res == 0) {
-        log_info() << " Attached PID: " << attached_process_pid;
+        log_info() << " Attached PID: " << pid;
+        return ReturnCode::SUCCESS;
     } else  {
         log_error() << "Attach call to LXC container failed: " << std::string(strerror(errno));
-        attached_process_pid = INVALID_PID;
+        return ReturnCode::FAILURE;
     }
-
-    return attached_process_pid;
 }
 
-pid_t Container::attach(const std::string &commandLine, uid_t userID)
-{
-    return attach(commandLine, m_gatewayEnvironmentVariables, userID);
-}
 
 ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
 {
@@ -383,13 +384,23 @@ ReturnCode Container::setUser(uid_t userID)
 
 }
 
-pid_t Container::attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID,
+ReturnCode Container::attach(const std::string &commandLine, pid_t *pid, uid_t userID)
+{
+    return attach(commandLine, pid, m_gatewayEnvironmentVariables, userID);
+}
+
+ReturnCode Container::attach(const std::string &commandLine, pid_t *pid, const EnvironmentVariables &variables, uid_t userID,
         const std::string &workingDirectory, int stdin, int stdout,
         int stderr)
 {
-    if(isError(ensureContainerRunning())) {
+    if (isError(ensureContainerRunning())) {
         log_error() << "Container is not running or in bad state, can't attach";
-        return INVALID_PID;
+        return ReturnCode::FAILURE;
+    }
+
+    if (pid == nullptr) {
+        log_error() << "Supplied pid argument is nullptr";
+        return ReturnCode::FAILURE;
     }
 
     log_debug() << "Attach " << commandLine << " UserID:" << userID;
@@ -407,7 +418,8 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
     args.push_back(nullptr);
 
     // We execute the function as root but will switch to the real userID inside
-    return executeInContainer([&] () {
+
+    ReturnCode result = executeInContainer([&] () {
                 log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
                 workingDirectory;
 
@@ -426,7 +438,13 @@ pid_t Container::attach(const std::string &commandLine, const EnvironmentVariabl
 
                 log_error() << "Error when executing the command in container : " << strerror(errno);
                 return 1;
-            }, variables, ROOT_UID, stdin, stdout, stderr);
+            }, pid, variables, ROOT_UID, stdin, stdout, stderr);
+    if (isError(result)) {
+        log_error() << "Could not execute in container";
+        return ReturnCode::FAILURE;
+    }
+
+    return ReturnCode::SUCCESS;
 }
 
 ReturnCode Container::stop()
@@ -567,14 +585,15 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
         return ReturnCode::FAILURE;
     }
 
-    pid_t pid = executeInContainer([this, cmd]() {
+    pid_t pid = INVALID_PID;
+    ReturnCode result = executeInContainer([this, cmd]() {
                 log_info() << "Executing system command in container : " << cmd;
                 const int result = execl("/bin/sh", "sh", "-c", cmd.c_str(), 0);
                 log_debug() << "Excution of system command " << cmd << " resulted in status " << result;
                 return result;
-            }, m_gatewayEnvironmentVariables);
+            }, &pid, m_gatewayEnvironmentVariables);
 
-    if (pid != INVALID_PID) {
+    if (isSuccess(result)) {
         const int commandResponse = waitForProcessTermination(pid);
         if (commandResponse != 0) {
             log_debug() << "Exectution of command " << cmd << " in container failed";
