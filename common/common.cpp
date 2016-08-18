@@ -59,12 +59,13 @@ std::string parentPath(const std::string &path_)
 
 ReturnCode touch(const std::string &path)
 {
-    auto fd = open(path.c_str(), O_WRONLY | O_CREAT | O_NOCTTY | O_NONBLOCK | O_LARGEFILE, 0666);
+    int fd = open(path.c_str(), O_WRONLY | O_CREAT | O_NOCTTY | O_NONBLOCK | O_LARGEFILE, 0666);
     if (fd != -1) {
         close(fd);
+        return ReturnCode::SUCCESS;
+    } else {
         return ReturnCode::FAILURE;
     }
-    return ReturnCode::SUCCESS;
 }
 
 ReturnCode writeToFile(const std::string &path, const std::string &content)
