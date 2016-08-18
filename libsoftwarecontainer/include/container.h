@@ -93,9 +93,8 @@ public:
 
     ReturnCode executeInContainer(const std::string &cmd);
 
-    std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
-
-    std::string bindMountFolderInContainer(const std::string &src, const std::string &dst, bool readonly = true);
+    ReturnCode bindMountFileInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true);
+    ReturnCode bindMountFolderInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true);
 
     ReturnCode mountDevice(const std::string &pathInHost);
 

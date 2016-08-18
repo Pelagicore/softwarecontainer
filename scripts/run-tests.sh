@@ -40,9 +40,15 @@ echo "XDG_RUNTIME_DIR is $XDG_RUNTIME_DIR"
 weston --backend=headless-backend.so &
 wpid=$!
 
+GTEST_FILTER="-*FileGatewayReadOnly"
+GTEST_OPTS="--gtest_output=xml"
+if [ -n "$1" ]; then
+    GTEST_FILTER="$1"
+fi
+
 ./libsoftwarecontainer/unit-test/softwarecontainerLibTest \
-    --gtest_filter=-"*FileGatewayReadOnly" \
-    --gtest_output=xml
+    --gtest_filter=$GTEST_FILTER \
+    $GTEST_OPTS
 retval=$?
 
 if ! kill $wpid > /dev/null 2>&1 ; then

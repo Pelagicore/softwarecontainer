@@ -207,7 +207,14 @@ public:
         profilefunction("bindMountFolderInContainerFunction");
         SoftwareContainerLib *container = nullptr;
         if (checkContainer(containerID, container)) {
-            return container->getContainer().bindMountFolderInContainer(pathInHost, subPathInContainer, readOnly);
+            std::string path;
+            ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, subPathInContainer, path, readOnly);
+            if (isError(result)) {
+                log_error() << "Unable to bind mount folder " << pathInHost << " to " << subPathInContainer;
+                return "";
+            }
+
+            return path;
         }
         return "";
     }
