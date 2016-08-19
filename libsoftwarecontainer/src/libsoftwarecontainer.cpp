@@ -35,11 +35,11 @@ SoftwareContainerWorkspace &getDefaultWorkspace()
 
 SoftwareContainerLib::SoftwareContainerLib(SoftwareContainerWorkspace &workspace) :
     m_workspace(workspace),
-    m_container( getContainerID()
-               , m_containerName
-               , m_workspace.m_containerConfig
-               , m_workspace.m_containerRoot
-               , m_workspace.m_containerShutdownTimeout)
+    m_container(new Container(getContainerID()
+                              , m_containerName
+                              , m_workspace.m_containerConfig
+                              , m_workspace.m_containerRoot
+                              , m_workspace.m_containerShutdownTimeout))
 {
     m_containerState = ContainerState::CREATED;
 }
@@ -63,7 +63,7 @@ void SoftwareContainerLib::setContainerIDPrefix(const std::string &name)
 void SoftwareContainerLib::setContainerName(const std::string &name)
 {
     m_containerName = name;
-    log_debug() << m_container.toString();
+    log_debug() << m_container->toString();
 }
 
 void SoftwareContainerLib::validateContainerID()
@@ -111,18 +111,18 @@ ReturnCode SoftwareContainerWorkspace::checkWorkspace()
 ReturnCode SoftwareContainerLib::preload()
 {
     log_debug() << "Initializing container";
-    if (isError(m_container.initialize())) {
+    if (isError(m_container->initialize())) {
         log_error() << "Could not setup container for preloading";
         return ReturnCode::FAILURE;
     }
 
     log_debug() << "Creating container";
-    if (isError(m_container.create())) {
+    if (isError(m_container->create())) {
         return ReturnCode::FAILURE;
     }
 
     log_debug() << "Starting container";
-    ReturnCode result = m_container.start(&m_pcPid);
+    ReturnCode result = m_container->start(&m_pcPid);
     if (isError(result)) {
         log_error() << "Could not start the container during preload";
         return ReturnCode::FAILURE;
@@ -199,7 +199,7 @@ void SoftwareContainerLib::addGateway(Gateway *gateway)
 
 void SoftwareContainerLib::openTerminal(const std::string &terminalCommand) const
 {
-    std::string command = logging::StringBuilder() << "lxc-attach -n " << m_container.id() << " " << terminalCommand;
+    std::string command = logging::StringBuilder() << "lxc-attach -n " << m_container->id() << " " << terminalCommand;
     log_info() << command;
     system(command.c_str());
 }
@@ -216,7 +216,7 @@ pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
 
     log_debug() << "launchCommand called with commandLine: " << commandLine;
     pid_t pid = INVALID_PID;
-    ReturnCode result = m_container.attach(commandLine, &pid);
+    ReturnCode result = m_container->attach(commandLine, &pid);
     if (isError(result)) {
         log_error() << "Attach returned invalid pid, launchCommand fails";
         return INVALID_PID;
@@ -257,7 +257,6 @@ void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs
     }
 
     m_containerState.setValueNotify(ContainerState::READY);
-
 }
 
 ReturnCode SoftwareContainerLib::shutdown()
@@ -272,7 +271,7 @@ ReturnCode SoftwareContainerLib::shutdown(unsigned int timeout)
         log_error() << "Could not shut down all gateways cleanly, check the log";
     }
 
-    if(isError(m_container.destroy(timeout))) {
+    if(isError(m_container->destroy(timeout))) {
         log_error() << "Could not destroy the container during shutdown";
         return ReturnCode::FAILURE;
     }
@@ -302,9 +301,10 @@ bool SoftwareContainerLib::isInitialized() const
     return m_initialized;
 }
 
-Container &SoftwareContainerLib::getContainer()
+std::shared_ptr<ContainerAbstractInterface> SoftwareContainerLib::getContainer()
 {
-    return m_container;
+    std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
+    return ptrCopy;
 }
 
 std::string SoftwareContainerLib::getContainerDir()

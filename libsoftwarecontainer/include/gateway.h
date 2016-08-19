@@ -75,10 +75,10 @@ public:
     bool hasContainer();
 
     /*! Get a reference to the associated container */
-    Container &getContainer();
+    std::shared_ptr<ContainerAbstractInterface> getContainer();
 
     /*! Set the associated contaitner for this gateway */
-    void setContainer(Container &container);
+    void setContainer(std::shared_ptr<ContainerAbstractInterface> container);
 
     /*! Is the gateway configured or not? */
     bool isConfigured();
@@ -95,7 +95,7 @@ protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
     static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
 
-    Container *m_container = nullptr;
+    std::shared_ptr<ContainerAbstractInterface> m_container;
     const char *m_id = nullptr;
     GatewayState m_state = GatewayState::CREATED;
 

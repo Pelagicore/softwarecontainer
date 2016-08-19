@@ -52,20 +52,20 @@ bool Gateway::teardown() {
     return teardownGateway();
 }
 
-
 bool Gateway::hasContainer()
 {
     return m_container != nullptr;
 }
 
-Container &Gateway::getContainer()
+std::shared_ptr<ContainerAbstractInterface> Gateway::getContainer()
 {
-    return *m_container;
+    std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
+    return ptrCopy;
 }
 
-void Gateway::setContainer(Container &container)
+void Gateway::setContainer(std::shared_ptr<ContainerAbstractInterface> container)
 {
-    m_container = &container;
+    m_container = container;
 }
 
 bool Gateway::isConfigured()
@@ -80,12 +80,22 @@ bool Gateway::isActivated()
 
 ReturnCode Gateway::setEnvironmentVariable(const std::string &variable, const std::string &value)
 {
-    return getContainer().setEnvironmentVariable(variable, value);
+    if (hasContainer()) {
+        return getContainer()->setEnvironmentVariable(variable, value);
+    } else {
+        log_error() << "Can't set environment variable on gateway without container";
+        return ReturnCode::FAILURE;
+    }
 }
 
 /*! Execute the given command in the container
  */
 ReturnCode Gateway::executeInContainer(const std::string &cmd)
 {
-    return getContainer().executeInContainer(cmd);
+    if (hasContainer()) {
+        return getContainer()->executeInContainer(cmd);
+    } else {
+        log_error() << "Can't execute in container from gateway without container";
+        return ReturnCode::FAILURE;
+    }
 }

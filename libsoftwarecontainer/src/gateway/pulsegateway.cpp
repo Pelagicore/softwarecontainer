@@ -29,8 +29,15 @@ bool PulseGateway::activateGateway()
         const char *dir = getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME);
         if (dir != nullptr) {
             log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
-            std::string path = "unix:" + getContainer().bindMountFileInContainer(dir, SOCKET_FILE_NAME, false);
-            setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, path );
+            std::string path;
+            ReturnCode result = getContainer()->bindMountFileInContainer(dir, SOCKET_FILE_NAME, path, false);
+            if (isError(result)) {
+                log_error() << "Could not bind mount pulseaudio socket in container";
+                return false;
+            }
+
+            std::string unixPath = "unix:" + path;
+            setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath );
         } else {
             log_error() << "Should enable pulseaudio gateway, but " << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
             return false;

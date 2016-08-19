@@ -198,4 +198,3 @@ std::string DBusGateway::socketName()
 }
 
 
-

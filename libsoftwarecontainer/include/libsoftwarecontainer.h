@@ -87,7 +87,7 @@ public:
     ReturnCode preload();
     ReturnCode init();
 
-    Container &getContainer();
+    std::shared_ptr<ContainerAbstractInterface> getContainer();
     const std::string &getContainerID();
     std::string getContainerDir();
     std::string getGatewayDir();
@@ -128,7 +128,7 @@ private:
     std::string m_containerName;
     ObservableWritableProperty<ContainerState> m_containerState;
 
-    Container m_container;
+    std::shared_ptr<ContainerAbstractInterface> m_container;
     pid_t m_pcPid = INVALID_PID;
     std::vector<std::unique_ptr<Gateway> > m_gateways;
 
@@ -226,7 +226,7 @@ public:
         m_env = env;
     }
 
-    Container &getContainer()
+    std::shared_ptr<ContainerAbstractInterface> getContainer()
     {
         return m_lib.getContainer();
     }
@@ -270,8 +270,8 @@ public:
 
     ReturnCode start()
     {
-        return getContainer().attach(m_command, &m_pid, m_env, m_userID, m_workingDirectory,
-                                     m_stdin[0], m_stdout[1], m_stderr[1]);
+        return getContainer()->attach(m_command, &m_pid, m_env, m_userID, m_workingDirectory,
+                                      m_stdin[0], m_stdout[1], m_stderr[1]);
     }
 
     std::string toString() const
@@ -305,7 +305,7 @@ public:
 
     ReturnCode start()
     {
-        return getContainer().executeInContainer(m_command, &m_pid, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+        return getContainer()->executeInContainer(m_command, &m_pid, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
     }
 
     void setEnvironnmentVariable(const std::string &key, const std::string &value)
