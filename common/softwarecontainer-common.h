@@ -11,7 +11,6 @@
 
 #include "softwarecontainer-config.h"
 #include "softwarecontainer-log.h"
-#include "pelagicore-common.h"
 
 #include "jsonparser.h"
 using pelagicore::JSonElement;
@@ -62,11 +61,6 @@ static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/SoftwareContai
 static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.SoftwareContainerAgent";
 
 static constexpr uid_t ROOT_UID = 0;
-
-inline bool isLXC_C_APIEnabled()
-{
-    return true;
-}
 
 /**
  * That class contains references to sigc++ connections and automatically disconnects them on destruction
@@ -191,8 +185,6 @@ private:
 
 };
 
-
-
 class CleanUpHandler
 {
 protected:
@@ -203,7 +195,6 @@ public:
     }
     virtual ReturnCode clean() = 0;
 };
-
 
 class DirectoryCleanUpHandler :
     public CleanUpHandler
@@ -281,10 +272,8 @@ public:
             return ReturnCode::SUCCESS;
         }
     }
-
     std::string m_path;
 };
-
 
 class FileToolkitWithUndo
 {
@@ -379,9 +368,7 @@ public:
                 return ReturnCode::FAILURE;
             }
         }
-
         return ReturnCode::SUCCESS;
-
     }
 
     ReturnCode createSharedMountPoint(const std::string &path)
@@ -425,13 +412,11 @@ public:
                         << strerror(errno);
             return ReturnCode::FAILURE;
         }
-
         return ReturnCode::SUCCESS;
     }
 
 protected:
     std::vector<CleanUpHandler *> m_cleanupHandlers;
-
 };
 
 }

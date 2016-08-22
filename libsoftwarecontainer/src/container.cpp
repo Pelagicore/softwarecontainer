@@ -212,7 +212,8 @@ ReturnCode Container::start(pid_t *pid)
         return ReturnCode::FAILURE;
     }
 
-    if (isLXC_C_APIEnabled() && false) {
+    // For some reason the LXC start function does not work out
+    if (false) {
         log_debug() << "Starting container";
 
         char commandEnv[] = "env";

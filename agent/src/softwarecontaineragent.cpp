@@ -28,14 +28,11 @@ LOG_DEFINE_APP_IDS("PELA", "SoftwareContainer agent");
 
 namespace softwarecontainer {
 
-using std::unique_ptr;
-
 LOG_DECLARE_DEFAULT_CONTEXT(PAM_DefaultLogContext, "MAIN", "Main context");
 
 class SoftwareContainerAgent
 {
-
-    typedef unique_ptr<SoftwareContainerLib> SoftwareContainerLibPtr;
+    typedef std::unique_ptr<SoftwareContainerLib> SoftwareContainerLibPtr;
 
 public:
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext

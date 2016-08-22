@@ -20,7 +20,6 @@ WaylandGateway::~WaylandGateway()
 {
 }
 
-
 ReturnCode WaylandGateway::readConfigElement(const JSonElement &element)
 {
     bool enabled;
