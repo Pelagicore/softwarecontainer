@@ -70,32 +70,31 @@ public:
      *
      * \return The pid of the init process of the container
      */
-    pid_t start();
+    ReturnCode start(pid_t *pid);
 
     /**
      * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    pid_t attach(const std::string &commandLine, const EnvironmentVariables &variables, uid_t userID,
-            const std::string &workingDirectory = "/", int stdin = -1, int stdout = 1,
-            int stderr = 2);
+    ReturnCode attach(const std::string &commandLine, pid_t *pid, const EnvironmentVariables &variables, uid_t userID,
+            const std::string &workingDirectory = "/", int stdin = -1, int stdout = 1, int stderr = 2);
 
     /**
      * Start a process with the environment variables which have previously been set by the gateways
      */
-    pid_t attach(const std::string &commandLine, uid_t userID = ROOT_UID);
+    ReturnCode attach(const std::string &commandLine, pid_t *pid, uid_t userID = ROOT_UID);
 
     ReturnCode setCgroupItem(std::string subsys, std::string value);
 
     ReturnCode setUser(uid_t userID);
 
-    pid_t executeInContainer(ContainerFunction function,
-            const EnvironmentVariables &variables = EnvironmentVariables(), uid_t userID = ROOT_UID, int stdin = -1, int stdout =
-                1, int stderr = 2);
+    ReturnCode executeInContainer(ContainerFunction function, pid_t *pid, const EnvironmentVariables &variables = EnvironmentVariables(),
+                                  uid_t userID = ROOT_UID, int stdin = -1, int stdout = 1, int stderr = 2);
 
-    std::string bindMountFileInContainer(const std::string &src, const std::string &dst, bool readonly = true);
+    ReturnCode executeInContainer(const std::string &cmd);
 
-    std::string bindMountFolderInContainer(const std::string &src, const std::string &dst, bool readonly = true);
+    ReturnCode bindMountFileInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true);
+    ReturnCode bindMountFolderInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true);
 
     ReturnCode mountDevice(const std::string &pathInHost);
 
@@ -141,7 +140,6 @@ public:
     const std::string &rootFS() const;
 
     ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
-    ReturnCode executeInContainer(const std::string &cmd);
 
 private:
     static int executeInContainerEntryFunction(void *param);

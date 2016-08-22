@@ -122,8 +122,8 @@ ReturnCode SoftwareContainerLib::preload()
     }
 
     log_debug() << "Starting container";
-    m_pcPid = m_container.start();
-    if (m_pcPid == INVALID_PID) {
+    ReturnCode result = m_container.start(&m_pcPid);
+    if (isError(result)) {
         log_error() << "Could not start the container during preload";
         return ReturnCode::FAILURE;
     }
@@ -215,8 +215,9 @@ pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
     */
 
     log_debug() << "launchCommand called with commandLine: " << commandLine;
-    pid_t pid = m_container.attach(commandLine);
-    if (pid == INVALID_PID) {
+    pid_t pid = INVALID_PID;
+    ReturnCode result = m_container.attach(commandLine, &pid);
+    if (isError(result)) {
         log_error() << "Attach returned invalid pid, launchCommand fails";
         return INVALID_PID;
     }

@@ -270,9 +270,8 @@ public:
 
     ReturnCode start()
     {
-        m_pid = getContainer().attach(m_command, m_env, m_userID, m_workingDirectory,
-                                      m_stdin[0], m_stdout[1], m_stderr[1]);
-        return bool2ReturnCode(m_pid != 0);
+        return getContainer().attach(m_command, &m_pid, m_env, m_userID, m_workingDirectory,
+                                     m_stdin[0], m_stdout[1], m_stderr[1]);
     }
 
     std::string toString() const
@@ -306,8 +305,7 @@ public:
 
     ReturnCode start()
     {
-        m_pid = getContainer().executeInContainer(m_command, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
-        return bool2ReturnCode(m_pid != INVALID_PID);
+        return getContainer().executeInContainer(m_command, &m_pid, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
     }
 
     void setEnvironnmentVariable(const std::string &key, const std::string &value)

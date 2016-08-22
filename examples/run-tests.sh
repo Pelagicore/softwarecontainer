@@ -2,5 +2,5 @@
 
 pushd simple/
 cmake . && make
-./launch.sh -b session
+./launch.sh -b system
 popd
