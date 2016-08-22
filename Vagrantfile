@@ -44,7 +44,11 @@ Vagrant.configure(2) do |config|
 
     # Install dependencies via git
     config.vm.provision "shell", privileged: false, 
-        args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git"],
+        args: ["dlt-daemon", "http://git.projects.genivi.org/dlt-daemon.git"],
+        path: "cookbook/build/cmake-git-builder.sh"
+
+    config.vm.provision "shell", privileged: false, 
+        args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git", "-DENABLE_DLT_BACKEND=1"],
         path: "cookbook/build/cmake-git-builder.sh"
 
     config.vm.provision "shell", privileged: false, 
