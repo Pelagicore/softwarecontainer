@@ -166,12 +166,8 @@ bool DBusGateway::teardownGateway()
 
     if (m_pid != INVALID_PID) {
         log_debug() << "Killing dbus-proxy with pid " << m_pid;
-        /*
-         * For some reason, it does not work using SIGTERM, as that causes
-         * the system to hang on waitpid - even if Glib::SPAWN_DO_NOT_REAP_CHILD
-         * is set. It seems dbus-proxy does not react to SIGTERM.
-         */
-        kill(m_pid, SIGTERM);
+
+        kill(m_pid, SIGKILL); // In some configurations, hangs if using SIGTERM instead
         waitpid(m_pid, nullptr, 0); // Wait until it exits
         Glib::spawn_close_pid(m_pid);
     } else {
