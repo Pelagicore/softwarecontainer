@@ -42,11 +42,11 @@ bool DeviceNodeGateway::activateGateway()
             }
         } else {
             // No major & minor numbers specified => simply map the device from the host into the container
-            getContainer().mountDevice(dev.name);
+            getContainer()->mountDevice(dev.name);
 
             // TODO : check if it is fine to authorize write access systematically
             std::string cmd = StringBuilder() << "chmod o+rwx " << dev.name;
-            getContainer().executeInContainer(cmd);
+            getContainer()->executeInContainer(cmd);
         }
     }
 

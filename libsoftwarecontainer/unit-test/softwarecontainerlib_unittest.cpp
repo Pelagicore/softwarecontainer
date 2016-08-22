@@ -388,7 +388,9 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
-    auto pathInContainer = getLib().getContainer().bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), true);
+    std::string pathInContainer;
+    ReturnCode result = getLib().getContainer()->bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), pathInContainer, true);
+    ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getLib(), [&] () {
                 return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
@@ -414,8 +416,9 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
-    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempDirname, basename(strdup(
-                    tempDirname)), true);
+    std::string pathInContainer;
+    ReturnCode result = getLib().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
+    ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getLib(), [&] () {
                 return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
@@ -450,8 +453,10 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    auto pathInContainer = getLib().getContainer().bindMountFolderInContainer(tempDirname, basename(strdup(
-                    tempDirname)), true);
+    std::string pathInContainer;
+    ReturnCode result = getLib().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
+    ASSERT_TRUE(isSuccess(result));
+
     char *tmp = new char[pathInContainer.size() + 8];
     std::copy(pathInContainer.begin(), pathInContainer.end(), tmp);
     tmp[pathInContainer.size()] = '\0';
@@ -580,7 +585,10 @@ TEST_F(SoftwareContainerApp, TestPulseAudioEnabled) {
     // We need access to the test file, so we bind mount it
     std::string soundFileCPP = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
     const char *soundFile = soundFileCPP.c_str();
-    auto pathInContainer = getLib().getContainer().bindMountFileInContainer(soundFile, basename(strdup(soundFile)), true);
+
+    std::string pathInContainer;
+    ReturnCode result = getLib().getContainer()->bindMountFileInContainer(soundFile, basename(strdup(soundFile)), pathInContainer, true);
+    ASSERT_TRUE(isSuccess(result));
 
     // Make sure the file is there
     FunctionJob job1(getLib(), [&] () {

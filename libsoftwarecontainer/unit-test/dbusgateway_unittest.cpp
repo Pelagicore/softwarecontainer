@@ -53,7 +53,7 @@ TEST_F(DBusGatewayTest, TestSetConfig) {
 }
 
 TEST_F(DBusGatewayTest, TestActivate) {
-    lib->addGateway(gw);
+    givenContainerIsSet(gw);
     const std::string config = "[{"
             "\"dbus-gateway-config-session\": [{"
                "\"direction\": \"*\","

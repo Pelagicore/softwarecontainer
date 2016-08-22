@@ -57,7 +57,7 @@ bool CgroupsGateway::activateGateway()
 {
     ReturnCode success = ReturnCode::FAILURE;
     for (auto& setting: m_settings) {
-        success = getContainer().setCgroupItem(setting.first, setting.second);
+        success = getContainer()->setCgroupItem(setting.first, setting.second);
         if (success != ReturnCode::SUCCESS) {
             log_error() << "Error activating Cgroups Gateway, could not set cgroup item "
                         << setting.first << ": " << setting.second;

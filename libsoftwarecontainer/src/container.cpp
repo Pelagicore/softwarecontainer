@@ -530,41 +530,58 @@ ReturnCode Container::destroy(unsigned int timeout)
 }
 
 
-std::string Container::bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
-        bool readonly)
+ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
+                                               const std::string &pathInContainer,
+                                               std::string &result,
+                                               bool readonly)
 {
     if(isError(ensureContainerRunning())) {
         log_error() << "Container is not running or in bad state, can't bind-mount file";
-        return "";
+        return ReturnCode::FAILURE;
     }
 
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
-    touch(dst);
+    if (isError(touch(dst))) {
+        log_error() << "Could not create " << dst;
+        return ReturnCode::FAILURE;
+    }
     m_cleanupHandlers.push_back(new FileCleanUpHandler(dst));
-    bindMount(pathOnHost, dst, readonly);
 
-    std::string actualPathInContainer = gatewaysDirInContainer();
-    actualPathInContainer += +"/" + pathInContainer;
+    if (isError(bindMount(pathOnHost, dst, readonly))) {
+        log_error() << "Could not bind mount " << pathOnHost << " to " << dst;
+        return ReturnCode::FAILURE;
+    }
 
-    return actualPathInContainer;
+    result = gatewaysDirInContainer() + "/" + pathInContainer;
+    return ReturnCode::SUCCESS;
 }
 
-std::string Container::bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer,
-        bool readonly)
+ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
+                                                 const std::string &pathInContainer,
+                                                 std::string &result,
+                                                 bool readonly)
 {
     if(isError(ensureContainerRunning())) {
         log_error() << "Container is not running or in bad state, can't bind-mount folder";
-        return "";
+        return ReturnCode::FAILURE;
     }
 
     std::string dst = gatewaysDir() + "/" + pathInContainer;
 
     log_debug() << "Creating folder : " << dst;
-    createDirectory(dst);
-    bindMount(pathOnHost, dst, readonly);
+    if (isError(createDirectory(dst))) {
+        log_error() << "Could not create folder " << dst;
+        return ReturnCode::FAILURE;
+    }
 
-    return gatewaysDirInContainer() + "/" + pathInContainer;
+    if (isError(bindMount(pathOnHost, dst, readonly))) {
+        log_error() << "Could not bind mount " << pathOnHost << " to " << dst;
+        return ReturnCode::FAILURE;
+    }
+
+    result = gatewaysDirInContainer() + "/" + pathInContainer;
+    return ReturnCode::SUCCESS;
 }
 
 ReturnCode Container::mountDevice(const std::string &pathInHost)
@@ -574,8 +591,8 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
         return ReturnCode::FAILURE;
     }
     log_debug() << "Mounting device in container : " << pathInHost;
-    auto returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
-    return (returnCode) ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+    bool returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
+    return bool2ReturnCode(returnCode);
 }
 
 ReturnCode Container::executeInContainer(const std::string &cmd)

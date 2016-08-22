@@ -36,7 +36,13 @@ bool WaylandGateway::activateGateway()
         if (dir != nullptr) {
             log_info() << "enabling Wayland gateway. Socket dir:" << dir;
             std::string d = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
-            std::string path = getContainer().bindMountFileInContainer(d, SOCKET_FILE_NAME, false);
+            std::string path;
+            ReturnCode result = getContainer()->bindMountFileInContainer(d, SOCKET_FILE_NAME, path, false);
+            if (isError(result)) {
+                log_error() << "Could not bind mount the wayland socket into the container";
+                return false;
+            }
+
             setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(path));
         } else {
             log_error() << "Should enable wayland gateway, but " << WAYLAND_RUNTIME_DIR_VARIABLE_NAME << " is not defined";

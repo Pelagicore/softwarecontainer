@@ -11,8 +11,7 @@
 #include <lxc/lxccontainer.h>
 
 #include "softwarecontainer-common.h"
-
-
+#include "containerabstractinterface.h"
 
 /*! Container is an abstraction of the specific containment technology used.
  *
@@ -22,7 +21,7 @@
  * and 'Shutdown'.
  */
 class Container :
-    private FileToolkitWithUndo
+    private FileToolkitWithUndo, public ContainerAbstractInterface
 {
     LOG_DECLARE_CLASS_CONTEXT("CONT", "Container");
 
@@ -44,8 +43,6 @@ class Container :
     static void init_lxc();
 
 public:
-    /// A function to be executed in the container
-    typedef std::function<int ()> ContainerFunction;
 
     /*!
      * Constructor

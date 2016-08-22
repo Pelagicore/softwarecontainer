@@ -44,13 +44,23 @@ bool FileGateway::activateGateway()
             std::string path;
 
             if (isDirectory(setting.pathInHost)) {
-                path = getContainer().bindMountFolderInContainer(setting.pathInHost
-                        , setting.pathInContainer
-                        , setting.readOnly);
+                ReturnCode result = getContainer()->bindMountFolderInContainer(setting.pathInHost
+                                                                             , setting.pathInContainer
+                                                                             , path
+                                                                             , setting.readOnly);
+                if (isError(result)) {
+                    log_error() << "Could not bind mount folder into container";
+                    return false;
+                }
             } else {
-                path = getContainer().bindMountFileInContainer(setting.pathInHost
-                        , setting.pathInContainer
-                        , setting.readOnly);
+                ReturnCode result = getContainer()->bindMountFileInContainer(setting.pathInHost
+                                                                           , setting.pathInContainer
+                                                                           , path
+                                                                           , setting.readOnly);
+                if (isError(result)) {
+                    log_error() << "Could not bind mount file into container";
+                    return false;
+                }
             }
 
             if (path.size() == 0) {
@@ -64,7 +74,7 @@ bool FileGateway::activateGateway()
             }
 
             if (setting.createSymlinkInContainer) {
-                getContainer().createSymLink(getContainer().rootFS() + setting.pathInHost, path);
+                getContainer()->createSymLink(getContainer()->rootFS() + setting.pathInHost, path);
             }
         }
         return true;
