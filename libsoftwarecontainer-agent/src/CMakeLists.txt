@@ -13,7 +13,7 @@ TARGET_LINK_LIBRARIES( softwarecontainer-agent-lib
     ${GLIBMM_LIBRARIES}
 )
 
-include_directories(${LIBPELAGICONTAINAGENT_DIR}/include)
+include_directories(${LIBSOFTWARECONTAINERAGENT_DIR}/include)
 
 install(TARGETS softwarecontainer-agent-lib DESTINATION lib)
 set_target_properties(softwarecontainer-agent-lib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
