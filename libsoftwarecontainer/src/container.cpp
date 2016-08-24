@@ -336,7 +336,7 @@ ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
 
 ReturnCode Container::setUser(uid_t userID)
 {
-    log_info() << "Setting env for userID : " << userID;
+    //log_info() << "Setting env for userID : " << userID;
 
     struct passwd *pw = getpwuid(userID);
     if (pw != nullptr) {
@@ -350,7 +350,7 @@ ReturnCode Container::setUser(uid_t userID)
         groups.resize(ngroups);
 
         if (getgrouplist(pw->pw_name, pw->pw_gid, groups.data(), &ngroups) == -1) {
-            log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
+            //log_error() << "getgrouplist() returned -1; ngroups = %d\n" << ngroups;
             return ReturnCode::FAILURE;
         }
 
@@ -359,25 +359,25 @@ ReturnCode Container::setUser(uid_t userID)
             s << " " << gid;
         }
 
-        log_debug() << "setuid(" << userID << ")" << "  setgid(" << pw->pw_gid << ")  " << "Groups " << s.str();
+        //log_debug() << "setuid(" << userID << ")" << "  setgid(" << pw->pw_gid << ")  " << "Groups " << s.str();
 
         if (setgroups(groups.size(), groups.data()) != 0) {
-            log_error() << "setgroups failed";
+            //log_error() << "setgroups failed";
             return ReturnCode::FAILURE;
         }
 
         if (setgid(pw->pw_gid) != 0) {
-            log_error() << "setgid failed";
+            //log_error() << "setgid failed";
             return ReturnCode::FAILURE;
         }
 
         if (setuid(userID) != 0) {
-            log_error() << "setuid failed";
+            //log_error() << "setuid failed";
             return ReturnCode::FAILURE;
         }
 
     } else {
-        log_error() << "Error in getpwuid";
+        //log_error() << "Error in getpwuid";
         return ReturnCode::FAILURE;
     }
 
@@ -421,7 +421,7 @@ ReturnCode Container::attach(const std::string &commandLine, pid_t *pid, const E
     // We execute the function as root but will switch to the real userID inside
 
     ReturnCode result = executeInContainer([&] () {
-                log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
+//                log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
                 workingDirectory;
 
                 if (!isSuccess(setUser(userID))) {
@@ -431,13 +431,13 @@ ReturnCode Container::attach(const std::string &commandLine, pid_t *pid, const E
                 if (workingDirectory.length() != 0) {
                     auto ret = chdir(workingDirectory.c_str());
                     if (ret != 0) {
-                        log_error() << "Error when changing current directory : " << strerror(errno);
+//                        log_error() << "Error when changing current directory : " << strerror(errno);
                     }
 
                 }
                 execvp(args[0], args.data());
 
-                log_error() << "Error when executing the command in container : " << strerror(errno);
+//                log_error() << "Error when executing the command in container : " << strerror(errno);
                 return 1;
             }, pid, variables, ROOT_UID, stdin, stdout, stderr);
     if (isError(result)) {
@@ -605,9 +605,9 @@ ReturnCode Container::executeInContainer(const std::string &cmd)
 
     pid_t pid = INVALID_PID;
     ReturnCode result = executeInContainer([this, cmd]() {
-                log_info() << "Executing system command in container : " << cmd;
+                //log_info() << "Executing system command in container : " << cmd;
                 const int result = execl("/bin/sh", "sh", "-c", cmd.c_str(), 0);
-                log_debug() << "Excution of system command " << cmd << " resulted in status " << result;
+                //log_debug() << "Excution of system command " << cmd << " resulted in status " << result;
                 return result;
             }, &pid, m_gatewayEnvironmentVariables);
 
