@@ -38,13 +38,13 @@ link_directories(
 )
 
 set(TEST_FILES
+    cgroupsgateway_unittest.cpp
+    dbusgateway_unittest.cpp
+    envgateway_unittest.cpp
+    filegateway_unittest.cpp
     main.cpp
     softwarecontainer_test.cpp
     softwarecontainerlib_unittest.cpp
-    cgroupsgateway_unittest.cpp
-    filegateway_unittest.cpp
-    envgateway_unittest.cpp
-    dbusgateway_unittest.cpp
 )
 
 macro(add_gtest_test testName files libraries)
