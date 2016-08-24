@@ -29,7 +29,7 @@ TARGET_LINK_LIBRARIES( softwarecontainer-agent
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
-    ${JSONParser_LIBRARIES}
+    ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainerLib
 )

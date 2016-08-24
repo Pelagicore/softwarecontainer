@@ -39,24 +39,44 @@ NetworkGateway::~NetworkGateway()
 {
 }
 
-ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
+ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
-    bool enableInternetAccess = false;
-    element.read("internet-access", enableInternetAccess);
-    m_internetAccess |= enableInternetAccess;
-
-    log_debug() << (m_internetAccess ? "Internet access will be enabled" : "Internet access disabled");
-
-    std::string gateway;
-    element.read("gateway", gateway);
-    if (gateway.size() != 0) {
-        m_gateway = gateway;
-        if ((m_gateway.size() != 0) && (m_gateway.compare(gateway))) {
-            log_error() << "Contradiction in gateway";
-            return ReturnCode::FAILURE;
-        }
+    json_t *internet_value = json_object_get(element, "internet-access");
+    if (!internet_value) {
+        log_error() << "Key \"internet-access\" missing in json configuration";
+        return ReturnCode::FAILURE;
     }
 
+    if (json_is_boolean(internet_value)) {
+        m_internetAccess = json_is_true(internet_value);
+    } else {
+        log_error() << "Value for \"internet-access\" key is not a boolean value";
+        return ReturnCode::FAILURE;
+    }
+
+    if (m_internetAccess) {
+        log_info() << "Internet access will be enabled";
+        json_t *gateway_value = json_object_get(element, "gateway");
+        if (!gateway_value) {
+            log_error() << "Key \"gateway\" missing in json configuration";
+            return ReturnCode::FAILURE;
+        }
+
+        if (!json_is_string(gateway_value)) {
+            log_error() << "Value for \"gateway\" key is not a string";
+            return ReturnCode::FAILURE;
+        }
+
+        if (json_string_length(gateway_value) != 0) {
+            m_gateway = std::string(json_string_value(gateway_value));
+        } else {
+            log_error() << "Value for \"gateway\" key is an empty string";
+            return ReturnCode::FAILURE;
+        }
+
+    } else {
+        log_info() << "Internet access will be disabled";
+    }
     return ReturnCode::SUCCESS;
 }
 

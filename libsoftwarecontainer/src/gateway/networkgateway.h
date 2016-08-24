@@ -37,7 +37,7 @@ public:
     NetworkGateway();
     ~NetworkGateway();
 
-    ReturnCode readConfigElement(const JSonElement &element) override;
+    ReturnCode readConfigElement(const json_t *element) override;
 
     /*!
      *  Implements Gateway::activateGateway

@@ -18,9 +18,8 @@
  * For further information see LICENSE
  */
 
-
 #include "generators.h"
-
+#include "generators.h"
 #include "devicenodegateway.h"
 
 
@@ -29,17 +28,36 @@ DeviceNodeGateway::DeviceNodeGateway() :
 {
 }
 
-ReturnCode DeviceNodeGateway::readConfigElement(const JSonElement &element)
+ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeGateway::Device dev;
 
-    element.read("name", dev.name);
-    element.read("major", dev.major);
-    element.read("minor", dev.minor);
-    element.read("mode", dev.mode);
+    typedef std::pair<const char *, std::string *> DevicePair;
+    const DevicePair mapping[] = {
+        DevicePair("name", &dev.name),
+        DevicePair("major", &dev.major),
+        DevicePair("minor", &dev.minor),
+        DevicePair("mode", &dev.mode)
+    };
+
+    for (DevicePair t : mapping) {
+        const char *key = t.first;
+        json_t *devPart = json_object_get(element, key);
+        if (!devPart) {
+            log_error() << "Key " << key << " missing in json configuration";
+            return ReturnCode::FAILURE;
+        }
+
+        if (!json_is_string(devPart)) {
+            log_error() << "Value for " << key << " key is not a string";
+            return ReturnCode::FAILURE;
+        }
+
+        std::string *structPart = t.second;
+        *structPart = json_string_value(devPart);
+    }
 
     m_devList.push_back(dev);
-
     return ReturnCode::SUCCESS;
 }
 

@@ -28,16 +28,53 @@ FileGateway::FileGateway()
 {
 }
 
-ReturnCode FileGateway::readConfigElement(const JSonElement &element)
+ReturnCode FileGateway::readConfigElement(const json_t *element)
 {
     FileSetting setting;
-    element.read("path-host", setting.pathInHost);
-    element.read("path-container", setting.pathInContainer);
-    element.read("create-symlink", setting.createSymlinkInContainer);
-    element.read("read-only", setting.readOnly);
-    element.read("env-var-name", setting.envVarName);
-    element.read("env-var-prefix", setting.envVarPrefix);
-    element.read("env-var-suffix", setting.envVarSuffix);
+
+    typedef std::pair<const char *, std::string *> SettingStringPair;
+    typedef std::pair<const char *, bool *> SettingBoolPair;
+
+    const SettingStringPair stringMapping[] = {
+        SettingStringPair("path-host", &setting.pathInHost),
+        SettingStringPair("path-container", &setting.pathInContainer),
+        SettingStringPair("env-var-name", &setting.envVarName),
+        SettingStringPair("env-var-prefix", &setting.envVarPrefix),
+        SettingStringPair("env-var-suffix", &setting.envVarSuffix)
+    };
+
+    const SettingBoolPair boolMapping[] = {
+        SettingBoolPair("create-symlink", &setting.createSymlinkInContainer),
+        SettingBoolPair("read-only", &setting.readOnly)
+    };
+
+    for (SettingStringPair s : stringMapping) {
+        const char *key = s.first;
+        json_t *settingString = json_object_get(element, key);
+        if (settingString) {
+            if (json_is_string(settingString)) {
+                std::string *structPart = s.second;
+                *structPart = json_string_value(settingString);
+            } else {
+                log_error() << "Value for " << key << " key is not a string";
+                return ReturnCode::FAILURE;
+            }
+        }
+    }
+
+    for (SettingBoolPair b : boolMapping) {
+        const char *key = b.first;
+        json_t *settingBool = json_object_get(element, key);
+        if (settingBool) {
+            bool *structPart = b.second;
+            if (json_is_boolean(settingBool)) {
+                *structPart = json_is_true(settingBool);
+            } else {
+                log_error() << "Value for " << key << " key is not a bool";
+                return ReturnCode::FAILURE;
+            }
+        }
+    }
 
     if (setting.pathInHost.size() == 0) {
         log_error() << "FileGateway config is lacking 'path-host' setting";

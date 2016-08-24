@@ -23,9 +23,6 @@
 
 #include "gateway.h"
 
-/**
- * To be removed
- */
 class WaylandGateway :
     public Gateway
 {
@@ -39,7 +36,7 @@ public:
     WaylandGateway();
     ~WaylandGateway();
 
-    ReturnCode readConfigElement(const JSonElement &element);
+    ReturnCode readConfigElement(const json_t *element);
     virtual bool activateGateway();
     virtual bool teardownGateway();
 

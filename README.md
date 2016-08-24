@@ -54,7 +54,6 @@ tests and perform a clang code analysis run on the code.
 - pelagicore-utils - Known good commit: aeb2a9bd52aff15c1a7ecae6a39e1aa271758e06
 - ivi-logging - Known good commit: ea313b78b23c2c79bfeee7329131a804b14965c8
 - ivi-mainloop - Known good commit: 558fbd49e874eef9a84a7d00a8d1a6dc9dc93cb2
-- jsonparser - Known good commit: 7179e326e5f9137faeb11852b0e640b31a3987d5
 - git
 - cmake
 - build-essential (on Debian-based systems)
@@ -65,6 +64,7 @@ tests and perform a clang code analysis run on the code.
 - libdbus-1-dev
 - libglibmm-2.4-dev
 - libglibmm-2.4
+- lxc
 - lxc-dev
 - libpulse-dev
 - unzip
@@ -77,6 +77,11 @@ tests and perform a clang code analysis run on the code.
 You normally only want to run the softwarecontainer-agent, which requires root
 privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
+
+## Why does it require root privileges?
+First, creating LXC containers require root priveleges. Second, setting up a
+network bridge using brctl and ifconfig/iptables typically also does require
+that.
 
 # Testing
 

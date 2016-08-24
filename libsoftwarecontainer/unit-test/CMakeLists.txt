@@ -26,7 +26,7 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
     ${IVIMainLoop_LIBRARIES}
-    ${JSONParser_LIBRARIES}
+    ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainerLib
 )

@@ -31,30 +31,16 @@ CgroupsGateway::CgroupsGateway()
     m_state = GatewayState::CREATED;
 }
 
-ReturnCode CgroupsGateway::readConfigElement(const JSonElement &element)
+ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
 {
-    if (!element.isValid()) {
-        log_error() << "Error: invalid JSON data";
-        return ReturnCode::FAILURE;
-    }
-
-    if (!element.isObject()) {
-        log_error() << "Error: Elements must be JSON objects";
-        return ReturnCode::FAILURE;
-    }
-
-    const json_t *data = element.root();
-    json_t *setting;
-    json_t *value;
-
-    setting = json_object_get(data, "setting");
+    json_t *setting = json_object_get(element, "setting");
     if (!json_is_string(setting)) {
         log_error() << "Error: setting is not a string";
         return ReturnCode::FAILURE;
     }
     std::string settingString = json_string_value(setting);
 
-    value = json_object_get(data, "value");
+    json_t *value = json_object_get(element, "value");
     if (!json_is_string(value)) {
         log_error() << "Error, value is not a string";
         return ReturnCode::FAILURE;

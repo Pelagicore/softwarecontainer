@@ -33,8 +33,13 @@ bool Gateway::setConfig(const std::string &config)
     if (json_is_array(root)) {
         for(size_t i = 0; i < json_array_size(root); i++) {
             json_t *element = json_array_get(root, i);
-            if (isError(readConfigElement(element))) {
-                log_error() << "Could not read config element";
+            if (json_is_object(element)) {
+                if (isError(readConfigElement(element))) {
+                    log_error() << "Could not read config element";
+                    return false;
+                }
+            } else {
+                log_error() << "json configuration is not an object";
                 return false;
             }
         }

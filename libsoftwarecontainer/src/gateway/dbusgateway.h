@@ -152,7 +152,7 @@ public:
     DBusGateway(ProxyType type, const std::string &gatewayDir, const std::string &name);
     virtual ~DBusGateway();
 
-    virtual ReturnCode readConfigElement(const JSonElement &element) override;
+    virtual ReturnCode readConfigElement(const json_t *element) override;
 
     /*!
      *  Implements Gateway::activateGateway

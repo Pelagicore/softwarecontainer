@@ -31,11 +31,20 @@ PulseGateway::~PulseGateway()
 {
 }
 
-ReturnCode PulseGateway::readConfigElement(const JSonElement &element)
+ReturnCode PulseGateway::readConfigElement(const json_t *element)
 {
-    bool enabled = false;
-    element.read("audio", enabled);
-    m_enableAudio |= enabled;
+    json_t *audio_value = json_object_get(element, "audio");
+    if (!audio_value) {
+        log_error() << "Key \"audio\" missing in json configuration";
+        return ReturnCode::FAILURE;
+    }
+
+    if (json_is_boolean(audio_value)) {
+        m_enableAudio = json_is_true(audio_value);
+    } else {
+        log_error() << "Value for \"audio\" key is not a boolean value";
+        return ReturnCode::FAILURE;
+    }
     return ReturnCode::SUCCESS;
 }
 

@@ -24,6 +24,7 @@
 #include "waylandgateway.h"
 
 // TODO: no clue why the following lines are needed
+constexpr const char *Gateway::ENABLED_FIELD;
 constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
 
@@ -36,11 +37,21 @@ WaylandGateway::~WaylandGateway()
 {
 }
 
-ReturnCode WaylandGateway::readConfigElement(const JSonElement &element)
+ReturnCode WaylandGateway::readConfigElement(const json_t *element)
 {
-    bool enabled;
-    element.readBoolean(ENABLED_FIELD, enabled);
-    m_enabled = enabled;
+    json_t *enabled_value = json_object_get(element, ENABLED_FIELD);
+    if (!enabled_value) {
+        log_error() << "Key " << ENABLED_FIELD << " missing in json configuration";
+        return ReturnCode::FAILURE;
+    }
+
+    if (json_is_boolean(enabled_value)) {
+        m_enabled = json_is_true(enabled_value);
+    } else {
+        log_error() << "Value for " << ENABLED_FIELD << " key is not a boolean value";
+        return ReturnCode::FAILURE;
+    }
+
     return ReturnCode::SUCCESS;
 }
 
