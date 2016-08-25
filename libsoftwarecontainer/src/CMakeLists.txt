@@ -49,7 +49,7 @@ gateway_support(DEFAULT_GATEWAYS env envgateway.h envgateway.cpp)
 gateway_support(DEFAULT_GATEWAYS file filegateway.h filegateway.cpp)
 gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.h waylandgateway.cpp)
 
-add_library(softwarecontainerLib SHARED 
+add_library(softwarecontainerlib SHARED 
     container.cpp
     gateway/gateway.cpp
     generators.cpp
@@ -60,7 +60,7 @@ add_library(softwarecontainerLib SHARED
     ${PROJECT_SOURCE_DIR}/common/common.cpp
 )
 
-TARGET_LINK_LIBRARIES( softwarecontainerLib
+TARGET_LINK_LIBRARIES( softwarecontainerlib
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
@@ -69,5 +69,5 @@ TARGET_LINK_LIBRARIES( softwarecontainerLib
 
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 
-install(TARGETS softwarecontainerLib DESTINATION lib)
-set_target_properties(softwarecontainerLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
+install(TARGETS softwarecontainerlib DESTINATION lib)
+set_target_properties(softwarecontainerlib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})

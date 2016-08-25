@@ -39,7 +39,7 @@ pactl load-module module-native-protocol-unix auth-anonymous=1 socket=$PULSE_SER
 export PULSE_SERVER=$PULSE_SERVER
 
 # BUG: ivi-logging and dlt does not work together in softwarecontainer for some reason
-#      Everything in the softwarecontainerLibTest hangs and stops dead if DLT backend 
+#      Everything in the softwarecontainerlibtest hangs and stops dead if DLT backend 
 #      is enabled.
 # # Setup environment for tests
 # echo "### Starting dlt-daemon ###"
@@ -64,7 +64,7 @@ if [ -n "$1" ]; then
     GTEST_FILTER="$1"
 fi
 
-./libsoftwarecontainer/unit-test/softwarecontainerLibTest \
+./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
     --gtest_filter=$GTEST_FILTER \
     $GTEST_OPTS
 retval=$?
@@ -81,7 +81,7 @@ if kill -0 $ppid > /dev/null 2>&1 ; then
 fi
 
 # BUG: ivi-logging and dlt does not work together in softwarecontainer for some reason
-#      Everything in the softwarecontainerLibTest hangs and stops dead if DLT backend 
+#      Everything in the softwarecontainerlibtest hangs and stops dead if DLT backend 
 #      is enabled.
 # # Shutdown the environment used by the tests
 # if ! kill $rpid > /dev/null 2>&1 ; then

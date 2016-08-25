@@ -21,7 +21,7 @@
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
 add_executable(softwarecontainer-agent
-    src/softwarecontaineragent.cpp
+    src/agent.cpp
     SoftwareContainerAgent_dbuscpp_adaptor.h
 )
 
@@ -31,7 +31,7 @@ TARGET_LINK_LIBRARIES( softwarecontainer-agent
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerLib
+    softwarecontainerlib
 )
 
 INSTALL(TARGETS softwarecontainer-agent DESTINATION bin)
