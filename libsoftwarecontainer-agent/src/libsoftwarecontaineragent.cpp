@@ -13,13 +13,6 @@ class Agent;
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "SCAL", "Software container agent library");
 
-template<typename Proxy, typename ... ConstructorArgs>
-    class DBusCppProxy: public Proxy, public DBus::IntrospectableProxy, public DBus::ObjectProxy {
-        public:
-            DBusCppProxy(DBus::Connection& connection, const std::string& objectPath, const std::string& busname, ConstructorArgs ... args) :
-                Proxy(args ...), DBus::ObjectProxy(connection, objectPath, busname.c_str()) {
-            }
-};
 
 struct AgentPrivateData
 {
@@ -39,19 +32,24 @@ private:
         Agent &m_agent;
     };
 
+    // Utility class for DBus Proxies
+    class DBusCppProxy : public SoftwareContainerAgentProxy, public DBus::IntrospectableProxy, public DBus::ObjectProxy {
+        public:
+            DBusCppProxy(DBus::Connection& connection, const std::string& objectPath, const std::string& busname, Agent &agent) :
+                SoftwareContainerAgentProxy(agent), DBus::ObjectProxy(connection, objectPath, busname.c_str())
+            {
+            }
+    };
+
     AgentPrivateData(Glib::RefPtr<Glib::MainContext> mainLoopContext, Agent &agent)
     {
         try {
             m_conn = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
-            m_proxy = std::unique_ptr<SoftwareContainerAgentProxy>(
-                new DBusCppProxy<SoftwareContainerAgentProxy, Agent>(*m_conn, AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent)
-            );
+            m_proxy = std::unique_ptr<SoftwareContainerAgentProxy>(new DBusCppProxy(*m_conn, AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent));
             m_proxy->Ping();
         } catch (DBus::Error &error) {
             m_conn = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SessionBus()));
-            m_proxy = std::unique_ptr<SoftwareContainerAgentProxy>(
-                new DBusCppProxy<SoftwareContainerAgentProxy, Agent>(*m_conn, AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent)
-            );
+            m_proxy = std::unique_ptr<SoftwareContainerAgentProxy>(new DBusCppProxy(*m_conn, AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent));
             m_proxy->Ping();
         }
     }

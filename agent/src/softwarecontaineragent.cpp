@@ -20,7 +20,7 @@
 #include "SoftwareContainerAgent_dbuscpp_adaptor.h"
 #include "libsoftwarecontainer.h"
 
-LOG_DEFINE_APP_IDS("PELA", "SoftwareContainer agent");
+LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
 
 namespace softwarecontainer {
 
@@ -69,7 +69,6 @@ public:
         } else {
             log_error() << "Invalid container ID " << containerID;
         }
-
     }
 
     /**
@@ -305,11 +304,11 @@ public:
 
 }
 
-template<typename Proxy, typename ... ConstructorArgs>
-class DBusCppAdaptor: public Proxy, public DBus::IntrospectableAdaptor, public DBus::ObjectAdaptor {
+// Utility class for DBus Adaptors
+class DBusCppAdaptor: public SoftwareContainerAgentAdaptor, public DBus::IntrospectableAdaptor, public DBus::ObjectAdaptor {
     public:
-        DBusCppAdaptor(DBus::Connection& connection, const std::string& objectPath, ConstructorArgs & ... args) :
-            Proxy(args ...), DBus::ObjectAdaptor(connection, objectPath)
+        DBusCppAdaptor(DBus::Connection& connection, const std::string& objectPath, SoftwareContainerAgent &agent) :
+            SoftwareContainerAgentAdaptor(agent), DBus::ObjectAdaptor(connection, objectPath)
         {
         }
 };
@@ -419,8 +418,7 @@ int main(int argc, char * *argv)
 
     SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
 
-    auto pp = std::unique_ptr<SoftwareContainerAgentAdaptor>(
-                new DBusCppAdaptor<SoftwareContainerAgentAdaptor, SoftwareContainerAgent>(*connection, AGENT_OBJECT_PATH, agent));
+    auto pp = std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
     ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
 
