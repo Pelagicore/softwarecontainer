@@ -436,8 +436,7 @@ ReturnCode Container::attach(const std::string &commandLine, pid_t *pid, const E
     // We execute the function as root but will switch to the real userID inside
 
     ReturnCode result = executeInContainer([&] () {
-//                log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " <<
-                workingDirectory;
+//                log_debug() << "Starting command line in container : " << commandLine << " . Working directory : " << workingDirectory;
 
                 if (!isSuccess(setUser(userID))) {
                     return -1;

@@ -334,7 +334,7 @@ void usage(const char *argv0)
 {
     printf("SoftwareContainer agent, v.%s\n", PACKAGE_VERSION);
     printf("Usage: %s [-p or --preload <num>] [-u or --user <uid>]", argv0);
-    printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>]\n", argv0);
+    printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>]\n");
     printf("\n");
     printf("--preload <num>     : Number of containers to preload, defaults to 0\n");
     printf("--user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");

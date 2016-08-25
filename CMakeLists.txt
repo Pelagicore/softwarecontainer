@@ -251,4 +251,6 @@ if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-add_subdirectory(doc)
+if (ENABLE_DOC)
+    add_subdirectory(doc)
+endif()
