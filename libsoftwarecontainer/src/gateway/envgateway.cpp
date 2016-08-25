@@ -32,26 +32,33 @@ EnvironmentGateway::~EnvironmentGateway()
 {
 }
 
-ReturnCode EnvironmentGateway::readConfigElement(const JSonElement &element)
+ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
 {
     std::string variableName;
-    element.read("name", variableName);
+    std::string variableValue;
 
-    if (variableName.empty()) {
-        log_warning() << "No 'name' specified for EnvironmentGateway element, aborting";
+    if (!read(element, "name", variableName)) {
+        log_error() << "Key \"name\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
 
-    std::string variableValue;
-    element.read("value", variableValue);
+    if (variableName.length() == 0) {
+        log_error() << "Value for \"name\" key is an empty string";
+        return ReturnCode::FAILURE;
+    }
 
-    if (variableValue.empty()) {
-        log_warning() << "No 'value' specified for EnvironmentGateway element, aborting";
+    if (!read(element, "value", variableValue)) {
+        log_error() << "Key \"value\" missing or not a string in json configuration";
+        return ReturnCode::FAILURE;
+    }
+
+    if (variableValue.length() == 0) {
+        log_error() << "Value for \"value\" key is an empty string";
         return ReturnCode::FAILURE;
     }
 
     bool appendMode = false;
-    element.read("append", appendMode);
+    read(element, "append", appendMode); // This key is optional
 
     if (m_variables.count(variableName) == 0) {
         m_variables[variableName] = variableValue;

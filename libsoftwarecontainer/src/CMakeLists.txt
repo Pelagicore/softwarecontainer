@@ -68,7 +68,7 @@ TARGET_LINK_LIBRARIES( softwarecontainerLib
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
     ${IVIMainLoop_LIBRARIES}
-    ${JSONParser_LIBRARIES}
+    ${Jansson_LIBRARIES}
 )
 
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)

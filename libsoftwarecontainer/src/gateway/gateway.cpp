@@ -33,8 +33,13 @@ bool Gateway::setConfig(const std::string &config)
     if (json_is_array(root)) {
         for(size_t i = 0; i < json_array_size(root); i++) {
             json_t *element = json_array_get(root, i);
-            if (isError(readConfigElement(element))) {
-                log_error() << "Could not read config element";
+            if (json_is_object(element)) {
+                if (isError(readConfigElement(element))) {
+                    log_error() << "Could not read config element";
+                    return false;
+                }
+            } else {
+                log_error() << "json configuration is not an object";
                 return false;
             }
         }
@@ -115,4 +120,36 @@ ReturnCode Gateway::executeInContainer(const std::string &cmd)
         log_error() << "Can't execute in container from gateway without container";
         return ReturnCode::FAILURE;
     }
+}
+
+bool Gateway::read(const json_t *element, const char *key, std::string &result)
+{
+    json_t *value = json_object_get(element, key);
+    if (!value) {
+        return false;
+    }
+
+    if (!json_is_string(value)) {
+        log_error() << "json element is not a string";
+        return false;
+    }
+
+    result = json_string_value(value);
+    return true;
+}
+
+bool Gateway::read(const json_t *element, const char *key, bool &result)
+{
+    json_t *value = json_object_get(element, key);
+    if (!value) {
+        return false;
+    }
+
+    if (!json_is_boolean(value)) {
+        log_error() << "json element is not a boolean";
+        return false;
+    }
+
+    result = json_is_true(value);
+    return true;
 }

@@ -51,9 +51,6 @@ public:
     }
 };
 
-
-
-
 TEST_F(SoftwareContainerApp, TestWayland) {
 
     GatewayConfiguration config;

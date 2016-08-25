@@ -33,9 +33,6 @@
 #include "softwarecontainer-config.h"
 #include "softwarecontainer-log.h"
 
-#include "jsonparser.h"
-using pelagicore::JSonElement;
-
 namespace softwarecontainer {
 
 typedef uint32_t ContainerID;

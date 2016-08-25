@@ -39,24 +39,27 @@ NetworkGateway::~NetworkGateway()
 {
 }
 
-ReturnCode NetworkGateway::readConfigElement(const JSonElement &element)
+ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
-    bool enableInternetAccess = false;
-    element.read("internet-access", enableInternetAccess);
-    m_internetAccess |= enableInternetAccess;
-
-    log_debug() << (m_internetAccess ? "Internet access will be enabled" : "Internet access disabled");
-
-    std::string gateway;
-    element.read("gateway", gateway);
-    if (gateway.size() != 0) {
-        m_gateway = gateway;
-        if ((m_gateway.size() != 0) && (m_gateway.compare(gateway))) {
-            log_error() << "Contradiction in gateway";
-            return ReturnCode::FAILURE;
-        }
+    if (!read(element, "internet-access", m_internetAccess)) {
+        log_error() << "either key \"internet-access\" missing or not a bool in json configuration";
+        return ReturnCode::FAILURE;
     }
 
+    if (m_internetAccess) {
+        log_info() << "Internet access will be enabled";
+
+        if (!read(element, "gateway", m_gateway)) {
+            log_error() << "either key \"gateway\" missing or not a string in json configuration";
+        }
+
+        if (m_gateway.length() == 0) {
+            log_error() << "Value for \"gateway\" key is an empty string";
+            return ReturnCode::FAILURE;
+        }
+    } else {
+        log_info() << "Internet access will be disabled";
+    }
     return ReturnCode::SUCCESS;
 }
 

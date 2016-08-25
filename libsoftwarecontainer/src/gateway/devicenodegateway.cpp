@@ -18,9 +18,8 @@
  * For further information see LICENSE
  */
 
-
 #include "generators.h"
-
+#include "generators.h"
 #include "devicenodegateway.h"
 
 
@@ -29,17 +28,20 @@ DeviceNodeGateway::DeviceNodeGateway() :
 {
 }
 
-ReturnCode DeviceNodeGateway::readConfigElement(const JSonElement &element)
+ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeGateway::Device dev;
 
-    element.read("name", dev.name);
-    element.read("major", dev.major);
-    element.read("minor", dev.minor);
-    element.read("mode", dev.mode);
+    if (!read(element, "name", dev.name)) {
+        log_error() << "Key \"name\" missing or not a string in json configuration";
+        return ReturnCode::FAILURE;
+    }
+    
+    read(element, "major", dev.major);
+    read(element, "minor", dev.minor);
+    read(element, "mode", dev.mode);
 
     m_devList.push_back(dev);
-
     return ReturnCode::SUCCESS;
 }
 

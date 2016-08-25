@@ -47,22 +47,45 @@ DBusGateway::~DBusGateway()
 static constexpr const char *SESSION_CONFIG = "dbus-gateway-config-session";
 static constexpr const char *SYSTEM_CONFIG = "dbus-gateway-config-system";
 
-ReturnCode DBusGateway::readConfigElement(const JSonElement &element)
+ReturnCode DBusGateway::readConfigElement(const json_t *element)
 {
-    JSonElement sessionConfig = element[SESSION_CONFIG];
-    if (sessionConfig.isValid() && sessionConfig.isArray()) {
-        for(unsigned int i = 0; i < sessionConfig.elementCount(); i++) {
-            JSonElement child = sessionConfig.arrayElementAt(i);
-            json_array_append(m_sessionBusConfig, (json_t*)child.root());
+    bool has_session, has_system = false;
+
+    // First, parse session bus configuration
+    json_t *sessionConfig = json_object_get(element, SESSION_CONFIG);
+    if (sessionConfig) {
+        has_session = true;
+        if (!json_is_array(sessionConfig)) {
+            log_error() << "Value for " << SESSION_CONFIG << " is not an array";
+            return ReturnCode::FAILURE;
+        }
+
+        for (unsigned int i = 0; i < json_array_size(sessionConfig); i++) {
+            json_t *child = json_array_get(sessionConfig, i);
+            // TODO: Error checking here, so that dbus-proxy can accept config
+            json_array_append(m_sessionBusConfig, json_deep_copy(child));
         }
     }
 
-    JSonElement systemConfig = element[SYSTEM_CONFIG];
-    if (systemConfig.isValid() && systemConfig.isArray()) {
-        for(unsigned int i = 0; i < systemConfig.elementCount(); i++) {
-            JSonElement child = systemConfig.arrayElementAt(i);
-            json_array_append(m_systemBusConfig, (json_t*)child.root());
+    // Then, parse system bus configuration
+    json_t *systemConfig = json_object_get(element, SYSTEM_CONFIG);
+    if (systemConfig) {
+        has_system = true;
+        if (!json_is_array(systemConfig)) {
+            log_error() << "Value for " << SYSTEM_CONFIG << " is not an array";
+            return ReturnCode::FAILURE;
         }
+
+        for (unsigned int i = 0; i < json_array_size(systemConfig); i++) {
+            json_t *child = json_array_get(systemConfig, i);
+            // TODO: Error checking here, so that dbus-proxy can accept config
+            json_array_append(m_systemBusConfig, json_deep_copy(child));
+        }
+    }
+
+    if (!has_session && !has_system) {
+        log_error() << "Neither system nor session configuration was provided";
+        return ReturnCode::FAILURE;
     }
 
     m_state = GatewayState::CONFIGURED;

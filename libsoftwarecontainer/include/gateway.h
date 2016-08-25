@@ -22,6 +22,7 @@
 #ifndef GATEWAY_H
 #define GATEWAY_H
 
+#include <jansson.h>
 #include "container.h"
 
 /*! Gateway base class
@@ -72,7 +73,7 @@ public:
      *          false otherwise
      */
     virtual bool setConfig(const std::string &config);
-    virtual ReturnCode readConfigElement(const JSonElement &element) = 0;
+    virtual ReturnCode readConfigElement(const json_t *element) = 0;
 
     /*! Applies any configuration set by setConfig()
      *
@@ -118,6 +119,9 @@ protected:
 
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;
+
+    bool read(const json_t *element, const char *key, std::string &result);
+    bool read(const json_t *element, const char *key, bool &result);
 };
 
 #endif /* GATEWAY_H */

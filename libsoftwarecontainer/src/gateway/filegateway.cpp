@@ -28,16 +28,17 @@ FileGateway::FileGateway()
 {
 }
 
-ReturnCode FileGateway::readConfigElement(const JSonElement &element)
+ReturnCode FileGateway::readConfigElement(const json_t *element)
 {
     FileSetting setting;
-    element.read("path-host", setting.pathInHost);
-    element.read("path-container", setting.pathInContainer);
-    element.read("create-symlink", setting.createSymlinkInContainer);
-    element.read("read-only", setting.readOnly);
-    element.read("env-var-name", setting.envVarName);
-    element.read("env-var-prefix", setting.envVarPrefix);
-    element.read("env-var-suffix", setting.envVarSuffix);
+
+    read(element, "path-host", setting.pathInHost);
+    read(element, "path-container", setting.pathInContainer);
+    read(element, "env-var-name", setting.envVarName);
+    read(element, "env-var-prefix", setting.envVarPrefix);
+    read(element, "env-var-suffix", setting.envVarSuffix);
+    read(element, "create-symlink", setting.createSymlinkInContainer);
+    read(element, "read-only", setting.readOnly);
 
     if (setting.pathInHost.size() == 0) {
         log_error() << "FileGateway config is lacking 'path-host' setting";
@@ -84,7 +85,7 @@ bool FileGateway::activateGateway()
                return false;
             }
 
-            if (setting.envVarName.size() != 0) {
+            if (setting.envVarName.size()) {
                 std::string value = StringBuilder() << setting.envVarPrefix << path << setting.envVarSuffix;
                 setEnvironmentVariable(setting.envVarName, value);
             }
