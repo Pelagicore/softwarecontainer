@@ -32,33 +32,37 @@ add_definitions(${DEPENDENCIES_CFLAGS})
 
 # Enable or disable support for gateways compile-time.
 SET(GATEWAY_SOURCES "")
-macro(gateway_support flag strname filename)
+SET(GATEWAY_HEADERS "")
+macro(gateway_support flag strname hfile filename)
     if (${flag})
         MESSAGE(INFO " Compiling with gateway support for ${strname}")
         LIST(APPEND GATEWAY_SOURCES gateway/${filename})
+        LIST(APPEND GATEWAY_HEADERS gateway/${hfile})
         ADD_DEFINITIONS(-D${flag})
     else(${flag})
         MESSAGE(INFO " Compiling without gateway support for ${strname}")
     endif(${flag})
-endmacro(gateway_support flag filename)
+endmacro(gateway_support flag filename hfile)
 
-gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
-gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
-gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
-gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
-gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
+gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.h cgroupsgateway.cpp)
+gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.h dbusgateway.cpp)
+gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.h devicenodegateway.cpp)
+gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.h networkgateway.cpp)
+gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.h pulsegateway.cpp)
 
 SET(DEFAULT_GATEWAYS TRUE)
-gateway_support(DEFAULT_GATEWAYS env envgateway.cpp)
-gateway_support(DEFAULT_GATEWAYS file filegateway.cpp)
-gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.cpp)
+gateway_support(DEFAULT_GATEWAYS env envgateway.h envgateway.cpp)
+gateway_support(DEFAULT_GATEWAYS file filegateway.h filegateway.cpp)
+gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.h waylandgateway.cpp)
 
 add_library(softwarecontainerLib SHARED 
     container.cpp
-    generators.cpp
-    libsoftwarecontainer.cpp
     gateway/gateway.cpp
+    generators.cpp
+    generators.h
+    libsoftwarecontainer.cpp
     ${GATEWAY_SOURCES}
+    ${GATEWAY_HEADERS}
     ${PROJECT_SOURCE_DIR}/common/common.cpp
 )
 
