@@ -17,10 +17,36 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
-find_package(PelagicoreUtilities REQUIRED)
 find_package(IVILogging          REQUIRED)
+find_package(PkgConfig           REQUIRED)
 
-pkg_config_use_package(COMMON_DEPENDENCIES "dbus-c++-glib-1;glibmm-2.4;lxc;ivi-main-loop;jsonparser")
+pkg_check_modules(IVILogging    REQUIRED ivi-logging)
+pkg_check_modules(DBusCpp       REQUIRED dbus-c++-glib-1)
+pkg_check_modules(Glibmm        REQUIRED glibmm-2.4)
+pkg_check_modules(LXC           REQUIRED lxc)
+pkg_check_modules(IVIMainLoop   REQUIRED ivi-main-loop)
+pkg_check_modules(JSONParser    REQUIRED jsonparser)
+
+add_definitions(${IVILogging_CFLAGS_OTHER})
+add_definitions(${DBusCpp_CFLAGS_OTHER})
+add_definitions(${Glibmm_CFLAGS_OTHER})
+add_definitions(${LXC_CFLAGS_OTHER})
+add_definitions(${IVIMainLoop_CFLAGS_OTHER})
+add_definitions(${JSONParser_CFLAGS_OTHER})
+
+include_directories(${IVILogging_INCLUDE_DIRS})
+include_directories(${DBusCpp_INCLUDE_DIRS})
+include_directories(${Glibmm_INCLUDE_DIRS})
+include_directories(${LXC_INCLUDE_DIRS})
+include_directories(${IVIMainLoop_INCLUDE_DIRS})
+include_directories(${JSONParser_INCLUDE_DIRS})
+
+link_directories(${IVILogging_LIBRARY_DIRS})
+link_directories(${DBusCpp_LIBRARY_DIRS})
+link_directories(${Glibmm_LIBRARY_DIRS})
+link_directories(${LXC_LIBRARY_DIRS})
+link_directories(${IVIMainLoop_LIBRARY_DIRS})
+link_directories(${JSONParser_LIBRARY_DIRS})
 
 # use, i.e. don't skip the full RPATH for the build tree
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
@@ -34,7 +60,6 @@ SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
 
 # the RPATH to be used when installing, but only if it's not a system directory
 LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
@@ -73,6 +98,22 @@ if(ENABLE_PROFILING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILING_ENABLED=1")
 endif()
 
+# Google Mock add (and fetch) macro
+macro(add_gmock)
+    set(GMOCKNAME gmock-1.7.0)
+    if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${GMOCKNAME})
+        if(NOT EXISTS ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip)
+            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://googlemock.googlecode.com/files/${GMOCKNAME}.zip)
+        endif()
+        execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip -d ${CMAKE_BINARY_DIR})
+    endif()
+    if(IS_DIRECTORY ${CMAKE_BINARY_DIR}/${GMOCKNAME})
+        add_subdirectory(${CMAKE_BINARY_DIR}/${GMOCKNAME} ${CMAKE_BINARY_DIR}/gmock)
+        link_directories(${CMAKE_BINARY_DIR}/${GMOCKNAME}/gmock)
+        include_directories(${CMAKE_BINARY_DIR}/${GMOCKNAME}/include ${CMAKE_BINARY_DIR}/${GMOCKNAME}/gtest/include)
+    endif()
+endmacro()
+
 option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
 	enable_testing()
@@ -82,7 +123,84 @@ endif()
 
 option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
 
-add_coverage()
+# Macro for making it easy to use gcov/lcov
+macro(add_coverage)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -O0")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+	find_program(LCOV lcov)
+	find_program(GENHTML genhtml)
+	if (LCOV AND GENHTML)
+		add_custom_target(lcov)
+		add_custom_command(
+			TARGET lcov
+			COMMAND mkdir -p coverage
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+		)
+
+        # Run baseline coverage file, then remove unwanted files from baseline data
+		add_custom_command(
+			TARGET lcov
+            # Create baseline
+			COMMAND ${LCOV} --capture --initial --directory . --base-directory . --output-file coverage/baseline.info
+            # Remove unwanted files from baseline data
+			COMMAND ${LCOV} --remove coverage/baseline.info \"/usr*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+			COMMAND ${LCOV} --remove coverage/baseline.info \"gmock*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+			COMMAND ${LCOV} --remove coverage/baseline.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+			COMMAND ${LCOV} --remove coverage/baseline.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+		)
+
+        # Run the actual tests and stuff
+		add_custom_command(
+			TARGET lcov
+		    # Run tests
+			COMMAND make test
+		    # Capture coverage data after tests have run
+			COMMAND ${LCOV} --capture --directory . --base-directory . --output-file coverage/testrun.info
+		    # Remove unwanted files from captured data
+			COMMAND ${LCOV} --remove coverage/testrun.info \"/usr*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+			COMMAND ${LCOV} --remove coverage/testrun.info \"gmock*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+			COMMAND ${LCOV} --remove coverage/testrun.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+			COMMAND ${LCOV} --remove coverage/testrun.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+		)
+		add_custom_command(
+			TARGET lcov
+		    # Combine baseline data and coverage data for accurate coverage stats
+			COMMAND ${LCOV} --add-tracefile coverage/baseline.info --add-tracefile coverage/testrun.info --output-file coverage/final.info
+		    # Generate HTML report
+			COMMAND genhtml --no-prefix coverage/final.info --output-directory coverage/
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+		)
+	else(LCOV AND GENHTML)
+		message(WARNING "Please install lcov and genhtml to enable the lcov target (apt-get install lcov)" )
+	endif(LCOV AND GENHTML)
+	message("Code coverage enabled")
+endmacro(add_coverage)
+
+macro(generate_dbuscpp_hfile xmlInterfaceFile h)
+	include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+	set(GENERATED_PROXY_FILENAME ${h}_dbuscpp_proxy.h)
+	set(GENERATED_ADAPTOR_FILENAME ${h}_dbuscpp_adaptor.h)
+
+	message("Creating DBusCpp proxy and stubs : ${GENERATED_PROXY_FILENAME} / ${GENERATED_ADAPTOR_FILENAME}")
+
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_PROXY_FILENAME} ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_ADAPTOR_FILENAME}
+        COMMAND dbusxx-xml2cpp ${xmlInterfaceFile} --proxy=${GENERATED_PROXY_FILENAME}
+        COMMAND dbusxx-xml2cpp ${xmlInterfaceFile} --adaptor=${GENERATED_ADAPTOR_FILENAME}
+        DEPENDS ${xmlInterfaceFile}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+
+    add_custom_target(dbus_cpp_${h} ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_PROXY_FILENAME} ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_ADAPTOR_FILENAME})
+
+endmacro()
+
+if(ENABLE_COVERAGE)
+    add_coverage()
+endif(ENABLE_COVERAGE)
 
 install(FILES scripts/setup_softwarecontainer.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 

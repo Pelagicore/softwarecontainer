@@ -1,7 +1,9 @@
 #include "libsoftwarecontaineragent.h"
 #include "SoftwareContainerAgentLib_dbuscpp_proxy.h"
 
-#include "pelagicore-DBusCpp.h"
+#include <glibmm.h>
+#include <dbus-c++/dbus.h>
+#include <dbus-c++/glib-integration.h>
 
 #include <memory>
 
@@ -11,10 +13,10 @@ class Agent;
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "SCAL", "Software container agent library");
 
+
 struct AgentPrivateData
 {
-    class SoftwareContainerAgentProxy :
-        public com::pelagicore::SoftwareContainerAgent_proxy
+    class SoftwareContainerAgentProxy : public com::pelagicore::SoftwareContainerAgent_proxy
     {
 
 public:
@@ -30,24 +32,31 @@ private:
         Agent &m_agent;
     };
 
-    AgentPrivateData(Glib::RefPtr<Glib::MainContext> mainLoopContext, Agent &agent) :
-        m_gLibDBusCppFactory(mainLoopContext)
+    // Utility class for DBus Proxies
+    class DBusCppProxy : public SoftwareContainerAgentProxy, public DBus::IntrospectableProxy, public DBus::ObjectProxy {
+        public:
+            DBusCppProxy(DBus::Connection& connection, const std::string& objectPath, const std::string& busname, Agent &agent) :
+                SoftwareContainerAgentProxy(agent), DBus::ObjectProxy(connection, objectPath, busname.c_str())
+            {
+            }
+    };
+
+    AgentPrivateData(Glib::RefPtr<Glib::MainContext> mainLoopContext, Agent &agent)
     {
         try {
-            m_proxy = m_gLibDBusCppFactory.registerProxy<SoftwareContainerAgentProxy>(
-                        m_gLibDBusCppFactory.getSystemBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+            m_conn = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
+            m_proxy = std::unique_ptr<SoftwareContainerAgentProxy>(new DBusCppProxy(*m_conn, AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent));
             m_proxy->Ping();
         } catch (DBus::Error &error) {
-            m_proxy = m_gLibDBusCppFactory.registerProxy<SoftwareContainerAgentProxy>(
-                        m_gLibDBusCppFactory.getSessionBusConnection(), AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent);
+            m_conn = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SessionBus()));
+            m_proxy = std::unique_ptr<SoftwareContainerAgentProxy>(new DBusCppProxy(*m_conn, AGENT_OBJECT_PATH, AGENT_BUS_NAME, agent));
             m_proxy->Ping();
         }
     }
 
     std::unique_ptr<SoftwareContainerAgentProxy> m_proxy;
-
 private:
-    pelagicore::GLibDBusCppFactory m_gLibDBusCppFactory;
+    std::unique_ptr<DBus::Connection> m_conn;
 };
 
 

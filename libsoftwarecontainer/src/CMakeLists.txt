@@ -44,16 +44,15 @@ add_library(softwarecontainerLib SHARED
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainerLib
-    ${PELAGICORE_UTILS_LIBRARIES}
     ${DEPENDENCIES_LIBRARIES}
-    ${DBUS_LIBRARIES} ${DBUSCPP_LIBRARIES}
-    ${DBUSCPPGLIB_LIBRARIES}
-    ${GLIBMM_LIBRARIES}
+    ${DBusCpp_LIBRARIES}
+    ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
-    ${COMMON_DEPENDENCIES_LIBRARIES}
+    ${IVIMainLoop_LIBRARIES}
+    ${JSONParser_LIBRARIES}
 )
 
-include_directories(${LIBPELAGICONTAIN_DIR}/include)
+include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 
 install(TARGETS softwarecontainerLib DESTINATION lib)
 set_target_properties(softwarecontainerLib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})

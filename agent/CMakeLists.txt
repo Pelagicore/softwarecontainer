@@ -6,19 +6,16 @@ add_executable(softwarecontainer-agent
     SoftwareContainerAgent_dbuscpp_adaptor.h
 )
 
-target_link_libraries( softwarecontainer-agent
-    ${PELAGICORE_UTILS_LIBRARIES}
-    ${DEPENDENCIES_LIBRARIES}
-    ${DBUS_LIBRARIES}
-    ${DBUSCPP_LIBRARIES}
-    ${DBUSCPPGLIB_LIBRARIES}
-    ${GLIBMM_LIBRARIES}
+TARGET_LINK_LIBRARIES( softwarecontainer-agent
+    ${DBusCpp_LIBRARIES}
+    ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
-    ${COMMON_DEPENDENCIES_LIBRARIES}
+    ${JSONParser_LIBRARIES}
+    ${IVILogging_LIBRARIES}
     softwarecontainerLib
 )
 
-install(TARGETS softwarecontainer-agent DESTINATION bin)
+INSTALL(TARGETS softwarecontainer-agent DESTINATION bin)
 
 #
 # When we install config files, we check for if prefix is /usr, and we treat

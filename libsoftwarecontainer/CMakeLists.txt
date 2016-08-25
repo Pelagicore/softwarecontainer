@@ -1,6 +1,6 @@
 add_definitions(-DLXCTEMPLATE="${LXC_TEMPLATE_DIR}/lxc-softwarecontainer")
 
-SET(LIBPELAGICONTAIN_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+SET(LIBSOFTWARECONTAINER_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(include)
 add_subdirectory(src)
 

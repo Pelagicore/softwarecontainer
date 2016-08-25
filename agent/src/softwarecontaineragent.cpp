@@ -11,20 +11,16 @@
 #include <glibmm.h>
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/glib-integration.h>
-
-#include "CommandLineParser.h"
-#include "pelagicore-log.h"
+#include <getopt.h>
 
 #include "ivi-main-loop/ivi-main-loop-unix-signal.h"
 
 #include <ivi-profiling.h>
 
-#include "pelagicore-DBusCpp.h"
 #include "SoftwareContainerAgent_dbuscpp_adaptor.h"
-
 #include "libsoftwarecontainer.h"
 
-LOG_DEFINE_APP_IDS("PELA", "SoftwareContainer agent");
+LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
 
 namespace softwarecontainer {
 
@@ -73,7 +69,6 @@ public:
         } else {
             log_error() << "Invalid container ID " << containerID;
         }
-
     }
 
     /**
@@ -309,28 +304,95 @@ public:
 
 }
 
+// Utility class for DBus Adaptors
+class DBusCppAdaptor: public SoftwareContainerAgentAdaptor, public DBus::IntrospectableAdaptor, public DBus::ObjectAdaptor {
+    public:
+        DBusCppAdaptor(DBus::Connection& connection, const std::string& objectPath, SoftwareContainerAgent &agent) :
+            SoftwareContainerAgentAdaptor(agent), DBus::ObjectAdaptor(connection, objectPath)
+        {
+        }
+};
+
+
+void usage(const char *argv0)
+{
+    printf("SoftwareContainer agent, v.%s\n", PACKAGE_VERSION);
+    printf("Usage: %s [-p or --preload <num>] [-u or --user <uid>]", argv0);
+    printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>]\n", argv0);
+    printf("\n");
+    printf("--preload <num>     : Number of containers to preload, defaults to 0\n");
+    printf("--user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");
+    printf("--shutdown <bool>   : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
+    printf("--timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
+}
+
+bool parseInt(char *arg, int *result)
+{
+    char *end;
+    long value = strtol(arg, &end, 10);
+    if (end == arg || *end != '\0' || errno == ERANGE) {
+        return false;
+    }
+
+    *result = value;
+    return true;
+}
+
 int main(int argc, char * *argv)
 {
     using ivi_main_loop::UNIXSignalHandler;
 
-    pelagicore::CommandLineParser commandLineParser("SoftwareContainer agent", "", PACKAGE_VERSION, "");
+    static struct option long_options[] =
+    {
+        { "preload",  required_argument, 0, 'p' },
+        { "user",     required_argument, 0, 'u' },
+        { "shutdown", required_argument, 0, 's' },
+        { "timeout",  required_argument, 0, 't' },
+        { "help",     no_argument,       0, 'h' },
+        { 0, 0, 0, 0 }
+    };
 
     int preloadCount = 0;
-    commandLineParser.addOption(preloadCount, "preload", 'p', "Number of containers to preload");
-
-    //    int userID = 0;
-    //    commandLineParser.addOption(userID, "user", 'u', "Default user id to be used when starting processes in the container");
-
+    int userID = 0;
     bool shutdownContainers = true;
-    commandLineParser.addOption(shutdownContainers, "shutdown", 's',
-            "If false, the containers will not be shutdown. Useful for debugging");
-
     int timeout = 2;
-    commandLineParser.addOption(timeout, "timeout", 't',
-            "Timeout in seconds to wait for containers to shutdown");
 
-    if (commandLineParser.parse(argc, argv)) {
-        exit(1);
+    int option_index = 0;
+    int c = 0;
+    while((c = getopt_long(argc, argv, "p:u:s:t:",long_options, &option_index)) != -1) {
+        switch(c)
+        {
+            case 'p':
+                if (!parseInt(optarg, &preloadCount)) {
+                    usage(argv[0]);
+                    exit(1);
+                }
+                break;
+            case 'u':
+                if (!parseInt(optarg, &userID)) {
+                    usage(argv[0]);
+                    exit(1);
+                }
+                break;
+            case 's':
+                shutdownContainers = std::string(optarg).compare("true") == 0;
+                break;
+            case 't':
+                if (!parseInt(optarg, &timeout)) {
+                    usage(argv[0]);
+                    exit(1);
+                }
+                break;
+            case 'h':
+                usage(argv[0]);
+                exit(0);
+                break;
+
+            case '?':
+                usage(argv[0]);
+                exit(1);
+                break;
+        }
     }
 
     profilepoint("softwareContainerStart");
@@ -339,22 +401,24 @@ int main(int argc, char * *argv)
     auto mainContext = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
 
-    pelagicore::GLibDBusCppFactory glibDBusFactory(mainContext);
+    DBus::Glib::BusDispatcher dbusDispatcher;
+    DBus::default_dispatcher = &dbusDispatcher;
+    dbusDispatcher.attach(mainContext->gobj());
 
     // We try to use the system bus, and fallback to the session bus if the system bus can not be used
-    auto connection = &glibDBusFactory.getSystemBusConnection();
+    auto connection = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
 
     try {
         connection->request_name(AGENT_BUS_NAME);
     } catch (DBus::Error &error) {
         log_warning() << "Can't own the name" << AGENT_BUS_NAME << " on the system bus => use session bus instead";
-        connection = &glibDBusFactory.getSessionBusConnection();
+        connection = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SessionBus()));
         connection->request_name(AGENT_BUS_NAME);
     }
 
     SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
 
-    auto pp = glibDBusFactory.registerAdapter<SoftwareContainerAgentAdaptor>(*connection, AGENT_OBJECT_PATH, agent);
+    auto pp = std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
     ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
 

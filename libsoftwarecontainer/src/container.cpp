@@ -20,7 +20,6 @@
 #include <string.h>
 
 #include "container.h"
-#include "pelagicore-common.h"
 
 static constexpr const char *LXC_CONTAINERS_ROOT_CONFIG_ITEM = "lxc.lxcpath";
 
@@ -301,7 +300,7 @@ ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid,
     // prepare array of env variable strings to be set when launching the process in the container
     std::vector<std::string> strings;
     for (auto &var : actualVariables) {
-        strings.push_back(pelagicore::formatString("%s=%s", var.first.c_str(), var.second.c_str()));
+        strings.push_back(var.first + "=" + var.second);
     }
 
     const char *envVariablesArray[strings.size() + 1];
