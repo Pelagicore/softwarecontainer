@@ -133,6 +133,8 @@ macro(add_gmock)
     endif()
 endmacro()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
+
 option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
 	enable_testing()
