@@ -119,6 +119,9 @@ protected:
 
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;
+
+    bool read(const json_t *element, const char *key, std::string &result);
+    bool read(const json_t *element, const char *key, bool &result);
 };
 
 #endif /* GATEWAY_H */

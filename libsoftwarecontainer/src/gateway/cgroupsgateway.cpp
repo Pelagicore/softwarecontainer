@@ -33,24 +33,23 @@ CgroupsGateway::CgroupsGateway()
 
 ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
 {
-    json_t *setting = json_object_get(element, "setting");
-    if (!json_is_string(setting)) {
-        log_error() << "Error: setting is not a string";
-        return ReturnCode::FAILURE;
-    }
-    std::string settingString = json_string_value(setting);
+    std::string settingKey;
+    std::string settingValue;
 
-    json_t *value = json_object_get(element, "value");
-    if (!json_is_string(value)) {
-        log_error() << "Error, value is not a string";
+    if (!read(element, "setting", settingKey)) {
+        log_error() << "Key \"setting\" either not a string or not in json configuration";
         return ReturnCode::FAILURE;
     }
 
-    std::string valueString = json_string_value(value);
-    if (m_settings.count(settingString) > 0) {
-        log_warning() << "setting '" << settingString << "' is set more than once, may be problematic.";
+    if (!read(element, "value", settingValue)) {
+        log_error() << "Key \"value\" either not a string or not in json configuration";
+        return ReturnCode::FAILURE;
     }
-    m_settings.insert( std::pair<std::string, std::string>(settingString, valueString) );
+
+    if (m_settings.count(settingKey) > 0) {
+        log_warning() << "setting '" << settingKey << "' is set more than once, may be problematic.";
+    }
+    m_settings.insert( std::pair<std::string, std::string>(settingKey, settingValue) );
 
     return ReturnCode::SUCCESS;
 }

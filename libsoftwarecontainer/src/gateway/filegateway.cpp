@@ -32,49 +32,13 @@ ReturnCode FileGateway::readConfigElement(const json_t *element)
 {
     FileSetting setting;
 
-    typedef std::pair<const char *, std::string *> SettingStringPair;
-    typedef std::pair<const char *, bool *> SettingBoolPair;
-
-    const SettingStringPair stringMapping[] = {
-        SettingStringPair("path-host", &setting.pathInHost),
-        SettingStringPair("path-container", &setting.pathInContainer),
-        SettingStringPair("env-var-name", &setting.envVarName),
-        SettingStringPair("env-var-prefix", &setting.envVarPrefix),
-        SettingStringPair("env-var-suffix", &setting.envVarSuffix)
-    };
-
-    const SettingBoolPair boolMapping[] = {
-        SettingBoolPair("create-symlink", &setting.createSymlinkInContainer),
-        SettingBoolPair("read-only", &setting.readOnly)
-    };
-
-    for (SettingStringPair s : stringMapping) {
-        const char *key = s.first;
-        json_t *settingString = json_object_get(element, key);
-        if (settingString) {
-            if (json_is_string(settingString)) {
-                std::string *structPart = s.second;
-                *structPart = json_string_value(settingString);
-            } else {
-                log_error() << "Value for " << key << " key is not a string";
-                return ReturnCode::FAILURE;
-            }
-        }
-    }
-
-    for (SettingBoolPair b : boolMapping) {
-        const char *key = b.first;
-        json_t *settingBool = json_object_get(element, key);
-        if (settingBool) {
-            bool *structPart = b.second;
-            if (json_is_boolean(settingBool)) {
-                *structPart = json_is_true(settingBool);
-            } else {
-                log_error() << "Value for " << key << " key is not a bool";
-                return ReturnCode::FAILURE;
-            }
-        }
-    }
+    read(element, "path-host", setting.pathInHost);
+    read(element, "path-container", setting.pathInContainer);
+    read(element, "env-var-name", setting.envVarName);
+    read(element, "env-var-prefix", setting.envVarPrefix);
+    read(element, "env-var-suffix", setting.envVarSuffix);
+    read(element, "create-symlink", setting.createSymlinkInContainer);
+    read(element, "read-only", setting.readOnly);
 
     if (setting.pathInHost.size() == 0) {
         log_error() << "FileGateway config is lacking 'path-host' setting";
@@ -121,7 +85,7 @@ bool FileGateway::activateGateway()
                return false;
             }
 
-            if (setting.envVarName.size() != 0) {
+            if (setting.envVarName.size()) {
                 std::string value = StringBuilder() << setting.envVarPrefix << path << setting.envVarSuffix;
                 setEnvironmentVariable(setting.envVarName, value);
             }

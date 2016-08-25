@@ -34,59 +34,39 @@ EnvironmentGateway::~EnvironmentGateway()
 
 ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
 {
-    json_t *variableName = json_object_get(element, "name");
-    if (!variableName) {
-        log_error() << "Key \"name\" missing in json configuration";
+    std::string variableName;
+    std::string variableValue;
+
+    if (!read(element, "name", variableName)) {
+        log_error() << "Key \"name\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
 
-    if (!json_is_string(variableName)) {
-        log_error() << "Value for \"name\" key is not a string";
-        return ReturnCode::FAILURE;
-    }
-
-    if (json_string_length(variableName) == 0) {
+    if (variableName.length() == 0) {
         log_error() << "Value for \"name\" key is an empty string";
         return ReturnCode::FAILURE;
     }
 
-    json_t *variableValue = json_object_get(element, "value");
-    if (!variableValue) {
-        log_error() << "Key \"value\" missing in json configuration";
+    if (!read(element, "value", variableValue)) {
+        log_error() << "Key \"value\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
 
-    if (!json_is_string(variableValue)) {
-        log_error() << "Value for \"value\" key is not a string";
-        return ReturnCode::FAILURE;
-    }
-
-    if (json_string_length(variableValue) == 0) {
+    if (variableValue.length() == 0) {
         log_error() << "Value for \"value\" key is an empty string";
         return ReturnCode::FAILURE;
     }
 
     bool appendMode = false;
-    json_t *appendModeValue = json_object_get(element, "append");
-    if (appendModeValue) {
-        if (json_is_boolean(appendModeValue)) {
-            appendMode = json_is_true(appendModeValue);
-        } else {
-            log_error() << "Key \"append\" not a bool";
-            return ReturnCode::FAILURE;
-        }
-    }
+    read(element, "append", appendMode); // This key is optional
 
-    std::string realVariableName = json_string_value(variableName);
-    std::string realVariableValue = json_string_value(variableValue);
-
-    if (m_variables.count(realVariableName) == 0) {
-        m_variables[realVariableName] = realVariableValue;
+    if (m_variables.count(variableName) == 0) {
+        m_variables[variableName] = variableValue;
     } else {
         if (appendMode) {
-            m_variables[realVariableName] += realVariableValue;
+            m_variables[variableName] += variableValue;
         } else {
-            log_error() << "Env variable " << realVariableName << " already defined with value : " << m_variables[realVariableName];
+            log_error() << "Env variable " << variableName << " already defined with value : " << m_variables[variableName];
             return ReturnCode::FAILURE;
         }
     }

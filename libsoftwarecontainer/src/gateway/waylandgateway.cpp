@@ -39,16 +39,8 @@ WaylandGateway::~WaylandGateway()
 
 ReturnCode WaylandGateway::readConfigElement(const json_t *element)
 {
-    json_t *enabled_value = json_object_get(element, ENABLED_FIELD);
-    if (!enabled_value) {
-        log_error() << "Key " << ENABLED_FIELD << " missing in json configuration";
-        return ReturnCode::FAILURE;
-    }
-
-    if (json_is_boolean(enabled_value)) {
-        m_enabled = json_is_true(enabled_value);
-    } else {
-        log_error() << "Value for " << ENABLED_FIELD << " key is not a boolean value";
+    if (!read(element, ENABLED_FIELD, m_enabled)) {
+        log_error() << "Key " << ENABLED_FIELD << " missing or not bool in json configuration";
         return ReturnCode::FAILURE;
     }
 

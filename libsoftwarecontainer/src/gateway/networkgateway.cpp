@@ -41,39 +41,22 @@ NetworkGateway::~NetworkGateway()
 
 ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
-    json_t *internet_value = json_object_get(element, "internet-access");
-    if (!internet_value) {
-        log_error() << "Key \"internet-access\" missing in json configuration";
-        return ReturnCode::FAILURE;
-    }
-
-    if (json_is_boolean(internet_value)) {
-        m_internetAccess = json_is_true(internet_value);
-    } else {
-        log_error() << "Value for \"internet-access\" key is not a boolean value";
+    if (!read(element, "internet-access", m_internetAccess)) {
+        log_error() << "either key \"internet-access\" missing or not a bool in json configuration";
         return ReturnCode::FAILURE;
     }
 
     if (m_internetAccess) {
         log_info() << "Internet access will be enabled";
-        json_t *gateway_value = json_object_get(element, "gateway");
-        if (!gateway_value) {
-            log_error() << "Key \"gateway\" missing in json configuration";
-            return ReturnCode::FAILURE;
+
+        if (!read(element, "gateway", m_gateway)) {
+            log_error() << "either key \"gateway\" missing or not a string in json configuration";
         }
 
-        if (!json_is_string(gateway_value)) {
-            log_error() << "Value for \"gateway\" key is not a string";
-            return ReturnCode::FAILURE;
-        }
-
-        if (json_string_length(gateway_value) != 0) {
-            m_gateway = std::string(json_string_value(gateway_value));
-        } else {
+        if (m_gateway.length() == 0) {
             log_error() << "Value for \"gateway\" key is an empty string";
             return ReturnCode::FAILURE;
         }
-
     } else {
         log_info() << "Internet access will be disabled";
     }

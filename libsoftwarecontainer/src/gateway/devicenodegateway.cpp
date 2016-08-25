@@ -32,30 +32,14 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeGateway::Device dev;
 
-    typedef std::pair<const char *, std::string *> DevicePair;
-    const DevicePair mapping[] = {
-        DevicePair("name", &dev.name),
-        DevicePair("major", &dev.major),
-        DevicePair("minor", &dev.minor),
-        DevicePair("mode", &dev.mode)
-    };
-
-    for (DevicePair t : mapping) {
-        const char *key = t.first;
-        json_t *devPart = json_object_get(element, key);
-        if (!devPart) {
-            log_error() << "Key " << key << " missing in json configuration";
-            return ReturnCode::FAILURE;
-        }
-
-        if (!json_is_string(devPart)) {
-            log_error() << "Value for " << key << " key is not a string";
-            return ReturnCode::FAILURE;
-        }
-
-        std::string *structPart = t.second;
-        *structPart = json_string_value(devPart);
+    if (!read(element, "name", dev.name)) {
+        log_error() << "Key \"name\" missing or not a string in json configuration";
+        return ReturnCode::FAILURE;
     }
+    
+    read(element, "major", dev.major);
+    read(element, "minor", dev.minor);
+    read(element, "mode", dev.mode);
 
     m_devList.push_back(dev);
     return ReturnCode::SUCCESS;
