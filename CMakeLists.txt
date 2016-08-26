@@ -36,7 +36,6 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
-find_package(IVILogging          REQUIRED)
 find_package(PkgConfig           REQUIRED)
 
 pkg_check_modules(IVILogging    REQUIRED ivi-logging)
