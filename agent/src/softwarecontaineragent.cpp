@@ -24,12 +24,12 @@
  * This executable needs to run by the root user since that is required by LXC.
  */
 
+#include <glib-unix.h>
 #include <glibmm.h>
+
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/glib-integration.h>
 #include <getopt.h>
-
-#include "ivi-main-loop/ivi-main-loop-unix-signal.h"
 
 #include <ivi-profiling.h>
 
@@ -354,10 +354,15 @@ bool parseInt(char *arg, int *result)
     return true;
 }
 
+int signalHandler(void *data) {
+    log_debug() << "Caught signal, exiting!";
+    Glib::RefPtr<Glib::MainLoop> *ml = static_cast<Glib::RefPtr<Glib::MainLoop> *>(data);
+    (*ml)->quit();
+    return 0;
+}
+
 int main(int argc, char * *argv)
 {
-    using ivi_main_loop::UNIXSignalHandler;
-
     static struct option long_options[] =
     {
         { "preload",  required_argument, 0, 'p' },
@@ -414,16 +419,17 @@ int main(int argc, char * *argv)
     profilepoint("softwareContainerStart");
     log_debug() << "Starting softwarecontainer agent";
 
-    auto mainContext = Glib::MainContext::get_default();
+    Glib::RefPtr<Glib::MainContext> mainContext = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
 
     DBus::Glib::BusDispatcher dbusDispatcher;
     DBus::default_dispatcher = &dbusDispatcher;
     dbusDispatcher.attach(mainContext->gobj());
 
-    // We try to use the system bus, and fallback to the session bus if the system bus can not be used
-    auto connection = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
+    std::unique_ptr<DBus::Connection> connection =
+        std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
 
+    // We try to use the system bus, and fallback to the session bus if the system bus can not be used
     try {
         connection->request_name(AGENT_BUS_NAME);
     } catch (DBus::Error &error) {
@@ -433,19 +439,12 @@ int main(int argc, char * *argv)
     }
 
     SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
-
-    auto pp = std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
-
-    ivi_main_loop::GLibEventSourceManager eventSourceManager(mainContext->gobj());
+    std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
+        std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
     // Register UNIX signal handler
-    auto signalHandler = [&] (int signal) {
-        log_debug() << "caught signal " << signal;
-        ml->quit();
-    };
-    UNIXSignalHandler handler(eventSourceManager, UNIXSignalHandler::HandlerMap {{SIGINT, signalHandler}, {SIGTERM, signalHandler}});
-    handler.enable();
-
+    g_unix_signal_add(SIGINT, &signalHandler, &ml);
+    g_unix_signal_add(SIGTERM, &signalHandler, &ml);
     ml->run();
 
     log_debug() << "Exiting softwarecontainer agent";

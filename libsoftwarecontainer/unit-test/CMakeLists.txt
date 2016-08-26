@@ -25,7 +25,6 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
-    ${IVIMainLoop_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainerLib
