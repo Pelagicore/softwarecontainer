@@ -10,4 +10,5 @@ Contents:
 
     chapters/intro/*
     chapters/lxc/*
+    chapters/gateways/*
 
