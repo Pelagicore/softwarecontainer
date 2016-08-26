@@ -23,15 +23,15 @@ project(softwarecontainer)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake_modules)
 
-SET( ${PROJECT_NAME}_MAJOR_VERSION 0 )
-SET( ${PROJECT_NAME}_MINOR_VERSION 9 )
-SET( ${PROJECT_NAME}_PATCH_LEVEL 1 )
+set(${PROJECT_NAME}_MAJOR_VERSION 0)
+set(${PROJECT_NAME}_MINOR_VERSION 9)
+set(${PROJECT_NAME}_PATCH_LEVEL 1)
 
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 
 if(EXTRA_PKG_CONFIG_PATH)
-	set(ENV{PKG_CONFIG_PATH} ${EXTRA_PKG_CONFIG_PATH})
-	message("Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
+    set(ENV{PKG_CONFIG_PATH} ${EXTRA_PKG_CONFIG_PATH})
+    message("Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
 endif(EXTRA_PKG_CONFIG_PATH)
 
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
@@ -68,23 +68,23 @@ link_directories(${IVIMainLoop_LIBRARY_DIRS})
 link_directories(${Jansson_LIBRARY_DIRS})
 
 # use, i.e. don't skip the full RPATH for the build tree
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
 # when building, don't use the install RPATH already
 # (but later on when installing)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # the RPATH to be used when installing, but only if it's not a system directory
-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-IF("${isSystemDir}" STREQUAL "-1")
-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-ENDIF("${isSystemDir}" STREQUAL "-1")
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif("${isSystemDir}" STREQUAL "-1")
 
 if(ADDITIONAL_LD_LIBRARY_PATH)
     add_definitions(-DADDITIONAL_LD_LIBRARY_PATH=${ADDITIONAL_LD_LIBRARY_PATH})
@@ -95,11 +95,11 @@ if(ADDITIONAL_PATH)
 endif()
 
 if(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
-	SET(SYS_CONFIG_DIR /etc)
-	SET(LXC_TEMPLATE_DIR /var/hl/lxc-templates/)
+    SET(SYS_CONFIG_DIR /etc)
+    SET(LXC_TEMPLATE_DIR /var/hl/lxc-templates/)
 else()
-	SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
-	SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_PREFIX}/var/hl/lxc-templates)
+    SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
+    SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_PREFIX}/var/hl/lxc-templates)
 endif()
 message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
@@ -137,8 +137,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wall -std=c++11")
 
 option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
-	enable_testing()
-	add_gmock()
+    enable_testing()
+    add_gmock()
     configure_file(scripts/run-tests.sh run-tests.sh COPYONLY)
 endif()
 
@@ -148,64 +148,65 @@ option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
 macro(add_coverage)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -O0")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-	find_program(LCOV lcov)
-	find_program(GENHTML genhtml)
-	if (LCOV AND GENHTML)
-		add_custom_target(lcov)
-		add_custom_command(
-			TARGET lcov
-			COMMAND mkdir -p coverage
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		)
+    find_program(LCOV lcov)
+    find_program(GENHTML genhtml)
+    if(LCOV AND GENHTML)
+        add_custom_target(lcov)
+        add_custom_command(
+            TARGET lcov
+            COMMAND mkdir -p coverage
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
 
         # Run baseline coverage file, then remove unwanted files from baseline data
-		add_custom_command(
-			TARGET lcov
+        add_custom_command(
+            TARGET lcov
             # Create baseline
-			COMMAND ${LCOV} --capture --initial --directory . --base-directory . --output-file coverage/baseline.info
+            COMMAND ${LCOV} --capture --initial --directory . --base-directory . --output-file coverage/baseline.info
             # Remove unwanted files from baseline data
-			COMMAND ${LCOV} --remove coverage/baseline.info \"/usr*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
-			COMMAND ${LCOV} --remove coverage/baseline.info \"gmock*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
-			COMMAND ${LCOV} --remove coverage/baseline.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
-			COMMAND ${LCOV} --remove coverage/baseline.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		)
+            COMMAND ${LCOV} --remove coverage/baseline.info \"/usr*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+            COMMAND ${LCOV} --remove coverage/baseline.info \"gmock*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+            COMMAND ${LCOV} --remove coverage/baseline.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+            COMMAND ${LCOV} --remove coverage/baseline.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file coverage/baseline.info
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
 
         # Run the actual tests and stuff
-		add_custom_command(
-			TARGET lcov
-		    # Run tests
-			COMMAND make test
-		    # Capture coverage data after tests have run
-			COMMAND ${LCOV} --capture --directory . --base-directory . --output-file coverage/testrun.info
-		    # Remove unwanted files from captured data
-			COMMAND ${LCOV} --remove coverage/testrun.info \"/usr*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
-			COMMAND ${LCOV} --remove coverage/testrun.info \"gmock*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
-			COMMAND ${LCOV} --remove coverage/testrun.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
-			COMMAND ${LCOV} --remove coverage/testrun.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		)
-		add_custom_command(
-			TARGET lcov
-		    # Combine baseline data and coverage data for accurate coverage stats
-			COMMAND ${LCOV} --add-tracefile coverage/baseline.info --add-tracefile coverage/testrun.info --output-file coverage/final.info
-		    # Generate HTML report
-			COMMAND genhtml --no-prefix coverage/final.info --output-directory coverage/
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		)
-	else(LCOV AND GENHTML)
-		message(WARNING "Please install lcov and genhtml to enable the lcov target (apt-get install lcov)" )
-	endif(LCOV AND GENHTML)
-	message("Code coverage enabled")
+        add_custom_command(
+            TARGET lcov
+            # Run tests
+            COMMAND make test
+            # Capture coverage data after tests have run
+            COMMAND ${LCOV} --capture --directory . --base-directory . --output-file coverage/testrun.info
+            # Remove unwanted files from captured data
+            COMMAND ${LCOV} --remove coverage/testrun.info \"/usr*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+            COMMAND ${LCOV} --remove coverage/testrun.info \"gmock*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+            COMMAND ${LCOV} --remove coverage/testrun.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+            COMMAND ${LCOV} --remove coverage/testrun.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file coverage/testrun.info
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+
+        add_custom_command(
+            TARGET lcov
+            # Combine baseline data and coverage data for accurate coverage stats
+            COMMAND ${LCOV} --add-tracefile coverage/baseline.info --add-tracefile coverage/testrun.info --output-file coverage/final.info
+            # Generate HTML report
+            COMMAND genhtml --no-prefix coverage/final.info --output-directory coverage/
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+    else(LCOV AND GENHTML)
+        message(WARNING "Please install lcov and genhtml to enable the lcov target (apt-get install lcov)" )
+    endif(LCOV AND GENHTML)
+    message("Code coverage enabled")
 endmacro(add_coverage)
 
 macro(generate_dbuscpp_hfile xmlInterfaceFile h)
-	include_directories(${CMAKE_CURRENT_BINARY_DIR})
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-	set(GENERATED_PROXY_FILENAME ${h}_dbuscpp_proxy.h)
-	set(GENERATED_ADAPTOR_FILENAME ${h}_dbuscpp_adaptor.h)
+    set(GENERATED_PROXY_FILENAME ${h}_dbuscpp_proxy.h)
+    set(GENERATED_ADAPTOR_FILENAME ${h}_dbuscpp_adaptor.h)
 
-	message("Creating DBusCpp proxy and stubs : ${GENERATED_PROXY_FILENAME} / ${GENERATED_ADAPTOR_FILENAME}")
+    message("Creating DBusCpp proxy and stubs : ${GENERATED_PROXY_FILENAME} / ${GENERATED_ADAPTOR_FILENAME}")
 
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_PROXY_FILENAME} ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_ADAPTOR_FILENAME}
@@ -216,7 +217,6 @@ macro(generate_dbuscpp_hfile xmlInterfaceFile h)
     )
 
     add_custom_target(dbus_cpp_${h} ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_PROXY_FILENAME} ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_ADAPTOR_FILENAME})
-
 endmacro()
 
 if(ENABLE_COVERAGE)
