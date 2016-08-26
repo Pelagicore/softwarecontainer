@@ -29,12 +29,7 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainerLib
 )
-
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
-link_directories(
-    ${DEPENDENCIES_LIBRARY_DIRS}
-    ${LOGGING_LIBRARY_DIRS}
-)
 
 set(TEST_FILES
     cgroupsgateway_unittest.cpp

@@ -9,7 +9,7 @@ To build the project documentation set -DENABLE_DOC=1 when running cmake.
 The project Doxygen docs contain info about SoftwareContainer in general,
 how to run SoftwareContainer and how to run the component tests.
 
-To run the unit-tests build the project with -DENABLE_COVERAGE=1 -DENABLE_TESTS=ON
+To run the unit-tests build with -DENABLE_COVERAGE=1 -DENABLE_TESTS=ON
 
 To disable support for various gateways at compile time, set
 * -DENABLE_PULSEGATEWAY=OFF (for pulse)
@@ -20,11 +20,9 @@ To disable support for various gateways at compile time, set
 
 Examples are built using -DENABLE_EXAMPLES=1
 
-For a concrete example of building SoftwareContainer and setting up dependencies,
-see Vagrantfile in this repository.
-
-For an  example on how to build this code, please take a look at the
-Vagrantfile. 
+For a concrete example of building SoftwareContainer and setting up
+dependencies, see Vagrantfile in this repository. For an example on how to
+build this code, please take a look at the Vagrantfile.
 
 # Building in Vagrant
 
@@ -45,32 +43,56 @@ vagrant up
 
 The vagrant machine can then be inspected by running `vagrant ssh`
 
-This will create an environment for building softwarecontainer, download all the
-requirements, build the ones necessary to build, build softwarecontainer, run unit
-tests and perform a clang code analysis run on the code. 
+This will create an environment for building softwarecontainer, download all
+the requirements, build the ones necessary to build, build softwarecontainer,
+run unit tests and perform a clang code analysis run on the code.
 
 # Dependencies
 
-- pelagicore-utils - Known good commit: aeb2a9bd52aff15c1a7ecae6a39e1aa271758e06
-- ivi-logging - Known good commit: ea313b78b23c2c79bfeee7329131a804b14965c8
-- ivi-mainloop - Known good commit: 558fbd49e874eef9a84a7d00a8d1a6dc9dc93cb2
-- git
+## Build tools
 - cmake
-- build-essential (on Debian-based systems)
 - pkg-config
-- libglib2.0-dev
-- libdbus-c++-dev
-- libdbus-c++-1-0v5
-- libdbus-1-dev
-- libglibmm-2.4-dev
-- libglibmm-2.4
-- lxc
-- lxc-dev
-- libpulse-dev
+- build-essential (on Debian-based systems)
 - unzip
-- libjansson-dev
-- libjansson4
+- git - optional, if you want to build using vagrant
 - vagrant-cookbook - optional, if you want to build using vagrant
+- sphinx - optional, if you want to build documentation
+- doxygen - optional, if you want to build documentation
+
+## Build dependencies
+- ivi-logging (https://github.com/Pelagicore/ivi-logging)
+- glib
+- glibmm
+- dbus
+- dbus-c++
+- lxc
+- jansson
+
+### Install build dependencies on Debian
+```
+$ sudo apt-get install lxc lxc-dev libglib-2.0-dev libglibmm-2.4 \
+                       libdbus-c++-dev libdbus-c++-1-0v5 libdbus-1-dev \
+                       libglibmm-2.4-dev libglibmm-2.4 lxc-dev \
+                       libjansson-dev libjansson4
+```
+
+### Reasoning behind dependencies
+- Being a piece of software aimed towards the automotive industry, ivi-logging
+  is a useful logging tool, since it interfaces well with GENIVI DLT.
+- In order to be able to provide a simple IPC from clients/launchers, we chose
+  DBus as the IPC mechanism, as it is a proven solution that is de-facto
+  standard on most GNU/Linux systems.
+- Glibmm is used mainly for main loop purposes (dbus-c++ interfaces well with
+  it), but also for spawning of binaries (such as dbus-proxy).
+- jansson is a simple, reliable c library for parsing json data. We have used
+  jansson is other projects, but there is no deeper reasoning behind using
+  that specific library. We should probably move to a c++ library some time
+  in the future.
+
+## Runtime dependencies
+- lxc
+- iptables
+- brctl, available in bridge-utils on Debian-based systems
 
 # Running
 
@@ -103,7 +125,8 @@ pitfalls that might be good to be aware of.
 
 In order to pulseaudio to work inside the container it needs to be running when
 the container is started. This is the case because when softwarecontainer sets
-up the container it will create a new socket to the pulseaudio server.
+up the container it will look for the socket pointed out by PULSE_SERVER, and
+mount it into the container, so that socket has to exist.
 
 ## DBus service files
 
