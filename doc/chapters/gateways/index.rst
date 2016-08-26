@@ -5,8 +5,6 @@ SoftwareContainer provides a set of gateways to enable communication between the
 
 Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services.. This makes the system scalable, as the number of IPC mechanisms is limited while the number of possible services are unlimited.
 
-The system is built up around *Capabilities*. Each application has a set of capabilities and these are matched to *Gateway Configurations*. The capabilities are associated with the applications, i.e. the software to be contained, while the gateway configurations are provided by the services. This decouples the container configuration from applications. By providing a simple library abstracting the actual IPC, the service can change IPC mechanism and provide a new set of gateway configurations and a new abstraction library without affecting the applications at all.
-
 This chapter contains descriptions of the available gateways and their configuration options.
 
 Gateways
