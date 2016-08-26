@@ -426,9 +426,10 @@ int main(int argc, char * *argv)
     DBus::default_dispatcher = &dbusDispatcher;
     dbusDispatcher.attach(mainContext->gobj());
 
-    // We try to use the system bus, and fallback to the session bus if the system bus can not be used
-    std::unique_ptr<DBus::Connection> connection = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
+    std::unique_ptr<DBus::Connection> connection =
+        std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
 
+    // We try to use the system bus, and fallback to the session bus if the system bus can not be used
     try {
         connection->request_name(AGENT_BUS_NAME);
     } catch (DBus::Error &error) {
@@ -438,7 +439,8 @@ int main(int argc, char * *argv)
     }
 
     SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
-    std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor = std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
+    std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
+        std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
     // Register UNIX signal handler
     g_unix_signal_add(SIGINT, &signalHandler, &ml);
