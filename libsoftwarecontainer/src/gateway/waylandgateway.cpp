@@ -23,7 +23,8 @@
 #include <unistd.h>
 #include "waylandgateway.h"
 
-// TODO: no clue why the following lines are needed
+// These lines are needed in order to define the fields, which otherwise would
+// yield linker errors.
 constexpr const char *Gateway::ENABLED_FIELD;
 constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
