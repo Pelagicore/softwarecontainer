@@ -4,12 +4,23 @@ This package includes the SoftwareContainer component.
 
 # Building
 
+Building and installing is simple:
+```
+$ mkdir build
+$ cd build
+$ cmake ../
+$ make
+$ sudo make install
+```
+
 To build the project documentation set -DENABLE_DOC=1 when running cmake.
+You can also build the docs separately by pointing cmake to the doc
+directory. Documentation is separated into doxygen docs (API level docs)
+and docs built with sphinx (user documentation and general docs on a higher
+level).
 
-The project Doxygen docs contain info about SoftwareContainer in general,
-how to run SoftwareContainer and how to run the component tests.
-
-To run the unit-tests build with -DENABLE_COVERAGE=1 -DENABLE_TESTS=ON
+To run the unit-tests build with -DENABLE_TEST=ON. To run code coverage tools
+build with -DENABLE_COVERAGE=1.
 
 To disable support for various gateways at compile time, set
 * -DENABLE_PULSEGATEWAY=OFF (for pulse)
@@ -18,13 +29,13 @@ To disable support for various gateways at compile time, set
 * -DENABLE_DBUSGATEWAY=OFF (for dbus)
 * -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
 
-Examples are built using -DENABLE_EXAMPLES=1
+To build the examples, build with -DENABLE_EXAMPLES=1
 
 For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
 build this code, please take a look at the Vagrantfile.
 
-# Building in Vagrant
+## Building in Vagrant
 
 Vagrant can be used to quickly set up a virtualized environment for building.
 On a debian-based system, issue the following commands to build using Vagrant:
@@ -107,17 +118,24 @@ that.
 
 # Testing
 
-There are currently two level of tests, the unit tests written in gtest/gmock
-available in */unit-test/* and built when building the rest of the system if
--DENABLE_TESTS=ON is defined to cmake. The tests are run using run-tests.sh in
-the CI environment so adding them there is a requirement.
+There are currently three levels of tests: unit tests, component tests, and
+service tests. To run all tests after building, run `run-all-tests.sh`
+in the project root.
 
-Secondly, there are also component tests i the directory component-test/ which
-will be run using run-tests.sh.
+The unit tests written in gtest/gmock available in */unit-test/*. The tests
+are run using `run-tests.sh` from the build directory. Note that you have
+to run them as root, since the actual container creation is not stubbed of
+and requires root access.
 
-# TroubleShooting
+The component tests are in libsoftwarecontainer/component-test/ and are run
+with test_runner.sh. Currently, the component tests are outdated and needs
+to be reworked.
 
-softwarecontainer is not very complex to begin with but due to a lot of
+The service tests are in service-test/ and are run with run_tests.sh.
+
+# Troubleshooting
+
+SoftwareContainer is not very complex to begin with but due to a lot of
 dependencies there may be some issues with running it. Here are a few common
 pitfalls that might be good to be aware of.
 
@@ -125,7 +143,7 @@ pitfalls that might be good to be aware of.
 
 In order to pulseaudio to work inside the container it needs to be running when
 the container is started. This is the case because when softwarecontainer sets
-up the container it will look for the socket pointed out by PULSE_SERVER, and
+up the container it will look for the socket pointed out by `PULSE_SERVER`, and
 mount it into the container, so that socket has to exist.
 
 ## DBus service files
