@@ -42,28 +42,24 @@ pkg_check_modules(IVILogging    REQUIRED ivi-logging)
 pkg_check_modules(DBusCpp       REQUIRED dbus-c++-glib-1)
 pkg_check_modules(Glibmm        REQUIRED glibmm-2.4)
 pkg_check_modules(LXC           REQUIRED lxc)
-pkg_check_modules(IVIMainLoop   REQUIRED ivi-main-loop)
 pkg_check_modules(Jansson       REQUIRED jansson)
 
 add_definitions(${IVILogging_CFLAGS_OTHER})
 add_definitions(${DBusCpp_CFLAGS_OTHER})
 add_definitions(${Glibmm_CFLAGS_OTHER})
 add_definitions(${LXC_CFLAGS_OTHER})
-add_definitions(${IVIMainLoop_CFLAGS_OTHER})
 add_definitions(${Jansson_CFLAGS_OTHER})
 
 include_directories(${IVILogging_INCLUDE_DIRS})
 include_directories(${DBusCpp_INCLUDE_DIRS})
 include_directories(${Glibmm_INCLUDE_DIRS})
 include_directories(${LXC_INCLUDE_DIRS})
-include_directories(${IVIMainLoop_INCLUDE_DIRS})
 include_directories(${Jansson_INCLUDE_DIRS})
 
 link_directories(${IVILogging_LIBRARY_DIRS})
 link_directories(${DBusCpp_LIBRARY_DIRS})
 link_directories(${Glibmm_LIBRARY_DIRS})
 link_directories(${LXC_LIBRARY_DIRS})
-link_directories(${IVIMainLoop_LIBRARY_DIRS})
 link_directories(${Jansson_LIBRARY_DIRS})
 
 # use, i.e. don't skip the full RPATH for the build tree

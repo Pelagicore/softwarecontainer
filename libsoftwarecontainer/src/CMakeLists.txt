@@ -71,7 +71,6 @@ TARGET_LINK_LIBRARIES( softwarecontainerLib
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
-    ${IVIMainLoop_LIBRARIES}
     ${Jansson_LIBRARIES}
 )
 

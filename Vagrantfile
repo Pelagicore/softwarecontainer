@@ -53,10 +53,6 @@ Vagrant.configure(2) do |config|
         path: "cookbook/build/cmake-git-builder.sh"
 
     config.vm.provision "shell", privileged: false, 
-        args: ["ivi-main-loop", "https://github.com/Pelagicore/ivi-main-loop.git"],
-        path: "cookbook/build/cmake-git-builder.sh"
-
-    config.vm.provision "shell", privileged: false, 
         args: ["dbus-proxy", "git@git.pelagicore.net:application-management/dbus-proxy.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
