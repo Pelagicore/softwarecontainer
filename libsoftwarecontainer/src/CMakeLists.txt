@@ -24,12 +24,6 @@ option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
 option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
 option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
 
-# Pulse is a special case since it has a dependency package
-if(ENABLE_PULSEGATEWAY)
-    pkg_check_modules(DEPENDENCIES REQUIRED libpulse)
-endif(ENABLE_PULSEGATEWAY)
-add_definitions(${DEPENDENCIES_CFLAGS})
-
 # Enable or disable support for gateways compile-time.
 SET(GATEWAY_SOURCES "")
 SET(GATEWAY_HEADERS "")
@@ -67,7 +61,6 @@ add_library(softwarecontainerLib SHARED
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainerLib
-    ${DEPENDENCIES_LIBRARIES}
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
