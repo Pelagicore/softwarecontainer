@@ -246,7 +246,7 @@ if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-option (ENABLE_DOC "Enable building and installation of documentation" OFF)
+option(ENABLE_DOC "Enable building and installation of documentation" OFF)
 if (ENABLE_DOC)
     add_subdirectory(doc)
 endif()
