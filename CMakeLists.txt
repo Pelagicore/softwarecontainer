@@ -99,6 +99,8 @@ endif()
 message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wall -std=c++11")
+
 include_directories(
     common
     libsoftwarecontainer/src
@@ -114,37 +116,20 @@ endif()
 
 # Google Mock add (and fetch) macro
 macro(add_gmock)
-    set(RELEASE release-1.7.0)
-    set(GMOCKNAME googlemock)
-    set(GTESTNAME googletest)
-    set(MOCKDIR googlemock-${RELEASE})
-    set(TESTDIR gtest)
+    set(ZIPNAME release-1.8.0)
+    set(MOCKDIR googletest-${ZIPNAME})
 
-    # Make sure gmock is there
     if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${MOCKDIR})
-        if(NOT EXISTS ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip)
-            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googlemock/archive/${RELEASE}.zip -O ${GMOCKNAME}.zip)
+        if(NOT EXISTS ${CMAKE_BINARY_DIR}/${ZIPNAME}.zip)
+            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googletest/archive/${ZIPNAME}.zip)
         endif()
-        execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip -d ${CMAKE_BINARY_DIR})
-    endif()
-
-    # Make sure gtest is there
-    if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${TESTDIR})
-        if(NOT EXISTS ${CMAKE_BINARY_DIR}/${GTESTNAME}.zip)
-            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googletest/archive/${RELEASE}.zip -O ${GTESTNAME}.zip)
-        endif()
-        execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${GTESTNAME}.zip -d ${CMAKE_BINARY_DIR})
-        execute_process(COMMAND mv ${CMAKE_BINARY_DIR}/googletest-${RELEASE} ${TESTDIR})
+        execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${ZIPNAME}.zip -d ${CMAKE_BINARY_DIR})
     endif()
 
     if(IS_DIRECTORY ${CMAKE_BINARY_DIR}/${MOCKDIR})
         add_subdirectory(${CMAKE_BINARY_DIR}/${MOCKDIR})
-        include_directories(${CMAKE_BINARY_DIR}/${MOCKDIR}/include
-                            ${CMAKE_BINARY_DIR}/${TESTDIR}/include)
     endif()
 endmacro()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wall -std=c++11")
 
 option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
