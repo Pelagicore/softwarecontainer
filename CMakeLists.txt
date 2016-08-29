@@ -255,7 +255,7 @@ add_subdirectory(common)
 add_subdirectory(libsoftwarecontainer)
 
 add_subdirectory(agent)
-add_subdirectory(libsoftwarecontainer-agent)
+add_subdirectory(libsoftwarecontaineragent)
 
 option (ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 if (ENABLE_EXAMPLES)

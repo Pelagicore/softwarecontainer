@@ -27,7 +27,7 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerLib
+    softwarecontainerlib
 )
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 
@@ -102,7 +102,7 @@ endmacro()
 
 
 
-add_gtest_test(softwarecontainerLibTest
+add_gtest_test(softwarecontainerlibtest
     "${TEST_FILES}"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )

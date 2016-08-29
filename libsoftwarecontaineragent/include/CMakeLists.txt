@@ -18,7 +18,7 @@
 
 
 set(HEADERS
-    libsoftwarecontaineragent.h
+    libsoftwarecontainer-agent.h
 )
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)

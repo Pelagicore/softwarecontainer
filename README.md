@@ -107,7 +107,7 @@ $ sudo apt-get install lxc lxc-dev libglib-2.0-dev libglibmm-2.4 \
 
 # Running
 
-You normally only want to run the softwarecontainer-agent, which requires root
+You normally only want to run the softwarecontaineragent, which requires root
 privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
 

@@ -22,6 +22,7 @@ generate_dbuscpp_hfile(${CMAKE_SOURCE_DIR}/agent/softwarecontainer-agent.xml "So
 
 add_library(softwarecontainer-agent-lib SHARED
     libsoftwarecontaineragent.cpp
+    ../include/libsoftwarecontaineragent.h
     ${CMAKE_CURRENT_BINARY_DIR}/SoftwareContainerAgentLib_dbuscpp_proxy.h
 )
 
