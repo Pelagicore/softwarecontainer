@@ -114,10 +114,10 @@ endif()
 
 # Google Mock add (and fetch) macro
 macro(add_gmock)
-    set(GMOCKNAME gmock-1.7.0)
+    set(GMOCKNAME release-1.7.0)
     if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${GMOCKNAME})
         if(NOT EXISTS ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip)
-            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://googlemock.googlecode.com/files/${GMOCKNAME}.zip)
+            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googlemock/releases/tag/${GMOCKNAME}.zip)
         endif()
         execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip -d ${CMAKE_BINARY_DIR})
     endif()
