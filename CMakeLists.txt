@@ -114,17 +114,33 @@ endif()
 
 # Google Mock add (and fetch) macro
 macro(add_gmock)
-    set(GMOCKNAME release-1.7.0)
-    if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${GMOCKNAME})
+    set(RELEASE release-1.7.0)
+    set(GMOCKNAME googlemock)
+    set(GTESTNAME googletest)
+    set(MOCKDIR googlemock-${RELEASE})
+    set(TESTDIR gtest)
+
+    # Make sure gmock is there
+    if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${MOCKDIR})
         if(NOT EXISTS ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip)
-            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googlemock/archive/${GMOCKNAME}.zip)
+            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googlemock/archive/${RELEASE}.zip -O ${GMOCKNAME}.zip)
         endif()
         execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${GMOCKNAME}.zip -d ${CMAKE_BINARY_DIR})
     endif()
-    if(IS_DIRECTORY ${CMAKE_BINARY_DIR}/${GMOCKNAME})
-        add_subdirectory(${CMAKE_BINARY_DIR}/${GMOCKNAME} ${CMAKE_BINARY_DIR}/gmock)
-        link_directories(${CMAKE_BINARY_DIR}/${GMOCKNAME}/gmock)
-        include_directories(${CMAKE_BINARY_DIR}/${GMOCKNAME}/include ${CMAKE_BINARY_DIR}/${GMOCKNAME}/gtest/include)
+
+    # Make sure gtest is there
+    if(NOT IS_DIRECTORY ${CMAKE_BINARY_DIR}/${TESTDIR})
+        if(NOT EXISTS ${CMAKE_BINARY_DIR}/${GTESTNAME}.zip)
+            execute_process(COMMAND wget -P ${CMAKE_BINARY_DIR} https://github.com/google/googletest/archive/${RELEASE}.zip -O ${GTESTNAME}.zip)
+        endif()
+        execute_process(COMMAND unzip ${CMAKE_BINARY_DIR}/${GTESTNAME}.zip -d ${CMAKE_BINARY_DIR})
+        execute_process(COMMAND mv ${CMAKE_BINARY_DIR}/googletest-${RELEASE} ${TESTDIR})
+    endif()
+
+    if(IS_DIRECTORY ${CMAKE_BINARY_DIR}/${MOCKDIR})
+        add_subdirectory(${CMAKE_BINARY_DIR}/${MOCKDIR})
+        include_directories(${CMAKE_BINARY_DIR}/${MOCKDIR}/include
+                            ${CMAKE_BINARY_DIR}/${TESTDIR}/include)
     endif()
 endmacro()
 
