@@ -27,8 +27,28 @@ if(ENABLE_TEST)
     add_subdirectory(unit-test)
 endif(ENABLE_TEST)
 
-option(ENABLE_NETWORKGATEWAY "Enable network support" ON)
+# busybox is currently always needed on the host system
+find_program(busybox_binary busybox)
+if(NOT busybox_binary)
+    message(FATAL_ERROR "'busybox' binary was not found.")
+endif(NOT busybox_binary)
+
+if(ENABLE_DBUSGATEWAY)
+    # dbus-proxy binary needs to be available if the D-Bus gateway is enabled
+    find_program(dbus-proxy_binary dbus-proxy)
+    if(NOT dbus-proxy_binary)
+        message(WARNING "'dbus-proxy' binary was not found. This is needed when D-Bus gateway is enabled.")
+    endif(NOT dbus-proxy_binary)
+endif(ENABLE_DBUSGATEWAY)
+
 if(ENABLE_NETWORKGATEWAY)
+    # brctl binary needs to be available at runtime if the network gateway is enabled
+    find_program(brctl_binary brctl)
+    if(NOT brctl_binary)
+        message(WARNING "'brctl' binary was not found. This is needed when network gateway is enabled.")
+    endif(NOT brctl_binary)
+
+    # Read network config to be used below when configuring the general config file
     file(READ ${PROJECT_SOURCE_DIR}/libsoftwarecontainer/softwarecontainer_network.conf.in NETWORK_LXC_CONF)
 endif(ENABLE_NETWORKGATEWAY)
 
