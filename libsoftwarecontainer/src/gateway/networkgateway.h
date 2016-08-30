@@ -107,7 +107,7 @@ private:
      * \return true  If bridge interface is available
      * \return false If bridge interface is not available
      */
-    bool isBridgeAvailable();
+    virtual bool isBridgeAvailable();
 
     std::string m_ip;
     std::string m_gateway;
