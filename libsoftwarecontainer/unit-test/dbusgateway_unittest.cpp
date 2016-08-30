@@ -37,10 +37,7 @@ public:
 
 };
 
-using::testing::InSequence;
 using::testing::_;
-using::testing::Return;
-using::testing::NiceMock;
 
 class DBusGatewayTest : public SoftwareContainerGatewayTest
 {

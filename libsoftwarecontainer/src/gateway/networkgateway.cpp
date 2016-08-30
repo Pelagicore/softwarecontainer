@@ -65,6 +65,11 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 
 bool NetworkGateway::activateGateway()
 {
+    if (!hasContainer()) {
+        log_error() << "activate was called on an EnvironmentGateway which has no associated container";
+        return false;
+    }
+
     if (m_gateway.size() != 0) {
         log_debug() << "Default gateway set to " << m_gateway;
     } else {
@@ -72,16 +77,17 @@ bool NetworkGateway::activateGateway()
         log_debug() << "No gateway. Network access will be disabled";
     }
 
-    bool success = false;
-    if (isBridgeAvailable()) {
-        if (m_internetAccess) {
-            generateIP();
-            success = up();
-        } else {
-            success = down();
-        }
+    if (!isBridgeAvailable()) {
+        log_error() << "Bridge not available.";
+        return false;
     }
-    return success;
+
+    if (m_internetAccess) {
+        generateIP();
+        return up();
+    } else {
+        return down();
+    }
 }
 
 bool NetworkGateway::teardownGateway()
@@ -108,8 +114,11 @@ bool NetworkGateway::generateIP()
 bool NetworkGateway::setDefaultGateway()
 {
     log_debug() << "Attempting to set default gateway";
-    std::string cmd = "route add default gw " + m_gateway;
-    if (isError(executeInContainer(cmd))) {
+    std::string cmdDel = "route del default gw " + m_gateway;
+    executeInContainer(cmdDel);
+
+    std::string cmdAdd = "route add default gw " + m_gateway;
+    if (isError(executeInContainer(cmdAdd))) {
         log_error() << "Could not set default gateway.";
         return false;
     }
@@ -122,7 +131,7 @@ bool NetworkGateway::up()
     std::string cmd;
 
     if (!m_interfaceInitialized) {
-        cmd = "ifconfig eth0 " + m_ip + " netmask 255.255.255.0 up";
+        cmd = "ifconfig eth0 " + ip() + " netmask 255.255.255.0 up";
         m_interfaceInitialized = true;
     } else {
         cmd = "ifconfig eth0 up";
