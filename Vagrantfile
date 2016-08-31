@@ -9,7 +9,8 @@ cpus = 3
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
     config.vm.provider "virtualbox" do |vb|
-        vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
+        vb.customize [ "guestproperty", "set", :id, 
+                       "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
         #vb.memory = ram * 1024
         #vb.cpus = cpus
     end
@@ -18,7 +19,8 @@ Vagrant.configure(2) do |config|
     config.vm.synced_folder "./", "/home/vagrant/softwarecontainer/", create: true
 
     # Deploy a private key used to clone gits from pelagicore.net
-    config.vm.provision "file", source: vagrant_private_key_file, destination: "/home/vagrant/.ssh/id_rsa"
+    config.vm.provision "file", source: vagrant_private_key_file, 
+        destination: "/home/vagrant/.ssh/id_rsa"
 
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh" 
@@ -28,8 +30,10 @@ Vagrant.configure(2) do |config|
         args: ['10.8.36.16'],
         path: "cookbook/system-config/apt-cacher.sh" 
 
+    # Select the best apt mirror
+    config.vm.provision "shell", path: "cookbook/system-config/select-apt-mirror.sh"
+
     # Upgrade machine to testing distro & install build dependencies
-    config.vm.provision "shell", path: "cookbook/deps/select-apt-mirror.sh"
     config.vm.provision "shell", path: "cookbook/deps/testing-upgrade.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
@@ -40,7 +44,7 @@ Vagrant.configure(2) do |config|
 
     # Add known hosts
     config.vm.provision "shell", privileged: false,
-        path: "cookbook/system-config/pelagicore-ssh-conf.sh"
+        path: "cookbook/system-config/ssh-keyscan-conf.sh"
 
     # Install dependencies via git
     config.vm.provision "shell", privileged: false, 
