@@ -1,8 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-vagrant_private_key_file="vagrant_key"
-
 ram = 4 #GB
 cpus = 3
 
@@ -17,10 +15,6 @@ Vagrant.configure(2) do |config|
 
     # Sync the repo root with this path in the VM
     config.vm.synced_folder "./", "/home/vagrant/softwarecontainer/", create: true
-
-    # Deploy a private key used to clone gits from pelagicore.net
-    config.vm.provision "file", source: vagrant_private_key_file, 
-        destination: "/home/vagrant/.ssh/id_rsa"
 
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh" 
