@@ -1,6 +1,25 @@
 # SoftwareContainer
 
-This package includes the SoftwareContainer component.
+The SoftwareContainer is a framework to manage and contain applications
+created and vetted by third party developers in an automotive setting. A
+launcher (a UI for example) sends a signal to the SoftwareContainer to start a
+new Container. It can then configure the Container using a documented JSON
+format and can launch process inside the Container. This can then be used to
+contain applications from eachother and make sure they are not interfering with
+eachother and to limit/manage resources available to the applications.
+
+Each container is configured using gateways, where each gateway has a scope of
+influence (network, dbus, files, pulseaudio, for example). The gateways get a
+configuration snippet from the Launcher which they will enforce.
+
+The SoftwareContainer is composed of the following components:
+
+* a libsoftwarecontainer library containing the interfacing code to LXC and
+  the gateway code.
+* softwarecontainer-agent, the binary daemon implementing the
+  libsoftwarecontainer library and running the SoftwareContainer services.
+* libsoftwarecontainer-agent, a library that can be used by other applications
+  to interface with the softwarecontainer-agent interfaces and to control it.
 
 # Building
 
