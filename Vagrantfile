@@ -57,7 +57,7 @@ Vagrant.configure(2) do |config|
         path: "cookbook/build/cmake-git-builder.sh"
 
     config.vm.provision "shell", privileged: false, 
-        args: ["dbus-proxy", "git@github.com:Pelagicore/dbus-proxy.git"],
+        args: ["dbus-proxy", "https://github.com/Pelagicore/dbus-proxy.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
     # Build and install project
