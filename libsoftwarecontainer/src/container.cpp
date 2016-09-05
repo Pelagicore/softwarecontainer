@@ -334,7 +334,7 @@ ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid,
                                          &Container::executeInContainerEntryFunction,
                                          &function, &options, pid);
     if (attach_res == 0) {
-        log_info() << " Attached PID: " << pid;
+        log_info() << " Attached PID: " << *pid;
         return ReturnCode::SUCCESS;
     } else  {
         log_error() << "Attach call to LXC container failed: " << std::string(strerror(errno));

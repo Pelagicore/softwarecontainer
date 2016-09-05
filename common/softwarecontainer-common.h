@@ -127,6 +127,7 @@ inline int waitForProcessTermination(pid_t pid)
  */
 bool isDirectory(const std::string &path);
 bool isFile(const std::string &path);
+bool isPipe(const std::string &path);
 bool isSocket(const std::string &path);
 
 bool existsInFileSystem(const std::string &path);
