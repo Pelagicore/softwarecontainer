@@ -48,6 +48,11 @@ bool isFile(const std::string &path)
     return S_ISREG(getStat(path).st_mode);
 }
 
+bool isPipe(const std::string &path)
+{
+    return S_ISFIFO(getStat(path).st_mode);
+}
+
 bool isSocket(const std::string &path)
 {
     return S_ISSOCK(getStat(path).st_mode);
