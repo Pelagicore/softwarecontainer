@@ -195,19 +195,6 @@ ReturnCode SoftwareContainerLib::init()
     addGateway(new FileGateway());
     addGateway(new EnvironmentGateway());
 
-    // TODO: When this is used together with spawning using lxc.init, we get
-    //       glib errors about ECHILD
-    // TODO: The pid might not valid if there was an error spawning. We should only
-    //       connect the watcher if the spawning went well.
-    if (m_pcPid != INVALID_PID) {
-        addProcessListener(m_connections, m_pcPid, [&] (pid_t pid, int exitCode) {
-            shutdown(m_workspace.m_containerShutdownTimeout);
-        }, m_mainLoopContext);
-    } else {
-        log_error() << "SoftwareContainer pid is " << INVALID_PID << ", this is an error!";
-        return ReturnCode::FAILURE;
-    }
-
     m_initialized = true;
     return ReturnCode::SUCCESS;
 }
@@ -218,23 +205,8 @@ void SoftwareContainerLib::addGateway(Gateway *gateway)
     m_gateways.push_back(std::unique_ptr<Gateway>(gateway));
 }
 
-void SoftwareContainerLib::openTerminal(const std::string &terminalCommand) const
-{
-    std::string command = logging::StringBuilder() << "lxc-attach -n " << m_container->id() << " " << terminalCommand;
-    log_info() << command;
-    system(command.c_str());
-}
-
-
 pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
 {
-    /*
-    if (m_mainLoopContext == nullptr) {
-        log_error() << "Main loop context needs to be set before calling launchCommand";
-        return INVALID_PID;
-    }
-    */
-
     log_debug() << "launchCommand called with commandLine: " << commandLine;
     pid_t pid = INVALID_PID;
     ReturnCode result = m_container->attach(commandLine, &pid);
