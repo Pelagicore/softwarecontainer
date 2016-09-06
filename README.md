@@ -21,6 +21,8 @@ The SoftwareContainer is composed of the following components:
 * libsoftwarecontainer-agent, a library that can be used by other applications
   to interface with the softwarecontainer-agent interfaces and to control it.
 
+SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer
+
 # Building
 
 Building and installing is simple:
