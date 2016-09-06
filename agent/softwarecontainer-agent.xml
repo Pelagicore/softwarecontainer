@@ -7,6 +7,7 @@
 
 		<method name="CreateContainer">
 			<arg direction="in" type="s" name="containerIDPrefix" />
+            <arg direction="in" type="s" name="config" />
 			<arg direction="out" type="u" name="containerID" />
 		</method>
 

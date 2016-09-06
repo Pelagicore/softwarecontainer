@@ -27,7 +27,7 @@
 #include "generators.h"
 #include "softwarecontainer-common.h"
 
-using namespace pelagicore;
+using namespace softwarecontainer;
 
 class PulseMockController
 {

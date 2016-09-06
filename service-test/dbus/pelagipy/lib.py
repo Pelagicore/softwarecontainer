@@ -80,8 +80,11 @@ class ContainerApp():
         self.__bind_dir = None
         self.containerId = None
 
-    def __createContainer(self):
-        self.containerId = self._pca_iface.CreateContainer("prefix-dbus-")
+    def __createContainer(self, writeOften=False):
+        if writeOften:
+            self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "{writeOften: \"1\"}")
+        else:
+            self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "")
 
     def bindMountFolderInContainer(self, relpath, dirname):
         return self._pca_iface.BindMountFolderInContainer(self.containerId, self._path + relpath, dirname, True)
@@ -115,8 +118,8 @@ class ContainerApp():
     def getBindDir(self):
         return self.__bind_dir
 
-    def start(self):
-        self.__createContainer()
+    def start(self, writeOften=False):
+        self.__createContainer(writeOften)
         self.__bind_dir = self.bindMountFolderInContainer("/..", "app")
 
     def terminate(self):

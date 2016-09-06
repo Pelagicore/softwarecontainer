@@ -22,8 +22,8 @@
 #ifndef GATEWAY_H
 #define GATEWAY_H
 
-#include <jansson.h>
 #include "container.h"
+#include "jsonparser.h"
 
 /*! Gateway base class
  *
@@ -36,7 +36,7 @@
  * * Activated - the gateway is active and running.
  *
  */
-class Gateway
+class Gateway: protected softwarecontainer::JSONParser
 {
     LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
 
@@ -120,8 +120,6 @@ protected:
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;
 
-    bool read(const json_t *element, const char *key, std::string &result);
-    bool read(const json_t *element, const char *key, bool &result);
 };
 
 #endif /* GATEWAY_H */

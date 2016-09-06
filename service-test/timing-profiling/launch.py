@@ -119,7 +119,7 @@ class ContainerApp():
         self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.SoftwareContainerAgent")
 
     def createContainer(self):
-        self.containerId = self._pca_iface.CreateContainer("prefix")
+        self.containerId = self._pca_iface.CreateContainer("prefix", "")
 
     def bindMountFolderInContainer(self):
         self._pca_iface.BindMountFolderInContainer(self.containerId, self._path, "app", True)

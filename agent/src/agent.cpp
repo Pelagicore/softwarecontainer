@@ -37,14 +37,17 @@
 #include "libsoftwarecontainer.h"
 #include "softwarecontainer-common.h"
 
+#include <jsonparser.h>
+
 LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
 
 namespace softwarecontainer {
 
 LOG_DECLARE_DEFAULT_CONTEXT(PAM_DefaultLogContext, "MAIN", "Main context");
 
-class SoftwareContainerAgent
+class SoftwareContainerAgent : protected softwarecontainer::JSONParser
 {
+    LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
     typedef std::unique_ptr<SoftwareContainerLib> SoftwareContainerLibPtr;
 
 public:
@@ -103,13 +106,75 @@ public:
         return valid;
     }
 
+    ReturnCode readConfigElement(const json_t *element)
+    {
+        std::string wo;
+        if(!read(element, "writeOften", wo))
+        {
+            log_debug() << "writeOften not found";
+            m_softwarecontainerWorkspace.m_writeOften = false;
+        } else {
+            if (wo == "1")
+            {
+                m_softwarecontainerWorkspace.m_writeOften = true;
+            } else {
+                m_softwarecontainerWorkspace.m_writeOften = false;
+            }
+        }
+        return ReturnCode::SUCCESS;
+    }
+
+    /**
+     * Parse config needed for starting up the container in a correct manner.
+     */
+    bool parseConfig(const std::string &config)
+    {
+        if (config.size() == 0)
+        {
+            log_warning() << "No configuration interpreted";
+            return false;
+        }
+
+        json_error_t error;
+        json_t *root = json_loads(config.c_str(), 0, &error);
+
+        if (!root) {
+            log_error() << "Could not parse config: " << error.text;
+            log_error() << config;
+            return false;
+        }
+
+        if (json_is_array(root)) {
+            for(size_t i = 0; i < json_array_size(root); i++) {
+                json_t *element = json_array_get(root, i);
+                if (json_is_object(element)) {
+                    if (isError(readConfigElement(element))) {
+                        log_error() << "Could not read config element";
+                        return false;
+                    }
+                } else {
+                    log_error() << "json configuration is not an object";
+                    return false;
+                }
+            }
+        } else {
+            log_error() << "Root JSON element is not an array";
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Create a new container
      */
-    ContainerID createContainer(const std::string &prefix)
+    ContainerID createContainer(const std::string &prefix, const std::string &config)
     {
         profilepoint("createContainerStart");
         profilefunction("createContainerFunction");
+
+        parseConfig(config);
+
         SoftwareContainerLib *container;
         if (m_preloadedContainers.size() != 0) {
             container = m_preloadedContainers[0].release();
@@ -296,9 +361,9 @@ public:
         m_agent.setGatewayConfigs(containerID, configs);
     }
 
-    uint32_t CreateContainer(const std::string &name) override
+    uint32_t CreateContainer(const std::string &name, const std::string &config) override
     {
-        return m_agent.createContainer(name);
+        return m_agent.createContainer(name, config);
     }
 
     void SetContainerName(const uint32_t &containerID, const std::string &name) override

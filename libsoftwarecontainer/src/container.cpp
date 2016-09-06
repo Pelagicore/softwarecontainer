@@ -59,11 +59,12 @@ void Container::init_lxc()
 }
 
 Container::Container(const std::string &id, const std::string &name, const std::string &configFile,
-        const std::string &containerRoot, int shutdownTimeout) :
+        const std::string &containerRoot, bool writeOften, int shutdownTimeout) :
     m_configFile(configFile),
     m_id(id),
     m_name(name),
     m_containerRoot(containerRoot),
+    m_writeOften(writeOften),
     m_shutdownTimeout(shutdownTimeout)
 {
     init_lxc();
