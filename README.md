@@ -97,7 +97,7 @@ run unit tests and perform a clang code analysis run on the code.
 
 ### Install build dependencies on Debian
 ```
-$ sudo apt-get install lxc lxc-dev libglib-2.0-dev libglibmm-2.4 \
+$ sudo apt-get install lxc lxc-dev libglib2.0-dev libglibmm-2.4 \
                        libdbus-c++-dev libdbus-c++-1-0v5 libdbus-1-dev \
                        libglibmm-2.4-dev libglibmm-2.4 lxc-dev \
                        libjansson-dev libjansson4
