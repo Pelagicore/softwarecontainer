@@ -218,14 +218,6 @@ void SoftwareContainerLib::addGateway(Gateway *gateway)
     m_gateways.push_back(std::unique_ptr<Gateway>(gateway));
 }
 
-void SoftwareContainerLib::openTerminal(const std::string &terminalCommand) const
-{
-    std::string command = logging::StringBuilder() << "lxc-attach -n " << m_container->id() << " " << terminalCommand;
-    log_info() << command;
-    system(command.c_str());
-}
-
-
 pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
 {
     /*

@@ -99,8 +99,6 @@ public:
 
     void addGateway(Gateway *gateway);
 
-    void openTerminal(const std::string &terminalCommand) const;
-
     /**
      * Preload the container.
      * That method can be called before setting the main loop context
