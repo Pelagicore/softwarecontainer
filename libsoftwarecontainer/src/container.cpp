@@ -228,44 +228,21 @@ ReturnCode Container::start(pid_t *pid)
     }
 
     // For some reason the LXC start function does not work out
-    if (false) {
-        log_debug() << "Starting container";
+    log_debug() << "Starting container";
 
-        char commandEnv[] = "env";
-        char commandSleep[] = "/bin/sleep";
-        char commandSleepTime[] = "100000000";
-        char* const args[] = { commandEnv, commandSleep, commandSleepTime, nullptr};
+    char commandEnv[] = "env";
+    char commandSleep[] = "/bin/sleep";
+    char commandSleepTime[] = "100000000";
+    char* const args[] = { commandEnv, commandSleep, commandSleepTime, nullptr};
 
-        if (!m_container->start(m_container, false, args)) {
-            log_error() << "Error starting container";
-            return ReturnCode::FAILURE;
-        } else {
-            log_debug() << "Container started: " << toString();
-            *pid = m_container->init_pid(m_container);
-            m_state = ContainerState::STARTED;
-        }
-    } else {
-        std::vector<std::string> executeCommandVec;
-        std::string lxcCommand = StringBuilder() << "lxc-execute -n " << id() << " -- env " << "/bin/sleep 100000000";
-        executeCommandVec = Glib::shell_parse_argv(lxcCommand);
-        std::vector<std::string> envVarVec = { };
-
-        log_debug() << "Execute: " << lxcCommand;
-
-        try {
-            Glib::spawn_async_with_pipes(
-                    ".",
-                    executeCommandVec,
-                    envVarVec,
-                    Glib::SPAWN_DO_NOT_REAP_CHILD | Glib::SPAWN_SEARCH_PATH,
-                    sigc::slot<void>(),
-                    pid);
-            m_state = ContainerState::STARTED;
-        } catch (const Glib::Error &ex) {
-            log_error() << "spawn error: " << ex.what();
-            return ReturnCode::FAILURE;
-        }
+    if (!m_container->start(m_container, false, args)) {
+        log_error() << "Error starting container";
+        return ReturnCode::FAILURE;
     }
+
+    log_debug() << "Container started: " << toString();
+    *pid = m_container->init_pid(m_container);
+    m_state = ContainerState::STARTED;
 
     //    assert( m_container->is_running(m_container) );
     log_info() << "To connect to this container : lxc-attach -n " << id();
