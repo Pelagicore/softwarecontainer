@@ -37,10 +37,21 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
         log_error() << "Key \"name\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
+
+    if (!read(element, "mode", dev.mode)) {
+        log_error() << "Key \"mode\" missing or not a string in json configuration";
+        return ReturnCode::FAILURE;
+    }
     
     read(element, "major", dev.major);
     read(element, "minor", dev.minor);
-    read(element, "mode", dev.mode);
+
+    if (dev.minor.length() == 0 ^ dev.minor.length() == 0) {
+        log_error() << "Either only minor or only major version specified."
+                       " This is not allowed, specify both major and minor version or none of them";
+        return ReturnCode::FAILURE;
+    }
+
 
     m_devList.push_back(dev);
     return ReturnCode::SUCCESS;
