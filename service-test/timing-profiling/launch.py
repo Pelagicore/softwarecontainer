@@ -138,7 +138,7 @@ class ContainerApp():
             }],
             "dbus-gateway-config-system": []
         }]
-        self._pca_iface.SetGatewayConfigs(self.containerId, {"network": json.dumps(configuration)})
+        self._pca_iface.SetGatewayConfigs(self.containerId, {"dbus": json.dumps(configuration)})
 
     def launchCommand(self):
         if self._pca_iface.LaunchCommand(self.containerId, 0, "/gateways/app/simple", "/gateways/app", "/tmp/stdout", {"": ""}) is -1:
