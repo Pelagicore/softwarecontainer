@@ -38,18 +38,31 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    if (!read(element, "mode", dev.mode)) {
-        log_error() << "Key \"mode\" missing or not a string in json configuration";
-        return ReturnCode::FAILURE;
-    }
-    
     read(element, "major", dev.major);
     read(element, "minor", dev.minor);
+    read(element, "mode",  dev.mode);
 
-    if (dev.minor.length() == 0 ^ dev.minor.length() == 0) {
-        log_error() << "Either only minor or only major version specified."
-                       " This is not allowed, specify both major and minor version or none of them";
-        return ReturnCode::FAILURE;
+    const bool majorSpecified = dev.major.length() == 0;
+    const bool minorSpecified = dev.minor.length() == 0;
+    const bool modeSpecified = dev.mode.length() == 0;
+
+    if (majorSpecified | minorSpecified) {
+        const std::string notAllowed = "This is not allowed, specify both major and minor version or none of them";
+
+        if (!majorSpecified) {
+            log_error() << "Major version not specified but minor version is. " << notAllowed;
+            return ReturnCode::FAILURE;
+        }
+
+        if (!minorSpecified) {
+            log_error() << "Minor version not specified but major version is. " << notAllowed;
+            return ReturnCode::FAILURE;
+        }
+
+        if (!modeSpecified) {
+            log_error() << "Mode has to be specified when minor and major version is.";
+            return ReturnCode::FAILURE;
+        }
     }
 
 
@@ -62,11 +75,11 @@ bool DeviceNodeGateway::activateGateway()
 {
     for (auto &dev : m_devList) {
         log_info() << "Mapping device " << dev.name;
-        const int mode = std::atoi(dev.mode.c_str());
 
         if (dev.major.length() != 0) {
             const int majorVersion = std::atoi(dev.major.c_str());
             const int minorVersion = std::atoi(dev.minor.c_str());
+            const int mode = std::atoi(dev.mode.c_str());
 
             // mknod dev.name c dev.major dev.minor
             if (mknod(dev.name.c_str(), S_IFCHR | mode, makedev(majorVersion, minorVersion)) != 0) {
@@ -77,9 +90,12 @@ bool DeviceNodeGateway::activateGateway()
             // No major & minor numbers specified => simply map the device from the host into the container
             getContainer()->mountDevice(dev.name);
 
-            if (chmod(dev.name.c_str(), mode) != 0) {
-                log_error() << "Could not 'chmod " << dev.mode << "' the mounted device " << dev.name;
-                return false;
+            if (dev.mode.length() != 0) {
+                const int mode = std::atoi(dev.mode.c_str());
+                if (chmod(dev.name.c_str(), mode) != 0) {
+                    log_error() << "Could not 'chmod " << dev.mode << "' the mounted device " << dev.name;
+                    return false;
+                }
             }
         }
     }
