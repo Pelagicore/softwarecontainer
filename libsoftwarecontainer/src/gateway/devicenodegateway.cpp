@@ -46,9 +46,9 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
     const bool minorSpecified = dev.minor.length() == 0;
 
     if (majorSpecified | minorSpecified) {
-        if (checkIsStrValid(dev.major, "Major version", "Major version must be specified when minor is.")
-            || checkIsStrValid(dev.minor, "Minor version", "Minor version must be specified when major is.")
-            || checkIsStrValid(dev.mode, "Mode", "Mode has to be specified when major and minor is specified.")) {
+        if (!checkIsStrValid(dev.major, "Major version", "Major version must be specified when minor is.")
+            || !checkIsStrValid(dev.minor, "Minor version", "Minor version must be specified when major is.")
+            || !checkIsStrValid(dev.mode, "Mode", "Mode has to be specified when major and minor is specified.")) {
             return ReturnCode::FAILURE;
         }
     }
