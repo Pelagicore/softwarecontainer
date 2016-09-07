@@ -19,8 +19,9 @@
  */
 
 #include "generators.h"
-#include "generators.h"
 #include "devicenodegateway.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
 
 DeviceNodeGateway::DeviceNodeGateway() :
@@ -36,10 +37,21 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
         log_error() << "Key \"name\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
+
+    if (!read(element, "mode", dev.mode)) {
+        log_error() << "Key \"mode\" missing or not a string in json configuration";
+        return ReturnCode::FAILURE;
+    }
     
     read(element, "major", dev.major);
     read(element, "minor", dev.minor);
-    read(element, "mode", dev.mode);
+
+    if (dev.minor.length() == 0 ^ dev.minor.length() == 0) {
+        log_error() << "Either only minor or only major version specified."
+                       " This is not allowed, specify both major and minor version or none of them";
+        return ReturnCode::FAILURE;
+    }
+
 
     m_devList.push_back(dev);
     return ReturnCode::SUCCESS;
@@ -50,12 +62,14 @@ bool DeviceNodeGateway::activateGateway()
 {
     for (auto &dev : m_devList) {
         log_info() << "Mapping device " << dev.name;
+        const int mode = std::atoi(dev.mode.c_str());
 
         if (dev.major.length() != 0) {
-            auto success = executeInContainer("mknod " + dev.name + " c " + dev.major + " " + dev.minor);
-            if (!isError(success)) {
-                success = executeInContainer("chmod " + dev.mode + " " + dev.name);
-            } else {
+            const int majorVersion = std::atoi(dev.major.c_str());
+            const int minorVersion = std::atoi(dev.minor.c_str());
+
+            // mknod dev.name c dev.major dev.minor
+            if (mknod(dev.name.c_str(), S_IFCHR | mode, makedev(majorVersion, minorVersion)) != 0) {
                 log_error() << "Failed to create device " << dev.name;
                 return false;
             }
@@ -63,9 +77,10 @@ bool DeviceNodeGateway::activateGateway()
             // No major & minor numbers specified => simply map the device from the host into the container
             getContainer()->mountDevice(dev.name);
 
-            // TODO : check if it is fine to authorize write access systematically
-            std::string cmd = StringBuilder() << "chmod o+rwx " << dev.name;
-            getContainer()->executeInContainer(cmd);
+            if (chmod(dev.name.c_str(), mode) != 0) {
+                log_error() << "Could not 'chmod " << dev.mode << "' the mounted device " << dev.name;
+                return false;
+            }
         }
     }
 
