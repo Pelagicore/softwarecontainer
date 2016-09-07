@@ -44,32 +44,34 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 
     const bool majorSpecified = dev.major.length() == 0;
     const bool minorSpecified = dev.minor.length() == 0;
-    const bool modeSpecified = dev.mode.length() == 0;
 
     if (majorSpecified | minorSpecified) {
-        const std::string notAllowed = "This is not allowed, specify both major and minor version or none of them";
-
-        if (!majorSpecified) {
-            log_error() << "Major version not specified but minor version is. " << notAllowed;
-            return ReturnCode::FAILURE;
-        }
-
-        if (!minorSpecified) {
-            log_error() << "Minor version not specified but major version is. " << notAllowed;
-            return ReturnCode::FAILURE;
-        }
-
-        if (!modeSpecified) {
-            log_error() << "Mode has to be specified when minor and major version is.";
+        if (checkIsStrValid(dev.major, "Major version", "Major version must be specified when minor is.")
+            || checkIsStrValid(dev.minor, "Minor version", "Minor version must be specified when major is.")
+            || checkIsStrValid(dev.mode, "Mode", "Mode has to be specified when major and minor is specified.")) {
             return ReturnCode::FAILURE;
         }
     }
-
 
     m_devList.push_back(dev);
     return ReturnCode::SUCCESS;
 }
 
+bool DeviceNodeGateway::checkIsStrValid(std::string intStr, std::string name, std::string notSpecified)
+{
+    if (intStr.length() == 0) {
+        log_error() << notSpecified;
+        return false;
+    }
+
+    int i = 0;
+    if (!parseInt(intStr.c_str(), &i)) {
+        log_error() << name << " must be represented as an integer.";
+        return false;
+    }
+
+    return true;
+}
 
 bool DeviceNodeGateway::activateGateway()
 {
@@ -77,9 +79,11 @@ bool DeviceNodeGateway::activateGateway()
         log_info() << "Mapping device " << dev.name;
 
         if (dev.major.length() != 0) {
-            const int majorVersion = std::atoi(dev.major.c_str());
-            const int minorVersion = std::atoi(dev.minor.c_str());
-            const int mode = std::atoi(dev.mode.c_str());
+
+            int majorVersion, minorVersion, mode;
+            parseInt(dev.major.c_str(), &majorVersion);
+            parseInt(dev.minor.c_str(), &minorVersion);
+            parseInt(dev.mode.c_str(), &mode);
 
             // mknod dev.name c dev.major dev.minor
             if (mknod(dev.name.c_str(), S_IFCHR | mode, makedev(majorVersion, minorVersion)) != 0) {

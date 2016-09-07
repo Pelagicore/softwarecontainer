@@ -129,4 +129,17 @@ ReturnCode readFromFile(const std::string &path, std::string &content)
     return ret;
 }
 
+bool parseInt(const char *arg, int *result)
+{
+    char *end;
+    long value = strtol(arg, &end, 10);
+    if (end == arg || *end != '\0' || errno == ERANGE) {
+        return false;
+    }
+
+    *result = value;
+    return true;
 }
+
+}
+

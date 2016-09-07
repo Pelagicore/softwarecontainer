@@ -22,6 +22,7 @@
 #ifndef DEVICENODEGATEWAY_H
 #define DEVICENODEGATEWAY_H
 #include "jansson.h"
+#include "softwarecontainer-common.h"
 
 #include "gateway.h"
 
@@ -114,6 +115,7 @@ private:
     };
 
     std::vector<DeviceNodeGateway::Device> m_devList;
+    bool checkIsStrValid(std::string intStr, std::string name, std::string notSpecified);
 
 };
 
