@@ -35,6 +35,7 @@
 
 #include "SoftwareContainerAgent_dbuscpp_adaptor.h"
 #include "libsoftwarecontainer.h"
+#include "softwarecontainer-common.h"
 
 LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
 
@@ -342,17 +343,6 @@ void usage(const char *argv0)
     printf("--timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
 }
 
-bool parseInt(char *arg, int *result)
-{
-    char *end;
-    long value = strtol(arg, &end, 10);
-    if (end == arg || *end != '\0' || errno == ERANGE) {
-        return false;
-    }
-
-    *result = value;
-    return true;
-}
 
 int signalHandler(void *data) {
     log_debug() << "Caught signal, exiting!";

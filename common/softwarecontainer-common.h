@@ -136,6 +136,7 @@ std::string parentPath(const std::string &path);
 ReturnCode touch(const std::string &path);
 ReturnCode writeToFile(const std::string &path, const std::string &content);
 ReturnCode readFromFile(const std::string &path, std::string &content);
+bool parseInt(const char *args, int *result);
 
 template<typename Type>
 class ObservableProperty
