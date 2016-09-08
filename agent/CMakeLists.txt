@@ -21,7 +21,9 @@
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
 add_executable(softwarecontainer-agent
-    src/agent.cpp
+    src/main.cpp
+    src/softwarecontaineragent.cpp
+    src/softwarecontaineragentadaptor.cpp
     SoftwareContainerAgent_dbuscpp_adaptor.h
 )
 
