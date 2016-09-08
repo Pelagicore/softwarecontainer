@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <node name="/com/pelagicore/SoftwareContainer">
-	<interface name="com.pelagicore.SoftwareContainerAgent">
+    <interface name="com.pelagicore.SoftwareContainerAgent">
 
-		<method name="Ping">
-		</method>
+        <method name="Ping">
+        </method>
 
-		<method name="CreateContainer">
-			<arg direction="in" type="s" name="containerIDPrefix" />
+        <method name="CreateContainer">
+            <arg direction="in" type="s" name="containerIDPrefix" />
             <arg direction="in" type="s" name="config" />
-			<arg direction="out" type="u" name="containerID" />
-		</method>
+            <arg direction="out" type="u" name="containerID" />
+        </method>
 
-		<method name="SetContainerName">
-			<arg direction="in" type="u" name="containerID" />
-			<arg direction="in" type="s" name="containerName" />
-		</method>
+        <method name="SetContainerName">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="in" type="s" name="containerName" />
+        </method>
 
-		<method name="LaunchCommand">
-			<arg direction="in" type="u" name="containerID" />
-			<arg direction="in" type="u" name="userID" />
-			<arg direction="in" type="s" name="commandLine" />
-			<arg direction="in" type="s" name="workingDirectory" />
-			<arg direction="in" type="s" name="outputFile" />
-			<arg direction="in" type="a{ss}" name="env" />
-			<arg direction="out" type="u" name="pid" />
-		</method>
+        <method name="LaunchCommand">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="in" type="u" name="userID" />
+            <arg direction="in" type="s" name="commandLine" />
+            <arg direction="in" type="s" name="workingDirectory" />
+            <arg direction="in" type="s" name="outputFile" />
+            <arg direction="in" type="a{ss}" name="env" />
+            <arg direction="out" type="u" name="pid" />
+        </method>
 
-		<method name="ShutDownContainer">
-			<arg direction="in" type="u" name="containerID" />
-		</method>
+        <method name="ShutDownContainer">
+            <arg direction="in" type="u" name="containerID" />
+        </method>
 
-		<method name="ShutDownContainerWithTimeout">
-			<arg direction="in" type="u" name="containerID" />
-			<arg direction="in" type="u" name="timeout" />
-		</method>
+        <method name="ShutDownContainerWithTimeout">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="in" type="u" name="timeout" />
+        </method>
 
-		<method name="WriteToStdIn">
-			<arg direction="in" type="u" name="processID" />
-			<arg direction="in" type="ay" name="bytes" />
-		</method>
+        <method name="WriteToStdIn">
+            <arg direction="in" type="u" name="processID" />
+            <arg direction="in" type="ay" name="bytes" />
+        </method>
 
-		<method name="BindMountFolderInContainer">
-			<arg direction="in" type="u" name="containerID" />
-			<arg direction="in" type="s" name="pathInHost" />
-			<arg direction="in" type="s" name="subPathInContainer" />
-			<arg direction="in" type="b" name="readOnly" />
-			<arg direction="out" type="s" name="pathInContainer" />
-		</method>
+        <method name="BindMountFolderInContainer">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="in" type="s" name="pathInHost" />
+            <arg direction="in" type="s" name="subPathInContainer" />
+            <arg direction="in" type="b" name="readOnly" />
+            <arg direction="out" type="s" name="pathInContainer" />
+        </method>
 
-		<method name="SetGatewayConfigs">
-			<!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList 
-				&lt; QString &gt; "/> -->
-			<annotation name="org.qtproject.QtDBus.QtTypeName.In0"
-				value="int" />
-			<arg direction="in" type="u" name="containerID" />
-			<arg direction="in" type="a{ss}" name="configs" />
-		</method>
-		
-   		<signal name="ProcessStateChanged">
-			<arg direction="out" type="u" name="containerID"/>
-			<arg direction="out" type="u" name="processID"/>
-			<arg direction="out" type="b" name="isRunning"/>
-			<arg direction="out" type="u" name="exitCode"/>
-		</signal>
+        <method name="SetGatewayConfigs">
+            <!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList 
+                &lt; QString &gt; "/> -->
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In0"
+                value="int" />
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="in" type="a{ss}" name="configs" />
+        </method>
 
-	</interface>
+        <signal name="ProcessStateChanged">
+            <arg direction="out" type="u" name="containerID"/>
+            <arg direction="out" type="u" name="processID"/>
+            <arg direction="out" type="b" name="isRunning"/>
+            <arg direction="out" type="u" name="exitCode"/>
+        </signal>
+
+    </interface>
 </node>
