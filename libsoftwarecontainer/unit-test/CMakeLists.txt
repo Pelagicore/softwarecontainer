@@ -34,6 +34,7 @@ include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 set(TEST_FILES
     cgroupsgateway_unittest.cpp
     dbusgateway_unittest.cpp
+    devicenodegateway_unittest.cpp
     envgateway_unittest.cpp
     filegateway_unittest.cpp
     networkgateway_unittest.cpp

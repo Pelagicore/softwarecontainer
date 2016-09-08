@@ -42,8 +42,8 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
     read(element, "minor", dev.minor);
     read(element, "mode",  dev.mode);
 
-    const bool majorSpecified = dev.major.length() == 0;
-    const bool minorSpecified = dev.minor.length() == 0;
+    const bool majorSpecified = dev.major.length() > 0;
+    const bool minorSpecified = dev.minor.length() > 0;
 
     if (majorSpecified | minorSpecified) {
         if (!checkIsStrValid(dev.major, "Major version", "Major version must be specified when minor is.")
@@ -75,6 +75,11 @@ bool DeviceNodeGateway::checkIsStrValid(std::string intStr, std::string name, st
 
 bool DeviceNodeGateway::activateGateway()
 {
+    if (m_devList.empty()) {
+        log_info() << "Activate was called when no devices has been configured.";
+        return false;
+    }
+
     for (auto &dev : m_devList) {
         log_info() << "Mapping device " << dev.name;
 
@@ -86,18 +91,32 @@ bool DeviceNodeGateway::activateGateway()
             parseInt(dev.mode.c_str(), &mode);
 
             // mknod dev.name c dev.major dev.minor
-            if (mknod(dev.name.c_str(), S_IFCHR | mode, makedev(majorVersion, minorVersion)) != 0) {
+            pid_t pid = INVALID_PID;
+            getContainer()->executeInContainer([&] () {
+                return mknod(dev.name.c_str(), S_IFCHR | mode,
+                             makedev(majorVersion, minorVersion));
+            }, &pid);
+
+            if (waitForProcessTermination(pid) != 0) {
                 log_error() << "Failed to create device " << dev.name;
                 return false;
             }
         } else {
-            // No major & minor numbers specified => simply map the device from the host into the container
+            // No major & minor numbers specified => simply map the device from
+            // the host into the container
             getContainer()->mountDevice(dev.name);
 
             if (dev.mode.length() != 0) {
                 const int mode = std::atoi(dev.mode.c_str());
-                if (chmod(dev.name.c_str(), mode) != 0) {
-                    log_error() << "Could not 'chmod " << dev.mode << "' the mounted device " << dev.name;
+
+                pid_t pid = INVALID_PID;
+                getContainer()->executeInContainer([&] () {
+                    return chmod(dev.name.c_str(), mode);
+                }, &pid);
+
+                if (waitForProcessTermination(pid) != 0) {
+                    log_error() << "Could not 'chmod " << dev.mode
+                                << "' the mounted device " << dev.name;
                     return false;
                 }
             }
