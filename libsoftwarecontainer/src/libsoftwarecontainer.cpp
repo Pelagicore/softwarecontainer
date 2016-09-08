@@ -48,9 +48,9 @@
 
 namespace softwarecontainer {
 
-SoftwareContainerWorkspace &getDefaultWorkspace()
+SoftwareContainerWorkspace &getDefaultWorkspace(bool writeOften)
 {
-    static SoftwareContainerWorkspace defaultWorkspace;
+    static SoftwareContainerWorkspace defaultWorkspace(writeOften);
     return defaultWorkspace;
 }
 
@@ -60,6 +60,7 @@ SoftwareContainerLib::SoftwareContainerLib(SoftwareContainerWorkspace &workspace
                               , m_containerName
                               , m_workspace.m_containerConfig
                               , m_workspace.m_containerRoot
+                              , m_workspace.m_writeOften
                               , m_workspace.m_containerShutdownTimeout))
 {
     m_containerState = ContainerState::CREATED;
@@ -231,8 +232,8 @@ void SoftwareContainerLib::updateGatewayConfiguration(const GatewayConfiguration
 
 void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs)
 {
-    // Go through the received configs and see if they match any of
-    // the running gateways, if so: set their respective config
+    // Go through the active gateways and check if there is a configuration for it
+    // If there is, apply it.
 
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();

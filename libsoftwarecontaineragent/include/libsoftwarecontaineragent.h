@@ -62,7 +62,7 @@ public:
 
     ReturnCode writeToStdIn(pid_t pid, const void *data, size_t length);
 
-    ReturnCode createContainer(const std::string &idPrefix, ContainerID &containerID);
+    ReturnCode createContainer(const std::string &idPrefix, ContainerID &containerID, const std::string &config);
 
     ReturnCode setContainerName(ContainerID containerID, const std::string &name);
 
@@ -104,7 +104,12 @@ public:
 
     ReturnCode init()
     {
-        auto ret = m_agent.createContainer(m_name, m_containerID);
+        std::string config;
+        if (m_writeOften)
+            config = "{writeOften: \"1\"}";
+        else
+            config = "{writeOften: \"0\"}";
+        auto ret = m_agent.createContainer(m_name, m_containerID, config);
         if (ret == ReturnCode::SUCCESS) {
             m_containerState = ContainerState::PRELOADED;
         }
@@ -163,6 +168,7 @@ private:
     ObservableWritableProperty<ContainerState> m_containerState = ContainerState::CREATED;
     ContainerID m_containerID;
     std::string m_name;
+    bool m_writeOften;
 };
 
 class AgentCommand

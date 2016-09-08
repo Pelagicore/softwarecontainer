@@ -40,10 +40,12 @@ class SoftwareContainerWorkspace :
 
 public:
     SoftwareContainerWorkspace(
+            bool writeOften = false,
             const std::string &containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE,
             const std::string &configFilePath = PELAGICONTAIN_DEFAULT_CONFIG,
             unsigned int containerShutdownTimeout = 2)
-        : m_containerRoot(containerRootFolder)
+        : m_writeOften(writeOften)
+        , m_containerRoot(containerRootFolder)
         , m_containerConfig(configFilePath)
         , m_containerShutdownTimeout(containerShutdownTimeout)
     {
@@ -67,12 +69,13 @@ public:
      */
     ReturnCode checkWorkspace();
 
+    bool m_writeOften;
     std::string m_containerRoot;
     std::string m_containerConfig;
     unsigned int m_containerShutdownTimeout;
 };
 
-SoftwareContainerWorkspace &getDefaultWorkspace();
+SoftwareContainerWorkspace &getDefaultWorkspace(bool writeOften);
 
 class SoftwareContainerLib :
     private FileToolkitWithUndo
@@ -80,7 +83,7 @@ class SoftwareContainerLib :
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    SoftwareContainerLib(SoftwareContainerWorkspace &workspace = getDefaultWorkspace());
+    SoftwareContainerLib(SoftwareContainerWorkspace &workspace = getDefaultWorkspace(false));
 
     ~SoftwareContainerLib();
 

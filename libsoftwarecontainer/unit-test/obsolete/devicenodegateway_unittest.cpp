@@ -27,7 +27,7 @@
 #include "devicenodegateway.h"
 #include "devicenodegateway_unittest_data.h"
 
-using namespace pelagicore;
+using namespace softwarecontainer;
 
 class MockController
 {

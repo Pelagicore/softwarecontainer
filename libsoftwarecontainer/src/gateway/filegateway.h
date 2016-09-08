@@ -26,7 +26,7 @@
 #include "gateway.h"
 
 /**
- * That gateway lets you map files (including socket files) or folders from the host into the container's filesystem.
+ * This gateway lets you map files (including socket files) or folders from the host into the container's filesystem.
  * In the container, the files are mapped into a subfolders (currently "/gateways"), at the location specified by the "path-container" field (see below).
    Example:
 {
