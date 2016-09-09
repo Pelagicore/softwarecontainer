@@ -18,9 +18,11 @@
  * For further information see LICENSE
  */
 
-
+#include "softwarecontainer-common.h"
 #include "softwarecontainer_test.h"
 #include "gateway/filegateway.h"
+#include <unistd.h>
+#include <stdlib.h>
 
 class FileGatewayTest : public SoftwareContainerGatewayTest
 {
@@ -35,8 +37,7 @@ public:
         SoftwareContainerLibTest::SetUp();
 
         // Create file
-        std::string cmd = "echo " + FILE_CONTENT + " > " + FILE_PATH;
-        ASSERT_TRUE(system(cmd.c_str()) == 0);
+        ASSERT_TRUE(writeToFile(FILE_PATH, FILE_CONTENT) == ReturnCode::SUCCESS);
     }
 
     void TearDown() override
@@ -44,14 +45,7 @@ public:
         SoftwareContainerLibTest::TearDown();
 
         // Remove file
-        std::string cmd = "rm " + FILE_PATH;
-        system(cmd.c_str());
-    }
-
-    bool runInShell(std::string cmd) {
-        CommandJob job(*lib, "sh -c \"" + cmd + "\"");
-        job.start();
-        return job.wait() == 0;
+        unlink(FILE_PATH.c_str());
     }
 
     const std::string FILE_CONTENT = "ahdkhqweuyreqiwenomndlaskmd";
@@ -91,8 +85,6 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
 
 TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
     givenContainerIsSet(gw);
-    const std::string cmd = "cat " + FILE_PATH;
-    ASSERT_FALSE(runInShell(cmd));
     const std::string config =
     "["
         "{"
@@ -104,16 +96,41 @@ TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_TRUE(gw->activate());
 
-    ASSERT_TRUE(runInShell(cmd));
+    ASSERT_TRUE(existsInFileSystem(FILE_PATH));
 }
 
 TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     givenContainerIsSet(gw);
-    const std::string cmd =  "printenv"
-                             "| grep " + ENV_VAR_NAME +
-                             "| grep " + PREFIX +
-                             "| grep " + SUFFIX;
-    ASSERT_FALSE(runInShell(cmd));
+    FunctionJob job = FunctionJob(*lib, [&] () {
+        const char* envC = getenv(ENV_VAR_NAME.c_str());
+
+        if (envC == nullptr) {
+            return 1;
+        }
+
+        const std::string env = std::string(envC);
+        if (env.length() < PREFIX.length() + SUFFIX.length()) {
+            return 2;
+        }
+
+        for (size_t i = 0; i < PREFIX.length(); ++i) {
+            if (env[i] != PREFIX[i]) {
+               return 3;
+            }
+        }
+
+        const int suffixStart = env.length() - SUFFIX.length();
+        for (size_t i = 0; i < SUFFIX.length(); ++i) {
+            if (env[suffixStart + i] != SUFFIX[i]) {
+               return 4;
+            }
+        }
+
+        return 0;
+    });
+
+    job.start();
+    ASSERT_EQ(job.wait(), 1);
 
     const std::string config =
     "["
@@ -128,7 +145,8 @@ TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_TRUE(gw->activate());
 
-    ASSERT_TRUE(runInShell(cmd));
+    job.start();
+    ASSERT_EQ(job.wait(), 0);
 }
 
 TEST_F(FileGatewayTest, TestActivateWithNoPathToHost) {
