@@ -62,6 +62,7 @@ private:
         std::string envVarPrefix;
         std::string envVarSuffix;
     };
+    virtual std::string bindMount(const FileSetting &setting);
 
     std::vector<FileSetting> m_settings;
 };
