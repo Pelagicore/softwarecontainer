@@ -37,30 +37,29 @@
  *
  * JSON format :
  * \code{.js}
- *  {[
- *                    {
- *                        "name":  "/dev/dri/card0"
- *                    },
- *                    {
- *                        "name":  "tty0",
- *                        "major": "4",
- *                        "minor": "0",
- *                        "mode":  "666"
- *                    },
- *                    {
- *                        "name":  "tty1",
- *                        "major": "4",
- *                        "minor": "0",
- *                        "mode":  "400"
- *                    },
- *                    {
- *                        "name":  "/dev/galcore",
- *                        "major": "199",
- *                        "minor": "0",
- *                        "mode":  "666"
- *                    }
- *                ]
- *  }
+ *  [
+ *      {
+ *          "name":  "/dev/dri/card0"
+ *      },
+ *      {
+ *          "name":  "tty0",
+ *          "major": "4",
+ *          "minor": "0",
+ *          "mode":  "666"
+ *      },
+ *      {
+ *          "name":  "tty1",
+ *          "major": "4",
+ *          "minor": "0",
+ *          "mode":  "400"
+ *      },
+ *      {
+ *          "name":  "/dev/galcore",
+ *          "major": "199",
+ *          "minor": "0",
+ *          "mode":  "666"
+ *      }
+ *  ]
  * \endcode
  *
  * .. or in text:
@@ -88,7 +87,7 @@ public:
     {
     }
 
-    ReturnCode readConfigElement(const json_t *element) override;
+    virtual ReturnCode readConfigElement(const json_t *element) override;
 
     /*!
      *  Implements Gateway::activateGateway
