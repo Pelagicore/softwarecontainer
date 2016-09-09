@@ -27,7 +27,6 @@ add_library(softwarecontainer-agent-lib SHARED
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainer-agent-lib
-    ${PELAGICORE_UTILS_LIBRARIES}
     ${DBUSCPP_LIBRARIES}
     ${DBUSCPPGLIB_LIBRARIES}
     ${GLIBMM_LIBRARIES}

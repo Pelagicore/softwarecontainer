@@ -41,8 +41,8 @@ class SoftwareContainerWorkspace :
 public:
     SoftwareContainerWorkspace(
             bool writeOften = false,
-            const std::string &containerRootFolder = PELAGICONTAIN_DEFAULT_WORKSPACE,
-            const std::string &configFilePath = PELAGICONTAIN_DEFAULT_CONFIG,
+            const std::string &containerRootFolder = SOFTWARECONTAINER_DEFAULT_WORKSPACE,
+            const std::string &configFilePath = SOFTWARECONTAINER_DEFAULT_CONFIG,
             unsigned int containerShutdownTimeout = 2)
         : m_writeOften(writeOften)
         , m_containerRoot(containerRootFolder)
