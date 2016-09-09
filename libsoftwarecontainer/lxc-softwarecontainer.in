@@ -4,9 +4,6 @@
 # This LXC template is based on the busybox one shipped with LXC.
 # Original author: Daniel Lezcano <daniel.lezcano@free.fr>
 #
-# Pelagicore maintainer:
-# Tobias Olausson <tobias.olausson@pelagicore.com>
-#
 # LXC is free software, released under GNU LGPL 2.1
 #
 # Reader's guide: to get the full understanding of how the containers are

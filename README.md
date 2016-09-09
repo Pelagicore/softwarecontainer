@@ -23,6 +23,9 @@ The SoftwareContainer is composed of the following components:
 
 SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer
 
+Pelagicore maintainer:
+Tobias Olausson <tobias.olausson@pelagicore.com>
+
 # Building
 
 Building and installing is simple:
