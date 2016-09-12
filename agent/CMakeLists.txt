@@ -16,9 +16,9 @@
 #
 # For further information see LICENSE
 
-
-
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
+
+set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(softwarecontainer-agent
     src/main.cpp
@@ -65,3 +65,5 @@ if (ENABLE_SYSTEMD)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.service.in  ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
 endif()
+
+add_subdirectory(unit-test)
