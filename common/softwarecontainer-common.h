@@ -90,16 +90,9 @@ public:
     /**
      * Add a new connection
      */
-    void addConnection(sigc::connection &connection) {
-        m_connections.push_back(connection);
-    }
+    void addConnection(sigc::connection &connection);
 
-    ~SignalConnectionsHandler()
-    {
-        for (auto &connection : m_connections) {
-            connection.disconnect();
-        }
-    }
+    ~SignalConnectionsHandler();
 
 private:
     std::vector<sigc::connection> m_connections;
@@ -200,6 +193,7 @@ public:
         return *this;
     }
 
+
 private:
     Type m_value;
 
@@ -248,21 +242,9 @@ class FileCleanUpHandler :
     public CleanUpHandler
 {
 public:
-    FileCleanUpHandler(const std::string &path)
-    {
-        m_path = path;
-    }
+    FileCleanUpHandler(const std::string &path);
 
-    ReturnCode clean() override
-    {
-        if (unlink(m_path.c_str()) == 0) {
-            log_debug() << "Unlinked " << m_path;
-            return ReturnCode::SUCCESS;
-        } else {
-            log_error() << "Can't delete " << m_path << " . Error :" << strerror(errno);
-            return ReturnCode::FAILURE;
-        }
-    }
+    ReturnCode clean() override;
 
     std::string m_path;
 };
@@ -271,27 +253,9 @@ class MountCleanUpHandler :
     public CleanUpHandler
 {
 public:
-    MountCleanUpHandler(const std::string &path)
-    {
-        m_path = path;
-    }
+    MountCleanUpHandler(const std::string &path);
 
-    ReturnCode clean() override
-    {
-        // Lazy unmount. Should be the equivalent of the "umount -l" command.
-        if (umount2(m_path.c_str(), MNT_DETACH) == 0) {
-            log_debug() << "Unmounted " << m_path;
-            return ReturnCode::SUCCESS;
-        } else {
-            log_warn() << "Can't unmount " << m_path << " . Error :" << strerror(errno) << ". Trying to force umount";
-            if (umount2(m_path.c_str(), MNT_FORCE) != 0) {
-                log_warn() << "Can't force unmount " << m_path << " . Error :" << strerror(errno);
-                return ReturnCode::FAILURE;
-            }
-            log_debug() << "Managed to force unmount " << m_path;
-            return ReturnCode::SUCCESS;
-        }
-    }
+    ReturnCode clean() override;
     std::string m_path;
 };
 
@@ -300,35 +264,9 @@ class FileToolkitWithUndo
     LOG_DECLARE_CLASS_CONTEXT("CLEA", "File toolkit");
 
 public:
-    ~FileToolkitWithUndo()
-    {
-        bool success = true;
-        // Clean up all created directories, files, and mount points
-        for (auto it = m_cleanupHandlers.rbegin(); it != m_cleanupHandlers.rend(); ++it) {
-            // Cleaning functions will do their own error/warning output
-            if(isError((*it)->clean())) {
-                success = false;
-            }
-            delete *it;
-        }
+    ~FileToolkitWithUndo();
 
-        if(!success) {
-            log_error() << "One or more cleanup handlers returned error status, please check the log";
-        }
-    }
-
-    ReturnCode createParentDirectory(const std::string &path)
-    {
-        log_debug() << "Creating parent directories for " << path;
-        std::string parent = parentPath(path);
-        if (!isDirectory(parent) && parent != "") {
-            if(isError(createDirectory(parent))) {
-                log_error() << "Could not create directory " << parent;
-                return ReturnCode::FAILURE;
-            }
-        }
-        return ReturnCode::SUCCESS;
-    }
+    ReturnCode createParentDirectory(const std::string &path);
 
     /**
      * Create a directory, and if successful append it to a list of dirs
@@ -336,104 +274,15 @@ public:
      * deleted in reverse order to creation insert to the beginning of
      * the list.
      */
-    ReturnCode createDirectory(const std::string &path)
-    {
-        if (isDirectory(path)) {
-            return ReturnCode::SUCCESS;
-        }
+    ReturnCode createDirectory(const std::string &path);
 
-        if(isError(createParentDirectory(path))) {
-            log_error() << "Couldn't create parent directory for " << path;
-            return ReturnCode::FAILURE;
-        }
+    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly);
 
-        if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-            log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
-            return ReturnCode::FAILURE;
-        }
+    ReturnCode createSharedMountPoint(const std::string &path);
 
-        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(path));
-        log_debug() << "Created directory " << path;
+    ReturnCode writeToFile(const std::string &path, const std::string &content);
 
-        return ReturnCode::SUCCESS;
-    }
-
-    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly)
-    {
-        unsigned long flags = MS_BIND;
-        const char *fstype = nullptr;
-        const void *data = nullptr;
-        log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
-
-        int mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
-        if (mountRes == 0) {
-            log_verbose() << "Bind-mounted folder " << src << " in " << dst;
-            m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
-        } else {
-            log_error() << "Could not mount into container: src=" << src
-                        << " , dst=" << dst << " err=" << strerror(errno);
-            return ReturnCode::FAILURE;
-        }
-
-        if (readOnly) {
-            flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
-
-            log_debug() << "Re-mounting read-only" << src << " in "
-                        << dst << ", flags: " << flags;
-            mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
-            if (mountRes != 0) {
-                // Failure
-                log_error() << "Could not re-mount " << src << " , read-only on "
-                            << dst << " err=" << strerror(errno);
-                return ReturnCode::FAILURE;
-            }
-        }
-        return ReturnCode::SUCCESS;
-    }
-
-    ReturnCode createSharedMountPoint(const std::string &path)
-    {
-        // MS_MGC_VAL |
-        auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
-        assert(mountRes == 0);
-        mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, nullptr);
-        assert(mountRes == 0);
-        mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, nullptr);
-        assert(mountRes == 0);
-        m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
-        log_debug() << "Created shared mount point at " << path;
-
-        return ReturnCode::SUCCESS;
-    }
-
-    ReturnCode writeToFile(const std::string &path, const std::string &content)
-    {
-        auto ret = softwarecontainer::writeToFile(path, content);
-        if (isError(ret)) {
-            return ret;
-        }
-        m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
-        log_debug() << "Successfully wrote to " << path;
-        return ReturnCode::SUCCESS;
-    }
-
-    ReturnCode createSymLink(const std::string &source, const std::string &destination)
-    {
-        log_debug() << "creating symlink " << source << " pointing to " << destination;
-
-        createDirectory(parentPath(source));
-
-        if (symlink(destination.c_str(), source.c_str()) == 0) {
-            m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
-            log_debug() << "Successfully created symlink from " << source << " to " << destination;
-        } else {
-            log_error() << "Error creating symlink " << destination
-                        << " pointing to " << source << ". Error: "
-                        << strerror(errno);
-            return ReturnCode::FAILURE;
-        }
-        return ReturnCode::SUCCESS;
-    }
+    ReturnCode createSymLink(const std::string &source, const std::string &destination);
 
 protected:
     std::vector<CleanUpHandler *> m_cleanupHandlers;

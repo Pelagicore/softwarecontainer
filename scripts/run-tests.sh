@@ -63,6 +63,10 @@ if [ -n "$1" ]; then
     GTEST_FILTER="$1"
 fi
 
+./agent/unit-test/softwarecontaineragenttest \
+    $GTEST_OPTS
+retval=$?
+
 ./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
     --gtest_filter=$GTEST_FILTER \
     $GTEST_OPTS
