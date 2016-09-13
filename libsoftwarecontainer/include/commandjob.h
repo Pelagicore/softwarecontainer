@@ -17,9 +17,7 @@
  * For further information see LICENSE
  */
 
-#ifndef SOFTWARECONTAINER_COMMANDJOB
-#define SOFTWARECONTAINER_COMMANDJOB
-
+#pragma once
 #include "jobabstract.h"
 namespace softwarecontainer {
 
@@ -47,5 +45,3 @@ private:
     uid_t m_userID = ROOT_UID;
 };
 }
-
-#endif // SOFTWARECONTAINER_COMMANDJOB

@@ -16,9 +16,7 @@
  *
  * For further information see LICENSE
  */
-#ifndef SOFTWARECONTAINER_FUNCTIONJOB
-#define SOFTWARECONTAINER_FUNCTIONJOB
-
+#pragma once
 #include "jobabstract.h"
 namespace softwarecontainer {
 
@@ -43,5 +41,3 @@ private:
     std::function<int()> m_command;
 };
 }
-
-#endif // SOFTWARECONTAINER_FUNCTIONJOB

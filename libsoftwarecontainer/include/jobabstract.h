@@ -16,9 +16,7 @@
  *
  * For further information see LICENSE
  */
-#ifndef SOFTWARECONTAINER_JOBABSTRACT
-#define SOFTWARECONTAINER_JOBABSTRACT
-
+#pragma once
 #include "libsoftwarecontainer.h"
 
 namespace softwarecontainer {
@@ -66,5 +64,3 @@ protected:
     int m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
 };
 }
-
-#endif // SOFTWARECONTAINER_JOBABSTRACT
