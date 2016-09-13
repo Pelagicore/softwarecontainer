@@ -26,6 +26,8 @@
 #include "gateway/networkgateway.h"
 #include "gateway/pulsegateway.h"
 #include "gateway/filegateway.h"
+#include "functionjob.h"
+#include "commandjob.h"
 
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");

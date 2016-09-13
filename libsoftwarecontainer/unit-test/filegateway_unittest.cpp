@@ -21,6 +21,7 @@
 #include "softwarecontainer-common.h"
 #include "softwarecontainer_test.h"
 #include "gateway/filegateway.h"
+#include "functionjob.h"
 #include <unistd.h>
 #include <stdlib.h>
 

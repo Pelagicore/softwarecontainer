@@ -55,6 +55,9 @@ add_library(softwarecontainerlib SHARED
     generators.cpp
     generators.h
     libsoftwarecontainer.cpp
+    jobs/jobabstract.cpp
+    jobs/functionjob.cpp
+    jobs/commandjob.cpp
     ${GATEWAY_SOURCES}
     ${GATEWAY_HEADERS}
     ${PROJECT_SOURCE_DIR}/common/common.cpp

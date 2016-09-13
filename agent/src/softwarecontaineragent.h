@@ -38,6 +38,7 @@
 #include "softwarecontainer-common.h"
 
 #include <jsonparser.h>
+#include "commandjob.h"
 
 
 
