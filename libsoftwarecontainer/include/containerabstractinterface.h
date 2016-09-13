@@ -48,6 +48,19 @@ public:
     virtual ReturnCode mountDevice(const std::string &pathInHost) = 0;
     virtual ReturnCode createSymLink(const std::string &source, const std::string &destination) = 0;
     virtual ReturnCode bindMountFileInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true) = 0;
+
+    /*! Bind mount a directory from the host into the container.
+     *
+     * Bind mount src to dst (relative to /gateways in container), e.g. passing '/home/foo/temp' as src and
+     * 'app' as dst, the resulting path inside the container will be '/gateways/app' and contain whatever is
+     * in '/home/foo/temp' on the host.
+     *
+     * 'src' and 'dst' can be any value but there might be issues if something like '..' is used.
+     *
+     * If 'readonly' is set to 'true' the mount is read only.
+     *
+     * The resulting path is written to the 'result' out-parameter.
+     */
     virtual ReturnCode bindMountFolderInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true) = 0;
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) = 0;
