@@ -107,6 +107,8 @@ public:
 
     void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
 
+    SoftwareContainerWorkspace getSoftwareContainerWorkspace();
+
 private:
     SoftwareContainerWorkspace m_softwarecontainerWorkspace;
     std::vector<SoftwareContainerLibPtr> m_containers;

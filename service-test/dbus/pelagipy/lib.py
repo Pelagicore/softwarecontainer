@@ -82,7 +82,7 @@ class ContainerApp():
 
     def __createContainer(self, writeOften=False):
         if writeOften:
-            self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "{writeOften: \"1\"}")
+            self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "{writeOften: true}")
         else:
             self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "")
 

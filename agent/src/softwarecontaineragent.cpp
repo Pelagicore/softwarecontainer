@@ -1,6 +1,10 @@
 #include "softwarecontaineragent.h"
 
-SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, bool shutdownContainers, int shutdownTimeout)
+SoftwareContainerAgent::SoftwareContainerAgent(
+        Glib::RefPtr<Glib::MainContext> mainLoopContext
+        , int preloadCount
+        , bool shutdownContainers
+        , int shutdownTimeout)
     : m_mainLoopContext(mainLoopContext)
     , m_preloadCount(preloadCount)
     , m_shutdownContainers(shutdownContainers)
@@ -48,12 +52,12 @@ bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareCon
 
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
 {
-    std::string wo;
+    bool wo;
     if(!read(element, "writeOften", wo)) {
         log_debug() << "writeOften not found";
         m_softwarecontainerWorkspace.m_writeOften = false;
     } else {
-        if (wo == "1") {
+        if (wo == true) {
             m_softwarecontainerWorkspace.m_writeOften = true;
         } else {
             m_softwarecontainerWorkspace.m_writeOften = false;
@@ -225,4 +229,9 @@ void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, cons
     if (checkContainer(containerID, container)) {
         container->updateGatewayConfiguration(configs);
     }
+}
+
+SoftwareContainerWorkspace SoftwareContainerAgent::getSoftwareContainerWorkspace()
+{
+    return m_softwarecontainerWorkspace;
 }
