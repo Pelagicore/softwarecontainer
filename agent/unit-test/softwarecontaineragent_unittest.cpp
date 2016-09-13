@@ -38,9 +38,9 @@ public:
     void SetUp() override
     {
         sca = new SoftwareContainerAgent(m_context
-                                         , m_preloadCount
-                                         , m_shutdownContainers
-                                         , m_shutdownTimeout);
+                , m_preloadCount
+                , m_shutdownContainers
+                , m_shutdownTimeout);
 
         workspace = sca->getSoftwareContainerWorkspace();
     }
@@ -55,7 +55,7 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithNoConf) {
 }
 
 TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
-    ContainerID id = sca->createContainer("iejr-", "[{\"writeOften\": \"1\"}]");
+    ContainerID id = sca->createContainer("iejr-", "[{\"writeOften\": true}]");
     // This is actually only true if no other containers have been created
     // before this one. Might need to be fixed somehow.
     workspace = sca->getSoftwareContainerWorkspace();
@@ -64,13 +64,13 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
-    bool retval = sca->parseConfig("[{\"writeOften\": \"1\"}]");
+    bool retval = sca->parseConfig("[{\"writeOften\": true}]");
     ASSERT_TRUE(retval == true);
     ASSERT_TRUE(workspace.m_writeOften == false);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice2) {
-    bool retval = sca->parseConfig("[{\"writeOften\": \"0\"}]");
+    bool retval = sca->parseConfig("[{\"writeOften\": false}]");
     ASSERT_TRUE(retval == true);
 }
 
@@ -86,16 +86,16 @@ TEST_F(SoftwareContainerAgentTest, parseConfigBadConfig) {
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig) {
     // This actually parses and should be true
-    bool retval = sca->parseConfig("[{\"writeoften\": \"1\"}]");
+    bool retval = sca->parseConfig("[{\"writeoften\": true}]");
     ASSERT_TRUE(retval== true);
     ASSERT_TRUE(workspace.m_writeOften == false);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig2) {
     // This actually parses and should be true
-    bool retval = sca->parseConfig("[{\"writeoften\": \"0\"}]");
+    bool retval = sca->parseConfig("[{\"writeoften\": false}]");
     workspace = sca->getSoftwareContainerWorkspace();
 
-    ASSERT_TRUE(retval == false);
+    ASSERT_TRUE(retval == true);
     ASSERT_TRUE(workspace.m_writeOften == false);
 }

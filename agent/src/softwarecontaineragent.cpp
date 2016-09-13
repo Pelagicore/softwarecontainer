@@ -52,12 +52,12 @@ bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareCon
 
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
 {
-    std::string wo;
+    bool wo;
     if(!read(element, "writeOften", wo)) {
         log_debug() << "writeOften not found";
         m_softwarecontainerWorkspace.m_writeOften = false;
     } else {
-        if (wo == "1") {
+        if (wo == true) {
             m_softwarecontainerWorkspace.m_writeOften = true;
         } else {
             m_softwarecontainerWorkspace.m_writeOften = false;
