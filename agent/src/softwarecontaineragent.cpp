@@ -1,6 +1,10 @@
 #include "softwarecontaineragent.h"
 
-SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, int preloadCount, bool shutdownContainers, int shutdownTimeout)
+SoftwareContainerAgent::SoftwareContainerAgent(
+        Glib::RefPtr<Glib::MainContext> mainLoopContext
+        , int preloadCount
+        , bool shutdownContainers
+        , int shutdownTimeout)
     : m_mainLoopContext(mainLoopContext)
     , m_preloadCount(preloadCount)
     , m_shutdownContainers(shutdownContainers)
@@ -225,4 +229,9 @@ void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, cons
     if (checkContainer(containerID, container)) {
         container->updateGatewayConfiguration(configs);
     }
+}
+
+SoftwareContainerWorkspace SoftwareContainerAgent::getSoftwareContainerWorkspace()
+{
+    return m_softwarecontainerWorkspace;
 }
