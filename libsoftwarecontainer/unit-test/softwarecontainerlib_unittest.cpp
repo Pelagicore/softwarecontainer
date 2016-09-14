@@ -142,6 +142,15 @@ TEST_F(SoftwareContainerApp, CommonFunctions) {
     ASSERT_EQ(c2, ReturnCode::FAILURE);
 }
 
+TEST_F(SoftwareContainerApp, EnvVarsSet) {
+    FunctionJob job(getLib(), [&] () {
+        return getenv("TESTVAR") != NULL ? 0 : 1;
+    });
+    job.setEnvironnmentVariable("TESTVAR","YES");
+    job.start();
+    ASSERT_TRUE(job.wait() == 0);
+}
+
 static constexpr int EXISTENT = 1;
 static constexpr int NON_EXISTENT = 0;
 
@@ -652,6 +661,23 @@ TEST_F(SoftwareContainerApp, TestStdin) {
  * We do not enable the network gateway so we expect the ping to fail
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
+    CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    job.start();
+    ASSERT_TRUE(job.wait() != 0);
+
+    CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
+    job2.start();
+    ASSERT_TRUE(job2.wait() != 0);
+}
+
+/**
+ * We can also disable it explicitly
+ */
+TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
+    GatewayConfiguration config;
+    config[NetworkGateway::ID] = "[ { \"internet-access\" : false } ]";
+    setGatewayConfigs(config);
+
     CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_TRUE(job.wait() != 0);
