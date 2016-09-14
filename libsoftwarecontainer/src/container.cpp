@@ -22,7 +22,6 @@
 #include <vector>
 #include <fstream>
 #include <unistd.h>
-#include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <lxc/lxccontainer.h>
@@ -59,12 +58,12 @@ void Container::init_lxc()
 }
 
 Container::Container(const std::string &id, const std::string &name, const std::string &configFile,
-        const std::string &containerRoot, bool writeOften, int shutdownTimeout) :
+        const std::string &containerRoot, bool enableWriteBuffer, int shutdownTimeout) :
     m_configFile(configFile),
     m_id(id),
     m_name(name),
     m_containerRoot(containerRoot),
-    m_writeOften(writeOften),
+    m_enableWriteBuffer(enableWriteBuffer),
     m_shutdownTimeout(shutdownTimeout)
 {
     init_lxc();

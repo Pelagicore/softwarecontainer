@@ -40,11 +40,11 @@ class SoftwareContainerWorkspace :
 
 public:
     SoftwareContainerWorkspace(
-            bool writeOften = false,
+            bool enableWriteBuffer = false,
             const std::string &containerRootFolder = SOFTWARECONTAINER_DEFAULT_WORKSPACE,
             const std::string &configFilePath = SOFTWARECONTAINER_DEFAULT_CONFIG,
             unsigned int containerShutdownTimeout = 2)
-        : m_writeOften(writeOften)
+        : m_enableWriteBuffer(enableWriteBuffer)
         , m_containerRoot(containerRootFolder)
         , m_containerConfig(configFilePath)
         , m_containerShutdownTimeout(containerShutdownTimeout)
@@ -69,13 +69,13 @@ public:
      */
     ReturnCode checkWorkspace();
 
-    bool m_writeOften;
+    bool m_enableWriteBuffer;
     std::string m_containerRoot;
     std::string m_containerConfig;
     unsigned int m_containerShutdownTimeout;
 };
 
-SoftwareContainerWorkspace &getDefaultWorkspace(bool writeOften);
+SoftwareContainerWorkspace &getDefaultWorkspace(bool enableWriteBuffer);
 
 class SoftwareContainerLib :
     private FileToolkitWithUndo

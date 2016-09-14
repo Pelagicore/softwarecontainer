@@ -105,10 +105,10 @@ public:
     ReturnCode init()
     {
         std::string config;
-        if (m_writeOften)
-            config = "{writeOften: \"1\"}";
+        if (m_enableWriteBuffer)
+            config = "{enableWriteBuffer: \"1\"}";
         else
-            config = "{writeOften: \"0\"}";
+            config = "{enableWriteBuffer: \"0\"}";
         auto ret = m_agent.createContainer(m_name, m_containerID, config);
         if (ret == ReturnCode::SUCCESS) {
             m_containerState = ContainerState::PRELOADED;
@@ -168,7 +168,7 @@ private:
     ObservableWritableProperty<ContainerState> m_containerState = ContainerState::CREATED;
     ContainerID m_containerID;
     std::string m_name;
-    bool m_writeOften;
+    bool m_enableWriteBuffer;
 };
 
 class AgentCommand

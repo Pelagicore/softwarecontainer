@@ -48,9 +48,9 @@
 
 namespace softwarecontainer {
 
-SoftwareContainerWorkspace &getDefaultWorkspace(bool writeOften)
+SoftwareContainerWorkspace &getDefaultWorkspace(bool enableWriteBuffer)
 {
-    static SoftwareContainerWorkspace defaultWorkspace(writeOften);
+    static SoftwareContainerWorkspace defaultWorkspace(enableWriteBuffer);
     return defaultWorkspace;
 }
 
@@ -60,7 +60,7 @@ SoftwareContainerLib::SoftwareContainerLib(SoftwareContainerWorkspace &workspace
                               , m_containerName
                               , m_workspace.m_containerConfig
                               , m_workspace.m_containerRoot
-                              , m_workspace.m_writeOften
+                              , m_workspace.m_enableWriteBuffer
                               , m_workspace.m_containerShutdownTimeout))
 {
     m_containerState = ContainerState::CREATED;

@@ -33,14 +33,15 @@ public:
     int m_preloadCount = 1;
     bool m_shutdownContainers = true;
     int m_shutdownTimeout = 2;
-    SoftwareContainerWorkspace workspace;
+    SoftwareContainerWorkspace *workspace;
 
     void SetUp() override
     {
-        sca = new SoftwareContainerAgent(m_context
-                , m_preloadCount
-                , m_shutdownContainers
-                , m_shutdownTimeout);
+        sca = new SoftwareContainerAgent(
+                    m_context
+                    , m_preloadCount
+                    , m_shutdownContainers
+                    , m_shutdownTimeout);
 
         workspace = sca->getSoftwareContainerWorkspace();
     }
@@ -55,22 +56,21 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithNoConf) {
 }
 
 TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
-    ContainerID id = sca->createContainer("iejr-", "[{\"writeOften\": true}]");
+    ContainerID id = sca->createContainer("iejr-", "[{\"enableWriteBuffer\": true}]");
     // This is actually only true if no other containers have been created
     // before this one. Might need to be fixed somehow.
-    workspace = sca->getSoftwareContainerWorkspace();
     ASSERT_TRUE(id == 0);
-    ASSERT_TRUE(workspace.m_writeOften == true);
+    ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
-    bool retval = sca->parseConfig("[{\"writeOften\": true}]");
+    bool retval = sca->parseConfig("[{\"enableWriteBuffer\": true}]");
     ASSERT_TRUE(retval == true);
-    ASSERT_TRUE(workspace.m_writeOften == false);
+    ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice2) {
-    bool retval = sca->parseConfig("[{\"writeOften\": false}]");
+    bool retval = sca->parseConfig("[{\"enableWriteBuffer\": false}]");
     ASSERT_TRUE(retval == true);
 }
 
@@ -85,17 +85,16 @@ TEST_F(SoftwareContainerAgentTest, parseConfigBadConfig) {
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig) {
-    // This actually parses and should be true
-    bool retval = sca->parseConfig("[{\"writeoften\": true}]");
+    // This actually parses and should be true. but wrong parameter name
+    bool retval = sca->parseConfig("[{\"enableWritebuffer\": true}]");
     ASSERT_TRUE(retval== true);
-    ASSERT_TRUE(workspace.m_writeOften == false);
+    ASSERT_TRUE(workspace->m_enableWriteBuffer == false);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig2) {
     // This actually parses and should be true
-    bool retval = sca->parseConfig("[{\"writeoften\": false}]");
-    workspace = sca->getSoftwareContainerWorkspace();
+    bool retval = sca->parseConfig("[{\"enableWriteBuffer\": false}]");
 
     ASSERT_TRUE(retval == true);
-    ASSERT_TRUE(workspace.m_writeOften == false);
+    ASSERT_TRUE(workspace->m_enableWriteBuffer == false);
 }
