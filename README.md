@@ -133,7 +133,7 @@ privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
 
 ## Why does it require root privileges?
-First, creating LXC containers require root priveleges. Second, setting up a
+First, creating LXC containers requires root priveleges. Second, setting up a
 network bridge using brctl and ifconfig/iptables typically also does require
 that.
 
@@ -143,13 +143,13 @@ There are currently three levels of tests: unit tests, component tests, and
 service tests. To run all tests after building, run `run-all-tests.sh`
 in the project root.
 
-The unit tests written in gtest/gmock available in */unit-test/*. The tests
+The unit tests written in gtest/gmock are available in */unit-test/*. The tests
 are run using `run-tests.sh` from the build directory. Note that you have
 to run them as root, since the actual container creation is not stubbed of
 and requires root access.
 
 The component tests are in libsoftwarecontainer/component-test/ and are run
-with test_runner.sh. Currently, the component tests are outdated and needs
+with test_runner.sh. Currently, the component tests are outdated and need
 to be reworked.
 
 The service tests are in service-test/ and are run with run_tests.sh.
@@ -162,7 +162,7 @@ pitfalls that might be good to be aware of.
 
 ## Note on PulseAudio
 
-In order to pulseaudio to work inside the container it needs to be running when
+In order for pulseaudio to work inside the container it needs to be running when
 the container is started. This is the case because when softwarecontainer sets
 up the container it will look for the socket pointed out by `PULSE_SERVER`, and
 mount it into the container, so that socket has to exist.
