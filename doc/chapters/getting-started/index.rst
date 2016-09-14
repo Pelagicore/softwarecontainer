@@ -12,7 +12,12 @@ to start, configure, and control containers. On the bus, the Agent has the name
 The Agent in turn links to the SoftwareContainer library which is to be considered an internal
 API for most users.
 
-TODO: Explain the thoughts around root privileges and the Agent.
+The reason for the split between the Agent and the SoftwareContainer library is to allow for
+deveopment directly towards the library. A reason for this could be e.g. project specific
+requirements on the integration towards SoftwareContainer. The Agent/library split is also useful
+when integrating a launcher, that e.g. launches apps from a UI, when the laumcher shouldn't be run
+with root privileges. In that case the launcher can use the Agent D-Bus API without being root while
+the Agent has been started with root privileges.
 
 
 Container config
