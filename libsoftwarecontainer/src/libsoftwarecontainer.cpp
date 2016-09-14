@@ -48,20 +48,21 @@
 
 namespace softwarecontainer {
 
-SoftwareContainerWorkspace &getDefaultWorkspace(bool enableWriteBuffer)
+std::shared_ptr<SoftwareContainerWorkspace> getDefaultWorkspace(bool enableWriteBuffer)
 {
-    static SoftwareContainerWorkspace defaultWorkspace(enableWriteBuffer);
+    static auto defaultWorkspace =
+            std::make_shared<SoftwareContainerWorkspace>(enableWriteBuffer);
     return defaultWorkspace;
 }
 
-SoftwareContainerLib::SoftwareContainerLib(SoftwareContainerWorkspace &workspace) :
+SoftwareContainerLib::SoftwareContainerLib(std::shared_ptr<SoftwareContainerWorkspace> workspace) :
     m_workspace(workspace),
     m_container(new Container(getContainerID()
                               , m_containerName
-                              , m_workspace.m_containerConfig
-                              , m_workspace.m_containerRoot
-                              , m_workspace.m_enableWriteBuffer
-                              , m_workspace.m_containerShutdownTimeout))
+                              , m_workspace->m_containerConfig
+                              , m_workspace->m_containerRoot
+                              , m_workspace->m_enableWriteBuffer
+                              , m_workspace->m_containerShutdownTimeout))
 {
     m_containerState = ContainerState::CREATED;
 }
@@ -255,7 +256,7 @@ void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs
 
 ReturnCode SoftwareContainerLib::shutdown()
 {
-    return shutdown(m_workspace.m_containerShutdownTimeout);
+    return shutdown(m_workspace->m_containerShutdownTimeout);
 }
 
 ReturnCode SoftwareContainerLib::shutdown(unsigned int timeout)
@@ -303,7 +304,7 @@ std::shared_ptr<ContainerAbstractInterface> SoftwareContainerLib::getContainer()
 
 std::string SoftwareContainerLib::getContainerDir()
 {
-    return m_workspace.m_containerRoot + "/" + getContainerID();
+    return m_workspace->m_containerRoot + "/" + getContainerID();
 }
 
 std::string SoftwareContainerLib::getGatewayDir()

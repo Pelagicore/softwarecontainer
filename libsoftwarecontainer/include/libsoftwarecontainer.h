@@ -75,7 +75,7 @@ public:
     unsigned int m_containerShutdownTimeout;
 };
 
-SoftwareContainerWorkspace &getDefaultWorkspace(bool enableWriteBuffer);
+std::shared_ptr<SoftwareContainerWorkspace> getDefaultWorkspace(bool enableWriteBuffer);
 
 class SoftwareContainerLib :
     private FileToolkitWithUndo
@@ -83,7 +83,7 @@ class SoftwareContainerLib :
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    SoftwareContainerLib(SoftwareContainerWorkspace &workspace = getDefaultWorkspace(false));
+    SoftwareContainerLib(std::shared_ptr<SoftwareContainerWorkspace> workspace = getDefaultWorkspace(false));
 
     ~SoftwareContainerLib();
 
@@ -144,7 +144,7 @@ public:
 private:
     ReturnCode shutdownGateways();
 
-    SoftwareContainerWorkspace &m_workspace;
+    std::shared_ptr<SoftwareContainerWorkspace> m_workspace;
 
     std::string m_containerID;
     std::string m_containerName;

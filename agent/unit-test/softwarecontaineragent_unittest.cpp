@@ -33,12 +33,12 @@ public:
     int m_preloadCount = 1;
     bool m_shutdownContainers = true;
     int m_shutdownTimeout = 2;
-    SoftwareContainerWorkspace *workspace;
+    std::shared_ptr<SoftwareContainerWorkspace> workspace;
 
     void SetUp() override
     {
         sca = new SoftwareContainerAgent(
-                    m_context
+                      m_context
                     , m_preloadCount
                     , m_shutdownContainers
                     , m_shutdownTimeout);
