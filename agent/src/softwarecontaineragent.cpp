@@ -9,8 +9,9 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     , m_preloadCount(preloadCount)
     , m_shutdownContainers(shutdownContainers)
 {
+    m_softwarecontainerWorkspace = std::make_shared<SoftwareContainerWorkspace>();
     triggerPreload();
-    m_softwarecontainerWorkspace.m_containerShutdownTimeout = shutdownTimeout;
+    m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
@@ -53,14 +54,14 @@ bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareCon
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
 {
     bool wo;
-    if(!read(element, "writeOften", wo)) {
-        log_debug() << "writeOften not found";
-        m_softwarecontainerWorkspace.m_writeOften = false;
+    if(!read(element, "enableWriteBuffer", wo)) {
+        log_debug() << "enableWriteBuffer not found";
+        m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
     } else {
         if (wo == true) {
-            m_softwarecontainerWorkspace.m_writeOften = true;
+            m_softwarecontainerWorkspace->m_enableWriteBuffer = true;
         } else {
-            m_softwarecontainerWorkspace.m_writeOften = false;
+            m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
         }
     }
     return ReturnCode::SUCCESS;
@@ -188,7 +189,7 @@ void SoftwareContainerAgent::setContainerName(ContainerID containerID, const std
 
 void SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
 {
-    shutdownContainer(containerID, m_softwarecontainerWorkspace.m_containerShutdownTimeout);
+    shutdownContainer(containerID, m_softwarecontainerWorkspace->m_containerShutdownTimeout);
 }
 
 void SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned int timeout)
@@ -231,7 +232,7 @@ void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, cons
     }
 }
 
-SoftwareContainerWorkspace SoftwareContainerAgent::getSoftwareContainerWorkspace()
+std::shared_ptr<SoftwareContainerWorkspace> SoftwareContainerAgent::getSoftwareContainerWorkspace()
 {
     return m_softwarecontainerWorkspace;
 }

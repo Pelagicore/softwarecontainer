@@ -110,13 +110,13 @@ class TestDBus(unittest.TestCase):
             serv.terminate()
             serv = None
 
-    def test_writeOften_flag(self):
+    def test_enableWriteBuffer_flag(self):
         ca = ContainerApp()
         try:
             serv = dbusapp.Server()
             serv.start()
 
-            ca.start(writeOften=True)
+            ca.start(enableWriteBuffer=True)
             ca.dbusGateway()
             ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
             self.assertTrue(serv.wait_until_requests())

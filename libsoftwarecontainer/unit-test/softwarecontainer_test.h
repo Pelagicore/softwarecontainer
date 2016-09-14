@@ -46,7 +46,7 @@ public:
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> m_ml;
     std::unique_ptr<SoftwareContainerLib> lib;
-    std::unique_ptr<SoftwareContainerWorkspace> workspace;
+    std::shared_ptr<SoftwareContainerWorkspace> workspace;
 };
 
 class SoftwareContainerGatewayTest : public SoftwareContainerLibTest
