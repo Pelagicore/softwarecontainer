@@ -27,10 +27,10 @@ if(ENABLE_TEST)
     add_subdirectory(unit-test)
 endif(ENABLE_TEST)
 
-# busybox is currently always needed on the host system
+# busybox is currently always needed on the host system at runtime
 find_program(busybox_binary busybox)
 if(NOT busybox_binary)
-    message(FATAL_ERROR "'busybox' binary was not found.")
+    message(WARNING "'busybox' binary was not found.")
 endif(NOT busybox_binary)
 
 if(ENABLE_DBUSGATEWAY)
