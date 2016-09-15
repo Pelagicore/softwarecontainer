@@ -60,7 +60,7 @@ add_library(softwarecontainerlib SHARED
     jobs/commandjob.cpp
     ${GATEWAY_SOURCES}
     ${GATEWAY_HEADERS}
-    ${PROJECT_SOURCE_DIR}/common/common.cpp
+    ${PROJECT_SOURCE_DIR}/common/softwarecontainer-common.cpp
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainerlib
