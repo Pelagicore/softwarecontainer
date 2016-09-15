@@ -192,12 +192,22 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly)
+ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer=false)
 {
     unsigned long flags = MS_BIND;
     const char *fstype = nullptr;
     const void *data = nullptr;
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
+
+    if(enableWriteBuffer) {
+       char *bufferDir = mkdtemp("/tmp/sc-bindmount-XXXXXX");
+       if (bufferDir == NULL) {
+           log_warning() << "Failed to create buffered Directory: " << strerror(errno);
+       }
+
+
+
+    }
 
     int mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
     if (mountRes == 0) {

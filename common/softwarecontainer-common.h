@@ -276,7 +276,7 @@ public:
      */
     ReturnCode createDirectory(const std::string &path);
 
-    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly);
+    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer);
 
     ReturnCode createSharedMountPoint(const std::string &path);
 
