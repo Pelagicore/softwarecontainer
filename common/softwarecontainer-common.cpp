@@ -25,6 +25,10 @@
 #include <fstream>
 #include "softwarecontainer-common.h"
 
+#include <string>
+#include <iostream>
+#include <sstream>
+
 namespace softwarecontainer {
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
@@ -192,24 +196,41 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer=false)
+char *FileToolkitWithUndo::tempDir(char *templ)
+{
+    char *dir = mkdtemp(templ);
+    if (dir == NULL) {
+        log_warning() << "Failed to create buffered Directory: " << strerror(errno);
+        return nullptr;
+    }
+
+    return dir;
+}
+
+ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer)
 {
     unsigned long flags = MS_BIND;
-    const char *fstype = nullptr;
+    std::string fstype;
     const void *data = nullptr;
+    int mountRes;
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
     if(enableWriteBuffer) {
-       char *bufferDir = mkdtemp("/tmp/sc-bindmount-XXXXXX");
-       if (bufferDir == NULL) {
-           log_warning() << "Failed to create buffered Directory: " << strerror(errno);
-       }
+        char *upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
+        char *workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
+        fstype.assign("overlay");
 
+        std::ostringstream os;
+        os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
+        data = os.str().c_str();
 
+        mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
+    } else {
 
+        mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
     }
 
-    int mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
+
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
         m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
@@ -224,7 +245,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 
         log_debug() << "Re-mounting read-only" << src << " in "
                     << dst << ", flags: " << flags;
-        mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
+        mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
         if (mountRes != 0) {
             // Failure
             log_error() << "Could not re-mount " << src << " , read-only on "
@@ -238,7 +259,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
 {
     // MS_MGC_VAL |
-    auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
+    auto mountRes = mount   (path.c_str(), path.c_str(), "", MS_BIND, nullptr);
     assert(mountRes == 0);
     mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, nullptr);
     assert(mountRes == 0);
@@ -330,5 +351,6 @@ SignalConnectionsHandler::~SignalConnectionsHandler()
 
 
 }
+
 
 

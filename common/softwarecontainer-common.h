@@ -81,7 +81,7 @@ static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.SoftwareContainerA
 static constexpr uid_t ROOT_UID = 0;
 
 /**
- * That class contains references to sigc++ connections and automatically disconnects them on destruction
+ * The class contains references to sigc++ connections and automatically disconnects them on destruction
  */
 class SignalConnectionsHandler
 {
@@ -269,21 +269,37 @@ public:
     ReturnCode createParentDirectory(const std::string &path);
 
     /**
-     * Create a directory, and if successful append it to a list of dirs
-     * to be deleted in the dtor. Since nestled dirs will need to be
-     * deleted in reverse order to creation insert to the beginning of
-     * the list.
+     * @brief createDirectory Create a directory, and if successful append it
+     * to a list of dirs to be deleted in the dtor. Since nestled dirs will
+     * need to be deleted in reverse order to creation insert to the beginning
+     * of the list.
+     * @param path Path of directory to be created
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
     ReturnCode createDirectory(const std::string &path);
 
-    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer);
+    /**
+     * @brief bindMount
+     * @param src
+     * @param dst
+     * @param readOnly
+     * @param enableWriteBuffer
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer=false);
 
+    /**
+     * @brief createSharedMountPoint
+     * @param path
+     * @return
+     */
     ReturnCode createSharedMountPoint(const std::string &path);
 
     ReturnCode writeToFile(const std::string &path, const std::string &content);
 
     ReturnCode createSymLink(const std::string &source, const std::string &destination);
 
+    char *tempDir(char *templ);
 protected:
     std::vector<CleanUpHandler *> m_cleanupHandlers;
 };
