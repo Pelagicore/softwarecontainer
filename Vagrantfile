@@ -35,6 +35,7 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/deps/pulseaudio-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/sphinx-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/pytest-and-dbus-testing-dependencies.sh"
+    config.vm.provision "shell", path: "cookbook/deps/debugging-tools.sh"
 
     # Add known hosts
     config.vm.provision "shell", privileged: false,
