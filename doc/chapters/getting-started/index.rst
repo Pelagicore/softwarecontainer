@@ -19,6 +19,27 @@ when integrating a launcher, that e.g. launches apps from a UI, when the laumche
 with root privileges. In that case the launcher can use the Agent D-Bus API without being root while
 the Agent has been started with root privileges.
 
+Below is an example of the major entities involved in a call to create a container:
+
+.. seqdiag::
+
+    seqdiag {
+        Launcher -> Agent [label = "CreateContainer (D-Bus call)", leftnote = "D-Bus side"]
+        Agent -> SoftwareContainerLib [label = "init()"];
+        SoftwareContainerLib -> ContainerAbstractInterface [label = "initialize()"]
+        SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+        SoftwareContainerLib -> ContainerAbstractInterface [label = "create()"]
+        ContainerAbstractInterface -> liblxc [label = "lxc_container_new()", rightnote = "system side"]
+        ContainerAbstractInterface <-- liblxc
+        SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+        SoftwareContainerLib -> ContainerAbstractInterface [label = "start()"]
+        ContainerAbstractInterface -> liblxc [label = "multiple calls"]
+        ContainerAbstractInterface <-- liblxc
+        SoftwareContainerLib <-- ContainerAbstractInterface
+        Agent <-- SoftwareContainerLib [label = "ReturnCode"]
+        Launcher <-- Agent [label = "ID"]
+    }
+
 
 Container config
 ================

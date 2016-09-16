@@ -34,7 +34,8 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.imgmath',
     'sphinx.ext.ifconfig',
-    'sphinxcontrib.manpage'
+    'sphinxcontrib.manpage',
+    'sphinxcontrib.seqdiag'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -65,6 +66,11 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# -- Options for seqdiag  -------------------------------------------------
+
+# This makes the text slightly easier to read but also more blurry...
+seqdiag_antialias = True
 
 
 # -- Options for HTML output ----------------------------------------------
