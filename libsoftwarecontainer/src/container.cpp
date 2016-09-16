@@ -166,7 +166,11 @@ ReturnCode Container::create()
 
     if (isSuccess(status)) {
         int flags = 0;
-        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
+        char *argv[2];
+        if (m_enableWriteBuffer) {
+            argv[0] = "--buffer";
+        }
+        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, argv)) {
             log_error() << "Error creating container";
             status = ReturnCode::FAILURE;
         } else {

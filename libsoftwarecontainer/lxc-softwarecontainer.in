@@ -117,11 +117,11 @@ copy_configuration()
 
 usage()
 {
-    echo "$1 -h|--help -p|--path=<path>|--rootfs=<path>"
+    echo "$1 -h|--help -b|--buffer -p|--path=<path>|--rootfs=<path>"
     return 0
 }
 
-options=$(getopt -o hp:n: -l help,path:,name:,rootfs: -- "$@")
+options=$(getopt -o bhp:n: -l help,buffer,path:,name:,rootfs: -- "$@")
 if [ $? -ne 0 ]; then
     usage $(basename $0)
     exit 1
@@ -132,6 +132,7 @@ while true
 do
     case "$1" in
         -h|--help)      usage $0 && exit 0;;
+        -b|--buffer)    buffer="true";;
         -p|--path)      path=$2; shift 2;;
         -n|--name)      name=$2; shift 2;;
         --rootfs)       rootfs=$2; shift 2;;
