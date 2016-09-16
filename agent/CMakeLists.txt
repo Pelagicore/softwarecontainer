@@ -66,4 +66,6 @@ if (ENABLE_SYSTEMD)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
 endif()
 
-add_subdirectory(unit-test)
+if (ENABLE_TEST)
+   add_subdirectory(unit-test)
+endif()
