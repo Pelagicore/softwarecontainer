@@ -23,8 +23,8 @@ For more information how to develop and integrate gateways in SoftwareContainer,
 Note on configurations
 ======================
 
-All gateway configurations are JSON, and SoftwareContainer requires this. Beyond that, the structure and
-content of this JSON is the responsibility of the respective gateway.
+All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer requires this.
+Beyond that, the structure and content of this JSON is the responsibility of the respective gateway.
 
 
 CGroups gateway

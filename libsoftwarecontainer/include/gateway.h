@@ -35,6 +35,8 @@
  *                configuration data, ready for activation
  * * Activated - the gateway is active and running.
  *
+ * The complete gateway config is passed as a JSON array and all
+ * gateways then provide their specific parsing of the items in the array.
  */
 class Gateway: protected softwarecontainer::JSONParser
 {
@@ -73,6 +75,15 @@ public:
      *          false otherwise
      */
     virtual bool setConfig(const std::string &config);
+
+    /*! Gateway specific parsing of config elements
+     *
+     * All gateways implement this method in order to provide gateway
+     * specific parsing of the configuration content.
+     *
+     * \param element A JSON configuration item.
+     * \returns ReturnCode FAILURE if an error was encountered while parsing, SUCCESS otherwise.
+     */
     virtual ReturnCode readConfigElement(const json_t *element) = 0;
 
     /*! Applies any configuration set by setConfig()
