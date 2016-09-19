@@ -1,33 +1,51 @@
-SoftwareContainer Gateways
-**************************
+
+Gateways
+********
 
 SoftwareContainer provides a set of gateways to enable communication between the host system and the contained system.
 
-Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services.. This makes the system scalable, as the number of IPC mechanisms is limited while the number of possible services are unlimited.
+Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services. This makes the
+system scalable, as the number of IPC mechanisms is limited while the number of possible services are unlimited.
+*Currently, some gateways break this principle, which is subject to correction in the future. The design intention
+is to have the gateways IPC centric and construct more abstract concepts like a Wayland "gateway" on top of
+multiple IPC gateways.*
 
-This chapter contains descriptions of the available gateways and their configuration options.
+This chapter contains descriptions of the available gateways and their configuration options. It is intended to
+explain to e.g. a service integrator how to write gateway configurations suitable for the service.
 
-.. todo:: define phases, e.g. activate
+For more information how to integrate and use the configurations in a project, see Integration patterns.
 
-Gateways
-========
+For more information how to develop and integrate gateways in SoftwareContainer, see Developer guidelines.
 
-CGroups Gateway
----------------
+.. todo:: The above references are to currently non-existing sections, it's a stab at drawing up a structure.
+
+
+Note on configurations
+======================
+
+All gateway configurations are JSON, and SoftwareContainer requires this. Beyond that, the structure and
+content of this JSON is the responsibility of the respective gateway.
+
+
+CGroups gateway
+===============
 
 The CGroups Gateway is used to limit the contained system's access to CPU and RAM resources.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
-The gateway configuration contains settings as key/value pairs and the setting
-key and value will be applied using ``lxc-cgroup`` as they are written in the
-gateway config (the ``lxc.cgroup`` prefix is added to all keys by the gateway).
+The gateway configuration contains settings as key/value pairs. The `setting` key
+is a string in the format <cgroup subsystem>.<setting> and the `value` is a string
+with the value to apply.
 
 No syntax or other checks for correctness is performed on the key/value pairs,
 see the ``lxc.container.conf`` man page for more details about legal settings.
 
-JSON format used in gateway config (as passed to ``setConfig()``::
+Example configurations
+----------------------
+
+Example gateway config::
 
     [
         {
@@ -40,44 +58,38 @@ JSON format used in gateway config (as passed to ``setConfig()``::
         }
     ]
 
-The root object is an array of seting key/value pair objects. Each key/value pair
-must have the ``setting`` and ``value`` defined. With the above example config the calls
-to lxc-cgroup would set the following:
-
-- ``lxc.cgroup.memory.limit_in_bytes`` to ``128M``
-- ``lxc.cgroup.cpu.shares to`` ``256``
-
-It is an error to prepend the ``lxc.cgroup`` prefix to settings in the config.
+The root object is an array of setting key/value pair objects. Each key/value pair
+must have the ``setting`` and ``value`` defined.
 
 
+D-Bus gateway
+=============
 
-D-Bus Gateway
--------------
-
-The D-Bus Gateway is used to provide access to host system d-bus busses, object paths and interfaces.
+The D-Bus Gateway is used to provide access to host system D-Bus busses, object paths, and interfaces.
 
 The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
-to use this socket when communicating with the outside D-Bus system.
+to use this socket when communicating with the outside D-Bus system. The gateway uses an external
+program `dbus-proxy` for creation and communication over the proxied bus connection.
 
 The gateway will also set the ``DBUS_SESSION_BUS_ADDRESS`` or
 ``DBUS_SYSTEM_BUS_ADDRESS`` for the session and system bus, respectively.
 libdbus uses these variables to find the socket to use for D-Bus
 communication, and the application running withing the container is
-expected to use these variables (probably by using libdbus).
+expected to use these variables (probably by means of the binding used).
 
-The ``dbus-proxy`` does not modify the messages passed via d-bus, it only provides a filter function.
+The `dbus-proxy` does not modify the messages passed via D-Bus, it only provides a filter function.
 This means that some filters may cause unwanted behaviour used in combination with dynamic
-interpretation of introspection data.
+interpretation of introspection data. For example, if introspection is configured to be allowed,
+the introspection data might contain interfaces and object paths that are not accessible for the
+application (unless the configuration also allowes everything on the connection).
 
-The gateway will not do any analysis of the configuration passed
-to it through ``setConfig()``, but will pass this configuration along to
-``dbus-proxy`` verbatim. This is to support future changes in the configuration
-format.
+The gateway will not do any analysis of the configuration passed to it, but will pass this configuration
+along to `dbus-proxy` verbatim. This is to support future changes in the configuration format.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
 The session and system buses have separate configurations implemented as separate JSON array
 objects with the names:
@@ -102,70 +114,78 @@ The rules are implemented as name/value pairs:
 
 All the values can be substituted with the wildcard character ``*`` with the meaning "all", e.g. a
 "direction" set to ``*`` will mean both incoming and outgoing, and a ``method`` set to ``*`` will match
-all method and signal names for the interface and object path specified. If a bus configuration
-is just an empty array it means all access to that bus will be blocked.
+all method and signal names for the interface and object path specified.
 
-Example Configurations
-^^^^^^^^^^^^^^^^^^^^^^
+If a bus configuration is just an empty array it means all access to that bus will be blocked.
+
+Example configurations
+----------------------
 
 A configuration that provides full access to the system and session buses would look like::
 
-    {
-        "dbus-gateway-config-session": [
-            {
-                "direction": "*",
-                "interface": "*",
-                "object-path": "*",
-                "method": "*"
-            }
-        ],
-        "dbus-gateway-config-system": [
-            {
-                "direction": "*",
-                "interface": "*",
-                "object-path": "*",
-                "method": "*"
-            }
-        ]
-    }
+    [
+        {
+            "dbus-gateway-config-session": [
+                {
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": "*"
+                }
+            ],
+            "dbus-gateway-config-system": [
+                {
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": "*"
+                }
+            ]
+        }
+    ]
 
 A configuration that provides full access to the session bus and no access at all to the system
 bus would look like::
 
-    {
-        "dbus-gateway-config-session": [
-            {
-                "direction": "*",
-                "interface": "*",
-                "object-path": "*",
-                "method": "*"
-            }
-        ],
-        "dbus-gateway-config-system": []
-    }
+    [
+        {
+            "dbus-gateway-config-session": [
+                {
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": "*"
+                }
+            ],
+            "dbus-gateway-config-system": []
+        }
+    ]
 
 A configuration that allows introspection on the session bus from within the container and no
 access at all to the system bus would look like::
 
-    {
-        "dbus-gateway-config-session": [
-            {
-                "direction": "outgoing",
-                "interface": "org.freedesktop.DBus.Introspectable",
-                "object-path": "/",
-                "method": "Introspect"
-            }
-        ],
-        "dbus-gateway-config-system": []
-    }
+    [
+        {
+            "dbus-gateway-config-session": [
+                {
+                    "direction": "outgoing",
+                    "interface": "org.freedesktop.DBus.Introspectable",
+                    "object-path": "/",
+                    "method": "Introspect"
+                }
+            ],
+            "dbus-gateway-config-system": []
+        }
+    ]
 
-Device Node Gateway
--------------------
+
+Device node gateway
+===================
 
 The Device Node Gateway is used to provide access to host system device nodes.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
 The configuration consists of a root list consisting of individual devices. Each device contains the following fields:
 
@@ -174,6 +194,8 @@ The configuration consists of a root list consisting of individual devices. Each
 - ``minor`` The minor device number, passed verbatim to ``mknod``
 - ``mode`` Permission mode, passed verbatim to ``chmod``
 
+Example configurations
+----------------------
 
 An example configuration can look like this::
 
@@ -201,17 +223,18 @@ An example configuration can look like this::
         }
     ]
 
-Environment Gateway
--------------------
 
-The Environment Gateway is used to export environment variables into the container.
+Environment gateway
+===================
+
+The Environment Gateway is used to set environment variables in the container.
 
 The environment gateway allows users to specify environment variables that
 should be known to the container and all commands and functions running
 inside the container.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
 The configuration consists of a list of environment variable definitions. Each such element must contain the following parameters:
 
@@ -220,10 +243,10 @@ The configuration consists of a list of environment variable definitions. Each s
 
 It may also, optionally, specify the following parameters:
 
-- ``append`` (bool) If the environment variable is already by the environment gateway defined append the new value to the value already defined. Defaults to false.
+- ``append`` (bool) If the environment variable is already defined by the gateway, append the new value to the value already defined. Defaults to false.
 
-Example Configurations
-^^^^^^^^^^^^^^^^^^^^^^
+Example configurations
+----------------------
 
 En example configuration would look like this::
 
@@ -241,50 +264,56 @@ There are also the possibility to append to an already defined variable::
     [
         {
             "name": "SOME_ENVIRONMENT_VARIABLE",
-            "value": "SOME_SUFFIX",
+            "value": "_SOME_SUFFIX",
             "append": true
         }
     ]
 
-File Gateway
-------------
 
-The File Gateway is used to export individual files from the host file into the container.
+File gateway
+============
+
+The File Gateway is used to expose individual files from the host filesystem inside the container.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
-In the container, the files are mapped into a subfolders (currently ``/gateways``), at the location specified by the ``path-container`` field (see below).
+In the container, the files are mapped into a subdirectory (currently ``/gateways``), at the location specified by the ``path-container`` field (see below).
+
+Example configurations
+----------------------
 
 An example configuration can look like this::
 
-    {
-        "path-host": "/tmp/someIPSocket",   // Path to the file in host's file-system
-        "path-container": "someIPSocket",   // Sub-path of the mount point in the container
-        "create-symlink": true, // specifies whether a symbolic link should to be created so that the file is available in the container under the same path is in the host.
-        "read-only": false,  // if true, the file is accessible in read-only mode in the container
-        "env-var-name": "SOMEIP_SOCKET_PATH", // name of a environment variable to be set
-        "env-var-prefix": "some-path-prefix", // define a prefix for the path set in the environment variable defined by "env-var-name"
-        "env-var-suffix": "some-path-suffix", // define a suffix for the path set in the environment variable defined by "env-var-name"
-    }
+    [
+        {
+            "path-host": "/tmp/someIPSocket",   // Path to the file in host's file-system
+            "path-container": "someIPSocket",   // Sub-path of the mount point in the container
+            "create-symlink": true, // specifies whether a symbolic link should to be created so that the file is available in the container under the same path is in the host.
+            "read-only": false,  // if true, the file is accessible in read-only mode in the container
+            "env-var-name": "SOMEIP_SOCKET_PATH", // name of a environment variable to be set
+            "env-var-prefix": "some-path-prefix", // define a prefix for the path set in the environment variable defined by "env-var-name"
+            "env-var-suffix": "some-path-suffix", // define a suffix for the path set in the environment variable defined by "env-var-name"
+        }
+    ]
 
-Network Gateway
----------------
+Network gateway
+===============
 
 The Network Gateway is used to provide Internet access through a container-specific firewall.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
 T.B.D.
 
 
-PulseAudio Gateway
-------------------
+PulseAudio gateway
+==================
 
 The PulseAudio Gateway is used to provide access to the host system PulseAudio server.
 
-This SoftwareContainer gateway is responsible for setting up a connection to the
+This gateway is responsible for setting up a connection to the
 PulseAudio server running on the host system. The gateway decides whether to
 connect to the PulseAudio server or not based on the configuration.
 
@@ -297,7 +326,7 @@ through the ``stateCallback`` function and, once the connection has been success
 set up, loads the ``module-native-protocol-unix`` PulseAudio module.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
 Example configuration enabling audio::
 
@@ -309,12 +338,13 @@ A malformed configuration or a configuration that sets audio to false will simpl
 disable audio and in such case, the gateway will not connect to the PulseAudio
 server at all.
 
-Wayland Gateway
----------------
+
+Wayland gateway
+===============
 
 The Wayland Gateway is used to provide access to the hsot system Wayland server.
 
 Configuration
-^^^^^^^^^^^^^
+-------------
 
 T.B.D.
