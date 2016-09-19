@@ -9,6 +9,6 @@ Contents:
     :glob:
 
     chapters/intro/*
+    chapters/design/*
     chapters/lxc/*
     chapters/gateways/*
-
