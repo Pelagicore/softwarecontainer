@@ -52,6 +52,9 @@ enum class ContainerState
     TERMINATED
 };
 
+/**
+ * @brief The ReturnCode enum contains common return values.
+ */
 enum class ReturnCode
 {
     FAILURE,
@@ -84,7 +87,8 @@ static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.SoftwareContainerA
 static constexpr uid_t ROOT_UID = 0;
 
 /**
- * The class contains references to sigc++ connections and automatically disconnects them on destruction
+ * @brief The SignalConnectionsHandler class contains references to sigc++ connections and
+ * automatically disconnects them on destruction.
  */
 class SignalConnectionsHandler
 {
@@ -102,15 +106,31 @@ private:
 
 };
 
-inline void addProcessListener(SignalConnectionsHandler &connections,
-                               pid_t pid, std::function<void(pid_t, int)> function,
-                               Glib::RefPtr<Glib::MainContext> context)
+/**
+ * @brief addProcessListener Adds a glib child watch for a process.
+ * @warning This is not thread safe!
+ * @param connections Add the signal to this list of connections
+ * @param pid The pid to watch for.
+ * @param function A lambda/function pointer to run when the signal is sent for a process.
+ * @param context glib context to attach the SignalChildWatch to.
+ */
+inline void addProcessListener(
+        SignalConnectionsHandler &connections
+        , pid_t pid
+        , std::function<void(pid_t, int)> function
+        , Glib::RefPtr<Glib::MainContext> context)
 {
     Glib::SignalChildWatch watch = context->signal_child_watch();
     auto connection = watch.connect(function,pid);
     connections.addConnection(connection);
 }
 
+/**
+ * @brief waitForProcessTermination Waits for a process to terminate and then returns the status
+ * of the process terminating.
+ * @param pid the process id to wait for.
+ * @return Process termination status.
+ */
 inline int waitForProcessTermination(pid_t pid)
 {
     int status = 0;
@@ -118,14 +138,39 @@ inline int waitForProcessTermination(pid_t pid)
     return WEXITSTATUS(status);
 }
 
-/*
- * Check if path is a directory
+/**
+ * @brief isDirectory Check if path is a directory
+ * @param path Path to check
+ * @return true/false
  */
 bool isDirectory(const std::string &path);
+
+/**
+ * @brief isFile Check if path is a file
+ * @param path Path to check
+ * @return true/false
+ */
 bool isFile(const std::string &path);
+
+/**
+ * @brief isPipe Check if path is a pipe
+ * @param path Path to check
+ * @return true/false
+ */
 bool isPipe(const std::string &path);
+
+/**
+ * @brief isSocket Check if path is a socket
+ * @param path Path to check
+ * @return true/false
+ */
 bool isSocket(const std::string &path);
 
+/**
+ * @brief existsInFileSystem Check if path exists
+ * @param path Path to check
+ * @return true/false
+ */
 bool existsInFileSystem(const std::string &path);
 
 std::string parentPath(const std::string &path);
@@ -269,6 +314,11 @@ class FileToolkitWithUndo
 public:
     ~FileToolkitWithUndo();
 
+    /**
+     * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
+     * @param path The directory path to be created.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
     ReturnCode createParentDirectory(const std::string &path);
 
     /**
@@ -282,32 +332,38 @@ public:
     ReturnCode createDirectory(const std::string &path);
 
     /**
-     * @brief bindMount
-     * @param src
-     * @param dst
-     * @param readOnly
-     * @param enableWriteBuffer
+     * @brief bindMount Bind mount a src directory to another position dst.
+     * @param src Path to mount from
+     * @param dst Path to mount to
+     * @param readOnly Make the bind mount destination read only
+     * @param enableWriteBuffer Enable write buffers on the bind mount.
      * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer=false);
 
     /**
-     * @brief overlayMount Mount a directory with an overlay on top of it.
-     * @param lower
-     * @param upper
-     * @param work
-     * @param dst
-     * @return
+     * @brief overlayMount Mount a directory with an overlay on top of it. An overlay protects
+     * the lower filesystem from writes by writing to the upper file system through the work
+     * directory.
+     * @param lower The lower file system, this will be read only.
+     * @param upper The upper file system, this can be a tmpfs/ramfs of some kind. This is where
+     * final writes wind up
+     * @param work This is a work directory, preferably a tmpfs/ramfs of some kind. This is where
+     * writes wind up temporarily.
+     * @param dst Where the overlay filesystem will be mounted.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
     ReturnCode overlayMount(
             const std::string &lower
             , const std::string &upper
             , const std::string &work
             , const std::string &dst);
+
     /**
-     * @brief createSharedMountPoint
-     * @param path
-     * @return
+     * @brief createSharedMountPoint Make the mount point shared, ie new mount points created in
+     * one bind mount will also be created in the other mount point.
+     * @param path The mount path to make shared.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
     ReturnCode createSharedMountPoint(const std::string &path);
 
