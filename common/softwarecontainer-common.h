@@ -323,9 +323,9 @@ public:
 
     /**
      * @brief createDirectory Create a directory, and if successful append it
-     * to a list of dirs to be deleted in the dtor. Since nestled dirs will
-     * need to be deleted in reverse order to creation insert to the beginning
-     * of the list.
+     *  to a list of dirs to be deleted in the dtor. Since nestled dirs will
+     *  need to be deleted in reverse order to creation insert to the beginning
+     *  of the list.
      * @param path Path of directory to be created
      * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
@@ -343,13 +343,13 @@ public:
 
     /**
      * @brief overlayMount Mount a directory with an overlay on top of it. An overlay protects
-     * the lower filesystem from writes by writing to the upper file system through the work
-     * directory.
+     *  the lower filesystem from writes by writing to the upper file system through the work
+     *  directory.
      * @param lower The lower file system, this will be read only.
      * @param upper The upper file system, this can be a tmpfs/ramfs of some kind. This is where
-     * final writes wind up
+     *  final writes wind up
      * @param work This is a work directory, preferably a tmpfs/ramfs of some kind. This is where
-     * writes wind up temporarily.
+     *  writes wind up temporarily.
      * @param dst Where the overlay filesystem will be mounted.
      * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
@@ -361,7 +361,7 @@ public:
 
     /**
      * @brief createSharedMountPoint Make the mount point shared, ie new mount points created in
-     * one bind mount will also be created in the other mount point.
+     *  one bind mount will also be created in the other mount point.
      * @param path The mount path to make shared.
      * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
@@ -371,11 +371,19 @@ public:
 
     ReturnCode createSymLink(const std::string &source, const std::string &destination);
 
-    std::string tempDir(std::string templ);
+    /**
+     * @brief tempDir Creates a temporary directory at templatePath.
+     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
+     *  is destroyed.
+     * @param templ a template Path used to create the path of the temporary directory, including
+     *  XXXXXX which will be replaced with a unique ID for the temporary directory
+     * @return A string path pointing to the newly creted temporary directory.
+     */
+    std::string tempDir(std::string templatePath);
 protected:
     /**
      * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
-     * FileToolKitWithUndo that will be run from the destructor.
+     *  FileToolKitWithUndo that will be run from the destructor.
      */
     std::vector<CleanUpHandler *> m_cleanupHandlers;
 };

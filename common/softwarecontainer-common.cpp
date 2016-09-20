@@ -205,6 +205,8 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
         return nullptr;
     }
 
+    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(templ));
+
     return StringBuilder() << dir;
 }
 
@@ -298,7 +300,7 @@ ReturnCode FileToolkitWithUndo::overlayMount(
 ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
 {
     // MS_MGC_VAL |
-    auto mountRes = mount   (path.c_str(), path.c_str(), "", MS_BIND, nullptr);
+    auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
     assert(mountRes == 0);
     mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, nullptr);
     assert(mountRes == 0);
