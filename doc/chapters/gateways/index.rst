@@ -1,4 +1,6 @@
 
+.. _gateways:
+
 Gateways
 ********
 
@@ -15,7 +17,7 @@ explain to e.g. a service integrator how to write gateway configurations suitabl
 
 For more information how to integrate and use the configurations in a project, see Integration patterns.
 
-For more information how to develop and integrate gateways in SoftwareContainer, see Developer guidelines.
+For more information how to develop and integrate gateways in SoftwareContainer, see :ref:`Developer guidelines <developers>`.
 
 .. todo:: The above references are to currently non-existing sections, it's a stab at drawing up a structure.
 

@@ -10,5 +10,6 @@ Contents:
 
     chapters/intro/*
     chapters/getting-started/*
-    chapters/lxc/*
     chapters/gateways/*
+    chapters/developers/*
+    chapters/lxc/*
