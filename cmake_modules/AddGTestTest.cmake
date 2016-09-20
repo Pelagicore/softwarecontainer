@@ -47,7 +47,9 @@ for filename in $FOLDER/*; do
                         TMP_FILE=`mktemp`
                         # Run the test and convert its output to the ptest format
                         $TEST_FILE >> $TMP_FILE
-                        cat $TMP_FILE | sed -r 's/^\\[\\s+OK\\s+\\] (.*) \\([0-9]+\\sms\\)$/PASS: \\1 /' | sed -r 's/^\\[\\s+FAILED\\s+\\] (.*) \\([0-9]+\\sms\\)$/FAIL: \\1 /' | awk '{if ($1 == \"PASS:\" || $1 == \"FAIL:\") {print $0}}'
+                        cat $TMP_FILE | sed -r 's/^\\[\\s+OK\\s+\\] (.*) \\([0-9]+\\sms\\)$/PASS: \\1 /' \
+                            | sed -r 's/^\\[\\s+FAILED\\s+\\] (.*) \\([0-9]+\\sms\\)$/FAIL: \\1 /' \
+                            | awk '{if ($1 == \"PASS:\" || $1 == \"FAIL:\") {print $0}}'
                 fi
         fi
 done
