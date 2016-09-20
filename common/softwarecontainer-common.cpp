@@ -200,7 +200,7 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
 {
     char *dir = const_cast<char*>(templ.c_str());
     dir = mkdtemp(dir);
-    if (dir == NULL) {
+    if (dir == nullptr) {
         log_warning() << "Failed to create buffered Directory: " << strerror(errno);
         return nullptr;
     }

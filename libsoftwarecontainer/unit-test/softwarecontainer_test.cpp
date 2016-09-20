@@ -40,7 +40,7 @@ void SoftwareContainerLibTest::exit()
 void SoftwareContainerLibTest::SetUp()
 {
     ::testing::Test::SetUp();
-    workspace = std::make_shared<SoftwareContainerWorkspace>(true);
+    workspace = std::make_shared<SoftwareContainerWorkspace>(false);
     lib = std::unique_ptr<SoftwareContainerLib>(new SoftwareContainerLib(workspace));
     lib->setContainerIDPrefix("Test-");
     lib->setMainLoopContext(m_context);

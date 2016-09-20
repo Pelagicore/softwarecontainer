@@ -139,7 +139,7 @@ public:
     ReturnCode shutdown(unsigned int timeout);
 
     /**
-     * @brief Calls lxc-stop (force stop)
+     * @brief Calls stop on the lxc container(force stop)
      */
     ReturnCode stop();
 

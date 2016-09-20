@@ -67,6 +67,10 @@ fi
     $GTEST_OPTS
 retval=$?
 
+./common/unit-test/softwarecontainercommontest \
+    $GTEST_OPTS
+retval=$?
+
 ./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
     --gtest_filter=$GTEST_FILTER \
     $GTEST_OPTS
