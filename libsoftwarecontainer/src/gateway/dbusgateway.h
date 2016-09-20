@@ -24,9 +24,8 @@
 
 #include "gateway.h"
 
-/*!
- * DBus Gateway takes care of spawning and killing the DBus proxies.
- *  =================================================================
+/**
+ * @brief DBus Gateway takes care of spawning and killing the DBus proxies.
  *
  *  This module requires the 'dbus-proxy' binary to be available in the $PATH
  *  of the user executing softwarecontainer.
@@ -41,17 +40,18 @@ public:
 
     static constexpr const char *ID = "dbus";
 
-    /*! Spawn the proxy and use the supplied path for the socket
+    /**
+     * @brief Spawn the proxy and use the supplied path for the socket
      *
-     * \param  type       SessionProxy or SystemProxy
+     * @param type SessionProxy or SystemProxy
      */
     DBusGateway(ProxyType type, const std::string &gatewayDir, const std::string &name);
     virtual ~DBusGateway();
 
     virtual ReturnCode readConfigElement(const json_t *element) override;
 
-    /*!
-     *  Implements Gateway::activateGateway
+    /**
+     *  @brief Implements Gateway::activateGateway
      *
      *  Starts the dbus-proxy binary and feeds it the configuration set in
      *  setConfig(). This function will also set up the correct environment
@@ -62,21 +62,22 @@ public:
      *
      *  This function requires the 'dbus-proxy' binary to be available in $PATH
      *
-     *  \return true when dbus-proxy was correctly execute and environment
-     *          variable was correctly set
-     *  \return false if dbus-proxy failed to execute or accept input on STDIN,
-     *          or when environment variable could not be set.
+     *  @return true when dbus-proxy was correctly execute and environment
+     *   variable was correctly set
+     *   false if dbus-proxy failed to execute or accept input on STDIN,
+     *   or when environment variable could not be set.
      */
     virtual bool activateGateway();
 
-    /*! Implements Gateway::teardownGateway
+    /**
+     * @brief Implements Gateway::teardownGateway
      *
      *  This function will clean up processes launched and file descriptors
      *  opened during the lifetime of the gatway. Specifically it will close
      *  the connection to the dbus-proxy, and close the stdin and stdout pipes
      *  opened to dbus-proxy.
      *
-     *  \return false if dbus-proxy could not be terminated, if stdin or stdout
+     * @return false if dbus-proxy could not be terminated, if stdin or stdout
      *          could not be closed, or if the socket created by the dbus-proxy
      *          could not be removed.
      */

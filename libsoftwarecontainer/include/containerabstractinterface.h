@@ -49,7 +49,8 @@ public:
     virtual ReturnCode createSymLink(const std::string &source, const std::string &destination) = 0;
     virtual ReturnCode bindMountFileInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true) = 0;
 
-    /*! Bind mount a directory from the host into the container.
+    /**
+     * @brief Bind mount a directory from the host into the container.
      *
      * Bind mount src to dst (relative to /gateways in container), e.g. passing '/home/foo/temp' as src and
      * 'app' as dst, the resulting path inside the container will be '/gateways/app' and contain whatever is

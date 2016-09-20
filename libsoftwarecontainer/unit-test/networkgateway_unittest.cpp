@@ -50,7 +50,8 @@ TEST_F(NetworkGatewayTest, TestNoContainer) {
     delete gw;
 }
 
-/*! Test NetworkGateway calls ControllerInterface::systemCall when
+/**
+ * @brief Test NetworkGateway calls ControllerInterface::systemCall when
  * NetworkGateway::setConfig() has been called
  *
  * The NetworkGateway::setConfig() should try to issue a ifconfig
@@ -71,7 +72,8 @@ TEST_F(NetworkGatewayTest, TestSeConfigNoGw) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test NetworkGateway::activate is successful.
+/**
+ * @brief Test NetworkGateway::activate is successful.
  */
 TEST_F(NetworkGatewayTest, TestActivate) {
     givenContainerIsSet(gw);
@@ -82,7 +84,8 @@ TEST_F(NetworkGatewayTest, TestActivate) {
     ASSERT_TRUE(gw->activate());
 }
 
-/*! Test NetworkGateway::activate is successful and that correct command is
+/**
+ * @brief Test NetworkGateway::activate is successful and that correct command is
  *  issued the second time it is called.
  */
 TEST_F(NetworkGatewayTest, TestActivateTwice) {
@@ -95,7 +98,8 @@ TEST_F(NetworkGatewayTest, TestActivateTwice) {
     ASSERT_TRUE(gw->activate());
 }
 
-/*! Test NetworkGateway::activate is successful but that no network interface
+/**
+ * @brief Test NetworkGateway::activate is successful but that no network interface
  *  is brought up when the networking config is malformed.
  */
 TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
@@ -106,7 +110,8 @@ TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
     ASSERT_FALSE(gw->activate());
 }
 
-/*! Test NetworkGateway::activate fails when there is no network bridge setup
+/**
+ * @brief Test NetworkGateway::activate fails when there is no network bridge setup
  *  on the host.
  */
 TEST_F(NetworkGatewayTest, TestActivateNoBridge) {

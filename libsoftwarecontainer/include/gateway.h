@@ -25,9 +25,9 @@
 #include "container.h"
 #include "jsonparser.h"
 
-/*! Gateway base class
+/**
  *
- * Gateway base class for SoftwareContainer
+ * @brief Gateway base class for SoftwareContainer
  *
  * Gateways can be in one of three states:
  * * Created - the gateway object exists
@@ -60,64 +60,80 @@ public:
     }
 
     /**
-     * Returns the ID of the gateway
+     * @brief
+     * @return Returns the ID of the gateway
      */
     virtual const char *id()
     {
         return m_id;
     }
 
-    /*! Configure this gateway according to the supplied JSON configuration
-     * string
+    /**
+     * @brief Configure this gateway according to the supplied JSON configuration
+     *  string
      *
-     * \param config JSON string containing gateway-specific JSON configuration
-     * \returns true if \p config was successfully parsed
+     * @param config JSON string containing gateway-specific JSON configuration
+     * @returns true if \p config was successfully parsed
      *          false otherwise
      */
     virtual bool setConfig(const std::string &config);
 
-    /*! Gateway specific parsing of config elements
+    /**
+     * @brief Gateway specific parsing of config elements
      *
      * All gateways implement this method in order to provide gateway
      * specific parsing of the configuration content.
      *
-     * \param element A JSON configuration item.
-     * \returns ReturnCode FAILURE if an error was encountered while parsing, SUCCESS otherwise.
+     * @param element A JSON configuration item.
+     * @returns ReturnCode FAILURE if an error was encountered while parsing, SUCCESS otherwise.
      */
     virtual ReturnCode readConfigElement(const json_t *element) = 0;
 
-    /*! Applies any configuration set by setConfig()
-     *
-     * \returns true upon successful application of configuration
-     *          false otherwise
+    /**
+     * @brief Applies any configuration set by setConfig()
+     * @returns true upon successful application of configuration
+     *  false otherwise
      */
     virtual bool activate();
 
-    /*! Restore system to the state prior to launching of gateway. Any cleanup
-     * code (removal of files, virtual interfaces, etc) should be placed here.
+    /**
+     * @brief Restore system to the state prior to launching of gateway. Any cleanup
+     *  code (removal of files, virtual interfaces, etc) should be placed here.
      *
-     * \returns true upon successful clean-up, false otherwise
+     * @returns true upon successful clean-up, false otherwise
      */
     virtual bool teardown();
 
-    /*! Check if the gateway has an associated container */
+    /**
+     * @brief Check if the gateway has an associated container
+     */
     bool hasContainer();
 
-    /*! Get a reference to the associated container */
+    /**
+     * @brief Get a reference to the associated container
+     */
     std::shared_ptr<ContainerAbstractInterface> getContainer();
 
-    /*! Set the associated contaitner for this gateway */
+    /**
+     * @brief Set the associated contaitner for this gateway
+     */
     void setContainer(std::shared_ptr<ContainerAbstractInterface> container);
 
-    /*! Is the gateway configured or not? */
+    /**
+     * @brief Is the gateway configured or not?
+     */
     bool isConfigured();
 
-    /*! Is the gateway activated or not? */
+    /**
+     * @brief Is the gateway activated or not?
+     */
     bool isActivated();
 
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value);
 
-    /*! Execute the given command in the container */
+    /**
+     * @brief Execute the given command in the container
+     */
     ReturnCode executeInContainer(const std::string &cmd);
 
 protected:

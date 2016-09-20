@@ -39,33 +39,36 @@ public:
 
     ReturnCode readConfigElement(const json_t *element) override;
 
-    /*!
-     *  Implements Gateway::activateGateway
+    /**
+     * @brief Implements Gateway::activateGateway
      */
     bool activateGateway() override;
 
-    /*!
-     * Implements Gateway::teardownGateway
+    /**
+     * @brief Implements Gateway::teardownGateway
      */
     bool teardownGateway() override;
 
-    /*! Returns the IP of the container
+    /**
+     * @brief Returns the IP of the container
      */
     const std::string ip();
 private:
-    /*! Generate IP address for the container
+    /**
+     * @brief Generate IP address for the container
      *
      * Retrieves an IP from DHCP.
      *
      * Note that a file on the system acts as a placeholder for the DHCP server.
      * The file keeps track of the highest used IP address.
      *
-     * \return true  Upon success
-     * \return false Upon failure
+     * @return true  Upon success
+     * @return false Upon failure
      */
     bool generateIP();
 
-    /*! Set route to default gateway
+    /**
+     * @brief Set route to default gateway
      *
      * Sets the route to the default gateway.
      * To be able to access anything outside the container, this method must be
@@ -73,12 +76,13 @@ private:
      * cases when a network interface that was previously enabled has been disabled
      * and then enabled again.
      *
-     * \return true  Upon success
-     * \return false Upon failure
+     * @return true  Upon success
+     * @return false Upon failure
      */
     bool setDefaultGateway();
 
-    /*! Enable the default network interface
+    /**
+     * @brief Enable the default network interface
      *
      * Enables the network interface and calls NetworkGateway::setDefaultGateway().
      *
@@ -86,26 +90,28 @@ private:
      * the IP and netmask are also set. During subsequent calls, this merely brings
      * up the existing network interface and calls setDefaultGateway().
      *
-     * \return true  Upon success
-     * \return false Upon failure
+     * @return true  Upon success
+     * @return false Upon failure
      */
     bool up();
 
-    /*! Disable the default network interface
+    /**
+     * @brief Disable the default network interface
      *
      * Disables the network interface.
      *
-     * \return true  Upon success
-     * \return false Upon failure
+     * @return true  Upon success
+     * @return false Upon failure
      */
     bool down();
 
-    /*! Check the availability of the network bridge on the host
+    /**
+     * @brief Check the availability of the network bridge on the host
      *
      * Checks the availability of the required network bridge on the host.
      *
-     * \return true  If bridge interface is available
-     * \return false If bridge interface is not available
+     * @return true  If bridge interface is available
+     * @return false If bridge interface is not available
      */
     virtual bool isBridgeAvailable();
 

@@ -110,7 +110,8 @@ ReturnCode Gateway::setEnvironmentVariable(const std::string &variable, const st
     }
 }
 
-/*! Execute the given command in the container
+/**
+ * @brief Execute the given command in the container
  */
 ReturnCode Gateway::executeInContainer(const std::string &cmd)
 {

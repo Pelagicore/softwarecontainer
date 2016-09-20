@@ -373,6 +373,10 @@ public:
 
     std::string tempDir(std::string templ);
 protected:
+    /**
+     * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
+     * FileToolKitWithUndo that will be run from the destructor.
+     */
     std::vector<CleanUpHandler *> m_cleanupHandlers;
 };
 

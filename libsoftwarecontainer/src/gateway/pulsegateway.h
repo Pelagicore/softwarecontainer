@@ -24,8 +24,8 @@
 #include <pulse/pulseaudio.h>
 #include "gateway.h"
 
-/*!
- * The PulseAudio Gateway is used to provide access to the host system PulseAudio server.
+/**
+ * @brief The PulseAudio Gateway is used to provide access to the host system PulseAudio server.
  */
 class PulseGateway :
     public Gateway
@@ -43,19 +43,19 @@ public:
 
     ReturnCode readConfigElement(const json_t *element) override;
 
-    /*!
-     *  Implements Gateway::activateGateway
+    /**
+     * @brief Implements Gateway::activateGateway
      *
      *  If audio is to be enabled, then calling this function results in a call
      *  to connectToPulseServer.
      *
-     * \returns true upon success (PulseAudio server connect call and mainloop
+     * @returns true upon success (PulseAudio server connect call and mainloop
      *               setup successfully), false otherwise.
      */
     virtual bool activateGateway() override;
 
-    /*!
-     * Implements Gateway::teardownGateway
+    /**
+     * @brief Implements Gateway::teardownGateway
      */
     virtual bool teardownGateway() override;
 

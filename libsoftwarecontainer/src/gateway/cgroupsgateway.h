@@ -23,8 +23,8 @@
 
 #include "gateway.h"
 
-/*!
- * The cgroups gateway sets cgroups related settings for the container.
+/**
+ * @brief The cgroups gateway sets cgroups related settings for the container.
  */
 
 class CgroupsGateway: public Gateway
