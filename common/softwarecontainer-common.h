@@ -58,6 +58,9 @@ enum class ReturnCode
     SUCCESS
 };
 
+bool operator&& (ReturnCode lhs, ReturnCode rhs);
+
+
 inline ReturnCode bool2ReturnCode(bool b)
 {
     return b ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
@@ -289,6 +292,19 @@ public:
     ReturnCode bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer=false);
 
     /**
+     * @brief overlayMount Mount a directory with an overlay on top of it.
+     * @param lower
+     * @param upper
+     * @param work
+     * @param dst
+     * @return
+     */
+    ReturnCode overlayMount(
+            const std::string &lower
+            , const std::string &upper
+            , const std::string &work
+            , const std::string &dst);
+    /**
      * @brief createSharedMountPoint
      * @param path
      * @return
@@ -299,7 +315,7 @@ public:
 
     ReturnCode createSymLink(const std::string &source, const std::string &destination);
 
-    char *tempDir(char *templ);
+    std::string tempDir(std::string templ);
 protected:
     std::vector<CleanUpHandler *> m_cleanupHandlers;
 };

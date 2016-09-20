@@ -196,15 +196,16 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
     return ReturnCode::SUCCESS;
 }
 
-char *FileToolkitWithUndo::tempDir(char *templ)
+std::string FileToolkitWithUndo::tempDir(std::string templ)
 {
-    char *dir = mkdtemp(templ);
+    char *dir = const_cast<char*>(templ.c_str());
+    dir = mkdtemp(dir);
     if (dir == NULL) {
         log_warning() << "Failed to create buffered Directory: " << strerror(errno);
         return nullptr;
     }
 
-    return dir;
+    return StringBuilder() << dir;
 }
 
 ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer)
@@ -216,8 +217,8 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
     if(enableWriteBuffer) {
-        char *upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
-        char *workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
+        std::string upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
+        std::string workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
         fstype.assign("overlay");
 
         std::ostringstream os;
@@ -253,6 +254,44 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
             return ReturnCode::FAILURE;
         }
     }
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode FileToolkitWithUndo::overlayMount(
+        const std::string &lower
+        , const std::string &upper
+        , const std::string &work
+        , const std::string &dst)
+{
+    std::string fstype = "overlay";
+    unsigned long flags = MS_BIND;
+
+    if ((createDirectory(lower) && ReturnCode::FAILURE)
+        || (createDirectory(upper) && ReturnCode::FAILURE)
+        || (createDirectory(work) && ReturnCode::FAILURE))
+    {
+        log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
+                       lower << ", upper=" << upper << ", work=" << work;
+        return ReturnCode::FAILURE;
+    }
+
+    std::string mountoptions = StringBuilder() << "lowerdir=" << lower
+                                               << ",upperdir=" << upper
+                                               << ",workdir=" << work;
+
+    int mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, mountoptions.c_str());
+
+    if (mountRes == 0) {
+        log_verbose() << "overlayMounted folder " << lower << " in " << dst;
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(upper));
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(work));
+    } else {
+        log_error() << "Could not mount into container: lower=" << lower
+                    << " , dst=" << dst << " err=" << strerror(errno);
+        return ReturnCode::FAILURE;
+    }
+
     return ReturnCode::SUCCESS;
 }
 
@@ -349,6 +388,9 @@ SignalConnectionsHandler::~SignalConnectionsHandler()
     }
 }
 
+bool operator&& (ReturnCode lhs, ReturnCode rhs) {
+    return lhs == rhs;
+}
 
 }
 
