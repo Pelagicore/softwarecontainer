@@ -169,10 +169,10 @@ ReturnCode Container::create()
         char *argv[2];
         if (m_enableWriteBuffer) {
             argv[0] = (char *)"--buffer";
-            std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
-            std::string rootfspath_lower = StringBuilder() << rootfspath_lower << "-lower";
-            std::string rootfspath_upper = StringBuilder() << rootfspath_lower << "-upper";
-            std::string rootfspath_work = StringBuilder() << rootfspath_lower << "-work";
+            const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
+            const std::string rootfspath_lower = StringBuilder() << rootfspath_lower << "-lower";
+            const std::string rootfspath_upper = StringBuilder() << rootfspath_lower << "-upper";
+            const std::string rootfspath_work = StringBuilder() << rootfspath_lower << "-work";
             overlayMount(rootfspath_lower, rootfspath_upper, rootfspath_work, rootfspath_dst);
         }
         if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, argv)) {
