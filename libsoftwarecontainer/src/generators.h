@@ -25,8 +25,9 @@
 #include <string>
 #include "softwarecontainer-common.h"
 
-/*! \brief  Generator functions
- *  \file   generators.h
+/**
+ * @brief  Generator functions
+ * @file   generators.h
  *
  *  Various helper functions for generating things such as network interface
  *  names, IP addresses and container names. By using these functions, unique
@@ -38,22 +39,24 @@ class Generator
     LOG_DECLARE_CLASS_CONTEXT("GEN", "Generator");
 
 public:
-    /*! \brief Generate an IP address
+    /**
+     * @brief Generate an IP address
      *
      * Calling this function will generate a new IP address. A counter is kept in
      * /tmp to minimize the risk of collissons
      *
-     * \param ip_addr_net A 24 bit network portion of an IP address
-     * \return A string representing an IP address
+     * @param ip_addr_net A 24 bit network portion of an IP address
+     * @return A string representing an IP address
      */
     std::string gen_ip_addr(const char *ip_addr_net);
 
-    /*! \brief Generate a container name
+    /**
+     * @brief Generate a container name
      *
      * Generate a container name based on the current time in milliseconds
      *
-     * \return name upon success
-     * \return NULL upon failure
+     * @return name upon success
+     * @return NULL upon failure
      */
     static std::string gen_ct_name();
 

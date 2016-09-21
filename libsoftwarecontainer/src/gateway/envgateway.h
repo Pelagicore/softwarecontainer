@@ -22,8 +22,8 @@
 #pragma once
 #include "gateway.h"
 
-/*!
- * Environment Gateway is used to define environment variables to the container
+/**
+ * @brief Environment Gateway is used to define environment variables to the container
  */
 class EnvironmentGateway :
     public Gateway

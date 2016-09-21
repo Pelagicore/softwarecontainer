@@ -30,7 +30,8 @@
 #include "softwarecontainer-common.h"
 #include "containerabstractinterface.h"
 
-/*! Container is an abstraction of the specific containment technology used.
+/**
+ * @brief The Container class is an abstraction of the specific containment technology used.
  *
  * The Container class is meant to be an abstraction of the containment
  * technology, so that SoftwareContainer can view it as a generic concept that
@@ -61,15 +62,15 @@ class Container :
 
 public:
 
-    /*!
-     * Constructor
+    /**
+     * @brief Constructor
      *
-     * \param name Name of the container
-     * \param configFile Path to the configuration file (including the file name)
-     * \param containerRoot A path to the root of the container, i.e. the base
+     * @param name Name of the container
+     * @param configFile Path to the configuration file (including the file name)
+     * @param containerRoot A path to the root of the container, i.e. the base
      *  path to e.g. the configurations and application root
-     * \param enableWriteBuffer Enable RAM write buffers on top of rootfs
-     * \param shutdownTimeout Timeout for shutdown of container.
+     * @param enableWriteBuffer Enable RAM write buffers on top of rootfs
+     * @param shutdownTimeout Timeout for shutdown of container.
      */
     Container(
             const std::string &id
@@ -81,27 +82,28 @@ public:
 
     ~Container();
 
-    /*!
-     * Calls the lxc-create command.
+    /**
+     * @brief create Creates a new lxc_container and creates it with all the initialization.
+     * @return ReturnCode::FAILURE on failed creation and ReturnCode::SUCCESS on a successful
+     *  creation.
      */
     ReturnCode create();
 
-    /*!
-     * Start the container
-     *
-     * \return The pid of the init process of the container
+    /**
+     * @brief Start the container
+     * @return The pid of the init process of the container
      */
     ReturnCode start(pid_t *pid);
 
     /**
-     * Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
+     * @brief Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
     ReturnCode attach(const std::string &commandLine, pid_t *pid, const EnvironmentVariables &variables, uid_t userID,
             const std::string &workingDirectory = "/", int stdin = -1, int stdout = 1, int stderr = 2);
 
     /**
-     * Start a process with the environment variables which have previously been set by the gateways
+     * @brief Start a process with the environment variables which have previously been set by the gateways
      */
     ReturnCode attach(const std::string &commandLine, pid_t *pid, uid_t userID = ROOT_UID);
 
@@ -124,32 +126,32 @@ public:
         return FileToolkitWithUndo::createSymLink(source, destination);
     }
 
-    /*!
-     * Calls shutdown, and then destroys the container
+    /**
+     * @brief Calls shutdown, and then destroys the container
      */
     ReturnCode destroy();
     ReturnCode destroy(unsigned int timeout);
 
-    /*
-     * Calls shutdown on the lxc container
+    /**
+     * @brief Calls shutdown on the lxc container
      */
     ReturnCode shutdown();
     ReturnCode shutdown(unsigned int timeout);
 
-    /*
-     * Calls lxc-stop (force stop)
+    /**
+     * @brief Calls stop on the lxc container(force stop)
      */
     ReturnCode stop();
 
     ReturnCode waitForState(LXCContainerState state, int timeout = 20);
     ReturnCode ensureContainerRunning();
 
-    /*!
-     * Setup the container for preloading
+    /**
+     * @brief Setup the container for preloading
      *
      * Setup the container so directories are available for later use when
      * setApplication is called.
-     * \return true or false
+     * @return true or false
      */
     ReturnCode initialize();
 
@@ -166,24 +168,24 @@ private:
     static int executeInContainerEntryFunction(void *param);
 
     /**
-     * The LXC configuration file for this container
+     * @brief The LXC configuration file for this container
      */
     std::string m_configFile;
 
     /**
-     * The unique name of the LXC container
+     * @brief The unique name of the LXC container
      */
     const std::string &m_id;
 
     std::string m_rootFSPath;
 
     /**
-     * The name assigned to the container
+     * @brief The name assigned to the container
      */
     const std::string &m_name;
 
-    /*
-     * Pointer to the LXC container
+    /**
+     * @brief Pointer to the LXC container
      */
     struct lxc_container *m_container = nullptr;
 

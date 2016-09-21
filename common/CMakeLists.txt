@@ -24,3 +24,9 @@ set(HEADERS
 )
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
+
+if(ENABLE_TEST)
+    set(SOFTWARECONTAINER_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(unit-test)
+endif()
+

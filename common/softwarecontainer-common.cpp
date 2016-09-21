@@ -25,6 +25,10 @@
 #include <fstream>
 #include "softwarecontainer-common.h"
 
+#include <string>
+#include <iostream>
+#include <sstream>
+
 namespace softwarecontainer {
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
@@ -192,14 +196,42 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly)
+std::string FileToolkitWithUndo::tempDir(std::string templ)
+{
+    char *dir = const_cast<char*>(templ.c_str());
+    dir = mkdtemp(dir);
+    if (dir == nullptr) {
+        log_warning() << "Failed to create buffered Directory: " << strerror(errno);
+        return nullptr;
+    }
+
+    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(templ));
+
+    return StringBuilder() << dir;
+}
+
+ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer)
 {
     unsigned long flags = MS_BIND;
-    const char *fstype = nullptr;
+    std::string fstype;
     const void *data = nullptr;
+    int mountRes;
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
-    int mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
+    if(enableWriteBuffer) {
+        std::string upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
+        std::string workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
+        fstype.assign("overlay");
+
+        std::ostringstream os;
+        os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
+        data = os.str().c_str();
+
+        mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
+    } else {
+        mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
+    }
+
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
         m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
@@ -214,7 +246,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 
         log_debug() << "Re-mounting read-only" << src << " in "
                     << dst << ", flags: " << flags;
-        mountRes = mount(src.c_str(), dst.c_str(), fstype, flags, data);
+        mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
         if (mountRes != 0) {
             // Failure
             log_error() << "Could not re-mount " << src << " , read-only on "
@@ -222,6 +254,44 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
             return ReturnCode::FAILURE;
         }
     }
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode FileToolkitWithUndo::overlayMount(
+          const std::string &lower
+        , const std::string &upper
+        , const std::string &work
+        , const std::string &dst)
+{
+    std::string fstype = "overlay";
+    unsigned long flags = MS_BIND;
+
+    if ((createDirectory(lower) && ReturnCode::FAILURE)
+        || (createDirectory(upper) && ReturnCode::FAILURE)
+        || (createDirectory(work) && ReturnCode::FAILURE))
+    {
+        log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
+                       lower << ", upper=" << upper << ", work=" << work;
+        return ReturnCode::FAILURE;
+    }
+
+    std::string mountoptions = StringBuilder() << "lowerdir=" << lower
+                                               << ",upperdir=" << upper
+                                               << ",workdir=" << work;
+
+    int mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, mountoptions.c_str());
+
+    if (mountRes == 0) {
+        log_verbose() << "overlayMounted folder " << lower << " in " << dst;
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(upper));
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(work));
+    } else {
+        log_error() << "Could not mount into container: lower=" << lower
+                    << " , dst=" << dst << " err=" << strerror(errno);
+        return ReturnCode::FAILURE;
+    }
+
     return ReturnCode::SUCCESS;
 }
 
@@ -318,7 +388,11 @@ SignalConnectionsHandler::~SignalConnectionsHandler()
     }
 }
 
+bool operator&& (ReturnCode lhs, ReturnCode rhs) {
+    return lhs == rhs;
+}
 
 }
+
 
 

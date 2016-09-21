@@ -19,37 +19,22 @@
  */
 
 
-#include "softwarecontainer_test.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
-void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
-{
-    lib->addGateway(gw);
-}
+#include "ivi-logging-console.h"
+#include "softwarecontainer-common.h"
 
-void SoftwareContainerLibTest::run()
-{
-    m_ml = Glib::MainLoop::create(m_context);
-    m_ml->run();
-}
+LOG_DEFINE_APP_IDS("PCON", "SoftwareContainer Unit Test");
+LOG_DECLARE_CONTEXT(SoftwareContainer_DefaultLogContext, "PCON", "Main context");
 
-void SoftwareContainerLibTest::exit()
+int main(int argc, char * *argv)
 {
-    m_ml->quit();
-}
+    if (!std::getenv("LOG_OUTPUT")) {
+        // Silence the logger
+        logging::ConsoleLogContext::setGlobalLogLevel(logging::LogLevel::None);
+    }
 
-void SoftwareContainerLibTest::SetUp()
-{
-    ::testing::Test::SetUp();
-    workspace = std::make_shared<SoftwareContainerWorkspace>(false);
-    lib = std::unique_ptr<SoftwareContainerLib>(new SoftwareContainerLib(workspace));
-    lib->setContainerIDPrefix("Test-");
-    lib->setMainLoopContext(m_context);
-    ASSERT_TRUE(isSuccess(lib->init()));
-}
-
-void SoftwareContainerLibTest::TearDown()
-{
-    ::testing::Test::TearDown();
-    lib.reset();
-    workspace.reset();
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

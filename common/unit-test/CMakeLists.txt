@@ -18,9 +18,6 @@
 
 include(AddGTestTest)
 
-set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
-add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
-
 set(TEST_LIBRARY_DEPENDENCIES 
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
@@ -29,15 +26,15 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainerlib
 )
-include_directories(${SOFTWARECONTAINERAGENT_DIR}/src)
+include_directories(${SOFTWARECONTAINER_COMMON_DIR})
 
 set(TEST_FILES
-    softwarecontaineragent_unittest.cpp
-    ../src/softwarecontaineragent.cpp
+    softwarecontainer-common_unittest.cpp
+    ../softwarecontainer-common.cpp
     main.cpp
 )
 
-add_gtest_test(softwarecontaineragenttest
+add_gtest_test(softwarecontainercommontest
     "${TEST_FILES}"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )

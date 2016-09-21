@@ -117,7 +117,7 @@ copy_configuration()
 
 usage()
 {
-    echo "$1 -h|--help -p|--path=<path>|--rootfs=<path>"
+    echo "$1 -h|--help -b|--buffer -p|--path=<path>|--rootfs=<path>"
     return 0
 }
 

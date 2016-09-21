@@ -65,7 +65,7 @@ public:
     }
 
     /**
-     * Check if the workspace is present and create it if needed
+     * @brief Check if the workspace is present and create it if needed
      */
     ReturnCode checkWorkspace();
 
@@ -88,12 +88,12 @@ public:
     ~SoftwareContainerLib();
 
     /**
-     * Set the main loop
+     * @brief Set the main loop
      */
     void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
 
-    /* 
-     * Shutdown the container
+    /**
+     * @brief Shutdown the container
      */ 
     ReturnCode shutdown();
     ReturnCode shutdown(unsigned int timeout);
@@ -103,7 +103,7 @@ public:
     void addGateway(Gateway *gateway);
 
     /**
-     * Preload the container.
+     * @brief Preload the container.
      * That method can be called before setting the main loop context
      */
     ReturnCode preload();
@@ -123,7 +123,8 @@ public:
 
     pid_t launchCommand(const std::string &commandLine);
 
-    /*! Continues the 'launch' phase by allowing gateway configurations to
+    /**
+     * @brief Continues the 'launch' phase by allowing gateway configurations to
      *  be set.
      *
      * Platform Access Manager calls this method after SoftwareContainer has
@@ -132,12 +133,12 @@ public:
      * all gateways as a result of this call. The contained application
      * is then started.
      *
-     * \param configs A map of gateway IDs and their respective configurations
+     * @param configs A map of gateway IDs and their respective configurations
      */
     void updateGatewayConfiguration(const GatewayConfiguration &configs);
 
     /**
-     * Set the gateway configuration and activate them
+     * @brief Set the gateway configuration and activate them
      */
     void setGatewayConfigs(const GatewayConfiguration &configs);
 

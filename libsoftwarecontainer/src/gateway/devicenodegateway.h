@@ -26,7 +26,8 @@
 
 #include "gateway.h"
 
-/*! This gateway is responsible for exposing device nodes in an LXC container.
+/**
+ * @brief This gateway is responsible for exposing device nodes in an LXC container.
  * The basic operation looks as follows:
  * - DeviceNodeGateway (DNG) is loaded with a JSON configuration detailing a
  *   list of devices to create, with device names (mandatory), permission modes (optional),
@@ -52,18 +53,18 @@ public:
 
     virtual ReturnCode readConfigElement(const json_t *element) override;
 
-    /*!
-     *  Implements Gateway::activateGateway
+    /**
+     * @brief Implements Gateway::activateGateway
      *
      * This function will iterate over all devices and issue mknod and chmod commands, which are run in the
      * container.
-     * \return true upon success; all commands executed successfully, false
+     * @return true upon success; all commands executed successfully, false
      *              otherwise
      */
     virtual bool activateGateway() override;
 
-    /*!
-     * Implements Gateway::teardownGateway
+    /**
+     * @brief Implements Gateway::teardownGateway
      */
     virtual bool teardownGateway() override;
 

@@ -166,7 +166,17 @@ ReturnCode Container::create()
 
     if (isSuccess(status)) {
         int flags = 0;
-        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, nullptr)) {
+        std::vector<char *> argv;
+        if (m_enableWriteBuffer) {
+            //log_error() << "Write buffer enabled";
+            argv.push_back("--buffer");
+            const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
+            const std::string rootfspath_lower = rootfspath_lower + "-lower";
+            const std::string rootfspath_upper = rootfspath_lower + "-upper";
+            const std::string rootfspath_work = rootfspath_lower + "-work";
+            overlayMount(rootfspath_lower, rootfspath_upper, rootfspath_work, rootfspath_dst);
+        }
+        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, &argv[0])) {
             log_error() << "Error creating container";
             status = ReturnCode::FAILURE;
         } else {
@@ -188,7 +198,7 @@ ReturnCode Container::create()
 ReturnCode Container::ensureContainerRunning()
 {
     if (m_state < ContainerState::STARTED) {
-        log_error() << "Containter is not in state STARTED, state is " << ((int)m_state);
+        log_error() << "Container is not in state STARTED, state is " << ((int)m_state);
         log_error() << logging::getStackTrace();
         return ReturnCode::FAILURE;
     }
