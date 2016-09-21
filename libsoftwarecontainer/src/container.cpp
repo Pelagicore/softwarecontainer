@@ -166,16 +166,17 @@ ReturnCode Container::create()
 
     if (isSuccess(status)) {
         int flags = 0;
-        char *argv[2];
+        std::vector<char *> argv;
         if (m_enableWriteBuffer) {
-            argv[0] = (char *)"--buffer";
+            //log_error() << "Write buffer enabled";
+            argv.push_back("--buffer");
             const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
             const std::string rootfspath_lower = rootfspath_lower + "-lower";
             const std::string rootfspath_upper = rootfspath_lower + "-upper";
             const std::string rootfspath_work = rootfspath_lower + "-work";
             overlayMount(rootfspath_lower, rootfspath_upper, rootfspath_work, rootfspath_dst);
         }
-        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, argv)) {
+        if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, &argv[0])) {
             log_error() << "Error creating container";
             status = ReturnCode::FAILURE;
         } else {
