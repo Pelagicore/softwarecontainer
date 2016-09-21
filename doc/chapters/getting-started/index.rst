@@ -2,6 +2,7 @@
 Getting started
 ***************
 
+
 Structure
 =========
 
@@ -23,22 +24,26 @@ Below is an example of the major entities involved in a call to create a contain
 
 .. seqdiag::
 
-    seqdiag {
-        Launcher -> Agent [label = "CreateContainer (D-Bus call)", leftnote = "D-Bus side"]
-        Agent -> SoftwareContainerLib [label = "init()"];
-        SoftwareContainerLib -> ContainerAbstractInterface [label = "initialize()"]
-        SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
-        SoftwareContainerLib -> ContainerAbstractInterface [label = "create()"]
-        ContainerAbstractInterface -> liblxc [label = "lxc_container_new()", rightnote = "system side"]
-        ContainerAbstractInterface <-- liblxc
-        SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
-        SoftwareContainerLib -> ContainerAbstractInterface [label = "start()"]
-        ContainerAbstractInterface -> liblxc [label = "multiple calls"]
-        ContainerAbstractInterface <-- liblxc
-        SoftwareContainerLib <-- ContainerAbstractInterface
-        Agent <-- SoftwareContainerLib [label = "ReturnCode"]
-        Launcher <-- Agent [label = "ID"]
-    }
+    span_height = 5;
+
+    Launcher -> Agent [label = "CreateContainer (D-Bus call)", leftnote = "D-Bus side"]
+    Agent -> SoftwareContainerLib [label = "init()"];
+
+    SoftwareContainerLib -> ContainerAbstractInterface [label = "initialize()"]
+    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+
+    SoftwareContainerLib -> ContainerAbstractInterface [label = "create()"]
+    ContainerAbstractInterface -> liblxc [label = "lxc_container_new()", rightnote = "system side"]
+    ContainerAbstractInterface <-- liblxc
+    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+
+    SoftwareContainerLib -> ContainerAbstractInterface [label = "start()"]
+    ContainerAbstractInterface -> liblxc [label = "multiple calls"]
+    ContainerAbstractInterface <-- liblxc
+    SoftwareContainerLib <-- ContainerAbstractInterface
+
+    Agent <-- SoftwareContainerLib [label = "ReturnCode"]
+    Launcher <-- Agent [label = "ID"]
 
 
 Container config
@@ -58,10 +63,18 @@ Example config JSON::
 The main reason this config is passed as raw JSON is to support additions in supported config options without breaking the API.
 
 
+
 Working with containers
 =======================
 
-Throughout this section, we will create a container, run an application in it and then shut down the
+This section describes how to work with the Agent D-Bus API and how to configure gateways to make the container useful for
+specific application and platform needs.
+
+
+Running a command in a container
+--------------------------------
+
+Throughout this section, we will create a container, run a command in it and then shut down the
 container again.
 
 Prerequisites:
@@ -157,3 +170,9 @@ Shut down the container::
     uint32:0
 
 The value passed as the `containerID` parameter should be the same value that was returned from the call to `CreateContainer`.
+
+
+Configure gateways
+------------------
+
+For details about the gateway configurations, see :ref:`Gateways <gateways>`
