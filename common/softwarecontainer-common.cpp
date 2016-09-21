@@ -229,10 +229,8 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 
         mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
     } else {
-
         mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
     }
-
 
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
@@ -260,7 +258,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 }
 
 ReturnCode FileToolkitWithUndo::overlayMount(
-        const std::string &lower
+          const std::string &lower
         , const std::string &upper
         , const std::string &work
         , const std::string &dst)

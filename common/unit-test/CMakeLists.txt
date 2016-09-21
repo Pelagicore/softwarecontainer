@@ -16,7 +16,7 @@
 #
 # For further information see LICENSE
 
-include (AddGTestTest)
+include(AddGTestTest)
 
 set(TEST_LIBRARY_DEPENDENCIES 
     ${DBusCpp_LIBRARIES}

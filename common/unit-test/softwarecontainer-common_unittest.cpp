@@ -29,8 +29,7 @@ class SoftwareContainerCommonTest: public ::testing::Test
 public:
     SoftwareContainerCommonTest() { }
 
-    void SetUp() override
-    {
+    void SetUp() override {
     }
 
 };

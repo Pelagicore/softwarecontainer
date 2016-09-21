@@ -16,7 +16,7 @@
 #
 # For further information see LICENSE
 
-include (AddGTestTest)
+include(AddGTestTest)
 
 set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
 add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
