@@ -69,8 +69,8 @@ todo_include_todos = True
 
 # -- Options for seqdiag  -------------------------------------------------
 
-# This makes the text slightly easier to read but also more blurry...
-seqdiag_antialias = True
+# SVGs look much less blurry
+seqdiag_html_image_format = "SVG"
 
 
 # -- Options for HTML output ----------------------------------------------
