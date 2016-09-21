@@ -53,7 +53,8 @@ To disable support for various gateways at compile time, set
 * -DENABLE_DBUSGATEWAY=OFF (for dbus)
 * -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
 
-To build the examples, build with -DENABLE_EXAMPLES=1
+To build the examples, build with -DENABLE_EXAMPLES=ON (and see Examples
+section).
 
 For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
@@ -136,6 +137,11 @@ needed. Run it with `--help` to see runtime options.
 First, creating LXC containers requires root priveleges. Second, setting up a
 network bridge using brctl and ifconfig/iptables typically also does require
 that.
+
+# Examples
+
+For examples see the `examples` directory and the README.md there for more
+information.
 
 # Testing
 
