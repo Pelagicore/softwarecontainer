@@ -307,7 +307,20 @@ The Network Gateway is used to provide Internet access through a container-speci
 Configuration
 -------------
 
-T.B.D.
+Example of network gateway config::
+
+    [
+        {
+            "type": "outgoing",
+            "rules": [
+                         { "host": "127.0.0.1/16", "port": 80, "target": "accept"},
+                         { "host": "google.com", "port": "80-85", "target": "accept"},
+                         { "host": "127.0.0.1/16", "port": [80, 8080], "target": "accept"},
+                         { "host": "50.63.202.33/24", "target": "reject"},
+                     ],
+            "default": "drop"
+        }
+    ]
 
 
 PulseAudio gateway

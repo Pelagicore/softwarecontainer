@@ -117,8 +117,41 @@ private:
 
     std::string m_ip;
     std::string m_gateway;
+
+    enum Target
+    {
+         INVALID_TARGET,
+         ACCEPT,
+         DROP,
+         REJECT
+    };
+
+    struct Rule
+    {
+         std::string host;
+         std::vector<int> ports;
+         Target target;
+    };
+
+    struct Entry
+    {
+         std::string type;
+         std::vector<Rule> rules;
+         Target defaultTarget;
+    };
+
+    std::vector<Entry> m_entries;
+
     bool m_internetAccess;
     bool m_interfaceInitialized;
 
     Generator m_generator;
+
+    /*! Parses a json element to a Rule
+     */
+    virtual ReturnCode parseRule(const json_t *element);
+
+    /*! Parses a string to a Target
+     */
+    virtual Target parseTarget(const std::string &str);
 };

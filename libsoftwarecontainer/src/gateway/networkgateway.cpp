@@ -41,26 +41,129 @@ NetworkGateway::~NetworkGateway()
 
 ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
-    if (!read(element, "internet-access", m_internetAccess)) {
-        log_error() << "either key \"internet-access\" missing or not a bool in json configuration";
+    Entry e;
+    if (!read(element, "type", e.type)) {
+        log_error() << " \"internet-access\" ";
         return ReturnCode::FAILURE;
     }
 
-    if (m_internetAccess) {
-        log_info() << "Internet access will be enabled";
+    const json_t *rules = json_object_get(element, "rules");
 
-        if (!read(element, "gateway", m_gateway)) {
-            log_error() << "either key \"gateway\" missing or not a string in json configuration";
+    size_t ix;
+    json_t *val;
+    json_array_foreach(rules, &ix, val) {
+        if (json_is_object(arrayElement)) {
+            if (isError(parseRule(arrayElement, e.rules))) {
+                log_error() << "Could not read rule config";
+                return false;
+            }
+        } else {
+            log_error() << "formatting of rules array is incorrect.";
+            return false;
         }
-
-        if (m_gateway.length() == 0) {
-            log_error() << "Value for \"gateway\" key is an empty string";
-            return ReturnCode::FAILURE;
-        }
-    } else {
-        log_info() << "Internet access will be disabled";
     }
+
+    std::string readTarget;
+    if (!read(element, "default", readTarget) {
+        log_error() << "No default target specified or default target is not a string.";
+        return ReturnCode::FAILURE;
+    }
+
+    e.defaultTarget = parseTarget(readTarget);
+    if (e.defaultTarget == Target::INVALID_TARGET) {
+        log_error() << "Default target '" << readTarget << "' is not a supported target.Invalid target.";
+        return ReturnCode::FAILURE;
+    }
+
+    m_entries.push_back(e);
     return ReturnCode::SUCCESS;
+}
+
+ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<Rule> &rules)
+{
+    Rule r;
+    std::string target;
+    if (!read(element, "target", target) {
+        log_error() << "Target not specified in the network config";
+        return ReturnCde::FAILURE;
+    }
+
+    r.target = parseTarget(target);
+    if (r.target == Target::INVALID_TARGET) {
+        log_error() << target << " is not a valid target.";
+        return ReturnCode::FAILURE;
+    }
+
+    if (!read(element, "host", r.host)) {
+        log_error() << "Host not specified in the network config.";
+        return ReturnCode::FAILURE;
+    }
+
+    // Parsing different port formats
+    // Port formatted as single integer
+    json_t *port = json_object_get(element, "port");
+    if (json_is_integer(port)) {
+        int iport = json_integer_value(port);
+        r.ports.push_back(iport);
+
+    // Port formatted as a string representing a range
+    json_t *port = json_object_get(element, "port");
+    } else if (json_is_string(port)) {
+        std::string portRange = json_string_value(port);
+        
+        const std::string::size_type n = portRange.find("-");
+        const std::string first = portRange.substr(0, n);
+        const std::string last = portRange.substr(n + 1);
+
+        int startPort;
+        if (!parseInt(first.c_str(), &startPoint)) {
+             log_error() << "Starting port in range " << portRange << "is not an integer.";
+             return ReturnCode::FAILURE;
+        }
+
+        int endPort;
+        if (!parseInt(first.c_str(), &endPoint)) {
+             log_error() << "End port in range " << portRange << "is not an integer.";
+             return ReturnCode::FAILURE;
+        }
+
+        for (int i = startPort; i <= endPort; ++i) {
+            r.ports.push_back(i);
+        }
+
+    // Port formatted as a list of integers
+    } else if (json_is_array(port)) {
+        size_t ix;
+        json_t *val;
+        json_array_foreach(port, ix, val) {
+            if (!json_is_integerval)) {
+                log_error() << "Entry in port array is not an integer.";
+                return ReturnCode::FAILURE;
+            }
+
+            int iport = json_integer_value(port);
+            r.ports.push_back(iport);
+        } 
+    }
+
+    rules.push_back(r);
+    return ReturnCode::SUCCESS;
+}
+
+Target NetworkGateway::parseTarget(const std::string &str)
+{
+    if (str == "ACCEPT") {
+        return Target::ACCEPT;
+    }
+    
+    if (str == "DROP") {
+        return Target::DROP;
+    }
+
+    if (str == "REJECT") {
+        return Target::REJECT;
+    }
+    return Target::INVALID_TARGET;
 }
 
 bool NetworkGateway::activateGateway()
