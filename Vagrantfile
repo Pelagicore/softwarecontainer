@@ -6,6 +6,12 @@ Vagrant.configure(2) do |config|
     config.vm.provider "virtualbox" do |vb|
         vb.customize [ "guestproperty", "set", :id, 
                        "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
+        if ENV['VAGRANT_RAM'] then
+            vb.memory = ENV['VAGRANT_RAM'].to_i * 1024
+        end
+        if ENV['VAGRANT_CPUS'] then
+            vb.cpus = ENV['VAGRANT_CPUS'].to_i
+        end
     end
 
     # Sync the repo root with this path in the VM
