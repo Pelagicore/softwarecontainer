@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # Copyright (C) 2016 Pelagicore AB
 #
@@ -18,12 +17,6 @@
 # For further information see LICENSE
 
 
-for dir in *; do
-    if [ -d "$dir" ]; then
-        if [ -e "${dir}/run-test.sh" ] ; then
-            pushd $dir
-            ./run-test.sh
-            popd
-        fi
-    fi
-done
+from lib import Receiver
+from lib import ContainerApp
+from lib import SoftwareContainerAgentHandler 

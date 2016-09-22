@@ -39,6 +39,7 @@ IFACE = "com.service.TestInterface"
 NR_OF_REQUESTS = 1000
 CLIENT_MESSAGE_SIZE = 256
 
+
 class Service(dbus.service.Object):
     def __init__(self, bus):
         self.__bus = bus
@@ -69,7 +70,7 @@ class Server(threading.Thread):
             print("Server not started yet, aborting wait...")
             return False
         expected_requests = NR_OF_REQUESTS * multiplier
-        ans = wait_until(lambda : self.service.requests == expected_requests, timeout)
+        ans = wait_until(lambda: self.service.requests == expected_requests, timeout)
         return ans
 
     def terminate(self):
@@ -83,9 +84,11 @@ class Server(threading.Thread):
 def wait_until(somepredicate, timeout, period=0.25, *args, **kwargs):
     mustend = time.time() + timeout
     while time.time() < mustend:
-        if somepredicate(*args, **kwargs): return True
+        if somepredicate(*args, **kwargs):
+            return True
         time.sleep(period)
     return False
+
 
 class Client():
 
@@ -108,12 +111,13 @@ class Client():
     def check_all_good_resp(self):
         return self.good_resp == NR_OF_REQUESTS
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('mode', choices=["client", "server"],
-                    help='Run the dbusapp as "server" or "client"')
+                        help='Run the dbusapp as "server" or "client"')
     parser.add_argument('--size', type=int, default=CLIENT_MESSAGE_SIZE,
-                    help='Size of the messages sent by client')
+                        help='Size of the messages sent by client')
 
     args = parser.parse_args()
     if args.mode == "server":

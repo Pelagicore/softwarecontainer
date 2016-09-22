@@ -18,6 +18,11 @@
 # For further information see LICENSE
 
 
+""" The classes in this module can be used directly if needed by the test code,
+    but the recommendation is to use the fixtures from 'conftest.py' if there
+    are any corresponding to the class needed.
+"""
+
 from gi.repository import GObject
 import dbus
 import json
@@ -28,8 +33,9 @@ import Queue
 import subprocess
 
 class Receiver(threading.Thread):
-    """
-    The Receiver class encapsulates and runs a gobject mainloop and dbus implementation in a separate thread
+    """ The Receiver class encapsulates and runs a gobject mainloop and dbus implementation in a separate thread
+
+        Purpose of Receiver is to listen to NameOwnerChanged to know about Agent coming and going
     """
     def __init__(self, logFile=None):
         self._logFile = logFile
@@ -54,7 +60,7 @@ class Receiver(threading.Thread):
 
     def run(self):
         import dbus.mainloop.glib
-        self._gloop =GObject.MainLoop()
+        self._gloop = GObject.MainLoop()
         self._loop = dbus.mainloop.glib.DBusGMainLoop()
         self._bus = dbus.SystemBus(mainloop=self._loop)
         self._bus.add_signal_receiver(self.handler, dbus_interface="org.freedesktop.DBus",
@@ -71,6 +77,9 @@ class Receiver(threading.Thread):
 
 
 class ContainerApp():
+    """ This represents the container. This can be considered the proxy for the Agent.
+    """
+
     def __init__(self):
         self._path = os.path.dirname(os.path.realpath(__file__))
         self._bus = dbus.SystemBus()
@@ -80,37 +89,20 @@ class ContainerApp():
         self.__bind_dir = None
         self.containerId = None
 
+    def set_host_path(self, path):
+        self.__host_path = path
+
     def __createContainer(self, enableWriteBuffer=False):
         if enableWriteBuffer:
             self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "{enableWriteBuffer: true}")
         else:
             self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "")
 
-    def bindMountFolderInContainer(self, relpath, dirname):
-        return self._pca_iface.BindMountFolderInContainer(self.containerId, self._path + relpath, dirname, True)
+    def bindMountFolderInContainer(self, dirname):
+        return self._pca_iface.BindMountFolderInContainer(self.containerId, self.__host_path, dirname, True)
 
-    def networkGateway(self):
-        configuration = {"network": json.dumps(
-        [{
-            "type": "OUTGOING",
-            "priority": 1,
-            "rules": [],
-            "default": "ACCEPT"
-        }])}
-        self._pca_iface.SetGatewayConfigs(self.containerId, configuration)
-
-    def dbusGateway(self):
-        connection = os.environ.get("DBUS_SESSION_BUS_ADDRESS")
-        configuration = [{
-            "dbus-gateway-config-session": [{
-                "direction": "*",
-                "interface": "*",
-                "object-path": "*",
-                "method": "*"
-            }],
-            "dbus-gateway-config-system": []
-        }]
-        self._pca_iface.SetGatewayConfigs(self.containerId, {"dbus": json.dumps(configuration)})
+    def set_gateway_config(self, gateway_id, config):
+        self._pca_iface.SetGatewayConfigs(self.containerId, {gateway_id: json.dumps(config)})
 
     def launchCommand(self, binary):
         response = self._pca_iface.LaunchCommand(self.containerId, 0,
@@ -126,7 +118,7 @@ class ContainerApp():
 
     def start(self, enableWriteBuffer=False):
         self.__createContainer(enableWriteBuffer)
-        self.__bind_dir = self.bindMountFolderInContainer("/..", "app")
+        self.__bind_dir = self.bindMountFolderInContainer("app")
 
     def terminate(self):
         if self.containerId is not None:
@@ -135,13 +127,24 @@ class ContainerApp():
 
 
 class SoftwareContainerAgentHandler():
+    """ Starts the agent and manages its life cycle, e.g. spawning and killing.
 
-    def __init__(self, logFile=subprocess.STDOUT):
-        self.rec = Receiver(logFile=logFile)
+        Used by e.g. ContainerApp over D-Bus.
+    """
+
+    def __init__(self, log_file_path=None):
+        self.log_file = None
+        self.log_file_path = log_file_path
+        if self.log_file_path == None:
+            self.log_file = subprocess.STDOUT
+        else:
+            self.log_file = open(log_file_path, "w")
+        self.rec = Receiver(logFile=self.log_file)
         self.rec.start()
 
-        """ Starting softwarecontainer-agent """
-        self.agent = subprocess.Popen("softwarecontainer-agent", stdout=logFile, stderr=logFile)
+        # Starting softwarecontainer-agent
+        # TODO: This doesn't work if the user pass 'None' as log_file_path
+        self.agent = subprocess.Popen("softwarecontainer-agent", stdout=self.log_file, stderr=self.log_file)
 
         try:
             """
@@ -167,3 +170,4 @@ class SoftwareContainerAgentHandler():
     def terminate(self):
         self.agent.terminate()
         self.rec.terminate()
+        self.log_file.close()

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 # Copyright (C) 2016 Pelagicore AB
 #
@@ -17,50 +16,50 @@
 #
 # For further information see LICENSE
 
+import pytest
 
 import os
 import time
 import subprocess
-import Queue
 import dbusapp
-import unittest
 
-from pydbus import SessionBus
-from pelagipy import Receiver
-from pelagipy import ContainerApp
-from pelagipy import SoftwareContainerAgentHandler
+from testframework import ContainerApp
 
-class TestDBus(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.logFile = open("test.log", "w")
-        time.sleep(0.5)
-
-        """ Setting up dbus environement variables for session buss """
-        p = subprocess.Popen('dbus-launch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        for var in p.stdout:
-            sp = var.split('=', 1)
-            os.environ[sp[0]] = sp[1][:-1]
-
-        cls.agentHandler = SoftwareContainerAgentHandler(cls.logFile)
-
-    def grepForDBusProxy(self):
-        return os.system('ps -aux | grep dbus-proxy | grep -v "grep" | grep prefix-dbus- > /dev/null')
+@pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
+class TestDBus(object):
+    """ This suite should do some basic testing of the D-Bus setup with the gateway,
+        an app in a container, the proxy, etc. After that, the main point is to
+        test the things that can't be tested on dbus-proxy alone. For example pure
+        testing of gateway configs is best done just using dbus-proxy, but testing
+        what happens when an app in the container uses the bus in various other ways,
+        e.g. stress testing and load testing, is better done here.
+    """
 
     def test_query_in(self):
         """ Launch server in container and test if a client can communicate with it from the host system """
         for x in range(0, 10):
             ca = ContainerApp()
             try:
+                # The container must have access to the test app used for the tests
+                ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
                 ca.start()
-                ca.dbusGateway()
+                config = [{
+                    "dbus-gateway-config-session": [{
+                        "direction": "*",
+                        "interface": "*",
+                        "object-path": "*",
+                        "method": "*"
+                    }],
+                    "dbus-gateway-config-system": []
+                }]
+                ca.set_gateway_config("dbus", config)
                 ca.launchCommand('{}/dbusapp.py server'.format(ca.getBindDir()))
 
                 time.sleep(0.5)
                 client = dbusapp.Client()
                 client.run()
-                self.assertTrue(client.check_all_good_resp())
+                assert client.check_all_good_resp() is True
             finally:
                 ca.terminate()
 
@@ -71,11 +70,21 @@ class TestDBus(unittest.TestCase):
             serv.start()
             ca = ContainerApp()
             try:
+                ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
                 ca.start()
-                ca.dbusGateway()
+                config = [{
+                    "dbus-gateway-config-session": [{
+                        "direction": "*",
+                        "interface": "*",
+                        "object-path": "*",
+                        "method": "*"
+                    }],
+                    "dbus-gateway-config-system": []
+                }]
+                ca.set_gateway_config("dbus", config)
                 ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
 
-                self.assertTrue(serv.wait_until_requests())
+                assert serv.wait_until_requests() is True
             finally:
                 ca.terminate()
                 serv.terminate()
@@ -88,17 +97,27 @@ class TestDBus(unittest.TestCase):
             serv = dbusapp.Server()
             serv.start()
 
+            ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
             ca.start()
-            ca.dbusGateway()
+            config = [{
+                "dbus-gateway-config-session": [{
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": "*"
+                }],
+                "dbus-gateway-config-system": []
+            }]
+            ca.set_gateway_config("dbus", config)
 
             clients = 100
-            message_size = 8192 # Bytes
+            message_size = 8192  # Bytes
 
             t0 = time.time()
             for x in range(0, clients):
                 ca.launchCommand('{}/dbusapp.py client --size {}'.format(ca.getBindDir(), message_size))
             t1 = time.time()
-            self.assertTrue(serv.wait_until_requests(multiplier=clients))
+            assert serv.wait_until_requests(multiplier=clients) is True
             t2 = time.time()
             print("\n")
             print("Clients started:              {0:.4f} seconds\n".format(t1 - t0))
@@ -116,26 +135,21 @@ class TestDBus(unittest.TestCase):
             serv = dbusapp.Server()
             serv.start()
 
+            ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
             ca.start(enableWriteBuffer=True)
-            ca.dbusGateway()
+            config = [{
+                "dbus-gateway-config-session": [{
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": "*"
+                }],
+                "dbus-gateway-config-system": []
+            }]
+            ca.set_gateway_config("dbus", config)
             ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
-            self.assertTrue(serv.wait_until_requests())
+            assert serv.wait_until_requests() is True
         finally:
             ca.terminate()
             serv.terminate()
             serv = None
-
-
-    def setUp(self):
-        self.assertNotEqual(self.grepForDBusProxy(), 0, msg="dbus-proxy not shutdown")
-
-    def tearDown(self):
-        self.assertNotEqual(self.grepForDBusProxy(), 0, msg="dbus-proxy not shutdown")
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.agentHandler.terminate()
-        cls.logFile.close()
-
-if __name__ == "__main__":
-    unittest.main()

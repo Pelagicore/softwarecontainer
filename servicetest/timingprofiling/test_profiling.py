@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 # Copyright (C) 2016 Pelagicore AB
 #
@@ -52,7 +51,9 @@ measurements and output it to files as expected by Jenkins.
 
 """
 
-import gobject
+# TODO: Make the test say pass or fail depending on some threshold in timing values
+
+
 import dbus
 import json
 import time
@@ -64,19 +65,23 @@ import sys
 import tempfile
 import string
 import re
+from gi.repository import GObject
 
 
 msgQueue = Queue.Queue()
 
 
+# TODO: This should be from the 'lib'
 class Receiver(threading.Thread):
-    """
-    The Receiver class encapsulates and runs a gobject mainloop and dbus implementation in a separate thread
+    """ The Receiver class encapsulates and runs a gobject mainloop and dbus implementation in a separate thread
+
+        This whole construct with the message queue is about triggering test excution only first after the
+        Agent is on the bus (the NameOwnerChanged signal has been received).
     """
     def __init__(self, logFile=None):
         self._logFile = logFile
         threading.Thread.__init__(self)
-        gobject.threads_init()
+        GObject.threads_init()
 
     def log(self, msg):
         if self._logFile is not None:
@@ -87,16 +92,15 @@ class Receiver(threading.Thread):
     def handler(self, gob, gob2, gob3):
         self.log("pythonProfilingPoint dbusAvailable %.09f %s %s %s" % (time.time(), gob, gob2, gob3))
         if gob == "com.pelagicore.SoftwareContainerAgent":
-            """
-            Put softwarecontainerStarted on the message queue, this is picked up by
-            other threads which should continue running when softwarecontainer-agent
-            is ready to work.
+            """ Put softwarecontainerStarted on the message queue, this is picked up by
+                other threads which should continue running when softwarecontainer-agent
+                is ready to work.
             """
             msgQueue.put("softwarecontainerStarted")
 
     def run(self):
         import dbus.mainloop.glib
-        self._gloop = gobject.MainLoop()
+        self._gloop = GObject.MainLoop()
         self._loop = dbus.mainloop.glib.DBusGMainLoop()
         self._bus = dbus.SystemBus(mainloop=self._loop)
         self._bus.add_signal_receiver(self.handler, dbus_interface="org.freedesktop.DBus", signal_name="NameOwnerChanged")
@@ -111,11 +115,13 @@ class Receiver(threading.Thread):
         self.terminate()
 
 
+# TODO: This should be from the 'lib'
 class ContainerApp():
     def __init__(self):
         self._path = os.path.dirname(os.path.realpath(__file__))
         self._bus = dbus.SystemBus()
-        self._pca_obj = self._bus.get_object("com.pelagicore.SoftwareContainerAgent", "/com/pelagicore/SoftwareContainerAgent")
+        self._pca_obj = self._bus.get_object("com.pelagicore.SoftwareContainerAgent",
+                                             "/com/pelagicore/SoftwareContainerAgent")
         self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.SoftwareContainerAgent")
 
     def createContainer(self):
@@ -127,7 +133,7 @@ class ContainerApp():
     def networkGateway(self):
         configuration = {"network": json.dumps([{"internet-access": True, "gateway": "10.0.3.1"}])}
         self._pca_iface.SetGatewayConfigs(self.containerId, configuration)
-        
+
     def dbusGateway(self):
         configuration = [{
             "dbus-gateway-config-session": [{
@@ -151,7 +157,7 @@ class ContainerApp():
     def start(self):
         self.createContainer()
         self.bindMountFolderInContainer()
-        #TODO: networkGateway ?
+        # TODO: networkGateway ?
         self.dbusGateway()
         self.launchCommand()
 
@@ -159,10 +165,11 @@ class ContainerApp():
         self.shutdown()
 
 
+# TODO: This code contains a lot of what is broken out into the "agent handler" in the "lib"
 def runTest(numStarts=3, logFile=None):
 
         rec = Receiver(logFile=logFile)
-        rec.start()
+        rec.start()  # Creates a thread, doesn not run it... (run() does that)
 
         time.sleep(0.5)
 
@@ -170,10 +177,9 @@ def runTest(numStarts=3, logFile=None):
         agent = subprocess.Popen("softwarecontainer-agent", stdout=logFile, stderr=logFile)
 
         try:
-            """
-            Wait for hte softwarecontainerStarted message to appear on the
-            msgQueue, this is evoked when softwarecontainer-agent is ready to
-            perform work. If we timeout tear down what we have started so far.
+            """ Wait for hte softwarecontainerStarted message to appear on the
+                msgQueue, this is evoked when softwarecontainer-agent is ready to
+                perform work. If we timeout tear down what we have started so far.
             """
             while msgQueue.get(block=True, timeout=5) != "softwarecontainerStarted":
                 pass
@@ -184,9 +190,8 @@ def runTest(numStarts=3, logFile=None):
             sys.exit(-1)
 
         if agent.poll() is not None:
-            """
-            Make sure we are not trying to perform anything against a dead
-            softwarecontainer-agent
+            """ Make sure we are not trying to perform anything against a dead
+                softwarecontainer-agent
             """
             print "SoftwareContainer-agent has died for some reason"
             rec.terminate()
@@ -194,8 +199,7 @@ def runTest(numStarts=3, logFile=None):
 
         apps = []
         for app in range(0, numStarts):
-            """
-            Start numStarts apps in softwarecontainer.
+            """ Start numStarts apps in softwarecontainer.
             """
             print "Start app " + str(app)
             container = ContainerApp()
@@ -205,8 +209,7 @@ def runTest(numStarts=3, logFile=None):
         time.sleep(5)
 
         for app in apps:
-            """
-            Tear down all started apps
+            """ Tear down all started apps
             """
             app.terminate()
 
@@ -299,8 +302,8 @@ def measure(logFile):
         writeMeasurement("result-" + start + "-" + end + "-" + str(i) + ".properties",
                          float(getLogPoint(logFile, end, i)) - float(getLogPoint(logFile, start, i)))
 
-    # TODO: We might want to separate the setGatewayConfigsFunction part into a 
-    #       separate step when we add more configs. 
+    # TODO: We might want to separate the setGatewayConfigsFunction part into a
+    #       separate step when we add more configs.
     profilePoints = ["createContainerFunction",
                      "bindMountFolderInContainerFunction",
                      "setGatewayConfigsFunction",
@@ -310,7 +313,7 @@ def measure(logFile):
         writeMeasurement("result-" + value + ".properties", float(getFunctionLog(logFile, value)))
 
 
-def main():
+def test_start_profiling():
     logfile = tempfile.TemporaryFile()
     runTest(logFile=logfile)
 
@@ -318,6 +321,3 @@ def main():
 
     logfile.seek(0)
     measure(logfile)
-
-if __name__ == "__main__":
-    main()
