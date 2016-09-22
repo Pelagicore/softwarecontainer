@@ -306,7 +306,7 @@ The Network Gateway is used to setup network connection and configure which traf
 
 Configuration
 -------------
-Types: "INCOMMING" and "OUTGOING"
+Types: "INCOMING" and "OUTGOING"
 Targets: "ACCEPT", "DROP" and "REJECT"
 host: hostname or ip-address with netmask
 default: target to choose when not matching any other rule
@@ -325,7 +325,7 @@ Example of network gateway config::
             "default": "REJECT"
         },
         {
-            "type": "INCOMMING",
+            "type": "INCOMING",
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "google.com", "port": "80-85", "target": "ACCEPT"},

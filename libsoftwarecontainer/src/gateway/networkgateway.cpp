@@ -42,12 +42,12 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
     Entry e;
     if (!read(element, "type", e.type)) {
-        log_error() << " \"internet-access\" ";
+        log_error() << "No type specified in network config.";
         return ReturnCode::FAILURE;
     }
 
-    if (e.type != "INCOMMING" && e.type != "OUTGOING") {
-        log_error() << e.type << " is not a valid type ('INCOMMING' or 'OUTGOING')";
+    if (e.type != "INCOMING" && e.type != "OUTGOING") {
+        log_error() << e.type << " is not a valid type ('INCOMING' or 'OUTGOING')";
         return ReturnCode::FAILURE;
     }
 
