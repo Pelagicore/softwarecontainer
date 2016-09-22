@@ -23,6 +23,7 @@
 
 #include "gateway.h"
 #include "generators.h"
+#include "jansson.h"
 
 class NetworkGateway :
     public Gateway
@@ -149,7 +150,7 @@ private:
 
     /*! Parses a json element to a Rule
      */
-    virtual ReturnCode parseRule(const json_t *element);
+    virtual ReturnCode parseRule(const json_t *element, std::vector<Rule> &rules);
 
     /*! Parses a string to a Target
      */
