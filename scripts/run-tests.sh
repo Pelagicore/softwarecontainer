@@ -58,22 +58,21 @@ wpid=$!
 
 echo "### Running tests ###"
 GTEST_FILTER="-*FileGatewayReadOnly"
-GTEST_OPTS="--gtest_output=xml"
 if [ -n "$1" ]; then
     GTEST_FILTER="$1"
 fi
 
 ./agent/unit-test/softwarecontaineragenttest \
-    $GTEST_OPTS
+    --gtest_output=xml:softwarecontaineragenttest.xml
 retval=$?
 
 ./common/unit-test/softwarecontainercommontest \
-    $GTEST_OPTS
+    --gtest_output=xml:softwarecontainercommontest.xml
 retval=$?
 
 ./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
     --gtest_filter=$GTEST_FILTER \
-    $GTEST_OPTS
+    --gtest_output=xml:softwarecontainerlibtest.xml
 retval=$?
 
 if ! kill $wpid > /dev/null 2>&1 ; then
