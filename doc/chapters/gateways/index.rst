@@ -302,23 +302,37 @@ An example configuration can look like this::
 Network gateway
 ===============
 
-The Network Gateway is used to provide Internet access through a container-specific firewall.
+The Network Gateway is used to setup network connection and configure which traffic is allowed and not.
 
 Configuration
 -------------
+Types: "INCOMMING" and "OUTGOING"
+Targets: "ACCEPT", "DROP" and "REJECT"
+host: hostname or ip-address with netmask
+default: target to choose when not matching any other rule
 
 Example of network gateway config::
 
     [
         {
-            "type": "outgoing",
+            "type": "OUTGOING",
             "rules": [
-                         { "host": "127.0.0.1/16", "port": 80, "target": "accept"},
-                         { "host": "google.com", "port": "80-85", "target": "accept"},
-                         { "host": "127.0.0.1/16", "port": [80, 8080], "target": "accept"},
-                         { "host": "50.63.202.33/24", "target": "reject"},
+                         { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
+                         { "host": "google.com", "port": "80-85", "target": "ACCEPT"},
+                         { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
+                         { "host": "50.63.202.33/24", "target": "DROP"},
                      ],
-            "default": "drop"
+            "default": "REJECT"
+        },
+        {
+            "type": "INCOMMING",
+            "rules": [
+                         { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
+                         { "host": "google.com", "port": "80-85", "target": "ACCEPT"},
+                         { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
+                         { "host": "50.63.202.33/24", "target": "REJECT"},
+                     ],
+            "default": "DROP"
         }
     ]
 
