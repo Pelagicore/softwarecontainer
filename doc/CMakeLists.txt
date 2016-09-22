@@ -70,7 +70,12 @@ add_custom_target(latexpdf
     COMMENT "Building Latex/PDF documentation with Sphinx")
 
 add_custom_target(doc ALL)
-add_dependencies(doc html latexpdf)
+add_dependencies(doc html)
+
+option(PDF_DOCS "Enable building documentation in PDF format" OFF)
+IF(PDF_DOCS)
+    add_dependencies(doc latexpdf)
+ENDIF()
 
 #
 # Then, doxygen for stuff that is code.

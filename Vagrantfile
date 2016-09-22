@@ -1,16 +1,17 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-ram = 4 #GB
-cpus = 3
-
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
     config.vm.provider "virtualbox" do |vb|
         vb.customize [ "guestproperty", "set", :id, 
                        "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
-        #vb.memory = ram * 1024
-        #vb.cpus = cpus
+        if ENV['VAGRANT_RAM'] then
+            vb.memory = ENV['VAGRANT_RAM'].to_i * 1024
+        end
+        if ENV['VAGRANT_CPUS'] then
+            vb.cpus = ENV['VAGRANT_CPUS'].to_i
+        end
     end
 
     # Sync the repo root with this path in the VM
@@ -24,12 +25,14 @@ Vagrant.configure(2) do |config|
         args: ['10.8.36.16'],
         path: "cookbook/system-config/apt-cacher.sh" 
 
-    # Select the best apt mirror
-    config.vm.provision "shell", path: "cookbook/system-config/select-apt-mirror.sh"
+    # Select the best apt mirror for our debian release
+    config.vm.provision "shell",
+        args: ["jessie"],
+        path: "cookbook/system-config/select-apt-mirror.sh"
 
-    # Upgrade machine to testing distro & install build dependencies
-    config.vm.provision "shell", path: "cookbook/deps/testing-upgrade.sh"
+    # Install build dependencies
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
+    config.vm.provision "shell", path: "cookbook/deps/softwarecontainer-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/wayland-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/pulseaudio-dependencies.sh"
