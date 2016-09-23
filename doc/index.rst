@@ -12,4 +12,5 @@ Contents:
     chapters/getting-started/*
     chapters/gateways/*
     chapters/developers/*
+    chapters/design/*
     chapters/lxc/*
