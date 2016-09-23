@@ -318,9 +318,9 @@ Example of network gateway config::
             "type": "OUTGOING",
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
-                         { "host": "google.com", "port": "80-85", "target": "ACCEPT"},
+                         { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
-                         { "host": "50.63.202.33/24", "target": "DROP"},
+                         { "host": "93.184.216.34/24", "target": "DROP"},
                      ],
             "default": "REJECT"
         },
@@ -328,9 +328,9 @@ Example of network gateway config::
             "type": "INCOMING",
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
-                         { "host": "google.com", "port": "80-85", "target": "ACCEPT"},
+                         { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
-                         { "host": "50.63.202.33/24", "target": "REJECT"},
+                         { "host": "93.184.216.34/24", "target": "REJECT"},
                      ],
             "default": "DROP"
         }
