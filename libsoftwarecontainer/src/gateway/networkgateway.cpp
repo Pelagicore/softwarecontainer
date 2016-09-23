@@ -51,6 +51,19 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
+    const json_t *prio = json_object_get(element, "priority");
+    if (prio == nullptr) {
+        log_error() << "No priority specified in network config.";
+        return ReturnCode::FAILURE;
+    }
+
+    e.priority = json_integer_value(prio);
+    if (e.priority < 1) {
+        log_error() << "Priority can not be less than 1";
+        return ReturnCode::FAILURE;
+    }
+
+
     const json_t *rules = json_object_get(element, "rules");
 
     if (rules == nullptr) {

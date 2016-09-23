@@ -136,6 +136,7 @@ private:
 
     struct Entry
     {
+         unsigned int priority;
          std::string type;
          std::vector<Rule> rules;
          Target defaultTarget;

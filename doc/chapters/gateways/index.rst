@@ -306,16 +306,18 @@ The Network Gateway is used to setup network connection and configure which traf
 
 Configuration
 -------------
-Types: "INCOMING" and "OUTGOING"
-Targets: "ACCEPT", "DROP" and "REJECT"
-host: hostname or ip-address with netmask
-default: target to choose when not matching any other rule
+Types: "INCOMING" and "OUTGOING".
+Targets: "ACCEPT", "DROP" and "REJECT".
+host: hostname or ip-address with netmask.
+default: target to choose when not matching any other rule.
+priority: An integer greater than 0 that priority of the ruleset, 1 being the highest priority.
 
 Example of network gateway config::
 
     [
         {
             "type": "OUTGOING",
+            "priority" 1,
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
@@ -326,6 +328,7 @@ Example of network gateway config::
         },
         {
             "type": "INCOMING",
+            "priority" 3,
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "example.com", "port": "80-85", "target": "ACCEPT"},

@@ -46,6 +46,7 @@ protected:
     const std::string VALID_FULL_CONFIG =
     "[{"
         "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -55,6 +56,7 @@ protected:
         "\"default\": \"ACCEPT\""
     "}, {"
         "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -64,6 +66,7 @@ protected:
         "\"default\": \"DROP\""
     "}, {"
         "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -73,6 +76,7 @@ protected:
         "\"default\": \"REJECT\""
     "}, {"
         "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -82,6 +86,7 @@ protected:
         "\"default\": \"ACCEPT\""
     "}, {"
         "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -91,6 +96,7 @@ protected:
         "\"default\": \"DROP\""
     "}, {"
         "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -120,6 +126,26 @@ TEST_F(NetworkGatewayTest, TestSetConfig) {
     ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
 }
 
+/*! Test that config entries with no priority specified fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigNoPriority) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
 /*! Test that config entries with no type specified fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigNoType) {
@@ -127,6 +153,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoType) {
 
     const std::string config =
     "[{"
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -147,6 +174,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoRules) {
     const std::string config =
     "[{"
         "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
         "\"default\": \"ACCEPT\""
     "}]";
 
@@ -161,6 +189,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigEmptyRules) {
     const std::string config =
     "[{"
         "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
         "\"rules\": [],"
         "\"default\": \"ACCEPT\""
     "}]";
@@ -176,6 +205,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoDefaultTarget) {
     const std::string config =
     "[{"
         "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -195,6 +225,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsInt) {
     const std::string config =
     "[{"
         "\"type\": 123,"
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -215,6 +246,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsBadString) {
     const std::string config =
     "[{"
         "\"type\": \"otcnm\","
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -235,6 +267,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsObject) {
     const std::string config =
     "[{"
         "\"type\": {\"type\": \"INCOMMING\"},"
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -254,6 +287,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsArray) {
     const std::string config =
     "[{"
         "\"type\": [\"INCOMING\"],"
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -274,6 +308,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsObject) {
     const std::string config =
     "[{"
         "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
         "\"rules\": {"
                      "\"rule1\": { \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "\"rule2\": { \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -293,6 +328,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsString) {
     const std::string config =
     "[{"
         "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
         "\"rules\": \""
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -312,6 +348,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsInteger) {
     const std::string config =
     "[{"
         "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
         "\"rules\": 123"
         "\"default\": \"ACCEPT\""
     "}]";
@@ -325,6 +362,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigDefaultTargetIsInvalid) {
     const std::string config =
     "[{"
         "\"type\": [\"INCOMING\"],"
+        "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
