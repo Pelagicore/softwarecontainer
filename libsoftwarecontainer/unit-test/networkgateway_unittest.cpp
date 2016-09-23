@@ -153,6 +153,21 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoRules) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
+/*! Test that config entries with empty rules specified works.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigEmptyRules) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"rules\": [],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_TRUE(gw->setConfig(config));
+}
+
 /*! Test that config entries with no default target specified fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigNoDefaultTarget) {
