@@ -72,7 +72,7 @@ protected:
                  "],"
         "\"default\": \"REJECT\""
     "}, {"
-        "\"type\": \"INCOMMING\","
+        "\"type\": \"INCOMING\","
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -81,7 +81,7 @@ protected:
                  "],"
         "\"default\": \"ACCEPT\""
     "}, {"
-        "\"type\": \"INCOMMING\","
+        "\"type\": \"INCOMING\","
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -90,7 +90,7 @@ protected:
                  "],"
         "\"default\": \"DROP\""
     "}, {"
-        "\"type\": \"INCOMMING\","
+        "\"type\": \"INCOMING\","
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -238,7 +238,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsArray) {
     givenContainerIsSet(gw);
     const std::string config =
     "[{"
-        "\"type\": [\"INCOMMING\"],"
+        "\"type\": [\"INCOMING\"],"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -258,7 +258,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsObject) {
 
     const std::string config =
     "[{"
-        "\"type\": \"INCOMMING\","
+        "\"type\": \"INCOMING\","
         "\"rules\": {"
                      "\"rule1\": { \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "\"rule2\": { \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -277,7 +277,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsString) {
 
     const std::string config =
     "[{"
-        "\"type\": \"INCOMMING\","
+        "\"type\": \"INCOMING\","
         "\"rules\": \""
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
@@ -296,7 +296,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsInteger) {
 
     const std::string config =
     "[{"
-        "\"type\": \"INCOMMING\","
+        "\"type\": \"INCOMING\","
         "\"rules\": 123"
         "\"default\": \"ACCEPT\""
     "}]";
@@ -309,7 +309,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigDefaultTargetIsInvalid) {
     givenContainerIsSet(gw);
     const std::string config =
     "[{"
-        "\"type\": [\"INCOMMING\"],"
+        "\"type\": [\"INCOMING\"],"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
