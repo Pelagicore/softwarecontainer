@@ -675,7 +675,13 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     GatewayConfiguration config;
-    config[NetworkGateway::ID] = "[ { \"internet-access\" : false } ]";
+    config[NetworkGateway::ID] =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": [],"
+        "\"default\": \"DROP\""
+    "}]";
     setGatewayConfigs(config);
 
     CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
@@ -693,16 +699,23 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
 
     GatewayConfiguration config;
-    config[NetworkGateway::ID] = "[ { \"internet-access\" : true, \"gateway\" : \"10.0.3.1\" } ]";
+    config[NetworkGateway::ID] =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": [],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
     setGatewayConfigs(config);
 
     CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
-    ASSERT_TRUE(job2.wait() == 0);
+    ASSERT_EQ(job2.wait(), 0);
 
     CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
-    ASSERT_TRUE(job.wait() == 0);
+    ASSERT_EQ(job.wait(), 0);
 }
 
 

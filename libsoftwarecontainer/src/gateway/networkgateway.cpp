@@ -103,6 +103,14 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
     }
 
     m_entries.push_back(e);
+
+    // --- TEMPORARY WORKAROUND ---
+    // in the wait of activate() being rewritten
+    if (e.defaultTarget == Target::ACCEPT) {
+        m_internetAccess = true;
+        m_gateway = "10.0.3.1";
+    }
+    // ----------------------------
     return ReturnCode::SUCCESS;
 }
 

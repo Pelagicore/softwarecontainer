@@ -90,7 +90,13 @@ class ContainerApp():
         return self._pca_iface.BindMountFolderInContainer(self.containerId, self._path + relpath, dirname, True)
 
     def networkGateway(self):
-        configuration = {"network": json.dumps([{"internet-access": True, "gateway": "10.0.3.1"}])}
+        configuration = {"network": json.dumps(
+        [{
+            "type": "OUTGOING",
+            "priority": 1,
+            "rules": [],
+            "default": "ACCEPT"
+        }])}
         self._pca_iface.SetGatewayConfigs(self.containerId, configuration)
 
     def dbusGateway(self):

@@ -317,7 +317,7 @@ Example of network gateway config::
     [
         {
             "type": "OUTGOING",
-            "priority" 1,
+            "priority": 1,
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
@@ -328,7 +328,7 @@ Example of network gateway config::
         },
         {
             "type": "INCOMING",
-            "priority" 3,
+            "priority": 3,
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
