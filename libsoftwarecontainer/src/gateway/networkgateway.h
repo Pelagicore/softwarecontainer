@@ -116,9 +116,9 @@ private:
      */
     virtual bool isBridgeAvailable();
 
-    std::string m_ip;
-    std::string m_gateway;
-
+    /**
+     * @brief Targets for Rules
+     */
     enum Target
     {
          INVALID_TARGET,
@@ -127,6 +127,9 @@ private:
          REJECT
     };
 
+    /**
+     * @brief Definition of a 'Rule' used to handle network traffic. Used internally in Entry.
+     */
     struct Rule
     {
          std::string host;
@@ -134,6 +137,9 @@ private:
          Target target;
     };
 
+    /**
+     * @brief An entry parsed from given configurations by readConfigElement()
+     */
     struct Entry
     {
          unsigned int priority;
@@ -142,6 +148,9 @@ private:
          Target defaultTarget;
     };
 
+    std::string m_ip;
+    std::string m_gateway;
+
     std::vector<Entry> m_entries;
 
     bool m_internetAccess;
@@ -149,11 +158,16 @@ private:
 
     Generator m_generator;
 
-    /*! Parses a json element to a Rule
+    /**
+     * @breif Parses a json element to a Rule
+     * @return ReturnCode::SUCCESS if the rule is successfully parsed
+     * @return ReturnCode::FAILURE otherwise.
      */
     virtual ReturnCode parseRule(const json_t *element, std::vector<Rule> &rules);
 
-    /*! Parses a string to a Target
+    /**
+     * @breif Parses a string to a Target
+     * @return Either the valid Target representation of the given string or Target::INVALID_TARGET
      */
     virtual Target parseTarget(const std::string &str);
 };
