@@ -25,6 +25,7 @@ add_executable(softwarecontainer-agent
     src/softwarecontaineragent.cpp
     src/softwarecontaineragentadaptor.cpp
     SoftwareContainerAgent_dbuscpp_adaptor.h
+    ${PROJECT_SOURCE_DIR}/common/jsonparser.cpp
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainer-agent
