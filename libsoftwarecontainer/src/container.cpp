@@ -169,7 +169,7 @@ ReturnCode Container::create()
         std::vector<char *> argv;
         if (m_enableWriteBuffer) {
             //log_error() << "Write buffer enabled";
-            argv.push_back("--buffer");
+            argv.push_back((char *)"--buffer");
             const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
             const std::string rootfspath_lower = rootfspath_lower + "-lower";
             const std::string rootfspath_upper = rootfspath_lower + "-upper";
