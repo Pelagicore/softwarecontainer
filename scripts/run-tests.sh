@@ -63,17 +63,19 @@ if [ -n "$1" ]; then
 fi
 
 ./agent/unit-test/softwarecontaineragenttest \
+    --gtest_filter=$GTEST_FILTER \
     --gtest_output=xml:softwarecontaineragenttest.xml
 retval=$?
 
 ./common/unit-test/softwarecontainercommontest \
+    --gtest_filter=$GTEST_FILTER \
     --gtest_output=xml:softwarecontainercommontest.xml
-retval=$?
+retval=retval+$?
 
 ./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
     --gtest_filter=$GTEST_FILTER \
     --gtest_output=xml:softwarecontainerlibtest.xml
-retval=$?
+retval=retval+$?
 
 if ! kill $wpid > /dev/null 2>&1 ; then
     echo "Failed to kill weston at pid $wpid"
