@@ -19,7 +19,7 @@ For more information how to integrate and use the configurations in a project, s
 
 For more information how to develop and integrate gateways in SoftwareContainer, see :ref:`Developer guidelines <developers>`.
 
-.. todo:: The above references are to currently non-existing sections, it's a stab at drawing up a structure.
+.. todo:: The Integration patterns refers to a currently non-existing section.
 
 
 Note on configurations
@@ -37,12 +37,12 @@ The CGroups Gateway is used to limit the contained system's access to CPU and RA
 Configuration
 -------------
 
-The gateway configuration contains settings as key/value pairs. The `setting` key
-is a string in the format <cgroup subsystem>.<setting> and the `value` is a string
+The gateway configuration contains settings as key/value pairs. The ``setting`` key
+is a string in the format <cgroup subsystem>.<setting> and the ``value`` is a string
 with the value to apply.
 
 No syntax or other checks for correctness is performed on the key/value pairs,
-see the ``lxc.container.conf`` man page for more details about legal settings.
+see the `lxc.container.conf` man page for more details about valid settings.
 
 Example configurations
 ----------------------
@@ -67,28 +67,28 @@ must have the ``setting`` and ``value`` defined.
 D-Bus gateway
 =============
 
-The D-Bus Gateway is used to provide access to host system D-Bus busses, object paths, and interfaces.
+The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and interfaces.
 
 The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
 to use this socket when communicating with the outside D-Bus system. The gateway uses an external
-program `dbus-proxy` for creation and communication over the proxied bus connection.
+program ``dbus-proxy`` for creation and communication over the proxied bus connection.
 
 The gateway will also set the ``DBUS_SESSION_BUS_ADDRESS`` or
 ``DBUS_SYSTEM_BUS_ADDRESS`` for the session and system bus, respectively.
 libdbus uses these variables to find the socket to use for D-Bus
-communication, and the application running withing the container is
+communication, and the application running within the container is
 expected to use these variables (probably by means of the binding used).
 
-The `dbus-proxy` does not modify the messages passed via D-Bus, it only provides a filter function.
+The ``dbus-proxy`` does not modify the messages passed via D-Bus, it only provides a filter function.
 This means that some filters may cause unwanted behaviour used in combination with dynamic
 interpretation of introspection data. For example, if introspection is configured to be allowed,
 the introspection data might contain interfaces and object paths that are not accessible for the
 application (unless the configuration also allowes everything on the connection).
 
 The gateway will not do any analysis of the configuration passed to it, but will pass this configuration
-along to `dbus-proxy` verbatim. This is to support future changes in the configuration format.
+along to ``dbus-proxy`` verbatim. This is to support future changes in the configuration format.
 
 Configuration
 -------------
@@ -110,7 +110,7 @@ of:
 The rules are implemented as name/value pairs:
 
 - ``direction`` - A string set to either ``incoming`` if the call or signal is coming from the outside of the container, or ``outgoing`` if the call or signal is coming from inside of the container.
-- ``interface`` - A string specifying a D-Bus interface name, e.g.``org.freedesktop.DBus``.
+- ``interface`` - A string specifying a D-Bus interface name, e.g. ``org.freedesktop.DBus``.
 - ``object-path`` - A string specifying a D-Bus object path, e.g. ``/org/freedesktop/UPower/Policy``.
 - ``method`` - A string specifying a D-Bus method name or signal name, e.g. ``EnumerateDevices``.
 

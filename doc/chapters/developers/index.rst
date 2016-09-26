@@ -10,7 +10,7 @@ The intended reader is a developer who wants to understand and work with the int
 or anyone who simply wants a better insight for e.g. troubleshooting.
 
 .. todo::
-    The diagrams in this chapter does not differ between sync and async calls, should be fixed
+    The diagrams in this chapter do not differ between sync and async calls, should be fixed
 
 
 Important internal interfaces
@@ -19,9 +19,9 @@ Important internal interfaces
 Interface: libsoftwarecontainer.h
 ---------------------------------
 
-This interface is what the Agent uses to manage the life cycle of container instances, e.g. creation and
-destruction. The interface provide access to the underlying ``ContainerAbstractInterface`` which users can
-use to access the container interface. The interface is implemented by ``SoftwareContainerLib``.
+The Agent uses ``libsoftwarecontainer.h`` to manage the lifecycle of container instances, e.g. creation and
+destruction. The interface provides access to the underlying ``ContainerAbstractInterface`` which users can
+utilize to access the container interface. The interface is implemented by ``SoftwareContainerLib``.
 
 Below is a diagram showing the interaction between the user `Agent` and the interfaces ``SoftwareContainerLib``
 subsequently uses:
@@ -104,12 +104,13 @@ Below is a diagram showing the `initialize`, `create`, and `start` sequence focu
 Interface: gateway.h
 --------------------
 
-All gateway implementations must inherit ``Gateway`` and implement the pure virtual methods. The rationale
-and design intention is to isolate gateway specific knowledge to respective gateway to:
+All gateway implementations must inherit ``Gateway`` and implement the pure virtual methods. The
+rationale and design intention for isolating gateway specific knowledge to respective gateway is to:
 
-* Allow gateways to have a flexible config structure and content to easier suit their purpose.
-* Separate maintenance between gateways, e.g. updating the config and implementation of one doesn't ripple to the others.
-* Consistent interface to the user of the class so there are no ripple effects into SoftwareContainer.
+* Allow gateways to have a flexible config structure and content to more easily suit their purpose.
+* Separate maintenance between gateways, e.g. updating the config and implementation of one will not
+  propagate to the others.
+* Consistent interface towards the user of the class so there are no ripple effects into SoftwareContainer.
 
 SoftwareContainer sets the configuration on the interface of this base class, and the derived classes are then called
 internally to do their specific parsing and application of the configs.
