@@ -2,6 +2,7 @@ CMakeLists.txt.user
 .idea/
 build/
 build-*/
+.idea/
 *.sw*
 *.pyc
 *.py~
