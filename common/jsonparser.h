@@ -55,9 +55,23 @@ namespace softwarecontainer {
          * given object does not contain the given key or the given key did not hold a boolean
          * value, false will be returned and the result reference will not be changed.
          *
+         * @return True: If the boolean was successfully read.
+         * @return False: If the boolean could not be read.
+         */
+        bool read(const json_t *element, const char *key, bool &result);
+
+        /**
+         * @brief Reads an integer from a JSON Object.
+         *
+         * Tries to read an integer value form a given JSON object using a given key.
+         * If the read is successful true will be returned and the result reference will be
+         * populated with the read value. If the integer could not be read, either due to the
+         * given object does not contain the given key or the given key did not hold an integer
+         * value, false will be returned and the result reference will not be changed.
+         *
          * @return True: If the integer was successfully read.
          * @return False: If the integer could not be read.
          */
-        bool read(const json_t *element, const char *key, bool &result);
+        bool read(const json_t *element, const char *key, int &result);
     };
 }

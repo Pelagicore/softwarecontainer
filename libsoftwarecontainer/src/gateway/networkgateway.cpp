@@ -23,7 +23,6 @@
 #include "ifaddrs.h"
 #include "unistd.h"
 #include "networkgateway.h"
-#include "jansson.h"
 #include "generators.h"
 
 constexpr const char *NetworkGateway::BRIDGE_INTERFACE;
@@ -41,26 +40,176 @@ NetworkGateway::~NetworkGateway()
 
 ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
-    if (!read(element, "internet-access", m_internetAccess)) {
-        log_error() << "either key \"internet-access\" missing or not a bool in json configuration";
+    Entry e;
+    if (!read(element, "type", e.type)) {
+        log_error() << "No type specified in network config.";
         return ReturnCode::FAILURE;
     }
 
-    if (m_internetAccess) {
-        log_info() << "Internet access will be enabled";
+    if (e.type != "INCOMING" && e.type != "OUTGOING") {
+        log_error() << e.type << " is not a valid type ('INCOMING' or 'OUTGOING')";
+        return ReturnCode::FAILURE;
+    }
 
-        if (!read(element, "gateway", m_gateway)) {
-            log_error() << "either key \"gateway\" missing or not a string in json configuration";
-        }
+    int p;
+    if (!read(element, "priority", p)) {
+      log_error() << "No priority specified in network config.";
+      return ReturnCode::FAILURE;
+    }
+    e.priority = p;
 
-        if (m_gateway.length() == 0) {
-            log_error() << "Value for \"gateway\" key is an empty string";
+    if (e.priority < 1) {
+        log_error() << "Priority can not be less than 1 but is " << e.priority;
+        return ReturnCode::FAILURE;
+    }
+
+    const json_t *rules = json_object_get(element, "rules");
+
+    if (rules == nullptr) {
+        log_error() << "No rules specified";
+        return ReturnCode::FAILURE;
+    }
+
+    if (!json_is_array(rules)) {
+        log_error() << "Rules not specified as an array";
+        return ReturnCode::FAILURE;
+    }
+
+    size_t ix;
+    json_t *val;
+    json_array_foreach(rules, ix, val) {
+        if (json_is_object(val)) {
+            if (isError(parseRule(val, e.rules))) {
+                log_error() << "Could not parse rule config";
+                return ReturnCode::FAILURE;
+            }
+        } else {
+            log_error() << "formatting of rules array is incorrect.";
             return ReturnCode::FAILURE;
         }
+    }
+
+    std::string readTarget;
+    if (!read(element, "default", readTarget)) {
+        log_error() << "No default target specified or default target is not a string.";
+        return ReturnCode::FAILURE;
+    }
+
+    e.defaultTarget = parseTarget(readTarget);
+    if (e.defaultTarget == Target::INVALID_TARGET) {
+        log_error() << "Default target '" << readTarget << "' is not a supported target.Invalid target.";
+        return ReturnCode::FAILURE;
+    }
+
+    m_entries.push_back(e);
+
+    // --- TEMPORARY WORKAROUND ---
+    // in the wait of activate() being rewritten
+    if (e.defaultTarget == Target::ACCEPT) {
+        m_internetAccess = true;
+        m_gateway = "10.0.3.1";
+    }
+    // ----------------------------
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<Rule> &rules)
+{
+    Rule r;
+    std::string target;
+    if (!read(element, "target", target)) {
+        log_error() << "Target not specified in the network config";
+        return ReturnCode::FAILURE;
+    }
+
+    r.target = parseTarget(target);
+    if (r.target == Target::INVALID_TARGET) {
+        log_error() << target << " is not a valid target.";
+        return ReturnCode::FAILURE;
+    }
+
+    if (!read(element, "host", r.host)) {
+        log_error() << "Host not specified in the network config.";
+        return ReturnCode::FAILURE;
+    }
+
+    // Parsing different port formats
+    json_t *port = json_object_get(element, "port");
+    if (port != nullptr) {
+        parsePort(port, r.ports);
+    }
+    // If there were no port configured, leave the port list empty
+    // and assume that all ports should be considered in the rule.
+
+    rules.push_back(r);
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode NetworkGateway::parsePort(const json_t *element, std::vector<unsigned int> &ports)
+{
+    // Port formatted as single integer
+    if (json_is_integer(element)) {
+        int port = json_integer_value(element);
+        ports.push_back(port);
+
+    // Port formatted as a string representing a range
+    } else if (json_is_string(element)) {
+        std::string portRange = json_string_value(element);
+
+        const std::string::size_type n = portRange.find("-");
+        const std::string first = portRange.substr(0, n);
+        const std::string last = portRange.substr(n + 1);
+
+        int startPort;
+        if (!parseInt(first.c_str(), &startPort)) {
+             log_error() << "Starting port in range " << portRange << "is not an integer.";
+             return ReturnCode::FAILURE;
+        }
+
+        int endPort;
+        if (!parseInt(first.c_str(), &endPort)) {
+             log_error() << "End port in range " << portRange << "is not an integer.";
+             return ReturnCode::FAILURE;
+        }
+
+        for (int i = startPort; i <= endPort; ++i) {
+            ports.push_back(i);
+        }
+
+    // Port formatted as a list of integers
+    } else if (json_is_array(element)) {
+        size_t ix;
+        json_t *val;
+        json_array_foreach(element, ix, val) {
+            if (!json_is_integer(val)) {
+                log_error() << "Entry in port array is not an integer.";
+                return ReturnCode::FAILURE;
+            }
+
+            int port = json_integer_value(element);
+            ports.push_back(port);
+        }
     } else {
-        log_info() << "Internet access will be disabled";
+        log_error() << "Rules specified in an invalid format";
+        return ReturnCode::FAILURE;
     }
     return ReturnCode::SUCCESS;
+}
+
+NetworkGateway::Target NetworkGateway::parseTarget(const std::string &str)
+{
+    if (str == "ACCEPT") {
+        return Target::ACCEPT;
+    }
+
+    if (str == "DROP") {
+        return Target::DROP;
+    }
+
+    if (str == "REJECT") {
+        return Target::REJECT;
+    }
+    return Target::INVALID_TARGET;
 }
 
 bool NetworkGateway::activateGateway()

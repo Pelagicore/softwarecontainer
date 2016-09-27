@@ -23,7 +23,16 @@
 
 #include "gateway.h"
 #include "generators.h"
+#include "jansson.h"
 
+/**
+ * @brief Sets up and manages network access and routing to the container
+ *
+ * The responsibility of NetworkGateway is to setup network connection as specified by given
+ * configuration. This configuration is described in detail in the user documentation, but
+ * a short summary of it is how to handle incoming and outgoing network packages using the
+ * three targets: ACCEPT, DROP and REJECT.
+ */
 class NetworkGateway :
     public Gateway
 {
@@ -115,10 +124,65 @@ private:
      */
     virtual bool isBridgeAvailable();
 
+    /**
+     * @brief Targets for Rules
+     */
+    enum Target
+    {
+         INVALID_TARGET,
+         ACCEPT,
+         DROP,
+         REJECT
+    };
+
+    /**
+     * @brief Definition of a 'Rule' used to handle network traffic. Used internally in Entry.
+     */
+    struct Rule
+    {
+         std::string host;
+         std::vector<unsigned int> ports;
+         Target target;
+    };
+
+    /**
+     * @brief An entry parsed from given configurations by readConfigElement()
+     */
+    struct Entry
+    {
+         unsigned int priority;
+         std::string type;
+         std::vector<Rule> rules;
+         Target defaultTarget;
+    };
+
     std::string m_ip;
     std::string m_gateway;
+
+    std::vector<Entry> m_entries;
+
     bool m_internetAccess;
     bool m_interfaceInitialized;
 
     Generator m_generator;
+
+    /**
+     * @brief Parses a json element to a Rule
+     * @return ReturnCode::SUCCESS if the rule is successfully parsed
+     * @return ReturnCode::FAILURE otherwise.
+     */
+    virtual ReturnCode parseRule(const json_t *element, std::vector<Rule> &rules);
+
+    /**
+     * @brief Parses a ports from an json element
+     * @return ReturnCode::SUCCESS if the rule is successfully parsed
+     * @return ReturnCode::FAILURE otherwise.
+     */
+    virtual ReturnCode parsePort(const json_t *element, std::vector<unsigned int> &ports);
+
+    /**
+     * @brief Parses a string to a Target
+     * @return Either the valid Target representation of the given string or Target::INVALID_TARGET
+     */
+    virtual Target parseTarget(const std::string &str);
 };

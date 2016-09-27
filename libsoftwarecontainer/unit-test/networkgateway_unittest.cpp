@@ -43,6 +43,68 @@ protected:
         SoftwareContainerLibTest::SetUp();
     }
 
+    const std::string VALID_FULL_CONFIG =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}, {"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"DROP\""
+    "}, {"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"REJECT\""
+    "}, {"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}, {"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"DROP\""
+    "}, {"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"example.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"REJECT\""
+    "}]";
 };
 
 TEST_F(NetworkGatewayTest, TestNoContainer) {
@@ -60,14 +122,268 @@ TEST_F(NetworkGatewayTest, TestNoContainer) {
  */
 TEST_F(NetworkGatewayTest, TestSetConfig) {
     givenContainerIsSet(gw);
-    const std::string config = "[{\"internet-access\": false, \"gateway\":\"\"}]";
+
+    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
+}
+
+/**
+ *@brief Test that config entries with no priority specified fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigNoPriority) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with no type specified fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigNoType) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with no rules specified fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigNoRules) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with empty rules specified works.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigEmptyRules) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": [],"
+        "\"default\": \"ACCEPT\""
+    "}]";
 
     ASSERT_TRUE(gw->setConfig(config));
 }
 
-TEST_F(NetworkGatewayTest, TestSeConfigNoGw) {
+/**
+ * @brief Test that config entries with no default target specified fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigNoDefaultTarget) {
     givenContainerIsSet(gw);
-    const std::string config = "[{\"internet-access\": true, \"gateway\":\"\"}]";
+
+    const std::string config =
+    "[{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "]"
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with type specified as an integer fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigTypeIsInt) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": 123,"
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with type specified as a string fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigTypeIsBadString) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"otcnm\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with type specified as an object fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigTypeIsObject) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": {\"type\": \"INCOMING\"},"
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with type specified as an array fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigTypeIsArray) {
+    givenContainerIsSet(gw);
+    const std::string config =
+    "[{"
+        "\"type\": [\"INCOMING\"],"
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}]";
+
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with rules specified as an object fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigRulesIsObject) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": {"
+                     "\"rule1\": { \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "\"rule2\": { \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "\"rule3\": { \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "\"rule4\": { \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "},"
+        "\"default\": \"ACCEPT\""
+    "}]";
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with rules specified as a string fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigRulesIsString) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": \""
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "\","
+        "\"default\": \"ACCEPT\""
+    "}]";
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with rules specified as an integer fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigRulesIsInteger) {
+    givenContainerIsSet(gw);
+
+    const std::string config =
+    "[{"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": 123"
+        "\"default\": \"ACCEPT\""
+    "}]";
+    ASSERT_FALSE(gw->setConfig(config));
+}
+
+/**
+ * @brief Test that config entries with default specified as a invali target fails gracefully.
+ */
+TEST_F(NetworkGatewayTest, TestSetConfigDefaultTargetIsInvalid) {
+    givenContainerIsSet(gw);
+    const std::string config =
+    "[{"
+        "\"type\": [\"INCOMING\"],"
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80-85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"FOO\""
+    "}]";
 
     ASSERT_FALSE(gw->setConfig(config));
 }
@@ -77,10 +393,9 @@ TEST_F(NetworkGatewayTest, TestSeConfigNoGw) {
  */
 TEST_F(NetworkGatewayTest, TestActivate) {
     givenContainerIsSet(gw);
-    const std::string config = "[{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}]";
 
     ::testing::DefaultValue<bool>::Set(true);
-    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
     ASSERT_TRUE(gw->activate());
 }
 
@@ -90,10 +405,9 @@ TEST_F(NetworkGatewayTest, TestActivate) {
  */
 TEST_F(NetworkGatewayTest, TestActivateTwice) {
     givenContainerIsSet(gw);
-    const std::string config = "[{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}]";
 
     ::testing::DefaultValue<bool>::Set(true);
-    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
     ASSERT_TRUE(gw->activate());
     ASSERT_TRUE(gw->activate());
 }
@@ -116,13 +430,12 @@ TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
  */
 TEST_F(NetworkGatewayTest, TestActivateNoBridge) {
     givenContainerIsSet(gw);
-    const std::string config = "[{\"internet-access\": true, \"gateway\":\"10.0.3.1\"}]";
 
     ::testing::DefaultValue<bool>::Set(false);
     {
         ::testing::InSequence sequence;
         EXPECT_CALL(*gw, isBridgeAvailable());
     }
-    ASSERT_TRUE(gw->setConfig(config));
+    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
     ASSERT_FALSE(gw->activate());
 }

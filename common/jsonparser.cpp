@@ -55,4 +55,20 @@ bool JSONParser::read(const json_t *element, const char *key, bool &result)
     return true;
 }
 
+bool JSONParser::read(const json_t *element, const char *key, int &result)
+{
+    json_t *value = json_object_get(element, key);
+    if (!value) {
+        return false;
+    }
+
+    if (!json_is_integer(value)) {
+        log_error() << "json element is not an integer";
+        return false;
+    }
+
+    result = json_integer_value(value);
+    return true;
+}
+
 }
