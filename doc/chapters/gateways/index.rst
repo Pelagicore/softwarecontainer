@@ -307,19 +307,54 @@ The Network Gateway is used to setup network connection and configure which traf
 Configuration
 -------------
 The configuration is structured as a list of JSON objects that each describe rules for ``OUTGOING``
-or ``INCOMING`` network traffic. During evaluation the rules are read in order starting with the
+or ``INCOMING`` network traffic. During evaluation of each configuration entry, the order in which
+the rules are specified in matters. For each entry the rules are read in order starting with the
 first specified rule. The validation is done by filtering network traffic on ``host`` and ``port``,
- where ``host`` is either hostname or ip address of a destination or source depending on context and
+where ``host`` is either hostname or ip address of a destination or source depending on context and
 ``port`` specifies which ports to filter on. When ``port`` is not specified, the rule applies to all
 ports. How to handle matching traffic is specified by ``target``. There are tree valid values for
-``target``: ``ACCEPT``, ``DROP`` and ``REJECT``, where ``ACCEPT`` does nothing with the traffic while ``REJECT``
-and ``DROP`` both deny the network traffic to continue. The difference between the latter two being
-that ``REJECT`` answers the sender while ``DROP`` does not. If no rule applies ``default`` specifies what
-to do with the traffic.
+``target``: ``ACCEPT``, ``DROP`` and ``REJECT``, where ``ACCEPT`` does nothing with the traffic
+while ``REJECT`` and ``DROP`` both deny the network traffic to continue. The difference between
+the latter two being that ``REJECT`` answers the sender while ``DROP`` does not. If no rule applies
+``default`` specifies what to do with the traffic.
 
-In order to not make the configuration calls order dependent, ``priority`` is used when merging
-network gateway configurations of the same type. This is specified as an unsigned int > 0 where 1
-describes the highest priority.
+As mentioned above, different order of the rules can have profound different meaning. Following are
+an example attempting to reject all traffic from example.com on ports 1234 to 5678 and adding an
+exception for port 1423.::
+    [
+        {
+            "type": "INCOMING",
+            "priority": 1,
+            "rules": [
+                         { "host": "example.com", "port": "1234-5678", "target": "REJECT"},
+                         { "host": "example.com", "port": 1423, "target": "ACCEPT"},
+                     ],
+            "default": "DROP"
+        }
+    ]
+
+However, since the rejection of the ports 1234 to 5678 is declared before the exception to the port
+1423, which is included in the range of ports rejected, the exception will not have any effect. In
+order to achive this the order of the rules has to be changed::
+    [
+        {
+            "type": "INCOMING",
+            "priority": 1,
+            "rules": [
+                         { "host": "example.com", "port": 1423, "target": "ACCEPT"},
+                         { "host": "example.com", "port": "1234-5678", "target": "REJECT"},
+                     ],
+            "default": "DROP"
+        }
+    ]
+
+Now, any incoming traffic from example.com on port 1423 will be accepted and traffic on the rest
+of the range will be rejected.
+
+
+In order to not make the listing of capabilities, e.g. in application manifests, order dependent,
+``priority`` is used when merging network gateway configurations of the same type. This is specified
+as an unsigned int > 0 where 1 describes the highest priority.
 
 An example of valid network gateway configuration::
 
