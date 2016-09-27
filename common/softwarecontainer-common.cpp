@@ -47,6 +47,23 @@ bool isDirectory(const std::string &path)
     return S_ISDIR(getStat(path).st_mode);
 }
 
+bool isDirectoryEmpty(const std::string &path) {
+  int n = 0;
+  struct dirent *d;
+  DIR *dir = opendir(path.c_str());
+  if (dir == NULL) //Not a directory or doesn't exist
+    return true;
+  while ((d = readdir(dir)) != NULL) {
+    if(++n > 2)
+      break;
+  }
+  closedir(dir);
+  if (n <= 2) //Directory Empty
+    return true;
+  else
+    return false;
+}
+
 bool isFile(const std::string &path)
 {
     return S_ISREG(getStat(path).st_mode);
@@ -144,7 +161,6 @@ bool parseInt(const char *arg, int *result)
     *result = value;
     return true;
 }
-
 
 void SignalConnectionsHandler::addConnection(sigc::connection &connection) {
     m_connections.push_back(connection);

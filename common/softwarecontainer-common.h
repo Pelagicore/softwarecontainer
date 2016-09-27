@@ -144,6 +144,15 @@ inline int waitForProcessTermination(pid_t pid)
 bool isDirectory(const std::string &path);
 
 /**
+ * @brief isDirectoryEmpty Check if path is empty
+ * @param path The path to check
+ * @return false if the directory is not empty
+ * @return false if the directory does not exist
+ * @return true if the directory is empty
+ */
+bool isDirectoryEmpty(const std::string &path);
+
+/**
  * @brief isFile Check if path is a file
  * @param path Path to check
  * @return true/false
