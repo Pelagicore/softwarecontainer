@@ -266,7 +266,7 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsObject) {
 
     const std::string config =
     "[{"
-        "\"type\": {\"type\": \"INCOMMING\"},"
+        "\"type\": {\"type\": \"INCOMING\"},"
         "\"priority\": 1,"
         "\"rules\": ["
                      "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"

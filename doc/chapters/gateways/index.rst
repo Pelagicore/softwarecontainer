@@ -331,7 +331,7 @@ An example of valid network gateway configuration::
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
-                         { "host": "93.184.216.34/24", "target": "DROP"},
+                         { "host": "203.0.113.0/24", "target": "DROP"},
                      ],
             "default": "REJECT"
         },
@@ -342,7 +342,7 @@ An example of valid network gateway configuration::
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
                          { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
-                         { "host": "93.184.216.34/24", "target": "REJECT"},
+                         { "host": "203.0.113.0/24", "target": "REJECT"},
                      ],
             "default": "DROP"
         }
