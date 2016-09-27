@@ -35,7 +35,7 @@ public:
     void SetUp() override
     {
         gw = new FileGateway();
-        SoftwareContainerLibTest::SetUp();
+        SoftwareContainerTest::SetUp();
 
         // Create file
         ASSERT_TRUE(writeToFile(FILE_PATH, FILE_CONTENT) == ReturnCode::SUCCESS);
@@ -43,7 +43,7 @@ public:
 
     void TearDown() override
     {
-        SoftwareContainerLibTest::TearDown();
+        SoftwareContainerTest::TearDown();
 
         // Remove file
         unlink(FILE_PATH.c_str());
@@ -102,7 +102,7 @@ TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
 
 TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     givenContainerIsSet(gw);
-    FunctionJob job = FunctionJob(*lib, [&] () {
+    FunctionJob job = FunctionJob(*sc, [&] () {
         const char* envC = getenv(ENV_VAR_NAME.c_str());
 
         if (envC == nullptr) {

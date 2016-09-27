@@ -30,13 +30,13 @@
 
 #include "gateway.h"
 #include "generators.h"
-#include "libsoftwarecontainer.h"
+#include "softwarecontainer.h"
 
-class SoftwareContainerLibTest : public ::testing::Test
+class SoftwareContainerTest : public ::testing::Test
 {
 public:
-    SoftwareContainerLibTest() { }
-    ~SoftwareContainerLibTest() { }
+    SoftwareContainerTest() { }
+    ~SoftwareContainerTest() { }
 
     void SetUp() override;
     void TearDown() override;
@@ -45,11 +45,11 @@ public:
 
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> m_ml;
-    std::unique_ptr<SoftwareContainerLib> lib;
-    std::shared_ptr<SoftwareContainerWorkspace> workspace;
+    std::unique_ptr<SoftwareContainer> sc;
+    std::shared_ptr<Workspace> workspace;
 };
 
-class SoftwareContainerGatewayTest : public SoftwareContainerLibTest
+class SoftwareContainerGatewayTest : public SoftwareContainerTest
 {
 public:
     SoftwareContainerGatewayTest() { }

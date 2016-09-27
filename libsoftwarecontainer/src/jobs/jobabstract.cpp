@@ -19,8 +19,8 @@
 
 #include "jobabstract.h"
 
-JobAbstract::JobAbstract(SoftwareContainerLib &lib) :
-    m_lib(lib)
+JobAbstract::JobAbstract(SoftwareContainer &sc) :
+    m_sc(sc)
 {
 }
 

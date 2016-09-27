@@ -19,9 +19,10 @@
 
 
 set(HEADERS
-    libsoftwarecontainer.h
+    softwarecontainer.h
     container.h
     containerabstractinterface.h
+    workspace.h
     gateway.h
 )
 

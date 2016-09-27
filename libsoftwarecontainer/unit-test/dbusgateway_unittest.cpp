@@ -47,7 +47,7 @@ public:
     void SetUp() override
     {
         gw = new MockDBusGateway(DBusGateway::SessionProxy, m_gatewayDir, m_containerName);
-        SoftwareContainerLibTest::SetUp();
+        SoftwareContainerTest::SetUp();
     }
 
     const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/";

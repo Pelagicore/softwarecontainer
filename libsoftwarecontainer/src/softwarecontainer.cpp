@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,7 +18,7 @@
  */
 
 
-#include "libsoftwarecontainer.h"
+#include "softwarecontainer.h"
 #include "generators.h" /* used for gen_ct_name */
 
 #ifdef ENABLE_PULSEGATEWAY
@@ -48,90 +47,49 @@
 
 namespace softwarecontainer {
 
-std::shared_ptr<SoftwareContainerWorkspace> getDefaultWorkspace(bool enableWriteBuffer)
-{
-    static auto defaultWorkspace =
-            std::make_shared<SoftwareContainerWorkspace>(enableWriteBuffer);
-    return defaultWorkspace;
-}
-
-SoftwareContainerLib::SoftwareContainerLib(std::shared_ptr<SoftwareContainerWorkspace> workspace) :
+SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace) :
     m_workspace(workspace),
     m_container(new Container(getContainerID()
                               , m_containerName
-                              , m_workspace->m_containerConfig
-                              , m_workspace->m_containerRoot
+                              , m_workspace->m_containerConfigPath
+                              , m_workspace->m_containerRootDir
                               , m_workspace->m_enableWriteBuffer
                               , m_workspace->m_containerShutdownTimeout))
 {
     m_containerState = ContainerState::CREATED;
 }
 
-SoftwareContainerLib::~SoftwareContainerLib()
+SoftwareContainer::~SoftwareContainer()
 {
 }
 
-void SoftwareContainerLib::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
+void SoftwareContainer::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
 {
     m_mainLoopContext = mainLoopContext;
 }
 
 
-void SoftwareContainerLib::setContainerIDPrefix(const std::string &name)
+void SoftwareContainer::setContainerIDPrefix(const std::string &name)
 {
     m_containerID = name + Generator::gen_ct_name();
     log_debug() << "Assigned container ID " << m_containerID;
 }
 
-void SoftwareContainerLib::setContainerName(const std::string &name)
+void SoftwareContainer::setContainerName(const std::string &name)
 {
     m_containerName = name;
     log_debug() << m_container->toString();
 }
 
-void SoftwareContainerLib::validateContainerID()
+void SoftwareContainer::validateContainerID()
 {
     if (m_containerID.size() == 0) {
         setContainerIDPrefix("PLC-");
     }
 }
 
-ReturnCode SoftwareContainerWorkspace::checkWorkspace()
-{
-    if (!isDirectory(m_containerRoot)) {
-        log_debug() << "Container root " << m_containerRoot << " does not exist, trying to create";
-        if(isError(createDirectory(m_containerRoot))) {
-            log_debug() << "Failed to create container root directory";
-            return ReturnCode::FAILURE;
-        }
-    }
-    
-#ifdef ENABLE_NETWORKGATEWAY
-    // TODO: Have a way to check for the bridge using C/C++ instead of a
-    // shell script. Libbridge and/or netfilter?
-    std::string cmdLine = INSTALL_PREFIX;
-    cmdLine += "/bin/setup_softwarecontainer.sh";
-    log_debug() << "Creating workspace : " << cmdLine;
-    int returnCode;
-    try {
-        Glib::spawn_sync("", Glib::shell_parse_argv(cmdLine),
-                         static_cast<Glib::SpawnFlags>(0), // Glib::SPAWN_DEFAULT in newer versions of glibmm
-                         sigc::slot<void>(), nullptr,
-                         nullptr, &returnCode);
-    } catch (Glib::SpawnError e) {
-        log_error() << "Failed to spawn " << cmdLine << ": code " << e.code() << " msg: " << e.what();
-        return ReturnCode::FAILURE;
-    }
-    if (returnCode != 0) {
-        log_error() << "Return code of " << cmdLine << " is non-zero";
-        return ReturnCode::FAILURE;
-    }
-#endif
 
-    return ReturnCode::SUCCESS;
-}
-
-ReturnCode SoftwareContainerLib::preload()
+ReturnCode SoftwareContainer::preload()
 {
     log_debug() << "Initializing container";
     if (isError(m_container->initialize())) {
@@ -156,7 +114,7 @@ ReturnCode SoftwareContainerLib::preload()
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode SoftwareContainerLib::init()
+ReturnCode SoftwareContainer::init()
 {
     validateContainerID();
 
@@ -201,13 +159,13 @@ ReturnCode SoftwareContainerLib::init()
     return ReturnCode::SUCCESS;
 }
 
-void SoftwareContainerLib::addGateway(Gateway *gateway)
+void SoftwareContainer::addGateway(Gateway *gateway)
 {
     gateway->setContainer(m_container);
     m_gateways.push_back(std::unique_ptr<Gateway>(gateway));
 }
 
-pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
+pid_t SoftwareContainer::launchCommand(const std::string &commandLine)
 {
     log_debug() << "launchCommand called with commandLine: " << commandLine;
     pid_t pid = INVALID_PID;
@@ -225,13 +183,13 @@ pid_t SoftwareContainerLib::launchCommand(const std::string &commandLine)
     return pid;
 }
 
-void SoftwareContainerLib::updateGatewayConfiguration(const GatewayConfiguration &configs)
+void SoftwareContainer::updateGatewayConfiguration(const GatewayConfiguration &configs)
 {
     log_debug() << "updateGatewayConfiguration called" << configs;
     setGatewayConfigs(configs);
 }
 
-void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs)
+void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &configs)
 {
     // Go through the active gateways and check if there is a configuration for it
     // If there is, apply it.
@@ -254,12 +212,12 @@ void SoftwareContainerLib::setGatewayConfigs(const GatewayConfiguration &configs
     m_containerState.setValueNotify(ContainerState::READY);
 }
 
-ReturnCode SoftwareContainerLib::shutdown()
+ReturnCode SoftwareContainer::shutdown()
 {
     return shutdown(m_workspace->m_containerShutdownTimeout);
 }
 
-ReturnCode SoftwareContainerLib::shutdown(unsigned int timeout)
+ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
 {
     log_debug() << "shutdown called"; // << logging::getStackTrace();
     if(isError(shutdownGateways())) {
@@ -275,7 +233,7 @@ ReturnCode SoftwareContainerLib::shutdown(unsigned int timeout)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode SoftwareContainerLib::shutdownGateways()
+ReturnCode SoftwareContainer::shutdownGateways()
 {
     ReturnCode status = ReturnCode::SUCCESS;
     for (auto &gateway : m_gateways) {
@@ -291,33 +249,33 @@ ReturnCode SoftwareContainerLib::shutdownGateways()
     return status;
 }
 
-bool SoftwareContainerLib::isInitialized() const
+bool SoftwareContainer::isInitialized() const
 {
     return m_initialized;
 }
 
-std::shared_ptr<ContainerAbstractInterface> SoftwareContainerLib::getContainer()
+std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
 {
     std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
     return ptrCopy;
 }
 
-std::string SoftwareContainerLib::getContainerDir()
+std::string SoftwareContainer::getContainerDir()
 {
-    return m_workspace->m_containerRoot + "/" + getContainerID();
+    return m_workspace->m_containerRootDir + "/" + getContainerID();
 }
 
-std::string SoftwareContainerLib::getGatewayDir()
+std::string SoftwareContainer::getGatewayDir()
 {
     return getContainerDir() + "/gateways";
 }
 
-const std::string &SoftwareContainerLib::getContainerID()
+const std::string &SoftwareContainer::getContainerID()
 {
     return m_containerID;
 }
 
-ObservableProperty<ContainerState> &SoftwareContainerLib::getContainerState()
+ObservableProperty<ContainerState> &SoftwareContainer::getContainerState()
 {
     return m_containerState;
 }

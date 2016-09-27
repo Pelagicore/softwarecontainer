@@ -9,7 +9,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     , m_preloadCount(preloadCount)
     , m_shutdownContainers(shutdownContainers)
 {
-    m_softwarecontainerWorkspace = std::make_shared<SoftwareContainerWorkspace>();
+    m_softwarecontainerWorkspace = std::make_shared<Workspace>();
     triggerPreload();
     m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
 }
@@ -22,10 +22,10 @@ void SoftwareContainerAgent::triggerPreload()
 {
     //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
     while (m_preloadedContainers.size() != m_preloadCount) {
-        auto container = new SoftwareContainerLib(m_softwarecontainerWorkspace);
+        auto container = new SoftwareContainer(m_softwarecontainerWorkspace);
         container->setContainerIDPrefix("Preload-");
         container->preload();
-        m_preloadedContainers.push_back(SoftwareContainerLibPtr(container));
+        m_preloadedContainers.push_back(SoftwareContainerPtr(container));
     }
 }
 
@@ -39,7 +39,7 @@ void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
     }
 }
 
-bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareContainerLib *&container)
+bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareContainer *&container)
 {
     bool valid = ((containerID < m_containers.size()) && (m_containers[containerID] != nullptr));
     if (valid) {
@@ -111,15 +111,15 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, c
 
     parseConfig(config);
 
-    SoftwareContainerLib *container;
+    SoftwareContainer *container;
     if (m_preloadedContainers.size() != 0) {
         container = m_preloadedContainers[0].release();
         m_preloadedContainers.erase(m_preloadedContainers.begin());
     } else {
-        container = new SoftwareContainerLib(m_softwarecontainerWorkspace);
+        container = new SoftwareContainer(m_softwarecontainerWorkspace);
     }
 
-    m_containers.push_back(SoftwareContainerLibPtr(container));
+    m_containers.push_back(SoftwareContainerPtr(container));
     auto id = m_containers.size() - 1;
     log_debug() << "Created container with ID :" << id;
     container->setContainerIDPrefix(prefix);
@@ -155,7 +155,7 @@ void SoftwareContainerAgent::writeToStdIn(pid_t pid, const std::vector<uint8_t> 
 pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile, const EnvironmentVariables &env, std::function<void (pid_t, int)> listener)
 {
     profilefunction("launchCommandFunction");
-    SoftwareContainerLib *container;
+    SoftwareContainer *container;
     if (checkContainer(containerID, container)) {
         auto job = new CommandJob(*container, cmdLine);
         // Capturing this leaves an open pipe for every container, even
@@ -181,7 +181,7 @@ pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID, uid_t userI
 
 void SoftwareContainerAgent::setContainerName(ContainerID containerID, const std::string &name)
 {
-    SoftwareContainerLib *container = nullptr;
+    SoftwareContainer *container = nullptr;
     if (checkContainer(containerID, container)) {
         container->setContainerName(name);
     }
@@ -196,7 +196,7 @@ void SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned
 {
     profilefunction("shutdownContainerFunction");
     if (m_shutdownContainers) {
-        SoftwareContainerLib *container = nullptr;
+        SoftwareContainer *container = nullptr;
         if (checkContainer(containerID, container)) {
             container->shutdown();
             deleteContainer(containerID);
@@ -209,7 +209,7 @@ void SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned
 std::string SoftwareContainerAgent::bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost, const std::string &subPathInContainer, bool readOnly)
 {
     profilefunction("bindMountFolderInContainerFunction");
-    SoftwareContainerLib *container = nullptr;
+    SoftwareContainer *container = nullptr;
     if (checkContainer(containerID, container)) {
         std::string path;
         ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, subPathInContainer, path, readOnly);
@@ -226,13 +226,13 @@ std::string SoftwareContainerAgent::bindMountFolderInContainer(const uint32_t co
 void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs)
 {
     profilefunction("setGatewayConfigsFunction");
-    SoftwareContainerLib *container = nullptr;
+    SoftwareContainer *container = nullptr;
     if (checkContainer(containerID, container)) {
         container->updateGatewayConfiguration(configs);
     }
 }
 
-std::shared_ptr<SoftwareContainerWorkspace> SoftwareContainerAgent::getSoftwareContainerWorkspace()
+std::shared_ptr<Workspace> SoftwareContainerAgent::getWorkspace()
 {
     return m_softwarecontainerWorkspace;
 }

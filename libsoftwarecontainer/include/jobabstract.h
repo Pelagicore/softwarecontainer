@@ -17,7 +17,7 @@
  * For further information see LICENSE
  */
 #pragma once
-#include "libsoftwarecontainer.h"
+#include "softwarecontainer.h"
 
 namespace softwarecontainer {
 /**
@@ -26,12 +26,12 @@ namespace softwarecontainer {
 class JobAbstract
 {
 protected:
-    LOG_SET_CLASS_CONTEXT(SoftwareContainerLib::getDefaultContext());
+    LOG_SET_CLASS_CONTEXT(SoftwareContainer::getDefaultContext());
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    JobAbstract(SoftwareContainerLib &lib);
+    JobAbstract(SoftwareContainer &sc);
     virtual ~JobAbstract();
 
     void captureStdin();
@@ -57,7 +57,7 @@ public:
 
 protected:
     EnvironmentVariables m_env;
-    SoftwareContainerLib &m_lib;
+    SoftwareContainer &m_sc;
     pid_t m_pid = 0;
     int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
     int m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};

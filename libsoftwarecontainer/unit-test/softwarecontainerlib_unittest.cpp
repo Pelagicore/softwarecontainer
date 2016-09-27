@@ -32,14 +32,14 @@
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
-class SoftwareContainerApp : public SoftwareContainerLibTest
+class SoftwareContainerApp : public SoftwareContainerTest
 {
 
 public:
 
     void setGatewayConfigs(const GatewayConfiguration &config)
     {
-        getLib().setGatewayConfigs(config);
+        getSc().setGatewayConfigs(config);
     }
 
     Glib::RefPtr<Glib::MainContext> getMainContext()
@@ -47,9 +47,9 @@ public:
         return m_context;
     }
 
-    SoftwareContainerLib &getLib()
+    SoftwareContainer &getSc()
     {
-        return *lib;
+        return *sc;
     }
 };
 
@@ -59,7 +59,7 @@ TEST_F(SoftwareContainerApp, TestWayland) {
     config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
 
     setGatewayConfigs(config);
-    FunctionJob jobTrue(getLib(), [] (){
+    FunctionJob jobTrue(getSc(), [] (){
         bool ERROR = 1;
         bool SUCCESS = 0;
 
@@ -82,7 +82,7 @@ TEST_F(SoftwareContainerApp, TestWayland) {
     jobTrue.start();
     ASSERT_TRUE(jobTrue.wait() == 0);
 
-    CommandJob westonJob(getLib(),"/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
+    CommandJob westonJob(getSc(),"/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
     westonJob.start();
     ASSERT_TRUE(westonJob.wait() == 0);
 
@@ -143,7 +143,7 @@ TEST_F(SoftwareContainerApp, CommonFunctions) {
 }
 
 TEST_F(SoftwareContainerApp, EnvVarsSet) {
-    FunctionJob job(getLib(), [&] () {
+    FunctionJob job(getSc(), [&] () {
         return getenv("TESTVAR") != NULL ? 0 : 1;
     });
     job.setEnvironnmentVariable("TESTVAR","YES");
@@ -158,7 +158,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     // Make sure /tmp exists in both host and container
     ASSERT_TRUE(isDirectory("/tmp"));
-    FunctionJob job0(getLib(), [&] () {
+    FunctionJob job0(getSc(), [&] () {
         return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
     });
     job0.start();
@@ -184,7 +184,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     // tempFilename2 will be symlinked into the container, so it will be
     // available at the same path inside as outside. Make sure it's not
     // there before we've mounted it.
-    FunctionJob jobNotMounted(getLib(), [&] () {
+    FunctionJob jobNotMounted(getSc(), [&] () {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobNotMounted.start();
@@ -218,14 +218,14 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     setGatewayConfigs(config);
 
     // Make sure the environment variables are available
-    FunctionJob jobEnv(getLib(), [&] () {
+    FunctionJob jobEnv(getSc(), [&] () {
         return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
     });
     jobEnv.start();
     ASSERT_TRUE(jobEnv.wait() == EXISTENT);
 
     // Now the files pointed out by the env var should be available
-    FunctionJob jobEnvFile(getLib(), [&] () {
+    FunctionJob jobEnvFile(getSc(), [&] () {
         std::string envVal = getenv(envVarName.c_str());
         return isFile(envVal) ? EXISTENT : NON_EXISTENT;
     });
@@ -234,7 +234,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     // The files with symlinks should be available at its original location,
     // but inside the container
-    FunctionJob jobSymlink(getLib(), [&] () {
+    FunctionJob jobSymlink(getSc(), [&] () {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobSymlink.start();
@@ -247,7 +247,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     writeToFile(tempFilename2, testData);
 
     // Test if we can read the data back into a variable
-    FunctionJob jobReadData(getLib(), [&] () {
+    FunctionJob jobReadData(getSc(), [&] () {
         std::string envVal = getenv(envVarName.c_str());
         std::string readBack;
         readFromFile(envVal, readBack);
@@ -258,7 +258,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     // Make sure we can't write to the file
     std::string badData = "This data should never be read";
-    FunctionJob jobWriteDataRO(getLib(), [&] () {
+    FunctionJob jobWriteDataRO(getSc(), [&] () {
         std::string envVal = getenv(envVarName.c_str());
         writeToFile(envVal, badData);
         return 0;
@@ -278,7 +278,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     // Make sure /tmp exists in both host and container
     ASSERT_TRUE(isDirectory("/tmp"));
-    FunctionJob job0(getLib(), [&] () {
+    FunctionJob job0(getSc(), [&] () {
         return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
     });
     job0.start();
@@ -304,7 +304,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     // tempFilename2 will be symlinked into the container, so it will be
     // available at the same path inside as outside. Make sure it's not
     // there before we've mounted it.
-    FunctionJob jobNotMounted(getLib(), [&] () {
+    FunctionJob jobNotMounted(getSc(), [&] () {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobNotMounted.start();
@@ -334,14 +334,14 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     setGatewayConfigs(config);
 
     // Make sure the environment variables are available
-    FunctionJob jobEnv(getLib(), [&] () {
+    FunctionJob jobEnv(getSc(), [&] () {
         return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
     });
     jobEnv.start();
     ASSERT_TRUE(jobEnv.wait() == EXISTENT);
 
     // Now the files pointed out by the env var should be available
-    FunctionJob jobEnvFile(getLib(), [&] () {
+    FunctionJob jobEnvFile(getSc(), [&] () {
         std::string envVal = getenv(envVarName.c_str());
         return isFile(envVal) ? EXISTENT : NON_EXISTENT;
     });
@@ -350,7 +350,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
 
     // The files with symlinks should be available at its original location,
     // but inside the container
-    FunctionJob jobSymlink(getLib(), [&] () {
+    FunctionJob jobSymlink(getSc(), [&] () {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobSymlink.start();
@@ -363,7 +363,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     writeToFile(tempFilename2, testData);
 
     // Test if we can read the data back into a variable
-    FunctionJob jobReadData(getLib(), [&] () {
+    FunctionJob jobReadData(getSc(), [&] () {
         std::string envVal = getenv(envVarName.c_str());
         std::string readBack;
         readFromFile(envVal, readBack);
@@ -374,7 +374,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
 
     // Make sure we can write to the file
     std::string newData = "This data should have been written";
-    FunctionJob jobWriteData(getLib(), [&] () {
+    FunctionJob jobWriteData(getSc(), [&] () {
         std::string envVal = getenv(envVarName.c_str());
         writeToFile(envVal, newData);
         return 0;
@@ -406,17 +406,17 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     write(fileDescriptor, content, sizeof(content));
     close(fileDescriptor);
 
-    FunctionJob job1(getLib(), [&] () {
+    FunctionJob job1(getSc(), [&] () {
                 return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
             });
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
     std::string pathInContainer;
-    ReturnCode result = getLib().getContainer()->bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), pathInContainer, true);
     ASSERT_TRUE(isSuccess(result));
 
-    FunctionJob job2(getLib(), [&] () {
+    FunctionJob job2(getSc(), [&] () {
                 return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
             });
     job2.start();
@@ -434,17 +434,17 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     mkdtemp(tempDirname);
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    FunctionJob job1(getLib(), [&] () {
+    FunctionJob job1(getSc(), [&] () {
                 return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
             });
     job1.start();
     ASSERT_TRUE(job1.wait() == NON_EXISTENT);
 
     std::string pathInContainer;
-    ReturnCode result = getLib().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
     ASSERT_TRUE(isSuccess(result));
 
-    FunctionJob job2(getLib(), [&] () {
+    FunctionJob job2(getSc(), [&] () {
                 return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
             });
     job2.start();
@@ -458,7 +458,7 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     close(fileDescriptor);
     ASSERT_TRUE(isFile(tempFilename));
 
-    FunctionJob job3(getLib(), [&] () {
+    FunctionJob job3(getSc(), [&] () {
                 return isFile(pathInContainer + "/" + basename(strdup(tempFilename))) ? EXISTENT : NON_EXISTENT;
             });
     job3.start();
@@ -478,7 +478,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
     ASSERT_TRUE(isDirectory(tempDirname));
 
     std::string pathInContainer;
-    ReturnCode result = getLib().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
     ASSERT_TRUE(isSuccess(result));
 
     char *tmp = new char[pathInContainer.size() + 8];
@@ -487,7 +487,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
     char *tempUnixSocket = strcat(tmp, "/socket");
 
 
-    FunctionJob job1(getLib(), [&] () {
+    FunctionJob job1(getSc(), [&] () {
 
                 int fd, fd2, done, n;
                 char str[100];
@@ -570,11 +570,12 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 }
 
 
-TEST(SoftwareContainerLib, MultithreadTest) {
+TEST(SoftwareContainer, MultithreadTest) {
 
     static const int TIMEOUT = 20;
 
-    SoftwareContainerLib lib;
+    std::shared_ptr<Workspace> workspacePtr(new Workspace());
+    SoftwareContainer lib(workspacePtr);
     lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;
@@ -611,17 +612,17 @@ TEST_F(SoftwareContainerApp, TestPulseAudioEnabled) {
     const char *soundFile = soundFileCPP.c_str();
 
     std::string pathInContainer;
-    ReturnCode result = getLib().getContainer()->bindMountFileInContainer(soundFile, basename(strdup(soundFile)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(soundFile, basename(strdup(soundFile)), pathInContainer, true);
     ASSERT_TRUE(isSuccess(result));
 
     // Make sure the file is there
-    FunctionJob job1(getLib(), [&] () {
+    FunctionJob job1(getSc(), [&] () {
         return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
     });
     job1.start();
     ASSERT_TRUE(job1.wait() == EXISTENT);
 
-    CommandJob job2(getLib(), "/usr/bin/paplay " + pathInContainer);
+    CommandJob job2(getSc(), "/usr/bin/paplay " + pathInContainer);
     job2.start();
     ASSERT_TRUE(job2.isRunning());
     ASSERT_TRUE(job2.wait() == 0);
@@ -629,7 +630,7 @@ TEST_F(SoftwareContainerApp, TestPulseAudioEnabled) {
 
 
 TEST_F(SoftwareContainerApp, TestStdin) {
-    CommandJob job(getLib(), "/bin/cat");
+    CommandJob job(getSc(), "/bin/cat");
     job.captureStdin();
     job.captureStdout();
     job.start();
@@ -661,11 +662,11 @@ TEST_F(SoftwareContainerApp, TestStdin) {
  * We do not enable the network gateway so we expect the ping to fail
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
-    CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_TRUE(job.wait() != 0);
 
-    CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
+    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
     ASSERT_TRUE(job2.wait() != 0);
 }
@@ -684,11 +685,11 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     "}]";
     setGatewayConfigs(config);
 
-    CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_TRUE(job.wait() != 0);
 
-    CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
+    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
     ASSERT_TRUE(job2.wait() != 0);
 }
@@ -709,32 +710,23 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
 
     setGatewayConfigs(config);
 
-    CommandJob job2(getLib(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
+    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
     ASSERT_EQ(job2.wait(), 0);
 
-    CommandJob job(getLib(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_EQ(job.wait(), 0);
 }
 
 
-//TEST(SoftwareContainerLib, TestStartUnexistingApp) {
-//	SoftwareContainerApp app;
-//	SoftwareContainerLib& lib = app.lib;
-//	Job job(lib, "/usr/bin/notexisting");
-//	job.start();
-//	// TODO : implement
-//}
-
-
 TEST_F(SoftwareContainerApp, TestJobReturnCode) {
 
-    CommandJob jobTrue(getLib(), "/bin/true");
+    CommandJob jobTrue(getSc(), "/bin/true");
     jobTrue.start();
     ASSERT_TRUE(jobTrue.wait() == 0);
 
-    CommandJob jobFalse(getLib(), "/bin/false");
+    CommandJob jobFalse(getSc(), "/bin/false");
     jobFalse.start();
     ASSERT_FALSE(jobFalse.wait() == 0);
 }
@@ -754,7 +746,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
 
     {
         CommandJob jobTrue(
-                getLib(),
+                getSc(),
                 "/usr/bin/dbus-send --system --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
         ASSERT_TRUE(jobTrue.wait() == 0);
@@ -762,7 +754,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
 
     {
         CommandJob jobTrue(
-                getLib(),
+                getSc(),
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
         ASSERT_TRUE(jobTrue.wait() == 0);
@@ -782,7 +774,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
 
     for(int i=0; i<2000; i++) {
         CommandJob jobTrue(
-                getLib(),
+                getSc(),
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
         ASSERT_TRUE(jobTrue.wait() == 0);
@@ -796,7 +788,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
     {
         CommandJob jobTrue(
-                getLib(),
+                getSc(),
                 "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
@@ -805,7 +797,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
     {
         CommandJob jobTrue(
-                getLib(),
+                getSc(),
                 "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
@@ -817,5 +809,5 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
 
 TEST_F(SoftwareContainerApp, InitTest) {
-    ASSERT_TRUE(getLib().isInitialized());
+    ASSERT_TRUE(getSc().isInitialized());
 }

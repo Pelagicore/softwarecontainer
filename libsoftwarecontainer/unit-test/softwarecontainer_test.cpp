@@ -23,33 +23,33 @@
 
 void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
 {
-    lib->addGateway(gw);
+    sc->addGateway(gw);
 }
 
-void SoftwareContainerLibTest::run()
+void SoftwareContainerTest::run()
 {
     m_ml = Glib::MainLoop::create(m_context);
     m_ml->run();
 }
 
-void SoftwareContainerLibTest::exit()
+void SoftwareContainerTest::exit()
 {
     m_ml->quit();
 }
 
-void SoftwareContainerLibTest::SetUp()
+void SoftwareContainerTest::SetUp()
 {
     ::testing::Test::SetUp();
-    workspace = std::make_shared<SoftwareContainerWorkspace>(false);
-    lib = std::unique_ptr<SoftwareContainerLib>(new SoftwareContainerLib(workspace));
-    lib->setContainerIDPrefix("Test-");
-    lib->setMainLoopContext(m_context);
-    ASSERT_TRUE(isSuccess(lib->init()));
+    workspace = std::make_shared<Workspace>(false);
+    sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace));
+    sc->setContainerIDPrefix("Test-");
+    sc->setMainLoopContext(m_context);
+    ASSERT_TRUE(isSuccess(sc->init()));
 }
 
-void SoftwareContainerLibTest::TearDown()
+void SoftwareContainerTest::TearDown()
 {
     ::testing::Test::TearDown();
-    lib.reset();
+    sc.reset();
     workspace.reset();
 }

@@ -40,7 +40,7 @@ protected:
     void SetUp() override
     {
         gw = new ::testing::NiceMock<MockNetworkGateway>();
-        SoftwareContainerLibTest::SetUp();
+        SoftwareContainerTest::SetUp();
     }
 
     const std::string VALID_FULL_CONFIG =

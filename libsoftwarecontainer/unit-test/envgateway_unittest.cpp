@@ -30,7 +30,7 @@ public:
     void SetUp() override
     {
         gw = new EnvironmentGateway();
-        SoftwareContainerLibTest::SetUp();
+        SoftwareContainerTest::SetUp();
     }
 
     const std::string NAME  = "Environment_variable_test_name";

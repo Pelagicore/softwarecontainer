@@ -28,64 +28,20 @@
 #include <stdlib.h>
 
 #include <glibmm.h>
-
+#include "workspace.h"
 #include "gateway.h"
 
 namespace softwarecontainer {
 
-class SoftwareContainerWorkspace :
-    private FileToolkitWithUndo
-{
-    LOG_DECLARE_CLASS_CONTEXT("PCLW", "SoftwareContainer library workspace");
-
-public:
-    SoftwareContainerWorkspace(
-            bool enableWriteBuffer = false,
-            const std::string &containerRootFolder = SOFTWARECONTAINER_DEFAULT_WORKSPACE,
-            const std::string &configFilePath = SOFTWARECONTAINER_DEFAULT_CONFIG,
-            unsigned int containerShutdownTimeout = 2)
-        : m_enableWriteBuffer(enableWriteBuffer)
-        , m_containerRoot(containerRootFolder)
-        , m_containerConfig(configFilePath)
-        , m_containerShutdownTimeout(containerShutdownTimeout)
-    {
-        // Make sure path ends in '/' since it might not always be checked
-        if (m_containerRoot.back() != '/') {
-            m_containerRoot += "/";
-        }
-
-        if (isError(checkWorkspace())) {
-            log_error() << "Failed when checking workspace";
-            assert(false);
-        }
-    }
-
-    ~SoftwareContainerWorkspace()
-    {
-    }
-
-    /**
-     * @brief Check if the workspace is present and create it if needed
-     */
-    ReturnCode checkWorkspace();
-
-    bool m_enableWriteBuffer;
-    std::string m_containerRoot;
-    std::string m_containerConfig;
-    unsigned int m_containerShutdownTimeout;
-};
-
-std::shared_ptr<SoftwareContainerWorkspace> getDefaultWorkspace(bool enableWriteBuffer);
-
-class SoftwareContainerLib :
+class SoftwareContainer :
     private FileToolkitWithUndo
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    SoftwareContainerLib(std::shared_ptr<SoftwareContainerWorkspace> workspace = getDefaultWorkspace(false));
+    SoftwareContainer(std::shared_ptr<Workspace> workspace);
 
-    ~SoftwareContainerLib();
+    ~SoftwareContainer();
 
     /**
      * @brief Set the main loop
@@ -145,7 +101,7 @@ public:
 private:
     ReturnCode shutdownGateways();
 
-    std::shared_ptr<SoftwareContainerWorkspace> m_workspace;
+    std::shared_ptr<Workspace> m_workspace;
 
     std::string m_containerID;
     std::string m_containerName;
