@@ -30,7 +30,7 @@ class FunctionJob :
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    FunctionJob(SoftwareContainerLib &lib, std::function<int()> command);
+    FunctionJob(SoftwareContainer &sc, std::function<int()> command);
     virtual ~FunctionJob();
 
     ReturnCode start();

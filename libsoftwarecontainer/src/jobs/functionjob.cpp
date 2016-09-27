@@ -20,7 +20,7 @@
 #include "functionjob.h"
 
 FunctionJob::FunctionJob(
-    SoftwareContainerLib &lib, std::function<int()> command): JobAbstract(lib)
+    SoftwareContainer &sc, std::function<int()> command): JobAbstract(sc)
 {
     m_command = command;
 }
@@ -31,7 +31,7 @@ FunctionJob::~FunctionJob()
 
 ReturnCode FunctionJob::start()
 {
-    return m_lib.getContainer()->executeInContainer(
+    return m_sc.getContainer()->executeInContainer(
         m_command, &m_pid, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
 }
 

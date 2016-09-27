@@ -31,7 +31,7 @@ public:
     void SetUp() override
     {
         gw = new DeviceNodeGateway();
-        SoftwareContainerLibTest::SetUp();
+        SoftwareContainerTest::SetUp();
     }
 
     const std::string NEW_DEVICE = "/dev/new_device";

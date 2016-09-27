@@ -34,7 +34,7 @@ public:
     int m_preloadCount = 1;
     bool m_shutdownContainers = true;
     int m_shutdownTimeout = 2;
-    std::shared_ptr<SoftwareContainerWorkspace> workspace;
+    std::shared_ptr<Workspace> workspace;
 
     void SetUp() override
     {
@@ -44,7 +44,7 @@ public:
                     , m_shutdownContainers
                     , m_shutdownTimeout);
 
-        workspace = sca->getSoftwareContainerWorkspace();
+        workspace = sca->getWorkspace();
     }
 
     void TearDown() override

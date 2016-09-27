@@ -32,7 +32,7 @@ public:
     void SetUp() override
     {
         gw = new CgroupsGateway();
-        SoftwareContainerLibTest::SetUp();
+        SoftwareContainerTest::SetUp();
     }
 };
 

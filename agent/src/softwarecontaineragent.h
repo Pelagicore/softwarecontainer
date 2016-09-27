@@ -34,7 +34,7 @@
 #include <ivi-profiling.h>
 
 #include "SoftwareContainerAgent_dbuscpp_adaptor.h"
-#include "libsoftwarecontainer.h"
+#include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
 
 #include <jsonparser.h>
@@ -52,7 +52,7 @@ namespace softwarecontainer {
 class SoftwareContainerAgent : protected softwarecontainer::JSONParser
 {
     LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
-    typedef std::unique_ptr<SoftwareContainerLib> SoftwareContainerLibPtr;
+    typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;
 
 public:
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
@@ -72,7 +72,7 @@ public:
     /**
      * Check whether the given containerID is valid and return a reference to the actual container
      */
-    bool checkContainer(ContainerID containerID, SoftwareContainerLib * &container);
+    bool checkContainer(ContainerID containerID, SoftwareContainer * &container);
 
     ReturnCode readConfigElement(const json_t *element);
 
@@ -108,12 +108,12 @@ public:
 
     void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
 
-    std::shared_ptr<SoftwareContainerWorkspace> getSoftwareContainerWorkspace();
+    std::shared_ptr<Workspace> getWorkspace();
 
 private:
-    std::shared_ptr<SoftwareContainerWorkspace> m_softwarecontainerWorkspace;
-    std::vector<SoftwareContainerLibPtr> m_containers;
-    std::vector<SoftwareContainerLibPtr> m_preloadedContainers;
+    std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
+    std::vector<SoftwareContainerPtr> m_containers;
+    std::vector<SoftwareContainerPtr> m_preloadedContainers;
     std::vector<CommandJob *> m_jobs;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;

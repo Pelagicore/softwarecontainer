@@ -20,7 +20,7 @@
 #include "commandjob.h"
 
 CommandJob::CommandJob(
-    SoftwareContainerLib &lib, const std::string &command): JobAbstract(lib)
+    SoftwareContainer &sc, const std::string &command): JobAbstract(sc)
 {
     m_command = command;
 }
@@ -43,7 +43,7 @@ ReturnCode CommandJob::setUserID(uid_t userID)
 
 ReturnCode CommandJob::start()
 {
-    return m_lib.getContainer()->attach(m_command, &m_pid, m_env, m_userID,
+    return m_sc.getContainer()->attach(m_command, &m_pid, m_env, m_userID,
                 m_workingDirectory, m_stdin[0], m_stdout[1], m_stderr[1]);
 }
 
