@@ -18,11 +18,11 @@
 # For further information see LICENSE
 
 
-DIRECTORIES=(examples/ servicetest/ build/)
+DIRECTORIES=(dbus/ timingprofiling/)
 
 for DIR in ${DIRECTORIES[@]}; do
-	echo "Running tests in $DIR"
-	pushd $DIR > /dev/null
-	./run-tests.sh
-	popd > /dev/null
+        echo "Running service tests in $DIR"
+        pushd $DIR > /dev/null
+        py.test -v
+        popd > /dev/null
 done
