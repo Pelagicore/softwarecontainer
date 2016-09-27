@@ -141,7 +141,7 @@ private:
     struct Rule
     {
          std::string host;
-         std::vector<int> ports;
+         std::vector<unsigned int> ports;
          Target target;
     };
 
@@ -172,6 +172,13 @@ private:
      * @return ReturnCode::FAILURE otherwise.
      */
     virtual ReturnCode parseRule(const json_t *element, std::vector<Rule> &rules);
+
+    /**
+     * @brief Parses a ports from an json element
+     * @return ReturnCode::SUCCESS if the rule is successfully parsed
+     * @return ReturnCode::FAILURE otherwise.
+     */
+    virtual ReturnCode parsePort(const json_t *element, std::vector<unsigned int> &ports);
 
     /**
      * @brief Parses a string to a Target

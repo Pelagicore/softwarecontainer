@@ -51,18 +51,17 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    const json_t *prio = json_object_get(element, "priority");
-    if (prio == nullptr) {
-        log_error() << "No priority specified in network config.";
-        return ReturnCode::FAILURE;
+    int p;
+    if (!read(element, "priority", p)) {
+      log_error() << "No priority specified in network config.";
+      return ReturnCode::FAILURE;
     }
+    e.priority = p;
 
-    e.priority = json_integer_value(prio);
     if (e.priority < 1) {
-        log_error() << "Priority can not be less than 1";
+        log_error() << "Priority can not be less than 1 but is " << e.priority;
         return ReturnCode::FAILURE;
     }
-
 
     const json_t *rules = json_object_get(element, "rules");
 
@@ -137,57 +136,63 @@ ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<Rule> &r
     // Parsing different port formats
     json_t *port = json_object_get(element, "port");
     if (port != nullptr) {
-        // Port formatted as single integer
-        if (json_is_integer(port)) {
-            int iport = json_integer_value(port);
-            r.ports.push_back(iport);
-
-        // Port formatted as a string representing a range
-        } else if (json_is_string(port)) {
-            std::string portRange = json_string_value(port);
-
-            const std::string::size_type n = portRange.find("-");
-            const std::string first = portRange.substr(0, n);
-            const std::string last = portRange.substr(n + 1);
-
-            int startPort;
-            if (!parseInt(first.c_str(), &startPort)) {
-                 log_error() << "Starting port in range " << portRange << "is not an integer.";
-                 return ReturnCode::FAILURE;
-            }
-
-            int endPort;
-            if (!parseInt(first.c_str(), &endPort)) {
-                 log_error() << "End port in range " << portRange << "is not an integer.";
-                 return ReturnCode::FAILURE;
-            }
-
-            for (int i = startPort; i <= endPort; ++i) {
-                r.ports.push_back(i);
-            }
-
-        // Port formatted as a list of integers
-        } else if (json_is_array(port)) {
-            size_t ix;
-            json_t *val;
-            json_array_foreach(port, ix, val) {
-                if (!json_is_integer(val)) {
-                    log_error() << "Entry in port array is not an integer.";
-                    return ReturnCode::FAILURE;
-                }
-
-                int iport = json_integer_value(port);
-                r.ports.push_back(iport);
-            }
-        } else {
-            log_error() << "Rules specified in an invalid format";
-            return ReturnCode::FAILURE;
-        }
+        parsePort(port, r.ports);
     }
     // If there were no port configured, leave the port list empty
     // and assume that all ports should be considered in the rule.
 
     rules.push_back(r);
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode NetworkGateway::parsePort(const json_t *element, std::vector<unsigned int> &ports)
+{
+    // Port formatted as single integer
+    if (json_is_integer(element)) {
+        int port = json_integer_value(element);
+        ports.push_back(port);
+
+    // Port formatted as a string representing a range
+    } else if (json_is_string(element)) {
+        std::string portRange = json_string_value(element);
+
+        const std::string::size_type n = portRange.find("-");
+        const std::string first = portRange.substr(0, n);
+        const std::string last = portRange.substr(n + 1);
+
+        int startPort;
+        if (!parseInt(first.c_str(), &startPort)) {
+             log_error() << "Starting port in range " << portRange << "is not an integer.";
+             return ReturnCode::FAILURE;
+        }
+
+        int endPort;
+        if (!parseInt(first.c_str(), &endPort)) {
+             log_error() << "End port in range " << portRange << "is not an integer.";
+             return ReturnCode::FAILURE;
+        }
+
+        for (int i = startPort; i <= endPort; ++i) {
+            ports.push_back(i);
+        }
+
+    // Port formatted as a list of integers
+    } else if (json_is_array(element)) {
+        size_t ix;
+        json_t *val;
+        json_array_foreach(element, ix, val) {
+            if (!json_is_integer(val)) {
+                log_error() << "Entry in port array is not an integer.";
+                return ReturnCode::FAILURE;
+            }
+
+            int port = json_integer_value(element);
+            ports.push_back(port);
+        }
+    } else {
+        log_error() << "Rules specified in an invalid format";
+        return ReturnCode::FAILURE;
+    }
     return ReturnCode::SUCCESS;
 }
 
