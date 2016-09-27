@@ -306,18 +306,18 @@ The Network Gateway is used to setup network connection and configure which traf
 
 Configuration
 -------------
-The configuration is structured as a list of JSON objects that each describe rules for `OUTGOING`
-or `INCOMING` network traffic. During evaluation the rules are read in order starting with the
-first specified rule. The validation is done by filtering network traffic on `host` and `port`,
- where `host` is either hostname or ip address of a destination or source depending on context and
-`port` specifies which ports to filter on. When `port` is not specified, the rule applies to all
-ports. How to handle matching traffic is specified by `target`. There are tree valid values for
-`target`: `ACCEPT`, `DROP` and `REJECT`, where `ACCEPT` does nothing with the traffic while `REJECT`
-and `DROP` both deny the network traffic to continue. The difference between the latter two being
-that `REJECT` answers the sender while `DROP` does not. If no rule applies `default` specifies what
+The configuration is structured as a list of JSON objects that each describe rules for ``OUTGOING``
+or ``INCOMING`` network traffic. During evaluation the rules are read in order starting with the
+first specified rule. The validation is done by filtering network traffic on ``host`` and ``port``,
+ where ``host`` is either hostname or ip address of a destination or source depending on context and
+``port`` specifies which ports to filter on. When ``port`` is not specified, the rule applies to all
+ports. How to handle matching traffic is specified by ``target``. There are tree valid values for
+``target``: ``ACCEPT``, ``DROP`` and ``REJECT``, where ``ACCEPT`` does nothing with the traffic while ``REJECT``
+and ``DROP`` both deny the network traffic to continue. The difference between the latter two being
+that ``REJECT`` answers the sender while ``DROP`` does not. If no rule applies ``default`` specifies what
 to do with the traffic.
 
-In order to not make the configuration calls order dependent, `priority` is used when merging
+In order to not make the configuration calls order dependent, ``priority`` is used when merging
 network gateway configurations of the same type. This is specified as an unsigned int > 0 where 1
 describes the highest priority.
 
