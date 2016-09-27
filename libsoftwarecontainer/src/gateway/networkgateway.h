@@ -25,6 +25,14 @@
 #include "generators.h"
 #include "jansson.h"
 
+/**
+ * @brief Sets up and manages network access and routing to the container
+ *
+ * The responsibility of NetworkGateway is to setup network connection as specified by given
+ * configuration. This configuration is described in detail in the user documentation, but
+ * a short summary of it is how to handle incoming and outgoing network packages using the
+ * three targets: ACCEPT, DROP and REJECT.
+ */
 class NetworkGateway :
     public Gateway
 {
