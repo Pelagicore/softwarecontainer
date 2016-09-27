@@ -159,14 +159,14 @@ private:
     Generator m_generator;
 
     /**
-     * @breif Parses a json element to a Rule
+     * @brief Parses a json element to a Rule
      * @return ReturnCode::SUCCESS if the rule is successfully parsed
      * @return ReturnCode::FAILURE otherwise.
      */
     virtual ReturnCode parseRule(const json_t *element, std::vector<Rule> &rules);
 
     /**
-     * @breif Parses a string to a Target
+     * @brief Parses a string to a Target
      * @return Either the valid Target representation of the given string or Target::INVALID_TARGET
      */
     virtual Target parseTarget(const std::string &str);

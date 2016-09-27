@@ -126,7 +126,8 @@ TEST_F(NetworkGatewayTest, TestSetConfig) {
     ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
 }
 
-/*! Test that config entries with no priority specified fails gracefully.
+/**
+ *@brief Test that config entries with no priority specified fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigNoPriority) {
     givenContainerIsSet(gw);
@@ -146,7 +147,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoPriority) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with no type specified fails gracefully.
+/**
+ * @brief Test that config entries with no type specified fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigNoType) {
     givenContainerIsSet(gw);
@@ -166,7 +168,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoType) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with no rules specified fails gracefully.
+/**
+ * @brief Test that config entries with no rules specified fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigNoRules) {
     givenContainerIsSet(gw);
@@ -181,7 +184,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoRules) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with empty rules specified works.
+/**
+ * @brief Test that config entries with empty rules specified works.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigEmptyRules) {
     givenContainerIsSet(gw);
@@ -197,7 +201,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigEmptyRules) {
     ASSERT_TRUE(gw->setConfig(config));
 }
 
-/*! Test that config entries with no default target specified fails gracefully.
+/**
+ * @brief Test that config entries with no default target specified fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigNoDefaultTarget) {
     givenContainerIsSet(gw);
@@ -217,7 +222,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigNoDefaultTarget) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with type specified as an integer fails gracefully.
+/**
+ * @brief Test that config entries with type specified as an integer fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigTypeIsInt) {
     givenContainerIsSet(gw);
@@ -238,7 +244,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsInt) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with type specified as a string fails gracefully.
+/**
+ * @brief Test that config entries with type specified as a string fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigTypeIsBadString) {
     givenContainerIsSet(gw);
@@ -259,7 +266,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsBadString) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with type specified as an object fails gracefully.
+/**
+ * @brief Test that config entries with type specified as an object fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigTypeIsObject) {
     givenContainerIsSet(gw);
@@ -280,7 +288,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsObject) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with type specified as an array fails gracefully.
+/**
+ * @brief Test that config entries with type specified as an array fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigTypeIsArray) {
     givenContainerIsSet(gw);
@@ -300,7 +309,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigTypeIsArray) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with rules specified as an object fails gracefully.
+/**
+ * @brief Test that config entries with rules specified as an object fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigRulesIsObject) {
     givenContainerIsSet(gw);
@@ -320,7 +330,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsObject) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with rules specified as a string fails gracefully.
+/**
+ * @brief Test that config entries with rules specified as a string fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigRulesIsString) {
     givenContainerIsSet(gw);
@@ -340,7 +351,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsString) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with rules specified as an integer fails gracefully.
+/**
+ * @brief Test that config entries with rules specified as an integer fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigRulesIsInteger) {
     givenContainerIsSet(gw);
@@ -355,7 +367,8 @@ TEST_F(NetworkGatewayTest, TestSetConfigRulesIsInteger) {
     ASSERT_FALSE(gw->setConfig(config));
 }
 
-/*! Test that config entries with default specified as a invali target fails gracefully.
+/**
+ * @brief Test that config entries with default specified as a invali target fails gracefully.
  */
 TEST_F(NetworkGatewayTest, TestSetConfigDefaultTargetIsInvalid) {
     givenContainerIsSet(gw);
