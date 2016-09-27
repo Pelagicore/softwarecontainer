@@ -35,6 +35,7 @@
 #include <string.h>
 
 #include "container.h"
+#include "filecleanuphandler.h"
 
 static constexpr const char *LXC_CONTAINERS_ROOT_CONFIG_ITEM = "lxc.lxcpath";
 

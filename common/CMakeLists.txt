@@ -22,6 +22,20 @@ set(HEADERS
     softwarecontainer-common.h
     softwarecontainer-log.h
     jsonparser.h
+    cleanuphandler.h
+    directorycleanuphandler.h
+    filecleanuphandler.h
+    mountcleanuphandler.h
+    filetoolkitwithundo.h
+)
+
+add_library(softwarecontainercommon SHARED
+    directorycleanuphandler.cpp
+    filecleanuphandler.cpp
+    jsonparser.cpp
+    filetoolkitwithundo.cpp
+    mountcleanuphandler.cpp
+    softwarecontainer-common.cpp
 )
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
