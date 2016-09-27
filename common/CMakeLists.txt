@@ -21,6 +21,7 @@
 set(HEADERS
     softwarecontainer-common.h
     softwarecontainer-log.h
+    jsonparser.h
 )
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
