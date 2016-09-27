@@ -30,7 +30,9 @@ include_directories(${SOFTWARECONTAINER_COMMON_DIR})
 
 set(TEST_FILES
     softwarecontainer-common_unittest.cpp
+    recursivecopy_unittest.cpp
     ../softwarecontainer-common.cpp
+    ../recursivecopy.cpp
     main.cpp
 )
 

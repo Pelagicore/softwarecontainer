@@ -36,6 +36,7 @@ add_library(softwarecontainercommon SHARED
     filetoolkitwithundo.cpp
     mountcleanuphandler.cpp
     softwarecontainer-common.cpp
+    recursivecopy.cpp
 )
 
 

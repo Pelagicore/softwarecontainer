@@ -4,6 +4,8 @@
 #include "filecleanuphandler.h"
 #include "mountcleanuphandler.h"
 
+#include "recursivecopy.h"
+
 namespace softwarecontainer {
 
 FileToolkitWithUndo::~FileToolkitWithUndo()
@@ -165,6 +167,12 @@ ReturnCode FileToolkitWithUndo::overlayMount(
     }
 
     return ReturnCode::SUCCESS;
+}
+
+ReturnCode FileToolkitWithUndo::syncOverlayMount(const std::string &lower,
+        const std::string &upper)
+{
+    return RecursiveCopy::getInstance().copy(upper, lower);
 }
 
 ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)

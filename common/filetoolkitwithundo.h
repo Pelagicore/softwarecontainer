@@ -62,6 +62,16 @@ public:
             const std::string &dst);
 
     /**
+     * @brief syncOverlayMount Copy the directory structure from upper layer to the lower layer
+     * @param lower The lower layer used in an overlay file system.
+     * @param upper The upper layer in an overlay file system.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode syncOverlayMount(
+            const std::string &lower,
+            const std::string &upper);
+
+    /**
      * @brief createSharedMountPoint Make the mount point shared, ie new mount points created in
      *  one bind mount will also be created in the other mount point.
      * @param path The mount path to make shared.
