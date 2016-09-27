@@ -27,6 +27,8 @@
 
 #include <lxc/lxccontainer.h>
 
+#include "filetoolkitwithundo.h"
+
 #include "softwarecontainer-common.h"
 #include "containerabstractinterface.h"
 

@@ -1,0 +1,93 @@
+#pragma once
+
+#include "cleanuphandler.h"
+#include "softwarecontainer-common.h"
+
+namespace softwarecontainer {
+
+class FileToolkitWithUndo
+{
+    LOG_DECLARE_CLASS_CONTEXT("CLEA", "File toolkit");
+
+public:
+    ~FileToolkitWithUndo();
+
+    /**
+     * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
+     * @param path The directory path to be created.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode createParentDirectory(const std::string &path);
+
+    /**
+     * @brief createDirectory Create a directory, and if successful append it
+     *  to a list of dirs to be deleted in the dtor. Since nestled dirs will
+     *  need to be deleted in reverse order to creation insert to the beginning
+     *  of the list.
+     * @param path Path of directory to be created
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode createDirectory(const std::string &path);
+
+    /**
+     * @brief bindMount Bind mount a src directory to another position dst.
+     * @param src Path to mount from
+     * @param dst Path to mount to
+     * @param readOnly Make the bind mount destination read only
+     * @param enableWriteBuffer Enable write buffers on the bind mount.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode bindMount(
+            const std::string &src,
+            const std::string &dst,
+            bool readOnly,
+            bool enableWriteBuffer=false);
+
+    /**
+     * @brief overlayMount Mount a directory with an overlay on top of it. An overlay protects
+     *  the lower filesystem from writes by writing to the upper file system through the work
+     *  directory.
+     * @param lower The lower file system, this will be read only.
+     * @param upper The upper file system, this can be a tmpfs/ramfs of some kind. This is where
+     *  final writes wind up
+     * @param work This is a work directory, preferably a tmpfs/ramfs of some kind. This is where
+     *  writes wind up temporarily.
+     * @param dst Where the overlay filesystem will be mounted.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode overlayMount(
+            const std::string &lower,
+            const std::string &upper,
+            const std::string &work,
+            const std::string &dst);
+
+    /**
+     * @brief createSharedMountPoint Make the mount point shared, ie new mount points created in
+     *  one bind mount will also be created in the other mount point.
+     * @param path The mount path to make shared.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode createSharedMountPoint(const std::string &path);
+
+    ReturnCode writeToFile(const std::string &path, const std::string &content);
+
+    ReturnCode createSymLink(const std::string &source, const std::string &destination);
+
+    /**
+     * @brief tempDir Creates a temporary directory at templatePath.
+     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
+     *  is destroyed.
+     * @param templ a template Path used to create the path of the temporary directory, including
+     *  XXXXXX which will be replaced with a unique ID for the temporary directory
+     * @return A string path pointing to the newly creted temporary directory.
+     */
+    std::string tempDir(std::string templatePath);
+protected:
+    /**
+     * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
+     *  FileToolKitWithUndo that will be run from the destructor.
+     */
+    std::vector<CleanUpHandler *> m_cleanupHandlers;
+};
+
+}
