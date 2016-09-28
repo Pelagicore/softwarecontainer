@@ -14,3 +14,4 @@ build-*/
 .vagrant/
 vagrant_key
 vagrant_key.pub
+.cache/
