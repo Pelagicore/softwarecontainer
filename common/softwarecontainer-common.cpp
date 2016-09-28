@@ -157,10 +157,6 @@ SignalConnectionsHandler::~SignalConnectionsHandler()
     }
 }
 
-bool operator&& (ReturnCode lhs, ReturnCode rhs) {
-    return lhs == rhs;
-}
-
 }
 
 

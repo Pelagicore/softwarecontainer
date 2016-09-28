@@ -549,7 +549,7 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
         log_error() << "Could not create " << dst;
         return ReturnCode::FAILURE;
     }
-    m_cleanupHandlers.push_back(new FileCleanUpHandler(dst));
+    m_cleanupHandlers.push(new FileCleanUpHandler(dst));
 
     if (isError(bindMount(pathOnHost, dst, readonly))) {
         log_error() << "Could not bind mount " << pathOnHost << " to " << dst;

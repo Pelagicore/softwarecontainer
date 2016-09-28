@@ -10,12 +10,16 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
 {
     bool success = true;
     // Clean up all created directories, files, and mount points
-    for(auto *it : m_cleanupHandlers)
-    {
-        if(isError(it->clean())) {
+
+    while (!m_cleanupHandlers.empty()) {
+        CleanUpHandler *c = m_cleanupHandlers.top();
+        m_cleanupHandlers.pop();
+
+        if (isError(c->clean())) {
             success = false;
         }
-        delete it;
+
+        delete c;
     }
 
     if(!success) {
@@ -52,7 +56,7 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
         return ReturnCode::FAILURE;
     }
 
-    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(path));
+    m_cleanupHandlers.push(new DirectoryCleanUpHandler(path));
     log_debug() << "Created directory " << path;
 
     return ReturnCode::SUCCESS;
@@ -67,7 +71,7 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
         return nullptr;
     }
 
-    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(templ));
+    m_cleanupHandlers.push(new DirectoryCleanUpHandler(templ));
 
     return std::string(dir);
 }
@@ -96,7 +100,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
-        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push(new MountCleanUpHandler(dst));
     } else {
         log_error() << "Could not mount into container: src=" << src
                     << " , dst=" << dst << " err=" << strerror(errno);
@@ -128,9 +132,9 @@ ReturnCode FileToolkitWithUndo::overlayMount(
     std::string fstype = "overlay";
     unsigned long flags = MS_BIND;
 
-    if ((createDirectory(lower) && ReturnCode::FAILURE)
-        || (createDirectory(upper) && ReturnCode::FAILURE)
-        || (createDirectory(work) && ReturnCode::FAILURE))
+    if (isError(createDirectory(lower))
+        || isError(createDirectory(upper))
+        || isError(createDirectory(work)))
     {
         log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
                        lower << ", upper=" << upper << ", work=" << work;
@@ -145,9 +149,9 @@ ReturnCode FileToolkitWithUndo::overlayMount(
 
     if (mountRes == 0) {
         log_verbose() << "overlayMounted folder " << lower << " in " << dst;
-        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
-        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(upper));
-        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(work));
+        m_cleanupHandlers.push(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push(new DirectoryCleanUpHandler(upper));
+        m_cleanupHandlers.push(new DirectoryCleanUpHandler(work));
     } else {
         log_error() << "Could not mount into container: lower=" << lower
                     << " , dst=" << dst << " err=" << strerror(errno);
@@ -165,7 +169,7 @@ ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
     assert(mountRes == 0);
     mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, nullptr);
     assert(mountRes == 0);
-    m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
+    m_cleanupHandlers.push(new MountCleanUpHandler(path));
     log_debug() << "Created shared mount point at " << path;
 
     return ReturnCode::SUCCESS;
@@ -177,7 +181,7 @@ ReturnCode FileToolkitWithUndo::writeToFile(const std::string &path, const std::
     if (isError(ret)) {
         return ret;
     }
-    m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
+    m_cleanupHandlers.push(new FileCleanUpHandler(path));
     log_debug() << "Successfully wrote to " << path;
     return ReturnCode::SUCCESS;
 }
@@ -189,7 +193,7 @@ ReturnCode FileToolkitWithUndo::createSymLink(const std::string &source, const s
     createDirectory(parentPath(source));
 
     if (symlink(destination.c_str(), source.c_str()) == 0) {
-        m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
+        m_cleanupHandlers.push(new FileCleanUpHandler(source));
         log_debug() << "Successfully created symlink from " << source << " to " << destination;
     } else {
         log_error() << "Error creating symlink " << destination

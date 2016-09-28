@@ -84,10 +84,10 @@ public:
     std::string tempDir(std::string templatePath);
 protected:
     /**
-     * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
+     * @brief m_cleanupHandlers A stack of cleanupHandlers added during the lifetime of the
      *  FileToolKitWithUndo that will be run from the destructor.
      */
-    std::vector<CleanUpHandler *> m_cleanupHandlers;
+    std::stack<CleanUpHandler *> m_cleanupHandlers;
 };
 
 }
