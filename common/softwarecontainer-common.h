@@ -61,8 +61,6 @@ enum class ReturnCode
     SUCCESS
 };
 
-bool operator&& (ReturnCode lhs, ReturnCode rhs);
-
 
 inline ReturnCode bool2ReturnCode(bool b)
 {
