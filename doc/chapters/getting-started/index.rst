@@ -105,7 +105,7 @@ Start a container::
     /com/pelagicore/SoftwareContainerAgent \
     com.pelagicore.SoftwareContainerAgent.CreateContainer \
     string:"MyPrefix-" \
-    string:'[{"writeOften": "0"}]'
+    string:'[{"enableWriteBuffer": true}]'
 
 The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
 
@@ -145,7 +145,8 @@ Launch something in the container::
     uint32:0 \
     string:"touch hello" \
     string:"/gateways/app/" \
-    string:"" dict:string:string:""
+    string:"" \
+    dict:string:string:""
 
 Parameters:
  * ``containerID`` - a uint32 with the ID of the created container, as returned by the ``CreateContainer`` method.
