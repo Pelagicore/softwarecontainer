@@ -20,9 +20,9 @@ import pytest
 
 import subprocess
 import os
+import signal
 
 from testframework import SoftwareContainerAgentHandler
-from testframework import ContainerApp
 
 
 # Add this directory (the package root) to the sys.path so the imports
@@ -32,21 +32,32 @@ package_root = os.path.dirname(os.path.abspath(__file__))
 os.sys.path.insert(0, package_root)
 
 
-# TODO: dbus-launch needs to be cleaned up during teardown
 @pytest.fixture(scope="module")
 def dbus_launch():
     """ Setting up dbus environement variables for session bus """
-    p = subprocess.Popen('dbus-launch', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen('dbus-launch', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     for var in p.stdout:
         sp = var.split('=', 1)
-        os.environ[sp[0]] = sp[1][:-1]
+        env_var = sp[0]
+        env_val = sp[1][:-1]
+        os.environ[env_var] = env_val
+    yield
+    # The DBUS_SESSION_BUS_PID is set to sp[1] in the last loop iteration above...
+    os.kill(int(sp[1]), signal.SIGKILL)
 
 
 @pytest.fixture(scope="module")
-def agent():
-    """ Start the Agent and return an interface to it """
-    log_file_path = "test.log"
-    agent_handler = SoftwareContainerAgentHandler(log_file_path)
+def agent(request):
+    """ Start the Agent and return an interface to it.
+
+        This fixture requires the test module to have a function named 'logfile_path'
+        on the module level
+    """
+    # Introspect the consuming module for the logfile path. The scope of this
+    # fixture means the module is received through the 'request' parameter
+    # and thus the path should be defined on the module level.
+    logfile_path = request.module.logfile_path()
+    agent_handler = SoftwareContainerAgentHandler(logfile_path)
 
     # Return the setup agent to the consuming test
     yield agent_handler

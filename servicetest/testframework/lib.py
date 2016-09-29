@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 # Copyright (C) 2016 Pelagicore AB
 #
@@ -21,153 +20,197 @@
 """ The classes in this module can be used directly if needed by the test code,
     but the recommendation is to use the fixtures from 'conftest.py' if there
     are any corresponding to the class needed.
+
+    For example, the Container class is probably something the tests want to
+    use directly, while the Agent setup is provided more handlily by fixtures.
 """
 
-from gi.repository import GObject
 import dbus
 import json
-import time
 import threading
-import os
+import thread
 import Queue
 import subprocess
+import dbus.mainloop.glib
+from gi.repository import GObject
+
+
+class Container():
+    """ This represents a container for most purposes.
+
+        This can be considered a proxy for the Agent, but the main purpose is to have a way
+        to create, manipulate, interact, and destroy a container instance.
+
+        TODO: The name of this class is off. What is it really? Resembles the "convenience" API
+              which has been discussed.
+    """
+
+    # Static class members used by tests for container "data" dict keys. See the documentation
+    # for the start() method for details.
+    PREFIX = "prefix"
+    CONFIG = "config"
+    BIND_MOUNT_DIR = "bind-mount-dir"
+    HOST_PATH = "host-path"
+
+    def __init__(self):
+        bus = dbus.SystemBus()
+        pca_obj = bus.get_object("com.pelagicore.SoftwareContainerAgent",
+                                 "/com/pelagicore/SoftwareContainerAgent")
+        self.__agent = dbus.Interface(pca_obj, "com.pelagicore.SoftwareContainerAgent")
+        self.__bind_dir = None
+        self.__container_id = None
+
+    def set_gateway_config(self, gateway_id, config):
+        """ Set a gateway config by passing an id and a Python object equivalent to a JSON
+            config.
+        """
+        self.__agent.SetGatewayConfigs(self.__container_id, {gateway_id: json.dumps(config)})
+
+    def launch_command(self, binary, stdout="/tmp/stdout", env={"": ""}):
+        """ Calls LaunchCommand on the Agent D-Bus interface.
+
+            The user must pass the actual command to run. This is passed as a string argument
+            to the 'binary' parameter and is passed along as is to the D-Bus method. stdout and
+            environment dictionary are optional. The other arguments required by the D-Bus method
+            are set by this helper based on other configs and data passed from the user previously.
+        """
+        response = self.__agent.LaunchCommand(self.__container_id,
+                                              0,
+                                              "{}".format(binary),
+                                              self.__bind_dir,
+                                              stdout,
+                                              env)
+        if response is -1:
+            print "Failed to launch process in container"
+            return -1
+        return response
+
+    def get_bind_dir(self):
+        """ Returns the path containing the bind mounted dir set previously
+
+            Tests can call this method to know what path prefix is suitable when running
+            a binary which has been bind mounted into the container previously.
+        """
+        return self.__bind_dir
+
+    def start(self, data):
+        """ Creates a container and bind mounts a directory.
+
+            The data parameter takes a dictionary with various values and configs to be used by
+            this helper class. The definitions for the dict keys are the class members defined at
+            the beginning of this class.
+
+            The user should pass a dict like e.g.:
+            {
+                Container.PREFIX: "dbus-test-",
+                Container.CONFIG: "{enableWriteBuffer: false}",
+                Container.HOST_PATH: my_path_string_variable,
+                Container.BIND_MOUNT_DIR: "app"
+            }
+
+            The values in the dict are passed as arguments to the D-Bus methods on SoftwareContainerAgent.
+            The dict is mapped like so:
+            Container.PREFIX - first argument to SoftwareContainerAgent::CreateContainer
+            Container.CONFIG - second argument to SoftwareContainerAgent::CreateContainer
+            Container.HOST_PATH - second argument to SoftwareContainerAgent::BindMountFolderInContainer
+            Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMountFolderInContainer
+        """
+        self.__create_container(data[Container.PREFIX],
+                                data[Container.CONFIG])
+        self.__bind_dir = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
+                                                               data[Container.BIND_MOUNT_DIR])
+
+    def terminate(self):
+        """ Perform teardown of container created by call to 'start'
+        """
+        if self.__container_id is not None:
+            self.__agent.ShutDownContainer(self.__container_id)
+
+    def __create_container(self, prefix, config):
+        self.__container_id = self.__agent.CreateContainer(prefix, config)
+
+    def __bindmount_folder_in_container(self, host_path, dirname):
+        return self.__agent.BindMountFolderInContainer(self.__container_id, host_path, dirname, True)
+
+
+class SoftwareContainerAgentHandler():
+    """ Starts the agent and manages its lifecycle, e.g. spawning and killing.
+
+        Used by e.g. ContainerApp over D-Bus.
+    """
+
+    def __init__(self, log_file_path=None):
+        self.__log_file = None
+        if log_file_path is None:
+            self.__log_file = subprocess.STDOUT
+        else:
+            self.__log_file = open(log_file_path, "w")
+        self.__rec = Receiver()
+        self.__rec.start()
+        self.__rec.wait_until_setup_is_done()
+
+        # Starting softwarecontainer-agent
+        # TODO: This doesn't work if the user pass 'None' as log_file_path
+        assert log_file_path is not None
+        self.__agent = subprocess.Popen("softwarecontainer-agent", stdout=self.__log_file, stderr=self.__log_file)
+
+        try:
+            # Wait for the softwarecontainerStarted message to appear on the
+            # msgQueue, this is evoked when softwarecontainer-agent is ready to
+            # perform work. If we timeout tear down what we have started so far.
+            while self.__rec.msg_queue().get(block=True, timeout=5) != "softwarecontainerStarted":
+                pass
+        except Queue.Empty as e:
+            self.__agent.terminate()
+            self.__rec.terminate()
+            raise Exception("SoftwareContainer DBus interface not seen", e)
+
+        if self.__agent.poll() is not None:
+            # Make sure we are not trying to perform anything against a dead softwarecontainer-agent
+            self.__rec.terminate()
+            raise Exception("SoftwareContainer-agent has died for some reason")
+
+    def terminate(self):
+        self.__agent.terminate()
+        self.__rec.terminate()
+        self.__log_file.close()
+
 
 class Receiver(threading.Thread):
     """ The Receiver class encapsulates and runs a gobject mainloop and dbus implementation in a separate thread
 
         Purpose of Receiver is to listen to NameOwnerChanged to know about Agent coming and going
     """
-    def __init__(self, logFile=None):
-        self._logFile = logFile
+    def __init__(self):
         threading.Thread.__init__(self)
         GObject.threads_init()
-        self.msgQueue = Queue.Queue()
+        self.__msg_queue = Queue.Queue()
+        self.lock = thread.allocate_lock()
+        self.lock.acquire()
 
-    def log(self, msg):
-        if self._logFile is not None:
-            self._logFile.write(msg)
-        else:
-            print(msg)
+    def wait_until_setup_is_done(self):
+        self.lock.acquire()
+        self.lock.release()
 
-    def handler(self, gob, gob2, gob3):
-        if gob == "com.pelagicore.SoftwareContainerAgent":
-            """
-            Put softwarecontainerStarted on the message queue, this is picked up by
-            other threads which should continue running when softwarecontainer-agent
-            is ready to work.
-            """
-            self.msgQueue.put("softwarecontainerStarted")
+    def msg_queue(self):
+        return self.__msg_queue
+
+    def handler(self, object_path, _name, _old_owner):
+        if object_path == "com.pelagicore.SoftwareContainerAgent":
+            # Put softwarecontainerStarted on the message queue, this is picked up by other threads which
+            # should continue running when softwarecontainer-agent is ready to work.
+            self.__msg_queue.put("softwarecontainerStarted")
 
     def run(self):
-        import dbus.mainloop.glib
-        self._gloop = GObject.MainLoop()
-        self._loop = dbus.mainloop.glib.DBusGMainLoop()
-        self._bus = dbus.SystemBus(mainloop=self._loop)
-        self._bus.add_signal_receiver(self.handler, dbus_interface="org.freedesktop.DBus",
-                                      signal_name="NameOwnerChanged")
-        self._gloop.run()
+        self.__gloop = GObject.MainLoop()
+        self.__loop = dbus.mainloop.glib.DBusGMainLoop()
+        self.__bus = dbus.SystemBus(mainloop=self.__loop)
+        self.__bus.add_signal_receiver(self.handler,
+                                       dbus_interface="org.freedesktop.DBus",
+                                       signal_name="NameOwnerChanged")
+        self.lock.release()
+        self.__gloop.run()
 
     def terminate(self):
-        if self._loop is not None:
-            self._gloop.quit()
-            self._gloop = None
-
-    def __del__(self):
-        self.terminate()
-
-
-class ContainerApp():
-    """ This represents the container. This can be considered the proxy for the Agent.
-    """
-
-    def __init__(self):
-        self._path = os.path.dirname(os.path.realpath(__file__))
-        self._bus = dbus.SystemBus()
-        self._pca_obj = self._bus.get_object("com.pelagicore.SoftwareContainerAgent",
-                                             "/com/pelagicore/SoftwareContainerAgent")
-        self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.SoftwareContainerAgent")
-        self.__bind_dir = None
-        self.containerId = None
-
-    def set_host_path(self, path):
-        self.__host_path = path
-
-    def __createContainer(self, enableWriteBuffer=False):
-        if enableWriteBuffer:
-            self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "{enableWriteBuffer: true}")
-        else:
-            self.containerId = self._pca_iface.CreateContainer("prefix-dbus-", "")
-
-    def bindMountFolderInContainer(self, dirname):
-        return self._pca_iface.BindMountFolderInContainer(self.containerId, self.__host_path, dirname, True)
-
-    def set_gateway_config(self, gateway_id, config):
-        self._pca_iface.SetGatewayConfigs(self.containerId, {gateway_id: json.dumps(config)})
-
-    def launchCommand(self, binary):
-        response = self._pca_iface.LaunchCommand(self.containerId, 0,
-                                                 "{}".format(binary),
-                                                 "/gateways/app", "/tmp/stdout", {"": ""})
-        if response is -1:
-            print "Failed to launch process in container"
-            return -1
-        return response
-
-    def getBindDir(self):
-        return self.__bind_dir
-
-    def start(self, enableWriteBuffer=False):
-        self.__createContainer(enableWriteBuffer)
-        self.__bind_dir = self.bindMountFolderInContainer("app")
-
-    def terminate(self):
-        if self.containerId is not None:
-            self._pca_iface.ShutDownContainer(self.containerId)
-
-
-
-class SoftwareContainerAgentHandler():
-    """ Starts the agent and manages its life cycle, e.g. spawning and killing.
-
-        Used by e.g. ContainerApp over D-Bus.
-    """
-
-    def __init__(self, log_file_path=None):
-        self.log_file = None
-        self.log_file_path = log_file_path
-        if self.log_file_path == None:
-            self.log_file = subprocess.STDOUT
-        else:
-            self.log_file = open(log_file_path, "w")
-        self.rec = Receiver(logFile=self.log_file)
-        self.rec.start()
-
-        # Starting softwarecontainer-agent
-        # TODO: This doesn't work if the user pass 'None' as log_file_path
-        self.agent = subprocess.Popen("softwarecontainer-agent", stdout=self.log_file, stderr=self.log_file)
-
-        try:
-            """
-            Wait for the softwarecontainerStarted message to appear on the
-            msgQueue, this is evoked when softwarecontainer-agent is ready to
-            perform work. If we timeout tear down what we have started so far.
-            """
-            while self.rec.msgQueue.get(block=True, timeout=5) != "softwarecontainerStarted":
-                pass
-        except Queue.Empty as e:
-            self.agent.terminate()
-            self.rec.terminate()
-            raise Exception("SoftwareContainer DBus interface not seen", e)
-
-        if self.agent.poll() is not None:
-            """
-            Make sure we are not trying to perform anything against a dead
-            softwarecontainer-agent
-            """
-            self.rec.terminate()
-            raise Exception("SoftwareContainer-agent has died for some reason")
-
-    def terminate(self):
-        self.agent.terminate()
-        self.rec.terminate()
-        self.log_file.close()
+        if self.__loop is not None:
+            self.__gloop.quit()
