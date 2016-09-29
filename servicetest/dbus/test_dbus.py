@@ -23,7 +23,42 @@ import time
 import subprocess
 import dbusapp
 
-from testframework import ContainerApp
+from testframework import Container
+
+
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
+# This function is used by the 'agent' fixture to know where the log should be stored
+def logfile_path():
+    return CURRENT_DIR + "/test.log"
+
+
+# The path to where the test app is located, will be passed in the 'data' dict when
+# starting the container. The test app is assumed to be located in the
+# same directory as this test.
+HOST_PATH = os.path.dirname(os.path.abspath(__file__))
+
+# These default values are used to pass various test specific values and
+# configurations to the Container helper. Tests that need to add, remove or
+# update entries can simply base their dict on this one for convenience.
+DATA = {
+    Container.PREFIX: "dbus-test-",
+    Container.CONFIG: "{enableWriteBuffer: false}",
+    Container.BIND_MOUNT_DIR: "app",
+    Container.HOST_PATH: HOST_PATH
+}
+
+# Simple gateway config when something just needs to be passed.
+GW_CONFIG = [{
+    "dbus-gateway-config-session": [{
+        "direction": "*",
+        "interface": "*",
+        "object-path": "*",
+        "method": "*"
+    }],
+    "dbus-gateway-config-system": []
+}]
 
 
 @pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
@@ -39,22 +74,11 @@ class TestDBus(object):
     def test_query_in(self):
         """ Launch server in container and test if a client can communicate with it from the host system """
         for x in range(0, 10):
-            ca = ContainerApp()
+            ca = Container()
             try:
-                # The container must have access to the test app used for the tests
-                ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
-                ca.start()
-                config = [{
-                    "dbus-gateway-config-session": [{
-                        "direction": "*",
-                        "interface": "*",
-                        "object-path": "*",
-                        "method": "*"
-                    }],
-                    "dbus-gateway-config-system": []
-                }]
-                ca.set_gateway_config("dbus", config)
-                ca.launchCommand('{}/dbusapp.py server'.format(ca.getBindDir()))
+                ca.start(DATA)
+                ca.set_gateway_config("dbus", GW_CONFIG)
+                ca.launch_command('{}/dbusapp.py server'.format(ca.get_bind_dir()))
 
                 time.sleep(0.5)
                 client = dbusapp.Client()
@@ -68,21 +92,11 @@ class TestDBus(object):
         for x in range(0, 10):
             serv = dbusapp.Server()
             serv.start()
-            ca = ContainerApp()
+            ca = Container()
             try:
-                ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
-                ca.start()
-                config = [{
-                    "dbus-gateway-config-session": [{
-                        "direction": "*",
-                        "interface": "*",
-                        "object-path": "*",
-                        "method": "*"
-                    }],
-                    "dbus-gateway-config-system": []
-                }]
-                ca.set_gateway_config("dbus", config)
-                ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
+                ca.start(DATA)
+                ca.set_gateway_config("dbus", GW_CONFIG)
+                ca.launch_command('{}/dbusapp.py client'.format(ca.get_bind_dir()))
 
                 assert serv.wait_until_requests() is True
             finally:
@@ -92,30 +106,20 @@ class TestDBus(object):
 
     def test_spam_out(self):
         """ Launch client in container and stress test the communication out """
-        ca = ContainerApp()
+        ca = Container()
         try:
             serv = dbusapp.Server()
             serv.start()
 
-            ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
-            ca.start()
-            config = [{
-                "dbus-gateway-config-session": [{
-                    "direction": "*",
-                    "interface": "*",
-                    "object-path": "*",
-                    "method": "*"
-                }],
-                "dbus-gateway-config-system": []
-            }]
-            ca.set_gateway_config("dbus", config)
+            ca.start(DATA)
+            ca.set_gateway_config("dbus", GW_CONFIG)
 
             clients = 100
             message_size = 8192  # Bytes
 
             t0 = time.time()
             for x in range(0, clients):
-                ca.launchCommand('{}/dbusapp.py client --size {}'.format(ca.getBindDir(), message_size))
+                ca.launch_command('{}/dbusapp.py client --size {}'.format(ca.get_bind_dir(), message_size))
             t1 = time.time()
             assert serv.wait_until_requests(multiplier=clients) is True
             t2 = time.time()
@@ -130,24 +134,16 @@ class TestDBus(object):
             serv = None
 
     def test_enableWriteBuffer_flag(self):
-        ca = ContainerApp()
+        ca = Container()
         try:
             serv = dbusapp.Server()
             serv.start()
 
-            ca.set_host_path(os.path.dirname(os.path.abspath(__file__)))
-            ca.start(enableWriteBuffer=True)
-            config = [{
-                "dbus-gateway-config-session": [{
-                    "direction": "*",
-                    "interface": "*",
-                    "object-path": "*",
-                    "method": "*"
-                }],
-                "dbus-gateway-config-system": []
-            }]
-            ca.set_gateway_config("dbus", config)
-            ca.launchCommand('{}/dbusapp.py client'.format(ca.getBindDir()))
+            DATA[Container.CONFIG] = "{enableWriteBuffer: true}"
+            ca.start(DATA)
+            ca.set_gateway_config("dbus", GW_CONFIG)
+            ca.launch_command('{}/dbusapp.py client'.format(ca.get_bind_dir()))
+
             assert serv.wait_until_requests() is True
         finally:
             ca.terminate()

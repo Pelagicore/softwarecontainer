@@ -16,6 +16,11 @@ gateway. Not so much focus is put on configuration because that is mostly
 tested on the `dbus-proxy` component itself which is a separate project.
 Rather, focus is on load and stress tests from inside the container.
 
+### Configuration requirements
+
+This suite requires SoftwareContainer to be configured with the D-Bus gateway
+enabled
+
 ### Running the tests
 
 In the `dbus` directory, run the tests like so:
@@ -32,8 +37,10 @@ anyway.
 
 This suite needs a test application to be configured and built with CMake.
 
-TODO: Add some convenience or describe how to point out the built app
-in the external 'build' dir.
+### Configuration requirements
+
+This suite requires SoftwareContainer to be configured with the D-Bus gateway
+enabled
 
 ### Running the tests
 

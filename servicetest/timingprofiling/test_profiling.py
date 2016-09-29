@@ -17,307 +17,181 @@
 # For further information see LICENSE
 
 
-"""
-Introduction
-============
-This test suite is used to measure timing values between different parts of
-softwarecontainer, both inside the core application, and outside it. The suite sets
-up all the necessary components to interact with softwarecontainer-agent, and issues
-commands to it using dbus.
+""" Introduction
+    ============
+    This test suite is used to measure timing values between different parts of
+    softwarecontainer, both inside the core application, and outside it. The suite sets
+    up all the necessary components to interact with softwarecontainer-agent, and issues
+    commands to it using dbus.
 
 
-Goals
-=====
-* Run softwarecontainer-agent and get profiling values from it into a log file
-* Run several apps inside containers using softwarecontainer-agent and get profiling
-  values from these runs.
-* Terminate everything and get profiling values from this.
-
-Architecture
-============
-Calling this architecture might be a bit of an overstatement. The test suite spawns
-a Receiver thread for dbus which will put "messages of interest" received on dbus on
-the msgQueue, which will be picked up by the main test.
-
-Each App is started using the ContainerApp objects which is basically just a
-convenience class wrapping up some dbus functionality.
-
-Once all apps have been spun up and are running, they are terminated and
-softwarecontainer-agent is spun down as well as the Receiver.
-
-All the output plus some extra data from the Receiver is logged to a physical file.
-When everything is finished, we go through the file to gather pertinent data, and do
-measurements and output it to files as expected by Jenkins.
-
+    Goals
+    =====
+    * Run softwarecontainer-agent and get profiling values from it into a log file
+    * Run several apps inside containers using softwarecontainer-agent and get profiling
+    values from these runs.
+    * Terminate everything and get profiling values from this.
 """
 
-# TODO: Make the test say pass or fail depending on some threshold in timing values
+import pytest
 
-
-import dbus
-import json
 import time
-import threading
 import os
-import subprocess
-import Queue
-import sys
 import tempfile
 import string
 import re
-from gi.repository import GObject
+
+from testframework import Container
 
 
-msgQueue = Queue.Queue()
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
-# TODO: This should be from the 'lib'
-class Receiver(threading.Thread):
-    """ The Receiver class encapsulates and runs a gobject mainloop and dbus implementation in a separate thread
-
-        This whole construct with the message queue is about triggering test excution only first after the
-        Agent is on the bus (the NameOwnerChanged signal has been received).
-    """
-    def __init__(self, logFile=None):
-        self._logFile = logFile
-        threading.Thread.__init__(self)
-        GObject.threads_init()
-
-    def log(self, msg):
-        if self._logFile is not None:
-            self._logFile.write(msg)
-        else:
-            print(msg)
-
-    def handler(self, gob, gob2, gob3):
-        self.log("pythonProfilingPoint dbusAvailable %.09f %s %s %s" % (time.time(), gob, gob2, gob3))
-        if gob == "com.pelagicore.SoftwareContainerAgent":
-            """ Put softwarecontainerStarted on the message queue, this is picked up by
-                other threads which should continue running when softwarecontainer-agent
-                is ready to work.
-            """
-            msgQueue.put("softwarecontainerStarted")
-
-    def run(self):
-        import dbus.mainloop.glib
-        self._gloop = GObject.MainLoop()
-        self._loop = dbus.mainloop.glib.DBusGMainLoop()
-        self._bus = dbus.SystemBus(mainloop=self._loop)
-        self._bus.add_signal_receiver(self.handler, dbus_interface="org.freedesktop.DBus", signal_name="NameOwnerChanged")
-        self._gloop.run()
-
-    def terminate(self):
-        if self._loop is not None:
-            self._gloop.quit()
-            self._gloop = None
-
-    def __del__(self):
-        self.terminate()
+# This function is used by the 'agent' fixture to know where the log should be stored
+def logfile_path():
+    return CURRENT_DIR + "/test.log"
 
 
-# TODO: This should be from the 'lib'
-class ContainerApp():
-    def __init__(self):
-        self._path = os.path.dirname(os.path.realpath(__file__))
-        self._bus = dbus.SystemBus()
-        self._pca_obj = self._bus.get_object("com.pelagicore.SoftwareContainerAgent",
-                                             "/com/pelagicore/SoftwareContainerAgent")
-        self._pca_iface = dbus.Interface(self._pca_obj, "com.pelagicore.SoftwareContainerAgent")
-
-    def createContainer(self):
-        self.containerId = self._pca_iface.CreateContainer("prefix", "")
-
-    def bindMountFolderInContainer(self):
-        self._pca_iface.BindMountFolderInContainer(self.containerId, self._path, "app", True)
-
-    def networkGateway(self):
-        configuration = {"network": json.dumps([{"internet-access": True, "gateway": "10.0.3.1"}])}
-        self._pca_iface.SetGatewayConfigs(self.containerId, configuration)
-
-    def dbusGateway(self):
-        configuration = [{
-            "dbus-gateway-config-session": [{
-                "direction": "outgoing",
-                "interface": "com.dbusproxyoutsideservice.SampleInterface",
-                "object-path": "*",
-                "method": "*"
-            }],
-            "dbus-gateway-config-system": []
-        }]
-        self._pca_iface.SetGatewayConfigs(self.containerId, {"dbus": json.dumps(configuration)})
-
-    def launchCommand(self):
-        if self._pca_iface.LaunchCommand(self.containerId, 0, "/gateways/app/simple", "/gateways/app", "/tmp/stdout", {"": ""}) is -1:
-            print "Failed to launch process in container"
-            return -1
-
-    def shutdown(self):
-        self._pca_iface.ShutDownContainer(self.containerId)
-
-    def start(self):
-        self.createContainer()
-        self.bindMountFolderInContainer()
-        # TODO: networkGateway ?
-        self.dbusGateway()
-        self.launchCommand()
-
-    def terminate(self):
-        self.shutdown()
-
-
-# TODO: This code contains a lot of what is broken out into the "agent handler" in the "lib"
-def runTest(numStarts=3, logFile=None):
-
-        rec = Receiver(logFile=logFile)
-        rec.start()  # Creates a thread, doesn not run it... (run() does that)
-
-        time.sleep(0.5)
-
-        print "Start softwarecontainer-agent"
-        agent = subprocess.Popen("softwarecontainer-agent", stdout=logFile, stderr=logFile)
-
-        try:
-            """ Wait for hte softwarecontainerStarted message to appear on the
-                msgQueue, this is evoked when softwarecontainer-agent is ready to
-                perform work. If we timeout tear down what we have started so far.
-            """
-            while msgQueue.get(block=True, timeout=5) != "softwarecontainerStarted":
-                pass
-        except Queue.Empty as e:
-            print "SoftwareContainer DBus interface not seen"
-            agent.terminate()
-            rec.terminate()
-            sys.exit(-1)
-
-        if agent.poll() is not None:
-            """ Make sure we are not trying to perform anything against a dead
-                softwarecontainer-agent
-            """
-            print "SoftwareContainer-agent has died for some reason"
-            rec.terminate()
-            sys.exit(-1)
-
-        apps = []
-        for app in range(0, numStarts):
+def run_test(num_starts=3):
+        apps = list()
+        for app in range(0, num_starts):
             """ Start numStarts apps in softwarecontainer.
             """
             print "Start app " + str(app)
-            container = ContainerApp()
-            container.start()
+            container = Container()
+
+            # A basic container configuration, content is not important for this test.
+            container_data = {
+                Container.PREFIX: "profiling-test-",
+                Container.CONFIG: "{enableWriteBuffer: false}",
+                Container.BIND_MOUNT_DIR: "app",
+                Container.HOST_PATH: CURRENT_DIR
+            }
+            container.start(container_data)
+
+            # A minimal gateway config so the gateway can be configured and enabled.
+            dbus_gw_config = [{
+                "dbus-gateway-config-session": [{
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": "*"
+                }],
+                "dbus-gateway-config-system": []
+            }]
+            container.set_gateway_config("dbus", dbus_gw_config)
+
+            container.launch_command("/gateways/app/simple")
             apps.append(container)
 
         time.sleep(5)
 
+        # Tear down all started apps
         for app in apps:
-            """ Tear down all started apps
-            """
             app.terminate()
 
-        agent.terminate()
-        rec.terminate()
 
-
-def removeAnsi(astring):
+def remove_ansi(astring):
     ansi_escape = re.compile(r'\x1b[^m]*m')
     return ansi_escape.sub('', astring)
 
 
-def getPythonPoint(logFile, pointName, matchNumber=1):
-    """
-    This function will grab the timestamp from a python log entry with pointName in the
-    logFile
+def get_python_point(log_file, point_name, match_number=1):
+    """ This function will grab the timestamp from a python log entry with pointName in
+        the log_file
     """
     match = 0
-    logFile.seek(0)
-    for line in logFile:
-        if re.search(pointName, line):
+    log_file.seek(0)
+    for line in log_file:
+        if re.search(point_name, line):
             match = match + 1
-            if match == matchNumber:
-                return removeAnsi(string.split(line)[2])
-    print "Nothing found! " + pointName + " " + str(matchNumber)
+            if match == match_number:
+                return remove_ansi(string.split(line)[2])
+    print "Nothing found! " + point_name + " " + str(match_number)
     return 0
 
 
-def getFunctionLog(logFile, functionName, matchNumber=1):
-    """
-    """
+def get_function_log(log_file, function_name, match_number=1):
     match = 0
-    logFile.seek(0)
-    for line in logFile:
-        if re.search(functionName + " end", line):
+    log_file.seek(0)
+    for line in log_file:
+        if re.search(function_name + " end", line):
             match = match + 1
-            if match == matchNumber:
+            if match == match_number:
                 print line
-                return removeAnsi(string.split(line)[6])
-    print "Nothing found! " + functionName + " " + str(matchNumber)
+                return remove_ansi(string.split(line)[6])
+    print "Nothing found! " + function_name + " " + str(match_number)
     return 0
 
 
-def getLogPoint(logFile, pointName, matchNumber=1):
-    """
-    This funciton will grab a timestamp from logFile with the entry name poointName, if no
-    matchNumber is declared, it will return the first found entry.
+def get_log_point(log_file, point_name, match_number=1):
+    """ This funciton will grab a timestamp from log_file with the entry name point_name, if no
+        match_number is declared, it will return the first found entry.
 
-    matchNumber can be used to set which entry to pick up, when multiple entries are found.
-    This might useful when starting multiple apps for example.
+        match_number can be used to set which entry to pick up, when multiple entries are found.
+        This might useful when starting multiple apps for example.
     """
     match = 0
-    logFile.seek(0)
-    for line in logFile:
-        if pointName in line:
+    log_file.seek(0)
+    for line in log_file:
+        if point_name in line:
             match = match + 1
-            if match == matchNumber:
-                return removeAnsi(string.split(line)[4])
-    print "Nothing found! " + pointName + " " + str(matchNumber)
+            if match == match_number:
+                return remove_ansi(string.split(line)[4])
+    print "Nothing found! " + point_name + " " + str(match_number)
     return 0
 
 
-def writeMeasurement(fileName, value, url=None):
+def write_measurement(file_name, value, url=None):
+    """ Write a measurement file to file_name containing the value and url entry.
+        This is for the properties files as defined in Jenkins Plot Plugin
     """
-    Write a measurement file to fileName containing the value and url entry.
-    This is for the properties files as defined in Jenkins Plot Plugin
-    """
-    f = open(fileName, 'w')
+    f = open(file_name, 'w')
     f.write("YVALUE=" + str(value) + "\n")
     if url is not None:
         f.write("URL=" + url + "\n")
     f.close()
 
 
-def measure(logFile):
-    if logFile is None:
+def measure(log_file):
+    if log_file is None:
         return False
 
-    for line in logFile:
+    for line in log_file:
         print line
 
     start = "softwareContainerStart"
     end = "dbusAvailable"
-    writeMeasurement("result-" + start + "-" + end + "-1.properties",
-                     float(getPythonPoint(logFile, end)) - float(getLogPoint(logFile, start)))
+    write_measurement("result-" + start + "-" + end + "-1.properties",
+                      float(get_python_point(log_file, end)) - float(get_log_point(log_file, start)))
 
     for i in range(1, 4):
         start = "createContainerStart"
         end = "launchCommandEnd"
-        writeMeasurement("result-" + start + "-" + end + "-" + str(i) + ".properties",
-                         float(getLogPoint(logFile, end, i)) - float(getLogPoint(logFile, start, i)))
+        write_measurement("result-" + start + "-" + end + "-" + str(i) + ".properties",
+                          float(get_log_point(log_file, end, i)) - float(get_log_point(log_file, start, i)))
 
-    # TODO: We might want to separate the setGatewayConfigsFunction part into a
-    #       separate step when we add more configs.
-    profilePoints = ["createContainerFunction",
-                     "bindMountFolderInContainerFunction",
-                     "setGatewayConfigsFunction",
-                     "launchCommandFunction",
-                     "shutdownContainerFunction"]
-    for value in profilePoints:
-        writeMeasurement("result-" + value + ".properties", float(getFunctionLog(logFile, value)))
+    profile_points = ["createContainerFunction",
+                      "bindMountFolderInContainerFunction",
+                      "setGatewayConfigsFunction",
+                      "launchCommandFunction",
+                      "shutdownContainerFunction"]
+    for value in profile_points:
+        write_measurement("result-" + value + ".properties", float(get_function_log(log_file, value)))
 
 
-def test_start_profiling():
-    logfile = tempfile.TemporaryFile()
-    runTest(logFile=logfile)
+@pytest.mark.usefixtures("agent")
+class TestTimingProfiling(object):
 
-    time.sleep(1)
+    def test_start_profiling(self):
+        run_test()
 
-    logfile.seek(0)
-    measure(logfile)
+        time.sleep(1)
+
+        # The agent fixture has set the Agent to log to the file specified by logfile_path() in this module.
+        # Now we need the content of that file for analysis. In this setup the Agent helper still has the file
+        # open and while the below seems to work, it is probably a nasty hack. Beware of this if the output
+        # from this test suite becomes strange...
+        log_file = open(logfile_path(), "r")
+        log_file.seek(0)
+        measure(log_file)

@@ -5,3 +5,4 @@ cmake_install.cmake
 simple
 dlt.log
 *.properties
+test.log
