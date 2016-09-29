@@ -321,6 +321,7 @@ the latter two being that ``REJECT`` answers the sender while ``DROP`` does not.
 As mentioned above, different order of the rules can have profound different meaning. Following are
 an example attempting to reject all traffic from example.com on ports 1234 to 5678 and adding an
 exception for port 1423.::
+
     [
         {
             "type": "INCOMING",
@@ -336,6 +337,7 @@ exception for port 1423.::
 However, since the rejection of the ports 1234 to 5678 is declared before the exception to the port
 1423, which is included in the range of ports rejected, the exception will not have any effect. In
 order to achive this the order of the rules has to be changed::
+
     [
         {
             "type": "INCOMING",
