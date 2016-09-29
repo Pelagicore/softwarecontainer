@@ -38,10 +38,12 @@ add_library(softwarecontainercommon SHARED
     softwarecontainer-common.cpp
 )
 
+
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
+install(TARGETS softwarecontainercommon DESTINATION lib)
+
 
 if(ENABLE_TEST)
     set(SOFTWARECONTAINER_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(unit-test)
 endif()
-
