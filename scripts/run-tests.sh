@@ -34,7 +34,7 @@ echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 
 echo "### Launching pulseaudio ###"
 PULSE_SERVER=/tmp/pulse.sock
-pulseaudio --daemonize
+pulseaudio --daemonize --exit-idle-time=-1
 ppid=$!
 pactl load-module module-native-protocol-unix auth-anonymous=1 socket=$PULSE_SERVER
 export PULSE_SERVER=$PULSE_SERVER
