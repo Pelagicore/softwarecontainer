@@ -44,6 +44,23 @@ enabled
 
 ### Running the tests
 
-In the `timing-profiling` directory, run the tests like so:
+In the `timingprofiling` directory, run the tests like so:
 
     sudo py.test
+
+
+## Capabilities tests
+
+This suite tests that the capabilities set are turned into the expected
+gateway configuration.
+
+### Configuration requirements
+
+TBD
+
+### Running the tests
+
+In the `capabilities` directory, run the tests like so:
+
+    sudo py.test
+

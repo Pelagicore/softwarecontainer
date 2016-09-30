@@ -57,6 +57,12 @@
             <arg direction="in" type="a{ss}" name="configs" />
         </method>
 
+        <method name="SetCapabilities">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="in" type="as" name="capabilities" />
+            <arg direction="out" type="b" name="success" />
+        </method>
+
         <signal name="ProcessStateChanged">
             <arg direction="out" type="u" name="containerID"/>
             <arg direction="out" type="u" name="processID"/>

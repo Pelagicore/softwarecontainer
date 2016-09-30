@@ -18,7 +18,7 @@
 # For further information see LICENSE
 
 
-DIRECTORIES=(dbus/ timingprofiling/)
+DIRECTORIES=(dbus/ timingprofiling/ capabilities/)
 
 for DIR in ${DIRECTORIES[@]}; do
         echo "Running service tests in $DIR"

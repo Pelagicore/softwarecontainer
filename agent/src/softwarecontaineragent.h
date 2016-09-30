@@ -108,6 +108,8 @@ public:
 
     void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
 
+    bool setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities);
+
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
