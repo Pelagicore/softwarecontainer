@@ -18,18 +18,17 @@
  * For further information see LICENSE
  */
 
-#pragma once
+#include "overlaysynccleanuphandler.h"
 
-#include <cleanuphandler.h>
+#include "recursivecopy.h"
 
-class CopyCleanupHandler : public CleanUpHandler
+OverlaySyncCleanupHandler::OverlaySyncCleanupHandler(std::string src, std::string dst)
 {
-public:
-    CopyCleanupHandler(std::string src, std::string dst);
+    m_src = src;
+    m_dst = dst;
+}
 
-    ReturnCode clean() override;
-private:
-    std::string m_src;
-    std::string m_dst;
-
-};
+ReturnCode OverlaySyncCleanupHandler::clean()
+{
+    return RecursiveCopy::getInstance().copy(m_src, m_dst);
+}

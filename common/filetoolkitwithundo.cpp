@@ -23,7 +23,7 @@
 #include "directorycleanuphandler.h"
 #include "filecleanuphandler.h"
 #include "mountcleanuphandler.h"
-#include "copycleanuphandler.h"
+#include "overlaysynccleanuphandler.h"
 
 #include "recursivecopy.h"
 
@@ -155,10 +155,10 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 }
 
 ReturnCode FileToolkitWithUndo::overlayMount(
-          const std::string &lower
-        , const std::string &upper
-        , const std::string &work
-        , const std::string &dst)
+        const std::string &lower,
+        const std::string &upper,
+        const std::string &work,
+        const std::string &dst)
 {
     std::string fstype = "overlay";
     unsigned long flags = MS_BIND;
@@ -181,7 +181,7 @@ ReturnCode FileToolkitWithUndo::overlayMount(
     if (mountRes == 0) {
         log_verbose() << "overlayMounted folder " << lower << " in " << dst;
         m_cleanupHandlers.push(new MountCleanUpHandler(dst));
-        m_cleanupHandlers.push(new CopyCleanupHandler(upper, lower));
+        m_cleanupHandlers.push(new OverlaySyncCleanupHandler(upper, lower));
         m_cleanupHandlers.push(new DirectoryCleanUpHandler(upper));
         m_cleanupHandlers.push(new DirectoryCleanUpHandler(work));
     } else {
@@ -193,7 +193,8 @@ ReturnCode FileToolkitWithUndo::overlayMount(
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode FileToolkitWithUndo::syncOverlayMount(const std::string &lower,
+ReturnCode FileToolkitWithUndo::syncOverlayMount(
+        const std::string &lower,
         const std::string &upper)
 {
     return RecursiveCopy::getInstance().copy(upper, lower);
@@ -224,7 +225,9 @@ ReturnCode FileToolkitWithUndo::writeToFile(const std::string &path, const std::
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode FileToolkitWithUndo::createSymLink(const std::string &source, const std::string &destination)
+ReturnCode FileToolkitWithUndo::createSymLink(
+        const std::string &source,
+        const std::string &destination)
 {
     log_debug() << "creating symlink " << source << " pointing to " << destination;
 

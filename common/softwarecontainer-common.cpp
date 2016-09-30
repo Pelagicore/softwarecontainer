@@ -21,13 +21,12 @@
 
 #include <string.h>
 #include <string>
+#include <iostream>
+#include <sstream>
 #include <fcntl.h>
 #include <fstream>
 #include "softwarecontainer-common.h"
 
-#include <string>
-#include <iostream>
-#include <sstream>
 
 namespace softwarecontainer {
 
@@ -48,20 +47,25 @@ bool isDirectory(const std::string &path)
 }
 
 bool isDirectoryEmpty(const std::string &path) {
-  int n = 0;
-  struct dirent *d;
-  DIR *dir = opendir(path.c_str());
-  if (dir == NULL) //Not a directory or doesn't exist
-    return true;
-  while ((d = readdir(dir)) != NULL) {
-    if(++n > 2)
-      break;
-  }
-  closedir(dir);
-  if (n <= 2) //Directory Empty
-    return true;
-  else
-    return false;
+    int n = 0;
+    constexpr int EMPTY_DIR_SIZE=2;
+    struct dirent *d;
+    DIR *dir = opendir(path.c_str());
+    if (dir == NULL) { //Not a directory or doesn't exist
+        return true;
+    }
+    while ((d = readdir(dir)) != NULL) {
+        ++n;
+        if(n > EMPTY_DIR_SIZE) {
+            break;
+        }
+    }
+    closedir(dir);
+    if (n <= EMPTY_DIR_SIZE) { //Directory Empty
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool isFile(const std::string &path)

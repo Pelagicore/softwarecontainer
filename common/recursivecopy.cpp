@@ -25,10 +25,10 @@
 #include <iostream>
 #include <string>
 
-std::string dst_root;
-std::string src_root;
+std::string dstRoot;
+std::string srcRoot;
 
-extern "C" int copy_file(const char*, const struct stat, int);
+extern "C" int copyFile(const char*, const struct stat, int);
 
 /**
  * @brief copy_file Copy files from src_path to dst_root global path
@@ -43,40 +43,42 @@ extern "C" int copy_file(const char*, const struct stat, int);
  * misbehave.
  * @return always 0 for now.
  */
-int copy_file(const char* src_path, const struct stat* sb, int typeflag) {
-    std::string dst_path;
-    std::string src(src_path);
+int copyFile(const char* srcPath, const struct stat* sb, int typeflag)
+{
+    std::string dstPath;
+    std::string src(srcPath);
 
-    if (src.find(src_root) != std::string::npos) {
-        dst_path = dst_root + src.erase(0, src_root.length());
+    if (src.find(srcRoot) != std::string::npos) {
+        dstPath = dstRoot + src.erase(0, srcRoot.length());
     } else {
-        dst_path = dst_root + src;
+        dstPath = dstRoot + src;
     }
 
     switch(typeflag) {
     case FTW_D:
-        mkdir(dst_path.c_str(), sb->st_mode);
+        mkdir(dstPath.c_str(), sb->st_mode);
         break;
     case FTW_F:
-        std::ifstream src(src_path, std::ios::binary);
-        std::ofstream dst(dst_path, std::ios::binary);
+        std::ifstream src(srcPath, std::ios::binary);
+        std::ofstream dst(dstPath, std::ios::binary);
         dst << src.rdbuf();
     }
     return 0;
 }
 
-RecursiveCopy &RecursiveCopy::getInstance() {
+RecursiveCopy &RecursiveCopy::getInstance()
+{
     static RecursiveCopy instance;
     return instance;
 }
 
-ReturnCode RecursiveCopy::copy(std::string src, std::string dst) {
+ReturnCode RecursiveCopy::copy(std::string src, std::string dst)
+{
     ReturnCode retval = ReturnCode::SUCCESS;
     m_copyLock.lock();
-    dst_root.assign(dst);
-    src_root.assign(src);
-    if (ftw(src.c_str(), copy_file, 20) != 0)
-    {
+    dstRoot.assign(dst);
+    srcRoot.assign(src);
+    if (ftw(src.c_str(), copyFile, 20) != 0) {
         log_error() << "Failed to recursively copy " << src << " to " << dst;
         retval = ReturnCode::FAILURE;
     }
