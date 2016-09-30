@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -61,17 +60,32 @@ enum class ReturnCode
     SUCCESS
 };
 
-
+/**
+ * @brief bool2ReturnCode Convert bool to ReturnCode
+ * @param b boolean value to be converted
+ * @return ReturnCode::SUCCESS if b is true
+ * @return ReturnCode::FAILURE if b is false
+ */
 inline ReturnCode bool2ReturnCode(bool b)
 {
     return b ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
 }
 
+/**
+ * @brief isError Check if ReturnCode indicates Error or not
+ * @param code the ReturnCode to check
+ * @return true if ReturnCode::FAILURE is indicated
+ */
 inline bool isError(ReturnCode code)
 {
     return (code != ReturnCode::SUCCESS);
 }
 
+/**
+ * @brief isSuccess Check if ReturnCode indicates Success or not
+ * @param code the ReturnCode to check
+ * @return true if ReturnCode::SUCCESS is indicated
+ */
 inline bool isSuccess(ReturnCode code)
 {
     return !isError(code);
@@ -113,13 +127,13 @@ private:
  * @param context glib context to attach the SignalChildWatch to.
  */
 inline void addProcessListener(
-        SignalConnectionsHandler &connections
-        , pid_t pid
-        , std::function<void(pid_t, int)> function
-        , Glib::RefPtr<Glib::MainContext> context)
+    SignalConnectionsHandler &connections,
+    pid_t pid,
+    std::function<void(pid_t, int)> function,
+    Glib::RefPtr<Glib::MainContext> context)
 {
     Glib::SignalChildWatch watch = context->signal_child_watch();
-    auto connection = watch.connect(function,pid);
+    auto connection = watch.connect(function, pid);
     connections.addConnection(connection);
 }
 

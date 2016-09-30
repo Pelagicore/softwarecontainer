@@ -27,7 +27,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
 
     parser.add_argument('mode', choices=["create", "check", "delete"],
-                        help='Mode of program, create, check and delete supported')
+                        help='Mode supported: create, check, delete')
 
     parser.add_argument('name', type=str, default='/lala.txt',
                         help='Filename to be used')

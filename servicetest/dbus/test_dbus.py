@@ -132,20 +132,3 @@ class TestDBus(object):
             ca.terminate()
             serv.terminate()
             serv = None
-
-    def test_enableWriteBuffer_flag(self):
-        ca = Container()
-        try:
-            serv = dbusapp.Server()
-            serv.start()
-
-            DATA[Container.CONFIG] = "{enableWriteBuffer: true}"
-            ca.start(DATA)
-            ca.set_gateway_config("dbus", GW_CONFIG)
-            ca.launch_command('{}/dbusapp.py client'.format(ca.get_bind_dir()))
-
-            assert serv.wait_until_requests() is True
-        finally:
-            ca.terminate()
-            serv.terminate()
-            serv = None
