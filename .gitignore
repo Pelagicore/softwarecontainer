@@ -12,6 +12,4 @@ build-*/
 *.files
 *.includes
 .vagrant/
-vagrant_key
-vagrant_key.pub
 .cache/

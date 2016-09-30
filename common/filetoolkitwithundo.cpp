@@ -3,6 +3,7 @@
 #include "directorycleanuphandler.h"
 #include "filecleanuphandler.h"
 #include "mountcleanuphandler.h"
+#include "copycleanuphandler.h"
 
 #include "recursivecopy.h"
 
@@ -101,6 +102,8 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
         os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
         data = os.str().c_str();
 
+        log_debug() << "enableWriteBuffer, config: " << os;
+
         mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
     } else {
         mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
@@ -158,6 +161,7 @@ ReturnCode FileToolkitWithUndo::overlayMount(
     if (mountRes == 0) {
         log_verbose() << "overlayMounted folder " << lower << " in " << dst;
         m_cleanupHandlers.push(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push(new CopyCleanupHandler(upper, lower));
         m_cleanupHandlers.push(new DirectoryCleanUpHandler(upper));
         m_cleanupHandlers.push(new DirectoryCleanUpHandler(work));
     } else {

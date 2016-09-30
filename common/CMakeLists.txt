@@ -23,6 +23,7 @@ set(HEADERS
     softwarecontainer-log.h
     jsonparser.h
     cleanuphandler.h
+    copycleanuphandler.h
     directorycleanuphandler.h
     filecleanuphandler.h
     mountcleanuphandler.h
@@ -35,6 +36,7 @@ add_library(softwarecontainercommon SHARED
     jsonparser.cpp
     filetoolkitwithundo.cpp
     mountcleanuphandler.cpp
+    copycleanuphandler.cpp
     softwarecontainer-common.cpp
     recursivecopy.cpp
 )
