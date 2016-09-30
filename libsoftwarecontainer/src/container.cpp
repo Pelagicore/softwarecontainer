@@ -168,22 +168,33 @@ ReturnCode Container::create()
     if (isSuccess(status)) {
         int flags = 0;
         std::vector<char *> argv;
+
+        const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
+
         if (m_enableWriteBuffer) {
-            //log_error() << "Write buffer enabled";
-            argv.push_back((char *)"--buffer");
-            const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
-            const std::string rootfspath_lower = rootfspath_lower + "-lower";
-            const std::string rootfspath_upper = rootfspath_lower + "-upper";
-            const std::string rootfspath_work = rootfspath_lower + "-work";
+            const std::string rootfspath_lower = rootfspath_dst + "-lower";
+            createDirectory(rootfspath_lower);
+            const std::string rootfspath_upper = rootfspath_dst + "-upper";
+            createDirectory(rootfspath_upper);
+            const std::string rootfspath_work = rootfspath_dst + "-work";
             overlayMount(rootfspath_lower, rootfspath_upper, rootfspath_work, rootfspath_dst);
+            m_rootFSPath = rootfspath_lower;
+
+            log_debug() << "Write buffer enabled, lower=" << rootfspath_lower
+                        << ", upper=" << rootfspath_upper
+                        << ", work=" << rootfspath_work
+                        << ", dst=" << rootfspath_dst;
+        } else {
+            m_rootFSPath = rootfspath_dst;
+            log_debug() << "WriteBuffer disabled, dst=" << rootfspath_dst;
         }
+
         if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, &argv[0])) {
             log_error() << "Error creating container";
+            m_rootFSPath.assign("");
             status = ReturnCode::FAILURE;
         } else {
-            log_debug() << "Successfully created container";
             m_state = ContainerState::CREATED;
-            m_rootFSPath = (StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs");
             log_debug() << "Container created. RootFS: " << m_rootFSPath;
         }
     }
@@ -578,7 +589,7 @@ ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
         return ReturnCode::FAILURE;
     }
 
-    if (isError(bindMount(pathOnHost, dst, readonly))) {
+    if (isError(bindMount(pathOnHost, dst, readonly, m_enableWriteBuffer))) {
         log_error() << "Could not bind mount " << pathOnHost << " to " << dst;
         return ReturnCode::FAILURE;
     }
