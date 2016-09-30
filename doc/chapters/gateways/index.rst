@@ -409,7 +409,7 @@ Configuration
 Example configuration enabling audio::
 
     [
-        {"audio": true}
+        { "audio": true }
     ]
 
 A malformed configuration or a configuration that sets audio to false will simply
@@ -422,7 +422,16 @@ Wayland gateway
 
 The Wayland Gateway is used to provide access to the hsot system Wayland server.
 
+Please note that the Wayland Gateway only provides access to the Wayland
+socket and sets the ``XDG_RUNTIME_DIR`` accordingly. For a Wayland
+*capability*, it is also necessary to ensure that the contained application
+has access to the graphics hardware devices and associated libraries.
+
 Configuration
 -------------
 
-T.B.D.
+Example configuration enabling Wayland::
+
+    [
+        { "enabled": true }
+    ]
