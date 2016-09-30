@@ -82,6 +82,12 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
     std::string fstype;
     const void *data = nullptr;
     int mountRes;
+
+    if (!existsInFileSystem(src)) {
+        log_error() << src << " does not exist on the host, can not bindMount";
+        return ReturnCode::FAILURE;
+    }
+
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
     if(enableWriteBuffer) {
