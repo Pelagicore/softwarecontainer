@@ -66,6 +66,12 @@ class Container():
         """
         self.__agent.SetGatewayConfigs(self.__container_id, {gateway_id: json.dumps(config)})
 
+    def set_capabilities(self, capabilities):
+        """ Set capabilities by passsing a list of strings with capability IDs
+        """
+        result = self.__agent.SetCapabilities(self.__container_id, capabilities)
+        return True if result == dbus.Boolean(True) else False
+
     def launch_command(self, binary, stdout="/tmp/stdout", env={"": ""}):
         """ Calls LaunchCommand on the Agent D-Bus interface.
 

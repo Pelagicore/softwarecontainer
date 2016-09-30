@@ -38,6 +38,11 @@ void softwarecontainer::SoftwareContainerAgentAdaptor::SetGatewayConfigs(const u
     m_agent.setGatewayConfigs(containerID, configs);
 }
 
+bool softwarecontainer::SoftwareContainerAgentAdaptor::SetCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities)
+{
+    return m_agent.setCapabilities(containerID, capabilities);
+}
+
 uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::CreateContainer(const std::string &name, const std::string &config)
 {
     return m_agent.createContainer(name, config);

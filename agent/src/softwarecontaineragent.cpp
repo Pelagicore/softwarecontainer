@@ -232,6 +232,12 @@ void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, cons
     }
 }
 
+bool SoftwareContainerAgent::setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities)
+{
+    return true;
+}
+
+
 std::shared_ptr<Workspace> SoftwareContainerAgent::getWorkspace()
 {
     return m_softwarecontainerWorkspace;
