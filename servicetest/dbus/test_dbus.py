@@ -104,6 +104,7 @@ class TestDBus(object):
                 serv.terminate()
                 serv = None
 
+    @pytest.mark.skip(reason="See reported issue about this")
     def test_spam_out(self):
         """ Launch client in container and stress test the communication out """
         ca = Container()
