@@ -27,22 +27,22 @@ Below is an example of the major entities involved in a call to create a contain
     span_height = 5;
 
     Launcher -> Agent [label = "CreateContainer (D-Bus call)", leftnote = "D-Bus side"]
-    Agent -> SoftwareContainerLib [label = "init()"];
+    Agent -> SoftwareContainer [label = "init()"];
 
-    SoftwareContainerLib -> ContainerAbstractInterface [label = "initialize()"]
-    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer -> ContainerAbstractInterface [label = "initialize()"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
 
-    SoftwareContainerLib -> ContainerAbstractInterface [label = "create()"]
+    SoftwareContainer -> ContainerAbstractInterface [label = "create()"]
     ContainerAbstractInterface -> liblxc [label = "lxc_container_new()", rightnote = "system side"]
     ContainerAbstractInterface <-- liblxc
-    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
 
-    SoftwareContainerLib -> ContainerAbstractInterface [label = "start()"]
+    SoftwareContainer -> ContainerAbstractInterface [label = "start()"]
     ContainerAbstractInterface -> liblxc [label = "multiple calls"]
     ContainerAbstractInterface <-- liblxc
-    SoftwareContainerLib <-- ContainerAbstractInterface
+    SoftwareContainer <-- ContainerAbstractInterface
 
-    Agent <-- SoftwareContainerLib [label = "ReturnCode"]
+    Agent <-- SoftwareContainer [label = "ReturnCode"]
     Launcher <-- Agent [label = "ID"]
 
 
