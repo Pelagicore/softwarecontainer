@@ -16,14 +16,14 @@ or anyone who simply wants a better insight for e.g. troubleshooting.
 Important internal interfaces
 =============================
 
-Interface: libsoftwarecontainer.h
+Interface: softwarecontainer.h
 ---------------------------------
 
-The Agent uses ``libsoftwarecontainer.h`` to manage the lifecycle of container instances, e.g. creation and
+The Agent uses ``softwarecontainer.h`` to manage the lifecycle of container instances, e.g. creation and
 destruction. The interface provides access to the underlying ``ContainerAbstractInterface`` which users can
-utilize to access the container interface. The interface is implemented by ``SoftwareContainerLib``.
+utilize to access the container interface. The interface is implemented by ``SoftwareContainer``.
 
-Below is a diagram showing the interaction between the user `Agent` and the interfaces ``SoftwareContainerLib``
+Below is a diagram showing the interaction between the user `Agent` and the interfaces ``SoftwareContainer``
 subsequently uses:
 
 .. seqdiag::
@@ -31,37 +31,37 @@ subsequently uses:
     span_height = 5;
 
 
-    Agent -> SoftwareContainerLib [label = "new()"]
-    Agent <-- SoftwareContainerLib
+    Agent -> SoftwareContainer [label = "new()"]
+    Agent <-- SoftwareContainer
 
-    Agent -> SoftwareContainerLib [label = "setContainerIDPrefix()"]
-    Agent <-- SoftwareContainerLib
+    Agent -> SoftwareContainer [label = "setContainerIDPrefix()"]
+    Agent <-- SoftwareContainer
 
-    Agent -> SoftwareContainerLib [label = "setMainLoopContext()"]
-    Agent <-- SoftwareContainerLib
+    Agent -> SoftwareContainer [label = "setMainLoopContext()"]
+    Agent <-- SoftwareContainer
 
-    Agent -> SoftwareContainerLib [label = "init()"]
+    Agent -> SoftwareContainer [label = "init()"]
 
-    SoftwareContainerLib -> SoftwareContainerLib [label = "preload()"]
+    SoftwareContainer -> SoftwareContainer [label = "preload()"]
 
-    SoftwareContainerLib -> ContainerAbstractInterface [label = "initialize()"]
-    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer -> ContainerAbstractInterface [label = "initialize()"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
 
-    SoftwareContainerLib -> ContainerAbstractInterface [label = "create()"]
-    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer -> ContainerAbstractInterface [label = "create()"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
 
-    SoftwareContainerLib -> ContainerAbstractInterface [label = "start()"]
-    SoftwareContainerLib <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer -> ContainerAbstractInterface [label = "start()"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
 
-    SoftwareContainerLib -> Gateway [label = "new()", note = "multiple calls"]
-    SoftwareContainerLib <-- Gateway
+    SoftwareContainer -> Gateway [label = "new()", note = "multiple calls"]
+    SoftwareContainer <-- Gateway
 
-    SoftwareContainerLib -> SoftwareContainerLib [label = "addGateway()", note = "multiple calls"]
+    SoftwareContainer -> SoftwareContainer [label = "addGateway()", note = "multiple calls"]
 
-    SoftwareContainerLib -> Gateway [label = "setContainer()", note = "multiple calls"]
-    SoftwareContainerLib <-- Gateway
+    SoftwareContainer -> Gateway [label = "setContainer()", note = "multiple calls"]
+    SoftwareContainer <-- Gateway
 
-    Agent <-- SoftwareContainerLib [label = "ReturnCode"]
+    Agent <-- SoftwareContainer [label = "ReturnCode"]
 
     === further events here ===
 
@@ -85,20 +85,20 @@ Below is a diagram showing the `initialize`, `create`, and `start` sequence focu
 
     span_height = 5;
 
-    SoftwareContainerLib -> Container [label = "initialize()"]
+    SoftwareContainer -> Container [label = "initialize()"]
     Container -> Container [label = "createDirectory()"]
     Container -> Container [label = "createSharedMountPoint()"]
-    SoftwareContainerLib <-- Container [label = "ReturnCode"]
+    SoftwareContainer <-- Container [label = "ReturnCode"]
 
-    SoftwareContainerLib -> Container [label = "create()"]
+    SoftwareContainer -> Container [label = "create()"]
     Container -> liblxc [label = "lxc_container_new()"]
     Container <-- liblxc [label = "container_struct"]
     === various operations on the lxc struct ===
-    SoftwareContainerLib <-- Container [label = "ReturnCode"]
+    SoftwareContainer <-- Container [label = "ReturnCode"]
 
-    SoftwareContainerLib -> Container [label = "start()"]
+    SoftwareContainer -> Container [label = "start()"]
     === various operations on the lxc struct ===
-    SoftwareContainerLib <-- Container [label = "ReturnCode"]
+    SoftwareContainer <-- Container [label = "ReturnCode"]
 
 
 Interface: gateway.h
@@ -124,23 +124,23 @@ Below diagram show the major events during the configuration and activation sequ
     span_height = 5;
 
 
-    Agent -> SoftwareContainerLib [label = "updateGatewayConfiguration()"]
-    SoftwareContainerLib -> SoftwareContainerLib [label = "setGatewayConfigs()"]
+    Agent -> SoftwareContainer [label = "updateGatewayConfiguration()"]
+    SoftwareContainer -> SoftwareContainer [label = "setGatewayConfigs()"]
 
-    SoftwareContainerLib -> Gateway [label = "id()"]
-    SoftwareContainerLib <-- Gateway [label = "ID"]
+    SoftwareContainer -> Gateway [label = "id()"]
+    SoftwareContainer <-- Gateway [label = "ID"]
 
-    SoftwareContainerLib -> Gateway [label = "setConfig()"]
+    SoftwareContainer -> Gateway [label = "setConfig()"]
 
     Gateway -> derived-gateway [label = "readConfigElement()"]
     Gateway <-- derived-gateway [label = "bool"]
 
-    SoftwareContainerLib <-- Gateway [label = "bool"]
+    SoftwareContainer <-- Gateway [label = "bool"]
 
-    SoftwareContainerLib -> Gateway [label = "isConfigured()"]
-    SoftwareContainerLib <-- Gateway [label = "bool"]
+    SoftwareContainer -> Gateway [label = "isConfigured()"]
+    SoftwareContainer <-- Gateway [label = "bool"]
 
-    SoftwareContainerLib -> Gateway [label = "activate()"]
-    SoftwareContainerLib <-- Gateway [label = "bool"]
+    SoftwareContainer -> Gateway [label = "activate()"]
+    SoftwareContainer <-- Gateway [label = "bool"]
 
-    Agent <-- SoftwareContainerLib [label = "void", failed]
+    Agent <-- SoftwareContainer [label = "void", failed]
