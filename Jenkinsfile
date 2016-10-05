@@ -36,6 +36,6 @@ node {
     runInVagrant(workspace, "cd softwarecontainer/examples && sudo ./run-tests.sh")
 
     stage 'Shutdown'
-    sh 'cd ${workspace} && vagrant halt || true'
+    sh "cd ${workspace} && vagrant halt || true"
 }
 
