@@ -31,7 +31,7 @@ namespace softwarecontainer {
      */
     class JSONParser {
 
-    protected:
+    public:
         /**
          * @brief Reads a string from a JSON Object.
          *
@@ -44,7 +44,7 @@ namespace softwarecontainer {
          * @return True: If the string was successfully read.
          * @return False: If the string could not be read.
          */
-        bool read(const json_t *element, const char *key, std::string &result);
+        static bool read(const json_t *element, const char *key, std::string &result);
 
         /**
          * @brief Reads a boolean from a JSON Object.
@@ -58,7 +58,7 @@ namespace softwarecontainer {
          * @return True: If the boolean was successfully read.
          * @return False: If the boolean could not be read.
          */
-        bool read(const json_t *element, const char *key, bool &result);
+        static bool read(const json_t *element, const char *key, bool &result);
 
         /**
          * @brief Reads an integer from a JSON Object.
@@ -72,6 +72,6 @@ namespace softwarecontainer {
          * @return True: If the integer was successfully read.
          * @return False: If the integer could not be read.
          */
-        bool read(const json_t *element, const char *key, int &result);
+        static bool read(const json_t *element, const char *key, int &result);
     };
 }
