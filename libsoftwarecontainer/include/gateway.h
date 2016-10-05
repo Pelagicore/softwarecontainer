@@ -22,8 +22,10 @@
 #ifndef GATEWAY_H
 #define GATEWAY_H
 
-#include "container.h"
+#include "containerabstractinterface.h"
 #include "jsonparser.h"
+
+#include <string>
 
 /**
  *
@@ -135,6 +137,12 @@ public:
      * @brief Execute the given command in the container
      */
     ReturnCode executeInContainer(const std::string &cmd);
+
+    /**
+     * @brief Execute a function in the container
+     */
+    typedef std::function<int ()> ContainerFunction;
+    ReturnCode executeInContainer(ContainerFunction func);
 
 protected:
     static constexpr const char *ENABLED_FIELD = "enabled";

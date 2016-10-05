@@ -24,6 +24,7 @@
 #include "gateway.h"
 #include "generators.h"
 #include "jansson.h"
+#include "netlink.h"
 
 /**
  * @brief Sets up and manages network access and routing to the container
@@ -165,6 +166,7 @@ private:
     bool m_interfaceInitialized;
 
     Generator m_generator;
+    Netlink m_netlinkHost;
 
     /**
      * @brief Parses a json element to a Rule

@@ -226,8 +226,8 @@ bool NetworkGateway::activateGateway()
         log_debug() << "No gateway. Network access will be disabled";
     }
 
-    if (!isBridgeAvailable()) {
-        log_error() << "Bridge not available.";
+    if ( !isBridgeAvailable() ) {
+        log_error() << "Bridge not available, expected gateway to be " << m_gateway;
         return false;
     }
 
@@ -262,64 +262,74 @@ bool NetworkGateway::generateIP()
 
 bool NetworkGateway::setDefaultGateway()
 {
-    log_debug() << "Attempting to set default gateway";
-    std::string cmdDel = "route del default gw " + m_gateway;
-    executeInContainer(cmdDel);
+    ReturnCode ret = executeInContainer([this] {
+        Netlink n;
+        bool success = n.setDefaultGateway(m_gateway.c_str());
+        return success ? 0 : 1;
+    });
 
-    std::string cmdAdd = "route add default gw " + m_gateway;
-    if (isError(executeInContainer(cmdAdd))) {
-        log_error() << "Could not set default gateway.";
-        return false;
-    }
-    return true;
+    return isSuccess(ret);
 }
 
 bool NetworkGateway::up()
 {
-    log_debug() << "Attempting to configure eth0 to 'up state'";
-    std::string cmd;
-
     if (!m_interfaceInitialized) {
-        cmd = "ifconfig eth0 " + ip() + " netmask 255.255.255.0 up";
-        m_interfaceInitialized = true;
-    } else {
-        cmd = "ifconfig eth0 up";
+        log_debug() << "Attempting to bring up eth0";
+        ReturnCode ret = executeInContainer([this] {
+            Netlink n;
+            std::vector<std::pair<int, std::string>> ifaces = n.get_interfaces();
+            for (std::pair<int, std::string> pair : ifaces) {
+                if (pair.second.compare("eth0") == 0) {
+                    in_addr ip_addr;
+                    inet_aton(ip().c_str(), &ip_addr);
+
+                    in_addr netmask;
+                    inet_aton("255.255.255.0", &netmask);
+
+                    return n.up(pair.first, ip_addr, netmask) ? 0 : 1;
+                }
+            }
+
+            return 1;
+        });
+
+        if (isSuccess(ret)) {
+            m_interfaceInitialized = true;
+            return setDefaultGateway();
+        } else {
+            log_debug() << "Failed to bring up eth0";
+            return false;
+        }
     }
 
-    if (isError(executeInContainer(cmd))) {
-        log_error() << "Configuring eth0 to 'up state' failed.";
-        return false;
-    }
-
-    /* The route to the default gateway must be added
-       each time the interface is brought up again */
-    return setDefaultGateway();
+    log_debug() << "Interface already configured";
+    return true;
 }
 
 bool NetworkGateway::down()
 {
     log_debug() << "Attempting to configure eth0 to 'down state'";
-    std::string cmd = "ifconfig eth0 down";
-    if (isError(executeInContainer(cmd))) {
+    ReturnCode ret = executeInContainer([this] {
+        Netlink n;
+        std::vector<std::pair<int, std::string>> ifaces = n.get_interfaces();
+        for (std::pair<int, std::string> pair : ifaces) {
+            if (pair.second.compare("eth0") == 0) {
+                return n.down(pair.first) ? 0 : 1;
+            }
+        }
+
+        return 1;
+    });
+
+    if (isError(ret)) {
         log_error() << "Configuring eth0 to 'down state' failed.";
         return false;
     }
+
     return true;
 }
 
-
 bool NetworkGateway::isBridgeAvailable()
 {
-    log_debug() << "Checking bridge availability";
-    std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \""
-                                      << BRIDGE_INTERFACE << "\" | grep -q \""
-                                      << m_gateway << "\"";
-
-    if (system(cmd.c_str()) == 0) {
-        return true;
-    } else {
-        log_error() << "No network bridge configured";
-    }
-
-    return false;
+    return m_netlinkHost.isBridgeAvailable(BRIDGE_INTERFACE, m_gateway.c_str());
 }
