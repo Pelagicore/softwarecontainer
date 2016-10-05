@@ -14,3 +14,4 @@ build-*/
 .vagrant/
 .cache/
 *.autosave
+clang/
