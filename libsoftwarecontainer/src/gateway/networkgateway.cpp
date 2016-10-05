@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -282,11 +281,7 @@ bool NetworkGateway::up()
                 if (pair.second.compare("eth0") == 0) {
                     in_addr ip_addr;
                     inet_aton(ip().c_str(), &ip_addr);
-
-                    in_addr netmask;
-                    inet_aton("255.255.255.0", &netmask);
-
-                    return n.up(pair.first, ip_addr, netmask) ? 0 : 1;
+                    return n.up(pair.first, ip_addr, 24) ? 0 : 1;
                 }
             }
 
