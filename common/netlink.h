@@ -1,4 +1,5 @@
 #include <linux/rtnetlink.h>
+#include <arpa/inet.h>
 
 #include <string>
 #include <vector>
@@ -11,13 +12,14 @@ class Netlink
         ~Netlink();
         bool get_dump();
 
-        bool up();
-        bool down();
-        bool isBridgeAvailable();
-        bool setDefaultGateway();
-        bool generateIP();
+        // TODO: Make sure all of these methods check for that get_dump()
+        // has been run before (some init var, I guess);
+        std::vector<std::pair<int,std::string>> get_interfaces();
+        bool up(int iface_index, in_addr ip, in_addr netmask);
+        bool down(int iface_index);
 
-        const std::string ip();
+        bool isBridgeAvailable(const char *bridgeName, const char *expectedAddress);
+        bool setDefaultGateway(const char *gateway_address);
 
     private:
         typedef std::pair<rtattr, void*> AttributeInfo;

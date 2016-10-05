@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "softwarecontainer-common.h"
+
 class ContainerAbstractInterface {
 
 public:

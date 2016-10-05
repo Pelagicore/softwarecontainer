@@ -1,6 +1,5 @@
 #include "netlink.h"
 
-#include <arpa/inet.h> // inet_aton etc
 #include <linux/if_arp.h> // ARPHRD_ defines
 
 #include <unistd.h> // getpid(), getpagesize()
@@ -20,8 +19,6 @@ Netlink::Netlink()
     if (!get_dump()) {
         fprintf(stderr, "Failed to initialize cache\n");
     }
-
-
 }
 
 Netlink::~Netlink()
@@ -34,17 +31,17 @@ bool Netlink::setup_netlink()
         fprintf(stderr, "Socket error: %s", strerror(errno));
         return false;
     }
-	m_pid = getpid();
 
     // Setup local sockaddr
     memset(&m_local, 0, sizeof(m_local));
     m_local.nl_family = AF_NETLINK;
-    m_local.nl_pid = m_pid;
     m_local.nl_groups = 0;
 
     if (bind(m_fd, (struct sockaddr *) &m_local, sizeof(m_local)) < 0) {
-        fprintf(stderr, "Failed to bind socket \n");
+        fprintf(stderr, "Failed to bind socket: %s \n", strerror(errno));
         return false;
+    } else {
+        m_pid = m_local.nl_pid;
     }
 
     // Setup kernel sockaddr
@@ -123,7 +120,7 @@ bool Netlink::send_msg(netlink_request<payload> req)
     return true;
 }
 
-bool Netlink::setDefaultGateway()
+bool Netlink::setDefaultGateway(const char *gateway_address)
 {
     netlink_request<rtmsg> set_gw = alloc_msg<rtmsg>(RTM_NEWROUTE, NLM_F_CREATE | NLM_F_REPLACE);
     set_gw.pay.rtm_family = AF_INET;
@@ -133,19 +130,22 @@ bool Netlink::setDefaultGateway()
     set_gw.pay.rtm_type = RTN_UNICAST;
 
     struct in_addr gw_addr;
-    if (inet_aton(m_gateway.c_str(), &gw_addr) == 0) {
+    if (inet_aton(gateway_address, &gw_addr) == 0) {
         return false;
     }
 	add_attribute(set_gw, RTA_GATEWAY, sizeof(gw_addr), &gw_addr);
 
-    send_msg(set_gw);
-    return true;
+    return send_msg(set_gw);
 }
 
-bool Netlink::up()
+// Bring up by index
+bool Netlink::up(int iface_index, in_addr ip, in_addr netmask)
 {
     for (LinkInfo link : m_links) {
         ifinfomsg ifinfo = link.first;
+        if (ifinfo.ifi_index != iface_index) {
+            continue;
+        }
 
         // First, bring the link up
 		netlink_request<ifinfomsg> msg_up = alloc_msg<ifinfomsg>(RTM_NEWLINK, NLM_F_CREATE);
@@ -153,7 +153,10 @@ bool Netlink::up()
         msg_up.pay.ifi_flags = ifinfo.ifi_flags | IFF_UP;
         msg_up.pay.ifi_change |= IFF_UP;
         msg_up.pay.ifi_index = ifinfo.ifi_index;
-        send_msg(msg_up);
+        if (!send_msg(msg_up)) {
+            fprintf(stderr, "Failed to bring device %i up\n", ifinfo.ifi_index);
+            return false;
+        }
 
         // If this is the loopback device, we can't set an IP address for it
         // and bringing it up is enough. Continue to next link.
@@ -165,33 +168,38 @@ bool Netlink::up()
         // TODO: Support for ipv6
 		netlink_request<ifaddrmsg> msg_setip = alloc_msg<ifaddrmsg>(RTM_NEWADDR, NLM_F_CREATE | NLM_F_REPLACE);
         msg_setip.pay.ifa_family = AF_INET; // ipv4
-        msg_setip.pay.ifa_prefixlen = 24; // netmask
+        msg_setip.pay.ifa_prefixlen = 24; // netmask TODO: parse from argument netmask
         msg_setip.pay.ifa_scope = RT_SCOPE_UNIVERSE;
         msg_setip.pay.ifa_index = ifinfo.ifi_index; // interface (link)
 
-		struct in_addr ip_addr;
-		struct in_addr bcast_addr;
-        if (inet_pton(msg_setip.pay.ifa_family, m_ip.c_str(), &ip_addr) == 0) {
-            return false;
-        }
+		struct in_addr bcast_addr; // TODO: calculate from ip
 		if (inet_pton(msg_setip.pay.ifa_family, m_broadcast.c_str(), &bcast_addr) == 0) {
 			return false;
 		}
 
-		add_attribute(msg_setip, IFA_LOCAL, sizeof(ip_addr), &ip_addr);
+		add_attribute(msg_setip, IFA_LOCAL, sizeof(ip), &ip);
         add_attribute(msg_setip, IFA_BROADCAST, sizeof(bcast_addr), &bcast_addr);
 
-        send_msg(msg_setip);
+        if (!send_msg(msg_setip)) {
+            // TODO: pton to print ip number also.
+            fprintf(stderr, "Failed to set ip on link %i\n", ifinfo.ifi_index);
+            return false;
+        }
+
+        return true;
     }
 
-    return setDefaultGateway();
+    return false;
 }
 
-bool Netlink::down()
+bool Netlink::down(int iface_index)
 {
-    // Remove all known addresses.
+    // Remove all known addresses for this interface
     for (AddressInfo addr : m_addresses) {
         ifaddrmsg ifaddr = addr.first;
+        if (!ifaddr.ifa_index == iface_index) {
+            continue;
+        }
         
         netlink_request<ifaddrmsg> addr_msg = alloc_msg<ifaddrmsg>(RTM_DELLINK, 0);
         memcpy(&addr_msg.pay, &ifaddr, sizeof(ifaddrmsg));
@@ -205,18 +213,19 @@ bool Netlink::down()
             continue; // This is the loopback device
         }
 
-		netlink_request<ifinfomsg> down_msg = alloc_msg<ifinfomsg>(RTM_DELLINK, 0);
+		netlink_request<ifinfomsg> down_msg = alloc_msg<ifinfomsg>(RTM_NEWLINK, 0);
         down_msg.pay.ifi_family = AF_UNSPEC;
         down_msg.pay.ifi_index = ifinfo.ifi_index;
+        down_msg.pay.ifi_flags = ~IFF_UP;
+        down_msg.pay.ifi_change = IFF_UP;
         send_msg(down_msg);
     }
     return true;
 
 }
 
-bool Netlink::isBridgeAvailable()
+bool Netlink::isBridgeAvailable(const char *bridgeName, const char *expectedAddress)
 {
-    #define BRIDGE_INTERFACE "lxcbr0"
     bool hasBridge = false;
     unsigned int bridge_ifindex = -1;
 
@@ -228,12 +237,17 @@ bool Netlink::isBridgeAvailable()
 
             if (attr.rta_type == IFLA_IFNAME) {
                 char *ifname = (char *) data;
-                if (strcmp(ifname, BRIDGE_INTERFACE) == 0) {
+                if (strcmp(ifname, bridgeName) == 0) {
                     hasBridge = true;
                     bridge_ifindex = linkinfo.first.ifi_index;
                     break;
                 }
             }
+        }
+
+        // TODO: Make this nicer, please
+        if (hasBridge) {
+            break;
         }
     }
 
@@ -259,11 +273,15 @@ bool Netlink::isBridgeAvailable()
             char out[INET6_ADDRSTRLEN];
             // It is ok here for inet_ntop to fail (data could be bad)
             if (inet_ntop(addrmsg.ifa_family, data, out, sizeof(out))) {
-                if (strcmp(out, m_gateway.c_str()) == 0) {
+                if (strcmp(out, expectedAddress) == 0) {
                     bridgeHasGateway = true;
                     break;
                 }
             }
+        }
+
+        if (bridgeHasGateway) {
+            break;
         }
     }
 
@@ -369,17 +387,48 @@ bool Netlink::get_dump()
 
 	netlink_request<rtgenmsg> link_msg = alloc_msg<rtgenmsg>(RTM_GETLINK, NLM_F_DUMP);
 	link_msg.pay.rtgen_family = AF_PACKET;
-	send_msg(link_msg);
+	if (!send_msg(link_msg)) {
+        return false;
+    }
 
 	netlink_request<rtgenmsg> addr_msg = alloc_msg<rtgenmsg>(RTM_GETADDR, NLM_F_DUMP);
 	addr_msg.pay.rtgen_family = AF_PACKET;
-	send_msg(addr_msg);
+	if (!send_msg(addr_msg)) {
+        return false;
+    }
 
 	netlink_request<rtgenmsg> route_msg = alloc_msg<rtgenmsg>(RTM_GETROUTE, NLM_F_DUMP);
 	route_msg.pay.rtgen_family = AF_PACKET;
-	send_msg(route_msg);
-    
+	if (!send_msg(route_msg)) {
+        return false;
+    }
+
 	return true;
+}
+
+std::vector<std::pair<int, std::string>> Netlink::get_interfaces()
+{
+    std::vector<std::pair<int, std::string>> ifaces;
+    for (LinkInfo link : m_links) {
+        ifinfomsg ifinfo = link.first;
+        if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
+            continue; // We don't include loopback here
+        }
+
+        AttributeList attributeList = link.second;
+        for (AttributeInfo attrInfo : attributeList) {
+            rtattr attr = attrInfo.first;
+            if (attr.rta_type == IFLA_IFNAME) {
+                const char *name = (char *)attrInfo.second;
+
+                std::pair<int, std::string> pair(ifinfo.ifi_index, std::string(name));
+                ifaces.push_back(pair);
+                break; // Just break out of this inner for
+            }
+        }
+    }
+
+    return ifaces;
 }
 
 
