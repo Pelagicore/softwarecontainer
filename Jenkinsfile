@@ -35,6 +35,10 @@ node {
     stage 'Examples'
     runInVagrant(workspace, "cd softwarecontainer/examples && sudo ./run-tests.sh")
 
+    stage 'Artifacts'
+    step([$class: 'JUnitResultArchiver', testResults: 'build/*test.xml'])
+    archive "**/*"
+
     stage 'Shutdown'
     sh "cd ${workspace} && vagrant halt || true"
 }
