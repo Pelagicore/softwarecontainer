@@ -43,6 +43,9 @@ add_library(softwarecontainercommon SHARED
     signalconnectionshandler.cpp
 )
 
+target_link_libraries(softwarecontainercommon
+   ${Jansson_LIBRARIES})
+
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
 install(TARGETS softwarecontainercommon DESTINATION lib)
 
