@@ -26,37 +26,37 @@
 
 Netlink::Netlink()
 {
-    m_sequence_number = 1;
-    m_cache_dumped = false;
-    m_netlink_initialized = false;
+    m_sequenceNumber = 1;
+    m_hasKernelDump = false;
+    m_netlinkInitialized = false;
 
-    if (!setup_netlink()) {
+    if (!setupNetlink()) {
         fprintf(stderr, "Failed to setup netlink\n");
     }
 
-    if (!get_dump()) {
+    if (!getKernelDump()) {
         fprintf(stderr, "Failed to initialize cache\n");
-        m_cache_dumped = false;
+        m_hasKernelDump = false;
     } else {
-        m_cache_dumped = true;
+        m_hasKernelDump = true;
     }
 }
 
 Netlink::~Netlink()
 {
-    if (m_netlink_initialized) {
+    if (m_netlinkInitialized) {
         shutdown(m_fd, SHUT_RDWR);
         close(m_fd);
     }
 
-    if (m_cache_dumped) {
-        clear_cache();
+    if (m_hasKernelDump) {
+        clearCache();
     }
 }
 
-bool Netlink::setup_netlink()
+bool Netlink::setupNetlink()
 {
-    if (m_netlink_initialized) {
+    if (m_netlinkInitialized) {
         return true;
     }
 
@@ -79,13 +79,14 @@ bool Netlink::setup_netlink()
 
     // Setup kernel sockaddr
     memset(&m_kernel, 0, sizeof(m_kernel));
-    m_kernel.nl_family = AF_NETLINK; /*  fill-in kernel address (destination) */
+    m_kernel.nl_family = AF_NETLINK;
 
-    m_netlink_initialized = true;
+    m_netlinkInitialized = true;
     return true;
 }
 
-template<typename payload> Netlink::netlink_request<payload> Netlink::alloc_msg(const int type, const int flags)
+template<typename payload>
+Netlink::netlink_request<payload> Netlink::createMessage(const int type, const int flags)
 {
     netlink_request<payload> request;
     // Initialize length to be header + payload (no attributes)
@@ -94,7 +95,7 @@ template<typename payload> Netlink::netlink_request<payload> Netlink::alloc_msg(
     // We want ACK
     request.hdr.nlmsg_flags = flags | NLM_F_ACK | NLM_F_REQUEST;
     // Sequence numbers are monotonically increasing, pid is just an identifier
-    request.hdr.nlmsg_seq = m_sequence_number++;
+    request.hdr.nlmsg_seq = m_sequenceNumber++;
     request.hdr.nlmsg_pid = m_pid;
     // Set both payload and attribute buffer to 0
     memset(&request.pay, 0, sizeof(payload));
@@ -104,10 +105,16 @@ template<typename payload> Netlink::netlink_request<payload> Netlink::alloc_msg(
 }
 
 template<typename payload>
-void Netlink::add_attribute(netlink_request<payload> &req, int type, size_t length, void *data)
+bool Netlink::addAttribute(netlink_request<payload> &request, int type, size_t length, void *data)
 {
+    long unsigned int MAXSIZE = sizeof(request.attr);
+    int usedAttributeLength = request.hdr.nlmsg_len - sizeof(request.hdr) - sizeof(request.pay);
+    if (usedAttributeLength + RTA_LENGTH(length) > MAXSIZE) {
+        return false;
+    }
+
     // First, get a pointer to memory at the end of the payload (pointed out by nlmsg_len)
-    struct rtattr *rta = (struct rtattr *)(((char *) &req) + NLMSG_ALIGN(req.hdr.nlmsg_len));
+    struct rtattr *rta = (struct rtattr *)(((char *) &request) + NLMSG_ALIGN(request.hdr.nlmsg_len));
 
     // Set type of attribute and attribute length (calculated with macro to include header)
     rta->rta_type = type;
@@ -117,18 +124,25 @@ void Netlink::add_attribute(netlink_request<payload> &req, int type, size_t leng
     memcpy(RTA_DATA(rta), data, length);
 
     // Update nlmsg_len to reflect that end of msg now includes an attribute
-    req.hdr.nlmsg_len = NLMSG_ALIGN(req.hdr.nlmsg_len) + RTA_LENGTH(length);
+    request.hdr.nlmsg_len = NLMSG_ALIGN(request.hdr.nlmsg_len) + RTA_LENGTH(length);
+
+    return true;
 }
 
 template<typename payload>
-bool Netlink::send_msg(netlink_request<payload> req)
+bool Netlink::sendMessage(netlink_request<payload> &request)
 {
+    if (!m_netlinkInitialized && !setupNetlink()) {
+        fprintf(stderr, "Could not setup netlink communication with kernel\n");
+        return false;
+    }
+
     // Create iovector, which holds pointer to, and size of,
     // the netlink message payload
     struct iovec io;
     memset(&io, 0, sizeof(io));
-    io.iov_base = &req;
-    io.iov_len = req.hdr.nlmsg_len;
+    io.iov_base = &request;
+    io.iov_len = request.hdr.nlmsg_len;
 
     // Create the message header, to wrap everything in
     struct msghdr msghdr;
@@ -146,7 +160,7 @@ bool Netlink::send_msg(netlink_request<payload> req)
         return false;
     }
 
-    if (read_msg() != 0) {
+    if (readMessage() != 0) {
         fprintf(stderr, "Got an error from the kernel\n");
         return false;
     }
@@ -154,9 +168,9 @@ bool Netlink::send_msg(netlink_request<payload> req)
     return true;
 }
 
-bool Netlink::setDefaultGateway(const char *gateway_address)
+bool Netlink::setDefaultGateway(const char *gatewayAddress)
 {
-    netlink_request<rtmsg> set_gw = alloc_msg<rtmsg>(RTM_NEWROUTE, NLM_F_CREATE | NLM_F_REPLACE);
+    netlink_request<rtmsg> set_gw = createMessage<rtmsg>(RTM_NEWROUTE, NLM_F_CREATE | NLM_F_REPLACE);
     set_gw.pay.rtm_family = AF_INET;
     set_gw.pay.rtm_table = RT_TABLE_MAIN;
     set_gw.pay.rtm_protocol = RTPROT_STATIC;
@@ -164,35 +178,35 @@ bool Netlink::setDefaultGateway(const char *gateway_address)
     set_gw.pay.rtm_type = RTN_UNICAST;
 
     struct in_addr gw_addr;
-    if (inet_aton(gateway_address, &gw_addr) == 0) {
+    if (inet_aton(gatewayAddress, &gw_addr) == 0) {
         return false;
     }
-    add_attribute(set_gw, RTA_GATEWAY, sizeof(gw_addr), &gw_addr);
+    addAttribute(set_gw, RTA_GATEWAY, sizeof(gw_addr), &gw_addr);
 
-    return send_msg(set_gw);
+    return sendMessage(set_gw);
 }
 
 // Bring up by index
-bool Netlink::up(int iface_index, in_addr ip, int netmask)
+bool Netlink::up(int ifaceIndex, in_addr ip, int netmask)
 {
-    if (!m_cache_dumped && !get_dump()) {
+    if (!m_hasKernelDump && !getKernelDump()) {
         fprintf(stderr, "Could not get cache dump from kernel\n");
         return false;
     }
 
     for (LinkInfo link : m_links) {
         ifinfomsg ifinfo = link.first;
-        if (ifinfo.ifi_index != iface_index) {
+        if (ifinfo.ifi_index != ifaceIndex) {
             continue;
         }
 
         // First, bring the link up
-        netlink_request<ifinfomsg> msg_up = alloc_msg<ifinfomsg>(RTM_NEWLINK, NLM_F_CREATE);
+        netlink_request<ifinfomsg> msg_up = createMessage<ifinfomsg>(RTM_NEWLINK, NLM_F_CREATE);
         msg_up.pay.ifi_family = AF_UNSPEC;
         msg_up.pay.ifi_flags = ifinfo.ifi_flags | IFF_UP;
         msg_up.pay.ifi_change |= IFF_UP;
         msg_up.pay.ifi_index = ifinfo.ifi_index;
-        if (!send_msg(msg_up)) {
+        if (!sendMessage(msg_up)) {
             fprintf(stderr, "Failed to bring device %i up\n", ifinfo.ifi_index);
             return false;
         }
@@ -205,7 +219,7 @@ bool Netlink::up(int iface_index, in_addr ip, int netmask)
 
         // Second, set IP address
         // TODO: Support for ipv6
-        netlink_request<ifaddrmsg> msg_setip = alloc_msg<ifaddrmsg>(RTM_NEWADDR, NLM_F_CREATE | NLM_F_REPLACE);
+        netlink_request<ifaddrmsg> msg_setip = createMessage<ifaddrmsg>(RTM_NEWADDR, NLM_F_CREATE | NLM_F_REPLACE);
         msg_setip.pay.ifa_family = AF_INET; // ipv4
         msg_setip.pay.ifa_prefixlen = netmask;
         msg_setip.pay.ifa_scope = RT_SCOPE_UNIVERSE;
@@ -216,10 +230,10 @@ bool Netlink::up(int iface_index, in_addr ip, int netmask)
         in_addr_t netpart = inet_netof(ip);
         struct in_addr bcast_addr = inet_makeaddr(netpart, inet_addr("0.0.0.255"));
 
-        add_attribute(msg_setip, IFA_LOCAL, sizeof(ip), &ip);
-        add_attribute(msg_setip, IFA_BROADCAST, sizeof(bcast_addr), &bcast_addr);
+        addAttribute(msg_setip, IFA_LOCAL, sizeof(ip), &ip);
+        addAttribute(msg_setip, IFA_BROADCAST, sizeof(bcast_addr), &bcast_addr);
 
-        if (!send_msg(msg_setip)) {
+        if (!sendMessage(msg_setip)) {
             // TODO: pton to print ip number also.
             fprintf(stderr, "Failed to set ip on link %i\n", ifinfo.ifi_index);
             return false;
@@ -231,9 +245,9 @@ bool Netlink::up(int iface_index, in_addr ip, int netmask)
     return false;
 }
 
-bool Netlink::down(int iface_index)
+bool Netlink::down(int ifaceIndex)
 {
-    if (!m_cache_dumped && !get_dump()) {
+    if (!m_hasKernelDump && !getKernelDump()) {
         fprintf(stderr, "Could not get cache dump from kernel\n");
         return false;
     }
@@ -241,13 +255,13 @@ bool Netlink::down(int iface_index)
     // Remove all known addresses for this interface
     for (AddressInfo addr : m_addresses) {
         ifaddrmsg ifaddr = addr.first;
-        if (!ifaddr.ifa_index == iface_index) {
+        if (!ifaddr.ifa_index == ifaceIndex) {
             continue;
         }
 
-        netlink_request<ifaddrmsg> addr_msg = alloc_msg<ifaddrmsg>(RTM_DELLINK, 0);
+        netlink_request<ifaddrmsg> addr_msg = createMessage<ifaddrmsg>(RTM_DELLINK, 0);
         memcpy(&addr_msg.pay, &ifaddr, sizeof(ifaddrmsg));
-        send_msg(addr_msg);
+        sendMessage(addr_msg);
     }
 
     // Then, remove the actual links.
@@ -257,12 +271,12 @@ bool Netlink::down(int iface_index)
             continue; // This is the loopback device
         }
 
-        netlink_request<ifinfomsg> down_msg = alloc_msg<ifinfomsg>(RTM_NEWLINK, 0);
+        netlink_request<ifinfomsg> down_msg = createMessage<ifinfomsg>(RTM_NEWLINK, 0);
         down_msg.pay.ifi_family = AF_UNSPEC;
         down_msg.pay.ifi_index = ifinfo.ifi_index;
         down_msg.pay.ifi_flags = ~IFF_UP;
         down_msg.pay.ifi_change = IFF_UP;
-        send_msg(down_msg);
+        sendMessage(down_msg);
     }
     return true;
 
@@ -270,7 +284,7 @@ bool Netlink::down(int iface_index)
 
 bool Netlink::isBridgeAvailable(const char *bridgeName, const char *expectedAddress)
 {
-    if (!m_cache_dumped && !get_dump()) {
+    if (!m_hasKernelDump && !getKernelDump()) {
         fprintf(stderr, "Could not get cache dump from kernel\n");
         return false;
     }
@@ -337,12 +351,17 @@ bool Netlink::isBridgeAvailable(const char *bridgeName, const char *expectedAddr
     return bridgeHasGateway;
 }
 
-int Netlink::read_msg()
+int Netlink::readMessage()
 {
-    bool end = false;
+    if (!m_netlinkInitialized && !setupNetlink()) {
+        fprintf(stderr, "Could not setup netlink communication with kernel\n");
+        return false;
+    }
+
     size_t PAGE_SIZE = getpagesize();
     char buf[PAGE_SIZE];
 
+    bool end = false;
     while (!end) {
         int len;
         struct nlmsghdr *msg;
@@ -375,15 +394,15 @@ int Netlink::read_msg()
                         break;
                     case RTM_GETLINK:
                     case RTM_NEWLINK:
-                        save_msg<ifinfomsg, LinkInfo>(msg, m_links);
+                        saveMessage<ifinfomsg, LinkInfo>(msg, m_links);
                         break;
                     case RTM_NEWADDR:
                     case RTM_GETADDR:
-                        save_msg<ifaddrmsg, AddressInfo>(msg, m_addresses);
+                        saveMessage<ifaddrmsg, AddressInfo>(msg, m_addresses);
                         break;
                     case RTM_NEWROUTE:
                     case RTM_GETROUTE:
-                        save_msg<rtmsg, RouteInfo>(msg, m_routes);
+                        saveMessage<rtmsg, RouteInfo>(msg, m_routes);
                         break;
                     case RTM_NEWNEIGH:
                     case RTM_GETNEIGH:
@@ -428,37 +447,37 @@ int Netlink::read_msg()
  * To get a dump of all links/addresses/routes we only need to use the generic
  * netlink family message type, and for that we only need to set family (AF_PACKET).
  */
-bool Netlink::get_dump()
+bool Netlink::getKernelDump()
 {
-    m_cache_dumped = false;
+    m_hasKernelDump = false;
 
-    netlink_request<rtgenmsg> link_msg = alloc_msg<rtgenmsg>(RTM_GETLINK, NLM_F_DUMP);
+    netlink_request<rtgenmsg> link_msg = createMessage<rtgenmsg>(RTM_GETLINK, NLM_F_DUMP);
     link_msg.pay.rtgen_family = AF_PACKET;
-    if (!send_msg(link_msg)) {
+    if (!sendMessage(link_msg)) {
         return false;
     }
 
-    netlink_request<rtgenmsg> addr_msg = alloc_msg<rtgenmsg>(RTM_GETADDR, NLM_F_DUMP);
+    netlink_request<rtgenmsg> addr_msg = createMessage<rtgenmsg>(RTM_GETADDR, NLM_F_DUMP);
     addr_msg.pay.rtgen_family = AF_PACKET;
-    if (!send_msg(addr_msg)) {
+    if (!sendMessage(addr_msg)) {
         return false;
     }
 
-    netlink_request<rtgenmsg> route_msg = alloc_msg<rtgenmsg>(RTM_GETROUTE, NLM_F_DUMP);
+    netlink_request<rtgenmsg> route_msg = createMessage<rtgenmsg>(RTM_GETROUTE, NLM_F_DUMP);
     route_msg.pay.rtgen_family = AF_PACKET;
-    if (!send_msg(route_msg)) {
+    if (!sendMessage(route_msg)) {
         return false;
     }
 
-    m_cache_dumped = true;
+    m_hasKernelDump = true;
     return true;
 }
 
-std::vector<std::pair<int, std::string>> Netlink::get_interfaces()
+std::vector<std::pair<int, std::string>> Netlink::getInterfaces()
 {
     std::vector<std::pair<int, std::string>> ifaces;
 
-    if (!m_cache_dumped && !get_dump()) {
+    if (!m_hasKernelDump && !getKernelDump()) {
         fprintf(stderr, "Could not get cache dump from kernel\n");
         return ifaces;
     }
@@ -486,18 +505,19 @@ std::vector<std::pair<int, std::string>> Netlink::get_interfaces()
 }
 
 
-template<typename msgtype> Netlink::AttributeList Netlink::get_attributes(struct nlmsghdr *h)
+template<typename msgtype>
+Netlink::AttributeList Netlink::getAttributes(struct nlmsghdr *header)
 {
     std::vector<AttributeInfo> attributes;
 
     // Get the pointer to the data section of the message
-    char *dataptr = (char *)NLMSG_DATA(h);
+    char *dataptr = (char *)NLMSG_DATA(header);
     // Add on the size of the message type header = go to the data section
     // where attributes are stored
     rtattr *attribute = (struct rtattr *)(dataptr + NLMSG_ALIGN(sizeof(msgtype)));
 
     // Total length of msg minus header = all attributes
-    int len = h->nlmsg_len - NLMSG_LENGTH(sizeof(msgtype));
+    int len = header->nlmsg_len - NLMSG_LENGTH(sizeof(msgtype));
     do {
         // Allocate enough data, and copy the attribute data to it
         void *data = malloc(RTA_PAYLOAD(attribute));
@@ -514,21 +534,39 @@ template<typename msgtype> Netlink::AttributeList Netlink::get_attributes(struct
 }
 
 template<typename msgtype, typename InfoType>
-void Netlink::save_msg(struct nlmsghdr *h, std::vector<InfoType> &result)
+void Netlink::saveMessage(struct nlmsghdr *header, std::vector<InfoType> &result)
 {
     // Bring out the msgtype struct
-    msgtype *msg = (msgtype *) NLMSG_DATA(h);
+    msgtype *msg = (msgtype *) NLMSG_DATA(header);
     // Get a vector of attributes for this message
-    std::vector<AttributeInfo> attributes = get_attributes<msgtype>(h);
+    std::vector<AttributeInfo> attributes = getAttributes<msgtype>(header);
     // Save them both as a pair to the given result vector
     result.push_back(std::pair<msgtype, AttributeList>(*msg, attributes));
 }
 
-bool Netlink::clear_cache()
+void Netlink::freeAttributes(AttributeList &attrList)
 {
-    // TODO: Make sure we call free on all attributes here
+    for (AttributeInfo attrInfo : attrList) {
+        void *data = attrInfo.second;
+        free(data);
+    }
+}
+
+bool Netlink::clearCache()
+{
+    for (LinkInfo link : m_links) {
+        freeAttributes(link.second);
+    }
     m_links.clear();
+
+    for (AddressInfo addr : m_addresses) {
+        freeAttributes(addr.second);
+    }
     m_addresses.clear();
+
+    for (RouteInfo route : m_routes) {
+        freeAttributes(route.second);
+    }
     m_routes.clear();
 
     return true;
