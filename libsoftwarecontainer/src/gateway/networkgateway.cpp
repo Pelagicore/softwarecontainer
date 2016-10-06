@@ -276,7 +276,7 @@ bool NetworkGateway::up()
         log_debug() << "Attempting to bring up eth0";
         ReturnCode ret = executeInContainer([this] {
             Netlink n;
-            std::vector<std::pair<int, std::string>> ifaces = n.get_interfaces();
+            std::vector<std::pair<int, std::string>> ifaces = n.getInterfaces();
             for (std::pair<int, std::string> pair : ifaces) {
                 if (pair.second.compare("eth0") == 0) {
                     in_addr ip_addr;
@@ -306,7 +306,7 @@ bool NetworkGateway::down()
     log_debug() << "Attempting to configure eth0 to 'down state'";
     ReturnCode ret = executeInContainer([this] {
         Netlink n;
-        std::vector<std::pair<int, std::string>> ifaces = n.get_interfaces();
+        std::vector<std::pair<int, std::string>> ifaces = n.getInterfaces();
         for (std::pair<int, std::string> pair : ifaces) {
             if (pair.second.compare("eth0") == 0) {
                 return n.down(pair.first) ? 0 : 1;
