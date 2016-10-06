@@ -122,7 +122,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
         os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
         data = os.str().c_str();
 
-        log_debug() << "enableWriteBuffer, config: " << os;
+        log_debug() << "enableWriteBuffer, config: " << os.str();
 
         mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
     } else {
