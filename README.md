@@ -48,7 +48,7 @@ build with -DENABLE_COVERAGE=1.
 
 To disable support for various gateways at compile time, set
 * -DENABLE_PULSEGATEWAY=OFF (for pulse)
-* -DENABLE_NETGATEWAY=OFF (for network)
+* -DENABLE_NETWORKGATEWAY=OFF (for network)
 * -DENABLE_DEVICENODEGATEWAY=OFF (for device node gateway)
 * -DENABLE_DBUSGATEWAY=OFF (for dbus)
 * -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
@@ -99,7 +99,7 @@ run unit tests and perform a clang code analysis run on the code.
 - dbus
 - dbus-c++
 - lxc
-- jansson
+- jansson (>=2.6)
 
 ### Install build dependencies on Debian
 ```
