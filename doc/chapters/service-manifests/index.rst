@@ -9,7 +9,7 @@ the service manifests.
 
 For information about how to work with the manifest files, e.g. where to
 install them, and how they are used in the overall context etc.,
-see :ref:`Integration <integration>`.
+see :ref:`Integration guidelines <integration-guidelines>`.
 
 Introduction
 ============
