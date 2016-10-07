@@ -13,6 +13,6 @@ Contents:
     chapters/design/*
     chapters/service-manifests/*
     chapters/gateways/*
-    chapters/integration/*
+    chapters/integration-guidelines/*
     chapters/developers/*
     chapters/lxc/*
