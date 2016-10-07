@@ -10,7 +10,9 @@ Contents:
 
     chapters/intro/*
     chapters/getting-started/*
-    chapters/gateways/*
-    chapters/developers/*
     chapters/design/*
+    chapters/service-manifests/*
+    chapters/gateways/*
+    chapters/integration/*
+    chapters/developers/*
     chapters/lxc/*

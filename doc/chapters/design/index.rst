@@ -1,5 +1,6 @@
-SoftwareContainer Design
-************************
+
+Design
+******
 
 SoftwareContainer has been designed as a building block enabling sandboxing of
 application contents in a larger system.
@@ -78,3 +79,6 @@ generally added to the end of the name, e.g. ``com.pelagicore.popups`` and
 The service manifests are typically placed in one JSON file per service, but
 can be split into one file per capability if needed. The files are placed in
 ``/share/resource-access-manager/caps.d/``.
+
+For more detailed information about service manifests content and format
+see :ref:`Service manifests <service-manifests>`
