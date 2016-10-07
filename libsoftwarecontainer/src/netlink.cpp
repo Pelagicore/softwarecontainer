@@ -102,7 +102,7 @@ Netlink::netlink_request<payload> Netlink::createMessage(const int type, const i
 }
 
 template<typename payload>
-ReturnCode Netlink::addAttribute(netlink_request<payload> &request, int type, size_t length, void *data)
+ReturnCode Netlink::addAttribute(netlink_request<payload> &request, const int type, const size_t length, const void *data)
 {
     long unsigned int MAXSIZE = sizeof(request.attr);
     int usedAttributeLength = request.hdr.nlmsg_len - sizeof(request.hdr) - sizeof(request.pay);
@@ -185,7 +185,8 @@ ReturnCode Netlink::setDefaultGateway(const char *gatewayAddress)
 }
 
 // Bring up by index
-ReturnCode Netlink::up(int ifaceIndex, in_addr ip, int netmask)
+
+ReturnCode Netlink::linkUp(const int ifaceIndex)
 {
     if (isError(checkKernelDump())) {
         return ReturnCode::FAILURE;
@@ -206,15 +207,22 @@ ReturnCode Netlink::up(int ifaceIndex, in_addr ip, int netmask)
         if (isError(sendMessage(msg_up))) {
             fprintf(stderr, "Failed to bring device %i up\n", ifinfo.ifi_index);
             return ReturnCode::FAILURE;
+        } else {
+            return ReturnCode::SUCCESS;
         }
+    }
 
-        // If this is the loopback device, we can't set an IP address for it
-        // and bringing it up is enough. Continue to next link.
-        if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
+    return ReturnCode::FAILURE;
+}
+
+ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const int netmask)
+{
+    for (LinkInfo link : m_links) {
+        ifinfomsg ifinfo = link.first;
+        if (ifinfo.ifi_index != ifaceIndex) {
             continue;
         }
 
-        // Second, set IP address
         // TODO: Support for ipv6
         netlink_request<ifaddrmsg> msg_setip = createMessage<ifaddrmsg>(RTM_NEWADDR, NLM_F_CREATE | NLM_F_REPLACE);
         msg_setip.pay.ifa_family = AF_INET; // ipv4
@@ -230,24 +238,58 @@ ReturnCode Netlink::up(int ifaceIndex, in_addr ip, int netmask)
         addAttribute(msg_setip, IFA_LOCAL, sizeof(ip), &ip);
         addAttribute(msg_setip, IFA_BROADCAST, sizeof(bcast_addr), &bcast_addr);
 
+        // No matter what happens, we return since we found the link we've been looking for.
         if (isError(sendMessage(msg_setip))) {
             // TODO: pton to print ip number also.
             fprintf(stderr, "Failed to set ip on link %i\n", ifinfo.ifi_index);
             return ReturnCode::FAILURE;
+        } else {
+            return ReturnCode::SUCCESS;
         }
-
-        return ReturnCode::SUCCESS;
     }
 
+    // No link found, that's a failure.
     return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::down(int ifaceIndex)
+ReturnCode Netlink::up(const int ifaceIndex, const in_addr ip, const int netmask)
 {
     if (isError(checkKernelDump())) {
         return ReturnCode::FAILURE;
     }
 
+    for (LinkInfo link : m_links) {
+        ifinfomsg ifinfo = link.first;
+        if (ifinfo.ifi_index != ifaceIndex) {
+            continue;
+        }
+
+        if (isError(linkUp(ifaceIndex))) {
+            fprintf(stderr, "Failed to bring device %i up\n", ifaceIndex);
+            return ReturnCode::FAILURE;
+        }
+
+        // If this is the loopback device, we can't set an IP address for it
+        // and bringing it up is enough. Continue to next link.
+        if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
+            continue;
+        }
+
+        // Second, set IP address
+        if (isError(setIP(ifaceIndex, ip, netmask))) {
+            return ReturnCode::FAILURE;
+        }
+
+        // All operations succeeded
+        return ReturnCode::SUCCESS;
+    }
+
+    // Link not found
+    return ReturnCode::FAILURE;
+}
+
+ReturnCode Netlink::removeAddresses(const int ifaceIndex)
+{
     // Remove all known addresses for this interface
     for (AddressInfo addr : m_addresses) {
         ifaddrmsg ifaddr = addr.first;
@@ -263,7 +305,11 @@ ReturnCode Netlink::down(int ifaceIndex)
         }
     }
 
-    // Then, remove the actual links.
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode Netlink::linkDown(const int ifaceIndex)
+{
     for (LinkInfo link : m_links) {
         ifinfomsg ifinfo = link.first;
         if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
@@ -278,20 +324,33 @@ ReturnCode Netlink::down(int ifaceIndex)
         
         if (isError(sendMessage(down_msg))) {
             return ReturnCode::FAILURE;
+        } else {
+            return ReturnCode::SUCCESS;
         }
     }
-    return ReturnCode::SUCCESS;
 
+    return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::isBridgeAvailable(const char *bridgeName, const char *expectedAddress)
+ReturnCode Netlink::down(const int ifaceIndex)
 {
     if (isError(checkKernelDump())) {
         return ReturnCode::FAILURE;
     }
 
-    bool hasBridge = false;
-    unsigned int bridge_ifindex = -1;
+    if (isError(removeAddresses(ifaceIndex))) {
+        return ReturnCode::FAILURE;
+    }
+
+    return ReturnCode::SUCCESS;
+}
+
+// TODO: Check that it is actually a bridge device
+ReturnCode Netlink::findBridge(const char *ifaceName, unsigned int &ifaceIndex)
+{
+    if (isError(checkKernelDump())) {
+        return ReturnCode::FAILURE;
+    }
 
     for (LinkInfo linkinfo : m_links) {
         AttributeList attributes = linkinfo.second;
@@ -301,35 +360,43 @@ ReturnCode Netlink::isBridgeAvailable(const char *bridgeName, const char *expect
 
             if (attr.rta_type == IFLA_IFNAME) {
                 char *ifname = (char *) data;
-                if (strcmp(ifname, bridgeName) == 0) {
-                    hasBridge = true;
-                    bridge_ifindex = linkinfo.first.ifi_index;
-                    break;
+                if (strcmp(ifname, ifaceName) == 0) {
+                    ifaceIndex = linkinfo.first.ifi_index;
+                    return ReturnCode::SUCCESS;
                 }
             }
         }
-
-        // TODO: Make this nicer, please
-        if (hasBridge) {
-            break;
-        }
     }
 
-    if (!hasBridge) {
+    return ReturnCode::FAILURE;
+}
+
+ReturnCode Netlink::isBridgeAvailable(const char *bridgeName, const char *expectedAddress)
+{
+    if (isError(checkKernelDump())) {
         return ReturnCode::FAILURE;
     }
 
-    bool bridgeHasGateway = false;
+    unsigned int ifaceIndex = 0;
+    if (isError(findBridge(bridgeName, ifaceIndex))) {
+        // We didn't find the right interface
+        return ReturnCode::FAILURE;
+    }
+
     for (AddressInfo addressInfo : m_addresses) {
+
+        // Skip if this is not the right interface
         ifaddrmsg addrmsg = addressInfo.first;
-        if (addrmsg.ifa_index != bridge_ifindex) {
+        if (addrmsg.ifa_index != ifaceIndex) {
             continue;
         }
 
         AttributeList attributes = addressInfo.second;
         for (AttributeInfo attrPair : attributes) {
+
+            // Skip if this attribute is not an address attribute
             rtattr attr = attrPair.first;
-            if (attr.rta_type != IFA_ADDRESS && attr.rta_type != IFA_LOCAL) {
+            if (attr.rta_type != IFA_ADDRESS) {
                 continue;
             }
 
@@ -338,18 +405,17 @@ ReturnCode Netlink::isBridgeAvailable(const char *bridgeName, const char *expect
             // It is ok here for inet_ntop to fail (data could be bad)
             if (inet_ntop(addrmsg.ifa_family, data, out, sizeof(out))) {
                 if (strcmp(out, expectedAddress) == 0) {
-                    bridgeHasGateway = true;
-                    break;
+                    return ReturnCode::SUCCESS;
                 }
             }
         }
 
-        if (bridgeHasGateway) {
-            break;
-        }
+        // Means we found addresses for interface, but they didn't match
+        return ReturnCode::FAILURE;
     }
 
-    return bridgeHasGateway ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+    // Means we didn't find address for interface
+    return ReturnCode::FAILURE;
 }
 
 int Netlink::readMessage()
@@ -362,6 +428,7 @@ int Netlink::readMessage()
     size_t PAGE_SIZE = getpagesize();
     char buf[PAGE_SIZE];
 
+    // We need this check in case of multipart messages.
     bool end = false;
     while (!end) {
         int len;
@@ -369,7 +436,7 @@ int Netlink::readMessage()
         struct msghdr reply;
         memset(&reply, 0, sizeof(reply));
 
-        struct iovec io = { buf, PAGE_SIZE };
+        struct iovec io = { buf, sizeof(buf) };
         reply.msg_iov = &io;
         reply.msg_iovlen = 1;
         reply.msg_name = &m_kernel;
@@ -390,7 +457,7 @@ int Netlink::readMessage()
 
                         break;
                     }
-                    case NLMSG_DONE:
+                    case NLMSG_DONE: // End of multipart message
                         end = true;
                         break;
                     case RTM_GETLINK:
@@ -439,8 +506,11 @@ int Netlink::readMessage()
                         break;
                 }
             }
+        } else {
+            end = true;
         }
     }
+
     return 0;
 }
 
@@ -515,7 +585,7 @@ ReturnCode Netlink::getInterfaces(InterfaceList &result)
 
 
 template<typename msgtype>
-ReturnCode Netlink::getAttributes(struct nlmsghdr *header, AttributeList &result)
+ReturnCode Netlink::getAttributes(const struct nlmsghdr *header, AttributeList &result)
 {
     // Get the pointer to the data section of the message
     char *dataptr = (char *)NLMSG_DATA(header);
@@ -525,7 +595,7 @@ ReturnCode Netlink::getAttributes(struct nlmsghdr *header, AttributeList &result
 
     // Total length of msg minus header = all attributes
     int len = header->nlmsg_len - NLMSG_LENGTH(sizeof(msgtype));
-    do {
+    while (RTA_OK(attribute, len)) {
         // Allocate enough data, and copy the attribute data to it
         void *data = malloc(RTA_PAYLOAD(attribute));
         if (data == nullptr) {
@@ -540,13 +610,13 @@ ReturnCode Netlink::getAttributes(struct nlmsghdr *header, AttributeList &result
 
         // Update attribute pointer
         attribute = RTA_NEXT(attribute, len);
-    } while (RTA_OK(attribute, len));
+    }
     
     return ReturnCode::SUCCESS;
 }
 
 template<typename msgtype, typename InfoType>
-ReturnCode Netlink::saveMessage(struct nlmsghdr *header, std::vector<InfoType> &result)
+ReturnCode Netlink::saveMessage(const struct nlmsghdr *header, std::vector<InfoType> &result)
 {
     // Bring out the msgtype struct
     msgtype *msg = (msgtype *) NLMSG_DATA(header);

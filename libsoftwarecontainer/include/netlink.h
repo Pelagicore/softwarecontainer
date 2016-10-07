@@ -18,7 +18,6 @@
  *
  */
 
-// ReturnCode
 #include "softwarecontainer-common.h"
 
 #include <linux/rtnetlink.h>
@@ -105,7 +104,7 @@ class Netlink
          * @endparblock
          * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        ReturnCode up(int ifaceIndex, in_addr ip, int netmask);
+        ReturnCode up(const int ifaceIndex, const in_addr ip, const int netmask);
 
         /*
          * @brief bring an interface down
@@ -115,7 +114,7 @@ class Netlink
          * @param ifaceIndex the index of the interface
          * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        ReturnCode down(int ifaceIndex);
+        ReturnCode down(const int ifaceIndex);
 
         /*
          * @brief checks if a given bridge is available with a given address
@@ -126,9 +125,9 @@ class Netlink
          * @return ReturnCode::SUCCESS if the bridge exists, is a bridge and has the expected address
          * @return ReturnCode::FAILURE otherwise
          *
-         * TODO: Check if device is actually a bridge device
          */
         ReturnCode isBridgeAvailable(const char *bridgeName, const char *expectedAddress);
+
 
         /*
          * Sets an ip address as the default gateway
@@ -153,7 +152,7 @@ class Netlink
          * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
         template<typename msgtype, typename InfoType>
-            ReturnCode saveMessage(struct nlmsghdr *header, std::vector<InfoType> &result);
+            ReturnCode saveMessage(const struct nlmsghdr *header, std::vector<InfoType> &result);
 
         /*
          * @brief Save the attributes and attribute data from a netlink message
@@ -170,7 +169,7 @@ class Netlink
          * @result ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
         template<typename msgtype>
-            ReturnCode getAttributes(struct nlmsghdr *header, AttributeList &result);
+            ReturnCode getAttributes(const struct nlmsghdr *header, AttributeList &result);
 
         /*
          * @brief sets up the communication with the kernel over netlink
@@ -211,7 +210,7 @@ class Netlink
          * @return a new netlink_request with given payload type
          */
         template<typename payload>
-            netlink_request<payload> createMessage(int type, int flags);
+            netlink_request<payload> createMessage(const int type, const int flags);
 
         /*
          * @brief adds an attribute to a netlink request
@@ -233,7 +232,7 @@ class Netlink
          * @return ReturnCode::FAILURE otherwise
          */
         template<typename payload>
-            ReturnCode addAttribute(netlink_request<payload> &req, int type, size_t length, void *data);
+            ReturnCode addAttribute(netlink_request<payload> &req, const int type, const size_t length, const void *data);
 
         /*
          * @brief send a netlink message and check for reply
@@ -248,6 +247,49 @@ class Netlink
          */
         template<typename payload>
             ReturnCode sendMessage(netlink_request<payload> &request);
+
+        /*
+         * @brief Check that the device given is a network bridge
+         * @param ifaceName the name of the interface
+         * @param ifaceIndex the index of the interface (out parameter)
+         *
+         * @return ReturnCode::SUCCESS if interface with matching name was found.
+         * @return ReturnCode::FAILURE otherwise.
+         */
+        ReturnCode findBridge(const char *ifaceName, unsigned int &ifaceIndex);
+
+        /*
+         * @brief Bring the given interface up
+         *
+         * Sets the UP flag for the given interface, if it exists.
+         *
+         * @param ifaceIndex the index for the interface to bring up
+         * @return ReturnCode::SUCCESS if the interface was found and brought up
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode linkUp(const int ifaceIndex);
+
+        /*
+         * @brief Sets an IP address for a network link
+         *
+         * @param ifaceIndex the index for the interface to set ip for
+         * @param ip the ipv4 address to set
+         * @param netmask the netmask in CIDR format (for example 24)
+         *
+         * @return ReturnCode::SUCCESS if interface was found and IP was set
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode setIP(const int ifaceIndex, const in_addr ip, const int netmask);
+
+        /*
+         * @brief Bring a given interface down
+         *
+         * @param ifaceIndex the index for the interface to bring down
+         * @return ReturnCode::SUCCESS if interface was found and brought down
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode linkDown(const int ifaceIndex);
+        ReturnCode removeAddresses(const int ifaceIndex);
 
         /*
          * @brief Listen for a netlink message
