@@ -15,7 +15,11 @@
  * SOFTWARE.
  *
  * For further information see LICENSE
+ *
  */
+
+// ReturnCode
+#include "softwarecontainer-common.h"
 
 #include <linux/rtnetlink.h>
 #include <arpa/inet.h>
@@ -25,7 +29,6 @@
 
 /*
  * @brief Handles various network operations over netlink
- * TODO: Consistent naming of things
  *
  * Some of the code in this class is based on code shown here, written by Jean Lorchat
  * http://iijean.blogspot.se/2010/03/howto-get-list-of-network-interfaces-in.html
@@ -33,6 +36,7 @@
 class Netlink
 {
     public:
+        typedef std::vector<std::pair<int, std::string>> InterfaceList;
 
         /*
          * @brief Construct a new Netlink object
@@ -62,9 +66,17 @@ class Netlink
          * After running this successfully, there will be a local cache of these
          * network objects, which is needed to run some of the other functions.
          *
-         * @return true on success, false otherwise
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        bool getKernelDump();
+        ReturnCode getKernelDump();
+
+        /*
+         * @brief check for a kernel dump, and if not present, try to get one
+         *
+         * @return ReturnCode::SUCCESS if there a kernel dump was found or could be fetched
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode checkKernelDump();
 
         /*
          * @brief Get a list of all network interfaces (except lo)
@@ -72,10 +84,13 @@ class Netlink
          * Runs through the list and gives a list of all network interface namees
          * and indexes available.
          *
-         * @return a vector of interfaces on success, an empty vector on failure // TODO: FIX THIS
+         * TODO: Check for each iface that we do have a name to add
+         *
+         * @return ReturnCode::SUCCESS if the operation was successful
+         * @return ReturnCode::FAILURE if there was an error
          * @pre a local cache has to exist. If not, getKernelDump() will be run
          */
-        std::vector<std::pair<int,std::string>> getInterfaces();
+        ReturnCode getInterfaces(InterfaceList &result);
 
         /*
          * @brief bring an interface up and set its ip address
@@ -88,9 +103,9 @@ class Netlink
          *      netmask the netmask for the network, as used in CIDR notation
          *      (for example 24 for /24)
          * @endparblock
-         * @return true on success, false otherwise
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        bool up(int ifaceIndex, in_addr ip, int netmask);
+        ReturnCode up(int ifaceIndex, in_addr ip, int netmask);
 
         /*
          * @brief bring an interface down
@@ -98,9 +113,9 @@ class Netlink
          * This is similar to running ifconfig <iface> down
          *
          * @param ifaceIndex the index of the interface
-         * @return true on success, false otherwise
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        bool down(int ifaceIndex);
+        ReturnCode down(int ifaceIndex);
 
         /*
          * @brief checks if a given bridge is available with a given address
@@ -108,20 +123,20 @@ class Netlink
          * @param bridgeName the name of the bridge interface
          * @param expectedAddress the expected address of the bridge, in dotted notation
          *
-         * @return true if the bridge exists, is a bridge and has the expected address
-         * @return false otherwise
+         * @return ReturnCode::SUCCESS if the bridge exists, is a bridge and has the expected address
+         * @return ReturnCode::FAILURE otherwise
          *
          * TODO: Check if device is actually a bridge device
          */
-        bool isBridgeAvailable(const char *bridgeName, const char *expectedAddress);
+        ReturnCode isBridgeAvailable(const char *bridgeName, const char *expectedAddress);
 
         /*
          * Sets an ip address as the default gateway
          *
          * @param gatewayAddress the address to set
-         * @return true on success, false otherwise
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        bool setDefaultGateway(const char *gatewayAddress);
+        ReturnCode setDefaultGateway(const char *gatewayAddress);
 
     private:
         typedef std::pair<rtattr, void*> AttributeInfo;
@@ -135,10 +150,10 @@ class Netlink
          *
          * @param h the netlink message header
          * @param result the vector in which to store the results
-         * TODO: What about errors here?
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
         template<typename msgtype, typename InfoType>
-            void saveMessage(struct nlmsghdr *header, std::vector<InfoType> &result);
+            ReturnCode saveMessage(struct nlmsghdr *header, std::vector<InfoType> &result);
 
         /*
          * @brief Save the attributes and attribute data from a netlink message
@@ -151,20 +166,20 @@ class Netlink
          * @note this function allocates memory on the heap. Use freeAttributes to free the list
          *
          * @param h the netlink message header
-         * @return an AttributeList with all attributes connected to this header
-         * TODO: What about errors here?
+         * @param result a reference to the list in which to store results
+         * @result ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
         template<typename msgtype>
-            AttributeList getAttributes(struct nlmsghdr *header);
+            ReturnCode getAttributes(struct nlmsghdr *header, AttributeList &result);
 
         /*
          * @brief sets up the communication with the kernel over netlink
          *
          * Creates a socket and binds it
          *
-         * @return true on success, false otherwise
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        bool setupNetlink();
+        ReturnCode setupNetlink();
 
         /*
          * Templatified general structure for netlink requests
@@ -214,10 +229,11 @@ class Netlink
          *
          * @note the data param is copied. The pointer can be freed after this method returns.
          *
-         * @return true if the attribute fits and was added, false otherwise
+         * @return ReturnCode::SUCCESS if the attribute fits and was added.
+         * @return ReturnCode::FAILURE otherwise
          */
         template<typename payload>
-            bool addAttribute(netlink_request<payload> &req, int type, size_t length, void *data);
+            ReturnCode addAttribute(netlink_request<payload> &req, int type, size_t length, void *data);
 
         /*
          * @brief send a netlink message and check for reply
@@ -227,10 +243,11 @@ class Netlink
          * @tparam payload the netlink message type
          * @param req the netlink request to send
          *
-         * @return true if sending was successful and reply was error-free, false otherwise
+         * @return ReturnCode::SUCCESS if sending was successful and reply was error-free.
+         * @return ReturnCode::FAILURE otherwise
          */
         template<typename payload>
-            bool sendMessage(netlink_request<payload> &request);
+            ReturnCode sendMessage(netlink_request<payload> &request);
 
         /*
          * @brief Listen for a netlink message
@@ -244,7 +261,7 @@ class Netlink
         /*
          * @brief clears the cache
          */
-        bool clearCache();
+        void clearCache();
 
         /*
          * @brief frees all attribute pointers saved in a list

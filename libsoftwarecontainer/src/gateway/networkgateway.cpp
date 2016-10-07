@@ -263,8 +263,8 @@ bool NetworkGateway::setDefaultGateway()
 {
     ReturnCode ret = executeInContainer([this] {
         Netlink n;
-        bool success = n.setDefaultGateway(m_gateway.c_str());
-        return success ? 0 : 1;
+        ReturnCode success = n.setDefaultGateway(m_gateway.c_str());
+        return isSuccess(success) ? 0 : 1;
     });
 
     return isSuccess(ret);
@@ -276,12 +276,16 @@ bool NetworkGateway::up()
         log_debug() << "Attempting to bring up eth0";
         ReturnCode ret = executeInContainer([this] {
             Netlink n;
-            std::vector<std::pair<int, std::string>> ifaces = n.getInterfaces();
+            Netlink::InterfaceList ifaces;
+            if (isError(n.getInterfaces(ifaces))) {
+                log_debug() << "Could not get list of interfaces from netlink";
+            }
+
             for (std::pair<int, std::string> pair : ifaces) {
                 if (pair.second.compare("eth0") == 0) {
                     in_addr ip_addr;
                     inet_aton(ip().c_str(), &ip_addr);
-                    return n.up(pair.first, ip_addr, 24) ? 0 : 1;
+                    return isSuccess(n.up(pair.first, ip_addr, 24)) ? 0 : 1;
                 }
             }
 
@@ -306,10 +310,15 @@ bool NetworkGateway::down()
     log_debug() << "Attempting to configure eth0 to 'down state'";
     ReturnCode ret = executeInContainer([this] {
         Netlink n;
-        std::vector<std::pair<int, std::string>> ifaces = n.getInterfaces();
+        Netlink::InterfaceList ifaces;
+        ReturnCode code = n.getInterfaces(ifaces);
+        if (isError(code)) {
+            log_debug() << "Failed to get list of interfaces from netlink";
+        }
+
         for (std::pair<int, std::string> pair : ifaces) {
             if (pair.second.compare("eth0") == 0) {
-                return n.down(pair.first) ? 0 : 1;
+                return isSuccess(n.down(pair.first)) ? 0 : 1;
             }
         }
 
@@ -326,5 +335,5 @@ bool NetworkGateway::down()
 
 bool NetworkGateway::isBridgeAvailable()
 {
-    return m_netlinkHost.isBridgeAvailable(BRIDGE_INTERFACE, m_gateway.c_str());
+    return isSuccess(m_netlinkHost.isBridgeAvailable(BRIDGE_INTERFACE, m_gateway.c_str()));
 }
