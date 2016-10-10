@@ -10,6 +10,7 @@ build-*/
 *.creator
 *.creator.user
 *.files
+*_test.xml
 *.includes
 .vagrant/
 .cache/
