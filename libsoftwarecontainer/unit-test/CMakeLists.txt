@@ -37,6 +37,7 @@ set(TEST_FILES
     devicenodegateway_unittest.cpp
     envgateway_unittest.cpp
     filegateway_unittest.cpp
+    netlink_unittest.cpp
     networkgateway_unittest.cpp
     main.cpp
     softwarecontainer_test.cpp

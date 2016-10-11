@@ -158,9 +158,12 @@ ReturnCode Netlink::sendMessage(netlink_request<payload> &request)
     }
 
     // TODO: Distinguish from kernel errors (negative) and other errors (positive)
-    if (readMessage() != 0) {
-        fprintf(stderr, "Got an error from the kernel\n");
+    int status = readMessage();
+    if (status < 0) {
+        fprintf(stderr, "Got an error from the kernel: %s\n", strerror(-status));
         return ReturnCode::FAILURE;
+    } else if (status > 0) {
+        fprintf(stderr, "Error in the netlink code: %i\n", status);
     }
 
     return ReturnCode::SUCCESS;
@@ -185,7 +188,6 @@ ReturnCode Netlink::setDefaultGateway(const char *gatewayAddress)
 }
 
 // Bring up by index
-
 ReturnCode Netlink::linkUp(const int ifaceIndex)
 {
     if (isError(checkKernelDump())) {
@@ -252,62 +254,6 @@ ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const int netm
     return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::up(const int ifaceIndex, const in_addr ip, const int netmask)
-{
-    if (isError(checkKernelDump())) {
-        return ReturnCode::FAILURE;
-    }
-
-    for (LinkInfo link : m_links) {
-        ifinfomsg ifinfo = link.first;
-        if (ifinfo.ifi_index != ifaceIndex) {
-            continue;
-        }
-
-        if (isError(linkUp(ifaceIndex))) {
-            fprintf(stderr, "Failed to bring device %i up\n", ifaceIndex);
-            return ReturnCode::FAILURE;
-        }
-
-        // If this is the loopback device, we can't set an IP address for it
-        // and bringing it up is enough. Continue to next link.
-        if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
-            continue;
-        }
-
-        // Second, set IP address
-        if (isError(setIP(ifaceIndex, ip, netmask))) {
-            return ReturnCode::FAILURE;
-        }
-
-        // All operations succeeded
-        return ReturnCode::SUCCESS;
-    }
-
-    // Link not found
-    return ReturnCode::FAILURE;
-}
-
-ReturnCode Netlink::removeAddresses(const int ifaceIndex)
-{
-    // Remove all known addresses for this interface
-    for (AddressInfo addr : m_addresses) {
-        ifaddrmsg ifaddr = addr.first;
-        if (!ifaddr.ifa_index == ifaceIndex) {
-            continue;
-        }
-
-        netlink_request<ifaddrmsg> addr_msg = createMessage<ifaddrmsg>(RTM_DELLINK, 0);
-        memcpy(&addr_msg.pay, &ifaddr, sizeof(ifaddrmsg));
-        
-        if (isError(sendMessage(addr_msg))) {
-            return ReturnCode::FAILURE;
-        }
-    }
-
-    return ReturnCode::SUCCESS;
-}
-
 ReturnCode Netlink::linkDown(const int ifaceIndex)
 {
     for (LinkInfo link : m_links) {
@@ -332,28 +278,14 @@ ReturnCode Netlink::linkDown(const int ifaceIndex)
     return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::down(const int ifaceIndex)
+ReturnCode Netlink::findLink(const char *ifaceName, LinkInfo &linkInfo)
 {
     if (isError(checkKernelDump())) {
         return ReturnCode::FAILURE;
     }
 
-    if (isError(removeAddresses(ifaceIndex))) {
-        return ReturnCode::FAILURE;
-    }
-
-    return ReturnCode::SUCCESS;
-}
-
-// TODO: Check that it is actually a bridge device
-ReturnCode Netlink::findBridge(const char *ifaceName, unsigned int &ifaceIndex)
-{
-    if (isError(checkKernelDump())) {
-        return ReturnCode::FAILURE;
-    }
-
-    for (LinkInfo linkinfo : m_links) {
-        AttributeList attributes = linkinfo.second;
+    for (LinkInfo link : m_links) {
+        AttributeList attributes = link.second;
         for (AttributeInfo attrinfo : attributes) {
             rtattr attr = attrinfo.first;
             void *data = attrinfo.second;
@@ -361,7 +293,7 @@ ReturnCode Netlink::findBridge(const char *ifaceName, unsigned int &ifaceIndex)
             if (attr.rta_type == IFLA_IFNAME) {
                 char *ifname = (char *) data;
                 if (strcmp(ifname, ifaceName) == 0) {
-                    ifaceIndex = linkinfo.first.ifi_index;
+                    linkInfo = link;
                     return ReturnCode::SUCCESS;
                 }
             }
@@ -371,50 +303,47 @@ ReturnCode Netlink::findBridge(const char *ifaceName, unsigned int &ifaceIndex)
     return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::isBridgeAvailable(const char *bridgeName, const char *expectedAddress)
+ReturnCode Netlink::findAddresses(const unsigned int interfaceIndex, std::vector<AddressInfo> &result)
 {
     if (isError(checkKernelDump())) {
         return ReturnCode::FAILURE;
     }
 
-    unsigned int ifaceIndex = 0;
-    if (isError(findBridge(bridgeName, ifaceIndex))) {
-        // We didn't find the right interface
-        return ReturnCode::FAILURE;
+    for (AddressInfo addressInfo : m_addresses) {
+        ifaddrmsg addrmsg = addressInfo.first;
+        if (addrmsg.ifa_index == interfaceIndex) {
+            result.push_back(addressInfo);
+        }
     }
 
-    for (AddressInfo addressInfo : m_addresses) {
+    return ReturnCode::SUCCESS;
 
-        // Skip if this is not the right interface
-        ifaddrmsg addrmsg = addressInfo.first;
-        if (addrmsg.ifa_index != ifaceIndex) {
-            continue;
-        }
+}
 
+ReturnCode Netlink::hasAddress(const std::vector<AddressInfo> &haystack, const int addressFamily, const char *needle)
+{
+    for (AddressInfo addressInfo : haystack) {
         AttributeList attributes = addressInfo.second;
         for (AttributeInfo attrPair : attributes) {
 
             // Skip if this attribute is not an address attribute
             rtattr attr = attrPair.first;
-            if (attr.rta_type != IFA_ADDRESS) {
+            if (attr.rta_type != IFA_ADDRESS && attr.rta_type != IFA_LOCAL) {
                 continue;
             }
 
             void *data = attrPair.second;
             char out[INET6_ADDRSTRLEN];
+
             // It is ok here for inet_ntop to fail (data could be bad)
-            if (inet_ntop(addrmsg.ifa_family, data, out, sizeof(out))) {
-                if (strcmp(out, expectedAddress) == 0) {
+            if (inet_ntop(addressFamily, data, out, sizeof(out))) {
+                if (strcmp(out, needle) == 0) {
                     return ReturnCode::SUCCESS;
                 }
             }
         }
-
-        // Means we found addresses for interface, but they didn't match
-        return ReturnCode::FAILURE;
     }
 
-    // Means we didn't find address for interface
     return ReturnCode::FAILURE;
 }
 
@@ -554,36 +483,6 @@ ReturnCode Netlink::checkKernelDump()
     return ReturnCode::SUCCESS;
 }
 
-
-ReturnCode Netlink::getInterfaces(InterfaceList &result)
-{
-    if (isError(checkKernelDump())) {
-        return ReturnCode::FAILURE;
-    }
-
-    for (LinkInfo link : m_links) {
-        ifinfomsg ifinfo = link.first;
-        if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
-            continue; // We don't include loopback here
-        }
-
-        AttributeList attributeList = link.second;
-        for (AttributeInfo attrInfo : attributeList) {
-            rtattr attr = attrInfo.first;
-            if (attr.rta_type == IFLA_IFNAME) {
-                const char *name = (char *)attrInfo.second;
-
-                std::pair<int, std::string> pair(ifinfo.ifi_index, std::string(name));
-                result.push_back(pair);
-                break; // Just break out of this inner for
-            }
-        }
-    }
-
-    return ReturnCode::SUCCESS;
-}
-
-
 template<typename msgtype>
 ReturnCode Netlink::getAttributes(const struct nlmsghdr *header, AttributeList &result)
 {
@@ -655,4 +554,6 @@ void Netlink::clearCache()
         freeAttributes(route.second);
     }
     m_routes.clear();
+
+    m_hasKernelDump = false;
 }
