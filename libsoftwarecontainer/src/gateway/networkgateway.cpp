@@ -276,20 +276,22 @@ bool NetworkGateway::up()
         log_debug() << "Attempting to bring up eth0";
         ReturnCode ret = executeInContainer([this] {
             Netlink n;
-            Netlink::InterfaceList ifaces;
-            if (isError(n.getInterfaces(ifaces))) {
-                log_debug() << "Could not get list of interfaces from netlink";
+
+            Netlink::LinkInfo iface;
+            if (isError(n.findLink("eth0", iface))) {
+                log_error() << "Could not find interface eth0 in container";
+                return 1;
             }
 
-            for (std::pair<int, std::string> pair : ifaces) {
-                if (pair.second.compare("eth0") == 0) {
-                    in_addr ip_addr;
-                    inet_aton(ip().c_str(), &ip_addr);
-                    return isSuccess(n.up(pair.first, ip_addr, 24)) ? 0 : 1;
-                }
+            int ifaceIndex = iface.first.ifi_index;
+            if (isError(n.linkUp(ifaceIndex))) {
+                log_error() << "Could not bring interface eth0 up in container";
+                return 2;
             }
 
-            return 1;
+            in_addr ip_addr;
+            inet_aton(ip().c_str(), &ip_addr);
+            return isSuccess(n.setIP(ifaceIndex, ip_addr, 24)) ? 0 : 3;
         });
 
         if (isSuccess(ret)) {
@@ -310,19 +312,18 @@ bool NetworkGateway::down()
     log_debug() << "Attempting to configure eth0 to 'down state'";
     ReturnCode ret = executeInContainer([this] {
         Netlink n;
-        Netlink::InterfaceList ifaces;
-        ReturnCode code = n.getInterfaces(ifaces);
-        if (isError(code)) {
-            log_debug() << "Failed to get list of interfaces from netlink";
+        Netlink::LinkInfo iface;
+        if (isError(n.findLink("eth0", iface))) {
+            log_error() << "Could not find interface eth0 in container";
+            return 1;
         }
 
-        for (std::pair<int, std::string> pair : ifaces) {
-            if (pair.second.compare("eth0") == 0) {
-                return isSuccess(n.down(pair.first)) ? 0 : 1;
-            }
+        if (isError(n.linkDown(iface.first.ifi_index))) {
+            log_error() << "Could not bring interface eth0 down in container";
+            return 2;
         }
 
-        return 1;
+        return 0;
     });
 
     if (isError(ret)) {
@@ -335,5 +336,16 @@ bool NetworkGateway::down()
 
 bool NetworkGateway::isBridgeAvailable()
 {
-    return isSuccess(m_netlinkHost.isBridgeAvailable(BRIDGE_INTERFACE, m_gateway.c_str()));
+    Netlink::LinkInfo iface;
+    if (isError(m_netlinkHost.findLink(BRIDGE_INTERFACE, iface))) {
+        log_error() << "Could not find " << BRIDGE_INTERFACE << " in the host";
+    }
+
+    std::vector<Netlink::AddressInfo> addresses;
+    if (isError(m_netlinkHost.findAddresses(iface.first.ifi_index, addresses))) {
+        log_error() << "Could not fetch addresses for " << BRIDGE_INTERFACE << " in the host";
+    }
+
+    return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
 }
+

@@ -35,7 +35,11 @@
 class Netlink
 {
     public:
-        typedef std::vector<std::pair<int, std::string>> InterfaceList;
+        typedef std::pair<rtattr, void*> AttributeInfo;
+        typedef std::vector<AttributeInfo> AttributeList;
+        typedef std::pair<ifinfomsg, AttributeList> LinkInfo;
+        typedef std::pair<ifaddrmsg, AttributeList> AddressInfo;
+        typedef std::pair<rtmsg, AttributeList> RouteInfo;
 
         /*
          * @brief Construct a new Netlink object
@@ -54,7 +58,7 @@ class Netlink
          *
          * Also shuts down the communication with the kernel.
          */
-        ~Netlink();
+        virtual ~Netlink();
 
         /*
          * @brief get a dump of all links, addresses and routes from the kernel.
@@ -75,74 +79,99 @@ class Netlink
          * @return ReturnCode::SUCCESS if there a kernel dump was found or could be fetched
          * @return ReturnCode::FAILURE otherwise
          */
-        ReturnCode checkKernelDump();
+        virtual ReturnCode checkKernelDump();
 
         /*
-         * @brief Get a list of all network interfaces (except lo)
-         *
-         * Runs through the list and gives a list of all network interface namees
-         * and indexes available.
-         *
-         * TODO: Check for each iface that we do have a name to add
-         *
-         * @return ReturnCode::SUCCESS if the operation was successful
-         * @return ReturnCode::FAILURE if there was an error
-         * @pre a local cache has to exist. If not, getKernelDump() will be run
-         */
-        ReturnCode getInterfaces(InterfaceList &result);
-
-        /*
-         * @brief bring an interface up and set its ip address
-         *
-         * This is similar to running: ifconfig <iface> up <ip> netmask <netmask>
-         *
-         * @param ifaceIndex the index of the interface
-         * @param ip the ip address to set, in binary form
-         * @parblock
-         *      netmask the netmask for the network, as used in CIDR notation
-         *      (for example 24 for /24)
-         * @endparblock
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
-         */
-        ReturnCode up(const int ifaceIndex, const in_addr ip, const int netmask);
-
-        /*
-         * @brief bring an interface down
-         *
-         * This is similar to running ifconfig <iface> down
-         *
-         * @param ifaceIndex the index of the interface
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
-         */
-        ReturnCode down(const int ifaceIndex);
-
-        /*
-         * @brief checks if a given bridge is available with a given address
-         *
-         * @param bridgeName the name of the bridge interface
-         * @param expectedAddress the expected address of the bridge, in dotted notation
-         *
-         * @return ReturnCode::SUCCESS if the bridge exists, is a bridge and has the expected address
-         * @return ReturnCode::FAILURE otherwise
-         *
-         */
-        ReturnCode isBridgeAvailable(const char *bridgeName, const char *expectedAddress);
-
-
-        /*
-         * Sets an ip address as the default gateway
+         * @brief Sets an ip address as the default gateway
          *
          * @param gatewayAddress the address to set
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         * @return ReturnCode::SUCCESS on success
+         * @return ReturnCode::FAILURE otherwise
          */
         ReturnCode setDefaultGateway(const char *gatewayAddress);
 
+        /*
+         * @brief Bring the given interface up
+         *
+         * Sets the UP flag for the given interface, if it exists.
+         *
+         * @param ifaceIndex the index for the interface to bring up
+         * @return ReturnCode::SUCCESS if the interface was found and brought up
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode linkUp(const int ifaceIndex);
+
+        /*
+         * @brief Bring a given interface down
+         *
+         * @param ifaceIndex the index for the interface to bring down
+         * @return ReturnCode::SUCCESS if interface was found and brought down
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode linkDown(const int ifaceIndex);
+
+        /*
+         * @brief Sets an IP address for a network link
+         *
+         * @param ifaceIndex the index for the interface to set ip for
+         * @param ip the ipv4 address to set
+         * @param netmask the netmask in CIDR format (for example 24)
+         *
+         * @return ReturnCode::SUCCESS if interface was found and IP was set
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode setIP(const int ifaceIndex, const in_addr ip, const int netmask);
+
+        /*
+         * @brief Check that the device given is a network bridge
+         * @param ifaceName the name of the interface
+         * @param ifaceIndex the index of the interface (out parameter)
+         *
+         * @return ReturnCode::SUCCESS if interface with matching name was found.
+         * @return ReturnCode::FAILURE otherwise.
+         */
+        ReturnCode findLink(const char *ifaceName, LinkInfo &linkInfo);
+
+        /*
+         * @brief Get all addresses associated with the given interface index
+         *
+         * @param interfaceIndex the interface address to get addresses for
+         * @param result the vector to place all addresses in (out parameter)
+         *
+         * @return ReturnCode::SUCCESS on success
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode findAddresses(const unsigned int interfaceIndex, std::vector<AddressInfo> &result);
+
+        /*
+         * @brief checks if an address is present in the given list
+         *
+         * @param haystack the list to search in
+         * @param addressFamily the address family, AF_INET or AF_INET6
+         * @param needle the ip address to search for, in dotted notation
+         *
+         * @return ReturnCode::SUCCESS if the address is in the haystack
+         * @return ReturnCode::FAILURE otherwise
+         */
+        ReturnCode hasAddress(const std::vector<AddressInfo> &haystack, const int addressFamily, const char *needle);
+
     private:
-        typedef std::pair<rtattr, void*> AttributeInfo;
-        typedef std::vector<AttributeInfo> AttributeList;
-        typedef std::pair<ifinfomsg, AttributeList> LinkInfo;
-        typedef std::pair<ifaddrmsg, AttributeList> AddressInfo;
-        typedef std::pair<rtmsg, AttributeList> RouteInfo;
+        /*
+         * @brief sets up the communication with the kernel over netlink
+         *
+         * Creates a socket and binds it
+         *
+         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         */
+        virtual ReturnCode setupNetlink();
+
+        /*
+         * @brief clears the cache
+         *
+         * This clears all the links, addresses and routes. It also has the responsibility to free
+         * all allocated attributes for links, addresses och routes.
+         */
+        void clearCache();
 
         /*
          * @brief Save the netlink message contents in the given result vector
@@ -170,15 +199,6 @@ class Netlink
          */
         template<typename msgtype>
             ReturnCode getAttributes(const struct nlmsghdr *header, AttributeList &result);
-
-        /*
-         * @brief sets up the communication with the kernel over netlink
-         *
-         * Creates a socket and binds it
-         *
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
-         */
-        ReturnCode setupNetlink();
 
         /*
          * Templatified general structure for netlink requests
@@ -249,49 +269,6 @@ class Netlink
             ReturnCode sendMessage(netlink_request<payload> &request);
 
         /*
-         * @brief Check that the device given is a network bridge
-         * @param ifaceName the name of the interface
-         * @param ifaceIndex the index of the interface (out parameter)
-         *
-         * @return ReturnCode::SUCCESS if interface with matching name was found.
-         * @return ReturnCode::FAILURE otherwise.
-         */
-        ReturnCode findBridge(const char *ifaceName, unsigned int &ifaceIndex);
-
-        /*
-         * @brief Bring the given interface up
-         *
-         * Sets the UP flag for the given interface, if it exists.
-         *
-         * @param ifaceIndex the index for the interface to bring up
-         * @return ReturnCode::SUCCESS if the interface was found and brought up
-         * @return ReturnCode::FAILURE otherwise
-         */
-        ReturnCode linkUp(const int ifaceIndex);
-
-        /*
-         * @brief Sets an IP address for a network link
-         *
-         * @param ifaceIndex the index for the interface to set ip for
-         * @param ip the ipv4 address to set
-         * @param netmask the netmask in CIDR format (for example 24)
-         *
-         * @return ReturnCode::SUCCESS if interface was found and IP was set
-         * @return ReturnCode::FAILURE otherwise
-         */
-        ReturnCode setIP(const int ifaceIndex, const in_addr ip, const int netmask);
-
-        /*
-         * @brief Bring a given interface down
-         *
-         * @param ifaceIndex the index for the interface to bring down
-         * @return ReturnCode::SUCCESS if interface was found and brought down
-         * @return ReturnCode::FAILURE otherwise
-         */
-        ReturnCode linkDown(const int ifaceIndex);
-        ReturnCode removeAddresses(const int ifaceIndex);
-
-        /*
          * @brief Listen for a netlink message
          *
          * This method will block while waiting to recieve a netlink message from the kernel.
@@ -299,11 +276,6 @@ class Netlink
          * @return 0 if the read message was error-free, an error code otherwise
          */
         int readMessage();
-
-        /*
-         * @brief clears the cache
-         */
-        void clearCache();
 
         /*
          * @brief frees all attribute pointers saved in a list
