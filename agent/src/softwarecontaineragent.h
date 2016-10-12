@@ -114,12 +114,13 @@ public:
 
 private:
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
-    std::vector<SoftwareContainerPtr> m_containers;
+    std::map<ContainerID, SoftwareContainerPtr> m_containers;
     std::vector<SoftwareContainerPtr> m_preloadedContainers;
     std::vector<CommandJob *> m_jobs;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
+    ContainerID m_containerId;
 };
 }
