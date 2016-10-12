@@ -65,10 +65,10 @@ class TestFileSystem(object):
         A nice way of getting process exit value from the container would be
         very nice.
         """
-        AbsoluteTestFile = os.path.join(CURRENT_DIR, TESTFILE)
+        absoluteTestFile = os.path.join(CURRENT_DIR, TESTFILE)
 
-        if os.path.exists(AbsoluteTestFile):
-            os.remove(AbsoluteTestFile)
+        if os.path.exists(absoluteTestFile):
+            os.remove(absoluteTestFile)
         ca = Container()
         if flag is True:
             DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
@@ -85,13 +85,13 @@ class TestFileSystem(object):
             time.sleep(0.5)
             # lala.txt should be available in the upper dir, not the lower.
             if flag is True:
-                assert os.path.exists(AbsoluteTestFile) is False
+                assert os.path.exists(absoluteTestFile) is False
             else:
-                assert os.path.exists(AbsoluteTestFile) is True
+                assert os.path.exists(absoluteTestFile) is True
             ca.launch_command('{}/fileapp.py delete {}'
                               .format(ca.get_bind_dir()), TESTFILE)
             # lala.txt should be deleted from both the upper and lower dir
             time.sleep(0.5)
-            assert os.path.exists(AbsoluteTestFile) is False
+            assert os.path.exists(absoluteTestFile) is False
         finally:
             ca.terminate()
