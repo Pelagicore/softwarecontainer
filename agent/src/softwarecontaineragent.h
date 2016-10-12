@@ -112,8 +112,6 @@ public:
 
     std::shared_ptr<Workspace> getWorkspace();
 
-    ContainerID testIDPool ();
-
 private:
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
