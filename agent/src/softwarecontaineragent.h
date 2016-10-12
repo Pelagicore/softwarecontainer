@@ -113,6 +113,8 @@ public:
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
+    inline bool isIdValid (ContainerID containerID);
+    ContainerID findSuitableId ();
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
     std::vector<SoftwareContainerPtr> m_preloadedContainers;

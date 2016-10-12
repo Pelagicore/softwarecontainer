@@ -31,13 +31,16 @@ void SoftwareContainerAgent::triggerPreload()
     }
 }
 
-void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
+inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
 {
-	bool valid = ((containerID < UINT32_MAX )
+	return ((containerID < UINT32_MAX )
 			&& (containerID >= 0 )
 			&& (m_containers.find(containerID)!= m_containers.end()));
+}
 
-	if (valid) {
+void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
+{
+	if (isIdValid(containerID)) {
 		m_containers.erase(containerID);
 		m_containerIdPool.push_back(containerID);
 	} else {
@@ -47,18 +50,14 @@ void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
 
 bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareContainer *&container)
 {
-	bool valid = ((containerID < UINT32_MAX )
-			&& (containerID >= 0 )
-			&& (m_containers.find(containerID)!= m_containers.end()));
-
-	log_debug() << "am i valid ? " << valid;
-	if (valid) {
+	if (isIdValid(containerID)) {
 		container = m_containers[containerID].get();
+		return true;
 	} else {
 		log_error() << "Invalid container ID " << containerID;
 	}
 
-	return valid;
+	return false;
 }
 
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
@@ -114,6 +113,18 @@ bool SoftwareContainerAgent::parseConfig(const std::string &config)
     return true;
 }
 
+ContainerID SoftwareContainerAgent::findSuitableId()
+{
+	ContainerID availableID = m_containerIdPool.back();
+	if (m_containerIdPool.size() > 1) {
+		m_containerIdPool.pop_back();
+	} else {
+		m_containerIdPool[0]++;
+	}
+
+	return availableID;
+}
+
 ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, const std::string &config)
 {
 	profilepoint("createContainerStart");
@@ -129,12 +140,7 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, c
 		container = new SoftwareContainer(m_softwarecontainerWorkspace);
 	}
 
-	ContainerID availableID = m_containerIdPool.back();
-	if (m_containerIdPool.size() > 1) {
-		m_containerIdPool.pop_back();
-	} else {
-		m_containerIdPool[0]++;
-	}
+	ContainerID availableID = findSuitableId();
 
 	m_containers[availableID] = SoftwareContainerPtr(container);
 	log_debug() << "Created container with ID :" << availableID;
