@@ -81,7 +81,7 @@ configure_busybox()
 
     # Symlink to busybox for the commands it supports
     cd $rootfs/bin || return 1
-    ./busybox --list | xargs -n1 -P 25 ln -s busybox
+    ./busybox --list | xargs -n1 ln -s busybox
 
     return 0
 }
