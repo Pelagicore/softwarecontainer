@@ -33,8 +33,8 @@ void SoftwareContainerAgent::triggerPreload()
 
 inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
 {
-    return ((containerID < UINT32_MAX )
-            && (containerID >= 0 )
+    return ((containerID < UINT32_MAX)
+            && (containerID >= 0)
             && (m_containers.find(containerID)!= m_containers.end()));
 }
 

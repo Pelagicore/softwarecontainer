@@ -37,20 +37,20 @@ public:
     std::shared_ptr<Workspace> workspace;
 
     void SetUp() override
-            {
+    {
         sca = new SoftwareContainerAgent(
-                m_context
-                , m_preloadCount
-                , m_shutdownContainers
-                , m_shutdownTimeout);
+            m_context
+            , m_preloadCount
+            , m_shutdownContainers
+            , m_shutdownTimeout);
 
         workspace = sca->getWorkspace();
-            }
+    }
 
     void TearDown() override
-            {
+    {
         delete sca;
-            }
+    }
 };
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
@@ -67,19 +67,6 @@ TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
     bool retval = sca->checkContainer(id, container);
     ASSERT_TRUE(retval == false);
 }
-/*
- * Stress test written for creation + deletion
- * It takes too much time, thus commented out
- *
-TEST_F(SoftwareContainerAgentTest, StressCreateDeleteContainer) {
-	ContainerID id = 0;
-	for (auto i = 0 ; i < UINT32_MAX; i++) {
-		id = sca->createContainer("iejr-", "");
-		sca->deleteContainer(id);
-	}
-	EXPECT_EQ(0, id);
-}
- */
 
 /*
  *TBD: This test needs to be fixed, somethings going on in it.
