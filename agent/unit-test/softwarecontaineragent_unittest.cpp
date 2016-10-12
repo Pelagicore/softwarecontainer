@@ -37,35 +37,35 @@ public:
     std::shared_ptr<Workspace> workspace;
 
     void SetUp() override
-    {
+            {
         sca = new SoftwareContainerAgent(
-                      m_context
-                    , m_preloadCount
-                    , m_shutdownContainers
-                    , m_shutdownTimeout);
+                m_context
+                , m_preloadCount
+                , m_shutdownContainers
+                , m_shutdownTimeout);
 
         workspace = sca->getWorkspace();
-    }
+            }
 
     void TearDown() override
-    {
+            {
         delete sca;
-    }
+            }
 };
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
-	SoftwareContainer *container;
-	ContainerID id = sca->createContainer("iejr-", "");
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer("iejr-", "");
     bool retval = sca->checkContainer(id, container);
     ASSERT_TRUE(retval == true);
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
-	SoftwareContainer *container;
-	ContainerID id = sca->createContainer("iejr-", "");
-	sca->deleteContainer(id);
-	bool retval = sca->checkContainer(id, container);
-	ASSERT_TRUE(retval == false);
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer("iejr-", "");
+    sca->deleteContainer(id);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval == false);
 }
 /*
  * Stress test written for creation + deletion
@@ -79,7 +79,7 @@ TEST_F(SoftwareContainerAgentTest, StressCreateDeleteContainer) {
 	}
 	EXPECT_EQ(0, id);
 }
-*/
+ */
 
 /*
  *TBD: This test needs to be fixed, somethings going on in it.
@@ -92,7 +92,7 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
     ASSERT_TRUE(id == 0);
     ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
 }
-*/
+ */
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
     bool retval = sca->parseConfig("[{\"enableWriteBuffer\": true}]");
