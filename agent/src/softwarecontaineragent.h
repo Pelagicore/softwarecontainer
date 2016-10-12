@@ -51,78 +51,78 @@ namespace softwarecontainer {
 
 class SoftwareContainerAgent : protected softwarecontainer::JSONParser
 {
-    LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
-    typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;
+	LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
+	typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;
 
 public:
-    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
-                     , int preloadCount
-                     , bool shutdownContainers
-                     , int shutdownTimeout);
+	SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
+			, int preloadCount
+			, bool shutdownContainers
+			, int shutdownTimeout);
 
-    ~SoftwareContainerAgent();
+	~SoftwareContainerAgent();
 
-    /**
-     * Preload additional containers if needed
-     */
-    void triggerPreload();
+	/**
+	 * Preload additional containers if needed
+	 */
+	 void triggerPreload();
 
-    void deleteContainer(ContainerID containerID);
+	 void deleteContainer(ContainerID containerID);
 
-    /**
-     * Check whether the given containerID is valid and return a reference to the actual container
-     */
-    bool checkContainer(ContainerID containerID, SoftwareContainer * &container);
+	 /**
+	  * Check whether the given containerID is valid and return a reference to the actual container
+	  */
+	 bool checkContainer(ContainerID containerID, SoftwareContainer * &container);
 
-    ReturnCode readConfigElement(const json_t *element);
+	 ReturnCode readConfigElement(const json_t *element);
 
-    /**
-     * Parse config needed for starting up the container in a correct manner.
-     */
-    bool parseConfig(const std::string &config);
+	 /**
+	  * Parse config needed for starting up the container in a correct manner.
+	  */
+	 bool parseConfig(const std::string &config);
 
-    /**
-     * Create a new container
-     */
-    ContainerID createContainer(const std::string &prefix, const std::string &config);
+	 /**
+	  * Create a new container
+	  */
+	 ContainerID createContainer(const std::string &prefix, const std::string &config);
 
-    bool checkJob(pid_t pid, CommandJob * &result);
+	 bool checkJob(pid_t pid, CommandJob * &result);
 
-    void writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes);
+	 void writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes);
 
-    /**
-     * Launch the given command in a the given container
-     */
-    pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine,
-                        const std::string &workingDirectory, const std::string &outputFile,
-                        const EnvironmentVariables &env, std::function<void (pid_t, int)> listener);
+	 /**
+	  * Launch the given command in a the given container
+	  */
+	 pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine,
+			 const std::string &workingDirectory, const std::string &outputFile,
+			 const EnvironmentVariables &env, std::function<void (pid_t, int)> listener);
 
-    void setContainerName(ContainerID containerID, const std::string &name);
+	 void setContainerName(ContainerID containerID, const std::string &name);
 
-    void shutdownContainer(ContainerID containerID);
+	 void shutdownContainer(ContainerID containerID);
 
-    void shutdownContainer(ContainerID containerID, unsigned int timeout);
+	 void shutdownContainer(ContainerID containerID, unsigned int timeout);
 
-    std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
-                const std::string &subPathInContainer, bool readOnly);
+	 std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
+			 const std::string &subPathInContainer, bool readOnly);
 
-    void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
+	 void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
 
-    bool setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities);
+	 bool setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities);
 
-    std::shared_ptr<Workspace> getWorkspace();
+	 std::shared_ptr<Workspace> getWorkspace();
 
 private:
-    inline bool isIdValid (ContainerID containerID);
-    ContainerID findSuitableId ();
-    std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
-    std::map<ContainerID, SoftwareContainerPtr> m_containers;
-    std::vector<SoftwareContainerPtr> m_preloadedContainers;
-    std::vector<CommandJob *> m_jobs;
-    Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
-    size_t m_preloadCount;
-    SignalConnectionsHandler m_connections;
-    bool m_shutdownContainers = true;
-    std::vector<ContainerID> m_containerIdPool;
+	 inline bool isIdValid (ContainerID containerID);
+	 ContainerID findSuitableId ();
+	 std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
+	 std::map<ContainerID, SoftwareContainerPtr> m_containers;
+	 std::vector<SoftwareContainerPtr> m_preloadedContainers;
+	 std::vector<CommandJob *> m_jobs;
+	 Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
+	 size_t m_preloadCount;
+	 SignalConnectionsHandler m_connections;
+	 bool m_shutdownContainers = true;
+	 std::vector<ContainerID> m_containerIdPool;
 };
 }

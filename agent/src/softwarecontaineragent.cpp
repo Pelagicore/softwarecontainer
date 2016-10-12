@@ -2,18 +2,18 @@
 #include <cstdint>
 
 SoftwareContainerAgent::SoftwareContainerAgent(
-        Glib::RefPtr<Glib::MainContext> mainLoopContext
-        , int preloadCount
-        , bool shutdownContainers
-        , int shutdownTimeout)
-    : m_mainLoopContext(mainLoopContext)
-    , m_preloadCount(preloadCount)
-    , m_shutdownContainers(shutdownContainers)
+		Glib::RefPtr<Glib::MainContext> mainLoopContext
+		, int preloadCount
+		, bool shutdownContainers
+		, int shutdownTimeout)
+: m_mainLoopContext(mainLoopContext)
+, m_preloadCount(preloadCount)
+, m_shutdownContainers(shutdownContainers)
 {
 	m_containerIdPool.push_back(0);
-    m_softwarecontainerWorkspace = std::make_shared<Workspace>();
-    triggerPreload();
-    m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
+	m_softwarecontainerWorkspace = std::make_shared<Workspace>();
+	triggerPreload();
+	m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
@@ -22,13 +22,13 @@ SoftwareContainerAgent::~SoftwareContainerAgent()
 
 void SoftwareContainerAgent::triggerPreload()
 {
-    //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
-    while (m_preloadedContainers.size() != m_preloadCount) {
-        auto container = new SoftwareContainer(m_softwarecontainerWorkspace);
-        container->setContainerIDPrefix("Preload-");
-        container->preload();
-        m_preloadedContainers.push_back(SoftwareContainerPtr(container));
-    }
+	//        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
+	while (m_preloadedContainers.size() != m_preloadCount) {
+		auto container = new SoftwareContainer(m_softwarecontainerWorkspace);
+		container->setContainerIDPrefix("Preload-");
+		container->preload();
+		m_preloadedContainers.push_back(SoftwareContainerPtr(container));
+	}
 }
 
 inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
@@ -62,55 +62,55 @@ bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareCon
 
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
 {
-    bool wo;
-    if(!read(element, "enableWriteBuffer", wo)) {
-        log_debug() << "enableWriteBuffer not found";
-        m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
-    } else {
-        if (wo == true) {
-            m_softwarecontainerWorkspace->m_enableWriteBuffer = true;
-        } else {
-            m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
-        }
-    }
-    return ReturnCode::SUCCESS;
+	bool wo;
+	if(!read(element, "enableWriteBuffer", wo)) {
+		log_debug() << "enableWriteBuffer not found";
+		m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
+	} else {
+		if (wo == true) {
+			m_softwarecontainerWorkspace->m_enableWriteBuffer = true;
+		} else {
+			m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
+		}
+	}
+	return ReturnCode::SUCCESS;
 }
 
 bool SoftwareContainerAgent::parseConfig(const std::string &config)
 {
-    if (config.size() == 0) {
-        log_warning() << "No configuration interpreted";
-        return false;
-    }
+	if (config.size() == 0) {
+		log_warning() << "No configuration interpreted";
+		return false;
+	}
 
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+	json_error_t error;
+	json_t *root = json_loads(config.c_str(), 0, &error);
 
-    if (!root) {
-        log_error() << "Could not parse config: " << error.text;
-        log_error() << config;
-        return false;
-    }
+	if (!root) {
+		log_error() << "Could not parse config: " << error.text;
+		log_error() << config;
+		return false;
+	}
 
-    if (json_is_array(root)) {
-        for(size_t i = 0; i < json_array_size(root); i++) {
-            json_t *element = json_array_get(root, i);
-            if (json_is_object(element)) {
-                if (isError(readConfigElement(element))) {
-                    log_error() << "Could not read config element";
-                    return false;
-                }
-            } else {
-                log_error() << "json configuration is not an object";
-                return false;
-            }
-        }
-    } else {
-        log_error() << "Root JSON element is not an array";
-        return false;
-    }
+	if (json_is_array(root)) {
+		for(size_t i = 0; i < json_array_size(root); i++) {
+			json_t *element = json_array_get(root, i);
+			if (json_is_object(element)) {
+				if (isError(readConfigElement(element))) {
+					log_error() << "Could not read config element";
+					return false;
+				}
+			} else {
+				log_error() << "json configuration is not an object";
+				return false;
+			}
+		}
+	} else {
+		log_error() << "Root JSON element is not an array";
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 ContainerID SoftwareContainerAgent::findSuitableId()
@@ -155,112 +155,112 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, c
 
 bool SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&result)
 {
-    for (auto &job : m_jobs) {
-        if (job->pid() == pid) {
-            result = job;
-            return true;
-        }
-    }
-    log_warning() << "Unknown PID: " << pid;
-    return false;
+	for (auto &job : m_jobs) {
+		if (job->pid() == pid) {
+			result = job;
+			return true;
+		}
+	}
+	log_warning() << "Unknown PID: " << pid;
+	return false;
 }
 
 void SoftwareContainerAgent::writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes)
 {
-    CommandJob *job = nullptr;
-    if (checkJob(pid, job)) {
-        log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
-        write(job->stdin(), bytes.data(), bytes.size());
-    }
+	CommandJob *job = nullptr;
+	if (checkJob(pid, job)) {
+		log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
+		write(job->stdin(), bytes.data(), bytes.size());
+	}
 }
 
 pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile, const EnvironmentVariables &env, std::function<void (pid_t, int)> listener)
 {
-    profilefunction("launchCommandFunction");
-    SoftwareContainer *container;
-    if (checkContainer(containerID, container)) {
-        auto job = new CommandJob(*container, cmdLine);
-        // Capturing this leaves an open pipe for every container, even
-        // after it has terminated.
-        // job->captureStdin();
-        job->setOutputFile(outputFile);
-        job->setUserID(userID);
-        job->setEnvironnmentVariables(env);
-        job->setWorkingDirectory(workingDirectory);
-        job->start();
-        addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {
-            listener(pid, exitCode);
-        }, m_mainLoopContext);
+	profilefunction("launchCommandFunction");
+	SoftwareContainer *container;
+	if (checkContainer(containerID, container)) {
+		auto job = new CommandJob(*container, cmdLine);
+		// Capturing this leaves an open pipe for every container, even
+		// after it has terminated.
+		// job->captureStdin();
+		job->setOutputFile(outputFile);
+		job->setUserID(userID);
+		job->setEnvironnmentVariables(env);
+		job->setWorkingDirectory(workingDirectory);
+		job->start();
+		addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {
+			listener(pid, exitCode);
+		}, m_mainLoopContext);
 
-        m_jobs.push_back(job);
+		m_jobs.push_back(job);
 
-        profilepoint("launchCommandEnd");
+		profilepoint("launchCommandEnd");
 
-        return job->pid();
-    }
-    return INVALID_PID;
+		return job->pid();
+	}
+	return INVALID_PID;
 }
 
 void SoftwareContainerAgent::setContainerName(ContainerID containerID, const std::string &name)
 {
-    SoftwareContainer *container = nullptr;
-    if (checkContainer(containerID, container)) {
-        container->setContainerName(name);
-    }
+	SoftwareContainer *container = nullptr;
+	if (checkContainer(containerID, container)) {
+		container->setContainerName(name);
+	}
 }
 
 void SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
 {
-    shutdownContainer(containerID, m_softwarecontainerWorkspace->m_containerShutdownTimeout);
+	shutdownContainer(containerID, m_softwarecontainerWorkspace->m_containerShutdownTimeout);
 }
 
 void SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned int timeout)
 {
-    profilefunction("shutdownContainerFunction");
-    if (m_shutdownContainers) {
-        SoftwareContainer *container = nullptr;
-        if (checkContainer(containerID, container)) {
-            container->shutdown();
-            deleteContainer(containerID);
-        }
-    } else {
-        log_info() << "Not shutting down container";
-    }
+	profilefunction("shutdownContainerFunction");
+	if (m_shutdownContainers) {
+		SoftwareContainer *container = nullptr;
+		if (checkContainer(containerID, container)) {
+			container->shutdown();
+			deleteContainer(containerID);
+		}
+	} else {
+		log_info() << "Not shutting down container";
+	}
 }
 
 std::string SoftwareContainerAgent::bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost, const std::string &subPathInContainer, bool readOnly)
 {
-    profilefunction("bindMountFolderInContainerFunction");
-    SoftwareContainer *container = nullptr;
-    if (checkContainer(containerID, container)) {
-        std::string path;
-        ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, subPathInContainer, path, readOnly);
-        if (isError(result)) {
-            log_error() << "Unable to bind mount folder " << pathInHost << " to " << subPathInContainer;
-            return "";
-        }
+	profilefunction("bindMountFolderInContainerFunction");
+	SoftwareContainer *container = nullptr;
+	if (checkContainer(containerID, container)) {
+		std::string path;
+		ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, subPathInContainer, path, readOnly);
+		if (isError(result)) {
+			log_error() << "Unable to bind mount folder " << pathInHost << " to " << subPathInContainer;
+			return "";
+		}
 
-        return path;
-    }
-    return "";
+		return path;
+	}
+	return "";
 }
 
 void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs)
 {
-    profilefunction("setGatewayConfigsFunction");
-    SoftwareContainer *container = nullptr;
-    if (checkContainer(containerID, container)) {
-        container->updateGatewayConfiguration(configs);
-    }
+	profilefunction("setGatewayConfigsFunction");
+	SoftwareContainer *container = nullptr;
+	if (checkContainer(containerID, container)) {
+		container->updateGatewayConfiguration(configs);
+	}
 }
 
 bool SoftwareContainerAgent::setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities)
 {
-    return true;
+	return true;
 }
 
 
 std::shared_ptr<Workspace> SoftwareContainerAgent::getWorkspace()
 {
-    return m_softwarecontainerWorkspace;
+	return m_softwarecontainerWorkspace;
 }
