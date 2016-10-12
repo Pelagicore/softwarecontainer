@@ -172,13 +172,14 @@ ReturnCode Container::create()
         const std::string rootfspath_dst = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
 
         if (m_enableWriteBuffer) {
+            createDirectory(rootfspath_dst);
             const std::string rootfspath_lower = rootfspath_dst + "-lower";
             createDirectory(rootfspath_lower);
             const std::string rootfspath_upper = rootfspath_dst + "-upper";
             createDirectory(rootfspath_upper);
             const std::string rootfspath_work = rootfspath_dst + "-work";
             overlayMount(rootfspath_lower, rootfspath_upper, rootfspath_work, rootfspath_dst);
-            m_rootFSPath = rootfspath_lower;
+            m_rootFSPath = rootfspath_dst;
 
             log_debug() << "Write buffer enabled, lower=" << rootfspath_lower
                         << ", upper=" << rootfspath_upper
