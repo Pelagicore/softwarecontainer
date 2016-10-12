@@ -1,4 +1,6 @@
 
+.. _getting-started:
+
 Getting started
 ***************
 
@@ -62,6 +64,12 @@ Example config JSON::
 
 The main reason this config is passed as raw JSON is to support additions in supported config options without breaking the API.
 
+Write buffer configuration
+--------------------------
+
+The ``enableWriteBuffer`` is used to enable or disable write buffers on the mounted :ref:`filesystems <filesystems>` in the container. These
+buffers consists of a RAM overlay on top of the existing :ref:`filesystem <filesystems>`, and are synced to the underlying :ref:`filesystem <filesystems>` on
+shutdown of the container.
 
 
 Working with containers

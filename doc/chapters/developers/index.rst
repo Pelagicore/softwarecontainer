@@ -9,6 +9,9 @@ This section describes the internal structure of SoftwareContainer, and the majo
 The intended reader is a developer who wants to understand and work with the internals of SoftwareContainer,
 or anyone who simply wants a better insight for e.g. troubleshooting.
 
+There is also some documentation of interest in the :ref:`Filesystems <filesystems>` chapter
+regarding filesystems in the container.
+
 .. todo::
     The diagrams in this chapter do not differ between sync and async calls, should be fixed
 
