@@ -53,12 +53,33 @@ public:
     }
 };
 
-TEST_F(SoftwareContainerAgentTest, CreateContainerWithNoConf) {
-    ContainerID id = sca->createContainer("iejr-", "");
-    // This is actually only true if no other containers have been created
-    // before this one. Might need to be fixed somehow.
-    ASSERT_TRUE(id == 0);
+TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
+	SoftwareContainer *container;
+	ContainerID id = sca->createContainer("iejr-", "");
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval == true);
 }
+
+TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
+	SoftwareContainer *container;
+	ContainerID id = sca->createContainer("iejr-", "");
+	sca->deleteContainer(id);
+	bool retval = sca->checkContainer(id, container);
+	ASSERT_TRUE(retval == false);
+}
+/*
+ * Stress test written for creation + deletion
+ * It takes too much time, thus commented out
+ *
+TEST_F(SoftwareContainerAgentTest, StressCreateDeleteContainer) {
+	ContainerID id = 0;
+	for (auto i = 0 ; i < UINT32_MAX; i++) {
+		id = sca->createContainer("iejr-", "");
+		sca->deleteContainer(id);
+	}
+	EXPECT_EQ(0, id);
+}
+*/
 
 /*
  *TBD: This test needs to be fixed, somethings going on in it.

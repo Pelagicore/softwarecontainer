@@ -112,6 +112,8 @@ public:
 
     std::shared_ptr<Workspace> getWorkspace();
 
+    ContainerID testIDPool ();
+
 private:
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
@@ -121,6 +123,6 @@ private:
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
-    ContainerID m_containerId;
+    std::vector<ContainerID> m_containerIdPool;
 };
 }
