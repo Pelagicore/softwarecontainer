@@ -16,3 +16,4 @@ build-*/
 .cache/
 *.autosave
 clang/
+testfile.txt

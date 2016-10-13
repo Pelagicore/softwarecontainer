@@ -22,17 +22,17 @@ import time
 import subprocess
 import fileapp
 import time
+import platform
 
 from testframework import Container
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-
+TESTFILE='testfile.txt'
 
 # This function is used by the 'agent' fixture to know where the log should
 # be stored
 def logfile_path():
     return CURRENT_DIR + "/test.log"
-
 
 DATA = {
     Container.PREFIX: "dbus-test-",
@@ -41,18 +41,34 @@ DATA = {
     Container.HOST_PATH: CURRENT_DIR
 }
 
-
 @pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
 class TestFileSystem(object):
     """ This suite should do some basic testing of the Filesystem within the
         containers and that the whole chain is working properly.
     """
 
+    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
     @pytest.mark.parametrize("flag", [True, False])
     def test_write_buffer_flag(self, flag):
-        print "gfrjioegeriopj"
-        if os.path.exists(CURRENT_DIR + '/lala.txt'):
-            os.remove(CURRENT_DIR + '/lala.txt')
+        """
+        Test if the write buffer flag works as expected, if the flag is enabled
+        files should not be written directly to the underlying file system. If
+        it is disabled, files should be written directly to the file system
+        :param flag: enable or disable writeBuffer.
+        :return: Nothing
+
+        :TODO: If the system doesn't have overlayfs and enableWriteBuffer is
+        enabled, this test will work anyways since we fail to mount the fs
+        containing fileapp.py, hence failing to create lala.txt, and hence the
+        file isn't available after running the create process.
+
+        A nice way of getting process exit value from the container would be
+        very nice.
+        """
+        absoluteTestFile = os.path.join(CURRENT_DIR, TESTFILE)
+
+        if os.path.exists(absoluteTestFile):
+            os.remove(absoluteTestFile)
         ca = Container()
         if flag is True:
             DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
@@ -61,21 +77,21 @@ class TestFileSystem(object):
 
         try:
             ca.start(DATA)
-            ca.launch_command('{}/fileapp.py create lala.txt'
-                              .format(ca.get_bind_dir()))
-            ca.launch_command('{}/fileapp.py check lala.txt'
-                              .format(ca.get_bind_dir()))
+            ca.launch_command('{}/fileapp.py create {}'
+                              .format(ca.get_bind_dir()), TESTFILE)
+            ca.launch_command('{}/fileapp.py check {}'
+                              .format(ca.get_bind_dir()), TESTFILE)
             # Give the command time to run inside the container
             time.sleep(0.5)
             # lala.txt should be available in the upper dir, not the lower.
             if flag is True:
-                assert os.path.exists(CURRENT_DIR + '/lala.txt') is False
+                assert os.path.exists(absoluteTestFile) is False
             else:
-                assert os.path.exists(CURRENT_DIR + '/lala.txt') is True
-            ca.launch_command('{}/fileapp.py delete lala.txt'
-                              .format(ca.get_bind_dir()))
+                assert os.path.exists(absoluteTestFile) is True
+            ca.launch_command('{}/fileapp.py delete {}'
+                              .format(ca.get_bind_dir()), TESTFILE)
             # lala.txt should be deleted from both the upper and lower dir
             time.sleep(0.5)
-            assert os.path.exists(CURRENT_DIR + '/lala.txt') is False
+            assert os.path.exists(absoluteTestFile) is False
         finally:
             ca.terminate()

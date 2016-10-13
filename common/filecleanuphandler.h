@@ -22,12 +22,27 @@
 
 #include <cleanuphandler.h>
 
+/**
+ * @brief The FileCleanUpHandler class is a subclass of CleanUpHandler that deletes a file. It is
+ * most commonly used when the FileToolKitWithUndo destructor is run to clean away cruft from the
+ * filesystem
+ */
 class FileCleanUpHandler :
     public CleanUpHandler
 {
 public:
+    /**
+     * @brief FileCleanUpHandler Create a cleanupHandler for the Path, which will be deleted when
+     * running the clean() function.
+     * @param path The path of the file to delete when clean() is run.
+     */
     FileCleanUpHandler(const std::string &path);
 
+    /**
+     * @brief clean Perform the cleanupHandler clean.
+     * @return ReturnCode::SUCCESS on success
+     * @return ReturnCode::FAILURE on failure
+     */
     ReturnCode clean() override;
 
     std::string m_path;

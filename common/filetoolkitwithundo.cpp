@@ -185,8 +185,10 @@ ReturnCode FileToolkitWithUndo::overlayMount(
         m_cleanupHandlers.push(new DirectoryCleanUpHandler(upper));
         m_cleanupHandlers.push(new DirectoryCleanUpHandler(work));
     } else {
-        log_error() << "Could not mount into container: lower=" << lower
-                    << " , dst=" << dst << " err=" << strerror(errno);
+        log_error() << "Could not mount into container: upper=" << upper
+                    << ",lower=" << lower
+                    << ",work=" << work
+                    << " at dst=" << dst << " err=" << strerror(errno);
         return ReturnCode::FAILURE;
     }
 
