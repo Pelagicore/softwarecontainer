@@ -36,13 +36,13 @@ endif(EXTRA_PKG_CONFIG_PATH)
 
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
-find_package(PkgConfig           REQUIRED)
+find_package(PkgConfig          REQUIRED)
 
-pkg_check_modules(IVILogging    REQUIRED ivi-logging)
-pkg_check_modules(DBusCpp       REQUIRED dbus-c++-glib-1)
-pkg_check_modules(Glibmm        REQUIRED glibmm-2.4)
-pkg_check_modules(LXC           REQUIRED lxc)
-pkg_check_modules(Jansson       REQUIRED jansson)
+pkg_check_modules(IVILogging    REQUIRED ivi-logging>=1.3.0)
+pkg_check_modules(DBusCpp       REQUIRED dbus-c++-glib-1>=0.9.0)
+pkg_check_modules(Glibmm        REQUIRED glibmm-2.4>=2.42.0)
+pkg_check_modules(LXC           REQUIRED lxc>=2.0.0)
+pkg_check_modules(Jansson       REQUIRED jansson>=2.6)
 
 add_definitions(${IVILogging_CFLAGS_OTHER})
 add_definitions(${DBusCpp_CFLAGS_OTHER})
