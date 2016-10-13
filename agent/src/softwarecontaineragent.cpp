@@ -23,7 +23,7 @@ SoftwareContainerAgent::~SoftwareContainerAgent()
 void SoftwareContainerAgent::triggerPreload()
 {
     //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
-    while (m_preloadedContainers.size() != m_preloadCount) {
+    while (m_preloadedContainers.size() < m_preloadCount) {
         auto container = new SoftwareContainer(m_softwarecontainerWorkspace);
         container->setContainerIDPrefix("Preload-");
         container->preload();
