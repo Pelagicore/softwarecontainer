@@ -35,7 +35,7 @@ inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
 {
     return ((containerID < UINT32_MAX)
             && (containerID >= 0)
-            && (m_containers.find(containerID)!= m_containers.end()));
+            && (1 == m_containers.count(containerID)));
 }
 
 void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
