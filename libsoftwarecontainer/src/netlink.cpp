@@ -217,7 +217,7 @@ ReturnCode Netlink::linkUp(const int ifaceIndex)
     return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const int netmask)
+ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const unsigned int netmask)
 {
     for (LinkInfo link : m_links) {
         ifinfomsg ifinfo = link.first;
@@ -232,10 +232,11 @@ ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const int netm
         msg_setip.pay.ifa_scope = RT_SCOPE_UNIVERSE;
         msg_setip.pay.ifa_index = ifinfo.ifi_index; // interface (link)
 
-        // Calculate broadcast address from ip address
-        // TODO: Use the netmask instead?!
-        in_addr_t netpart = inet_netof(ip);
-        struct in_addr bcast_addr = inet_makeaddr(netpart, inet_addr("0.0.0.255"));
+        // Calculate the broadcast address.
+        // Broadcast = IP | (~Netmask)
+        in_addr_t inet_netmask = (1 << netmask) -1;
+        in_addr_t inet_bcast = ip.s_addr | (~inet_netmask);
+        in_addr bcast_addr = { inet_bcast };
 
         addAttribute(msg_setip, IFA_LOCAL, sizeof(ip), &ip);
         addAttribute(msg_setip, IFA_BROADCAST, sizeof(bcast_addr), &bcast_addr);
