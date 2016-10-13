@@ -112,6 +112,7 @@ The ``upper`` directory is a temporarily created directory in the ``/tmp``
 filesystem. The ``work`` is also a temporary filesystem.
 
 .. blockdiag::
+    :alt: "Description of OverlayFS layering"
 
     diagram { 
         orientation = portrait

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -226,8 +225,8 @@ bool NetworkGateway::activateGateway()
         log_debug() << "No gateway. Network access will be disabled";
     }
 
-    if (!isBridgeAvailable()) {
-        log_error() << "Bridge not available.";
+    if ( !isBridgeAvailable() ) {
+        log_error() << "Bridge not available, expected gateway to be " << m_gateway;
         return false;
     }
 
@@ -262,64 +261,91 @@ bool NetworkGateway::generateIP()
 
 bool NetworkGateway::setDefaultGateway()
 {
-    log_debug() << "Attempting to set default gateway";
-    std::string cmdDel = "route del default gw " + m_gateway;
-    executeInContainer(cmdDel);
+    ReturnCode ret = executeInContainer([this] {
+        Netlink n;
+        ReturnCode success = n.setDefaultGateway(m_gateway.c_str());
+        return isSuccess(success) ? 0 : 1;
+    });
 
-    std::string cmdAdd = "route add default gw " + m_gateway;
-    if (isError(executeInContainer(cmdAdd))) {
-        log_error() << "Could not set default gateway.";
-        return false;
-    }
-    return true;
+    return isSuccess(ret);
 }
 
 bool NetworkGateway::up()
 {
-    log_debug() << "Attempting to configure eth0 to 'up state'";
-    std::string cmd;
-
-    if (!m_interfaceInitialized) {
-        cmd = "ifconfig eth0 " + ip() + " netmask 255.255.255.0 up";
-        m_interfaceInitialized = true;
-    } else {
-        cmd = "ifconfig eth0 up";
+    if (m_interfaceInitialized) {
+        log_debug() << "Interface already configured";
+        return true;
     }
 
-    if (isError(executeInContainer(cmd))) {
-        log_error() << "Configuring eth0 to 'up state' failed.";
+    log_debug() << "Attempting to bring up eth0";
+    ReturnCode ret = executeInContainer([this] {
+        Netlink n;
+
+        Netlink::LinkInfo iface;
+        if (isError(n.findLink("eth0", iface))) {
+            log_error() << "Could not find interface eth0 in container";
+            return 1;
+        }
+
+        int ifaceIndex = iface.first.ifi_index;
+        if (isError(n.linkUp(ifaceIndex))) {
+            log_error() << "Could not bring interface eth0 up in container";
+            return 2;
+        }
+
+        in_addr ip_addr;
+        inet_aton(ip().c_str(), &ip_addr);
+        return isSuccess(n.setIP(ifaceIndex, ip_addr, 24)) ? 0 : 3;
+    });
+
+    if (isSuccess(ret)) {
+        m_interfaceInitialized = true;
+        return setDefaultGateway();
+    } else {
+        log_debug() << "Failed to bring up eth0";
         return false;
     }
-
-    /* The route to the default gateway must be added
-       each time the interface is brought up again */
-    return setDefaultGateway();
 }
 
 bool NetworkGateway::down()
 {
     log_debug() << "Attempting to configure eth0 to 'down state'";
-    std::string cmd = "ifconfig eth0 down";
-    if (isError(executeInContainer(cmd))) {
+    ReturnCode ret = executeInContainer([this] {
+        Netlink n;
+        Netlink::LinkInfo iface;
+        if (isError(n.findLink("eth0", iface))) {
+            log_error() << "Could not find interface eth0 in container";
+            return 1;
+        }
+
+        if (isError(n.linkDown(iface.first.ifi_index))) {
+            log_error() << "Could not bring interface eth0 down in container";
+            return 2;
+        }
+
+        return 0;
+    });
+
+    if (isError(ret)) {
         log_error() << "Configuring eth0 to 'down state' failed.";
         return false;
     }
+
     return true;
 }
 
-
 bool NetworkGateway::isBridgeAvailable()
 {
-    log_debug() << "Checking bridge availability";
-    std::string cmd = StringBuilder() << "ifconfig | grep -C 2 \""
-                                      << BRIDGE_INTERFACE << "\" | grep -q \""
-                                      << m_gateway << "\"";
-
-    if (system(cmd.c_str()) == 0) {
-        return true;
-    } else {
-        log_error() << "No network bridge configured";
+    Netlink::LinkInfo iface;
+    if (isError(m_netlinkHost.findLink(BRIDGE_INTERFACE, iface))) {
+        log_error() << "Could not find " << BRIDGE_INTERFACE << " in the host";
     }
 
-    return false;
+    std::vector<Netlink::AddressInfo> addresses;
+    if (isError(m_netlinkHost.findAddresses(iface.first.ifi_index, addresses))) {
+        log_error() << "Could not fetch addresses for " << BRIDGE_INTERFACE << " in the host";
+    }
+
+    return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
 }
+

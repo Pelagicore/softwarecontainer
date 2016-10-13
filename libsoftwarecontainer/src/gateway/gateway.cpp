@@ -21,6 +21,7 @@
 
 #include "gateway.h"
 
+
 bool Gateway::setConfig(const std::string &config)
 {
     json_error_t error;
@@ -123,3 +124,17 @@ ReturnCode Gateway::executeInContainer(const std::string &cmd)
     }
 }
 
+ReturnCode Gateway::executeInContainer(ContainerFunction func)
+{
+    if (hasContainer()) {
+        pid_t pid;
+        ReturnCode ret = getContainer()->executeInContainer(func, &pid);
+        if (isSuccess(ret)) {
+            waitpid(pid, 0, 0);
+        }
+        return ret;
+    } else {
+        log_error() << "Can't execute in container from gateway without container";
+        return ReturnCode::FAILURE;
+    }
+}

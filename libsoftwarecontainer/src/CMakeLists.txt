@@ -54,6 +54,7 @@ add_library(softwarecontainerlib SHARED
     gateway/gateway.cpp
     generators.cpp
     generators.h
+    netlink.cpp
     softwarecontainer.cpp
     workspace.cpp
     jobs/jobabstract.cpp
