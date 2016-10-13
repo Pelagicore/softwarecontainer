@@ -13,9 +13,11 @@ filesystem.
 Standard filesystem
 ===================
 
-Each container has a rootfs that is bind mounted as the containers root file
-system of said container. The process of creating the filesystem and bind
-mounting different parts is spread out over several involved parties.
+Each container has a rootfs that is bind mounted as the containers root
+filesystem of said container. The creation and bind mounting of the root
+filesystem is automated by LXC based on a configuration file and a shell script
+provided at startup. The process of creating the filesystem and bind mounting
+different parts is spread out over several involved parties because of this.
 
 1. The root filesystem directory is created and the
    directory is empty on creation.
