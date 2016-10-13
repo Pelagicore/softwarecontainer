@@ -17,17 +17,12 @@
 #
 # For further information see LICENSE
 
-
 BRCTL_CMD="brctl"
 BRIDGE="lxcbr0"
 
-# Set up system
-echo "Checking system prerequisites..."
-
+# Check for the bridge, and if not found, don't output anything
 BRIDGE_AVAILABLE=$($BRCTL_CMD show | grep $BRIDGE)
-if [ -n "$BRIDGE_AVAILABLE" ]; then
-    echo "Found $BRIDGE"
-else
+if ! [ -n "$BRIDGE_AVAILABLE" ]; then
     echo "$BRIDGE was NOT FOUND, attempting to add..."
     $BRCTL_CMD addbr $BRIDGE
     $BRCTL_CMD setfd $BRIDGE 0
