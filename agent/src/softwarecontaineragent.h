@@ -56,9 +56,9 @@ class SoftwareContainerAgent : protected softwarecontainer::JSONParser
 
 public:
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
-                     , int preloadCount
-                     , bool shutdownContainers
-                     , int shutdownTimeout);
+            , int preloadCount
+            , bool shutdownContainers
+            , int shutdownTimeout);
 
     ~SoftwareContainerAgent();
 
@@ -94,8 +94,8 @@ public:
      * Launch the given command in a the given container
      */
     pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine,
-                        const std::string &workingDirectory, const std::string &outputFile,
-                        const EnvironmentVariables &env, std::function<void (pid_t, int)> listener);
+            const std::string &workingDirectory, const std::string &outputFile,
+            const EnvironmentVariables &env, std::function<void (pid_t, int)> listener);
 
     void setContainerName(ContainerID containerID, const std::string &name);
 
@@ -104,7 +104,7 @@ public:
     void shutdownContainer(ContainerID containerID, unsigned int timeout);
 
     std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
-                const std::string &subPathInContainer, bool readOnly);
+            const std::string &subPathInContainer, bool readOnly);
 
     void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
 
@@ -113,13 +113,16 @@ public:
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
+    inline bool isIdValid (ContainerID containerID);
+    ContainerID findSuitableId ();
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
-    std::vector<SoftwareContainerPtr> m_containers;
+    std::map<ContainerID, SoftwareContainerPtr> m_containers;
     std::vector<SoftwareContainerPtr> m_preloadedContainers;
     std::vector<CommandJob *> m_jobs;
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
+    std::vector<ContainerID> m_containerIdPool;
 };
 }

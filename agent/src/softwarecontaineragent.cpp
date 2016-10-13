@@ -1,14 +1,16 @@
 #include "softwarecontaineragent.h"
+#include <cstdint>
 
 SoftwareContainerAgent::SoftwareContainerAgent(
         Glib::RefPtr<Glib::MainContext> mainLoopContext
         , int preloadCount
         , bool shutdownContainers
         , int shutdownTimeout)
-    : m_mainLoopContext(mainLoopContext)
-    , m_preloadCount(preloadCount)
-    , m_shutdownContainers(shutdownContainers)
+: m_mainLoopContext(mainLoopContext)
+, m_preloadCount(preloadCount)
+, m_shutdownContainers(shutdownContainers)
 {
+    m_containerIdPool.push_back(0);
     m_softwarecontainerWorkspace = std::make_shared<Workspace>();
     triggerPreload();
     m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
@@ -29,11 +31,18 @@ void SoftwareContainerAgent::triggerPreload()
     }
 }
 
+inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
+{
+    return ((containerID < UINT32_MAX)
+            && (containerID >= 0)
+            && (1 == m_containers.count(containerID)));
+}
+
 void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
 {
-    bool valid = ((containerID < m_containers.size()) && (m_containers[containerID] != nullptr));
-    if (valid) {
-        m_containers[containerID] = nullptr;
+    if (isIdValid(containerID)) {
+        m_containers.erase(containerID);
+        m_containerIdPool.push_back(containerID);
     } else {
         log_error() << "Invalid container ID " << containerID;
     }
@@ -41,14 +50,14 @@ void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
 
 bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareContainer *&container)
 {
-    bool valid = ((containerID < m_containers.size()) && (m_containers[containerID] != nullptr));
-    if (valid) {
+    if (isIdValid(containerID)) {
         container = m_containers[containerID].get();
+        return true;
     } else {
         log_error() << "Invalid container ID " << containerID;
     }
 
-    return valid;
+    return false;
 }
 
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
@@ -104,6 +113,18 @@ bool SoftwareContainerAgent::parseConfig(const std::string &config)
     return true;
 }
 
+ContainerID SoftwareContainerAgent::findSuitableId()
+{
+    ContainerID availableID = m_containerIdPool.back();
+    if (m_containerIdPool.size() > 1) {
+        m_containerIdPool.pop_back();
+    } else {
+        m_containerIdPool[0]++;
+    }
+
+    return availableID;
+}
+
 ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, const std::string &config)
 {
     profilepoint("createContainerStart");
@@ -119,16 +140,17 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, c
         container = new SoftwareContainer(m_softwarecontainerWorkspace);
     }
 
-    m_containers.push_back(SoftwareContainerPtr(container));
-    auto id = m_containers.size() - 1;
-    log_debug() << "Created container with ID :" << id;
+    ContainerID availableID = findSuitableId();
+
+    m_containers[availableID] = SoftwareContainerPtr(container);
+    log_debug() << "Created container with ID :" << availableID;
     container->setContainerIDPrefix(prefix);
     container->setMainLoopContext(m_mainLoopContext);
     container->init();
 
     triggerPreload();
 
-    return id;
+    return availableID;
 }
 
 bool SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&result)

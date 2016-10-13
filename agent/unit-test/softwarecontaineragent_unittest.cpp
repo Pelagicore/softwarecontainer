@@ -39,10 +39,10 @@ public:
     void SetUp() override
     {
         sca = new SoftwareContainerAgent(
-                      m_context
-                    , m_preloadCount
-                    , m_shutdownContainers
-                    , m_shutdownTimeout);
+            m_context
+            , m_preloadCount
+            , m_shutdownContainers
+            , m_shutdownTimeout);
 
         workspace = sca->getWorkspace();
     }
@@ -53,11 +53,19 @@ public:
     }
 };
 
-TEST_F(SoftwareContainerAgentTest, CreateContainerWithNoConf) {
+TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
+    SoftwareContainer *container;
     ContainerID id = sca->createContainer("iejr-", "");
-    // This is actually only true if no other containers have been created
-    // before this one. Might need to be fixed somehow.
-    ASSERT_TRUE(id == 0);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval == true);
+}
+
+TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer("iejr-", "");
+    sca->deleteContainer(id);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval == false);
 }
 
 /*
@@ -71,7 +79,7 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
     ASSERT_TRUE(id == 0);
     ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
 }
-*/
+ */
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
     bool retval = sca->parseConfig("[{\"enableWriteBuffer\": true}]");
