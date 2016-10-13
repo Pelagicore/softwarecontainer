@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.imgmath',
     'sphinx.ext.ifconfig',
     'sphinxcontrib.manpage',
+    'sphinxcontrib.blockdiag',
     'sphinxcontrib.seqdiag'
 ]
 
