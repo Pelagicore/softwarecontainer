@@ -9,7 +9,7 @@ def runInVagrant = { String workspace, String command ->
 node {
     workspace = pwd()
     stage 'Download'
-    git branch: 'master', url: 'https://github.com/Pelagicore/softwarecontainer.git'
+    checkout scm
     sh 'git submodule update --init'
 
     stage 'Build'
