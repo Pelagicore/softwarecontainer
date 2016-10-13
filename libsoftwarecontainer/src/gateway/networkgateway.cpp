@@ -272,39 +272,39 @@ bool NetworkGateway::setDefaultGateway()
 
 bool NetworkGateway::up()
 {
-    if (!m_interfaceInitialized) {
-        log_debug() << "Attempting to bring up eth0";
-        ReturnCode ret = executeInContainer([this] {
-            Netlink n;
-
-            Netlink::LinkInfo iface;
-            if (isError(n.findLink("eth0", iface))) {
-                log_error() << "Could not find interface eth0 in container";
-                return 1;
-            }
-
-            int ifaceIndex = iface.first.ifi_index;
-            if (isError(n.linkUp(ifaceIndex))) {
-                log_error() << "Could not bring interface eth0 up in container";
-                return 2;
-            }
-
-            in_addr ip_addr;
-            inet_aton(ip().c_str(), &ip_addr);
-            return isSuccess(n.setIP(ifaceIndex, ip_addr, 24)) ? 0 : 3;
-        });
-
-        if (isSuccess(ret)) {
-            m_interfaceInitialized = true;
-            return setDefaultGateway();
-        } else {
-            log_debug() << "Failed to bring up eth0";
-            return false;
-        }
+    if (m_interfaceInitialized) {
+        log_debug() << "Interface already configured";
+        return true;
     }
 
-    log_debug() << "Interface already configured";
-    return true;
+    log_debug() << "Attempting to bring up eth0";
+    ReturnCode ret = executeInContainer([this] {
+        Netlink n;
+
+        Netlink::LinkInfo iface;
+        if (isError(n.findLink("eth0", iface))) {
+            log_error() << "Could not find interface eth0 in container";
+            return 1;
+        }
+
+        int ifaceIndex = iface.first.ifi_index;
+        if (isError(n.linkUp(ifaceIndex))) {
+            log_error() << "Could not bring interface eth0 up in container";
+            return 2;
+        }
+
+        in_addr ip_addr;
+        inet_aton(ip().c_str(), &ip_addr);
+        return isSuccess(n.setIP(ifaceIndex, ip_addr, 24)) ? 0 : 3;
+    });
+
+    if (isSuccess(ret)) {
+        m_interfaceInitialized = true;
+        return setDefaultGateway();
+    } else {
+        log_debug() << "Failed to bring up eth0";
+        return false;
+    }
 }
 
 bool NetworkGateway::down()

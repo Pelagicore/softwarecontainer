@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-/*
+/**
  * @brief Handles various network operations over netlink
  *
  * Some of the code in this class is based on code shown here, written by Jean Lorchat
@@ -41,7 +41,7 @@ class Netlink
         typedef std::pair<ifaddrmsg, AttributeList> AddressInfo;
         typedef std::pair<rtmsg, AttributeList> RouteInfo;
 
-        /*
+        /**
          * @brief Construct a new Netlink object
          *
          * This will do a setup of the sockets needed to talk netlink to the kernel,
@@ -49,7 +49,7 @@ class Netlink
          */
         Netlink();
 
-        /*
+        /**
          * @brief release all resources held by the Netlink object
          *
          * Since we allocate everything on the stack, except for the netlink attributes
@@ -60,7 +60,7 @@ class Netlink
          */
         virtual ~Netlink();
 
-        /*
+        /**
          * @brief get a dump of all links, addresses and routes from the kernel.
          *
          * This is done by sending RTM_GETLINK, RTM_GETADDR and RTM_GETROUTE
@@ -70,10 +70,12 @@ class Netlink
          * network objects, which is needed to run some of the other functions.
          *
          * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         *
+         * @sa clearCache()
          */
         ReturnCode getKernelDump();
 
-        /*
+        /**
          * @brief check for a kernel dump, and if not present, try to get one
          *
          * @return ReturnCode::SUCCESS if there a kernel dump was found or could be fetched
@@ -81,7 +83,7 @@ class Netlink
          */
         virtual ReturnCode checkKernelDump();
 
-        /*
+        /**
          * @brief Sets an ip address as the default gateway
          *
          * @param gatewayAddress the address to set
@@ -90,7 +92,7 @@ class Netlink
          */
         ReturnCode setDefaultGateway(const char *gatewayAddress);
 
-        /*
+        /**
          * @brief Bring the given interface up
          *
          * Sets the UP flag for the given interface, if it exists.
@@ -101,7 +103,7 @@ class Netlink
          */
         ReturnCode linkUp(const int ifaceIndex);
 
-        /*
+        /**
          * @brief Bring a given interface down
          *
          * @param ifaceIndex the index for the interface to bring down
@@ -110,7 +112,7 @@ class Netlink
          */
         ReturnCode linkDown(const int ifaceIndex);
 
-        /*
+        /**
          * @brief Sets an IP address for a network link
          *
          * @param ifaceIndex the index for the interface to set ip for
@@ -122,7 +124,7 @@ class Netlink
          */
         ReturnCode setIP(const int ifaceIndex, const in_addr ip, const int netmask);
 
-        /*
+        /**
          * @brief Check that the device given is a network bridge
          * @param ifaceName the name of the interface
          * @param ifaceIndex the index of the interface (out parameter)
@@ -132,7 +134,7 @@ class Netlink
          */
         ReturnCode findLink(const char *ifaceName, LinkInfo &linkInfo);
 
-        /*
+        /**
          * @brief Get all addresses associated with the given interface index
          *
          * @param interfaceIndex the interface address to get addresses for
@@ -143,7 +145,7 @@ class Netlink
          */
         ReturnCode findAddresses(const unsigned int interfaceIndex, std::vector<AddressInfo> &result);
 
-        /*
+        /**
          * @brief checks if an address is present in the given list
          *
          * @param haystack the list to search in
@@ -156,24 +158,26 @@ class Netlink
         ReturnCode hasAddress(const std::vector<AddressInfo> &haystack, const int addressFamily, const char *needle);
 
     private:
-        /*
+        /**
          * @brief sets up the communication with the kernel over netlink
          *
          * Creates a socket and binds it
          *
          * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
-        virtual ReturnCode setupNetlink();
+        ReturnCode setupNetlink();
 
-        /*
+        /**
          * @brief clears the cache
          *
          * This clears all the links, addresses and routes. It also has the responsibility to free
          * all allocated attributes for links, addresses och routes.
+         *
+         * @sa getKernelDump()
          */
         void clearCache();
 
-        /*
+        /**
          * @brief Save the netlink message contents in the given result vector
          *
          * @param h the netlink message header
@@ -181,9 +185,9 @@ class Netlink
          * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
         template<typename msgtype, typename InfoType>
-            ReturnCode saveMessage(const struct nlmsghdr *header, std::vector<InfoType> &result);
+            ReturnCode saveMessage(const struct nlmsghdr &header, std::vector<InfoType> &result);
 
-        /*
+        /**
          * @brief Save the attributes and attribute data from a netlink message
          *
          * This parses all attributes and saves the rtattr structure together with the
@@ -198,9 +202,9 @@ class Netlink
          * @result ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
          */
         template<typename msgtype>
-            ReturnCode getAttributes(const struct nlmsghdr *header, AttributeList &result);
+            ReturnCode getAttributes(const struct nlmsghdr &header, AttributeList &result);
 
-        /*
+        /**
          * Templatified general structure for netlink requests
          *
          * With the exception of the msghdr, this structure contains everything needed
@@ -218,7 +222,7 @@ class Netlink
             char attr[2048];
         };
 
-        /*
+        /**
          * @brief get a netlink request with given type and flags
          *
          * Creates an empty netlink_request struct with just some basic
@@ -232,7 +236,7 @@ class Netlink
         template<typename payload>
             netlink_request<payload> createMessage(const int type, const int flags);
 
-        /*
+        /**
          * @brief adds an attribute to a netlink request
          *
          * Handling netlink attributes is HARD. We use a function to add them to avoid having
@@ -254,7 +258,7 @@ class Netlink
         template<typename payload>
             ReturnCode addAttribute(netlink_request<payload> &req, const int type, const size_t length, const void *data);
 
-        /*
+        /**
          * @brief send a netlink message and check for reply
          *
          * This sends the given request to the kernel and parses the reply as well.
@@ -268,7 +272,7 @@ class Netlink
         template<typename payload>
             ReturnCode sendMessage(netlink_request<payload> &request);
 
-        /*
+        /**
          * @brief Listen for a netlink message
          *
          * This method will block while waiting to recieve a netlink message from the kernel.
@@ -277,7 +281,7 @@ class Netlink
          */
         int readMessage();
 
-        /*
+        /**
          * @brief frees all attribute pointers saved in a list
          */
         void freeAttributes(AttributeList &attrList);

@@ -336,10 +336,8 @@ ReturnCode Netlink::hasAddress(const std::vector<AddressInfo> &haystack, const i
             char out[INET6_ADDRSTRLEN];
 
             // It is ok here for inet_ntop to fail (data could be bad)
-            if (inet_ntop(addressFamily, data, out, sizeof(out))) {
-                if (strcmp(out, needle) == 0) {
-                    return ReturnCode::SUCCESS;
-                }
+            if (inet_ntop(addressFamily, data, out, sizeof(out)) && strcmp(out, needle) == 0) {
+                return ReturnCode::SUCCESS;
             }
         }
     }
@@ -372,71 +370,71 @@ int Netlink::readMessage()
         reply.msg_namelen = sizeof(m_kernel);
 
         len = recvmsg(m_fd, &reply, 0); /* read lots of data */
-        if (len > 0) {
-            for (msg = (struct nlmsghdr *) buf; NLMSG_OK(msg, len); msg = NLMSG_NEXT(msg, len)) {
-                switch(msg->nlmsg_type)
-                {
-                    case NLMSG_ERROR: {
-                        struct nlmsgerr *err = (struct nlmsgerr *)NLMSG_DATA(msg);
-                        if (err->error != 0) {
-                            return err->error; // Actually an error
-                        } else {
-                            end = true; // This was an ack
-                        }
-
-                        break;
-                    }
-                    case NLMSG_DONE: // End of multipart message
-                        end = true;
-                        break;
-                    case RTM_GETLINK:
-                    case RTM_NEWLINK:
-                        saveMessage<ifinfomsg, LinkInfo>(msg, m_links);
-                        break;
-                    case RTM_NEWADDR:
-                    case RTM_GETADDR:
-                        saveMessage<ifaddrmsg, AddressInfo>(msg, m_addresses);
-                        break;
-                    case RTM_NEWROUTE:
-                    case RTM_GETROUTE:
-                        saveMessage<rtmsg, RouteInfo>(msg, m_routes);
-                        break;
-                    case RTM_NEWNEIGH:
-                    case RTM_GETNEIGH:
-                        break;
-                    case RTM_NEWRULE:
-                    case RTM_GETRULE:
-                        break;
-                    case RTM_NEWQDISC:
-                    case RTM_GETQDISC:
-                        break;
-                    case RTM_NEWTCLASS:
-                    case RTM_GETTCLASS:
-                        break;
-                    case RTM_NEWTFILTER:
-                    case RTM_GETTFILTER:
-                        break;
-                    // Group all delete cases together, since we don't want to
-                    // save anything here. TODO: Delete if present in cache
-                    case RTM_DELLINK:
-                        printf("Got dellink\n");
-                        break;
-                    case RTM_DELROUTE:
-                    case RTM_DELADDR:
-                    case RTM_DELTFILTER:
-                    case RTM_DELTCLASS:
-                    case RTM_DELQDISC:
-                    case RTM_DELRULE:
-                    case RTM_DELNEIGH:
-                        break;
-
-                    default:    /* for education only, should not happen here */
-                        printf("message type %d, length %d\n", msg->nlmsg_type, msg->nlmsg_len);
-                        break;
-                }
-            }
-        } else {
+        if (len == 0) {
             end = true;
+        }
+
+        for (msg = (struct nlmsghdr *) buf; NLMSG_OK(msg, len); msg = NLMSG_NEXT(msg, len)) {
+            switch(msg->nlmsg_type)
+            {
+                case NLMSG_ERROR: {
+                    struct nlmsgerr *err = (struct nlmsgerr *)NLMSG_DATA(msg);
+                    if (err->error != 0) {
+                        return err->error; // Actually an error
+                    } else {
+                        end = true; // This was an ack
+                    }
+
+                    break;
+                }
+                case NLMSG_DONE: // End of multipart message
+                    end = true;
+                    break;
+                case RTM_GETLINK:
+                case RTM_NEWLINK:
+                    saveMessage<ifinfomsg, LinkInfo>(*msg, m_links);
+                    break;
+                case RTM_NEWADDR:
+                case RTM_GETADDR:
+                    saveMessage<ifaddrmsg, AddressInfo>(*msg, m_addresses);
+                    break;
+                case RTM_NEWROUTE:
+                case RTM_GETROUTE:
+                    saveMessage<rtmsg, RouteInfo>(*msg, m_routes);
+                    break;
+                case RTM_NEWNEIGH:
+                case RTM_GETNEIGH:
+                    break;
+                case RTM_NEWRULE:
+                case RTM_GETRULE:
+                    break;
+                case RTM_NEWQDISC:
+                case RTM_GETQDISC:
+                    break;
+                case RTM_NEWTCLASS:
+                case RTM_GETTCLASS:
+                    break;
+                case RTM_NEWTFILTER:
+                case RTM_GETTFILTER:
+                    break;
+                // Group all delete cases together, since we don't want to
+                // save anything here. TODO: Delete if present in cache
+                case RTM_DELLINK:
+                    printf("Got dellink\n");
+                    break;
+                case RTM_DELROUTE:
+                case RTM_DELADDR:
+                case RTM_DELTFILTER:
+                case RTM_DELTCLASS:
+                case RTM_DELQDISC:
+                case RTM_DELRULE:
+                case RTM_DELNEIGH:
+                    break;
+
+                default:    /* for education only, should not happen here */
+                    printf("message type %d, length %d\n", msg->nlmsg_type, msg->nlmsg_len);
+                    break;
+            }
         }
     }
 
@@ -484,16 +482,16 @@ ReturnCode Netlink::checkKernelDump()
 }
 
 template<typename msgtype>
-ReturnCode Netlink::getAttributes(const struct nlmsghdr *header, AttributeList &result)
+ReturnCode Netlink::getAttributes(const struct nlmsghdr &header, AttributeList &result)
 {
     // Get the pointer to the data section of the message
-    char *dataptr = (char *)NLMSG_DATA(header);
+    char *dataptr = (char *)NLMSG_DATA(&header);
     // Add on the size of the message type header = go to the data section
     // where attributes are stored = first attribute
     rtattr *attribute = (struct rtattr *)(dataptr + NLMSG_ALIGN(sizeof(msgtype)));
 
     // Total length of msg minus header = all attributes
-    int len = header->nlmsg_len - NLMSG_LENGTH(sizeof(msgtype));
+    int len = header.nlmsg_len - NLMSG_LENGTH(sizeof(msgtype));
     while (RTA_OK(attribute, len)) {
         // Allocate enough data, and copy the attribute data to it
         void *data = malloc(RTA_PAYLOAD(attribute));
@@ -515,10 +513,10 @@ ReturnCode Netlink::getAttributes(const struct nlmsghdr *header, AttributeList &
 }
 
 template<typename msgtype, typename InfoType>
-ReturnCode Netlink::saveMessage(const struct nlmsghdr *header, std::vector<InfoType> &result)
+ReturnCode Netlink::saveMessage(const struct nlmsghdr &header, std::vector<InfoType> &result)
 {
     // Bring out the msgtype struct
-    msgtype *msg = (msgtype *) NLMSG_DATA(header);
+    msgtype *msg = (msgtype *) NLMSG_DATA(&header);
     // Get a vector of attributes for this message
     AttributeList attributes;
     if (isError(getAttributes<msgtype>(header, attributes))) {
