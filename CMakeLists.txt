@@ -23,18 +23,25 @@ project(softwarecontainer)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
+#
+# Set software version
+#
+
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
 set(${PROJECT_NAME}_MINOR_VERSION 9)
 set(${PROJECT_NAME}_PATCH_LEVEL 1)
 
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
+add_definitions(-DPACKAGE_VERSION="${VERSION}")
+
+#
+# Find dependencies, and include them etc
+#
 
 if(EXTRA_PKG_CONFIG_PATH)
     set(ENV{PKG_CONFIG_PATH} ${EXTRA_PKG_CONFIG_PATH})
     message("Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
 endif(EXTRA_PKG_CONFIG_PATH)
-
-add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
 find_package(PkgConfig          REQUIRED)
 
@@ -62,13 +69,35 @@ link_directories(${Glibmm_LIBRARY_DIRS})
 link_directories(${LXC_LIBRARY_DIRS})
 link_directories(${Jansson_LIBRARY_DIRS})
 
+#
+# All available options goes here
+#
+
+# First, options on enabling / disabling gateways at compile-time
+option(ENABLE_PULSEGATEWAY "Enables pulse gateway" ON)
+option(ENABLE_NETWORKGATEWAY "Enables network gateway" ON)
+option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
+option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
+option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
+
+# Then, options on
+option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
+option(ENABLE_TEST "Enables unit testing" ON)
+option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
+option(ENABLE_COVERAGE "Enable building and installation of examples" OFF)
+option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
+option(ENABLE_DOC "Enable building and installation of documentation" OFF)
+
+
+#
+# RPATH options
+#
+
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
-# when building, don't use the install RPATH already
-# (but later on when installing)
+# when building, don't use the install RPATH already (but later on when installing)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
 # add the automatically determined parts of the RPATH
@@ -109,7 +138,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/libsoftwarecontainer/src
 )
 
-option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
 if(ENABLE_PROFILING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILING_ENABLED=1")
 endif()
@@ -131,14 +159,12 @@ macro(add_gmock)
     endif()
 endmacro()
 
-option(ENABLE_TEST "Enables unit testing" ON)
 if(ENABLE_TEST)
     enable_testing()
     add_gmock()
     configure_file(scripts/run-tests.sh run-tests.sh COPYONLY)
 endif()
 
-option(ENABLE_SYSTEMD "Enables installation of systemD unit files" ON)
 
 # Macro for making it easy to use gcov/lcov
 macro(add_coverage)
@@ -215,13 +241,20 @@ macro(generate_dbuscpp_hfile xmlInterfaceFile h)
     add_custom_target(dbus_cpp_${h} ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_PROXY_FILENAME} ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_ADAPTOR_FILENAME})
 endmacro()
 
-if(ENABLE_COVERAGE)
+if (ENABLE_COVERAGE)
     add_coverage()
-endif(ENABLE_COVERAGE)
-
-install(FILES scripts/setup_softwarecontainer.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+endif()
 
 add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+
+if (NOT DEFINED BRIDGE_DEVICE)
+    set(BRIDGE_DEVICE lxcbr0)
+endif()
+add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
+message("Network bridge defined as ${BRIDGE_DEVICE}")
+
+configure_file(scripts/setup_softwarecontainer.sh.in setup_softwarecontainer.sh @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 configure_file(softwarecontainer.pc.in softwarecontainer.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
@@ -236,18 +269,20 @@ endif()
 configure_file(softwarecontainer-config.h.in softwarecontainer-config.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/softwarecontainer)
 
+#
+# Add all sub-projects
+#
+
 add_subdirectory(common)
 add_subdirectory(libsoftwarecontainer)
 
 add_subdirectory(agent)
 add_subdirectory(libsoftwarecontaineragent)
 
-option (ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-option(ENABLE_DOC "Enable building and installation of documentation" OFF)
 if (ENABLE_DOC)
     add_subdirectory(doc)
 endif()

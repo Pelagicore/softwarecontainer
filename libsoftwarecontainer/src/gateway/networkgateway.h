@@ -42,8 +42,6 @@ class NetworkGateway :
 public:
     static constexpr const char *ID = "network";
 
-    static constexpr const char *BRIDGE_INTERFACE = "lxcbr0";
-
     NetworkGateway();
     ~NetworkGateway();
 

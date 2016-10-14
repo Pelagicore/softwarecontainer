@@ -49,18 +49,22 @@ if(ENABLE_NETWORKGATEWAY)
     endif(NOT brctl_binary)
 
     # Read network config to be used below when configuring the general config file
-    file(READ ${PROJECT_SOURCE_DIR}/libsoftwarecontainer/softwarecontainer_network.conf.in NETWORK_LXC_CONF)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer_network.conf.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer_network.conf
+    )
+
+    file(READ ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer_network.conf NETWORK_LXC_CONF)
 endif(ENABLE_NETWORKGATEWAY)
 
 configure_file(
-    ${PROJECT_SOURCE_DIR}/libsoftwarecontainer/softwarecontainer.conf.in
-    ${PROJECT_SOURCE_DIR}/libsoftwarecontainer/softwarecontainer.conf
+    ${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer.conf.in
+    ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.conf
 )
 
 configure_file(
-    ${PROJECT_SOURCE_DIR}/libsoftwarecontainer/lxc-softwarecontainer.in
-    ${CMAKE_BINARY_DIR}/libsoftwarecontainer/lxc-softwarecontainer
+    ${CMAKE_CURRENT_SOURCE_DIR}/lxc-softwarecontainer.in
+    ${CMAKE_CURRENT_BINARY_DIR}/lxc-softwarecontainer
 )
 
-install(PROGRAMS ${CMAKE_BINARY_DIR}/libsoftwarecontainer/lxc-softwarecontainer DESTINATION ${LXC_TEMPLATE_DIR})
-install(FILES softwarecontainer.conf DESTINATION ${SYS_CONFIG_DIR})
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/lxc-softwarecontainer DESTINATION ${LXC_TEMPLATE_DIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.conf DESTINATION ${SYS_CONFIG_DIR})

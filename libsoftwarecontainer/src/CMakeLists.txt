@@ -17,19 +17,12 @@
 # For further information see LICENSE
 
 
-# Default values
-option(ENABLE_PULSEGATEWAY "Enables pulse gateway" ON)
-option(ENABLE_NETWORKGATEWAY "Enables network gateway" ON)
-option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
-option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
-option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
-
 # Enable or disable support for gateways compile-time.
 SET(GATEWAY_SOURCES "")
 SET(GATEWAY_HEADERS "")
 macro(gateway_support flag strname hfile filename)
     if (${flag})
-        MESSAGE(INFO " Compiling with gateway support for ${strname}")
+        MESSAGE("Compiling with gateway support for ${strname}")
         LIST(APPEND GATEWAY_SOURCES gateway/${filename})
         LIST(APPEND GATEWAY_HEADERS gateway/${hfile})
         ADD_DEFINITIONS(-D${flag})
