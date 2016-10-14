@@ -122,7 +122,7 @@ class Netlink
          * @return ReturnCode::SUCCESS if interface was found and IP was set
          * @return ReturnCode::FAILURE otherwise
          */
-        ReturnCode setIP(const int ifaceIndex, const in_addr ip, const unsigned int netmask);
+        ReturnCode setIP(const int ifaceIndex, const in_addr ip, const unsigned char netmask);
 
         /**
          * @brief Check that the device given is a network bridge

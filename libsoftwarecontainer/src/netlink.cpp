@@ -217,7 +217,7 @@ ReturnCode Netlink::linkUp(const int ifaceIndex)
     return ReturnCode::FAILURE;
 }
 
-ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const unsigned int netmask)
+ReturnCode Netlink::setIP(const int ifaceIndex, const in_addr ip, const unsigned char netmask)
 {
     for (LinkInfo link : m_links) {
         ifinfomsg ifinfo = link.first;
