@@ -1,4 +1,3 @@
-
 macro(add_gtest_test testName files libraries)
 
         if(NOT DEFINED TESTS_INSTALLATION_PATH)

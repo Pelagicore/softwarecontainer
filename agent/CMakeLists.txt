@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -16,6 +15,7 @@
 #
 # For further information see LICENSE
 
+include(GenerateDBusCpp)
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
 set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
