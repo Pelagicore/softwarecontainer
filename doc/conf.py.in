@@ -39,6 +39,17 @@ extensions = [
     'sphinxcontrib.seqdiag'
 ]
 
+# Substitutions for common names. Key is replaced value in the text of all .rst # documents.
+substs = { "bridge-device": "@BRIDGE_DEVICE@" }
+
+# Duplicate all entries with different formatting options
+for key in substs.keys():
+    substs[key + "-code"] = "``" + substs[key] + "``"
+    substs[key + "-emph"] = "`" + substs[key] + "`"
+
+for key in substs.keys():
+    rst_epilog += ".. |%s| replace:: %s\n" % (key, substs[key])
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 source_suffix = '.rst'

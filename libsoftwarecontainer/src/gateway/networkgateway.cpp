@@ -24,8 +24,6 @@
 #include "networkgateway.h"
 #include "generators.h"
 
-constexpr const char *NetworkGateway::BRIDGE_INTERFACE;
-
 NetworkGateway::NetworkGateway() :
     Gateway(ID),
     m_internetAccess(false),
@@ -337,13 +335,13 @@ bool NetworkGateway::down()
 bool NetworkGateway::isBridgeAvailable()
 {
     Netlink::LinkInfo iface;
-    if (isError(m_netlinkHost.findLink(BRIDGE_INTERFACE, iface))) {
-        log_error() << "Could not find " << BRIDGE_INTERFACE << " in the host";
+    if (isError(m_netlinkHost.findLink(BRIDGE_DEVICE, iface))) {
+        log_error() << "Could not find " << BRIDGE_DEVICE << " in the host";
     }
 
     std::vector<Netlink::AddressInfo> addresses;
     if (isError(m_netlinkHost.findAddresses(iface.first.ifi_index, addresses))) {
-        log_error() << "Could not fetch addresses for " << BRIDGE_INTERFACE << " in the host";
+        log_error() << "Could not fetch addresses for " << BRIDGE_DEVICE << " in the host";
     }
 
     return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
