@@ -353,9 +353,8 @@ int Netlink::readMessage()
     }
 
     size_t PAGE_SIZE = getpagesize();
-    char buf[PAGE_SIZE];
+    char *buf= new char[PAGE_SIZE];
 
-    // We need this check in case of multipart messages.
     bool end = false;
     while (!end) {
         int len;
@@ -363,7 +362,7 @@ int Netlink::readMessage()
         struct msghdr reply;
         memset(&reply, 0, sizeof(reply));
 
-        struct iovec io = { buf, sizeof(buf) };
+        struct iovec io = { buf, sizeof(char) * PAGE_SIZE };
         reply.msg_iov = &io;
         reply.msg_iovlen = 1;
         reply.msg_name = &m_kernel;
@@ -437,7 +436,7 @@ int Netlink::readMessage()
             }
         }
     }
-
+    delete buf;
     return 0;
 }
 
