@@ -12,12 +12,16 @@ SoftwareContainerAgent::SoftwareContainerAgent(
 {
     m_containerIdPool.push_back(0);
     m_softwarecontainerWorkspace = std::make_shared<Workspace>();
-    triggerPreload();
     m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
 {
+}
+
+bool SoftwareContainerAgent::checkWorkspace()
+{
+    return isSuccess(m_softwarecontainerWorkspace->checkWorkspace());
 }
 
 void SoftwareContainerAgent::triggerPreload()
