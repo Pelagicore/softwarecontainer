@@ -319,7 +319,8 @@ ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid,
         strings.push_back(var.first + "=" + var.second);
     }
 
-    const char *envVariablesArray[strings.size() + 1];
+    const size_t stringCount = strings.size() + 1;
+    const char **envVariablesArray = new const char* [stringCount];
     for (size_t i = 0; i < strings.size(); i++) {
         envVariablesArray[i] = strings[i].c_str();
     }
@@ -333,6 +334,8 @@ ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid,
     int attach_res = m_container->attach(m_container,
                                          &Container::executeInContainerEntryFunction,
                                          &function, &options, pid);
+
+    delete envVariablesArray;
     if (attach_res == 0) {
         log_info() << " Attached PID: " << *pid;
         return ReturnCode::SUCCESS;
