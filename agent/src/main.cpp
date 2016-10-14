@@ -104,6 +104,13 @@ int main(int argc, char **argv)
     }
 
     SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
+    if (!agent.checkWorkspace()) {
+        log_error() << "Workspace check failed, exiting";
+        return 1;
+    }
+    agent.triggerPreload();
+
+
     std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
         std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 

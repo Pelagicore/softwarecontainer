@@ -95,6 +95,7 @@ option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
 option(ENABLE_COVERAGE "Enable building and installation of examples" OFF)
 option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 option(ENABLE_DOC "Enable building and installation of documentation" OFF)
+option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
 
 #
 # RPATH options
@@ -145,13 +146,36 @@ endif()
 if(ENABLE_COVERAGE)
     include(AddLCov)
     add_coverage()
-endif()
+endif(ENABLE_COVERAGE)
 
-if (NOT DEFINED BRIDGE_DEVICE)
+#
+# Configure which bridge device to use with SC
+#
+
+if(NOT DEFINED BRIDGE_DEVICE)
     set(BRIDGE_DEVICE lxcbr0)
 endif()
 add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
 message("Network bridge defined as ${BRIDGE_DEVICE}")
+
+if(NOT DEFINED BRIDGE_DEVICE)
+    set(BRIDGE_DEVICE lxcbr0)
+endif()
+add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
+message("Network bridge defined as ${BRIDGE_DEVICE}")
+
+#
+# If SC shouldn't create bridge, then we substitute different parts
+# of the setup script at compile time.
+#
+
+if(CREATE_BRIDGE)
+    message("SoftwareContainer will create ${BRIDGE_DEVICE} if not present at runtime")
+    file(READ scripts/setup_create_nobridge.sh.in NOBRIDGE)
+else()
+    message("SoftwareContainer will exit if ${BRIDGE_DEVICE} is not present at runtime")
+    file(READ scripts/setup_exit_nobridge.sh.in NOBRIDGE)
+endif()
 
 configure_file(scripts/setup_softwarecontainer.sh.in setup_softwarecontainer.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

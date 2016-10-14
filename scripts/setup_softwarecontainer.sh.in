@@ -23,10 +23,5 @@ BRIDGE="@BRIDGE_DEVICE@"
 # Check for the bridge, and if not found, don't output anything
 BRIDGE_AVAILABLE=$($BRCTL_CMD show | grep $BRIDGE)
 if ! [ -n "$BRIDGE_AVAILABLE" ]; then
-    echo "$BRIDGE was NOT FOUND, attempting to add..."
-    $BRCTL_CMD addbr $BRIDGE
-    $BRCTL_CMD setfd $BRIDGE 0
-    ifconfig $BRIDGE 10.0.3.1 netmask 255.255.255.0 promisc up
-    iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE
-    echo 1 > /proc/sys/net/ipv4/ip_forward
+@NOBRIDGE@
 fi

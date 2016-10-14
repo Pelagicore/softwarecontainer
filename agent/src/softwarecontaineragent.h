@@ -63,6 +63,11 @@ public:
     ~SoftwareContainerAgent();
 
     /**
+     * @brief Check that the workspace we've created works.
+     */
+    bool checkWorkspace();
+
+    /**
      * Preload additional containers if needed
      */
     void triggerPreload();
