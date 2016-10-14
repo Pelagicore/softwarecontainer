@@ -93,13 +93,13 @@ run unit tests and perform a clang code analysis run on the code.
 - doxygen - optional, if you want to build documentation
 
 ## Build dependencies
-- ivi-logging (https://github.com/Pelagicore/ivi-logging)
+- ivi-logging (https://github.com/Pelagicore/ivi-logging) (>= 1.3.0)
 - glib
-- glibmm
 - dbus
-- dbus-c++
-- lxc
-- jansson (>=2.6)
+- glibmm   (>=2.42.0)
+- dbus-c++ (>=0.9.0)
+- lxc      (>=2.0.0)
+- jansson  (>=2.6)
 
 ### Install build dependencies on Debian
 ```
