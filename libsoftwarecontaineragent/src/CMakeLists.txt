@@ -16,8 +16,7 @@
 #
 # For further information see LICENSE
 
-
-
+include(GenerateDBusCpp)
 generate_dbuscpp_hfile(${CMAKE_SOURCE_DIR}/agent/softwarecontainer-agent.xml "SoftwareContainerAgentLib")
 
 add_library(softwarecontainer-agent-lib SHARED

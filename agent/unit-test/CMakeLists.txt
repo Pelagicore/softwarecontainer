@@ -29,12 +29,13 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainerlib
 )
+
 include_directories(${SOFTWARECONTAINERAGENT_DIR}/src)
 
 set(TEST_FILES
     softwarecontaineragent_unittest.cpp
-    ../src/softwarecontaineragent.cpp
     main.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
 )
 
 add_gtest_test(softwarecontaineragenttest
