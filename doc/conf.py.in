@@ -43,10 +43,13 @@ extensions = [
 substs = { "bridge-device": "@BRIDGE_DEVICE@" }
 
 # Duplicate all entries with different formatting options
+# This ensures that even formatted versions of the words in substs variable
+# get substituted
 for key in substs.keys():
     substs[key + "-code"] = "``" + substs[key] + "``"
     substs[key + "-emph"] = "`" + substs[key] + "`"
 
+# Substitutes all keys in substs variable with their values in that map
 rst_epilog = ""
 for key in substs.keys():
     rst_epilog += ".. |%s| replace:: %s\n" % (key, substs[key])

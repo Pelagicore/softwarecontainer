@@ -81,14 +81,14 @@ link_directories(${Jansson_LIBRARY_DIRS})
 # All available options goes here
 #
 
-# First, options on enabling / disabling gateways at compile-time
+# Options on enabling / disabling gateways at compile-time
 option(ENABLE_PULSEGATEWAY "Enables pulse gateway" ON)
 option(ENABLE_NETWORKGATEWAY "Enables network gateway" ON)
 option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
 option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
 option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
 
-# Then, options on various things
+# Options on various things
 option(ENABLE_SYSTEMD "Installs systemd service files" ON)
 option(ENABLE_TEST "Enables unit testing" ON)
 option(ENABLE_PROFILING "Enables profiling support in the application" OFF)

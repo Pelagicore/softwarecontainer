@@ -55,22 +55,15 @@ class SoftwareContainerAgent : protected softwarecontainer::JSONParser
     typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;
 
 public:
+    /*
+     * @throws ReturnCode::FAILURE if initialization of the agent fails
+     */
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
             , int preloadCount
             , bool shutdownContainers
             , int shutdownTimeout);
 
     ~SoftwareContainerAgent();
-
-    /**
-     * @brief Check that the workspace we've created works.
-     */
-    bool checkWorkspace();
-
-    /**
-     * Preload additional containers if needed
-     */
-    void triggerPreload();
 
     void deleteContainer(ContainerID containerID);
 
@@ -118,6 +111,7 @@ public:
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
+    bool triggerPreload();
     inline bool isIdValid (ContainerID containerID);
     ContainerID findSuitableId ();
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;

@@ -56,6 +56,9 @@ To disable support for various gateways at compile time, set
 To build the examples, build with -DENABLE_EXAMPLES=ON (and see Examples
 section).
 
+To prevent SoftwareContainer from creating a network bridge on startup (and
+instead only check that one is there), build with -DCREATE_BRIDGE=OFF.
+
 For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
 build this code, please take a look at the Vagrantfile.

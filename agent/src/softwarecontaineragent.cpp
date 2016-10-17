@@ -13,26 +13,36 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     m_containerIdPool.push_back(0);
     m_softwarecontainerWorkspace = std::make_shared<Workspace>();
     m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
+
+    if (isError(m_softwarecontainerWorkspace->checkWorkspace())) {
+        log_error() << "Failed to set up workspace";
+        throw ReturnCode::FAILURE;
+    }
+
+    if (!triggerPreload()) {
+        log_error() << "Failed to preload";
+        throw ReturnCode::FAILURE;
+    }
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
 {
 }
 
-bool SoftwareContainerAgent::checkWorkspace()
+bool SoftwareContainerAgent::triggerPreload()
 {
-    return isSuccess(m_softwarecontainerWorkspace->checkWorkspace());
-}
-
-void SoftwareContainerAgent::triggerPreload()
-{
-    //        log_debug() << "triggerPreload " << m_preloadCount - m_preloadedContainers.size();
     while (m_preloadedContainers.size() < m_preloadCount) {
         auto container = new SoftwareContainer(m_softwarecontainerWorkspace);
         container->setContainerIDPrefix("Preload-");
-        container->preload();
+
+        if (isError(container->preload())) {
+            log_error() << "Preloading failed";
+            return false;
+        }
         m_preloadedContainers.push_back(SoftwareContainerPtr(container));
     }
+
+    return true;
 }
 
 inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
