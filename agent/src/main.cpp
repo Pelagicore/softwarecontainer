@@ -103,16 +103,15 @@ int main(int argc, char **argv)
         connection->request_name(AGENT_BUS_NAME);
     }
 
-    SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
-    if (!agent.checkWorkspace()) {
-        log_error() << "Workspace check failed, exiting";
+    try {
+        SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
+        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
+            std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
+
+    } catch (ReturnCode failure) {
+        log_error() << "Agent initialization failed";
         return 1;
     }
-    agent.triggerPreload();
-
-
-    std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
-        std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
     // Register UNIX signal handler
     g_unix_signal_add(SIGINT, &signalHandler, &ml);
