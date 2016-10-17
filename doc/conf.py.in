@@ -47,6 +47,7 @@ for key in substs.keys():
     substs[key + "-code"] = "``" + substs[key] + "``"
     substs[key + "-emph"] = "`" + substs[key] + "`"
 
+rst_epilog = ""
 for key in substs.keys():
     rst_epilog += ".. |%s| replace:: %s\n" % (key, substs[key])
 
