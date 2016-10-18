@@ -49,7 +49,7 @@ configure_file(
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
 
-add_custom_target(html
+add_custom_target(sphinx-html
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
@@ -59,7 +59,7 @@ add_custom_target(html
     COMMENT "Building HTML documentation with Sphinx"
 )
 
-add_custom_target(latexpdf
+add_custom_target(sphinx-latexpdf
     ${SPHINX_EXECUTABLE}
         -q -b latex
         -c "${BINARY_BUILD_DIR}"
@@ -70,11 +70,11 @@ add_custom_target(latexpdf
     COMMENT "Building Latex/PDF documentation with Sphinx")
 
 add_custom_target(doc ALL)
-add_dependencies(doc html)
+add_dependencies(doc sphinx-html)
 
 option(PDF_DOCS "Enable building documentation in PDF format" OFF)
 IF(PDF_DOCS)
-    add_dependencies(doc latexpdf)
+    add_dependencies(doc sphinx-latexpdf)
 ENDIF()
 
 #
@@ -119,21 +119,21 @@ macro(add_doxygen_doc packageName)
         else()
             set(DOXYGEN_EXAMPLE_PATH "")
         endif()
+
         # prepare doxygen configuration file
         set(OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
         set(DOXYGEN_PROJECT_NAME ${packageName})
         configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doxygen.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
 
         # add doxygen as target
-        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen-docs COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
 
         # cleanup $build/doc/doxygen on "make clean"
         set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES doxygen)
 
         add_custom_target(
-            doxygen ALL
-            DEPENDS
-            ${CMAKE_CURRENT_BINARY_DIR}/doxygen
+            doxygen
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-docs
         )
 
         # install HTML API documentation and manual pages
@@ -146,13 +146,21 @@ macro(add_doxygen_doc packageName)
     endif()
 endmacro()
 
-set_doxygen_tag("INPUT" "${PROJECT_SOURCE_DIR}/doc \
-                         ${PROJECT_SOURCE_DIR}/agent \
-                         ${PROJECT_SOURCE_DIR}/common \
-                         ${PROJECT_SOURCE_DIR}/examples \
-                         ${PROJECT_SOURCE_DIR}/libsoftwarecontainer"
+# If we want to build docs separately then this won't be set
+if(DEFINED ${PROJECT_SOURCE_DIR})
+    set(MAIN_DIR ${PROJECT_SOURCE_DIR})
+else()
+    set(MAIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../)
+endif()
+
+set_doxygen_tag("INPUT" "${MAIN_DIR}/doc \
+                         ${MAIN_DIR}/agent \
+                         ${MAIN_DIR}/common \
+                         ${MAIN_DIR}/examples \
+                         ${MAIN_DIR}/libsoftwarecontainer"
 )
 
 set_doxygen_tag("EXCLUDE_PATTERNS" "*/unit-test/* */component-test/* ")
 
 add_doxygen_doc(softwarecontainer)
+add_dependencies(doc doxygen)
