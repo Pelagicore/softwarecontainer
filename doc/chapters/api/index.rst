@@ -11,10 +11,18 @@ mostly useful for integrators.
 D-Bus API
 ========
 
-D-Bus API is an IPC interface to call SoftwareContainer agent methods.
+D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following path and interface.
 
 :Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
+
+In this document path and interface above used in all method call examples below with following order.::
+
+        dbus-send --system --print-reply \
+        --dest=Interface \
+        Path \
+        Method \
+        Arguments
 
 Methods
 -------
