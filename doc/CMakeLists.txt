@@ -125,21 +125,28 @@ macro(add_doxygen_doc packageName)
         set(DOXYGEN_PROJECT_NAME ${packageName})
         configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doxygen.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
 
+        # Where to place the generated doxygen documentation
+        set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen-docs)
+
         # add doxygen as target
-        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen-docs COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
+        add_custom_command(
+            OUTPUT ${DOXYGEN_OUTPUT_DIR}
+            COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg
+            COMMENT "Building doxygen documentation"
+        )
 
         # cleanup $build/doc/doxygen on "make clean"
         set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES doxygen)
 
         add_custom_target(
             doxygen
-            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-docs
+            DEPENDS ${DOXYGEN_OUTPUT_DIR}
         )
 
         # install HTML API documentation and manual pages
         set(DOC_PATH "share/doc/${packageName}")
 
-        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen
+        install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
                 DESTINATION ${DOC_PATH}
         )
 
