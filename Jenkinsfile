@@ -1,32 +1,34 @@
 #!/usr/bin/groovy
 
 def runInVagrant = { String workspace, String command ->
-    sh "cd ${workspace} && \
-        vagrant ssh -c '${command}' \
-        "
+    sh "cd ${workspace} && vagrant ssh -c '${command}'"
 }
 
 node {
     // Store the directory we are executed in as our workspace.
-    workspace = pwd()
+    String workspace = pwd()
     stage 'Download'
     // Checkout the git repository and refspec pointed to by jenkins
     checkout scm
     // Update the submodules in the repository.
     sh 'git submodule update --init'
 
-    stage 'Build'
-    // STart the machine and provision it
-    // TODO This should be split into two parts, one for provisioning and one for actually
-    // building softwarecontainer
-    sh "cd ${workspace} && vagrant up --provision"
+    stage 'StartVM'
+    // Start the machine and provision it
+    sh "cd ${workspace} && vagrant destroy -f"
+    sh "cd ${workspace} && vagrant up"
 
+    stage 'Build'
+    String buildParams = "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 "
+    buildParams       += "-DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"
+    runInVagrant(workspace, 'sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
+                             softwarecontainer \"${buildParams}\"')
 
     // TODO: Haven't figured out how to make the parallel jobs run on the same slave/agent
     // or if it is possible. Very annoying. Let's run sequentially in a single slave for now.
     stage 'Clang'
     runInVagrant(workspace, 'sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
-            softwarecontainer clang \"-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1\"')
+                             softwarecontainer clang \"${buildParams}\"')
     stage 'Documentation'
     runInVagrant(workspace, 'cd softwarecontainer/build && make doc')
     stage 'UnitTest'

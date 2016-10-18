@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh" 
 
-    # Use apt-cacher on main server
+    # Use apt-cacher on our apt cache server
     config.vm.provision "shell", 
         args: ['10.8.36.16'],
         path: "cookbook/system-config/apt-cacher.sh" 
@@ -57,21 +57,4 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", privileged: false, 
         args: ["dbus-proxy", "https://github.com/Pelagicore/dbus-proxy.git"],
         path: "cookbook/build/cmake-git-builder.sh"
-
-    # Build and install project
-    config.vm.provision "shell", privileged: false, 
-        args: ["softwarecontainer", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
-        path: "cookbook/build/cmake-builder.sh"
-
-    if ENV['CI_BUILD'] then
-        # clang analysis of the code
-        config.vm.provision "shell", privileged: false,
-            args: ["softwarecontainer", "clang", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1"],
-            path: "cookbook/build/clang-code-analysis.sh"
-
-        config.vm.provision "shell", inline: <<-SHELL
-            cd softwarecontainer
-            sudo su -c ./run-all-tests.sh
-        SHELL
-    end
 end
