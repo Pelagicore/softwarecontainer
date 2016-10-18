@@ -57,4 +57,19 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", privileged: false, 
         args: ["dbus-proxy", "https://github.com/Pelagicore/dbus-proxy.git"],
         path: "cookbook/build/cmake-git-builder.sh"
+
+    if ENV['BUILD_AND_TEST'] then
+        config.vm.provision "shell", privileged: false,
+            args: ["softwarecontainer", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
+            path: "cookbook/build/cmake-builder.sh"
+
+            config.vm.provision "shell", privileged: false,
+                args: ["softwarecontainer", "clang", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1"],
+                path: "cookbook/build/clang-code-analysis.sh"
+
+            config.vm.provision "shell", inline: <<-SHELL
+                   cd softwarecontainer
+                   sudo su -c ./run-all-tests.sh
+            SHELL
+    end
 end

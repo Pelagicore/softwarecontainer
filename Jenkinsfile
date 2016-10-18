@@ -19,7 +19,7 @@ node {
 
     stage 'StartVM'
         // Start the machine (destroy it if present) and provision it
-        sh "cd ${workspace} && vagrant destroy -f"
+        sh "cd ${workspace} && vagrant destroy -f || true"
         sh "cd ${workspace} && vagrant up"
 
     stage 'Build'
