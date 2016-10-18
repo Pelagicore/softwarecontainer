@@ -21,9 +21,11 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh" 
 
     # Use apt-cacher on our apt cache server
-    config.vm.provision "shell", 
-        args: ['10.8.36.16'],
-        path: "cookbook/system-config/apt-cacher.sh" 
+    if ENV['APT_CACHE_SERVER'] then
+        config.vm.provision "shell",
+            args: [ENV['APT_CACHE_SERVER']],
+            path: "cookbook/system-config/apt-cacher.sh"
+    end
 
     # Select the best apt mirror for our debian release
     config.vm.provision "shell",
