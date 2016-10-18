@@ -23,14 +23,14 @@ node {
         sh "cd ${workspace} && vagrant up"
 
     stage 'Build'
-        runInVagrant(workspace, 'sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
-                                 softwarecontainer \"${buildParams}\"')
+        runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
+                                 softwarecontainer \"${buildParams}\"")
 
     // TODO: Haven't figured out how to make the parallel jobs run on the same slave/agent
     // or if it is possible. Very annoying. Let's run sequentially in a single slave for now.
     stage 'Clang'
-        runInVagrant(workspace, 'sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
-                                 softwarecontainer clang \"${buildParams}\"')
+        runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
+                                 softwarecontainer clang \"${buildParams}\"")
     stage 'Documentation'
         runInVagrant(workspace, 'cd softwarecontainer/build && make doc')
     stage 'UnitTest'
