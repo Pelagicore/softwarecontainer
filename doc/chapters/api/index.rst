@@ -1,20 +1,9 @@
-
-.. _api:
-
-API
-***
-
-This chapter documents the DBus and C API for interacting with the SoftwareContainerAgent. This is
-mostly useful for integrators.
-
-.. TODO::
-    This chapter is still to be written properly. Some bits and pieces have
-    been but they are under development.
-
 .. _dbus-api:
 
 DBus API
 ========
+
+DBus API is an IPC interface to call software container agent methods.
 
 :Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
@@ -24,88 +13,276 @@ Methods
 
 Ping
 ----
-Ping()
+Controls availability of com.pelagicore.SoftwareContainerAgent interface
+
+:Parameters:
+        - **None**
+
+:Return Value:
+        - **None** 
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.Ping
 
 CreateContainer
 ---------------
-:containerIDPrefix: string
-:config: string
+Creates a new container and returns created container id.
 
-uint32 containerID CreateContainer(string containerIDPrefix, string config)
+:Parameters:
+        - **IDPrefix** : ``string`` prefix for random container id.
+        - **config** : ``string`` config file in json format.
+        
+                Example config JSON::
+        
+                [{"enableWriteBuffer": true}]
+
+ 
+
+:Return Value:
+        - **containerID** ``uint32`` ID of created software container.
+
+
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.CreateContainer \
+        string:"00" string:'[{"enableWriteBuffer": true}]'
 
 SetContainerName
 ----------------
-:containerID: uint32
-:containerName: string
+Sets the name of container with unique containerID.
 
-void SetContainerName(uint32 containerID, string containerName)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+        - **containerName** ``string`` name.
+
+:Return Value:
+        - **None**
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.SetContainerName \
+        uint32:0 string:"myContainer"
+
 
 LaunchCommand
 -------------
-:containerID: uint32
-:userID: uint32
-:commandLine: string
-:workingDirectory: string
-:outputFile: string
-:env: map<string, string>
+Launches specific application/code int he container.
 
-uint32 pid LaunchCommand(uint32 containerID, uint32 userID, string commandLine, string workingDirectory, string outputFile, map<string, string> env)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+        - **userID** ``uint32`` UID for command, currently unused, use ``0``.
+        - **commandLine** ``string`` the method to run in container.
+        - **workingDirectory** ``string`` path to working directory.
+        - **outputFile** ``string`` output file to direct stdout.
+        - **env** ``map<string, string>`` environment variables and their values.
+
+:Return Value:
+        - **pid** ``uint32`` PID of the process run inside the container.
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.LaunchCommand \
+        uint32:0 \
+        uint32:0 \
+        string:"touch hello" \
+        string:"/gateways/app/" \
+        string:"" \
+        dict:string:string:""
+        
 
 ShutdownContainer
 -----------------
-:containerID: uint32
+Teardowns all active gateways related to container and shutdowns the container with all reserved sources.
 
-void ShutdownContainer(uint32 containerID)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+
+:Return Value:
+        - **None**
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.ShutDownContainer \
+        uint32:0
+
 
 ShutdownContainerWithTimeout
 ----------------------------
-:containerID: uint32
-:timeout: uint32
+Teardowns all active gateways related to container and shutdowns the container and all reserved sources after given timeout.
 
-void ShutdownContainerWithTimeout(uint32 containerID, uint32 timeout)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+        - **timeout** ``uint32`` timeout. 
+
+:Return Value:
+        - **None**
+                         
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.ShutDownContainerWithTimeout \
+        uint32:0 \
+        uint32:5
+
 
 WriteToStdIn
 ------------
-:processID: uint32
-:bytes: array<char>
+Send characters array to the standard input of particular process.
 
-void WriteToStdIn(uint32 processID, array<char> bytes)
+:Parameters:
+        - **processID** ``uint32`` PID of the process; obtained LaunchCommand.
+        - **bytes** ``array<char>`` character array to sent stdin.
+
+:Return Value:
+        - **None**
+
+:Example Usage:
+
+::
+
+        bus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.WriteToStdIn \
+        uint32:14859 \
+        array:byte:'a','b'        
+
 
 BindMountFolderInContainer
 --------------------------
-:containerID: uint32
-:pathInHost: string
-:subPathInContainer: string
-:readOnly: bool
+Binds a directory in the container to a directory in the host/
 
-string pathInContainer BindMountFolderInContainer(uint32 containerID, string pathInHost, string subPathInContainer, ool readOnly)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+        - **pathInHost** ``string`` path to the directory in host.
+        - **subPathInContainer** ``string`` path to the directory in container.
+        - **readOnly** ``bool`` availability of binded folder 
+
+:Return Value:
+        - **pathInContainer** ``string`` path to the bind folder in container. 
+
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer \
+        uint32:1 \
+        string:"/home/myUser/myBindFolder" \
+        string:"/home/vagrant/softwarecontainer/build" \
+        boolean:false
+        
 
 SetGatewayConfigs
 -----------------
-:containerID: uint32
-:configs: map<string, string>
+Sets the configuration of particular gateway. The gateway configuration contains settings as key/value pairs.
 
-void SetGatewayConfigs(uint32 containerID, map<string, string> configs)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+        - **configs** ``map<string, string>`` A map to key/value pairs.
+
+:Return Value:
+       - **None**
+
+ 
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        com.pelagicore.SoftwareContainerAgent.SetGatewayConfigs \
+        uint32:1 \
+        dict:string:string:"configItem1","1","configItem2","2"
+
 
 SetCapabilities
 ---------------
-:containerID: uint32
-:capabilities: array<string>
+Currently This method has no applicable usage. 
 
-bool success SetCapabilities(uint32 containerID, array<string> capabilities)
+:Parameters:
+        - **containerID** ``uint32`` The ID obtained by CreateContainer method.
+        - **capabilities** ``array<string>``
+
+
+:Return Value:
+       - **success** ``boolean`` either true or false.
+
+:Example Usage:
+        - Althought there is no meaning to use this method, it can be used as following example.
+
+::
+
+         dbus-send --system --print-reply \
+         --dest=com.pelagicore.SoftwareContainerAgent \
+         /com/pelagicore/SoftwareContainerAgent \
+         com.pelagicore.SoftwareContainerAgent.SetCapabilities \
+         uint32:1 \
+         array:string:"I","Can","not","provide","functionality"
+
 
 Signals
 -------
 
 ProcessStateChanged
 -------------------
-:containerID: uint32
-:processID: uint32
-:isRunning: bool
-:exitCode: uint32
+The Dbus API sends signal when process state is changed. There are four value to be emitted.
 
-void ProcessStateChanged(uint32 containerID, uint32 processID, bool isRunning, uint32 exitCode)
+:containerID: ``uint32`` The ID obtained by CreateContainer method.
 
-C API
------
+:processID: ``uint32`` Pocess ID of container.
+
+:isRunning: ``bool`` Whether the process is running or not.
+
+:exitCode: ``uint32`` exit code of Process.
+
+
+Introspection
+-------------
+
+Using ``org.freedesktop.DBus.Introspectable.Introspect`` interface, methhods of SoftwareContainerAgent DBus API can be observed.
+
+:Example Usage:
+
+::
+
+        dbus-send --system --print-reply \
+        --dest=com.pelagicore.SoftwareContainerAgent \
+        /com/pelagicore/SoftwareContainerAgent \
+        org.freedesktop.DBus.Introspectable.Introspect
 
