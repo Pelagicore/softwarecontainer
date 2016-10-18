@@ -20,7 +20,7 @@ node {
     stage 'StartVM'
         // Start the machine (destroy it if present) and provision it
         sh "cd ${workspace} && vagrant destroy -f || true"
-        sh "cd ${workspace} && vagrant up"
+        sh "cd ${workspace} && APT_CACHE_SERVER=\"10.8.36.16\" vagrant up"
 
     stage 'Build'
         runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
