@@ -13,14 +13,14 @@ D-Bus API
 
 D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following path and interface.
 
-:Path: /com/pelagicore/SoftwareContainer
+:Object Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
 
-In this document path and interface above used in all method call examples below with following order.::
+In this document object path and interface used in examples below with following order.::
 
         dbus-send --system --print-reply \
         --dest=Interface \
-        Path \
+        Object Path \
         Method \
         Arguments
 
@@ -51,7 +51,7 @@ CreateContainer
 Creates a new container and returns created container id.
 
 :Parameters:
-        :IDPrefix: ``string`` prefix for random container id.
+        :IDPrefix: ``string`` prefix for name of back-end container.
         :config: ``string`` config file in json format.
         
                 Example config JSON::
