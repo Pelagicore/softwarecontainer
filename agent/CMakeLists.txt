@@ -48,9 +48,9 @@ INSTALL(TARGETS softwarecontainer-agent DESTINATION bin)
 
 # Install the D-Bus configuration file
 if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
-    set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/usr/share/dbus-1/system.d/")
-else()
     set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/etc/dbus-1/system.d")
+else()
+    set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/usr/share/dbus-1/system.d/")
 endif()
 install(FILES softwarecontainer-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR})
 

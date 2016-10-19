@@ -108,17 +108,16 @@ int main(int argc, char **argv)
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
             std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
+        // Register UNIX signal handler
+        g_unix_signal_add(SIGINT, &signalHandler, &ml);
+        g_unix_signal_add(SIGTERM, &signalHandler, &ml);
+        ml->run();
+
+        log_debug() << "Exiting softwarecontainer agent";
+        return 0;
     } catch (ReturnCode failure) {
         log_error() << "Agent initialization failed";
         return 1;
     }
 
-    // Register UNIX signal handler
-    g_unix_signal_add(SIGINT, &signalHandler, &ml);
-    g_unix_signal_add(SIGTERM, &signalHandler, &ml);
-    ml->run();
-
-    log_debug() << "Exiting softwarecontainer agent";
-
-    return 0;
 }
