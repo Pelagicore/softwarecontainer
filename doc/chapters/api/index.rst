@@ -3,7 +3,7 @@
 API
 ***
 
-This chapter documents the DBus and C API for interacting with the SoftwareContainerAgent. This is
+This chapter documents the D-Bus API for interacting with the SoftwareContainerAgent. This is
 mostly useful for integrators.
 
 .. _dbus-api:
@@ -11,18 +11,10 @@ mostly useful for integrators.
 D-Bus API
 ========
 
-D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following path and interface.
+D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following object path and interface.
 
 :Object Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
-
-In this document object path and interface used in examples below with following order.::
-
-        dbus-send --system --print-reply \
-        --dest=Interface \
-        Object Path \
-        Method \
-        Arguments
 
 Methods
 -------
@@ -36,15 +28,6 @@ Controls availability of com.pelagicore.SoftwareContainerAgent interface
 |
 :Return Value:
         *None*
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.Ping
 
 CreateContainer
 ---------------
@@ -60,16 +43,6 @@ Creates a new container and returns created container id.
 |
 :Return Value:
         :containerID: ``uint32`` ID of created SoftwareContainer.
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.CreateContainer \
-        string:"00" string:'[{"enableWriteBuffer": true}]'
 
 SetContainerName
 ----------------
@@ -81,21 +54,10 @@ Sets the name of container with unique containerID.
 |
 :Return Value:
         *None*
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.SetContainerName \
-        uint32:0 string:"myContainer"
-
 
 LaunchCommand
 -------------
-Launches specific application/code int he container.
+Launches specific application/code in the container.
 
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
@@ -107,47 +69,22 @@ Launches specific application/code int he container.
 |
 :Return Value:
         :pid: ``uint32`` PID of the process run inside the container.
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.LaunchCommand \
-        uint32:0 \
-        uint32:0 \
-        string:"touch hello" \
-        string:"/gateways/app/" \
-        string:"" \
-        dict:string:string:""
-        
+       
 
 ShutdownContainer
 -----------------
-Teardowns all active gateways related to container and shutdowns the container with all reserved sources.
+Tears down all active gateways related to container and shuts down the container with all reserved sources.
 
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
 |
 :Return Value:
         *None*
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.ShutDownContainer \
-        uint32:0
 
 
 ShutdownContainerWithTimeout
 ----------------------------
-Teardowns all active gateways related to container and shutdowns the container and all reserved sources after given timeout.
+Tears down all active gateways related to container and shuts down the container and all reserved sources after given timeout.
 
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
@@ -155,18 +92,6 @@ Teardowns all active gateways related to container and shutdowns the container a
 |
 :Return Value:
         *None*
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.ShutDownContainerWithTimeout \
-        uint32:0 \
-        uint32:5
-
 
 WriteToStdIn
 ------------
@@ -178,18 +103,6 @@ Send a character array to the standard input of a particular process.
 |
 :Return Value:
         *None*
-|
-:Example Usage:
-
-::
-
-        bus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.WriteToStdIn \
-        uint32:14859 \
-        array:byte:'a','b'        
-
 
 BindMountFolderInContainer
 --------------------------
@@ -203,20 +116,6 @@ Binds a directory on the host to the container.
 |
 :Return Value:
         :pathInContainer: ``string`` path to the bind folder in container. 
-|
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer \
-        uint32:1 \
-        string:"/home/myUser/myBindFolder" \
-        string:"/home/vagrant/softwarecontainer/build" \
-        boolean:false
-        
 
 SetGatewayConfigs
 -----------------
@@ -228,18 +127,6 @@ Sets the configuration of a particular gateway. The gateway configuration contai
 |
 :Return Value:
         *None*
-| 
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        com.pelagicore.SoftwareContainerAgent.SetGatewayConfigs \
-        uint32:1 \
-        dict:string:string:"configItem1","1","configItem2","2"
-
 
 SetCapabilities
 ---------------
@@ -251,25 +138,13 @@ Currently This method has no applicable usage.
 |
 :Return Value:
         :success: ``boolean`` either true or false.
-|
-:Example Usage:
-
-::
-
-         dbus-send --system --print-reply \
-         --dest=com.pelagicore.SoftwareContainerAgent \
-         /com/pelagicore/SoftwareContainerAgent \
-         com.pelagicore.SoftwareContainerAgent.SetCapabilities \
-         uint32:1 \
-         array:string:"I","Can","not","provide","functionality"
-
 
 Signals
 -------
 
 ProcessStateChanged
 -------------------
-The D-Bus API sends signal when process state is changed. There are four value to be emitted.
+The D-Bus API sends signal when process state is changed. There are four values to be emitted.
 
 :containerID: ``uint32`` The ID obtained by CreateContainer method.
 
@@ -285,12 +160,4 @@ Introspection
 
 Using ``org.freedesktop.DBus.Introspectable.Introspect`` interface, methods of SoftwareContainerAgent D-Bus API can be observed.
 
-:Example Usage:
-
-::
-
-        dbus-send --system --print-reply \
-        --dest=com.pelagicore.SoftwareContainerAgent \
-        /com/pelagicore/SoftwareContainerAgent \
-        org.freedesktop.DBus.Introspectable.Introspect
 
