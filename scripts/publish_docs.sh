@@ -19,12 +19,12 @@ fi
 API_DOCS="api-docs"
 USER_DOCS="user-docs"
 
-git rm -rf ${API_DOCS}  || true
-git rm -rf ${USER_DOCS} || true
-cp -r build/doc/doxygen-docs/html ${API_DOCS}
-cp -r build/doc/html ${USER_DOCS}
+git rm -rf "${API_DOCS}"  || true
+git rm -rf "${USER_DOCS}" || true
+cp -r build/doc/doxygen-docs/html "${API_DOCS}"
+cp -r build/doc/html "${USER_DOCS}"
 
-git add ${API_DOCS} ${USER_DOCS}
+git add "${API_DOCS}" "${USER_DOCS}"
 git commit -m "Built new docs on master"
 
 ### Pushing to github ###
