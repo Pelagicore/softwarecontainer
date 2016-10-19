@@ -34,7 +34,7 @@ CreateContainer
 Creates a new container and returns created container id.
 
 :Parameters:
-        :IDPrefix: ``string`` prefix for name of back-end container.
+        :prefix: ``string`` prefix for name of back-end container.
         :config: ``string`` config file in json format.
         
                 Example config JSON::
@@ -57,7 +57,7 @@ Sets the name of container with unique containerID.
 
 LaunchCommand
 -------------
-Launches specific application/code in the container.
+Launches the specified application/code in the container.
 
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
