@@ -10,7 +10,8 @@ node {
         // Store the directory we are executed in as our workspace.
         // These are the build parameters we want to use
         String buildParams = "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 "
-        buildParams       += "-DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"
+        buildParams       += "-DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1 "
+        buildParams       += "-DCMAKE_INSTALL_PREFIX=/usr"
 
         stage 'Download'
             // Checkout the git repository and refspec pointed to by jenkins
