@@ -1,0 +1,4 @@
+<map id="Gateway::executeInContainer" name="Gateway::executeInContainer">
+<area shape="rect" id="node2" href="$class_gateway.html#ab03846b347174727f70ab4e4ce5db09f" title="Get a reference to the associated container. " alt="" coords="263,5,429,32"/>
+<area shape="rect" id="node3" href="$class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2" title="Check if the gateway has an associated container. " alt="" coords="261,56,431,83"/>
+</map>

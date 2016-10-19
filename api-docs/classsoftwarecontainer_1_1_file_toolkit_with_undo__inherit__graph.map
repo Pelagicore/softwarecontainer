@@ -1,0 +1,5 @@
+<map id="softwarecontainer::FileToolkitWithUndo" name="softwarecontainer::FileToolkitWithUndo">
+<area shape="rect" id="node2" href="$class_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="5,102,89,129"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="114,95,258,136"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. " alt="" coords="282,95,426,136"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="softwarecontainer::Workspace::checkWorkspace" name="softwarecontainer::Workspace::checkWorkspace">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="256,5,400,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a2e2789ba9649ed6abf7a1c3ab3025daa" title="createParentDirectory Recursively tries to create the directory pointed to by path. " alt="" coords="448,5,619,61"/>
+</map>

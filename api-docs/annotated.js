@@ -1,0 +1,38 @@
+var annotated =
+[
+    [ "softwarecontainer", null, [
+      [ "CleanUpHandler", "classsoftwarecontainer_1_1_clean_up_handler.html", "classsoftwarecontainer_1_1_clean_up_handler" ],
+      [ "CommandJob", "classsoftwarecontainer_1_1_command_job.html", "classsoftwarecontainer_1_1_command_job" ],
+      [ "FileToolkitWithUndo", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html", "classsoftwarecontainer_1_1_file_toolkit_with_undo" ],
+      [ "FunctionJob", "classsoftwarecontainer_1_1_function_job.html", "classsoftwarecontainer_1_1_function_job" ],
+      [ "JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html", "classsoftwarecontainer_1_1_job_abstract" ],
+      [ "JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", "classsoftwarecontainer_1_1_j_s_o_n_parser" ],
+      [ "ObservableProperty", "classsoftwarecontainer_1_1_observable_property.html", "classsoftwarecontainer_1_1_observable_property" ],
+      [ "ObservableWritableProperty", "classsoftwarecontainer_1_1_observable_writable_property.html", "classsoftwarecontainer_1_1_observable_writable_property" ],
+      [ "SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", "classsoftwarecontainer_1_1_signal_connections_handler" ],
+      [ "SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", "classsoftwarecontainer_1_1_software_container" ],
+      [ "SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", "classsoftwarecontainer_1_1_software_container_agent" ],
+      [ "SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", "classsoftwarecontainer_1_1_software_container_agent_adaptor" ],
+      [ "Workspace", "classsoftwarecontainer_1_1_workspace.html", "classsoftwarecontainer_1_1_workspace" ]
+    ] ],
+    [ "CgroupsGateway", "class_cgroups_gateway.html", "class_cgroups_gateway" ],
+    [ "Container", "class_container.html", "class_container" ],
+    [ "ContainerAbstractInterface", "class_container_abstract_interface.html", "class_container_abstract_interface" ],
+    [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", "class_d_bus_cpp_adaptor" ],
+    [ "DBusGateway", "class_d_bus_gateway.html", "class_d_bus_gateway" ],
+    [ "DeviceNodeGateway", "class_device_node_gateway.html", "class_device_node_gateway" ],
+    [ "DirectoryCleanUpHandler", "class_directory_clean_up_handler.html", "class_directory_clean_up_handler" ],
+    [ "EnvironmentGateway", "class_environment_gateway.html", "class_environment_gateway" ],
+    [ "FileCleanUpHandler", "class_file_clean_up_handler.html", "class_file_clean_up_handler" ],
+    [ "FileGateway", "class_file_gateway.html", "class_file_gateway" ],
+    [ "Gateway", "class_gateway.html", "class_gateway" ],
+    [ "Generator", "class_generator.html", "class_generator" ],
+    [ "MountCleanUpHandler", "class_mount_clean_up_handler.html", "class_mount_clean_up_handler" ],
+    [ "Netlink", "class_netlink.html", "class_netlink" ],
+    [ "NetworkGateway", "class_network_gateway.html", "class_network_gateway" ],
+    [ "OverlaySyncCleanupHandler", "class_overlay_sync_cleanup_handler.html", "class_overlay_sync_cleanup_handler" ],
+    [ "PProfiler", "class_p_profiler.html", "class_p_profiler" ],
+    [ "PulseGateway", "class_pulse_gateway.html", "class_pulse_gateway" ],
+    [ "RecursiveCopy", "class_recursive_copy.html", "class_recursive_copy" ],
+    [ "WaylandGateway", "class_wayland_gateway.html", "class_wayland_gateway" ]
+];

@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_clean_up_handler.html" title="softwarecontainer::\lCleanUpHandler" alt="" coords="5,74,149,115"/>
+<area shape="rect" id="node2" href="$class_directory_clean_up_handler.html" title="DirectoryCleanUpHandler" alt="" coords="207,5,391,32"/>
+<area shape="rect" id="node3" href="$class_file_clean_up_handler.html" title="The FileCleanUpHandler class is a subclass of CleanUpHandler that deletes a file. ..." alt="" coords="225,56,372,83"/>
+<area shape="rect" id="node4" href="$class_mount_clean_up_handler.html" title="MountCleanUpHandler" alt="" coords="215,107,382,133"/>
+<area shape="rect" id="node5" href="$class_overlay_sync_cleanup_handler.html" title="The OverlaySyncCleanupHandler class is used to copy files on cleanup and can be added to the CleanupH..." alt="" coords="197,157,400,184"/>
+</map>

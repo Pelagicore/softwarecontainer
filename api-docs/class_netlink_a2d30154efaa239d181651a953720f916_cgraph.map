@@ -1,0 +1,4 @@
+<map id="Netlink::findLink" name="Netlink::findLink">
+<area shape="rect" id="node2" href="$class_netlink.html#af2756a7ed673d086466f75d57de09fdf" title="check for a kernel dump, and if not present, try to get one " alt="" coords="176,5,365,32"/>
+<area shape="rect" id="node3" href="$class_netlink.html#a1764702f3ed67ae491696c7632dea0cd" title="get a dump of all links, addresses and routes from the kernel. " alt="" coords="413,5,587,32"/>
+</map>

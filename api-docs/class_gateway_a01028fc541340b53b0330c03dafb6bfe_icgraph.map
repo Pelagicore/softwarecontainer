@@ -1,0 +1,6 @@
+<map id="Gateway::id" name="Gateway::id">
+<area shape="rect" id="node2" href="$class_gateway.html#aac80886a35b80d8003051e6926b59937" title="Applies any configuration set by setConfig() " alt="" coords="152,5,287,32"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container.html#af928f299cf15ecda5f625eaecd518f57" title="Set the gateway configuration and activate them. " alt="" coords="339,16,561,72"/>
+<area shape="rect" id="node5" href="$class_gateway.html#a12bc56e21985047b61012932394b4512" title="Restore system to the state prior to launching of gateway. " alt="" coords="148,107,291,133"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html#a7db71d975b5bbfebe48e50769cf726b9" title="Continues the &#39;launch&#39; phase by allowing gateway configurations to be set. " alt="" coords="609,16,857,72"/>
+</map>

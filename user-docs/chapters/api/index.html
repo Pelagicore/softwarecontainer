@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &#8212; softwarecontainer 0.9.1-1f436a2
+ documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.1-1f436a2
+',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-1f436a2
+ documentation" href="../../index.html" />
+    <link rel="next" title="Design" href="../design/index.html" />
+    <link rel="prev" title="Getting started" href="../getting-started/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api">
+<span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>This chapter documents the DBus and C API for interacting with the SoftwareContainerAgent. This is
+mostly useful for integrators.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">This chapter is still to be written properly. Some bits and pieces have
+been but they are under development.</p>
+</div>
+<div class="section" id="dbus-api">
+<span id="id2"></span><h2>DBus API<a class="headerlink" href="#dbus-api" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Path:</th><td class="field-body">/com/pelagicore/SoftwareContainer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Interface:</th><td class="field-body">com.pelagicore.SoftwareContainerAgent</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="ping">
+<h3>Ping<a class="headerlink" href="#ping" title="Permalink to this headline">¶</a></h3>
+<p>Ping()</p>
+</div>
+<div class="section" id="createcontainer">
+<h3>CreateContainer<a class="headerlink" href="#createcontainer" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">containerIDPrefix:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">config:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p>uint32 containerID CreateContainer(string containerIDPrefix, string config)</p>
+</div>
+<div class="section" id="setcontainername">
+<h3>SetContainerName<a class="headerlink" href="#setcontainername" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">containerName:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+<p>void SetContainerName(uint32 containerID, string containerName)</p>
+</div>
+<div class="section" id="launchcommand">
+<h3>LaunchCommand<a class="headerlink" href="#launchcommand" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">userID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">commandLine:</th><td class="field-body">string</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">workingDirectory:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">outputFile:</th><td class="field-body">string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">env:</th><td class="field-body">map&lt;string, string&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>uint32 pid LaunchCommand(uint32 containerID, uint32 userID, string commandLine, string workingDirectory, string outputFile, map&lt;string, string&gt; env)</p>
+</div>
+<div class="section" id="shutdowncontainer">
+<h3>ShutdownContainer<a class="headerlink" href="#shutdowncontainer" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+</tbody>
+</table>
+<p>void ShutdownContainer(uint32 containerID)</p>
+</div>
+<div class="section" id="shutdowncontainerwithtimeout">
+<h3>ShutdownContainerWithTimeout<a class="headerlink" href="#shutdowncontainerwithtimeout" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">timeout:</th><td class="field-body">uint32</td>
+</tr>
+</tbody>
+</table>
+<p>void ShutdownContainerWithTimeout(uint32 containerID, uint32 timeout)</p>
+</div>
+<div class="section" id="writetostdin">
+<h3>WriteToStdIn<a class="headerlink" href="#writetostdin" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">processID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">bytes:</th><td class="field-body">array&lt;char&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>void WriteToStdIn(uint32 processID, array&lt;char&gt; bytes)</p>
+</div>
+<div class="section" id="bindmountfolderincontainer">
+<h3>BindMountFolderInContainer<a class="headerlink" href="#bindmountfolderincontainer" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body">string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">subPathInContainer:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+<p>string pathInContainer BindMountFolderInContainer(uint32 containerID, string pathInHost, string subPathInContainer, ool readOnly)</p>
+</div>
+<div class="section" id="setgatewayconfigs">
+<h3>SetGatewayConfigs<a class="headerlink" href="#setgatewayconfigs" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">configs:</th><td class="field-body">map&lt;string, string&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>void SetGatewayConfigs(uint32 containerID, map&lt;string, string&gt; configs)</p>
+</div>
+<div class="section" id="setcapabilities">
+<h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body">array&lt;string&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>bool success SetCapabilities(uint32 containerID, array&lt;string&gt; capabilities)</p>
+</div>
+<div class="section" id="signals">
+<h3>Signals<a class="headerlink" href="#signals" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="processstatechanged">
+<h3>ProcessStateChanged<a class="headerlink" href="#processstatechanged" title="Permalink to this headline">¶</a></h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-even field"><th class="field-name">processID:</th><td class="field-body">uint32</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">isRunning:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-even field"><th class="field-name">exitCode:</th><td class="field-body">uint32</td>
+</tr>
+</tbody>
+</table>
+<p>void ProcessStateChanged(uint32 containerID, uint32 processID, bool isRunning, uint32 exitCode)</p>
+</div>
+<div class="section" id="c-api">
+<h3>C API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#dbus-api">DBus API</a><ul>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#ping">Ping</a></li>
+<li><a class="reference internal" href="#createcontainer">CreateContainer</a></li>
+<li><a class="reference internal" href="#setcontainername">SetContainerName</a></li>
+<li><a class="reference internal" href="#launchcommand">LaunchCommand</a></li>
+<li><a class="reference internal" href="#shutdowncontainer">ShutdownContainer</a></li>
+<li><a class="reference internal" href="#shutdowncontainerwithtimeout">ShutdownContainerWithTimeout</a></li>
+<li><a class="reference internal" href="#writetostdin">WriteToStdIn</a></li>
+<li><a class="reference internal" href="#bindmountfolderincontainer">BindMountFolderInContainer</a></li>
+<li><a class="reference internal" href="#setgatewayconfigs">SetGatewayConfigs</a></li>
+<li><a class="reference internal" href="#setcapabilities">SetCapabilities</a></li>
+<li><a class="reference internal" href="#signals">Signals</a></li>
+<li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a></li>
+<li><a class="reference internal" href="#c-api">C API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../getting-started/index.html" title="previous chapter">Getting started</a></li>
+      <li>Next: <a href="../design/index.html" title="next chapter">Design</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/api/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../../_sources/chapters/api/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

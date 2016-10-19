@@ -1,0 +1,4 @@
+<map id="Gateway::isConfigured" name="Gateway::isConfigured">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container.html#af928f299cf15ecda5f625eaecd518f57" title="Set the gateway configuration and activate them. " alt="" coords="216,5,439,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container.html#a7db71d975b5bbfebe48e50769cf726b9" title="Continues the &#39;launch&#39; phase by allowing gateway configurations to be set. " alt="" coords="487,5,735,61"/>
+</map>

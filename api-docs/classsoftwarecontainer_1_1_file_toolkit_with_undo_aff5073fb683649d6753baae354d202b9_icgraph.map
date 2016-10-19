@@ -1,0 +1,9 @@
+<map id="softwarecontainer::FileToolkitWithUndo::createDirectory" name="softwarecontainer::FileToolkitWithUndo::createDirectory">
+<area shape="rect" id="node2" href="$class_container.html#af602c6e290b0f9f5abb78bbc3b0828cd" title="Bind mount a directory from the host into the container. " alt="" coords="199,5,398,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_workspace.html#a3478c4690122b5057dd98df517e629ba" title="Check if the workspace is present and create it if needed. " alt="" coords="197,71,400,112"/>
+<area shape="rect" id="node5" href="$class_container.html#a32b1856163054cc997f19aae33babb6a" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="465,234,598,261"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a2e2789ba9649ed6abf7a1c3ab3025daa" title="createParentDirectory Recursively tries to create the directory pointed to by path. " alt="" coords="213,187,384,243"/>
+<area shape="rect" id="node7" href="$class_container.html#a0665ab6bbf3018c8cf478d3a0ee7f956" title="Setup the container for preloading. " alt="" coords="227,267,370,294"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="227,318,371,374"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_workspace.html#ab5eb9d5dee4f59d14e6feee02c86fcd5" title="Creates a workspace. " alt="" coords="448,71,615,112"/>
+</map>

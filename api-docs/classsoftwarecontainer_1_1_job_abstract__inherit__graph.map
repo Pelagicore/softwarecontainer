@@ -1,0 +1,4 @@
+<map id="softwarecontainer::JobAbstract" name="softwarecontainer::JobAbstract">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_command_job.html" title="Use this class to execute a command line in a SoftwareContainer. " alt="" coords="5,95,149,136"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_function_job.html" title="Run a C++ function lambda inside a SoftwareContainer. " alt="" coords="173,95,317,136"/>
+</map>

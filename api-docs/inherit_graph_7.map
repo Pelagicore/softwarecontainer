@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html" title="Convenience layer for the Jansson JSON parser. " alt="" coords="5,205,149,246"/>
+<area shape="rect" id="node2" href="$class_gateway.html" title="Gateway base class for SoftwareContainer. " alt="" coords="248,183,325,209"/>
+<area shape="rect" id="node11" href="$classsoftwarecontainer_1_1_software_container_agent.html" title="A wrapper class. " alt="" coords="197,234,376,275"/>
+<area shape="rect" id="node3" href="$class_cgroups_gateway.html" title="The cgroups gateway sets cgroups related settings for the container. " alt="" coords="438,5,569,32"/>
+<area shape="rect" id="node4" href="$class_d_bus_gateway.html" title="DBus Gateway takes care of spawning and killing the DBus proxies. " alt="" coords="448,56,559,83"/>
+<area shape="rect" id="node5" href="$class_device_node_gateway.html" title="This gateway is responsible for exposing device nodes in an LXC container. " alt="" coords="426,107,581,133"/>
+<area shape="rect" id="node6" href="$class_environment_gateway.html" title="Environment Gateway is used to define environment variables to the container. " alt="" coords="424,157,583,184"/>
+<area shape="rect" id="node7" href="$class_file_gateway.html" title="This gateway lets you map files (including socket files) or folders from the host into the container&#39;..." alt="" coords="455,208,552,235"/>
+<area shape="rect" id="node8" href="$class_network_gateway.html" title="Sets up and manages network access and routing to the container. " alt="" coords="439,259,568,285"/>
+<area shape="rect" id="node9" href="$class_pulse_gateway.html" title="The PulseAudio Gateway is used to provide access to the host system PulseAudio server. " alt="" coords="448,309,559,336"/>
+<area shape="rect" id="node10" href="$class_wayland_gateway.html" title="WaylandGateway" alt="" coords="439,360,568,387"/>
+</map>

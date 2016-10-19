@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Service manifests &#8212; softwarecontainer 0.9.1-1f436a2
+ documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9.1-1f436a2
+',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-1f436a2
+ documentation" href="../../index.html" />
+    <link rel="next" title="Gateways" href="../gateways/index.html" />
+    <link rel="prev" title="Design" href="../design/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="service-manifests">
+<span id="id1"></span><h1>Service manifests<a class="headerlink" href="#service-manifests" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes the format, structure, and some of the content in
+the service manifests.</p>
+<p>For information about how to work with the manifest files, e.g. where to
+install them, and how they are used in the overall context etc.,
+see <a class="reference internal" href="../integration-guidelines/index.html#integration-guidelines"><span class="std std-ref">Integration guidelines</span></a>.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Service manifests are JSON files mapping capabilities to gateway
+configurations. In other words, service manifests describe what
+exact gateway configurations are needed to configure the relevant
+gateways for a specific service in order to realize a capability.
+The service manifests contain the definitions of all the capabilities
+relevant for a service.</p>
+<p>For example, a platform might have a capability <cite>com.acme.SomeResource</cite>
+defined. This capability requires access to service <cite>A</cite>. Service <cite>A</cite>
+will then need to deploy a service manifest which contains all gateway
+configurations needed for the <cite>com.acme.SomeResource</cite> capability.</p>
+<p>A service manifest might also contain gateway configurations for more
+capabilities.</p>
+<p>More than one service might be needed to fulfill a capability, meaning that
+each relevant service would need to be integrated in the above mentioned way.</p>
+</div>
+<div class="section" id="manifest-format">
+<h2>Manifest format<a class="headerlink" href="#manifest-format" title="Permalink to this headline">¶</a></h2>
+<p>A service manifest is a text file containing JSON. It is required to define
+a version set to &#8220;1&#8221;, and an array &#8220;capabilities&#8221; which contains a
+&#8220;name&#8221; key with the capability name as value, and a &#8220;gateways&#8221; key which
+contains an array of objects each defining a gateway configuration identified
+with a gateway ID.</p>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example of a simple service manifest:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+  <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s">&quot;com.acme.SomeResource&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw1&quot;</span><span class="p">,</span>
+          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw2&quot;</span><span class="p">,</span>
+          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s">&quot;com.acme.AnotherResource&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In this manifest, there is one capability named <cite>com.acme.SomeResource</cite>
+which defines gateway configurations for the two gateways <cite>dummy-gw1</cite> and
+<cite>dummy-gw2</cite>. In this case the configurations for both gateways are empty
+(but valid) JSON. Exact content will depend on what gateways are involved.
+There is also a second capability named <cite>com.acme.AnotherResource</cite> with
+a gateway object with an empty array. The manifest also contains the required
+version element.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Service manifests</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#manifest-format">Manifest format</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../design/index.html" title="previous chapter">Design</a></li>
+      <li>Next: <a href="../gateways/index.html" title="next chapter">Gateways</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/service-manifests/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../../_sources/chapters/service-manifests/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

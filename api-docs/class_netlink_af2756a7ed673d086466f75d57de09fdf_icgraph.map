@@ -1,0 +1,5 @@
+<map id="Netlink::checkKernelDump" name="Netlink::checkKernelDump">
+<area shape="rect" id="node2" href="$class_netlink.html#ad4bf08fab49ab14314e4925ecedd8cb6" title="Get all addresses associated with the given interface index. " alt="" coords="243,5,407,32"/>
+<area shape="rect" id="node3" href="$class_netlink.html#a2d30154efaa239d181651a953720f916" title="Check that the device given is a network bridge. " alt="" coords="263,56,386,83"/>
+<area shape="rect" id="node4" href="$class_netlink.html#a543fb0107278eb2bf932cfa52a615f7a" title="Bring the given interface up. " alt="" coords="268,107,381,133"/>
+</map>
