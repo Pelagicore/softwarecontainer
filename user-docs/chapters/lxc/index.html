@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SoftwareContainer using LXC &#8212; softwarecontainer 0.9.1-1f436a2
+    <title>SoftwareContainer using LXC &#8212; softwarecontainer 0.9.1-c16d8d5
  documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-1f436a2
+        VERSION:     '0.9.1-c16d8d5
 ',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-1f436a2
+    <link rel="top" title="softwarecontainer 0.9.1-c16d8d5
  documentation" href="../../index.html" />
     <link rel="prev" title="Developer guidelines" href="../developers/index.html" />
    
@@ -281,8 +281,8 @@ copy_configuration <span class="nv">$path</span> <span class="nv">$rootfs</span>
 <p>The configuration file contains three things: network setup, device and pty/tty allocation, and mount entries.</p>
 <div class="section" id="network-setup">
 <h3>Network setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h3>
-<p>The Network setup configuration is used when LXC creates a veth interface, connected to lxcbr0
-(not set up here!), and for the network to be up.</p>
+<p>The Network setup configuration is used when LXC creates a veth interface, connected to
+bridge-device (not set up here!), and for the network to be up.</p>
 </div>
 <div class="section" id="device-and-pty-tty-allocation">
 <h3>Device and pty/tty allocation<a class="headerlink" href="#device-and-pty-tty-allocation" title="Permalink to this headline">¶</a></h3>

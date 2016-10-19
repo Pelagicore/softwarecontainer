@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.9.1-1f436a2
+    <title>Integration guidelines &#8212; softwarecontainer 0.9.1-c16d8d5
  documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-1f436a2
+        VERSION:     '0.9.1-c16d8d5
 ',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-1f436a2
+    <link rel="top" title="softwarecontainer 0.9.1-c16d8d5
  documentation" href="../../index.html" />
     <link rel="next" title="Filesystems" href="../filesystem/index.html" />
     <link rel="prev" title="Gateways" href="../gateways/index.html" />
@@ -68,6 +68,14 @@ into a platform.</p>
 and <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
 <p>Service manifests should be installed in <code class="docutils literal"><span class="pre">/etc/softwarecontainer/caps.d/&lt;service-name&gt;</span></code>.</p>
 </div>
+<div class="section" id="network-setup">
+<h2>Network setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h2>
+<p>The network setup of software container is dependent on a network bridge being available on the
+host system, if compiled with support for the network gateway. By default, SoftwareContainer will
+create such a bridge on the system if it is not already there. This can be changed, so that
+SoftwareContainer will simply fail with an error message if the bridge was not available.</p>
+<p>The selection of whether or not to create the bridge is a compile-time options given to CMake.</p>
+</div>
 </div>
 
 
@@ -81,6 +89,7 @@ and <a class="reference internal" href="../gateways/index.html#gateways"><span c
 <li><a class="reference internal" href="#">Integration guidelines</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#service-manifests">Service manifests</a></li>
+<li><a class="reference internal" href="#network-setup">Network setup</a></li>
 </ul>
 </li>
 </ul>
