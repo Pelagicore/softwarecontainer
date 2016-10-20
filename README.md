@@ -22,6 +22,7 @@ The SoftwareContainer is composed of the following components:
   to interface with the softwarecontainer-agent interfaces and to control it.
 
 SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer
+The documentation is avaliable at https://pelagicore.github.io/softwarecontainer/
 
 Pelagicore maintainer:
 Tobias Olausson <tobias.olausson@pelagicore.com>
