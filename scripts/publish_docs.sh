@@ -15,16 +15,18 @@ then
 fi
 
 ### Moving docs to root directory and committing ###
-
+INDEX_PAGE="index.html"
 API_DOCS="api-docs"
 USER_DOCS="user-docs"
 
+git rm "${INDEX_PAGE}"    || true
 git rm -rf "${API_DOCS}"  || true
 git rm -rf "${USER_DOCS}" || true
+cp    build/doc/index.html "${INDEX_PAGE}"
 cp -r build/doc/doxygen-docs/html "${API_DOCS}"
 cp -r build/doc/html "${USER_DOCS}"
 
-git add "${API_DOCS}" "${USER_DOCS}"
+git add "${INDEX_PAGE}" "${API_DOCS}" "${USER_DOCS}"
 git commit -m "Built new docs on master"
 
 ### Pushing to github ###
