@@ -65,10 +65,7 @@ copyright = u'2016, Pelagicore AB'
 author = u'Pelagicore AB'
 
 version = u'@VERSION@'
-release = u'@VERSION@-' + str(subprocess.check_output("git rev-parse --short HEAD", shell=True))
-is_dirty = (subprocess.check_output ('git diff --shortstat 2> /dev/null | tail -n1', shell=True) != "")
-if is_dirty:
-    release = release.strip() + "-dirty"
+release = u"@VERSION@-@REVISION@ @DATE@"
 
 language = None
 
