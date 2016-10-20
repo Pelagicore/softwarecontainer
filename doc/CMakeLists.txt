@@ -49,6 +49,11 @@ configure_file(
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
 
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/index.html.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/index.html"
+    @ONLY)
+
 add_custom_target(sphinx-html
     ${SPHINX_EXECUTABLE}
         -q -b html
