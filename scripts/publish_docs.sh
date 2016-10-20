@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+### Abort if the build is dirty
+if [[ "`git diff --shortstat 2> /dev/null | tail -n1`" != "" ]]
+then
+    exit 1
+fi
+
 ### Fetch the gh-pages branch and switch to it ###
 git fetch origin gh-pages
 git checkout -qf FETCH_HEAD
