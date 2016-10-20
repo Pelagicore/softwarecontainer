@@ -22,6 +22,7 @@ set -e
 ### Abort if the build is dirty
 if [[ "`git diff --shortstat 2> /dev/null | tail -n1`" != "" ]]
 then
+    echo "Aborting pulication of documentation due to the repository being 'dirty'"
     exit 1
 fi
 
