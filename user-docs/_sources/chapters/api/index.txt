@@ -1,22 +1,19 @@
-
 .. _api:
 
 API
 ***
 
-This chapter documents the DBus and C API for interacting with the SoftwareContainerAgent. This is
+This chapter documents the D-Bus API for interacting with the SoftwareContainerAgent. This is
 mostly useful for integrators.
-
-.. TODO::
-    This chapter is still to be written properly. Some bits and pieces have
-    been but they are under development.
 
 .. _dbus-api:
 
-DBus API
+D-Bus API
 ========
 
-:Path: /com/pelagicore/SoftwareContainer
+D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following object path and interface.
+
+:Object Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
 
 Methods
@@ -24,88 +21,143 @@ Methods
 
 Ping
 ----
-Ping()
+Controls availability of com.pelagicore.SoftwareContainerAgent interface
+
+:Parameters:
+        *None*
+|
+:Return Value:
+        *None*
 
 CreateContainer
 ---------------
-:containerIDPrefix: string
-:config: string
+Creates a new container and returns created container id.
 
-uint32 containerID CreateContainer(string containerIDPrefix, string config)
+:Parameters:
+        :prefix: ``string`` prefix for name of back-end container.
+        :config: ``string`` config file in json format.
+        
+                Example config JSON::
+        
+                [{"enableWriteBuffer": true}]
+|
+:Return Value:
+        :containerID: ``uint32`` ID of created SoftwareContainer.
 
 SetContainerName
 ----------------
-:containerID: uint32
-:containerName: string
+Sets the name of container with unique containerID.
 
-void SetContainerName(uint32 containerID, string containerName)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerName: ``string`` name.
+|
+:Return Value:
+        *None*
 
 LaunchCommand
 -------------
-:containerID: uint32
-:userID: uint32
-:commandLine: string
-:workingDirectory: string
-:outputFile: string
-:env: map<string, string>
+Launches the specified application/code in the container.
 
-uint32 pid LaunchCommand(uint32 containerID, uint32 userID, string commandLine, string workingDirectory, string outputFile, map<string, string> env)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :userID: ``uint32`` UID for command, currently unused, use ``0``.
+        :commandLine: ``string`` the method to run in container.
+        :workDirectory: ``string`` path to working directory.
+        :outputFile: ``string`` output file to direct stdout.
+        :env: ``map<string, string>`` environment variables and their values.
+|
+:Return Value:
+        :pid: ``uint32`` PID of the process run inside the container.
+       
 
 ShutdownContainer
 -----------------
-:containerID: uint32
+Tears down all active gateways related to container and shuts down the container with all reserved sources.
 
-void ShutdownContainer(uint32 containerID)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+|
+:Return Value:
+        *None*
+
 
 ShutdownContainerWithTimeout
 ----------------------------
-:containerID: uint32
-:timeout: uint32
+Tears down all active gateways related to container and shuts down the container and all reserved sources after given timeout.
 
-void ShutdownContainerWithTimeout(uint32 containerID, uint32 timeout)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :timeout: ``uint32`` timeout. 
+|
+:Return Value:
+        *None*
 
 WriteToStdIn
 ------------
-:processID: uint32
-:bytes: array<char>
+Send a character array to the standard input of a particular process.
 
-void WriteToStdIn(uint32 processID, array<char> bytes)
+:Parameters:
+        :processID: ``uint32`` PID of the process; obtained by LaunchCommand.
+        :bytes: ``array<char>`` character array to sent to the stdin.
+|
+:Return Value:
+        *None*
 
 BindMountFolderInContainer
 --------------------------
-:containerID: uint32
-:pathInHost: string
-:subPathInContainer: string
-:readOnly: bool
+Binds a directory on the host to the container.
 
-string pathInContainer BindMountFolderInContainer(uint32 containerID, string pathInHost, string subPathInContainer, ool readOnly)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :pathInHost: ``string`` path to the directory in host.
+        :subPathInContainer: ``string`` path to the directory in container.
+        :readOnly: ``bool`` indicates whether the directory is read-only or not.  
+|
+:Return Value:
+        :pathInContainer: ``string`` path to the bind folder in container. 
 
 SetGatewayConfigs
 -----------------
-:containerID: uint32
-:configs: map<string, string>
+Sets the configuration of a particular gateway. The gateway configuration contains settings as key/value pairs.
 
-void SetGatewayConfigs(uint32 containerID, map<string, string> configs)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :configs: ``map<string, string>`` A map to key/value pairs.
+|
+:Return Value:
+        *None*
 
 SetCapabilities
 ---------------
-:containerID: uint32
-:capabilities: array<string>
+Currently This method has no applicable usage. 
 
-bool success SetCapabilities(uint32 containerID, array<string> capabilities)
+:Parameters:
+        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :capabilities: ``array<string>``
+|
+:Return Value:
+        :success: ``boolean`` either true or false.
 
 Signals
 -------
 
 ProcessStateChanged
 -------------------
-:containerID: uint32
-:processID: uint32
-:isRunning: bool
-:exitCode: uint32
+The D-Bus API sends signal when process state is changed. There are four values to be emitted.
 
-void ProcessStateChanged(uint32 containerID, uint32 processID, bool isRunning, uint32 exitCode)
+:containerID: ``uint32`` The ID obtained by CreateContainer method.
 
-C API
------
+:processID: ``uint32`` Pocess ID of container.
+
+:isRunning: ``bool`` Whether the process is running or not.
+
+:exitCode: ``uint32`` exit code of Process.
+
+
+Introspection
+-------------
+
+Using ``org.freedesktop.DBus.Introspectable.Introspect`` interface, methods of SoftwareContainerAgent D-Bus API can be observed.
+
 

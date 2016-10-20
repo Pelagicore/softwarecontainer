@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.9.1-c16d8d5
+    <title>API &#8212; softwarecontainer 0.9.1-6198afc
  documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-c16d8d5
+        VERSION:     '0.9.1-6198afc
 ',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-c16d8d5
+    <link rel="top" title="softwarecontainer 0.9.1-6198afc
  documentation" href="../../index.html" />
     <link rel="next" title="Design" href="../design/index.html" />
     <link rel="prev" title="Getting started" href="../getting-started/index.html" />
@@ -48,20 +48,16 @@
             
   <div class="section" id="api">
 <span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<p>This chapter documents the DBus and C API for interacting with the SoftwareContainerAgent. This is
+<p>This chapter documents the D-Bus API for interacting with the SoftwareContainerAgent. This is
 mostly useful for integrators.</p>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">This chapter is still to be written properly. Some bits and pieces have
-been but they are under development.</p>
-</div>
-<div class="section" id="dbus-api">
-<span id="id2"></span><h2>DBus API<a class="headerlink" href="#dbus-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="d-bus-api">
+<span id="dbus-api"></span><h2>D-Bus API<a class="headerlink" href="#d-bus-api" title="Permalink to this headline">¶</a></h2>
+<p>D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following object path and interface.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Path:</th><td class="field-body">/com/pelagicore/SoftwareContainer</td>
+<tr class="field-odd field"><th class="field-name">Object Path:</th><td class="field-body">/com/pelagicore/SoftwareContainer</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Interface:</th><td class="field-body">com.pelagicore.SoftwareContainerAgent</td>
 </tr>
@@ -72,170 +68,398 @@ been but they are under development.</p>
 </div>
 <div class="section" id="ping">
 <h3>Ping<a class="headerlink" href="#ping" title="Permalink to this headline">¶</a></h3>
-<p>Ping()</p>
+<p>Controls availability of com.pelagicore.SoftwareContainerAgent interface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="createcontainer">
 <h3>CreateContainer<a class="headerlink" href="#createcontainer" title="Permalink to this headline">¶</a></h3>
+<p>Creates a new container and returns created container id.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">containerIDPrefix:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">prefix:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">string</span></code> prefix for name of back-end container.</p>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">config:</th><td class="field-body">string</td>
+<tr class="field-even field"><th class="field-name">config:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">string</span></code> config file in json format.</p>
+<p>Example config JSON:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span class="p">[{</span><span class="s">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}]</span>
+</pre></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
-<p>uint32 containerID CreateContainer(string containerIDPrefix, string config)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> ID of created SoftwareContainer.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="setcontainername">
 <h3>SetContainerName<a class="headerlink" href="#setcontainername" title="Permalink to this headline">¶</a></h3>
+<p>Sets the name of container with unique containerID.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">containerName:</th><td class="field-body">string</td>
+<tr class="field-even field"><th class="field-name">containerName:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> name.</td>
 </tr>
 </tbody>
 </table>
-<p>void SetContainerName(uint32 containerID, string containerName)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="launchcommand">
 <h3>LaunchCommand<a class="headerlink" href="#launchcommand" title="Permalink to this headline">¶</a></h3>
+<p>Launches the specified application/code in the container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">userID:</th><td class="field-body">uint32</td>
+<tr class="field-even field"><th class="field-name">userID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> UID for command, currently unused, use <code class="docutils literal"><span class="pre">0</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">commandLine:</th><td class="field-body">string</td>
+<tr class="field-odd field"><th class="field-name">commandLine:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the method to run in container.</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">workingDirectory:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">string</td>
+<tr class="field-even field"><th class="field-name">workDirectory:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to working directory.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">outputFile:</th><td class="field-body">string</td>
+<tr class="field-odd field"><th class="field-name">outputFile:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> output file to direct stdout.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">env:</th><td class="field-body">map&lt;string, string&gt;</td>
+<tr class="field-even field"><th class="field-name">env:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> environment variables and their values.</td>
 </tr>
 </tbody>
 </table>
-<p>uint32 pid LaunchCommand(uint32 containerID, uint32 userID, string commandLine, string workingDirectory, string outputFile, map&lt;string, string&gt; env)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> PID of the process run inside the container.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="shutdowncontainer">
 <h3>ShutdownContainer<a class="headerlink" href="#shutdowncontainer" title="Permalink to this headline">¶</a></h3>
+<p>Tears down all active gateways related to container and shuts down the container with all reserved sources.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
 </tbody>
 </table>
-<p>void ShutdownContainer(uint32 containerID)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="shutdowncontainerwithtimeout">
 <h3>ShutdownContainerWithTimeout<a class="headerlink" href="#shutdowncontainerwithtimeout" title="Permalink to this headline">¶</a></h3>
+<p>Tears down all active gateways related to container and shuts down the container and all reserved sources after given timeout.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">timeout:</th><td class="field-body">uint32</td>
+<tr class="field-even field"><th class="field-name">timeout:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> timeout.</td>
 </tr>
 </tbody>
 </table>
-<p>void ShutdownContainerWithTimeout(uint32 containerID, uint32 timeout)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="writetostdin">
 <h3>WriteToStdIn<a class="headerlink" href="#writetostdin" title="Permalink to this headline">¶</a></h3>
+<p>Send a character array to the standard input of a particular process.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">processID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">processID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> PID of the process; obtained by LaunchCommand.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">bytes:</th><td class="field-body">array&lt;char&gt;</td>
+<tr class="field-even field"><th class="field-name">bytes:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;char&gt;</span></code> character array to sent to the stdin.</td>
 </tr>
 </tbody>
 </table>
-<p>void WriteToStdIn(uint32 processID, array&lt;char&gt; bytes)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="bindmountfolderincontainer">
 <h3>BindMountFolderInContainer<a class="headerlink" href="#bindmountfolderincontainer" title="Permalink to this headline">¶</a></h3>
+<p>Binds a directory on the host to the container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body">string</td>
+<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to the directory in host.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">subPathInContainer:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">string</td>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to the directory in container.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body">bool</td>
+<tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</td>
 </tr>
 </tbody>
 </table>
-<p>string pathInContainer BindMountFolderInContainer(uint32 containerID, string pathInHost, string subPathInContainer, ool readOnly)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to the bind folder in container.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="setgatewayconfigs">
 <h3>SetGatewayConfigs<a class="headerlink" href="#setgatewayconfigs" title="Permalink to this headline">¶</a></h3>
+<p>Sets the configuration of a particular gateway. The gateway configuration contains settings as key/value pairs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">configs:</th><td class="field-body">map&lt;string, string&gt;</td>
+<tr class="field-even field"><th class="field-name">configs:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> A map to key/value pairs.</td>
 </tr>
 </tbody>
 </table>
-<p>void SetGatewayConfigs(uint32 containerID, map&lt;string, string&gt; configs)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="setcapabilities">
 <h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
+<p>Currently This method has no applicable usage.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body">array&lt;string&gt;</td>
+<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code></td>
 </tr>
 </tbody>
 </table>
-<p>bool success SetCapabilities(uint32 containerID, array&lt;string&gt; capabilities)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">boolean</span></code> either true or false.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="signals">
 <h3>Signals<a class="headerlink" href="#signals" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="processstatechanged">
 <h3>ProcessStateChanged<a class="headerlink" href="#processstatechanged" title="Permalink to this headline">¶</a></h3>
+<p>The D-Bus API sends signal when process state is changed. There are four values to be emitted.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body">uint32</td>
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">processID:</th><td class="field-body">uint32</td>
+<tr class="field-even field"><th class="field-name">processID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> Pocess ID of container.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">isRunning:</th><td class="field-body">bool</td>
+<tr class="field-odd field"><th class="field-name">isRunning:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether the process is running or not.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">exitCode:</th><td class="field-body">uint32</td>
+<tr class="field-even field"><th class="field-name">exitCode:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> exit code of Process.</td>
 </tr>
 </tbody>
 </table>
-<p>void ProcessStateChanged(uint32 containerID, uint32 processID, bool isRunning, uint32 exitCode)</p>
 </div>
-<div class="section" id="c-api">
-<h3>C API<a class="headerlink" href="#c-api" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="introspection">
+<h3>Introspection<a class="headerlink" href="#introspection" title="Permalink to this headline">¶</a></h3>
+<p>Using <code class="docutils literal"><span class="pre">org.freedesktop.DBus.Introspectable.Introspect</span></code> interface, methods of SoftwareContainerAgent D-Bus API can be observed.</p>
 </div>
 </div>
 </div>
@@ -249,7 +473,7 @@ been but they are under development.</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">API</a><ul>
-<li><a class="reference internal" href="#dbus-api">DBus API</a><ul>
+<li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
 <li><a class="reference internal" href="#methods">Methods</a></li>
 <li><a class="reference internal" href="#ping">Ping</a></li>
 <li><a class="reference internal" href="#createcontainer">CreateContainer</a></li>
@@ -263,7 +487,7 @@ been but they are under development.</p>
 <li><a class="reference internal" href="#setcapabilities">SetCapabilities</a></li>
 <li><a class="reference internal" href="#signals">Signals</a></li>
 <li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a></li>
-<li><a class="reference internal" href="#c-api">C API</a></li>
+<li><a class="reference internal" href="#introspection">Introspection</a></li>
 </ul>
 </li>
 </ul>
