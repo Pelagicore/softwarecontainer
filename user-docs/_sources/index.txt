@@ -1,5 +1,6 @@
 Welcome to SoftwareContainer's documentation!
 =============================================
+Revision: |release|
 
 Contents:
 
