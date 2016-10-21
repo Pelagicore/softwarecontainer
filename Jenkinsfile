@@ -54,6 +54,7 @@ node {
 
     catch(err) {
         println "Something went wrong!"
+        currentBuild.result = "FAILURE"
     }
 
     // Always try to shut down the machine 
