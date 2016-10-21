@@ -20,11 +20,15 @@
 
 
 #include "libsoftwarecontaineragent.h"
-#include "SoftwareContainerAgentLib_dbuscpp_proxy.h"
 
 #include <glibmm.h>
-#include <dbus-c++/dbus.h>
-#include <dbus-c++/glib-integration.h>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+    #include "SoftwareContainerAgentLib_dbuscpp_proxy.h"
+    #include <dbus-c++/dbus.h>
+    #include <dbus-c++/glib-integration.h>
+#pragma GCC diagnostic pop
 
 #include <memory>
 

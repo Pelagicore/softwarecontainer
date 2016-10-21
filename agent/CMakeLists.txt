@@ -24,7 +24,7 @@ add_executable(softwarecontainer-agent
     src/main.cpp
     src/softwarecontaineragent.cpp
     src/softwarecontaineragentadaptor.cpp
-    SoftwareContainerAgent_dbuscpp_adaptor.h
+    ${GENERATED_ADAPTOR_FILENAME}
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainer-agent

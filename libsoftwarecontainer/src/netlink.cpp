@@ -259,8 +259,12 @@ ReturnCode Netlink::linkDown(const int ifaceIndex)
 {
     for (LinkInfo link : m_links) {
         ifinfomsg ifinfo = link.first;
-        if(ifinfo.ifi_type == ARPHRD_LOOPBACK) {
+        if (ifinfo.ifi_type == ARPHRD_LOOPBACK) {
             continue; // This is the loopback device
+        }
+
+        if (ifinfo.ifi_index != ifaceIndex) {
+            continue; // Only bring down the requested iface
         }
 
         netlink_request<ifinfomsg> down_msg = createMessage<ifinfomsg>(RTM_NEWLINK, 0);

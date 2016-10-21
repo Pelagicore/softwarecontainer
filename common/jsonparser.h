@@ -30,6 +30,7 @@ namespace softwarecontainer {
      * using the Janssson JSON parser.
      */
     class JSONParser {
+        LOG_DECLARE_CLASS_CONTEXT("JSON", "JSONParser");
 
     protected:
         /**
