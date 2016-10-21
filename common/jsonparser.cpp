@@ -21,8 +21,6 @@
 
 namespace softwarecontainer {
 
-LOG_DECLARE_CLASS_CONTEXT("JSON", "JSONParser");
-
 bool JSONParser::read(const json_t *element, const char *key, std::string &result)
 {
     json_t *value = json_object_get(element, key);

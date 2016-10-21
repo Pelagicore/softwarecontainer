@@ -20,9 +20,8 @@ include(GenerateDBusCpp)
 generate_dbuscpp_hfile(${CMAKE_SOURCE_DIR}/agent/softwarecontainer-agent.xml "SoftwareContainerAgentLib")
 
 add_library(softwarecontainer-agent-lib SHARED
+    ${GENERATED_PROXY_FILENAME}
     libsoftwarecontaineragent.cpp
-    ../include/libsoftwarecontaineragent.h
-    ${CMAKE_CURRENT_BINARY_DIR}/SoftwareContainerAgentLib_dbuscpp_proxy.h
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainer-agent-lib

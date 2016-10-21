@@ -48,7 +48,6 @@ bool SoftwareContainerAgent::triggerPreload()
 inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
 {
     return ((containerID < UINT32_MAX)
-            && (containerID >= 0)
             && (1 == m_containers.count(containerID)));
 }
 
@@ -228,7 +227,7 @@ void SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned
     if (m_shutdownContainers) {
         SoftwareContainer *container = nullptr;
         if (checkContainer(containerID, container)) {
-            container->shutdown();
+            container->shutdown(timeout);
             deleteContainer(containerID);
         }
     } else {

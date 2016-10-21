@@ -648,7 +648,8 @@ TEST_F(SoftwareContainerApp, TestStdin) {
     SignalConnectionsHandler connections;
     addProcessListener(connections, job.pid(), [&] (
                 int pid, int exitCode) {
-                log_debug() << "finished process :" << job.toString();
+                log_debug() << "Finished process:" << job.toString();
+                log_debug() << "Pid was " << pid << ", exitCode was " << exitCode;
                 exit();
             }, getMainContext());
 

@@ -34,7 +34,7 @@ LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 
 struct stat getStat(const std::string &path)
 {
-    struct stat st = {};
+    struct stat st;
     if (stat(path.c_str(), &st) == 0) {
         return st;
     }
