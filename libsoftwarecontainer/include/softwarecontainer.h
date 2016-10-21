@@ -78,8 +78,6 @@ public:
 
     ObservableProperty<ContainerState> &getContainerState();
 
-    pid_t launchCommand(const std::string &commandLine);
-
     /**
      * @brief Continues the 'launch' phase by allowing gateway configurations to
      *  be set.

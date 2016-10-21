@@ -165,24 +165,6 @@ void SoftwareContainer::addGateway(Gateway *gateway)
     m_gateways.push_back(std::unique_ptr<Gateway>(gateway));
 }
 
-pid_t SoftwareContainer::launchCommand(const std::string &commandLine)
-{
-    log_debug() << "launchCommand called with commandLine: " << commandLine;
-    pid_t pid = INVALID_PID;
-    ReturnCode result = m_container->attach(commandLine, &pid);
-    if (isError(result)) {
-        log_error() << "Attach returned invalid pid, launchCommand fails";
-        return INVALID_PID;
-    }
-
-    // TODO: Why do we shutdown as soon as one process exits?
-    addProcessListener(m_connections, pid, [&](pid_t pid, int returnCode) {
-        shutdown();
-    }, m_mainLoopContext);
-
-    return pid;
-}
-
 void SoftwareContainer::updateGatewayConfiguration(const GatewayConfiguration &configs)
 {
     log_debug() << "updateGatewayConfiguration called" << configs;
