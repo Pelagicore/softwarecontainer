@@ -105,7 +105,7 @@ macro(add_doxygen_doc packageName)
     find_package(Doxygen)
 
     if (DOXYGEN_FOUND STREQUAL "NO")
-        message("Doxygen not found. Please get a copy http://www.doxygen.org")
+        message(FATAL_ERROR "Doxygen not found. Please get a copy http://www.doxygen.org")
     else()
         if(DEFINED tagMap_INPUT)
             set(DOXYGEN_INPUT ${tagMap_INPUT})

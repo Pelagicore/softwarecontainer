@@ -56,7 +56,7 @@ install(FILES softwarecontainer-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGU
 
 # Install systemd configuration
 if (ENABLE_SYSTEMD)
-    message("SystemD file installation enabled")
+    message(STATUS "SystemD file installation enabled")
 
     if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
         set(SYSTEMD_CONFIGURATION_FILES_DIR "/lib/systemd/system")

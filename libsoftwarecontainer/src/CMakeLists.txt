@@ -21,11 +21,11 @@
 SET(GATEWAY_SOURCES "")
 macro(gateway_support flag strname filename)
     if (${flag})
-        MESSAGE("Compiling with gateway support for ${strname}")
-        LIST(APPEND GATEWAY_SOURCES gateway/${filename})
-        ADD_DEFINITIONS(-D${flag})
+        message(STATUS "Compiling with gateway support for ${strname}")
+        list(APPEND GATEWAY_SOURCES gateway/${filename})
+        add_definitions(-D${flag})
     else(${flag})
-        MESSAGE(INFO " Compiling without gateway support for ${strname}")
+        message(STATUS "Compiling without gateway support for ${strname}")
     endif(${flag})
 endmacro(gateway_support flag filename)
 
@@ -33,18 +33,21 @@ gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
 gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
+if(ENABLE_NETWORKGATEWAY)
+    list(APPEND GATEWAY_SOURCES netlink.cpp)
+endif()
+
 gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
 
-SET(DEFAULT_GATEWAYS TRUE)
-gateway_support(DEFAULT_GATEWAYS env envgateway.cpp)
-gateway_support(DEFAULT_GATEWAYS file filegateway.cpp)
+set(DEFAULT_GATEWAYS TRUE)
+gateway_support(DEFAULT_GATEWAYS environment envgateway.cpp)
+gateway_support(DEFAULT_GATEWAYS files filegateway.cpp)
 gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.cpp)
 
 add_library(softwarecontainerlib SHARED 
     container.cpp
     gateway/gateway.cpp
     generators.cpp
-    netlink.cpp
     softwarecontainer.cpp
     workspace.cpp
     jobs/jobabstract.cpp

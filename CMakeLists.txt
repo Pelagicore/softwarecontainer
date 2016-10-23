@@ -44,7 +44,7 @@ string(TIMESTAMP DATE "%Y-%m-%d")
 
 if(EXTRA_PKG_CONFIG_PATH)
     set(ENV{PKG_CONFIG_PATH} ${EXTRA_PKG_CONFIG_PATH})
-    message("Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
+    message(STATUS "Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
 endif(EXTRA_PKG_CONFIG_PATH)
 
 find_package(PkgConfig          REQUIRED)
@@ -130,8 +130,8 @@ else()
     SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
     SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_PREFIX}/share/softwarecontainer/lxc-templates)
 endif()
-message("Configuration files will be installed in " ${SYS_CONFIG_DIR})
-message("LXC template will be installed in " ${LXC_TEMPLATE_DIR})
+message(STATUS "Configuration files will be installed in " ${SYS_CONFIG_DIR})
+message(STATUS "LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
 #
 # Set C++ compiler flags
@@ -154,40 +154,58 @@ if(ENABLE_COVERAGE)
 endif(ENABLE_COVERAGE)
 
 #
-# Configure which bridge device to use with SC
+# Network related options
 #
 
-if(NOT DEFINED BRIDGE_DEVICE)
-    set(BRIDGE_DEVICE lxcbr0)
-endif()
-add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
-message("Network bridge defined as ${BRIDGE_DEVICE}")
+if (ENABLE_NETWORKGATEWAY)
 
-if(NOT DEFINED BRIDGE_DEVICE)
-    set(BRIDGE_DEVICE lxcbr0)
+    macro(set_default VAR VALUE)
+        if(NOT DEFINED ${VAR})
+            set(${VAR} ${VALUE})
+        endif()
+    endmacro()
+
+    set_default(BRIDGE_DEVICE lxcbr0)
+    add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
+    message(STATUS "Network bridge defined as ${BRIDGE_DEVICE}")
+
+    #
+    # Should SoftwareContainer create a bridge if not present?
+    #
+    if(CREATE_BRIDGE)
+        message(STATUS "SoftwareContainer will create ${BRIDGE_DEVICE} if not present at runtime")
+        add_definitions(-DCREATE_BRIDGE=true)
+
+        set_default(BRIDGE_IP 10.0.3.1)
+        set_default(BRIDGE_NETADDR 10.0.3.0)
+        set_default(BRIDGE_NETADDR 10.0.3.0)
+        set_default(BRIDGE_NETMASK 255.255.255.0)
+        set_default(BRIDGE_NETMASK_BITS 24)
+
+        configure_file(scripts/setup_create_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh)
+        file(READ ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh NOBRIDGE)
+
+    else()
+        message(WARNING "SoftwareContainer will exit if ${BRIDGE_DEVICE} is not present at runtime")
+        configure_file(scripts/setup_exit_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/exit_nobridge.sh)
+        file(READ exit_nobridge.sh NOBRIDGE)
+    endif()
+
+    # Get the actual setup script
+    configure_file(scripts/setup_softwarecontainer.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh DESTINATION bin
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif()
-add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
-message("Network bridge defined as ${BRIDGE_DEVICE}")
 
 #
-# If SC shouldn't create bridge, then we substitute different parts
-# of the setup script at compile time.
+# Pkg-config file
 #
-
-if(CREATE_BRIDGE)
-    message("SoftwareContainer will create ${BRIDGE_DEVICE} if not present at runtime")
-    file(READ scripts/setup_create_nobridge.sh.in NOBRIDGE)
-else()
-    message("SoftwareContainer will exit if ${BRIDGE_DEVICE} is not present at runtime")
-    file(READ scripts/setup_exit_nobridge.sh.in NOBRIDGE)
-endif()
-
-configure_file(scripts/setup_softwarecontainer.sh.in setup_softwarecontainer.sh @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
 configure_file(softwarecontainer.pc.in softwarecontainer.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
+#
+# General configuration file
+#
 configure_file(softwarecontainer-config.h.in softwarecontainer-config.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/softwarecontainer)
 

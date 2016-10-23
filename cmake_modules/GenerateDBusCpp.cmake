@@ -4,7 +4,7 @@ macro(generate_dbuscpp_hfile xmlInterfaceFile h)
     set(GENERATED_PROXY_FILENAME ${h}_dbuscpp_proxy.h)
     set(GENERATED_ADAPTOR_FILENAME ${h}_dbuscpp_adaptor.h)
 
-    message("Creating DBusCpp proxy and stubs : ${GENERATED_PROXY_FILENAME} / ${GENERATED_ADAPTOR_FILENAME}")
+    message(STATUS "Creating DBusCpp proxy and stubs : ${GENERATED_PROXY_FILENAME} / ${GENERATED_ADAPTOR_FILENAME}")
 
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_PROXY_FILENAME} ${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_ADAPTOR_FILENAME}

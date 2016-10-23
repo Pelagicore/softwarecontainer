@@ -1,6 +1,6 @@
-    echo "$BRIDGE was NOT FOUND, attempting to add..."
-    $BRCTL_CMD addbr $BRIDGE
-    $BRCTL_CMD setfd $BRIDGE 0
-    ifconfig $BRIDGE 10.0.3.1 netmask 255.255.255.0 promisc up
-    iptables -t nat -A POSTROUTING -s 10.0.3.0/24 ! -d 10.0.3.0/24 -j MASQUERADE
+    echo "@BRIDGE_DEVICE@ was NOT FOUND, attempting to add..."
+    brctl addbr @BRIDGE_DEVICE@
+    brctl setfd @BRIDGE_DEVICE@ 0
+    ifconfig @BRIDGE_DEVICE@ @BRIDGE_IP@ netmask @BRIDGE_NETMASK@ promisc up
+    iptables -t nat -A POSTROUTING -s @BRIDGE_NETADDR@/@BRIDGE_NETMASK_BITS@ ! -d @BRIDGE_NETADDR@/@BRIDGE_NETMASK_BITS@ -j MASQUERADE
     echo 1 > /proc/sys/net/ipv4/ip_forward
