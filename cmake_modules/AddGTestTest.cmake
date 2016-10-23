@@ -1,34 +1,28 @@
 macro(add_gtest_test testName files libraries)
 
-        if(NOT DEFINED TESTS_INSTALLATION_PATH)
-                set(TESTS_INSTALLATION_PATH "lib/${PROJECT_NAME}/ptest")
-        endif()
+    if(NOT DEFINED TESTS_INSTALLATION_PATH)
+            set(TESTS_INSTALLATION_PATH "lib/${PROJECT_NAME}/ptest")
+    endif()
 
-        message(STATUS "Tests will be installed in : ${CMAKE_INSTALL_PREFIX}/${TESTS_INSTALLATION_PATH}")
+    message(STATUS "Tests will be installed in : ${CMAKE_INSTALL_PREFIX}/${TESTS_INSTALLATION_PATH}")
 
-        if (DEFINED $ENV{GTEST_DIR})
-                set(GTEST_DIR $ENV{GTEST_DIR})
-        endif()
+    add_executable(${testName}
+            ${files}
+    )
 
-        message(STATUS "Google test found in ${GTEST_DIR}")
-
-        include_directories(${GTEST_DIR}/include)
-        link_directories(${GTEST_DIR}/lib/.libs)
-
-        add_executable(${testName}
-                ${files}
-        )
-
+    if ((NOT TARGET gtest) OR (NOT TARGET gmock))
+        message(FATAL_ERROR "No gtest or gmock targets found, can't add tests")
+    else()
         target_link_libraries(${testName}
-                ${libraries}
-                gtest
-                gtest_main
-                gmock
-                gmock_main
+            ${libraries}
+            gtest
+            gtest_main
+            gmock
+            gmock_main
         )
 
         INSTALL(TARGETS ${testName}
-          DESTINATION ${TESTS_INSTALLATION_PATH}
+            DESTINATION ${TESTS_INSTALLATION_PATH}
         )
 
         add_test(
@@ -56,5 +50,6 @@ done
 
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/run-ptest" DESTINATION ${TESTS_INSTALLATION_PATH}
                 PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+    endif()
 
 endmacro()
