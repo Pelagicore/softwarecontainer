@@ -17,11 +17,8 @@
 #
 # For further information see LICENSE
 
-BRCTL_CMD="brctl"
-BRIDGE="@BRIDGE_DEVICE@"
-
 # Check for the bridge, and if not found, don't output anything
-BRIDGE_AVAILABLE=$($BRCTL_CMD show | grep $BRIDGE)
+BRIDGE_AVAILABLE=$(brctl show | grep @BRIDGE_DEVICE@)
 if ! [ -n "$BRIDGE_AVAILABLE" ]; then
 @NOBRIDGE@
 fi

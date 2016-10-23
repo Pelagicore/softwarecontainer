@@ -31,17 +31,28 @@ set(TEST_LIBRARY_DEPENDENCIES
 )
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 
+set(GATEWAY_TEST_FILES "")
+macro(add_gateway_test GATEWAY_FLAG FILENAME)
+    if (${GATEWAY_FLAG})
+        LIST(APPEND GATEWAY_TEST_FILES ${FILENAME})
+    endif()
+endmacro()
+
+add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_unittest.cpp)
+add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
+add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)
+
+set(DEFAULT_GATEWAYS TRUE)
+add_gateway_test(DEFAULT_GATEWAYS envgateway_unittest.cpp)
+add_gateway_test(DEFAULT_GATEWAYS filegateway_unittest.cpp)
+
 set(TEST_FILES
-    cgroupsgateway_unittest.cpp
-    dbusgateway_unittest.cpp
-    devicenodegateway_unittest.cpp
-    envgateway_unittest.cpp
-    filegateway_unittest.cpp
-    netlink_unittest.cpp
-    networkgateway_unittest.cpp
-    main.cpp
     softwarecontainer_test.cpp
     softwarecontainerlib_unittest.cpp
+    main.cpp
+    ${GATEWAY_TEST_FILES}
 )
 
 add_gtest_test(softwarecontainerlibtest

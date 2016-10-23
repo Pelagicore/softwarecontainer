@@ -4,13 +4,13 @@ macro(add_gtest_test testName files libraries)
                 set(TESTS_INSTALLATION_PATH "lib/${PROJECT_NAME}/ptest")
         endif()
 
-        message("Tests will be installed in : ${TESTS_INSTALLATION_PATH}")
+        message(STATUS "Tests will be installed in : ${CMAKE_INSTALL_PREFIX}/${TESTS_INSTALLATION_PATH}")
 
         if (DEFINED $ENV{GTEST_DIR})
                 set(GTEST_DIR $ENV{GTEST_DIR})
         endif()
 
-        message("Google test found in ${GTEST_DIR}")
+        message(STATUS "Google test found in ${GTEST_DIR}")
 
         include_directories(${GTEST_DIR}/include)
         link_directories(${GTEST_DIR}/lib/.libs)
