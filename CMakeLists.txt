@@ -170,7 +170,8 @@ if (ENABLE_NETWORKGATEWAY)
     message(STATUS "Network bridge defined as ${BRIDGE_DEVICE}")
 
     #
-    # Should SoftwareContainer create a bridge if not present?
+    # Some settings for whether or not SC should create a bridge
+    # if one is not found.
     #
     if(CREATE_BRIDGE)
         message(STATUS "SoftwareContainer will create ${BRIDGE_DEVICE} if not present at runtime")
