@@ -113,7 +113,7 @@ Start a container::
     /com/pelagicore/SoftwareContainerAgent \
     com.pelagicore.SoftwareContainerAgent.CreateContainer \
     string:"MyPrefix-" \
-    string:'[{"enableWriteBuffer": true}]'
+    string:'[{"enableWriteBuffer": false}]'
 
 The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
 
