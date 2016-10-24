@@ -15,11 +15,10 @@ multiple IPC gateways.*
 This chapter contains descriptions of the available gateways and their configuration options. It is intended to
 explain to e.g. a service integrator how to write gateway configurations suitable for the service.
 
-For more information how to integrate and use the configurations in a project, see Integration patterns.
+For more information how to integrate and use the configurations in a project,
+see :ref:`Integration guidelines <integration-guidelines>`.
 
 For more information how to develop and integrate gateways in SoftwareContainer, see :ref:`Developer guidelines <developers>`.
-
-.. todo:: The Integration patterns refers to a currently non-existing section.
 
 
 Note on configurations
