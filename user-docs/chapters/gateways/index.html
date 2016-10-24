@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.9.1-b1b5acc 2016-10-24 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.9.1-4cc18cb 2016-10-24 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-b1b5acc 2016-10-24',
+        VERSION:     '0.9.1-4cc18cb 2016-10-24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-b1b5acc 2016-10-24 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-4cc18cb 2016-10-24 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -51,14 +51,11 @@ system scalable, as the number of IPC mechanisms is limited while the number of 
 <em>Currently, some gateways break this principle, which is subject to correction in the future. The design intention
 is to have the gateways IPC centric and construct more abstract concepts like a Wayland &#8220;gateway&#8221; on top of
 multiple IPC gateways.</em></p>
-<p>This chapter contains descriptions of the available gateways and their configuration options. It is intended to
-explain to e.g. a service integrator how to write gateway configurations suitable for the service.</p>
-<p>For more information how to integrate and use the configurations in a project, see Integration patterns.</p>
+<p>This chapter contains descriptions of the available gateways, their IDs,  and their configuration options.
+It is intended to explain to e.g. a service integrator how to write gateway configurations suitable for the service.</p>
+<p>For more information how to integrate and use the configurations in a project,
+see <a class="reference internal" href="../integration-guidelines/index.html#integration-guidelines"><span class="std std-ref">Integration guidelines</span></a>.</p>
 <p>For more information how to develop and integrate gateways in SoftwareContainer, see <a class="reference internal" href="../developers/index.html#developers"><span class="std std-ref">Developer guidelines</span></a>.</p>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">The Integration patterns refers to a currently non-existing section.</p>
-</div>
 <div class="section" id="note-on-configurations">
 <h2>Note on configurations<a class="headerlink" href="#note-on-configurations" title="Permalink to this headline">¶</a></h2>
 <p>All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer requires this.
@@ -67,6 +64,10 @@ Beyond that, the structure and content of this JSON is the responsibility of the
 <div class="section" id="cgroups-gateway">
 <h2>CGroups gateway<a class="headerlink" href="#cgroups-gateway" title="Permalink to this headline">¶</a></h2>
 <p>The CGroups Gateway is used to limit the contained system&#8217;s access to CPU and RAM resources.</p>
+<div class="section" id="id">
+<h3>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the CGroups gateway is: <code class="docutils literal"><span class="pre">cgroups</span></code></p>
+</div>
 <div class="section" id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
 <p>The gateway configuration contains settings as key/value pairs. The <code class="docutils literal"><span class="pre">setting</span></code> key
@@ -115,7 +116,11 @@ application (unless the configuration also allowes everything on the connection)
 <p>The gateway will not do any analysis of the configuration passed to it, but will pass this configuration
 along to <code class="docutils literal"><span class="pre">dbus-proxy</span></code> verbatim. This is to support future changes in the configuration format.</p>
 <div class="section" id="id2">
-<h3>Configuration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<h3>ID<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the D-Bus gateway is: <code class="docutils literal"><span class="pre">dbus</span></code></p>
+</div>
+<div class="section" id="id3">
+<h3>Configuration<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>The session and system buses have separate configurations implemented as separate JSON array
 objects with the names:</p>
 <ul class="simple">
@@ -142,8 +147,8 @@ of:</p>
 all method and signal names for the interface and object path specified.</p>
 <p>If a bus configuration is just an empty array it means all access to that bus will be blocked.</p>
 </div>
-<div class="section" id="id3">
-<h3>Example configurations<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Example configurations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>A configuration that provides full access to the system and session buses would look like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
@@ -206,8 +211,12 @@ access at all to the system bus would look like:</p>
 <div class="section" id="device-node-gateway">
 <h2>Device node gateway<a class="headerlink" href="#device-node-gateway" title="Permalink to this headline">¶</a></h2>
 <p>The Device Node Gateway is used to provide access to host system device nodes.</p>
-<div class="section" id="id4">
-<h3>Configuration<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>ID<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Device node gateway is: <code class="docutils literal"><span class="pre">devicenode</span></code></p>
+</div>
+<div class="section" id="id6">
+<h3>Configuration<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p>The configuration consists of a root list consisting of individual devices. Each device contains the following fields:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">name</span></code> The name of the device, with or without path. This is passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
@@ -216,8 +225,8 @@ access at all to the system bus would look like:</p>
 <li><code class="docutils literal"><span class="pre">mode</span></code> Permission mode, passed verbatim to <code class="docutils literal"><span class="pre">chmod</span></code></li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>Example configurations<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Example configurations<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <p>An example configuration can look like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
@@ -252,8 +261,12 @@ access at all to the system bus would look like:</p>
 <p>The environment gateway allows users to specify environment variables that
 should be known to the container and all commands and functions running
 inside the container.</p>
-<div class="section" id="id6">
-<h3>Configuration<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>ID<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Environment gateway is: <code class="docutils literal"><span class="pre">env</span></code></p>
+</div>
+<div class="section" id="id9">
+<h3>Configuration<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <p>The configuration consists of a list of environment variable definitions. Each such element must contain the following parameters:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">name</span></code> The name of the environment variable in question</li>
@@ -264,8 +277,8 @@ inside the container.</p>
 <li><code class="docutils literal"><span class="pre">append</span></code> (bool) If the environment variable is already defined by the gateway, append the new value to the value already defined. Defaults to false.</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h3>Example configurations<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>Example configurations<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <p>En example configuration would look like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
@@ -291,12 +304,16 @@ inside the container.</p>
 <div class="section" id="file-gateway">
 <h2>File gateway<a class="headerlink" href="#file-gateway" title="Permalink to this headline">¶</a></h2>
 <p>The File Gateway is used to expose individual files from the host filesystem inside the container.</p>
-<div class="section" id="id8">
-<h3>Configuration<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>ID<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the File gateway is: <code class="docutils literal"><span class="pre">file</span></code></p>
+</div>
+<div class="section" id="id12">
+<h3>Configuration<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <p>In the container, the files are mapped into a subdirectory (currently <code class="docutils literal"><span class="pre">/gateways</span></code>), at the location specified by the <code class="docutils literal"><span class="pre">path-container</span></code> field (see below).</p>
 </div>
-<div class="section" id="id9">
-<h3>Example configurations<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id13">
+<h3>Example configurations<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <p>An example configuration can look like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
@@ -316,8 +333,12 @@ inside the container.</p>
 <div class="section" id="network-gateway">
 <h2>Network gateway<a class="headerlink" href="#network-gateway" title="Permalink to this headline">¶</a></h2>
 <p>The Network Gateway is used to setup network connection and configure which traffic is allowed and not.</p>
-<div class="section" id="id10">
-<h3>Configuration<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h3>ID<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Network gateway is: <code class="docutils literal"><span class="pre">network</span></code></p>
+</div>
+<div class="section" id="id15">
+<h3>Configuration<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <p>The configuration is structured as a list of JSON objects that each describe rules for <code class="docutils literal"><span class="pre">OUTGOING</span></code>
 or <code class="docutils literal"><span class="pre">INCOMING</span></code> network traffic. During evaluation of each configuration entry, the order in which
 the rules are specified in matters. For each entry the rules are read in order starting with the
@@ -407,8 +428,12 @@ during the <code class="docutils literal"><span class="pre">activate()</span></c
 <p>Once <code class="docutils literal"><span class="pre">activate</span></code> has been initiated, the gateway listens to changes in the connection
 through the <code class="docutils literal"><span class="pre">stateCallback</span></code> function and, once the connection has been successfully
 set up, loads the <code class="docutils literal"><span class="pre">module-native-protocol-unix</span></code> PulseAudio module.</p>
-<div class="section" id="id11">
-<h3>Configuration<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h3>ID<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the PulseAudio gateway is: <code class="docutils literal"><span class="pre">pulseaudio</span></code></p>
+</div>
+<div class="section" id="id17">
+<h3>Configuration<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <p>Example configuration enabling audio:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span> <span class="s">&quot;audio&quot;</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span>
@@ -427,8 +452,12 @@ server at all.</p>
 socket and sets the <code class="docutils literal"><span class="pre">XDG_RUNTIME_DIR</span></code> accordingly. For a Wayland
 <em>capability</em>, it is also necessary to ensure that the contained application
 has access to the graphics hardware devices and associated libraries.</p>
-<div class="section" id="id12">
-<h3>Configuration<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h3>ID<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Wayland gateway is: <code class="docutils literal"><span class="pre">wayland</span></code></p>
+</div>
+<div class="section" id="id19">
+<h3>Configuration<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
 <p>Example configuration enabling Wayland:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span> <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span>
@@ -450,40 +479,48 @@ has access to the graphics hardware devices and associated libraries.</p>
 <li><a class="reference internal" href="#">Gateways</a><ul>
 <li><a class="reference internal" href="#note-on-configurations">Note on configurations</a></li>
 <li><a class="reference internal" href="#cgroups-gateway">CGroups gateway</a><ul>
+<li><a class="reference internal" href="#id">ID</a></li>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
 <li><a class="reference internal" href="#example-configurations">Example configurations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#d-bus-gateway">D-Bus gateway</a><ul>
-<li><a class="reference internal" href="#id2">Configuration</a></li>
-<li><a class="reference internal" href="#id3">Example configurations</a></li>
+<li><a class="reference internal" href="#id2">ID</a></li>
+<li><a class="reference internal" href="#id3">Configuration</a></li>
+<li><a class="reference internal" href="#id4">Example configurations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#device-node-gateway">Device node gateway</a><ul>
-<li><a class="reference internal" href="#id4">Configuration</a></li>
-<li><a class="reference internal" href="#id5">Example configurations</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#environment-gateway">Environment gateway</a><ul>
+<li><a class="reference internal" href="#id5">ID</a></li>
 <li><a class="reference internal" href="#id6">Configuration</a></li>
 <li><a class="reference internal" href="#id7">Example configurations</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#environment-gateway">Environment gateway</a><ul>
+<li><a class="reference internal" href="#id8">ID</a></li>
+<li><a class="reference internal" href="#id9">Configuration</a></li>
+<li><a class="reference internal" href="#id10">Example configurations</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#file-gateway">File gateway</a><ul>
-<li><a class="reference internal" href="#id8">Configuration</a></li>
-<li><a class="reference internal" href="#id9">Example configurations</a></li>
+<li><a class="reference internal" href="#id11">ID</a></li>
+<li><a class="reference internal" href="#id12">Configuration</a></li>
+<li><a class="reference internal" href="#id13">Example configurations</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#network-gateway">Network gateway</a><ul>
-<li><a class="reference internal" href="#id10">Configuration</a></li>
+<li><a class="reference internal" href="#id14">ID</a></li>
+<li><a class="reference internal" href="#id15">Configuration</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#pulseaudio-gateway">PulseAudio gateway</a><ul>
-<li><a class="reference internal" href="#id11">Configuration</a></li>
+<li><a class="reference internal" href="#id16">ID</a></li>
+<li><a class="reference internal" href="#id17">Configuration</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wayland-gateway">Wayland gateway</a><ul>
-<li><a class="reference internal" href="#id12">Configuration</a></li>
+<li><a class="reference internal" href="#id18">ID</a></li>
+<li><a class="reference internal" href="#id19">Configuration</a></li>
 </ul>
 </li>
 </ul>

@@ -9,7 +9,7 @@ mostly useful for integrators.
 .. _dbus-api:
 
 D-Bus API
-========
+=========
 
 D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following object path and interface.
 
@@ -25,7 +25,9 @@ Controls availability of com.pelagicore.SoftwareContainerAgent interface
 
 :Parameters:
         *None*
+
 |
+
 :Return Value:
         *None*
 
@@ -40,7 +42,9 @@ Creates a new container and returns created container id.
                 Example config JSON::
         
                 [{"enableWriteBuffer": true}]
+
 |
+
 :Return Value:
         :containerID: ``uint32`` ID of created SoftwareContainer.
 
@@ -51,7 +55,9 @@ Sets the name of container with unique containerID.
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
         :containerName: ``string`` name.
+
 |
+
 :Return Value:
         *None*
 
@@ -66,7 +72,9 @@ Launches the specified application/code in the container.
         :workDirectory: ``string`` path to working directory.
         :outputFile: ``string`` output file to direct stdout.
         :env: ``map<string, string>`` environment variables and their values.
+
 |
+
 :Return Value:
         :pid: ``uint32`` PID of the process run inside the container.
        
@@ -77,7 +85,9 @@ Tears down all active gateways related to container and shuts down the container
 
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
+
 |
+
 :Return Value:
         *None*
 
@@ -88,8 +98,10 @@ Tears down all active gateways related to container and shuts down the container
 
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
-        :timeout: ``uint32`` timeout. 
+        :timeout: ``uint32`` timeout.
+
 |
+
 :Return Value:
         *None*
 
@@ -100,7 +112,9 @@ Send a character array to the standard input of a particular process.
 :Parameters:
         :processID: ``uint32`` PID of the process; obtained by LaunchCommand.
         :bytes: ``array<char>`` character array to sent to the stdin.
+
 |
+
 :Return Value:
         *None*
 
@@ -112,8 +126,10 @@ Binds a directory on the host to the container.
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
         :pathInHost: ``string`` path to the directory in host.
         :subPathInContainer: ``string`` path to the directory in container.
-        :readOnly: ``bool`` indicates whether the directory is read-only or not.  
+        :readOnly: ``bool`` indicates whether the directory is read-only or not.
+
 |
+
 :Return Value:
         :pathInContainer: ``string`` path to the bind folder in container. 
 
@@ -124,7 +140,9 @@ Sets the configuration of a particular gateway. The gateway configuration contai
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
         :configs: ``map<string, string>`` A map to key/value pairs.
+
 |
+
 :Return Value:
         *None*
 
@@ -135,7 +153,9 @@ Currently This method has no applicable usage.
 :Parameters:
         :containerID: ``uint32`` The ID obtained by CreateContainer method.
         :capabilities: ``array<string>``
+
 |
+
 :Return Value:
         :success: ``boolean`` either true or false.
 

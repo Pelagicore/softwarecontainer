@@ -12,14 +12,13 @@ system scalable, as the number of IPC mechanisms is limited while the number of 
 is to have the gateways IPC centric and construct more abstract concepts like a Wayland "gateway" on top of
 multiple IPC gateways.*
 
-This chapter contains descriptions of the available gateways and their configuration options. It is intended to
-explain to e.g. a service integrator how to write gateway configurations suitable for the service.
+This chapter contains descriptions of the available gateways, their IDs,  and their configuration options.
+It is intended to explain to e.g. a service integrator how to write gateway configurations suitable for the service.
 
-For more information how to integrate and use the configurations in a project, see Integration patterns.
+For more information how to integrate and use the configurations in a project,
+see :ref:`Integration guidelines <integration-guidelines>`.
 
 For more information how to develop and integrate gateways in SoftwareContainer, see :ref:`Developer guidelines <developers>`.
-
-.. todo:: The Integration patterns refers to a currently non-existing section.
 
 
 Note on configurations
@@ -33,6 +32,11 @@ CGroups gateway
 ===============
 
 The CGroups Gateway is used to limit the contained system's access to CPU and RAM resources.
+
+ID
+--
+
+The ID used for the CGroups gateway is: ``cgroups``
 
 Configuration
 -------------
@@ -89,6 +93,11 @@ application (unless the configuration also allowes everything on the connection)
 
 The gateway will not do any analysis of the configuration passed to it, but will pass this configuration
 along to ``dbus-proxy`` verbatim. This is to support future changes in the configuration format.
+
+ID
+--
+
+The ID used for the D-Bus gateway is: ``dbus``
 
 Configuration
 -------------
@@ -186,6 +195,11 @@ Device node gateway
 
 The Device Node Gateway is used to provide access to host system device nodes.
 
+ID
+--
+
+The ID used for the Device node gateway is: ``devicenode``
+
 Configuration
 -------------
 
@@ -235,6 +249,11 @@ The environment gateway allows users to specify environment variables that
 should be known to the container and all commands and functions running
 inside the container.
 
+ID
+--
+
+The ID used for the Environment gateway is: ``env``
+
 Configuration
 -------------
 
@@ -277,6 +296,11 @@ File gateway
 
 The File Gateway is used to expose individual files from the host filesystem inside the container.
 
+ID
+--
+
+The ID used for the File gateway is: ``file``
+
 Configuration
 -------------
 
@@ -303,6 +327,10 @@ Network gateway
 ===============
 
 The Network Gateway is used to setup network connection and configure which traffic is allowed and not.
+
+ID
+--
+The ID used for the Network gateway is: ``network``
 
 Configuration
 -------------
@@ -403,6 +431,11 @@ Once ``activate`` has been initiated, the gateway listens to changes in the conn
 through the ``stateCallback`` function and, once the connection has been successfully
 set up, loads the ``module-native-protocol-unix`` PulseAudio module.
 
+ID
+--
+
+The ID used for the PulseAudio gateway is: ``pulseaudio``
+
 Configuration
 -------------
 
@@ -427,6 +460,11 @@ socket and sets the ``XDG_RUNTIME_DIR`` accordingly. For a Wayland
 *capability*, it is also necessary to ensure that the contained application
 has access to the graphics hardware devices and associated libraries.
 
+ID
+--
+
+The ID used for the Wayland gateway is: ``wayland``
+
 Configuration
 -------------
 
@@ -435,3 +473,4 @@ Example configuration enabling Wayland::
     [
         { "enabled": true }
     ]
+
