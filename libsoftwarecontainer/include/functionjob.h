@@ -34,7 +34,7 @@ public:
     virtual ~FunctionJob();
 
     ReturnCode start();
-    void setEnvironnmentVariable(const std::string &key, const std::string &value);
+    void setEnvironmentVariable(const std::string &key, const std::string &value);
     std::string toString() const;
 
 private:

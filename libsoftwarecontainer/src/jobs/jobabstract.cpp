@@ -85,12 +85,12 @@ bool JobAbstract::isRunning()
     return (m_pid != 0);
 }
 
-void JobAbstract::setEnvironnmentVariable(const std::string &key, const std::string &value)
+void JobAbstract::setEnvironmentVariable(const std::string &key, const std::string &value)
 {
     m_env[key] = value;
 }
 
-void JobAbstract::setEnvironnmentVariables(const EnvironmentVariables &env)
+void JobAbstract::setEnvironmentVariables(const EnvironmentVariables &env)
 {
     m_env = env;
 }

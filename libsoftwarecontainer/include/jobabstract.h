@@ -52,8 +52,8 @@ public:
      * since we don't know if the exec() occurring after the fork into the container actually succeeds...
      */
     bool isRunning();
-    void setEnvironnmentVariable(const std::string &key, const std::string &value);
-    void setEnvironnmentVariables(const EnvironmentVariables &env);
+    void setEnvironmentVariable(const std::string &key, const std::string &value);
+    void setEnvironmentVariables(const EnvironmentVariables &env);
 
 protected:
     EnvironmentVariables m_env;

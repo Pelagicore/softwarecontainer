@@ -192,7 +192,7 @@ pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID, uid_t userI
         // job->captureStdin();
         job->setOutputFile(outputFile);
         job->setUserID(userID);
-        job->setEnvironnmentVariables(env);
+        job->setEnvironmentVariables(env);
         job->setWorkingDirectory(workingDirectory);
         job->start();
         addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {

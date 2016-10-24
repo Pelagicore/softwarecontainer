@@ -215,7 +215,7 @@ public:
         m_envVariables[key] = value;
     }
 
-    void setEnvironnmentVariables(const EnvironmentVariables &variables)
+    void setEnvironmentVariables(const EnvironmentVariables &variables)
     {
         m_envVariables = variables;
     }
