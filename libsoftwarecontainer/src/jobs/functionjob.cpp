@@ -35,7 +35,7 @@ ReturnCode FunctionJob::start()
         m_command, &m_pid, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
 }
 
-void FunctionJob::setEnvironnmentVariable(
+void FunctionJob::setEnvironmentVariable(
         const std::string &key, const std::string &value)
 {
     m_env[key] = value;

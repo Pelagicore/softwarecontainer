@@ -146,7 +146,7 @@ TEST_F(SoftwareContainerApp, EnvVarsSet) {
     FunctionJob job(getSc(), [&] () {
         return getenv("TESTVAR") != NULL ? 0 : 1;
     });
-    job.setEnvironnmentVariable("TESTVAR","YES");
+    job.setEnvironmentVariable("TESTVAR","YES");
     job.start();
     ASSERT_TRUE(job.wait() == 0);
 }
