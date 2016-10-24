@@ -13,6 +13,7 @@ Contents:
     chapters/getting-started/*
     chapters/api/*
     chapters/design/*
+    chapters/configuration/*
     chapters/service-manifests/*
     chapters/gateways/*
     chapters/integration-guidelines/*
