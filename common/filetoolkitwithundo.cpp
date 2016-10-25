@@ -205,11 +205,23 @@ ReturnCode FileToolkitWithUndo::syncOverlayMount(
 ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
 {
     auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
-    assert(mountRes == 0);
+    if (mountRes != 0) {
+        log_error() << "Could not bind mount " << path << " to itself";
+        return ReturnCode::FAILURE;
+    }
+
     mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, nullptr);
-    assert(mountRes == 0);
+    if (mountRes != 0) {
+        log_error() << "Could not make " << path << " unbindable";
+        return ReturnCode::FAILURE;
+    }
+
     mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, nullptr);
-    assert(mountRes == 0);
+    if (mountRes != 0) {
+        log_error() << "Could not make " << path << " shared";
+        return ReturnCode::FAILURE;
+    }
+
     m_cleanupHandlers.push(new MountCleanUpHandler(path));
     log_debug() << "Created shared mount point at " << path;
 

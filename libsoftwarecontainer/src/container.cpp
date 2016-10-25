@@ -27,7 +27,6 @@
 #include <lxc/lxccontainer.h>
 #include <lxc/version.h>
 
-#include <assert.h>
 #include <pwd.h>
 #include <grp.h>
 
@@ -267,7 +266,11 @@ ReturnCode Container::start(pid_t *pid)
     *pid = m_container->init_pid(m_container);
     m_state = ContainerState::STARTED;
 
-    //    assert( m_container->is_running(m_container) );
+    if (isError(ensureContainerRunning())) {
+        log_error() << "Container started but is not running";
+        return ReturnCode::FAILURE;
+    }
+
     log_info() << "To connect to this container : lxc-attach -n " << id();
     return ReturnCode::SUCCESS;
 }

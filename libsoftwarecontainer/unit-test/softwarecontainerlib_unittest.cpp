@@ -80,11 +80,11 @@ TEST_F(SoftwareContainerApp, TestWayland) {
 
     });
     jobTrue.start();
-    ASSERT_TRUE(jobTrue.wait() == 0);
+    ASSERT_EQ(jobTrue.wait(), 0);
 
     CommandJob westonJob(getSc(),"/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
     westonJob.start();
-    ASSERT_TRUE(westonJob.wait() == 0);
+    ASSERT_EQ(westonJob.wait(), 0);
 
 }
 
@@ -112,7 +112,7 @@ TEST_F(SoftwareContainerApp, CommonFunctions) {
     ASSERT_EQ(testData, readBack);
 
     // And remove the file
-    ASSERT_TRUE(unlink(tempFilename) == 0);
+    ASSERT_EQ(unlink(tempFilename), 0);
 
     // New temp file
     fileDescriptor = mkstemp(tempFilename);
@@ -129,7 +129,7 @@ TEST_F(SoftwareContainerApp, CommonFunctions) {
     ASSERT_FALSE(isFile(tempFilename));
     ASSERT_FALSE(isDirectory(tempFilename));
 
-    const char *unexistingFile = "/run/user/10jhgj00/X11-dgfdgdagisplay";
+    const char unexistingFile[] = "/run/user/10jhgj00/X11-dgfdgdagisplay";
     ASSERT_FALSE(isSocket(unexistingFile));
     ASSERT_FALSE(isFile(unexistingFile));
     ASSERT_FALSE(isDirectory(unexistingFile));
@@ -148,7 +148,7 @@ TEST_F(SoftwareContainerApp, EnvVarsSet) {
     });
     job.setEnvironmentVariable("TESTVAR","YES");
     job.start();
-    ASSERT_TRUE(job.wait() == 0);
+    ASSERT_EQ(job.wait(), 0);
 }
 
 static constexpr int EXISTENT = 1;
@@ -162,7 +162,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
     });
     job0.start();
-    ASSERT_TRUE(job0.wait() == EXISTENT);
+    ASSERT_EQ(job0.wait(), EXISTENT);
 
     // Create two temporary files
     char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
@@ -171,8 +171,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     int fd2 = mkstemp(tempFilename2);
 
     // We could indeed create them.
-    ASSERT_TRUE(fd1 != 0);
-    ASSERT_TRUE(fd2 != 0);
+    ASSERT_NE(fd1, 0);
+    ASSERT_NE(fd2, 0);
 
     close(fd1);
     close(fd2);
@@ -188,7 +188,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobNotMounted.start();
-    ASSERT_TRUE(jobNotMounted.wait() == NON_EXISTENT);
+    ASSERT_EQ(jobNotMounted.wait(), NON_EXISTENT);
 
     // We configure the FileGateway to have both files mounted to their
     // respective locations. The first one's location can be found through
@@ -222,7 +222,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
     });
     jobEnv.start();
-    ASSERT_TRUE(jobEnv.wait() == EXISTENT);
+    ASSERT_EQ(jobEnv.wait(), EXISTENT);
 
     // Now the files pointed out by the env var should be available
     FunctionJob jobEnvFile(getSc(), [&] () {
@@ -230,7 +230,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return isFile(envVal) ? EXISTENT : NON_EXISTENT;
     });
     jobEnvFile.start();
-    ASSERT_TRUE(jobEnvFile.wait() == EXISTENT);
+    ASSERT_EQ(jobEnvFile.wait(), EXISTENT);
 
     // The files with symlinks should be available at its original location,
     // but inside the container
@@ -238,7 +238,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobSymlink.start();
-    ASSERT_TRUE(jobSymlink.wait() == EXISTENT);
+    ASSERT_EQ(jobSymlink.wait(), EXISTENT);
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
@@ -254,7 +254,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return readBack == testData ? 0 : 1;
     });
     jobReadData.start();
-    ASSERT_TRUE(jobReadData.wait() == 0);
+    ASSERT_EQ(jobReadData.wait(), 0);
 
     // Make sure we can't write to the file
     std::string badData = "This data should never be read";
@@ -271,8 +271,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     ASSERT_EQ(testData, readBack);
 
     // Remove the temp files
-    ASSERT_TRUE(unlink(tempFilename1) == 0);
-    ASSERT_TRUE(unlink(tempFilename2) == 0);
+    ASSERT_EQ(unlink(tempFilename1), 0);
+    ASSERT_EQ(unlink(tempFilename2), 0);
 }
 
 TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
@@ -282,7 +282,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
     });
     job0.start();
-    ASSERT_TRUE(job0.wait() == EXISTENT);
+    ASSERT_EQ(job0.wait(), EXISTENT);
 
     // Create two temporary files
     char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
@@ -291,8 +291,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     int fd2 = mkstemp(tempFilename2);
 
     // We could indeed create them.
-    ASSERT_TRUE(fd1 != 0);
-    ASSERT_TRUE(fd2 != 0);
+    ASSERT_NE(fd1, 0);
+    ASSERT_NE(fd2, 0);
 
     close(fd1);
     close(fd2);
@@ -308,7 +308,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobNotMounted.start();
-    ASSERT_TRUE(jobNotMounted.wait() == NON_EXISTENT);
+    ASSERT_EQ(jobNotMounted.wait(), NON_EXISTENT);
 
     std::string envVarName = "TEST_FILE_PATH";
     GatewayConfiguration config;
@@ -338,7 +338,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
     });
     jobEnv.start();
-    ASSERT_TRUE(jobEnv.wait() == EXISTENT);
+    ASSERT_EQ(jobEnv.wait(), EXISTENT);
 
     // Now the files pointed out by the env var should be available
     FunctionJob jobEnvFile(getSc(), [&] () {
@@ -346,7 +346,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return isFile(envVal) ? EXISTENT : NON_EXISTENT;
     });
     jobEnvFile.start();
-    ASSERT_TRUE(jobEnvFile.wait() == EXISTENT);
+    ASSERT_EQ(jobEnvFile.wait(), EXISTENT);
 
     // The files with symlinks should be available at its original location,
     // but inside the container
@@ -354,7 +354,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
     });
     jobSymlink.start();
-    ASSERT_TRUE(jobSymlink.wait() == EXISTENT);
+    ASSERT_EQ(jobSymlink.wait(), EXISTENT);
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
@@ -370,7 +370,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return readBack == testData ? 0 : 1;
     });
     jobReadData.start();
-    ASSERT_TRUE(jobReadData.wait() == 0);
+    ASSERT_EQ(jobReadData.wait(), 0);
 
     // Make sure we can write to the file
     std::string newData = "This data should have been written";
@@ -387,8 +387,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     ASSERT_EQ(newData, readBack);
 
     // Let's remove the temp files also
-    ASSERT_TRUE(unlink(tempFilename1) == 0);
-    ASSERT_TRUE(unlink(tempFilename2) == 0);
+    ASSERT_EQ(unlink(tempFilename1), 0);
+    ASSERT_EQ(unlink(tempFilename2), 0);
 }
 
 /**
@@ -399,7 +399,7 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     char tempFilename[] = "/tmp/blablaXXXXXX";
     int fileDescriptor = mkstemp(tempFilename);
 
-    ASSERT_TRUE(fileDescriptor != 0);
+    ASSERT_NE(fileDescriptor, 0);
 
     // create a temporary file with some content
     const char *content = "GFDGDFHDHRWG";
@@ -407,20 +407,20 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     close(fileDescriptor);
 
     FunctionJob job1(getSc(), [&] () {
-                return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
-            });
+        return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
+    });
     job1.start();
-    ASSERT_TRUE(job1.wait() == NON_EXISTENT);
+    ASSERT_EQ(job1.wait(), NON_EXISTENT);
 
     std::string pathInContainer;
     ReturnCode result = getSc().getContainer()->bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), pathInContainer, true);
     ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getSc(), [&] () {
-                return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
-            });
+        return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
+    });
     job2.start();
-    ASSERT_TRUE(job2.wait() == EXISTENT);
+    ASSERT_EQ(job2.wait(), EXISTENT);
 
 }
 
@@ -435,20 +435,20 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     ASSERT_TRUE(isDirectory(tempDirname));
 
     FunctionJob job1(getSc(), [&] () {
-                return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
-            });
+        return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
+    });
     job1.start();
-    ASSERT_TRUE(job1.wait() == NON_EXISTENT);
+    ASSERT_EQ(job1.wait(), NON_EXISTENT);
 
     std::string pathInContainer;
     ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
     ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getSc(), [&] () {
-                return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
-            });
+        return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
+    });
     job2.start();
-    ASSERT_TRUE(job2.wait() == EXISTENT);
+    ASSERT_EQ(job2.wait(), EXISTENT);
 
     // Write some data to a file inside the directory
     char *tempFilename = strcat(tempDirname, "/bluhuXXXXXX");
@@ -462,7 +462,7 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
                 return isFile(pathInContainer + "/" + basename(strdup(tempFilename))) ? EXISTENT : NON_EXISTENT;
             });
     job3.start();
-    ASSERT_TRUE(job3.wait() == EXISTENT);
+    ASSERT_EQ(job3.wait(), EXISTENT);
 }
 
 #include <stdlib.h>
@@ -558,7 +558,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
         else //Parent process
         {
             job1.start();
-            ASSERT_TRUE(job1.wait() == EXISTENT);
+            ASSERT_EQ(job1.wait(), EXISTENT);
         }
     }
     else // fork failed
@@ -620,12 +620,12 @@ TEST_F(SoftwareContainerApp, TestPulseAudioEnabled) {
         return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
     });
     job1.start();
-    ASSERT_TRUE(job1.wait() == EXISTENT);
+    ASSERT_EQ(job1.wait(), EXISTENT);
 
     CommandJob job2(getSc(), "/usr/bin/paplay " + pathInContainer);
     job2.start();
     ASSERT_TRUE(job2.isRunning());
-    ASSERT_TRUE(job2.wait() == 0);
+    ASSERT_EQ(job2.wait(), 0);
 }
 
 
@@ -665,11 +665,11 @@ TEST_F(SoftwareContainerApp, TestStdin) {
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
     CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
-    ASSERT_TRUE(job.wait() != 0);
+    ASSERT_NE(job.wait(), 0);
 
     CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
-    ASSERT_TRUE(job2.wait() != 0);
+    ASSERT_NE(job2.wait(), 0);
 }
 
 /**
@@ -688,11 +688,11 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
 
     CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
     job.start();
-    ASSERT_TRUE(job.wait() != 0);
+    ASSERT_NE(job.wait(), 0);
 
     CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
-    ASSERT_TRUE(job2.wait() != 0);
+    ASSERT_NE(job2.wait(), 0);
 }
 
 /**
@@ -725,11 +725,11 @@ TEST_F(SoftwareContainerApp, TestJobReturnCode) {
 
     CommandJob jobTrue(getSc(), "/bin/true");
     jobTrue.start();
-    ASSERT_TRUE(jobTrue.wait() == 0);
+    ASSERT_EQ(jobTrue.wait(), 0);
 
     CommandJob jobFalse(getSc(), "/bin/false");
     jobFalse.start();
-    ASSERT_FALSE(jobFalse.wait() == 0);
+    ASSERT_NE(jobFalse.wait(), 0);
 }
 
 /**
@@ -750,7 +750,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
                 getSc(),
                 "/usr/bin/dbus-send --system --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
-        ASSERT_TRUE(jobTrue.wait() == 0);
+        ASSERT_EQ(jobTrue.wait(), 0);
     }
 
     {
@@ -758,7 +758,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
                 getSc(),
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
-        ASSERT_TRUE(jobTrue.wait() == 0);
+        ASSERT_EQ(jobTrue.wait(), 0);
     }
 }
 
@@ -778,7 +778,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
                 getSc(),
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
-        ASSERT_TRUE(jobTrue.wait() == 0);
+        ASSERT_EQ(jobTrue.wait(), 0);
     }
 }
 
@@ -793,7 +793,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
                 "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue.start();
 
-        ASSERT_TRUE(jobTrue.wait() != 0);
+        ASSERT_NE(jobTrue.wait(), 0);
     }
 
     {
@@ -803,7 +803,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
         jobTrue.start();
 
         // We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
-        ASSERT_TRUE(jobTrue.wait() != 0);
+        ASSERT_NE(jobTrue.wait(), 0);
     }
 
 }
