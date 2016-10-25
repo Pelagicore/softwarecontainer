@@ -58,8 +58,7 @@ node {
     }
 
     // Always try to shut down the machine 
-    stage 'Shutdown'
-        // Shutdown the machine
-        sh "cd ${workspace} && vagrant halt || true"
+    // Shutdown the machine
+    sh "cd ${workspace} && vagrant halt || true"
 }
 
