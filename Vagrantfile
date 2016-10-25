@@ -53,10 +53,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.provision "shell", privileged: false, 
         #args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git", "-DENABLE_DLT_BACKEND=1"],
-        args: ["ivi-logging",
-               "https://github.com/Pelagicore/ivi-logging.git",
-               "",
-               "ba905f02e35f09aed200d9ca8bd615bf2524ea1a"],
+        args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
     config.vm.provision "shell", privileged: false, 
