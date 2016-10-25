@@ -36,7 +36,7 @@ SoftwareContainer provides a set of gateways. All of these gateways can be confi
 
 Files
 =====
-For some feautures configuration files are used to pass values to particular operations.
+For some features configuration files are used to pass values to particular operations.
 
 :LXC Configuration File:
 
