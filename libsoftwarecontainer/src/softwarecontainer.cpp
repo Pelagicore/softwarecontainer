@@ -68,11 +68,9 @@ void SoftwareContainer::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainL
     m_mainLoopContext = mainLoopContext;
 }
 
-
-void SoftwareContainer::setContainerIDPrefix(const std::string &name)
+void SoftwareContainer::setContainerID(const std::string &newID)
 {
-    m_containerID = name + Generator::gen_ct_name();
-    log_debug() << "Assigned container ID " << m_containerID;
+    m_containerID = newID;
 }
 
 void SoftwareContainer::setContainerName(const std::string &name)
@@ -81,16 +79,13 @@ void SoftwareContainer::setContainerName(const std::string &name)
     log_debug() << m_container->toString();
 }
 
-void SoftwareContainer::validateContainerID()
-{
-    if (m_containerID.size() == 0) {
-        setContainerIDPrefix("PLC-");
-    }
-}
-
-
 ReturnCode SoftwareContainer::preload()
 {
+    if (m_containerID.empty()) {
+        const std::string newID = "SC-PRELOADED-" + Generator::gen_ct_name();
+        setContainerID(newID);
+    }
+
     log_debug() << "Initializing container";
     if (isError(m_container->initialize())) {
         log_error() << "Could not setup container for preloading";
@@ -116,7 +111,10 @@ ReturnCode SoftwareContainer::preload()
 
 ReturnCode SoftwareContainer::init()
 {
-    validateContainerID();
+    if (m_containerID.empty()) {
+        const std::string newID = "SC-" + Generator::gen_ct_name();
+        setContainerID(newID);
+    }
 
     if (m_mainLoopContext->gobj() == nullptr) {
         log_error() << "Main loop context must be set first !";

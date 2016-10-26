@@ -33,7 +33,6 @@ bool SoftwareContainerAgent::triggerPreload()
 {
     while (m_preloadedContainers.size() < m_preloadCount) {
         auto container = new SoftwareContainer(m_softwarecontainerWorkspace);
-        container->setContainerIDPrefix("Preload-");
 
         if (isError(container->preload())) {
             log_error() << "Preloading failed";
@@ -151,7 +150,7 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, c
 
     m_containers[availableID] = SoftwareContainerPtr(container);
     log_debug() << "Created container with ID :" << availableID;
-    container->setContainerIDPrefix(prefix);
+    container->setContainerID(prefix + std::to_string(availableID));
     container->setMainLoopContext(m_mainLoopContext);
     container->init();
 

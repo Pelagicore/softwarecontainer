@@ -71,10 +71,11 @@ public:
     std::string getContainerDir();
     std::string getGatewayDir();
 
-    void setContainerIDPrefix(const std::string &prefix);
+    /**
+     * @brief Sets what ID will be used for the LXC container when creating it.
+     */
+    void setContainerID(const std::string &newID);
     void setContainerName(const std::string &name);
-
-    void validateContainerID();
 
     ObservableProperty<ContainerState> &getContainerState();
 
