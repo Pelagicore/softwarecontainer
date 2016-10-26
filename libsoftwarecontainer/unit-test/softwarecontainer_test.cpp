@@ -42,7 +42,6 @@ void SoftwareContainerTest::SetUp()
     ::testing::Test::SetUp();
     workspace = std::make_shared<Workspace>(false);
     sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace));
-    sc->setContainerIDPrefix("Test-");
     sc->setMainLoopContext(m_context);
     ASSERT_TRUE(isSuccess(sc->init()));
 }

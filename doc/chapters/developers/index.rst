@@ -37,7 +37,7 @@ subsequently uses:
     Agent -> SoftwareContainer [label = "new()"]
     Agent <-- SoftwareContainer
 
-    Agent -> SoftwareContainer [label = "setContainerIDPrefix()"]
+    Agent -> SoftwareContainer [label = "setContainerID()"]
     Agent <-- SoftwareContainer
 
     Agent -> SoftwareContainer [label = "setMainLoopContext()"]
