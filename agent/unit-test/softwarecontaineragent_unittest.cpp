@@ -38,13 +38,18 @@ public:
 
     void SetUp() override
     {
-        sca = new SoftwareContainerAgent(
-            m_context
-            , m_preloadCount
-            , m_shutdownContainers
-            , m_shutdownTimeout);
+        try {
+            sca = new SoftwareContainerAgent(
+                m_context
+                , m_preloadCount
+                , m_shutdownContainers
+                , m_shutdownTimeout);
 
-        workspace = sca->getWorkspace();
+            workspace = sca->getWorkspace();
+        } catch(ReturnCode failure) {
+            log_error() << "Exception in software agent constructor";
+            ASSERT_TRUE(false);
+        }
     }
 
     void TearDown() override
