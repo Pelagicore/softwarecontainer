@@ -226,7 +226,7 @@ private:
     // List of containers in use
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
     // List of pre-loaded containers
-    std::vector<SoftwareContainerPtr> m_preloadedContainers;
+    std::vector<std::pair<ContainerID, SoftwareContainerPtr>> m_preloadedContainers;
     // List of running jobs
     std::vector<CommandJob *> m_jobs;
 
