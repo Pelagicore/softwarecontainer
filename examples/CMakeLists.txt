@@ -16,5 +16,7 @@
 #
 # For further information see LICENSE
 
+# Unset RPATH. This should not be needed for any example.
+set(CMAKE_INSTALL_RPATH "")
 
 add_subdirectory(simple)
