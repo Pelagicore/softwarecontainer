@@ -62,7 +62,7 @@ Vagrant.configure(2) do |config|
 
     if ENV['BUILD_AND_TEST'] then
         config.vm.provision "shell", privileged: false,
-            args: ["softwarecontainer", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1"],
+            args: ["softwarecontainer", "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 -DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1 -DENABLE_EXAMPLES=1"],
             path: "cookbook/build/cmake-builder.sh"
 
             config.vm.provision "shell", privileged: false,
