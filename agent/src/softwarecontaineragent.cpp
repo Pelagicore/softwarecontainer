@@ -38,7 +38,9 @@ bool SoftwareContainerAgent::triggerPreload()
             log_error() << "Preloading failed";
             return false;
         }
-        m_preloadedContainers.push_back(SoftwareContainerPtr(container));
+        auto availableID = findSuitableId();
+        auto pair = std::pair<ContainerID, SoftwareContainerPtr>(availableID, SoftwareContainerPtr(container));
+        m_preloadedContainers.push_back(std::move(pair));
     }
 
     return true;
@@ -139,14 +141,17 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &prefix, c
     parseConfig(config);
 
     SoftwareContainer *container;
-    if (m_preloadedContainers.size() != 0) {
-        container = m_preloadedContainers[0].release();
-        m_preloadedContainers.erase(m_preloadedContainers.begin());
+    ContainerID availableID;
+    if (!m_preloadedContainers.empty()) {
+        auto pair = std::move(m_preloadedContainers.back());
+        m_preloadedContainers.pop_back();
+
+        availableID = pair.first;
+        container   = pair.second.release();
     } else {
+        availableID = findSuitableId();
         container = new SoftwareContainer(m_softwarecontainerWorkspace);
     }
-
-    ContainerID availableID = findSuitableId();
 
     m_containers[availableID] = SoftwareContainerPtr(container);
     log_debug() << "Created container with ID :" << availableID;
