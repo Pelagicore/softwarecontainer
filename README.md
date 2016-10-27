@@ -73,8 +73,9 @@ On a debian-based system, issue the following commands to build using Vagrant:
 git submodule init
 git submodule update
 
-sudo apt install virtualbox
-sudo apt install vagrant
+sudo apt update
+sudo apt install virtualbox vagrant
+
 vagrant up
 ```
 
