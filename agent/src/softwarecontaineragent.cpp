@@ -133,7 +133,7 @@ ContainerID SoftwareContainerAgent::findSuitableId()
     return availableID;
 }
 
-SoftwareContainer* SoftwareContainerAgent::makeSoftwareContainer(const ContainerID &containerID)
+SoftwareContainer *SoftwareContainerAgent::makeSoftwareContainer(const ContainerID &containerID)
 {
     log_debug() << "Created container with ID :" << containerID;
     auto container = new SoftwareContainer(m_softwarecontainerWorkspace, "SC-" + std::to_string(containerID));
