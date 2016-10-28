@@ -47,7 +47,7 @@
 
 #include <jsonparser.h>
 #include "commandjob.h"
-
+#include <queue>
 
 
 /**
@@ -225,10 +225,14 @@ private:
     ContainerID findSuitableId();
 
     std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
+
     // List of containers in use
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
-    // List of pre-loaded containers
-    std::vector<std::pair<ContainerID, SoftwareContainerPtr>> m_preloadedContainers;
+
+    // Queue of pre-loaded containers
+    // Push and pop are the only operations that is applied to this collection
+    // That is why it is a std::queue and not a std::map
+    std::queue<std::pair<ContainerID, SoftwareContainerPtr>> m_preloadedContainers;
     // List of running jobs
     std::vector<CommandJob *> m_jobs;
 

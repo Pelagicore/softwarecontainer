@@ -40,7 +40,7 @@ bool SoftwareContainerAgent::triggerPreload()
             return false;
         }
         auto pair = std::pair<ContainerID, SoftwareContainerPtr>(availableID, SoftwareContainerPtr(container));
-        m_preloadedContainers.push_back(std::move(pair));
+        m_preloadedContainers.push(std::move(pair));
     }
 
     return true;
@@ -150,8 +150,8 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
     SoftwareContainer *container;
     ContainerID availableID;
     if (!m_preloadedContainers.empty()) {
-        auto pair = std::move(m_preloadedContainers.back());
-        m_preloadedContainers.pop_back();
+        auto pair = std::move(m_preloadedContainers.front());
+        m_preloadedContainers.pop();
 
         availableID = pair.first;
         container   = pair.second.release();
