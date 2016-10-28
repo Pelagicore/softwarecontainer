@@ -16,8 +16,6 @@
 #
 # For further information see LICENSE
 
-# Unset RPATH. This should not be needed for any example.
-set(CMAKE_INSTALL_RPATH "")
 
-add_subdirectory(simple)
-add_subdirectory(hello-wayland)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+INSTALL(FILES launch.sh DESTINATION share/softwarecontainer/examples/wayland)
