@@ -27,20 +27,19 @@
 /*
  * Increase the counter and return an IP number based on that.
  */
-std::string Generator::gen_ip_addr(const char *ip_addr_net)
+std::string Generator::genIPAddr(const char *ipAddrNet)
 {
-
     counter++;
     if (counter < 2 || counter > 254) {
         counter = 2;
     }
 
     char ip[20];
-    snprintf(ip, sizeof(ip), "%s%d", ip_addr_net, counter);
+    snprintf(ip, sizeof(ip), "%s%d", ipAddrNet, counter);
     return std::string(ip);
 }
 
-std::string Generator::gen_ct_name()
+std::string Generator::genName()
 {
     static const char alphanum[] = "abcdefghijklmnopqrstuvwxyz";
     struct timeval time;
