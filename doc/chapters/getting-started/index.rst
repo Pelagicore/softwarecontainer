@@ -112,7 +112,6 @@ Start a container::
     --dest=com.pelagicore.SoftwareContainerAgent \
     /com/pelagicore/SoftwareContainerAgent \
     com.pelagicore.SoftwareContainerAgent.CreateContainer \
-    string:"MyPrefix-" \
     string:'[{"enableWriteBuffer": false}]'
 
 The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
@@ -140,7 +139,7 @@ Parameters:
 The method assumes the path ``pathInHost`` exists, so choose another path if it is more convenient.
 The result of the method is that the content of '/home/vagrant/container-test' will be
 visible in the path ``/gateways/app`` inside the container. The actual location on the host can be found in
-``/tmp/container/MyPrefix-<generated-name>/gateways/`` where the created ``app`` directory will be.
+``/tmp/container/SC-<container ID>/gateways/`` where the created ``app`` directory will be.
 
 
 Launch something in the container::

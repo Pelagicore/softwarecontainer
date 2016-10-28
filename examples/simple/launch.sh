@@ -71,7 +71,7 @@ $PCCMD org.freedesktop.DBus.Introspectable.Introspect
 $PCCMD com.pelagicore.SoftwareContainerAgent.Ping
 
 # Create a new container
-$PCCMD com.pelagicore.SoftwareContainerAgent.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+$PCCMD com.pelagicore.SoftwareContainerAgent.CreateContainer string:'[{"writeOften": "0"}]'
 
 # Expose a directory to the container
 $PCCMD com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer uint32:0 string:${SCRIPTPATH} string:app boolean:true
