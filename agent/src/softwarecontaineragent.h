@@ -213,7 +213,7 @@ public:
 
 private:
     // Helper for creating software container instances
-    SoftwareContainer* makeSoftwareContainer(const ContainerID &containerID);
+    SoftwareContainer *makeSoftwareContainer(const ContainerID &containerID);
 
     // Pre-loads container until the we have as many as configured
     bool triggerPreload();
