@@ -372,7 +372,7 @@ exception for port 1423.::
             "type": "INCOMING",
             "priority": 1,
             "rules": [
-                         { "host": "example.com", "port": "1234-5678", "target": "REJECT"},
+                         { "host": "example.com", "port": "1234:5678", "target": "REJECT"},
                          { "host": "example.com", "port": 1423, "target": "ACCEPT"},
                      ],
             "default": "DROP"
@@ -389,7 +389,7 @@ order to achive this the order of the rules has to be changed::
             "priority": 1,
             "rules": [
                          { "host": "example.com", "port": 1423, "target": "ACCEPT"},
-                         { "host": "example.com", "port": "1234-5678", "target": "REJECT"},
+                         { "host": "example.com", "port": "1234:5678", "target": "REJECT"},
                      ],
             "default": "DROP"
         }
@@ -411,7 +411,7 @@ An example of valid network gateway configuration::
             "priority": 1,
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
-                         { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
+                         { "host": "example.com", "port": "80:85", "target": "ACCEPT"},
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
                          { "host": "203.0.113.0/24", "target": "DROP"},
                      ],
@@ -422,7 +422,7 @@ An example of valid network gateway configuration::
             "priority": 3,
             "rules": [
                          { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
-                         { "host": "example.com", "port": "80-85", "target": "ACCEPT"},
+                         { "host": "example.com", "port": "80:85", "target": "ACCEPT"},
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
                          { "host": "203.0.113.0/24", "target": "REJECT"},
                      ],

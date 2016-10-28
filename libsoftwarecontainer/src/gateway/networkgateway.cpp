@@ -25,9 +25,9 @@
 #include "generators.h"
 
 NetworkGateway::NetworkGateway() :
-    Gateway(ID),
-    m_internetAccess(false),
-    m_interfaceInitialized(false)
+Gateway(ID),
+m_internetAccess(false),
+m_interfaceInitialized(false)
 {
 }
 
@@ -37,26 +37,26 @@ NetworkGateway::~NetworkGateway()
 
 ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
-    Entry e;
-    if (!read(element, "type", e.type)) {
+    IPTableEntry e;
+    if (!read(element, "type", e.m_type)) {
         log_error() << "No type specified in network config.";
         return ReturnCode::FAILURE;
     }
 
-    if (e.type != "INCOMING" && e.type != "OUTGOING") {
-        log_error() << e.type << " is not a valid type ('INCOMING' or 'OUTGOING')";
+    if (e.m_type != "INCOMING" && e.m_type != "OUTGOING") {
+        log_error() << e.m_type << " is not a valid type ('INCOMING' or 'OUTGOING')";
         return ReturnCode::FAILURE;
     }
 
     int p;
     if (!read(element, "priority", p)) {
-      log_error() << "No priority specified in network config.";
-      return ReturnCode::FAILURE;
+        log_error() << "No priority specified in network config.";
+        return ReturnCode::FAILURE;
     }
-    e.priority = p;
+    e.m_priority = p;
 
-    if (e.priority < 1) {
-        log_error() << "Priority can not be less than 1 but is " << e.priority;
+    if (e.m_priority < 1) {
+        log_error() << "Priority can not be less than 1 but is " << e.m_priority;
         return ReturnCode::FAILURE;
     }
 
@@ -76,7 +76,7 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
     json_t *val;
     json_array_foreach(rules, ix, val) {
         if (json_is_object(val)) {
-            if (isError(parseRule(val, e.rules))) {
+            if (isError(parseRule(val, e.m_rules))) {
                 log_error() << "Could not parse rule config";
                 return ReturnCode::FAILURE;
             }
@@ -92,8 +92,9 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    e.defaultTarget = parseTarget(readTarget);
-    if (e.defaultTarget == Target::INVALID_TARGET) {
+    if (parseTarget(readTarget)) {
+        e.m_defaultTarget = readTarget;
+    } else {
         log_error() << "Default target '" << readTarget << "' is not a supported target.Invalid target.";
         return ReturnCode::FAILURE;
     }
@@ -102,7 +103,7 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 
     // --- TEMPORARY WORKAROUND ---
     // in the wait of activate() being rewritten
-    if (e.defaultTarget == Target::ACCEPT) {
+    if ("ACCEPT" == e.m_defaultTarget) {
         m_internetAccess = true;
         m_gateway = "10.0.3.1";
     }
@@ -110,17 +111,18 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<Rule> &rules)
+ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules)
 {
-    Rule r;
+    IPTableEntry::Rule r;
     std::string target;
     if (!read(element, "target", target)) {
         log_error() << "Target not specified in the network config";
         return ReturnCode::FAILURE;
     }
 
-    r.target = parseTarget(target);
-    if (r.target == Target::INVALID_TARGET) {
+    if (parseTarget(target)) {
+        r.target = target;
+    } else {
         log_error() << target << " is not a valid target.";
         return ReturnCode::FAILURE;
     }
@@ -142,50 +144,39 @@ ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<Rule> &r
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode NetworkGateway::parsePort(const json_t *element, std::vector<unsigned int> &ports)
+ReturnCode NetworkGateway::parsePort(const json_t *element,  IPTableEntry::portFilter &ports)
 {
-    // Port formatted as single integer
+    // Port formatted as single integer means there is only one port
     if (json_is_integer(element)) {
-        int port = json_integer_value(element);
-        ports.push_back(port);
-
+        auto port = json_integer_value(element);
+        ports.any = true;
+        ports.multiport = false;
+        ports.ports = std::to_string(port);
     // Port formatted as a string representing a range
     } else if (json_is_string(element)) {
-        std::string portRange = json_string_value(element);
-
-        const std::string::size_type n = portRange.find("-");
-        const std::string first = portRange.substr(0, n);
-        const std::string last = portRange.substr(n + 1);
-
-        int startPort;
-        if (!parseInt(first.c_str(), &startPort)) {
-             log_error() << "Starting port in range " << portRange << "is not an integer.";
-             return ReturnCode::FAILURE;
-        }
-
-        int endPort;
-        if (!parseInt(first.c_str(), &endPort)) {
-             log_error() << "End port in range " << portRange << "is not an integer.";
-             return ReturnCode::FAILURE;
-        }
-
-        for (int i = startPort; i <= endPort; ++i) {
-            ports.push_back(i);
-        }
-
+        auto portRange = json_string_value(element);
+        ports.any = true;
+        ports.multiport = true;
+        ports.ports = portRange;
     // Port formatted as a list of integers
     } else if (json_is_array(element)) {
         size_t ix;
         json_t *val;
+        std::string portList = "";
+
         json_array_foreach(element, ix, val) {
             if (!json_is_integer(val)) {
                 log_error() << "Entry in port array is not an integer.";
                 return ReturnCode::FAILURE;
             }
 
-            int port = json_integer_value(element);
-            ports.push_back(port);
+            int port = json_integer_value(val);
+            portList = portList + std::to_string(port) + ",";
         }
+        portList.pop_back();
+        ports.any = true;
+        ports.multiport = true;
+        ports.ports = portList;
     } else {
         log_error() << "Rules specified in an invalid format";
         return ReturnCode::FAILURE;
@@ -193,20 +184,12 @@ ReturnCode NetworkGateway::parsePort(const json_t *element, std::vector<unsigned
     return ReturnCode::SUCCESS;
 }
 
-NetworkGateway::Target NetworkGateway::parseTarget(const std::string &str)
+bool NetworkGateway::parseTarget(const std::string &str)
 {
-    if (str == "ACCEPT") {
-        return Target::ACCEPT;
+    if (str == "ACCEPT" || str == "DROP" || str == "REJECT") {
+        return true;
     }
-
-    if (str == "DROP") {
-        return Target::DROP;
-    }
-
-    if (str == "REJECT") {
-        return Target::REJECT;
-    }
-    return Target::INVALID_TARGET;
+    return false;
 }
 
 bool NetworkGateway::activateGateway()
@@ -230,6 +213,9 @@ bool NetworkGateway::activateGateway()
 
     if (m_internetAccess) {
         generateIP();
+        for (auto entry:m_entries) {
+            entry.applyRules();
+        }
         return up();
     } else {
         return down();
@@ -347,3 +333,54 @@ bool NetworkGateway::isBridgeAvailable()
     return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
 }
 
+std::string IPTableEntry::getChain() {
+    if ( "INCOMING" == m_type) {
+        return "INPUT";
+    } else if ("OUTGOING" == m_type) {
+        return "OUTPUT";
+    } else if ("FORWARD" == m_type) {
+        return "FORWARD";
+    }
+    return "";
+}
+
+bool IPTableEntry::applyRules()
+{
+    for (auto rule:m_rules) {
+        if (!insertRule(rule, getChain())) {
+            log_error() << "Couldn't apply the rule " << rule.target;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool IPTableEntry::insertRule(Rule rule, std::string type)
+{
+    if (type.empty()) {
+        log_error() << "Chain type is not recognized :" << type;
+        return false;
+    }
+
+    std::string iptableCommand = "iptables -A " + type;
+
+    if (!rule.host.empty()) {
+        iptableCommand = iptableCommand + " -s " + rule.host ;
+    }
+
+    if (rule.ports.any) {
+        if (rule.ports.multiport) {
+            iptableCommand = iptableCommand + " -p tcp --match multiport --sports " + rule.ports.ports;
+        } else {
+            iptableCommand = iptableCommand + " -p tcp --sport " + rule.ports.ports;
+        }
+
+    }
+
+    iptableCommand = iptableCommand + " -j " + rule.target;
+    log_debug() << "Add network rule : " <<  iptableCommand;
+
+    system(iptableCommand.c_str());
+    return true;
+}
