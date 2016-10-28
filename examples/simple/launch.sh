@@ -62,22 +62,44 @@ AGENTPID="$!"
 # Let the agent start up
 sleep 2
 
-export PCCMD="dbus-send --${BUS} --print-reply --dest=com.pelagicore.SoftwareContainerAgent /com/pelagicore/SoftwareContainerAgent"
+# Destination
+PCNAME="com.pelagicore.SoftwareContainerAgent"
+# Object path
+PCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
+# Prefix for dbus methods
+AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
+export PCCMD="dbus-send --${BUS} --print-reply --dest=$PCNAME $PCOBJPATH"
 
 # Introspect the agent
 $PCCMD org.freedesktop.DBus.Introspectable.Introspect
 
 # Ping the agent
-$PCCMD com.pelagicore.SoftwareContainerAgent.Ping
+$PCCMD $AGENTPREFIX.Ping
 
 # Create a new container
-$PCCMD com.pelagicore.SoftwareContainerAgent.CreateContainer string:'[{"writeOften": "0"}]'
+$PCCMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+
+# A few thing that we use for more or less every call below
+CONTAINERID="uint32:0"
+ROOTID="uint32:0"
+OUTFILE="/tmp/stdout"
 
 # Expose a directory to the container
-$PCCMD com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer uint32:0 string:${SCRIPTPATH} string:app boolean:true
+$PCCMD $AGENTPREFIX.BindMountFolderInContainer \
+    $CONTAINERID \
+    string:${SCRIPTPATH} \
+    string:app \
+    boolean:true
+APPBASE="/gateways/app"
 
 # Run the simple example
-$PCCMD com.pelagicore.SoftwareContainerAgent.LaunchCommand uint32:0 uint32:0 string:/gateways/app/simple string:/gateways/app/ string:/tmp/stdout dict:string:string:""
+$PCCMD $AGENTPREFIX.LaunchCommand \
+    $CONTAINERID \
+    $ROOTID \
+    string:$APPBASE/simple \
+    string:$APPBASE \
+    string:$OUTFILE \
+    dict:string:string:""
 
 # Let the example run for a while
 sleep 30

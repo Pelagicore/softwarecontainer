@@ -22,10 +22,6 @@
 # container, the example will launch simple.c in a container, and observe that
 # it is killed inside the container by the OOM killer.
 
-# Register the path of the script. This is what we will mount in to the
-# container later, in order to access the 'simple' binary.
-SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
-
 help() {
     echo "$0 [-b [system|session]]"
     echo ""
@@ -36,7 +32,7 @@ help() {
 
 BUS="system"
 while getopts ":b:h" opt; do
-    case $opt in 
+    case $opt in
     b)
         BUS="$OPTARG"
         ;;
@@ -81,38 +77,60 @@ AGENTPID="$!"
 # Let the agent start up
 sleep 2
 
-export PCCMD="dbus-send --${BUS} --print-reply --dest=com.pelagicore.SoftwareContainerAgent /com/pelagicore/SoftwareContainerAgent"
+# Destination
+PCNAME="com.pelagicore.SoftwareContainerAgent"
+# Object path
+PCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
+# Prefix for dbus methods
+AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
+export PCCMD="dbus-send --${BUS} --print-reply --dest=$PCNAME $PCOBJPATH"
 
 # Introspect the agent
 $PCCMD org.freedesktop.DBus.Introspectable.Introspect
 
 # Ping the agent
-$PCCMD com.pelagicore.SoftwareContainerAgent.Ping
+$PCCMD $AGENTPREFIX.Ping
 
 # Create a new container
-$PCCMD com.pelagicore.SoftwareContainerAgent.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+$PCCMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+
+# A few thing that we use for more or less every call below
+CONTAINERID="uint32:0"
+ROOTID="uint32:0"
+OUTFILE="/tmp/stdout"
 
 # Set gateway config allowing wayland access
 WAYLANDKEY="wayland"
 WAYLANDVALUE="[{\"enabled\": true}]"
 
 # Enable wayland gateway
-$PCCMD com.pelagicore.SoftwareContainerAgent.SetGatewayConfigs uint32:0 dict:string:string:"$WAYLANDKEY","$WAYLANDVALUE"
-
-# Expose a directory to the container
-$PCCMD com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer uint32:0 string:${SCRIPTPATH} string:app boolean:true
+$PCCMD $AGENTPREFIX.SetGatewayConfigs \
+    $CONTAINERID \
+    dict:string:string:"$WAYLANDKEY","$WAYLANDVALUE"
 
 # Run the simple egl example from weston
-$PCCMD com.pelagicore.SoftwareContainerAgent.LaunchCommand uint32:0 uint32:0 string:"$SIMPLEWESTON" string:/gateways/app string:/tmp/stdout dict:string:string:""
+$PCCMD $AGENTPREFIX.LaunchCommand \
+    $CONTAINERID \
+    $ROOTID \
+    string:"$SIMPLEWESTON" \
+    string:/gateways/app \
+    string:${OUTFILE}-simple \
+    dict:string:string:""
 
 # Run weston-flower
-$PCCMD com.pelagicore.SoftwareContainerAgent.LaunchCommand uint32:0 uint32:0 string:"$FLOWERWESTON" string:/gateways/app string:/tmp/stdout dict:string:string:""
+$PCCMD $AGENTPREFIX.LaunchCommand \
+    $CONTAINERID \
+    $ROOTID \
+    string:"$FLOWERWESTON" \
+    string:/gateways/app \
+    string:${OUTFILE}-flower \
+    dict:string:string:""
 
 # Let the examples run for a while
-sleep 5
+sleep 30
 
 # Shutdown the container
-$PCCMD com.pelagicore.SoftwareContainerAgent.ShutDownContainer uint32:0
+$PCCMD $AGENTPREFIX.ShutDownContainer $CONTAINERID
 
 # Clean up
 kill $WESTONPID
