@@ -36,7 +36,6 @@ CreateContainer
 Creates a new container and returns created container id.
 
 :Parameters:
-        :prefix: ``string`` prefix for name of back-end container.
         :config: ``string`` config file in json format.
         
                 Example config JSON::
