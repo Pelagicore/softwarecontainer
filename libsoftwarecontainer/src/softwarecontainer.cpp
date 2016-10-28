@@ -55,7 +55,6 @@ SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace, const
                               m_workspace->m_enableWriteBuffer,
                               m_workspace->m_containerShutdownTimeout))
 {
-    log_debug() << "Software container called with " + containerID;
     m_containerState = ContainerState::CREATED;
 }
 
