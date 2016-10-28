@@ -84,7 +84,7 @@ protection for the filesystem by only allowing a final write of the changes in
 the upper layer when the container is shutting down.
 
 To enable the write buffer, set the ``enableWriteBuffer`` option in the
-``com.pelagicore.SoftwareContainerAgent.CreateContainer(prefix, config)`` call.
+``com.pelagicore.SoftwareContainerAgent.CreateContainer(config)`` call.
 This is done using the config parameter in specific, for example, this JSON
 config::
 
