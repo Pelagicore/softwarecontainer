@@ -48,7 +48,7 @@ public:
      * @param ip_addr_net A 24 bit network portion of an IP address
      * @return A string representing an IP address
      */
-    std::string gen_ip_addr(const char *ip_addr_net);
+    std::string genIPAddr(const char *ipAddrNet);
 
     /**
      * @brief Generate a container name
@@ -58,7 +58,7 @@ public:
      * @return name upon success
      * @return NULL upon failure
      */
-    static std::string gen_ct_name();
+    static std::string genName();
 
 private:
     int counter = 0;

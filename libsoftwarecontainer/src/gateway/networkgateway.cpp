@@ -251,7 +251,7 @@ bool NetworkGateway::generateIP()
     log_debug() << "Generating ip-address";
     const char *ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
 
-    m_ip = m_generator.gen_ip_addr(ipAddrNet);
+    m_ip = m_generator.genIPAddr(ipAddrNet);
     log_debug() << "IP set to " << m_ip;
 
     return true;
