@@ -40,7 +40,7 @@ class SoftwareContainer :
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    SoftwareContainer(std::shared_ptr<Workspace> workspace);
+    SoftwareContainer(std::shared_ptr<Workspace> workspace, const std::string &id);
 
     ~SoftwareContainer();
 
@@ -67,14 +67,9 @@ public:
     ReturnCode init();
 
     std::shared_ptr<ContainerAbstractInterface> getContainer();
-    const std::string &getContainerID();
     std::string getContainerDir();
     std::string getGatewayDir();
 
-    /**
-     * @brief Sets what ID will be used for the LXC container when creating it.
-     */
-    void setContainerID(const std::string &newID);
     void setContainerName(const std::string &name);
 
     ObservableProperty<ContainerState> &getContainerState();
@@ -103,7 +98,6 @@ private:
 
     std::shared_ptr<Workspace> m_workspace;
 
-    std::string m_containerID;
     std::string m_containerName;
     ObservableWritableProperty<ContainerState> m_containerState;
 

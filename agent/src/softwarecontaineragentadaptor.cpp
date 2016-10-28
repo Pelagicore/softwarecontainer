@@ -43,9 +43,9 @@ bool softwarecontainer::SoftwareContainerAgentAdaptor::SetCapabilities(const uin
     return m_agent.setCapabilities(containerID, capabilities);
 }
 
-uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::CreateContainer(const std::string &name, const std::string &config)
+uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::CreateContainer(const std::string &config)
 {
-    return m_agent.createContainer(name, config);
+    return m_agent.createContainer(config);
 }
 
 void softwarecontainer::SoftwareContainerAgentAdaptor::SetContainerName(const uint32_t &containerID, const std::string &name)

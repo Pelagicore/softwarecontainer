@@ -114,13 +114,12 @@ public:
     /**
      * @brief Create a new container
      *
-     * @param prefix a string to prefix the container name with
      * @param config container-wide configuration string
      *
      * @return ContainerID for the newly created container
      *
      */
-    ContainerID createContainer(const std::string &prefix, const std::string &config);
+    ContainerID createContainer(const std::string &config);
 
 
     /**
@@ -213,6 +212,9 @@ public:
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
+    // Helper for creating software container instances
+    SoftwareContainer* makeSoftwareContainer(const ContainerID &containerID);
+
     // Pre-loads container until the we have as many as configured
     bool triggerPreload();
     // Find a job given a pid

@@ -32,7 +32,7 @@ public:
 
     bool SetCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities) override;
 
-    uint32_t CreateContainer(const std::string &name, const std::string &config) override;
+    uint32_t CreateContainer(const std::string &config) override;
 
     void SetContainerName(const uint32_t &containerID, const std::string &name) override;
 

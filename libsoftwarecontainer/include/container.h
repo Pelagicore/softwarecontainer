@@ -75,8 +75,7 @@ public:
      * @param shutdownTimeout Timeout for shutdown of container.
      */
     Container(
-            const std::string &id
-            , const std::string &name
+            const std::string id
             , const std::string &configFile
             , const std::string &containerRoot
             , bool enableWriteBuffer = false
@@ -177,14 +176,9 @@ private:
     /**
      * @brief The unique name of the LXC container
      */
-    const std::string &m_id;
+    const std::string m_id;
 
     std::string m_rootFSPath;
-
-    /**
-     * @brief The name assigned to the container
-     */
-    const std::string &m_name;
 
     /**
      * @brief Pointer to the LXC container

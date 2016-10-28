@@ -47,15 +47,15 @@
 
 namespace softwarecontainer {
 
-SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace) :
+SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace, const std::string &containerID) :
     m_workspace(workspace),
-    m_container(new Container(getContainerID()
-                              , m_containerName
-                              , m_workspace->m_containerConfigPath
-                              , m_workspace->m_containerRootDir
-                              , m_workspace->m_enableWriteBuffer
-                              , m_workspace->m_containerShutdownTimeout))
+    m_container(new Container(containerID,
+                              m_workspace->m_containerConfigPath,
+                              m_workspace->m_containerRootDir,
+                              m_workspace->m_enableWriteBuffer,
+                              m_workspace->m_containerShutdownTimeout))
 {
+    log_debug() << "Software container called with " + containerID;
     m_containerState = ContainerState::CREATED;
 }
 
@@ -68,11 +68,6 @@ void SoftwareContainer::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainL
     m_mainLoopContext = mainLoopContext;
 }
 
-void SoftwareContainer::setContainerID(const std::string &newID)
-{
-    m_containerID = newID;
-}
-
 void SoftwareContainer::setContainerName(const std::string &name)
 {
     m_containerName = name;
@@ -81,11 +76,6 @@ void SoftwareContainer::setContainerName(const std::string &name)
 
 ReturnCode SoftwareContainer::preload()
 {
-    if (m_containerID.empty()) {
-        const std::string newID = "SC-PRELOADED-" + Generator::gen_ct_name();
-        setContainerID(newID);
-    }
-
     log_debug() << "Initializing container";
     if (isError(m_container->initialize())) {
         log_error() << "Could not setup container for preloading";
@@ -111,11 +101,6 @@ ReturnCode SoftwareContainer::preload()
 
 ReturnCode SoftwareContainer::init()
 {
-    if (m_containerID.empty()) {
-        const std::string newID = "SC-" + Generator::gen_ct_name();
-        setContainerID(newID);
-    }
-
     if (m_mainLoopContext->gobj() == nullptr) {
         log_error() << "Main loop context must be set first !";
         return ReturnCode::FAILURE;
@@ -141,8 +126,9 @@ ReturnCode SoftwareContainer::init()
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-    addGateway(new DBusGateway( DBusGateway::SessionProxy, getGatewayDir(), getContainerID()));
-    addGateway(new DBusGateway( DBusGateway::SystemProxy, getGatewayDir(), getContainerID()));
+    std::string containerID = std::string(m_container->id());
+    addGateway(new DBusGateway( DBusGateway::SessionProxy, getGatewayDir(), containerID ));
+    addGateway(new DBusGateway( DBusGateway::SystemProxy,  getGatewayDir(), containerID ));
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
@@ -242,17 +228,13 @@ std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
 
 std::string SoftwareContainer::getContainerDir()
 {
-    return m_workspace->m_containerRootDir + "/" + getContainerID();
+    const std::string containerID = std::string(m_container->id());
+    return m_workspace->m_containerRootDir + "/" + containerID;
 }
 
 std::string SoftwareContainer::getGatewayDir()
 {
     return getContainerDir() + "/gateways";
-}
-
-const std::string &SoftwareContainer::getContainerID()
-{
-    return m_containerID;
 }
 
 ObservableProperty<ContainerState> &SoftwareContainer::getContainerState()

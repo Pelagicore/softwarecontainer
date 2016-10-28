@@ -62,7 +62,6 @@ def run_test(num_starts=3):
 
             # A basic container configuration, content is not important for this test.
             container_data = {
-                Container.PREFIX: "profiling-test-",
                 Container.CONFIG: '[{"enableWriteBuffer": false}]',
                 Container.BIND_MOUNT_DIR: "app",
                 Container.HOST_PATH: CURRENT_DIR
