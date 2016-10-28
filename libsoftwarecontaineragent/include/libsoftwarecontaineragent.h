@@ -62,7 +62,7 @@ public:
 
     ReturnCode writeToStdIn(pid_t pid, const void *data, size_t length);
 
-    ReturnCode createContainer(const std::string &idPrefix, ContainerID &containerID, const std::string &config);
+    ReturnCode createContainer(ContainerID &containerID, const std::string &config);
 
     ReturnCode setContainerName(ContainerID containerID, const std::string &name);
 
@@ -109,7 +109,7 @@ public:
             config = "{enableWriteBuffer: \"1\"}";
         else
             config = "{enableWriteBuffer: \"0\"}";
-        auto ret = m_agent.createContainer(m_name, m_containerID, config);
+        auto ret = m_agent.createContainer(m_containerID, config);
         if (ret == ReturnCode::SUCCESS) {
             m_containerState = ContainerState::PRELOADED;
         }

@@ -575,7 +575,7 @@ TEST(SoftwareContainer, MultithreadTest) {
     static const int TIMEOUT = 20;
 
     std::shared_ptr<Workspace> workspacePtr(new Workspace());
-    SoftwareContainer lib(workspacePtr);
+    SoftwareContainer lib(workspacePtr, "SC-TEST-MultithreadTest");
     lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;

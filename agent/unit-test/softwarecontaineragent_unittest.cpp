@@ -60,14 +60,14 @@ public:
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
     SoftwareContainer *container;
-    ContainerID id = sca->createContainer("iejr-", "");
+    ContainerID id = sca->createContainer("");
     bool retval = sca->checkContainer(id, container);
     ASSERT_TRUE(retval == true);
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
     SoftwareContainer *container;
-    ContainerID id = sca->createContainer("iejr-", "");
+    ContainerID id = sca->createContainer("");
     sca->deleteContainer(id);
     bool retval = sca->checkContainer(id, container);
     ASSERT_TRUE(retval == false);
@@ -77,7 +77,7 @@ TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
  *TBD: This test needs to be fixed, somethings going on in it.
 TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
     log_error() << "gobbles1";
-    ContainerID id = sca->createContainer("iejr-", "[{\"enableWriteBuffer\": true}]");
+    ContainerID id = sca->createContainer("[{\"enableWriteBuffer\": true}]");
     // This is actually only true if no other containers have been created
     // before this one. Might need to be fixed somehow.
     log_error() << "gobbles2";

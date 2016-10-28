@@ -57,15 +57,15 @@ void Container::init_lxc()
     }
 }
 
-Container::Container(const std::string &id, const std::string &name, const std::string &configFile,
+Container::Container(const std::string id, const std::string &configFile,
         const std::string &containerRoot, bool enableWriteBuffer, int shutdownTimeout) :
     m_configFile(configFile),
     m_id(id),
-    m_name(name),
     m_containerRoot(containerRoot),
     m_enableWriteBuffer(enableWriteBuffer),
     m_shutdownTimeout(shutdownTimeout)
 {
+    log_debug() << "Container constructed with " + id;
     init_lxc();
 }
 
@@ -113,7 +113,6 @@ std::string Container::toString()
     ss << "LXC " << id() << " ";
     if (m_container != nullptr) {
         ss << "id: " << id()
-           << " name : " << m_name
            << " / state:" << m_container->state(m_container)
            << " / initPID:" << m_container->init_pid(m_container)
            << " / LastError: " << m_container->error_string

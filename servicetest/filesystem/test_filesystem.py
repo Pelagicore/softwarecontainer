@@ -35,7 +35,6 @@ def logfile_path():
     return CURRENT_DIR + "/test.log"
 
 DATA = {
-    Container.PREFIX: "dbus-test-",
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
     Container.BIND_MOUNT_DIR: "app",
     Container.HOST_PATH: CURRENT_DIR
