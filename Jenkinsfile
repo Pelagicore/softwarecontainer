@@ -9,7 +9,8 @@ node {
     try {
         // Store the directory we are executed in as our workspace.
         // These are the build parameters we want to use
-        String buildParams = "-DENABLE_DOC=1 -DENABLE_TEST=ON -DENABLE_COVERAGE=1 "
+        String buildParams = "-DENABLE_TEST=ON -DENABLE_COVERAGE=1 "
+        buildParams       += "-DENABLE_USER_DOC=1 -DENABLE_API_DOC=1 "
         buildParams       += "-DENABLE_SYSTEMD=1 -DENABLE_PROFILING=1 "
         buildParams       += "-DCMAKE_INSTALL_PREFIX=/usr"
 
@@ -33,8 +34,10 @@ node {
         stage 'Clang'
             runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
                                      softwarecontainer clang \"${buildParams}\"")
-        stage 'Documentation'
-            runInVagrant(workspace, 'cd softwarecontainer/build && make doc')
+        stage 'User documentation'
+            runInVagrant(workspace, 'cd softwarecontainer/build && make user-doc')
+        stage 'API documentation'
+            runInVagrant(workspace, 'cd softwarecontainer/build && make api-doc')
         stage 'UnitTest'
             runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.sh")
         stage 'ServiceTest'
@@ -57,7 +60,7 @@ node {
         currentBuild.result = "FAILURE"
     }
 
-    // Always try to shut down the machine 
+    // Always try to shut down the machine
     // Shutdown the machine
     sh "cd ${workspace} && vagrant halt || true"
 }
