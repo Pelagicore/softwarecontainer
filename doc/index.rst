@@ -11,6 +11,7 @@ Contents:
 
     chapters/intro/*
     chapters/getting-started/*
+    chapters/examples/*
     chapters/api/*
     chapters/design/*
     chapters/configuration/*
