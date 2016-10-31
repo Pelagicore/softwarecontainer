@@ -36,7 +36,7 @@ help() {
 
 BUS="system"
 while getopts ":b:h" opt; do
-    case $opt in 
+    case $opt in
     b)
         BUS="$OPTARG"
         ;;
@@ -63,21 +63,21 @@ AGENTPID="$!"
 sleep 2
 
 # Destination
-PCNAME="com.pelagicore.SoftwareContainerAgent"
+SCNAME="com.pelagicore.SoftwareContainerAgent"
 # Object path
-PCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
+SCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
 # Prefix for dbus methods
 AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
-export PCCMD="dbus-send --${BUS} --print-reply --dest=$PCNAME $PCOBJPATH"
+export SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 
 # Introspect the agent
-$PCCMD org.freedesktop.DBus.Introspectable.Introspect
+$SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 
 # Ping the agent
-$PCCMD $AGENTPREFIX.Ping
+$SC_CMD $AGENTPREFIX.Ping
 
 # Create a new container
-$PCCMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="uint32:0"
@@ -85,7 +85,7 @@ ROOTID="uint32:0"
 OUTFILE="/tmp/stdout"
 
 # Expose a directory to the container
-$PCCMD $AGENTPREFIX.BindMountFolderInContainer \
+$SC_CMD $AGENTPREFIX.BindMountFolderInContainer \
     $CONTAINERID \
     string:${SCRIPTPATH} \
     string:app \
@@ -93,7 +93,7 @@ $PCCMD $AGENTPREFIX.BindMountFolderInContainer \
 APPBASE="/gateways/app"
 
 # Run the simple example
-$PCCMD $AGENTPREFIX.LaunchCommand \
+$SC_CMD $AGENTPREFIX.LaunchCommand \
     $CONTAINERID \
     $ROOTID \
     string:$APPBASE/simple \
