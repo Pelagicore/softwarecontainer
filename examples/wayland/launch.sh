@@ -78,21 +78,21 @@ AGENTPID="$!"
 sleep 2
 
 # Destination
-PCNAME="com.pelagicore.SoftwareContainerAgent"
+SCNAME="com.pelagicore.SoftwareContainerAgent"
 # Object path
-PCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
+SCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
 # Prefix for dbus methods
 AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
-export PCCMD="dbus-send --${BUS} --print-reply --dest=$PCNAME $PCOBJPATH"
+export SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 
 # Introspect the agent
-$PCCMD org.freedesktop.DBus.Introspectable.Introspect
+$SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 
 # Ping the agent
-$PCCMD $AGENTPREFIX.Ping
+$SC_CMD $AGENTPREFIX.Ping
 
 # Create a new container
-$PCCMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="uint32:0"
@@ -104,12 +104,12 @@ WAYLANDKEY="wayland"
 WAYLANDVALUE="[{\"enabled\": true}]"
 
 # Enable wayland gateway
-$PCCMD $AGENTPREFIX.SetGatewayConfigs \
+$SC_CMD $AGENTPREFIX.SetGatewayConfigs \
     $CONTAINERID \
     dict:string:string:"$WAYLANDKEY","$WAYLANDVALUE"
 
 # Run the simple egl example from weston
-$PCCMD $AGENTPREFIX.LaunchCommand \
+$SC_CMD $AGENTPREFIX.LaunchCommand \
     $CONTAINERID \
     $ROOTID \
     string:"$SIMPLEWESTON" \
@@ -118,7 +118,7 @@ $PCCMD $AGENTPREFIX.LaunchCommand \
     dict:string:string:""
 
 # Run weston-flower
-$PCCMD $AGENTPREFIX.LaunchCommand \
+$SC_CMD $AGENTPREFIX.LaunchCommand \
     $CONTAINERID \
     $ROOTID \
     string:"$FLOWERWESTON" \
@@ -130,7 +130,7 @@ $PCCMD $AGENTPREFIX.LaunchCommand \
 sleep 30
 
 # Shutdown the container
-$PCCMD $AGENTPREFIX.ShutDownContainer $CONTAINERID
+$SC_CMD $AGENTPREFIX.ShutDownContainer $CONTAINERID
 
 # Clean up
 kill $WESTONPID
