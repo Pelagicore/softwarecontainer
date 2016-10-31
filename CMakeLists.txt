@@ -99,9 +99,17 @@ option(ENABLE_TEST "Enables unit testing" ON)
 option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
 option(ENABLE_COVERAGE "Enable building and installation of examples" OFF)
 option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
+option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
+
+# Options for documentation
 option(ENABLE_USER_DOC "Enable building and installation of the user documentation" OFF)
 option(ENABLE_API_DOC "Enable building and installation of the api documentation" OFF)
-option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
+option(ENABLE_ALL_DOC "Enable building and installation of both the user and the api documentation." OFF)
+
+if(ENABLE_ALL_DOC)
+    set(ENABLE_API_DOC ON)
+    set(ENABLE_USER_DOC ON)
+endif()
 
 #
 # RPATH options
