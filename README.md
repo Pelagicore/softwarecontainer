@@ -38,14 +38,14 @@ $ make
 $ sudo make install
 ```
 
-To build the project documentation set -DENABLE_DOC=1 when running cmake.
+To build the project documentation set -DENABLE_ALL_DOC=ON when running cmake.
 You can also build the docs separately by pointing cmake to the doc
 directory. Documentation is separated into doxygen docs (API level docs)
 and docs built with sphinx (user documentation and general docs on a higher
 level).
 
 To run the unit-tests build with -DENABLE_TEST=ON. To run code coverage tools
-build with -DENABLE_COVERAGE=1.
+build with -DENABLE_COVERAGE=ON.
 
 To disable support for various gateways at compile time, set
 * -DENABLE_PULSEGATEWAY=OFF (for pulse)
