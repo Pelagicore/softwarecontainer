@@ -4,8 +4,8 @@ Example for running wayland applications in SoftwareContainer
 Requirements
 ------------
 * weston
-* weston-simple-egl and weston-flower examples
-* softwarecontainer
+* weston-simple-egl and weston-flower examples (available as a part of the weston repository)
+* softwarecontainer-agent
 
 How to run
 ----------
