@@ -92,3 +92,4 @@ endif()
 
 add_custom_target(api-doc ALL)
 add_dependencies(api-doc doxygen)
+add_dependencies(doc api-doc)

@@ -23,6 +23,8 @@ cmake_minimum_required(VERSION 3.0.2)
 #
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
+add_custom_target(doc ALL)
+
 if(ENABLE_USER_DOC)
     include(user_doc.cmake)
 endif()
