@@ -77,7 +77,7 @@ $SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 $SC_CMD $AGENTPREFIX.Ping
 
 # Create a new container
-$SC_CMD $AGENTPREFIX.CreateContainer string:prefix string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"writeOften": "0"}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="uint32:0"
