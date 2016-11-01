@@ -17,29 +17,24 @@
 
 find_package(Doxygen REQUIRED)
 
-# Set a Doxygen tag.
-# The tagName parameter is the name of the tag to set.
-# If we want to build docs separately then this won't be set
-# The value parameter is the value the specified tag will be set to.
+# Prepare doxygen configuration file
+set(OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
 set(DOXYGEN_INPUT ${PROJECT_SOURCE_DIR})
 set(DOXYGEN_EXAMPLE_PATH ${EXAMPLE_PATH})
-
-# prepare doxygen configuration file
-set(OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
 set(DOXYGEN_PROJECT_NAME ${PROJECT_NAME})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doxygen.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
 
 # Where to place the generated doxygen documentation
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen-docs)
 
-# add doxygen as target
+# Add doxygen as target
 add_custom_command(
     OUTPUT ${DOXYGEN_OUTPUT_DIR}
     COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg
     COMMENT "Building doxygen documentation"
 )
 
-# cleanup $build/doc/doxygen on "make clean"
+# Cleanup $build/doc/doxygen on "make clean"
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES doxygen)
 
 add_custom_target(
@@ -47,7 +42,7 @@ add_custom_target(
     DEPENDS ${DOXYGEN_OUTPUT_DIR}
 )
 
-# install HTML API documentation and manual pages
+# Install HTML API documentation and manual pages
 set(DOC_PATH "share/doc/${PROJECT_NAME}")
 
 install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
