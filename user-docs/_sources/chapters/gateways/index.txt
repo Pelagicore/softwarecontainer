@@ -257,14 +257,24 @@ The ID used for the Environment gateway is: ``env``
 Configuration
 -------------
 
-The configuration consists of a list of environment variable definitions. Each such element must contain the following parameters:
+The configuration consists of a list of environment variable definitions. Each
+such element must contain the following parameters:
 
 - ``name`` The name of the environment variable in question
 - ``value`` The value to attach to the name
 
-It may also, optionally, specify the following parameters:
+Note that ``value`` will be read as a string.
+
+If a variable is added that has previously been added already, the new value is ignored
+and the old value is kept intact. This is considered a misconfiguration and will generate
+a log warning.
+
+The configuration may also, optionally, specify the following parameters:
 
 - ``append`` (bool) If the environment variable is already defined by the gateway, append the new value to the value already defined. Defaults to false.
+
+If a previously undefined variable is appended, the variable is set to the value
+provided, i.e. it will behave as if the variable is to be set, not appended.
 
 Example configurations
 ----------------------
@@ -278,17 +288,24 @@ En example configuration would look like this::
         }
     ]
 
-Note that ``value`` will be read as a string.
+With the above configuration, ``SOME_ENVIRONMENT_VARIABLE`` would be set to ``SOME_VALUE``,
+if the variable had not been previously set. In the case where ``SOME_ENVIRONMENT_VARIABLE``
+would have been previously set to e.g. ``ORIGINAL_VALUE``, that value would be kept.
 
-There are also the possibility to append to an already defined variable::
+There is also the possibility to append to an already defined variable::
 
     [
         {
             "name": "SOME_ENVIRONMENT_VARIABLE",
-            "value": "_SOME_SUFFIX",
+            "value": ":/some/path",
             "append": true
         }
     ]
+
+With the above configuration, if ``SOME_ENVIRONMENT_VARIABLE`` had previously been set
+to e.g. ``/tmp/test``, the varaiable value would now be set to ``/tmp/test:/some/path``.
+If ``SOME_ENVIRONMENT_VARIABLE`` had not been previously set, the value would now be
+set to ``:/some/path``.
 
 
 File gateway

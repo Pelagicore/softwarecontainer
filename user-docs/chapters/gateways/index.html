@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.9.1-a4add5d 2016-11-01 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.9.1-a1eef8d 2016-11-01 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-a4add5d 2016-11-01',
+        VERSION:     '0.9.1-a1eef8d 2016-11-01',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-a4add5d 2016-11-01 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-a1eef8d 2016-11-01 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -267,15 +267,22 @@ inside the container.</p>
 </div>
 <div class="section" id="id9">
 <h3>Configuration<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
-<p>The configuration consists of a list of environment variable definitions. Each such element must contain the following parameters:</p>
+<p>The configuration consists of a list of environment variable definitions. Each
+such element must contain the following parameters:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">name</span></code> The name of the environment variable in question</li>
 <li><code class="docutils literal"><span class="pre">value</span></code> The value to attach to the name</li>
 </ul>
-<p>It may also, optionally, specify the following parameters:</p>
+<p>Note that <code class="docutils literal"><span class="pre">value</span></code> will be read as a string.</p>
+<p>If a variable is added that has previously been added already, the new value is ignored
+and the old value is kept intact. This is considered a misconfiguration and will generate
+a log warning.</p>
+<p>The configuration may also, optionally, specify the following parameters:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">append</span></code> (bool) If the environment variable is already defined by the gateway, append the new value to the value already defined. Defaults to false.</li>
 </ul>
+<p>If a previously undefined variable is appended, the variable is set to the value
+provided, i.e. it will behave as if the variable is to be set, not appended.</p>
 </div>
 <div class="section" id="id10">
 <h3>Example configurations<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
@@ -288,17 +295,23 @@ inside the container.</p>
 <span class="p">]</span>
 </pre></div>
 </div>
-<p>Note that <code class="docutils literal"><span class="pre">value</span></code> will be read as a string.</p>
-<p>There are also the possibility to append to an already defined variable:</p>
+<p>With the above configuration, <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code> would be set to <code class="docutils literal"><span class="pre">SOME_VALUE</span></code>,
+if the variable had not been previously set. In the case where <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code>
+would have been previously set to e.g. <code class="docutils literal"><span class="pre">ORIGINAL_VALUE</span></code>, that value would be kept.</p>
+<p>There is also the possibility to append to an already defined variable:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
         <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;SOME_ENVIRONMENT_VARIABLE&quot;</span><span class="p">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;_SOME_SUFFIX&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;:/some/path&quot;</span><span class="p">,</span>
         <span class="s">&quot;append&quot;</span><span class="p">:</span> <span class="n">true</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
 </div>
+<p>With the above configuration, if <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code> had previously been set
+to e.g. <code class="docutils literal"><span class="pre">/tmp/test</span></code>, the varaiable value would now be set to <code class="docutils literal"><span class="pre">/tmp/test:/some/path</span></code>.
+If <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code> had not been previously set, the value would now be
+set to <code class="docutils literal"><span class="pre">:/some/path</span></code>.</p>
 </div>
 </div>
 <div class="section" id="file-gateway">
