@@ -145,7 +145,10 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
     profilepoint("createContainerStart");
     profilefunction("createContainerFunction");
 
-    parseConfig(config);
+    if (!parseConfig(config)) {
+        log_error() << "The provided config could not be successfully parsed."
+        return -1;
+    }
 
     SoftwareContainer *container;
     ContainerID availableID;
@@ -162,9 +165,15 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 
     m_containers[availableID] = SoftwareContainerPtr(container);
     container->setMainLoopContext(m_mainLoopContext);
-    container->init();
 
-    triggerPreload();
+    if (isError(container->init()) {
+        log_error() << "Could not init the container.";
+        return -1;
+    }
+
+    if (!triggerPreload()) {
+        log_warning() << "Failed to preload a new container.";
+    }
 
     return availableID;
 }

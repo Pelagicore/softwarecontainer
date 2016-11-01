@@ -116,7 +116,9 @@ public:
      *
      * @param config container-wide configuration string
      *
-     * @return ContainerID for the newly created container
+     * @return If the container is successfully created a positive ContainerID
+     *         representing the newly created container will be returned.
+     *         Otherwise, -1 will be returned.
      *
      */
     ContainerID createContainer(const std::string &config);
