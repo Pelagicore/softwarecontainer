@@ -30,10 +30,10 @@
 /**
  * @brief A rules entry for the treatment of packets.
  */
-struct IPTableEntry
+class IPTableEntry
 {
     LOG_DECLARE_CLASS_CONTEXT("IPTE", "IPTable Entry");
-
+public:
     /**
      * @brief container for port filtering options. Used internally in a Rule.
      */
@@ -44,6 +44,16 @@ struct IPTableEntry
         std::string ports;
     };
 
+    /**
+     * @brief Targets for Rules
+     */
+    enum Target
+    {
+        INVALID_TARGET,
+        ACCEPT,
+        DROP,
+        REJECT
+    };
 
     /**
      * @brief Definition of a 'Rule' used to handle network traffic. Used internally in an Entry.
@@ -52,36 +62,34 @@ struct IPTableEntry
     {
         std::string host;
         portFilter  ports;
-        std::string target;
+        Target target;
     };
-
-    /**
-     * @brief Inserts a rule to iptables
-     * @return true  Upon success
-     * @return false Upon failure
-     */
-    bool insertRule(Rule rule, std::string type);
-
-    /**
-     * @brief converts NetworkGateway type to rule table chain
-     * Rule table consists three chains: "INPUT", "OUTPUT" and "FORWARD" which are activated at
-     * different points of the packet filtering process
-     * @return "INPUT", "OUTPUT" or "FORWARD" on successfully determine the chain
-     * @return "" on failure to determine chain
-     */
-    std::string getChain();
 
     /**
      * @brief Applies all rules to iptables
      * @return true  Upon success
      * @return false Upon failure
      */
-    bool applyRules();
+    ReturnCode applyRules();
 
     unsigned int m_priority;
     std::string m_type;
     std::vector<Rule> m_rules;
-    std::string m_defaultTarget;
+    Target m_defaultTarget;
+private:
+    /**
+     * @brief converts target to string
+     * @return string representation of target
+     */
+    std::string convertTarget (Target& t);
+
+
+    /**
+     * @brief Inserts a rule to iptables
+     * @return true  Upon success
+     * @return false Upon failure
+     */
+    ReturnCode insertRule(Rule rule);
 };
 
 
@@ -211,5 +219,5 @@ private:
      * @brief Parses a string to a Target
      * @return Either the valid Target representation of true or false
      */
-    bool parseTarget(const std::string &str);
+    IPTableEntry::Target parseTarget(const std::string &str);
 };
