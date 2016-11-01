@@ -96,23 +96,22 @@ From the build directory, run the agent::
 Note that we are running this command with ``sudo``, the Agent needs to be started with root privileges.
 
 
-Using ``dbus-send``, introspect the Agent D-Bus service API::
+Using e.g. ``gdbus``, we can introspect the Agent D-Bus service API::
 
-    dbus-send --system --print-reply \
-    --dest=com.pelagicore.SoftwareContainerAgent \
-    /com/pelagicore/SoftwareContainerAgent \
-    org.freedesktop.DBus.Introspectable.Introspect
+    gdbus introspect --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent
 
 Next, we will start a new container so take note of the parameters of CreateContainer.
 
 
 Start a container::
 
-    dbus-send --system --print-reply \
-    --dest=com.pelagicore.SoftwareContainerAgent \
-    /com/pelagicore/SoftwareContainerAgent \
-    com.pelagicore.SoftwareContainerAgent.CreateContainer \
-    string:'[{"enableWriteBuffer": false}]'
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.CreateContainer \
+    '[{"enableWriteBuffer": false}]'
 
 The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
 
@@ -121,14 +120,14 @@ The return value of CreateContainer is the ID of the newly created container. Th
 
 Bind mount a directory inside the container::
 
-    dbus-send --system --print-reply \
-    --dest=com.pelagicore.SoftwareContainerAgent \
-    /com/pelagicore/SoftwareContainerAgent \
-    com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer \
-    uint32:0 \
-    string:"/home/vagrant/container-test" \
-    string:"app" \
-    boolean:false
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer \
+    0 \
+    "/home/vagrant/softwarecontainer" \
+    "app" \
+    false
 
 Parameters:
  * ``containerID`` - a uint32 with the ID of the created container, as returned by the ``CreateContainer`` method.
@@ -137,23 +136,23 @@ Parameters:
  * ``readOnly`` - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.
 
 The method assumes the path ``pathInHost`` exists, so choose another path if it is more convenient.
-The result of the method is that the content of '/home/vagrant/container-test' will be
+The result of the method is that the content of '/home/vagrant/softwarecontainer' will be
 visible in the path ``/gateways/app`` inside the container. The actual location on the host can be found in
 ``/tmp/container/SC-<container ID>/gateways/`` where the created ``app`` directory will be.
 
 
 Launch something in the container::
 
-    dbus-send --system --print-reply \
-    --dest=com.pelagicore.SoftwareContainerAgent \
-    /com/pelagicore/SoftwareContainerAgent \
-    com.pelagicore.SoftwareContainerAgent.LaunchCommand \
-    uint32:0 \
-    uint32:0 \
-    string:"touch hello" \
-    string:"/gateways/app/" \
-    string:"" \
-    dict:string:string:""
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.LaunchCommand \
+    0 \
+    0 \
+    "touch hello" \
+    "/gateways/app" \
+    "" \
+    '{"": ""}'
 
 Parameters:
  * ``containerID`` - a uint32 with the ID of the created container, as returned by the ``CreateContainer`` method.
@@ -166,16 +165,16 @@ Parameters:
 The method returns the PID of the process run inside the container.
 
 The above method call results in a file ``hello`` being created inside the conainer in ``/gateways/app/``. This can
-also be seen in the bind mounted location ``/home/vagrant/container-test/``.
+also be seen in the bind mounted location ``/home/vagrant/softwarecontainer/``.
 
 
 Shut down the container::
 
-    dbus-send --system --print-reply \
-    --dest=com.pelagicore.SoftwareContainerAgent \
-    /com/pelagicore/SoftwareContainerAgent \
-    com.pelagicore.SoftwareContainerAgent.ShutDownContainer \
-    uint32:0
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.ShutDownContainer \
+    0
 
 The value passed as the `containerID` parameter should be the same value that was returned from the call to `CreateContainer`.
 
@@ -184,3 +183,19 @@ Configure gateways
 ------------------
 
 For details about the gateway configurations, see :ref:`Gateways <gateways>`
+
+Once a container is created and before e.g. an application is launched in the container, gateway configurations
+can be set in order to configure what the application will have access to.
+
+Set gateway config::
+
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.SetGatewayConfigs \
+    0 \
+    '{"env": "[{\"name\": \"MY_VAR\", \"value\": \"1234\"},{\"name\": \"OTHER_VAR\", \"value\": \"5678\"}]"}'
+
+Parameters:
+ * ``containerID`` - an int with the id of the created container, as returned by the ``CreateContainer`` method.
+ * ``configs`` - a string:string dictionary with gateway ID as key and json config as value.
