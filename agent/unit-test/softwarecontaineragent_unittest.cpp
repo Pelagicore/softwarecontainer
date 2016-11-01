@@ -23,23 +23,26 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <unistd.h>
+#include <memory>
 
 class SoftwareContainerAgentTest: public ::testing::Test
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
     SoftwareContainerAgentTest() { }
-    SoftwareContainerAgent *sca;
+    std::shared_ptr<SoftwareContainerAgent> sca;
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     int m_preloadCount = 1;
     bool m_shutdownContainers = true;
     int m_shutdownTimeout = 2;
     std::shared_ptr<Workspace> workspace;
 
+    const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
+
     void SetUp() override
     {
         try {
-            sca = new SoftwareContainerAgent(
+            sca = std::make_shared<SoftwareContainerAgent>(
                 m_context
                 , m_preloadCount
                 , m_shutdownContainers
@@ -54,20 +57,19 @@ public:
 
     void TearDown() override
     {
-        delete sca;
     }
 };
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
     SoftwareContainer *container;
-    ContainerID id = sca->createContainer("");
+    ContainerID id = sca->createContainer(valid_config);
     bool retval = sca->checkContainer(id, container);
     ASSERT_TRUE(retval == true);
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
     SoftwareContainer *container;
-    ContainerID id = sca->createContainer("");
+    ContainerID id = sca->createContainer(valid_config);
     sca->deleteContainer(id);
     bool retval = sca->checkContainer(id, container);
     ASSERT_TRUE(retval == false);

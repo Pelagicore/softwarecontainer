@@ -214,8 +214,11 @@ public:
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
+    // Get a preloaded container if possible otherwise make a new container.
+    std::pair<ContainerID, SoftwareContainerPtr> getContainerPair();
+
     // Helper for creating software container instances
-    SoftwareContainer *makeSoftwareContainer(const ContainerID &containerID);
+    SoftwareContainerPtr makeSoftwareContainer(const ContainerID &containerID);
 
     // Pre-loads container until the we have as many as configured
     bool triggerPreload();

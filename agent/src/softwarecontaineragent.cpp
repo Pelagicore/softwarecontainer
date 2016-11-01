@@ -33,13 +33,13 @@ bool SoftwareContainerAgent::triggerPreload()
 {
     while (m_preloadedContainers.size() < m_preloadCount) {
         auto availableID = findSuitableId();
-        auto container = makeSoftwareContainer(availableID);
+        SoftwareContainerPtr container = std::move(makeSoftwareContainer(availableID));
 
         if (isError(container->preload())) {
             log_error() << "Preloading failed";
             return false;
         }
-        auto pair = std::pair<ContainerID, SoftwareContainerPtr>(availableID, SoftwareContainerPtr(container));
+        auto pair = std::pair<ContainerID, SoftwareContainerPtr>(availableID, std::move(container));
         m_preloadedContainers.push(std::move(pair));
     }
 
@@ -134,10 +134,10 @@ ContainerID SoftwareContainerAgent::findSuitableId()
     return availableID;
 }
 
-SoftwareContainer *SoftwareContainerAgent::makeSoftwareContainer(const ContainerID &containerID)
+SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwareContainer(const ContainerID &containerID)
 {
     log_debug() << "Created container with ID :" << containerID;
-    auto container = new SoftwareContainer(m_softwarecontainerWorkspace, "SC-" + std::to_string(containerID));
+    auto container = SoftwareContainerPtr(new SoftwareContainer(m_softwarecontainerWorkspace, "SC-" + std::to_string(containerID)));
     return container;
 }
 
@@ -147,36 +147,42 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
     profilefunction("createContainerFunction");
 
     if (!parseConfig(config)) {
-        log_error() << "The provided config could not be successfully parsed."
+        log_error() << "The provided config could not be successfully parsed.";
         return -1;
     }
 
-    SoftwareContainer *container;
-    ContainerID availableID;
-    if (!m_preloadedContainers.empty()) {
-        auto pair = std::move(m_preloadedContainers.front());
-        m_preloadedContainers.pop();
+    std::pair<ContainerID, SoftwareContainerPtr> pair = std::move(getContainerPair());
+    pair.second->setMainLoopContext(m_mainLoopContext);
 
-        availableID = pair.first;
-        container   = pair.second.release();
-    } else {
-        availableID = findSuitableId();
-        container = makeSoftwareContainer(availableID);
-    }
-
-    m_containers[availableID] = SoftwareContainerPtr(container);
-    container->setMainLoopContext(m_mainLoopContext);
-
-    if (isError(container->init()) {
+    if (isError(pair.second->init())) {
         log_error() << "Could not init the container.";
         return -1;
     }
 
+    // TODO: Would be nice if this could be done async.
     if (!triggerPreload()) {
         log_warning() << "Failed to preload a new container.";
     }
 
-    return availableID;
+    m_containers.insert(std::move(pair));
+
+    // Return the ContainerID for the container
+    return pair.first;
+}
+
+std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareContainerAgent::getContainerPair()
+{
+    if (!m_preloadedContainers.empty()) {
+        auto pair = std::move(m_preloadedContainers.front());
+        m_preloadedContainers.pop();
+
+        return pair;
+    }
+
+    // Nothing is preloaded
+    ContainerID availableID = findSuitableId();
+    auto container = std::move(makeSoftwareContainer(availableID));
+    return std::make_pair(availableID, std::move(container));
 }
 
 bool SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&result)
