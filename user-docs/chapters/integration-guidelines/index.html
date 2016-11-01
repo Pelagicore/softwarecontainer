@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.9.1-d8d8e1b 2016-11-01 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.9.1-a4add5d 2016-11-01 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-d8d8e1b 2016-11-01',
+        VERSION:     '0.9.1-a4add5d 2016-11-01',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-d8d8e1b 2016-11-01 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-a4add5d 2016-11-01 documentation" href="../../index.html" />
     <link rel="next" title="Filesystems" href="../filesystem/index.html" />
     <link rel="prev" title="Gateways" href="../gateways/index.html" />
    
@@ -49,7 +49,7 @@
 into a platform.</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">This chapter work in progress and lacks a lot of content.</p>
+<p class="last">This chapter is work in progress and lacks a lot of content.</p>
 </div>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
@@ -73,6 +73,45 @@ create such a bridge on the system if it is not already there. This can be chang
 SoftwareContainer will simply fail with an error message if the bridge was not available.</p>
 <p>The selection of whether or not to create the bridge is a compile-time options given to CMake.</p>
 </div>
+<div class="section" id="wayland-setup">
+<h2>Wayland setup<a class="headerlink" href="#wayland-setup" title="Permalink to this headline">¶</a></h2>
+<p>In order to have applications access wayland, one needs to enable the Wayland gateway, and possibly
+give access to graphics hardware. Not all applications require direct access to the graphics
+hardware, see <a class="reference internal" href="../examples/index.html#wayland-example"><span class="std std-ref">Wayland example</span></a>. A reasonable capability for a Wayland
+application would therefore include both the Wayland gateway and a configuration of the Device Node
+gateway for any graphics hardware access needed.</p>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>Here is an example manifest defining wayland access:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.example.wayland-access&quot;</span><span class="p">,</span>
+      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;wayland&quot;</span><span class="p">,</span>
+          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;devicenode&quot;</span><span class="p">,</span>
+          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;/dev/dri/card0&quot;</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -87,6 +126,10 @@ SoftwareContainer will simply fail with an error message if the bridge was not a
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#service-manifests">Service manifests</a></li>
 <li><a class="reference internal" href="#network-setup">Network setup</a></li>
+<li><a class="reference internal" href="#wayland-setup">Wayland setup</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
