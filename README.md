@@ -60,6 +60,8 @@ section).
 To prevent SoftwareContainer from creating a network bridge on startup (and
 instead only check that one is there), build with -DCREATE_BRIDGE=OFF.
 
+**NOTE**: CMAKE_INSTALL_PREFIX must currently be defined and be set to '/usr'
+
 For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
 build this code, please take a look at the Vagrantfile.
@@ -163,7 +165,8 @@ The component tests are in libsoftwarecontainer/component-test/ and are run
 with test_runner.sh. Currently, the component tests are outdated and need
 to be reworked.
 
-The service tests are in service-test/ and are run with run_tests.sh.
+The service tests are in service-test/ and can be run with run-tests.sh.
+See servicetest/README.md for more details about these tests.
 
 # Troubleshooting
 
