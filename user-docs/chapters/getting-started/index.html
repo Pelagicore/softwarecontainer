@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.9.1-a1eef8d 2016-11-01 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.9.1-d22dd82 2016-11-01 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-a1eef8d 2016-11-01',
+        VERSION:     '0.9.1-d22dd82 2016-11-01',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-a1eef8d 2016-11-01 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-d22dd82 2016-11-01 documentation" href="../../index.html" />
     <link rel="next" title="SoftwareContainer examples" href="../examples/index.html" />
     <link rel="prev" title="Welcome to the SoftwareContainer documentation" href="../intro/index.html" />
    
@@ -199,33 +199,32 @@ container.</p>
 </pre></div>
 </div>
 <p>Note that we are running this command with <code class="docutils literal"><span class="pre">sudo</span></code>, the Agent needs to be started with root privileges.</p>
-<p>Using <code class="docutils literal"><span class="pre">dbus-send</span></code>, introspect the Agent D-Bus service API:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">dbus</span><span class="o">-</span><span class="n">send</span> <span class="o">--</span><span class="n">system</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">reply</span> \
-<span class="o">--</span><span class="n">dest</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="n">org</span><span class="o">.</span><span class="n">freedesktop</span><span class="o">.</span><span class="n">DBus</span><span class="o">.</span><span class="n">Introspectable</span><span class="o">.</span><span class="n">Introspect</span>
+<p>Using e.g. <code class="docutils literal"><span class="pre">gdbus</span></code>, we can introspect the Agent D-Bus service API:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">introspect</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span>
 </pre></div>
 </div>
 <p>Next, we will start a new container so take note of the parameters of CreateContainer.</p>
 <p>Start a container:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">dbus</span><span class="o">-</span><span class="n">send</span> <span class="o">--</span><span class="n">system</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">reply</span> \
-<span class="o">--</span><span class="n">dest</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">CreateContainer</span> \
-<span class="n">string</span><span class="p">:</span><span class="s">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">CreateContainer</span> \
+<span class="s">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
 </pre></div>
 </div>
 <p>The JSON string passed as argument to the <code class="docutils literal"><span class="pre">config</span></code> parameter is documented in the Container config section.</p>
 <p>The return value of CreateContainer is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.</p>
 <p>Bind mount a directory inside the container:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">dbus</span><span class="o">-</span><span class="n">send</span> <span class="o">--</span><span class="n">system</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">reply</span> \
-<span class="o">--</span><span class="n">dest</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">BindMountFolderInContainer</span> \
-<span class="n">uint32</span><span class="p">:</span><span class="mi">0</span> \
-<span class="n">string</span><span class="p">:</span><span class="s">&quot;/home/vagrant/container-test&quot;</span> \
-<span class="n">string</span><span class="p">:</span><span class="s">&quot;app&quot;</span> \
-<span class="n">boolean</span><span class="p">:</span><span class="n">false</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">BindMountFolderInContainer</span> \
+<span class="mi">0</span> \
+<span class="s">&quot;/home/vagrant/softwarecontainer&quot;</span> \
+<span class="s">&quot;app&quot;</span> \
+<span class="n">false</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -239,20 +238,20 @@ container.</p>
 </dd>
 </dl>
 <p>The method assumes the path <code class="docutils literal"><span class="pre">pathInHost</span></code> exists, so choose another path if it is more convenient.
-The result of the method is that the content of &#8216;/home/vagrant/container-test&#8217; will be
+The result of the method is that the content of &#8216;/home/vagrant/softwarecontainer&#8217; will be
 visible in the path <code class="docutils literal"><span class="pre">/gateways/app</span></code> inside the container. The actual location on the host can be found in
 <code class="docutils literal"><span class="pre">/tmp/container/SC-&lt;container</span> <span class="pre">ID&gt;/gateways/</span></code> where the created <code class="docutils literal"><span class="pre">app</span></code> directory will be.</p>
 <p>Launch something in the container:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">dbus</span><span class="o">-</span><span class="n">send</span> <span class="o">--</span><span class="n">system</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">reply</span> \
-<span class="o">--</span><span class="n">dest</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">LaunchCommand</span> \
-<span class="n">uint32</span><span class="p">:</span><span class="mi">0</span> \
-<span class="n">uint32</span><span class="p">:</span><span class="mi">0</span> \
-<span class="n">string</span><span class="p">:</span><span class="s">&quot;touch hello&quot;</span> \
-<span class="n">string</span><span class="p">:</span><span class="s">&quot;/gateways/app/&quot;</span> \
-<span class="n">string</span><span class="p">:</span><span class="s">&quot;&quot;</span> \
-<span class="nb">dict</span><span class="p">:</span><span class="n">string</span><span class="p">:</span><span class="n">string</span><span class="p">:</span><span class="s">&quot;&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">LaunchCommand</span> \
+<span class="mi">0</span> \
+<span class="mi">0</span> \
+<span class="s">&quot;touch hello&quot;</span> \
+<span class="s">&quot;/gateways/app&quot;</span> \
+<span class="s">&quot;&quot;</span> \
+<span class="s">&#39;{&quot;&quot;: &quot;&quot;}&#39;</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -269,13 +268,13 @@ visible in the path <code class="docutils literal"><span class="pre">/gateways/a
 </dl>
 <p>The method returns the PID of the process run inside the container.</p>
 <p>The above method call results in a file <code class="docutils literal"><span class="pre">hello</span></code> being created inside the conainer in <code class="docutils literal"><span class="pre">/gateways/app/</span></code>. This can
-also be seen in the bind mounted location <code class="docutils literal"><span class="pre">/home/vagrant/container-test/</span></code>.</p>
+also be seen in the bind mounted location <code class="docutils literal"><span class="pre">/home/vagrant/softwarecontainer/</span></code>.</p>
 <p>Shut down the container:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">dbus</span><span class="o">-</span><span class="n">send</span> <span class="o">--</span><span class="n">system</span> <span class="o">--</span><span class="nb">print</span><span class="o">-</span><span class="n">reply</span> \
-<span class="o">--</span><span class="n">dest</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ShutDownContainer</span> \
-<span class="n">uint32</span><span class="p">:</span><span class="mi">0</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ShutDownContainer</span> \
+<span class="mi">0</span>
 </pre></div>
 </div>
 <p>The value passed as the <cite>containerID</cite> parameter should be the same value that was returned from the call to <cite>CreateContainer</cite>.</p>
@@ -283,6 +282,25 @@ also be seen in the bind mounted location <code class="docutils literal"><span c
 <div class="section" id="configure-gateways">
 <h3>Configure gateways<a class="headerlink" href="#configure-gateways" title="Permalink to this headline">¶</a></h3>
 <p>For details about the gateway configurations, see <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a></p>
+<p>Once a container is created and before e.g. an application is launched in the container, gateway configurations
+can be set in order to configure what the application will have access to.</p>
+<p>Set gateway config:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetGatewayConfigs</span> \
+<span class="mi">0</span> \
+<span class="s">&#39;{&quot;env&quot;: &quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">MY_VAR</span><span class="se">\&quot;</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">value</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">1234</span><span class="se">\&quot;</span><span class="s">},{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">OTHER_VAR</span><span class="se">\&quot;</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">value</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">5678</span><span class="se">\&quot;</span><span class="s">}]&quot;}&#39;</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">containerID</span></code> - an int with the id of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
+<li><code class="docutils literal"><span class="pre">configs</span></code> - a string:string dictionary with gateway ID as key and json config as value.</li>
+</ul>
+</dd>
+</dl>
 </div>
 </div>
 </div>
