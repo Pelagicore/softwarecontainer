@@ -729,7 +729,6 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
     "}]";
 
     setGatewayConfigs(config);
-
     CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
     ASSERT_EQ(job2.wait(), 0);

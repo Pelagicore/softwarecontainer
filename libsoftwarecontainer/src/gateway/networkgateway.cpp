@@ -25,9 +25,9 @@
 #include "generators.h"
 
 NetworkGateway::NetworkGateway() :
-Gateway(ID),
-m_internetAccess(false),
-m_interfaceInitialized(false)
+    Gateway(ID),
+    m_internetAccess(false),
+    m_interfaceInitialized(false)
 {
 }
 
@@ -38,12 +38,17 @@ NetworkGateway::~NetworkGateway()
 ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {
     IPTableEntry e;
-    if (!read(element, "type", e.m_type)) {
+    std::string chain;
+    if (!read(element, "type", chain)) {
         log_error() << "No type specified in network config.";
         return ReturnCode::FAILURE;
     }
 
-    if (e.m_type != "INCOMING" && e.m_type != "OUTGOING") {
+    if ("INCOMING" == chain) {
+        e.m_type = "INPUT";
+    } else if ("OUTGOING" == chain) {
+        e.m_type = "OUTPUT";
+    } else {
         log_error() << e.m_type << " is not a valid type ('INCOMING' or 'OUTGOING')";
         return ReturnCode::FAILURE;
     }
@@ -92,9 +97,8 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    if (parseTarget(readTarget)) {
-        e.m_defaultTarget = readTarget;
-    } else {
+    e.m_defaultTarget= parseTarget(readTarget);
+    if (e.m_defaultTarget == IPTableEntry::Target::INVALID_TARGET) {
         log_error() << "Default target '" << readTarget << "' is not a supported target.Invalid target.";
         return ReturnCode::FAILURE;
     }
@@ -103,7 +107,7 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 
     // --- TEMPORARY WORKAROUND ---
     // in the wait of activate() being rewritten
-    if ("ACCEPT" == e.m_defaultTarget) {
+    if (IPTableEntry::Target::ACCEPT == e.m_defaultTarget) {
         m_internetAccess = true;
         m_gateway = "10.0.3.1";
     }
@@ -120,9 +124,8 @@ ReturnCode NetworkGateway::parseRule(const json_t *element, std::vector<IPTableE
         return ReturnCode::FAILURE;
     }
 
-    if (parseTarget(target)) {
-        r.target = target;
-    } else {
+    r.target = parseTarget(target);
+    if (r.target == IPTableEntry::Target::INVALID_TARGET) {
         log_error() << target << " is not a valid target.";
         return ReturnCode::FAILURE;
     }
@@ -184,13 +187,23 @@ ReturnCode NetworkGateway::parsePort(const json_t *element,  IPTableEntry::portF
     return ReturnCode::SUCCESS;
 }
 
-bool NetworkGateway::parseTarget(const std::string &str)
+IPTableEntry::Target NetworkGateway::parseTarget(const std::string &str)
 {
-    if (str == "ACCEPT" || str == "DROP" || str == "REJECT") {
-        return true;
+    if (str == "ACCEPT") {
+        return IPTableEntry::Target::ACCEPT;
     }
-    return false;
-}
+
+    if (str == "DROP") {
+        return IPTableEntry::Target::DROP;
+    }
+
+    if (str == "REJECT") {
+        return IPTableEntry::Target::REJECT;
+    }
+
+    return IPTableEntry::Target::INVALID_TARGET;
+ }
+
 
 bool NetworkGateway::activateGateway()
 {
@@ -213,9 +226,11 @@ bool NetworkGateway::activateGateway()
 
     if (m_internetAccess) {
         generateIP();
-        for (auto entry:m_entries) {
+
+        for (auto entry : m_entries) {
             entry.applyRules();
         }
+
         return up();
     } else {
         return down();
@@ -333,37 +348,38 @@ bool NetworkGateway::isBridgeAvailable()
     return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
 }
 
-std::string IPTableEntry::getChain() {
-    if ( "INCOMING" == m_type) {
-        return "INPUT";
-    } else if ("OUTGOING" == m_type) {
-        return "OUTPUT";
-    } else if ("FORWARD" == m_type) {
-        return "FORWARD";
-    }
-    return "";
-}
-
-bool IPTableEntry::applyRules()
+ReturnCode IPTableEntry::applyRules()
 {
-    for (auto rule:m_rules) {
-        if (!insertRule(rule, getChain())) {
+    for (auto rule : m_rules) {
+        if (ReturnCode::FAILURE == insertRule(rule)) {
             log_error() << "Couldn't apply the rule " << rule.target;
-            return false;
+            return ReturnCode::FAILURE;
         }
     }
 
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
-bool IPTableEntry::insertRule(Rule rule, std::string type)
-{
-    if (type.empty()) {
-        log_error() << "Chain type is not recognized :" << type;
-        return false;
-    }
 
-    std::string iptableCommand = "iptables -A " + type;
+std::string IPTableEntry::convertTarget (Target& t)
+{
+    switch(t)
+    {
+        case Target::ACCEPT:
+            return "ACCEPT";
+        case Target::DROP:
+            return "DROP";
+        case Target::REJECT:
+            return "REJECT";
+        case Target::INVALID_TARGET:
+            return "INVALID";
+    }
+    return "INVALID";
+}
+
+ReturnCode IPTableEntry::insertRule(Rule rule)
+{
+    std::string iptableCommand = "iptables -A " + m_type;
 
     if (!rule.host.empty()) {
         iptableCommand = iptableCommand + " -s " + rule.host ;
@@ -378,9 +394,22 @@ bool IPTableEntry::insertRule(Rule rule, std::string type)
 
     }
 
-    iptableCommand = iptableCommand + " -j " + rule.target;
+    iptableCommand = iptableCommand + " -j " + convertTarget(rule.target);
     log_debug() << "Add network rule : " <<  iptableCommand;
 
-    system(iptableCommand.c_str());
-    return true;
+    try {
+        Glib::spawn_command_line_sync(iptableCommand);
+
+    } catch (Glib::SpawnError e) {
+        log_error() << "Failed to spawn " << iptableCommand << ": code " << e.code()
+                               << " msg: " << e.what();
+
+        return ReturnCode::FAILURE;
+    } catch (Glib::ShellError e) {
+        log_error() << "Failed to call " << iptableCommand << ": code " << e.code()
+                                       << " msg: " << e.what();
+        return ReturnCode::FAILURE;
+    }
+
+    return ReturnCode::SUCCESS;
 }
