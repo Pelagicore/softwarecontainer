@@ -18,6 +18,7 @@ Contents:
     chapters/service-manifests/*
     chapters/gateways/*
     chapters/integration-guidelines/*
+    chapters/troubleshooting/*
     chapters/filesystem/*
     chapters/developers/*
     chapters/lxc/*
