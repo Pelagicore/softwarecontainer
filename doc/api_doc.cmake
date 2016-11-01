@@ -17,45 +17,16 @@
 
 find_package(Doxygen REQUIRED)
 
-set(packageName "softwarecontainer")
-
 # Set a Doxygen tag.
 # The tagName parameter is the name of the tag to set.
+# If we want to build docs separately then this won't be set
 # The value parameter is the value the specified tag will be set to.
-macro(set_doxygen_tag tagName value)
-    set(tagMap_${tagName} ${value})
-endmacro()
-
-set_doxygen_tag("INPUT" "${MAIN_DIR}/doc \
-                         ${MAIN_DIR}/agent \
-                         ${MAIN_DIR}/common \
-                         ${MAIN_DIR}/examples \
-                         ${MAIN_DIR}/libsoftwarecontainer"
-)    
-
-set_doxygen_tag("EXCLUDE_PATTERNS" "*/unit-test/* */component-test/* ")
-
-if(DEFINED tagMap_INPUT)
-    set(DOXYGEN_INPUT ${tagMap_INPUT})
-else()
-    set(DOXYGEN_INPUT ${PROJECT_SOURCE_DIR})
-endif()
-
-if(DEFINED tagMap_EXCLUDE_PATTERNS)
-    set(DOXYGEN_EXCLUDE_PATTERNS ${tagMap_EXCLUDE_PATTERNS})
-else()
-    set(DOXYGEN_EXCLUDE_PATTERNS "")
-endif()
-
-if(DEFINED tagMap_EXAMPLE_PATH)
-    set(DOXYGEN_EXAMPLE_PATH ${tagMap_EXAMPLE_PATH})
-else()
-    set(DOXYGEN_EXAMPLE_PATH "")
-endif()
+set(DOXYGEN_INPUT ${PROJECT_SOURCE_DIR})
+set(DOXYGEN_EXAMPLE_PATH ${EXAMPLE_PATH})
 
 # prepare doxygen configuration file
 set(OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
-set(DOXYGEN_PROJECT_NAME ${packageName})
+set(DOXYGEN_PROJECT_NAME ${PROJECT_NAME})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doxygen.cfg.in ${CMAKE_CURRENT_BINARY_DIR}/doxygen.cfg)
 
 # Where to place the generated doxygen documentation
@@ -77,18 +48,11 @@ add_custom_target(
 )
 
 # install HTML API documentation and manual pages
-set(DOC_PATH "share/doc/${packageName}")
+set(DOC_PATH "share/doc/${PROJECT_NAME}")
 
 install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
         DESTINATION ${DOC_PATH}
 )
-
-# If we want to build docs separately then this won't be set
-if(DEFINED ${PROJECT_SOURCE_DIR})
-    set(MAIN_DIR ${PROJECT_SOURCE_DIR})
-else()
-    set(MAIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../)
-endif()
 
 add_custom_target(api-doc ALL)
 add_dependencies(api-doc doxygen)
