@@ -53,11 +53,11 @@ Below is an example of a simple service manifest::
           "gateways": [
             {
               "id": "dummy-gw1",
-              "config": {}
+              "config": []
             },
             {
               "id": "dummy-gw2",
-              "config": {}
+              "config": []
             }
           ]
         },
