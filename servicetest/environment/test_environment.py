@@ -77,7 +77,6 @@ HOST_PATH = os.path.dirname(os.path.abspath(__file__))
 # configurations to the Container helper. Tests that need to add, remove or
 # update entries can simply base their dict on this one for convenience.
 DATA = {
-    Container.PREFIX: "environment-test-",
     Container.CONFIG: "[{\"enableWriteBuffer\": false}]",
     Container.BIND_MOUNT_DIR: "app",
     Container.HOST_PATH: HOST_PATH
