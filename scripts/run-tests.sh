@@ -57,23 +57,23 @@ weston --backend=headless-backend.so &
 wpid=$!
 
 echo "### Running tests ###"
-GTEST_FILTER="-*FileGatewayReadOnly"
+FILTER_ARG=""
 if [ -n "$1" ]; then
-    GTEST_FILTER="$1"
+    FILTER_ARG="--gtest_filter=$1"
 fi
 
 ./agent/unit-test/softwarecontaineragenttest \
-    --gtest_filter=$GTEST_FILTER \
+    $FILTER_ARG \
     --gtest_output=xml:softwarecontaineragenttest.xml
 retval=$?
 
 ./common/unit-test/softwarecontainercommontest \
-    --gtest_filter=$GTEST_FILTER \
+    $FILTER_ARG \
     --gtest_output=xml:softwarecontainercommontest.xml
 retval=$(($retval+$?))
 
 ./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
-    --gtest_filter=$GTEST_FILTER \
+    $FILTER_ARG \
     --gtest_output=xml:softwarecontainerlibtest.xml
 retval=$(($retval+$?))
 

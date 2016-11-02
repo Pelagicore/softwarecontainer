@@ -287,7 +287,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     std::string readBack = "";
     readFromFile(tempFilename1, readBack);
-    ASSERT_EQ(testData, readBack);
+    ASSERT_EQ(readBack, testData);
 
     // Remove the temp files
     ASSERT_EQ(unlink(tempFilename1), 0);
@@ -497,7 +497,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
     ASSERT_TRUE(isDirectory(tempDirname));
 
     std::string pathInContainer;
-    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, false);
     ASSERT_TRUE(isSuccess(result));
 
     char *tmp = new char[pathInContainer.size() + 8];
