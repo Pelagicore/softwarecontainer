@@ -49,4 +49,16 @@ As it is indicated in :ref:`design chapter <design>`, each IPC is managed by a g
 
 CMake Options
 =============
-CMake options can be used to configure softwareContainer. Desired gateways can be enabled/disabled by passing flags to cmake. (Currently following gateways are able for enable/disable option; network, pulse, device node, dbus, cgroup :ref:`Gateways <gateways>`).
+
+CMake options can be used to configure SoftwareContainer. Following are an explanation of some of them together with use case examples:
+
+Gateways options
+----------------
+If a gateway is disabled this means that the gateway will not be apart of SoftwareContainer at compile time. Hence this will disable the IPC mechanism that the gateway in question handles.
+As an example, the following snippet will install SoftwareContainer without any network support::
+
+    cmake -DENABLE_NETWORKGATEWAY=OFF ..
+    make
+    sudo make install
+
+A complete list of available gateways can be found at :ref:`Gateways <gateways>`.
