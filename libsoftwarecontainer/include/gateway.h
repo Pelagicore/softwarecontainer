@@ -19,16 +19,14 @@
  */
 
 
-#ifndef GATEWAY_H
-#define GATEWAY_H
+#pragma once
+
+#include <string>
 
 #include "containerabstractinterface.h"
 #include "jsonparser.h"
 
-#include <string>
-
 /**
- *
  * @brief Gateway base class for SoftwareContainer
  *
  * Gateways can be in one of three states:
@@ -81,20 +79,8 @@ public:
     virtual bool setConfig(const std::string &config);
 
     /**
-     * @brief Gateway specific parsing of config elements
-     *
-     * All gateways implement this method in order to provide gateway
-     * specific parsing of the configuration content.
-     *
-     * @param element A JSON configuration item.
-     * @returns ReturnCode FAILURE if an error was encountered while parsing, SUCCESS otherwise.
-     */
-    virtual ReturnCode readConfigElement(const json_t *element) = 0;
-
-    /**
      * @brief Applies any configuration set by setConfig()
-     * @returns true upon successful application of configuration
-     *  false otherwise
+     * @returns true upon successful application of configuration, false otherwise
      */
     virtual bool activate();
 
@@ -107,17 +93,7 @@ public:
     virtual bool teardown();
 
     /**
-     * @brief Check if the gateway has an associated container
-     */
-    bool hasContainer();
-
-    /**
-     * @brief Get a reference to the associated container
-     */
-    std::shared_ptr<ContainerAbstractInterface> getContainer();
-
-    /**
-     * @brief Set the associated contaitner for this gateway
+     * @brief Set the associated container for this gateway
      */
     void setContainer(std::shared_ptr<ContainerAbstractInterface> container);
 
@@ -131,6 +107,37 @@ public:
      */
     bool isActivated();
 
+protected:
+    /**
+     * @brief Gateway specific parsing of config elements
+     *
+     * All gateways implement this method in order to provide gateway
+     * specific parsing of the configuration content.
+     *
+     * @param element A JSON configuration item.
+     * @returns ReturnCode FAILURE if an error was encountered while parsing, SUCCESS otherwise.
+     */
+    virtual ReturnCode readConfigElement(const json_t *element) = 0;
+
+    /**
+     * @brief Check if the gateway has an associated container
+     *
+     * Inheriting gateways calls this method to know if they are safe to assume they
+     * can access a ContainerAbstractInterface instance previously set by SoftwareContainer
+     * calling setContainer()
+     *
+     * @returns true if there is a ContainerAbstractInterface instance set, false if not.
+     */
+    bool hasContainer();
+
+    /**
+     * @brief Get a handle to the associated container
+     */
+    std::shared_ptr<ContainerAbstractInterface> getContainer();
+
+    /**
+     * @brief Set an environment variable in the associated container
+     */
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value);
 
     /**
@@ -144,7 +151,6 @@ public:
     typedef std::function<int ()> ContainerFunction;
     ReturnCode executeInContainer(ContainerFunction func);
 
-protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
     static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
 
@@ -156,5 +162,3 @@ protected:
     virtual bool teardownGateway() = 0;
 
 };
-
-#endif /* GATEWAY_H */
