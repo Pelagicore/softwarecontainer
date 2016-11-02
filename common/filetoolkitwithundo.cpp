@@ -165,7 +165,8 @@ ReturnCode FileToolkitWithUndo::overlayMount(
 
     if (isError(createDirectory(lower))
         || isError(createDirectory(upper))
-        || isError(createDirectory(work)))
+        || isError(createDirectory(work))
+        || isError(createDirectory(dst)))
     {
         log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
                        lower << ", upper=" << upper << ", work=" << work;
