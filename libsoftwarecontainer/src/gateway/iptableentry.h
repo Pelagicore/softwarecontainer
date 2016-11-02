@@ -19,9 +19,6 @@
 
 #pragma once
 
-#ifndef IPTABLEENTRY_H_
-#define IPTABLEENTRY_H_
-
 #include "softwarecontainer-common.h"
 
 /**
@@ -88,8 +85,12 @@ private:
      * @return false Upon failure
      */
     ReturnCode insertRule(Rule rule);
+
+    /**
+    * @brief set the default policy on the m_type chain to m_defaultTarget
+    * @return true  Upon success
+    * @return false Upon failure
+    */
+    ReturnCode setPolicy();
 };
 
-
-
-#endif /* IPTABLEENTRY_H_ */

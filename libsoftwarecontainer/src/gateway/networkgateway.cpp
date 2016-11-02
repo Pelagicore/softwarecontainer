@@ -98,8 +98,9 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
     }
 
     e.m_defaultTarget = parseTarget(readTarget);
-    if (e.m_defaultTarget == IPTableEntry::Target::INVALID_TARGET) {
-        log_error() << "Default target '" << readTarget << "' is not a supported target.Invalid target.";
+    if (e.m_defaultTarget == IPTableEntry::Target::INVALID_TARGET
+        || e.m_defaultTarget == IPTableEntry::Target::REJECT) {
+        log_error() << "Default target '" << readTarget << "' is not a supported target";
         return ReturnCode::FAILURE;
     }
 
@@ -228,7 +229,13 @@ bool NetworkGateway::activateGateway()
         generateIP();
 
         for (auto entry : m_entries) {
-            entry.applyRules();
+            executeInContainer([&] {
+                if (isSuccess(entry.applyRules())) {
+                    return 0;
+                }  else {
+                    return 1;
+                }
+            });
         }
 
         return up();
