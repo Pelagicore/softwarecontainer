@@ -588,6 +588,10 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
     }
 
     result = gatewaysDirInContainer() + "/" + pathInContainer;
+    if (readonly) {
+        return remountReadOnlyInContainer(result);
+    }
+
     return ReturnCode::SUCCESS;
 }
 
@@ -615,7 +619,30 @@ ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
     }
 
     result = gatewaysDirInContainer() + "/" + pathInContainer;
+
+    if (readonly) {
+        return remountReadOnlyInContainer(result);
+    }
+
     return ReturnCode::SUCCESS;
+}
+
+ReturnCode Container::remountReadOnlyInContainer(const std::string &path)
+{
+    pid_t pid = INVALID_PID;
+
+    ReturnCode ret = executeInContainer([path] () {
+        unsigned long flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
+        return mount(path.c_str(), path.c_str(), "", flags, nullptr);
+    }, &pid);
+
+    if (isError(ret)) {
+        log_error() << "Could not remount " << path << " read-only in container";
+        return ReturnCode::FAILURE;
+    }
+
+    int status = waitForProcessTermination(pid);
+    return bool2ReturnCode(status == 0);
 }
 
 ReturnCode Container::mountDevice(const std::string &pathInHost)

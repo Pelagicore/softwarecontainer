@@ -168,6 +168,8 @@ public:
 private:
     static int executeInContainerEntryFunction(void *param);
 
+    ReturnCode remountReadOnlyInContainer(const std::string &path);
+
     /**
      * @brief Helper function that rollsback the changes done in Container::create().
      */
