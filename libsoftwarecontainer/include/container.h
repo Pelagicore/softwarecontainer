@@ -169,6 +169,11 @@ private:
     static int executeInContainerEntryFunction(void *param);
 
     /**
+     * @brief Helper function that rollsback the changes done in Container::create().
+     */
+    ReturnCode rollbackCreate();
+
+    /**
      * @brief The LXC configuration file for this container
      */
     std::string m_configFile;

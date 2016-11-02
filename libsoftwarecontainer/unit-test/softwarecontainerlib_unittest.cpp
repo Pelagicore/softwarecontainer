@@ -69,7 +69,8 @@ TEST_F(SoftwareContainerApp, TestWayland) {
             return ERROR;
         }
 
-        std::string socketPath = StringBuilder() << waylandDir << "/" << WaylandGateway::SOCKET_FILE_NAME;
+        std::string socketPath = StringBuilder() << waylandDir << "/"
+                                                 << WaylandGateway::SOCKET_FILE_NAME;
         log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
 
         if ( !isSocket(socketPath) ) {
@@ -88,6 +89,24 @@ TEST_F(SoftwareContainerApp, TestWayland) {
 
 }
 
+/*
+ * Test that it is not possible to create two containers with the same id.
+ */
+TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
+
+    std::shared_ptr<Workspace> workspace = std::make_shared<Workspace>();
+    const std::string id = "SOME_TEST_ID";
+
+    SoftwareContainer s1(workspace, id);
+    SoftwareContainer s2(workspace, id);
+
+    s1.setMainLoopContext(getMainContext());
+    s2.setMainLoopContext(getMainContext());
+
+    ASSERT_TRUE(isSuccess(s1.init()));
+    ASSERT_TRUE(isError(s2.init()));
+
+}
 
 /*
  * Tests the convenience functions in common.cpp
