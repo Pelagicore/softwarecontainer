@@ -6,6 +6,7 @@ lxc.pts = 1
 
 @NETWORK_LXC_CONF@
 
+lxc.mount.entry = /sbin sbin none ro,bind 0 0
 lxc.mount.entry = /usr usr none ro,bind 0 0
 lxc.mount.entry = /lib lib none ro,bind 0 0
 lxc.mount.entry = /usr/lib usr/lib none ro,bind 0 0

@@ -361,7 +361,8 @@ ports. How to handle matching traffic is specified by ``target``. There are tree
 ``target``: ``ACCEPT``, ``DROP`` and ``REJECT``, where ``ACCEPT`` does nothing with the traffic
 while ``REJECT`` and ``DROP`` both deny the network traffic to continue. The difference between
 the latter two being that ``REJECT`` answers the sender while ``DROP`` does not. If no rule applies
-``default`` specifies what to do with the traffic.
+``default`` specifies what to do with the traffic. There are only two valid values for ``default``:
+``ACCEPT`` and ``DROP``.
 
 As mentioned above, different order of the rules can have profound different meaning. Following are
 an example attempting to reject all traffic from example.com on ports 1234 to 5678 and adding an
@@ -415,7 +416,7 @@ An example of valid network gateway configuration::
                          { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
                          { "host": "203.0.113.0/24", "target": "DROP"},
                      ],
-            "default": "REJECT"
+            "default": "DROP"
         },
         {
             "type": "INCOMING",
