@@ -160,7 +160,7 @@ Parameters:
  * ``commandLine`` - a string with the method to run at the method line insider the container.
  * ``workingDirectory`` - a string with a path to a directory which will be set as the working directory.
  * ``outputFile`` - a string with a path to where stdout will be directed from within the container.
- * ``env`` - a string:string dictionary with environment variables and values to be set in the container.
+ * ``env`` - a string:string dictionary with environment variables and values to be set in the container. These will override any variables with the same name previously set by the Environment gateway.
 
 The method returns the PID of the process run inside the container.
 

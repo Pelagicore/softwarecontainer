@@ -62,6 +62,16 @@ ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
 
     if (m_variables.count(variableName) == 0) {
         m_variables[variableName] = variableValue;
+        if (appendMode) {
+            // The variable did not exist but the config intention was still to append,
+            // this might be a misconfiguration
+            log_info() << "Env variable \""
+                       << variableName
+                       << "\" was configured to be appended but the variable has not previously"
+                       << " been set, so it will be created. Value is set to: \""
+                       << variableValue
+                       << "\"";
+        }
     } else {
         if (appendMode) {
             m_variables[variableName] += variableValue;

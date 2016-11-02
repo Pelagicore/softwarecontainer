@@ -281,8 +281,13 @@ int Container::executeInContainerEntryFunction(void *param)
     return (*function)();
 }
 
-ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid, const EnvironmentVariables &variables, uid_t userID,
-                                         int stdin, int stdout, int stderr)
+ReturnCode Container::executeInContainer(ContainerFunction function,
+                                         pid_t *pid,
+                                         const EnvironmentVariables &variables,
+                                         uid_t userID,
+                                         int stdin,
+                                         int stdout,
+                                         int stderr)
 {
     if (pid == nullptr) {
         log_error() << "Supplied pid argument is nullptr";
@@ -302,18 +307,26 @@ ReturnCode Container::executeInContainer(ContainerFunction function, pid_t *pid,
     options.uid = userID;
     options.gid = userID;
 
+    // List of vars to use when executing the function
     EnvironmentVariables actualVariables = variables;
 
-    // Add the variables set by the gateways
+    // Add the variables set by gateways, variables passed with the 'variables' argument
+    // will take precedence over previously set variables.
     for (auto &var : m_gatewayEnvironmentVariables) {
         if (variables.count(var.first) != 0) {
             if (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {
-                log_warning() << "Variable set by gateway overriding original variable value: "
-                              << var.first << ". values: " << var.second;
+                // Inform user that GW config will be overridden, it might be unintentionally done
+                log_info() << "Variable \""
+                           << var.first
+                           << "\" set by gateway will be overwritten with the value: \""
+                           << variables.at(var.first)
+                           << "\"";
             }
+            actualVariables[var.first] = variables.at(var.first);
+        } else {
+            // The variable was not set again, just keep the original value set by GW
+            actualVariables[var.first] = var.second;
         }
-
-        actualVariables[var.first] = var.second;
     }
 
     // prepare array of env variable strings to be set when launching the process in the container

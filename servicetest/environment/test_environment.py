@@ -126,9 +126,37 @@ GW_CONFIG_APPEND = [
 
 ##### Test suites #####
 
-""" TODO: Create a suite that tests the interaction between GW config and
-          explicitly setting variables when doing LaunchCommand
-"""
+@pytest.mark.usefixtures("create_testoutput_dir", "agent", "clear_env_files")
+class TestInteractionGatewayAndAPI(object):
+    """ This suite tests the interaction between the environment gateway and
+        setting of environment variables through the Agent D-Bus API.
+    """
+
+    def test_vars_set_by_api_takes_precedence(self):
+        """ Setting a varaible through the D-Bus API should mean that value
+            takes precedence over a variable previously set by the environment
+            gateway.
+        """
+        try:
+            sc = Container()
+            sc.start(DATA)
+            # Set variable through gateway
+            sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
+            # Set the same variable with LaunchCommand
+            env_var = {"MY_ENV_VAR": "new-value"}
+            sc.launch_command("python " +
+                                  sc.get_bind_dir() +
+                                  "/testhelper.py --get-env-vars " +
+                                  sc.get_bind_dir() + "/testoutput/",
+                              env=env_var)
+
+            # The D-Bus LaunchCommand is asynch so let it take effect before assert
+            time.sleep(0.5)
+            my_env_var = testhelper.env_var("MY_ENV_VAR", TESTOUTPUT_DIR)
+            # Assert value is the one set with LaunchCommand
+            assert my_env_var == "new-value"
+        finally:
+            sc.terminate()
 
 
 @pytest.mark.usefixtures("create_testoutput_dir", "agent", "clear_env_files")

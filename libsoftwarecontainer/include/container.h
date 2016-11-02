@@ -194,6 +194,7 @@ private:
 
     bool m_enableWriteBuffer;
 
+    // All environment variables set by gateways
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
     int m_shutdownTimeout = 2;
