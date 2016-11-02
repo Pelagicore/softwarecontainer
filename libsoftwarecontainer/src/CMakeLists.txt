@@ -35,6 +35,7 @@ gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
 if(ENABLE_NETWORKGATEWAY)
     list(APPEND GATEWAY_SOURCES netlink.cpp)
+    list(APPEND GATEWAY_SOURCES gateway/iptableentry.cpp)
 endif()
 
 gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)

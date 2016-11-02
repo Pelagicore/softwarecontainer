@@ -18,80 +18,13 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include "gateway.h"
 #include "generators.h"
 #include "jansson.h"
 #include "netlink.h"
-
-
-/**
- * @brief A rules entry for the treatment of packets.
- */
-class IPTableEntry
-{
-    LOG_DECLARE_CLASS_CONTEXT("IPTE", "IPTable Entry");
-public:
-    /**
-     * @brief container for port filtering options. Used internally in a Rule.
-     */
-    struct portFilter {
-        portFilter() : any{0}, multiport{0}, ports{""} {};
-        bool any;
-        bool multiport;
-        std::string ports;
-    };
-
-    /**
-     * @brief Targets for Rules
-     */
-    enum Target
-    {
-        INVALID_TARGET,
-        ACCEPT,
-        DROP,
-        REJECT
-    };
-
-    /**
-     * @brief Definition of a 'Rule' used to handle network traffic. Used internally in an Entry.
-     */
-    struct Rule
-    {
-        std::string host;
-        portFilter  ports;
-        Target target;
-    };
-
-    /**
-     * @brief Applies all rules to iptables
-     * @return true  Upon success
-     * @return false Upon failure
-     */
-    ReturnCode applyRules();
-
-    unsigned int m_priority;
-    std::string m_type;
-    std::vector<Rule> m_rules;
-    Target m_defaultTarget;
-private:
-    /**
-     * @brief converts target to string
-     * @return string representation of target
-     */
-    std::string convertTarget (Target& t);
-
-
-    /**
-     * @brief Inserts a rule to iptables
-     * @return true  Upon success
-     * @return false Upon failure
-     */
-    ReturnCode insertRule(Rule rule);
-};
-
+#include "iptableentry.h"
 
 /**
  * @brief Sets up and manages network access and routing to the container
