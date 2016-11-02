@@ -103,7 +103,7 @@ private:
 
     std::shared_ptr<ContainerAbstractInterface> m_container;
     pid_t m_pcPid = INVALID_PID;
-    std::vector<std::unique_ptr<Gateway> > m_gateways;
+    std::vector<std::unique_ptr<Gateway>> m_gateways;
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     SignalConnectionsHandler m_connections;
