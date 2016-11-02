@@ -97,7 +97,7 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    e.m_defaultTarget= parseTarget(readTarget);
+    e.m_defaultTarget = parseTarget(readTarget);
     if (e.m_defaultTarget == IPTableEntry::Target::INVALID_TARGET) {
         log_error() << "Default target '" << readTarget << "' is not a supported target.Invalid target.";
         return ReturnCode::FAILURE;
@@ -346,70 +346,4 @@ bool NetworkGateway::isBridgeAvailable()
     }
 
     return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
-}
-
-ReturnCode IPTableEntry::applyRules()
-{
-    for (auto rule : m_rules) {
-        if (ReturnCode::FAILURE == insertRule(rule)) {
-            log_error() << "Couldn't apply the rule " << rule.target;
-            return ReturnCode::FAILURE;
-        }
-    }
-
-    return ReturnCode::SUCCESS;
-}
-
-
-std::string IPTableEntry::convertTarget (Target& t)
-{
-    switch(t)
-    {
-        case Target::ACCEPT:
-            return "ACCEPT";
-        case Target::DROP:
-            return "DROP";
-        case Target::REJECT:
-            return "REJECT";
-        case Target::INVALID_TARGET:
-            return "INVALID";
-    }
-    return "INVALID";
-}
-
-ReturnCode IPTableEntry::insertRule(Rule rule)
-{
-    std::string iptableCommand = "iptables -A " + m_type;
-
-    if (!rule.host.empty()) {
-        iptableCommand = iptableCommand + " -s " + rule.host ;
-    }
-
-    if (rule.ports.any) {
-        if (rule.ports.multiport) {
-            iptableCommand = iptableCommand + " -p tcp --match multiport --sports " + rule.ports.ports;
-        } else {
-            iptableCommand = iptableCommand + " -p tcp --sport " + rule.ports.ports;
-        }
-
-    }
-
-    iptableCommand = iptableCommand + " -j " + convertTarget(rule.target);
-    log_debug() << "Add network rule : " <<  iptableCommand;
-
-    try {
-        Glib::spawn_command_line_sync(iptableCommand);
-
-    } catch (Glib::SpawnError e) {
-        log_error() << "Failed to spawn " << iptableCommand << ": code " << e.code()
-                               << " msg: " << e.what();
-
-        return ReturnCode::FAILURE;
-    } catch (Glib::ShellError e) {
-        log_error() << "Failed to call " << iptableCommand << ": code " << e.code()
-                                       << " msg: " << e.what();
-        return ReturnCode::FAILURE;
-    }
-
-    return ReturnCode::SUCCESS;
 }
