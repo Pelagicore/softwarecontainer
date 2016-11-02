@@ -145,6 +145,7 @@ ReturnCode Container::create()
     log_debug() << "Template : " << LXCTEMPLATE;
     log_debug() << "creating container with ID : " << containerID;
 
+    // Creating a new LXC pointer
     // After this point all failures should do rollback
     m_container = lxc_container_new(containerID, nullptr);
     if (!m_container) {
@@ -165,28 +166,24 @@ ReturnCode Container::create()
     }
     log_debug() << "Successfully loaded container config";
 
-    const std::string rootfspath_dst =
-        StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
+    // File system stuff
+    m_rootFSPath = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
 
     if (m_enableWriteBuffer) {
-        createDirectory(rootfspath_dst);
-        const std::string rootfspath_lower = rootfspath_dst + "-lower";
-        createDirectory(rootfspath_lower);
-        const std::string rootfspath_upper = rootfspath_dst + "-upper";
-        createDirectory(rootfspath_upper);
-        const std::string rootfspath_work = rootfspath_dst + "-work";
-        overlayMount(rootfspath_lower, rootfspath_upper, rootfspath_work, rootfspath_dst);
-        m_rootFSPath = rootfspath_dst;
+        const std::string rootFSPathLower = m_rootFSPath + "-lower";
+        const std::string rootFSPathUpper = m_rootFSPath + "-upper";
+        const std::string rootFSPathWork  = m_rootFSPath + "-work";
 
-        log_debug() << "Write buffer enabled, lower=" << rootfspath_lower
-                    << ", upper=" << rootfspath_upper
-                    << ", work=" << rootfspath_work
-                    << ", dst=" << rootfspath_dst;
+        overlayMount(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);
+        log_debug() << "Write buffer enabled, lower=" << rootFSPathLower
+                    << ", upper=" << rootFSPathUpper
+                    << ", work=" << rootFSPathWork
+                    << ", dst=" << m_rootFSPath;
     } else {
-        m_rootFSPath = rootfspath_dst;
-        log_debug() << "WriteBuffer disabled, dst=" << rootfspath_dst;
+        log_debug() << "WriteBuffer disabled, dst=" << m_rootFSPath;
     }
 
+    // Set the LXC template
     int flags = 0;
     std::vector<char *> argv;
     if (!m_container->create(m_container, LXCTEMPLATE, nullptr, nullptr, flags, &argv[0])) {
@@ -195,6 +192,7 @@ ReturnCode Container::create()
         return rollbackCreate();
     }
 
+    // Everything went fine, set state and return successfully.
     m_state = ContainerState::CREATED;
     log_debug() << "Container created. RootFS: " << m_rootFSPath;
 
