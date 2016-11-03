@@ -66,6 +66,13 @@ For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
 build this code, please take a look at the Vagrantfile.
 
+**Note**: It is possible to get the complete list of CMake options by running:
+``
+    mkdir build
+    cd build
+    cmake -LAH ..
+``
+
 ## Building in Vagrant
 
 Vagrant can be used to quickly set up a virtualized environment for building.
