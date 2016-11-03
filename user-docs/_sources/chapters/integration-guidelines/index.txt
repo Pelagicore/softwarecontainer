@@ -35,7 +35,7 @@ host system, if compiled with support for the network gateway. By default, Softw
 create such a bridge on the system if it is not already there. This can be changed, so that
 SoftwareContainer will simply fail with an error message if the bridge was not available.
 
-The selection of whether or not to create the bridge is a compile-time options given to CMake.
+The selection of whether or not to create the bridge is a compile-time option given to CMake.
 Please see the README for more information about how to set the various CMake options.
 
 For each container a virtual ethernet device will be set up and be bridged to the above mentioned
@@ -43,7 +43,7 @@ network bridge on the host system. The virtual ethernet device is then mapped to
 inside of the container (usually eth0).
 
 In order to configure what traffic is allowed the NetworkGateway is used. The NetworkGateway converts
-the configuration it receives into ip-tables rules which are set for the network device inside of the
+the configuration it receives into iptables rules which are set for the network device inside of the
 container. See :ref:`Gateways <gateways>` for more information.
 
 Wayland setup
