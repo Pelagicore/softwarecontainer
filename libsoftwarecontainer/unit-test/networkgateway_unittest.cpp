@@ -63,7 +63,7 @@ protected:
                      "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
                  "],"
-        "\"default\": \"DROP\""
+        "\"default\": \"ACCEPT\""
     "}, {"
         "\"type\": \"OUTGOING\","
         "\"priority\": 1,"
@@ -73,7 +73,7 @@ protected:
                      "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
                  "],"
-        "\"default\": \"DROP\""
+        "\"default\": \"ACCEPT\""
     "}, {"
         "\"type\": \"INCOMING\","
         "\"priority\": 1,"
@@ -93,7 +93,7 @@ protected:
                      "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
                  "],"
-        "\"default\": \"DROP\""
+        "\"default\": \"ACCEPT\""
     "}, {"
         "\"type\": \"INCOMING\","
         "\"priority\": 1,"
@@ -103,7 +103,7 @@ protected:
                      "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
                      "{ \"host\": \"93.184.216.34/24\", \"target\": \"REJECT\"}"
                  "],"
-        "\"default\": \"DROP\""
+        "\"default\": \"ACCEPT\""
     "}]";
 };
 

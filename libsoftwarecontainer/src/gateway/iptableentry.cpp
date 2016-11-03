@@ -22,16 +22,16 @@
 
 ReturnCode IPTableEntry::applyRules()
 {
-    if (ReturnCode::FAILURE == setPolicy()) {
-        log_error() << "Unable to set policy " << convertTarget(m_defaultTarget) << " for " << m_type;
-        return ReturnCode::FAILURE;
-    }
-
     for (auto rule : m_rules) {
         if (ReturnCode::FAILURE == insertRule(rule)) {
             log_error() << "Couldn't apply the rule " << rule.target;
             return ReturnCode::FAILURE;
         }
+    }
+
+    if (ReturnCode::FAILURE == setPolicy()) {
+        log_error() << "Unable to set policy " << convertTarget(m_defaultTarget) << " for " << m_type;
+        return ReturnCode::FAILURE;
     }
 
     return ReturnCode::SUCCESS;
