@@ -2,7 +2,7 @@ SoftwareContainer using LXC
 ***************************
 
 SoftwareContainer uses the Linux Containers (`LXC <https://linuxcontainers.org/>`_) project as its container backend. LXC uses namespaces and cgroups,
-and has been supported in the Linux kernel since 2.6.24. 
+and has been supported in the Linux kernel since 2.6.24.
 
 LXC Template
 ------------

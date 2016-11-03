@@ -13,6 +13,7 @@
         <method name="SetContainerName">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="s" name="containerName" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="LaunchCommand">
@@ -25,18 +26,31 @@
             <arg direction="out" type="u" name="pid" />
         </method>
 
+        <method name="FreezeContainer">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="out" type="b" name="success" />
+        </method>
+
+        <method name="ThawContainer">
+            <arg direction="in" type="u" name="containerID" />
+            <arg direction="out" type="b" name="success" />
+        </method>
+
         <method name="ShutDownContainer">
             <arg direction="in" type="i" name="containerID" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="ShutDownContainerWithTimeout">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="u" name="timeout" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="WriteToStdIn">
             <arg direction="in" type="u" name="processID" />
             <arg direction="in" type="ay" name="bytes" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="BindMountFolderInContainer">
@@ -48,7 +62,7 @@
         </method>
 
         <method name="SetGatewayConfigs">
-            <!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList 
+            <!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList
                 &lt; QString &gt; "/> -->
             <annotation name="org.qtproject.QtDBus.QtTypeName.In0"
                 value="int" />

@@ -32,7 +32,7 @@ public:
     SoftwareContainerAgentTest() { }
     std::shared_ptr<SoftwareContainerAgent> sca;
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    int m_preloadCount = 1;
+    int m_preloadCount = 0;
     bool m_shutdownContainers = true;
     int m_shutdownTimeout = 2;
     std::shared_ptr<Workspace> workspace;
@@ -64,7 +64,7 @@ TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
     SoftwareContainer *container;
     ContainerID id = sca->createContainer(valid_config);
     bool retval = sca->checkContainer(id, container);
-    ASSERT_TRUE(retval == true);
+    ASSERT_TRUE(retval);
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
@@ -72,7 +72,7 @@ TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
     ContainerID id = sca->createContainer(valid_config);
     sca->deleteContainer(id);
     bool retval = sca->checkContainer(id, container);
-    ASSERT_TRUE(retval == false);
+    ASSERT_FALSE(retval);
 }
 
 /*
@@ -90,36 +90,178 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
     bool retval = sca->parseConfig("[{\"enableWriteBuffer\": true}]");
-    ASSERT_TRUE(retval == true);
-    ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
+    ASSERT_TRUE(retval);
+    ASSERT_TRUE(workspace->m_enableWriteBuffer);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice2) {
     bool retval = sca->parseConfig("[{\"enableWriteBuffer\": false}]");
-    ASSERT_TRUE(retval == true);
+    ASSERT_TRUE(retval);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNoConfig) {
     bool retval = sca->parseConfig("");
-    ASSERT_TRUE(retval== false);
+    ASSERT_FALSE(retval);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigBadConfig) {
     bool retval = sca->parseConfig("gobfmsrfe");
-    ASSERT_TRUE(retval== false);
+    ASSERT_FALSE(retval);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig) {
     // This actually parses and should be true. but wrong parameter name
     bool retval = sca->parseConfig("[{\"enableWritebuffer\": true}]");
-    ASSERT_TRUE(retval== true);
-    ASSERT_TRUE(workspace->m_enableWriteBuffer == false);
+    ASSERT_TRUE(retval);
+    ASSERT_FALSE(workspace->m_enableWriteBuffer);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig2) {
     // This actually parses and should be true
     bool retval = sca->parseConfig("[{\"enableWriteBuffer\": false}]");
 
-    ASSERT_TRUE(retval == true);
-    ASSERT_TRUE(workspace->m_enableWriteBuffer == false);
+    ASSERT_TRUE(retval);
+    ASSERT_FALSE(workspace->m_enableWriteBuffer);
+}
+
+// Freeze an invalid container
+TEST_F(SoftwareContainerAgentTest, FreezeInvalidContainer) {
+    bool retval = sca->suspendContainer(0);
+    ASSERT_FALSE(retval);
+}
+
+// Thaw an invalid container
+TEST_F(SoftwareContainerAgentTest, ThawInvalidContainer) {
+    bool retval = sca->resumeContainer(0);
+    ASSERT_FALSE(retval);
+}
+
+// Thaw a container that has not been frozen
+TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_FALSE(retval);
+}
+
+// Freeze and then resume a container
+TEST_F(SoftwareContainerAgentTest, FreezeAndThawContainer) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_TRUE(retval);
+}
+
+// Freeze a container and try to resume it twice
+TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_FALSE(retval);
+}
+
+// Freeze an already frozen container
+TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_FALSE(retval);
+}
+
+// Freeze an already frozen container, and then resume it
+TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_FALSE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_TRUE(retval);
+}
+
+// Double suspend and then double resume
+TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_FALSE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_FALSE(retval);
+}
+
+// Try to launch a command in a frozen container. Then resume it and try again.
+TEST_F(SoftwareContainerAgentTest, FreezeContainerAndLaunchCommand) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    std::function<void (pid_t, int)> noopFunction = [] (pid_t, int) {};
+
+    pid_t pid = sca->launchCommand(id, 0, "whoami", "", "", EnvironmentVariables(), noopFunction);
+    ASSERT_EQ(pid, INVALID_PID);
+
+    retval = sca->resumeContainer(id);
+    ASSERT_TRUE(retval);
+
+    pid = sca->launchCommand(id, 0, "whoami", "", "", EnvironmentVariables(), noopFunction);
+    ASSERT_NE(pid, INVALID_PID);
+    waitpid(pid, nullptr, 0);
+}
+
+// Make sure you can still shutdown a frozen container
+TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
+    SoftwareContainer *container;
+    ContainerID id = sca->createContainer(valid_config);
+    bool retval = sca->checkContainer(id, container);
+    ASSERT_TRUE(retval);
+
+    retval = sca->suspendContainer(id);
+    ASSERT_TRUE(retval);
+
+    retval = sca->shutdownContainer(id);
+    ASSERT_TRUE(retval);
 }

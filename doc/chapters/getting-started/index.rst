@@ -167,6 +167,29 @@ The method returns the PID of the process run inside the container.
 The above method call results in a file ``hello`` being created inside the conainer in ``/gateways/app/``. This can
 also be seen in the bind mounted location ``/home/vagrant/softwarecontainer/``.
 
+Suspend the container::
+
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.SuspendContainer \
+    0
+
+This will suspend execution inside the container. The value passed as the `containerID` parameter
+should be the same value that was returned from the call to `CreateContainer`. It is not possible
+to run LaunchCommand on a suspended container.
+
+Resume the container::
+
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.ResumeContainer \
+    0
+
+
+This will resume the suspended container. The value passed as the `containerID` parameter
+should be the same value that was returned from the call to `CreateContainer`.
 
 Shut down the container::
 

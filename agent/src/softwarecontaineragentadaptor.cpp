@@ -20,12 +20,17 @@ uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::LaunchCommand(const i
 
 void softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout)
 {
-    m_agent.shutdownContainer(containerID, timeout);
+    return m_agent.suspendContainer(containerID);
+}
+
+bool softwarecontainer::SoftwareContainerAgentAdaptor::FreezeContainer(const int32_t &containerID)
+{
+    return m_agent.resumeContainer(containerID);
 }
 
 void softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainer(const int32_t &containerID)
 {
-    m_agent.shutdownContainer(containerID);
+    return m_agent.shutdownContainer(containerID);
 }
 
 std::string softwarecontainer::SoftwareContainerAgentAdaptor::BindMountFolderInContainer(const int32_t &containerID, const std::string &pathInHost, const std::string &subPathInContainer, const bool &readOnly)
@@ -57,7 +62,7 @@ void softwarecontainer::SoftwareContainerAgentAdaptor::Ping()
 {
 }
 
-void softwarecontainer::SoftwareContainerAgentAdaptor::WriteToStdIn(const uint32_t &processID, const std::vector<uint8_t> &bytes)
+bool softwarecontainer::SoftwareContainerAgentAdaptor::WriteToStdIn(const uint32_t &processID, const std::vector<uint8_t> &bytes)
 {
-    m_agent.writeToStdIn(processID, bytes);
+    return m_agent.writeToStdIn(processID, bytes);
 }

@@ -51,9 +51,8 @@
 
 
 /**
- * @class softwarecontainer::SoftwareContainerAgent 
+ * @class softwarecontainer::SoftwareContainerAgent
  * @brief A wrapper class
- * 
  */
 namespace softwarecontainer {
 
@@ -80,7 +79,7 @@ public:
     /**
      * @brief delete container by ID
      */
-    void deleteContainer(ContainerID containerID);
+    bool deleteContainer(ContainerID containerID);
 
     /**
      * @brief Check whether the given container is valid and return a reference to the actual container
@@ -130,7 +129,7 @@ public:
      * @param pid the pid of the process (must be created through launchCommand)
      * @param bytes the bytes to write to stdin
      */
-    void writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes);
+    bool writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes);
 
     /**
      * @brief Launch the given command in a the given container
@@ -153,14 +152,14 @@ public:
      * @param containerID the id for the container
      * @param name the name to set
      */
-    void setContainerName(ContainerID containerID, const std::string &name);
+    bool setContainerName(ContainerID containerID, const std::string &name);
 
     /**
      * @brief shuts down a container
      *
      * @param containerID the container to shut down
      */
-    void shutdownContainer(ContainerID containerID);
+    bool shutdownContainer(ContainerID containerID);
 
     /**
      * @brief shuts down a container with a custom timeout
@@ -168,7 +167,21 @@ public:
      * @param containerID the container to shut down
      * @param timeout timeout in seconds to wait before forcing
      */
-    void shutdownContainer(ContainerID containerID, unsigned int timeout);
+    bool shutdownContainer(ContainerID containerID, unsigned int timeout);
+
+    /**
+     * @brief suspends execution of a container
+     *
+     * @param containerID the container to suspend
+     */
+    bool suspendContainer(ContainerID containerID);
+
+    /**
+     * @brief resumes execution of a container
+     *
+     * @param containerID the container to resume
+     */
+    bool resumeContainer(ContainerID containerID);
 
     /**
      * @brief Bind mount a folder into the container

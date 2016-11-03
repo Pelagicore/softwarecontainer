@@ -209,6 +209,11 @@ ReturnCode Container::rollbackCreate() {
 
 ReturnCode Container::ensureContainerRunning()
 {
+    if (ContainerState::FROZEN == m_state) {
+        log_error() << "Container is frozen, does not run";
+        return ReturnCode::FAILURE;
+    }
+
     if (m_state < ContainerState::STARTED) {
         log_error() << "Container is not in state STARTED, state is " << ((int)m_state);
         log_error() << logging::getStackTrace();
@@ -703,6 +708,49 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
     FileToolkitWithUndo::writeToFile(path, s);
 
     return ReturnCode::SUCCESS;
+}
+
+ReturnCode Container::suspend()
+{
+    if (m_state < ContainerState::STARTED) {
+        log_error() << "Container is not started yet";
+        return ReturnCode::FAILURE;
+    }
+
+    if (m_state == ContainerState::FROZEN) {
+        log_error() << "Container is already suspended";
+        return ReturnCode::FAILURE;
+    }
+
+    log_debug() << "Suspending container";
+    bool retval = m_container->freeze(m_container);
+
+    if (retval) {
+        m_state = ContainerState::FROZEN;
+        return ReturnCode::SUCCESS;
+    }
+
+    log_error() << "Could not suspend the container";
+    return ReturnCode::FAILURE;
+}
+
+ReturnCode Container::resume()
+{
+    if (m_state < ContainerState::FROZEN) {
+        log_error() << "Container is not suspended";
+        return ReturnCode::FAILURE;
+    }
+
+    log_debug() << "Resuming container";
+    bool retval = m_container->unfreeze(m_container);
+
+    if (retval) {
+        m_state = ContainerState::STARTED;
+        return ReturnCode::SUCCESS;
+    }
+
+    log_error() << "Could not resume container";
+    return ReturnCode::FAILURE;
 }
 
 const char *Container::id() const

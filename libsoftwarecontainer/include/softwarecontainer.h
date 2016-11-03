@@ -51,9 +51,29 @@ public:
 
     /**
      * @brief Shutdown the container
-     */ 
+     */
     ReturnCode shutdown();
     ReturnCode shutdown(unsigned int timeout);
+
+    /*
+     * @brief suspend the container
+     *
+     * This suspends any execution inside the container until resume is called.
+     *
+     * @return ReturnCode::FAILURE if the container was already suspended
+     * @return ReturnCode::SUCCESS if the container was successfully suspended
+     */
+    ReturnCode suspend();
+
+    /*
+     * @brief resume a suspended container
+     *
+     * This resumes execution of a container that was suspended.
+     *
+     * @return ReturnCode::FAILURE if the container was not suspended
+     * @return ReturnCode::SUCCESS if the container was successfully resumed
+     */
+    ReturnCode resume();
 
     bool isInitialized() const;
 
