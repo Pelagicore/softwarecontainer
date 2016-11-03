@@ -126,7 +126,10 @@ bool DBusGateway::activateGateway()
     json_t *jsonConfig = json_object();
     json_object_set(jsonConfig, SESSION_CONFIG, m_sessionBusConfig);
     json_object_set(jsonConfig, SYSTEM_CONFIG, m_systemBusConfig);
-    std::string config = std::string(json_dumps(jsonConfig, JSON_COMPACT));
+
+    char *config_c = json_dumps(jsonConfig, JSON_COMPACT);
+    std::string config = std::string(config_c);
+    free(config_c);
 
     return testDBusConnection(config);
 }
