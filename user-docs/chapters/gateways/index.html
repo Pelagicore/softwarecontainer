@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.9.1-309bc9e 2016-11-02 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.9.1-69405d6 2016-11-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-309bc9e 2016-11-02',
+        VERSION:     '0.9.1-69405d6 2016-11-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-309bc9e 2016-11-02 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-69405d6 2016-11-03 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -362,7 +362,8 @@ ports. How to handle matching traffic is specified by <code class="docutils lite
 <code class="docutils literal"><span class="pre">target</span></code>: <code class="docutils literal"><span class="pre">ACCEPT</span></code>, <code class="docutils literal"><span class="pre">DROP</span></code> and <code class="docutils literal"><span class="pre">REJECT</span></code>, where <code class="docutils literal"><span class="pre">ACCEPT</span></code> does nothing with the traffic
 while <code class="docutils literal"><span class="pre">REJECT</span></code> and <code class="docutils literal"><span class="pre">DROP</span></code> both deny the network traffic to continue. The difference between
 the latter two being that <code class="docutils literal"><span class="pre">REJECT</span></code> answers the sender while <code class="docutils literal"><span class="pre">DROP</span></code> does not. If no rule applies
-<code class="docutils literal"><span class="pre">default</span></code> specifies what to do with the traffic.</p>
+<code class="docutils literal"><span class="pre">default</span></code> specifies what to do with the traffic. There are only two valid values for <code class="docutils literal"><span class="pre">default</span></code>:
+<code class="docutils literal"><span class="pre">ACCEPT</span></code> and <code class="docutils literal"><span class="pre">DROP</span></code>.</p>
 <p>As mentioned above, different order of the rules can have profound different meaning. Following are
 an example attempting to reject all traffic from example.com on ports 1234 to 5678 and adding an
 exception for port 1423.:</p>
@@ -371,7 +372,7 @@ exception for port 1423.:</p>
         <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
         <span class="s">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s">&quot;rules&quot;</span><span class="p">:</span> <span class="p">[</span>
-                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;1234-5678&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;REJECT&quot;</span><span class="p">},</span>
+                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;1234:5678&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;REJECT&quot;</span><span class="p">},</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="mi">1423</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
                  <span class="p">],</span>
         <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;DROP&quot;</span>
@@ -388,7 +389,7 @@ order to achive this the order of the rules has to be changed:</p>
         <span class="s">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s">&quot;rules&quot;</span><span class="p">:</span> <span class="p">[</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="mi">1423</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
-                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;1234-5678&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;REJECT&quot;</span><span class="p">},</span>
+                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;1234:5678&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;REJECT&quot;</span><span class="p">},</span>
                  <span class="p">],</span>
         <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;DROP&quot;</span>
     <span class="p">}</span>
@@ -407,18 +408,18 @@ as an unsigned int &gt; 0 where 1 describes the highest priority.</p>
         <span class="s">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s">&quot;rules&quot;</span><span class="p">:</span> <span class="p">[</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1/16&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
-                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;80-85&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
+                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;80:85&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1/16&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">8080</span><span class="p">],</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;203.0.113.0/24&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;DROP&quot;</span><span class="p">},</span>
                  <span class="p">],</span>
-        <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;REJECT&quot;</span>
+        <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;DROP&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
         <span class="s">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
         <span class="s">&quot;rules&quot;</span><span class="p">:</span> <span class="p">[</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1/16&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
-                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;80-85&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
+                     <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;example.com&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;80:85&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1/16&quot;</span><span class="p">,</span> <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">8080</span><span class="p">],</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;ACCEPT&quot;</span><span class="p">},</span>
                      <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;203.0.113.0/24&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;REJECT&quot;</span><span class="p">},</span>
                  <span class="p">],</span>
