@@ -4,7 +4,7 @@
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
     config.vm.provider "virtualbox" do |vb|
-        vb.customize [ "guestproperty", "set", :id, 
+        vb.customize [ "guestproperty", "set", :id,
                        "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
         if ENV['VAGRANT_RAM'] then
             vb.memory = ENV['VAGRANT_RAM'].to_i * 1024
@@ -18,7 +18,7 @@ Vagrant.configure(2) do |config|
     config.vm.synced_folder "./", "/home/vagrant/softwarecontainer/", create: true
 
     # Workaround for some bad network stacks
-    config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh" 
+    config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh"
 
     # Use apt-cacher on our apt cache server
     if ENV['APT_CACHE_SERVER'] then
@@ -40,23 +40,23 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/deps/pulseaudio-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/sphinx-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/pytest-and-dbus-testing-dependencies.sh"
-    config.vm.provision "shell", path: "cookbook/deps/debugging-tools.sh"
+    config.vm.provision "shell", path: "cookbook/deps/developer-tools.sh"
 
     # Add known hosts
     config.vm.provision "shell", privileged: false,
         path: "cookbook/system-config/ssh-keyscan-conf.sh"
 
     # Install dependencies via git
-    config.vm.provision "shell", privileged: false, 
+    config.vm.provision "shell", privileged: false,
         args: ["dlt-daemon", "http://git.projects.genivi.org/dlt-daemon.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
-    config.vm.provision "shell", privileged: false, 
+    config.vm.provision "shell", privileged: false,
         #args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git", "-DENABLE_DLT_BACKEND=1"],
         args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
-    config.vm.provision "shell", privileged: false, 
+    config.vm.provision "shell", privileged: false,
         args: ["dbus-proxy", "https://github.com/Pelagicore/dbus-proxy.git"],
         path: "cookbook/build/cmake-git-builder.sh"
 
