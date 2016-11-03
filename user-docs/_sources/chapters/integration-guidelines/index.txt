@@ -36,11 +36,20 @@ create such a bridge on the system if it is not already there. This can be chang
 SoftwareContainer will simply fail with an error message if the bridge was not available.
 
 The selection of whether or not to create the bridge is a compile-time options given to CMake.
+Please see the README for more information about how to set the various CMake options.
+
+For each container a virtual ethernet device will be set up and be bridged to the above mentioned
+network bridge on the host system. The virtual ethernet device is then mapped to an ethernet device
+inside of the container (usually eth0).
+
+In order to configure what traffic is allowed the NetworkGateway is used. The NetworkGateway converts
+the configuration it receives into ip-tables rules which are set for the network device inside of the
+container. See :ref:`Gateways <gateways>` for more information.
 
 Wayland setup
 =============
 
-In order to have applications access wayland, one needs to enable the Wayland gateway, and possibly
+In order to have applications access Wayland, one needs to enable the Wayland gateway, and possibly
 give access to graphics hardware. Not all applications require direct access to the graphics
 hardware, see :ref:`Wayland example <wayland-example>`. A reasonable capability for a Wayland
 application would therefore include both the Wayland gateway and a configuration of the Device Node
@@ -48,7 +57,7 @@ gateway for any graphics hardware access needed.
 
 Example
 -------
-Here is an example manifest defining wayland access::
+Here is an example manifest defining Wayland access::
 
     {
       "capabilities": [

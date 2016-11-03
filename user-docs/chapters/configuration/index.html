@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &#8212; softwarecontainer 0.9.1-69405d6 2016-11-03 documentation</title>
+    <title>Configuration &#8212; softwarecontainer 0.9.1-f010597 2016-11-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-69405d6 2016-11-03',
+        VERSION:     '0.9.1-f010597 2016-11-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-69405d6 2016-11-03 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-f010597 2016-11-03 documentation" href="../../index.html" />
     <link rel="next" title="Service manifests" href="../service-manifests/index.html" />
     <link rel="prev" title="Design" href="../design/index.html" />
    
@@ -104,7 +104,18 @@
 </div>
 <div class="section" id="cmake-options">
 <h2>CMake Options<a class="headerlink" href="#cmake-options" title="Permalink to this headline">¶</a></h2>
-<p>CMake options can be used to configure softwareContainer. Desired gateways can be enabled/disabled by passing flags to cmake. (Currently following gateways are able for enable/disable option; network, pulse, device node, dbus, cgroup <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a>).</p>
+<p>CMake options can be used to configure SoftwareContainer. Following are an explanation of some of them together with use case examples:</p>
+<div class="section" id="gateways-options">
+<h3>Gateways options<a class="headerlink" href="#gateways-options" title="Permalink to this headline">¶</a></h3>
+<p>If a gateway is disabled this means that the gateway will not be apart of SoftwareContainer at compile time. Hence this will disable the IPC mechanism that the gateway in question handles.
+As an example, the following snippet will install SoftwareContainer without any network support:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">cmake</span> <span class="o">-</span><span class="n">DENABLE_NETWORKGATEWAY</span><span class="o">=</span><span class="n">OFF</span> <span class="o">..</span>
+<span class="n">make</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>A complete list of available gateways can be found at <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
+</div>
 </div>
 </div>
 
@@ -120,7 +131,10 @@
 <li><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
 <li><a class="reference internal" href="#json">JSON</a></li>
 <li><a class="reference internal" href="#files">Files</a></li>
-<li><a class="reference internal" href="#cmake-options">CMake Options</a></li>
+<li><a class="reference internal" href="#cmake-options">CMake Options</a><ul>
+<li><a class="reference internal" href="#gateways-options">Gateways options</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
