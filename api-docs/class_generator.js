@@ -1,5 +1,5 @@
 var class_generator =
 [
-    [ "gen_ip_addr", "class_generator.html#a70a55add550a1afc96b35476826789c8", null ],
-    [ "gen_ct_name", "class_generator.html#aef4b2cad9d8532c984ab9864cf9ad575", null ]
+    [ "genIPAddr", "class_generator.html#ae3571464dd705850e8705c278e064257", null ],
+    [ "genName", "class_generator.html#a4987226acdc23f9c0a89e45ac68bebd5", null ]
 ];
