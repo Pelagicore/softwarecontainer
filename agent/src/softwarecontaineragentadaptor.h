@@ -28,6 +28,9 @@ public:
     std::string BindMountFolderInContainer(const int32_t &containerID, const std::string &pathInHost,
                 const std::string &subPathInContainer, const bool &readOnly) override;
 
+    bool FreezeContainer(const int32_t &containerID) override;
+    bool ThawContainer(const int32_t &containerID) override;
+
     void SetGatewayConfigs(const int32_t &containerID, const std::map<std::string, std::string> &configs) override;
 
     bool SetCapabilities(const int32_t &containerID, const std::vector<std::string> &capabilities) override;

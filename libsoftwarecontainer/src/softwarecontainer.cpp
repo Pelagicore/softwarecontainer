@@ -198,6 +198,17 @@ ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
     return ReturnCode::SUCCESS;
 }
 
+ReturnCode SoftwareContainer::suspend()
+{
+    return m_container->suspend();
+}
+
+ReturnCode SoftwareContainer::resume()
+{
+    return m_container->resume();
+}
+
+
 ReturnCode SoftwareContainer::shutdownGateways()
 {
     ReturnCode status = ReturnCode::SUCCESS;

@@ -42,6 +42,9 @@ public:
     virtual ReturnCode shutdown() = 0;
     virtual ReturnCode shutdown(unsigned int timeout) = 0;
 
+    virtual ReturnCode suspend() = 0;
+    virtual ReturnCode resume() = 0;
+
     virtual ReturnCode destroy() = 0;
     virtual ReturnCode destroy(unsigned int timeout) = 0;
 

@@ -139,6 +139,28 @@ public:
     ReturnCode shutdown();
     ReturnCode shutdown(unsigned int timeout);
 
+    /*
+     * @brief calls freeze() on the LXC container
+     *
+     * This only works if the container is currently running and is not already
+     * suspended.
+     *
+     * @return ReturnCode::SUCCESS if the container was successfully suspended
+     * @return ReturnCode::FAILURE otherwise
+     */
+    ReturnCode suspend();
+
+    /*
+     * @brief calls unfreeze() on the LXC container
+     *
+     * This only works if the container was already suspended. This sets the container
+     * into running state again.
+     *
+     * @return ReturnCode::SUCCESS if the container was successfully resumed
+     * @return ReturnCode::FAILURE otherwise
+     */
+    ReturnCode resume();
+
     /**
      * @brief Calls stop on the lxc container(force stop)
      */
@@ -207,6 +229,7 @@ private:
         DESTROYED = 2,
         CREATED = 3,
         STARTED = 4,
+        FROZEN = 5,
     };
     ContainerState m_state = ContainerState::DEFAULT;
 };
