@@ -18,7 +18,7 @@
 
 include(AddGTestTest)
 
-set(TEST_LIBRARY_DEPENDENCIES 
+set(TEST_LIBRARY_DEPENDENCIES
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
@@ -26,13 +26,12 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainerlib
 )
+
 include_directories(${SOFTWARECONTAINER_COMMON_DIR})
 
 set(TEST_FILES
     softwarecontainer-common_unittest.cpp
     recursivecopy_unittest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../softwarecontainer-common.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../recursivecopy.cpp
     main.cpp
 )
 
