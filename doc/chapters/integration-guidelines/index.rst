@@ -4,20 +4,19 @@
 Integration guidelines
 **********************
 
-This chapter describes the workflow and major tasks and concepts involved in integrating SoftwareContainer
-into a platform.
-
 .. todo::
 
     This chapter is work in progress and lacks a lot of content.
 
-Introduction
-============
+This chapter describes the workflow, major tasks and concepts involved in integrating SoftwareContainer
+into a platform. A brief summary of the general steps involved:
 
-The general steps involved in integration are:
+#. Setting up the various IPC mechanisms, that should be reachable from inside containers, on the host system.
+#. Writing service manifests for capabilities of the platform.
+#. Integrating a launcher that interact with the SoftwareContainerAgent.
 
-* Writing service manifests for capabilities in the platform.
-* Integrating a launcher.
+Below follows information about what SoftwareContainer assumes about the host system when handling different
+IPC mechanisms and examples of configuration and usage.
 
 Service manifests
 =================
