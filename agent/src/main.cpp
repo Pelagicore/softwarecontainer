@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
     int option_index = 0;
     int c = 0;
-    while((c = getopt_long(argc, argv, "p:u:s:t:",long_options, &option_index)) != -1) {
+    while((c = getopt_long(argc, argv, "p:u:s:ht:", long_options, &option_index)) != -1) {
         switch(c) {
             case 'p':
                 if (!parseInt(optarg, &preloadCount)) {
