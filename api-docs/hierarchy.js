@@ -1,9 +1,5 @@
 var hierarchy =
 [
-    [ "softwarecontainer::Agent", "classsoftwarecontainer_1_1_agent.html", null ],
-    [ "softwarecontainer::AgentCommand", "classsoftwarecontainer_1_1_agent_command.html", null ],
-    [ "softwarecontainer::AgentContainer", "classsoftwarecontainer_1_1_agent_container.html", null ],
-    [ "softwarecontainer::AgentPrivateData", "structsoftwarecontainer_1_1_agent_private_data.html", null ],
     [ "softwarecontainer::CleanUpHandler", "classsoftwarecontainer_1_1_clean_up_handler.html", [
       [ "DirectoryCleanUpHandler", "class_directory_clean_up_handler.html", null ],
       [ "FileCleanUpHandler", "class_file_clean_up_handler.html", null ],
@@ -22,10 +18,6 @@ var hierarchy =
     [ "IntrospectableAdaptor", null, [
       [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
     ] ],
-    [ "IntrospectableProxy", null, [
-      [ "softwarecontainer::AgentPrivateData::DBusCppProxy", "classsoftwarecontainer_1_1_agent_private_data_1_1_d_bus_cpp_proxy.html", null ]
-    ] ],
-    [ "IPTableEntry", "class_i_p_table_entry.html", null ],
     [ "softwarecontainer::JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html", [
       [ "softwarecontainer::CommandJob", "classsoftwarecontainer_1_1_command_job.html", null ],
       [ "softwarecontainer::FunctionJob", "classsoftwarecontainer_1_1_function_job.html", null ]
@@ -47,31 +39,18 @@ var hierarchy =
     [ "ObjectAdaptor", null, [
       [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
     ] ],
-    [ "ObjectProxy", null, [
-      [ "softwarecontainer::AgentPrivateData::DBusCppProxy", "classsoftwarecontainer_1_1_agent_private_data_1_1_d_bus_cpp_proxy.html", null ]
-    ] ],
     [ "softwarecontainer::ObservableProperty< Type >", "classsoftwarecontainer_1_1_observable_property.html", [
       [ "softwarecontainer::ObservableWritableProperty< Type >", "classsoftwarecontainer_1_1_observable_writable_property.html", null ]
     ] ],
     [ "softwarecontainer::ObservableProperty< ContainerState >", "classsoftwarecontainer_1_1_observable_property.html", [
       [ "softwarecontainer::ObservableWritableProperty< ContainerState >", "classsoftwarecontainer_1_1_observable_writable_property.html", null ]
     ] ],
-    [ "softwarecontainer::ObservableProperty< ProcessState >", "classsoftwarecontainer_1_1_observable_property.html", [
-      [ "softwarecontainer::ObservableWritableProperty< ProcessState >", "classsoftwarecontainer_1_1_observable_writable_property.html", null ]
-    ] ],
-    [ "IPTableEntry::portFilter", "struct_i_p_table_entry_1_1port_filter.html", null ],
     [ "PProfiler", "class_p_profiler.html", null ],
     [ "RecursiveCopy", "class_recursive_copy.html", null ],
-    [ "IPTableEntry::Rule", "struct_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
     [ "SoftwareContainerAgent_adaptor", null, [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", [
         [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
-      ] ]
-    ] ],
-    [ "SoftwareContainerAgent_proxy", null, [
-      [ "softwarecontainer::AgentPrivateData::SoftwareContainerAgentProxy", "classsoftwarecontainer_1_1_agent_private_data_1_1_software_container_agent_proxy.html", [
-        [ "softwarecontainer::AgentPrivateData::DBusCppProxy", "classsoftwarecontainer_1_1_agent_private_data_1_1_d_bus_cpp_proxy.html", null ]
       ] ]
     ] ]
 ];

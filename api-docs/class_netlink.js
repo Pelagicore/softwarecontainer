@@ -12,7 +12,7 @@ var class_netlink =
     [ "setDefaultGateway", "class_netlink.html#a549bc6adda3142682c868a25b2af9231", null ],
     [ "linkUp", "class_netlink.html#a543fb0107278eb2bf932cfa52a615f7a", null ],
     [ "linkDown", "class_netlink.html#aed6f3c913fe88c0648b91252419f7846", null ],
-    [ "setIP", "class_netlink.html#ad71afe1271bbc38578d0e85e7aef0118", null ],
+    [ "setIP", "class_netlink.html#a7216869c3c231c9be48d63368bb897cc", null ],
     [ "findLink", "class_netlink.html#a2d30154efaa239d181651a953720f916", null ],
     [ "findAddresses", "class_netlink.html#ad4bf08fab49ab14314e4925ecedd8cb6", null ],
     [ "hasAddress", "class_netlink.html#a7f315e1dd78801c0d3bb2ee46ff179c7", null ]
