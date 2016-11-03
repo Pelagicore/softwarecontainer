@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.9.1-44b5293 2016-11-03 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.9.1-7250358 2016-11-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-44b5293 2016-11-03',
+        VERSION:     '0.9.1-7250358 2016-11-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-44b5293 2016-11-03 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-7250358 2016-11-03 documentation" href="../../index.html" />
     <link rel="next" title="Troubleshooting" href="../troubleshooting/index.html" />
     <link rel="prev" title="Gateways" href="../gateways/index.html" />
    
@@ -45,20 +45,19 @@
             
   <div class="section" id="integration-guidelines">
 <span id="id1"></span><h1>Integration guidelines<a class="headerlink" href="#integration-guidelines" title="Permalink to this headline">¶</a></h1>
-<p>This chapter describes the workflow and major tasks and concepts involved in integrating SoftwareContainer
-into a platform.</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <p class="last">This chapter is work in progress and lacks a lot of content.</p>
 </div>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The general steps involved in integration are:</p>
-<ul class="simple">
-<li>Writing service manifests for capabilities in the platform.</li>
-<li>Integrating a launcher.</li>
-</ul>
-</div>
+<p>This chapter describes the workflow, major tasks and concepts involved in integrating SoftwareContainer
+into a platform. A brief summary of the general steps involved:</p>
+<ol class="arabic simple">
+<li>Setting up the various IPC mechanisms, that should be reachable from inside containers, on the host system.</li>
+<li>Writing service manifests for capabilities of the platform.</li>
+<li>Integrating a launcher that interact with the SoftwareContainerAgent.</li>
+</ol>
+<p>Below follows information about what SoftwareContainer assumes about the host system when handling different
+IPC mechanisms and examples of configuration and usage.</p>
 <div class="section" id="service-manifests">
 <h2>Service manifests<a class="headerlink" href="#service-manifests" title="Permalink to this headline">¶</a></h2>
 <p>For details about format and content of service manifests, see <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">Service manifests</span></a>
@@ -130,7 +129,6 @@ gateway for any graphics hardware access needed.</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Integration guidelines</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#service-manifests">Service manifests</a></li>
 <li><a class="reference internal" href="#network-setup">Network setup</a></li>
 <li><a class="reference internal" href="#wayland-setup">Wayland setup</a><ul>
