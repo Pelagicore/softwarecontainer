@@ -227,9 +227,10 @@ bool NetworkGateway::activateGateway()
 
     if (m_internetAccess) {
         generateIP();
+        auto returnValue = up();
 
         for (auto entry : m_entries) {
-            executeInContainer([&] {
+            executeInContainer([&] () {
                 if (isSuccess(entry.applyRules())) {
                     return 0;
                 }  else {
@@ -238,7 +239,7 @@ bool NetworkGateway::activateGateway()
             });
         }
 
-        return up();
+        return returnValue;
     } else {
         return down();
     }
