@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filesystems &#8212; softwarecontainer 0.9.1-a26e787 2016-11-04 documentation</title>
+    <title>Filesystems &#8212; softwarecontainer 0.9.1-1a9bb5d 2016-11-04 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-a26e787 2016-11-04',
+        VERSION:     '0.9.1-1a9bb5d 2016-11-04',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-a26e787 2016-11-04 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-1a9bb5d 2016-11-04 documentation" href="../../index.html" />
     <link rel="next" title="Developer guidelines" href="../developers/index.html" />
     <link rel="prev" title="Troubleshooting" href="../troubleshooting/index.html" />
    
@@ -53,22 +53,23 @@ filesystem.</p>
 <h2>Standard filesystem<a class="headerlink" href="#standard-filesystem" title="Permalink to this headline">¶</a></h2>
 <p>Each container has a rootfs that is bind mounted as the containers root
 filesystem of said container. The creation and bind mounting of the root
-filesystem is automated by LXC based on a configuration file and a shell script
+filesystem is automated based on a configuration file and a shell script
 provided at startup. The process of creating the filesystem and bind mounting
-different parts is spread out over several involved parties because of this.</p>
+different parts is spread out over several involved parties because of this.
+Following is a rough description of the steps taken when setting up the
+standard filesystem for SoftwareContainer:</p>
 <ol class="arabic simple">
 <li>The root filesystem directory is created and the
 directory is empty on creation.</li>
-<li>It is setup by the <code class="docutils literal"><span class="pre">lxc-softwarecontainer.in</span></code> script, which is run by
-lxc init when the container is created.</li>
-<li>The <code class="docutils literal"><span class="pre">lxc-softwarecontainer.in</span></code>  creates several basic directories
+<li>It is setup by the <code class="docutils literal"><span class="pre">lxc-softwarecontainer</span></code> script, which is run when
+the container is created.</li>
+<li>The <code class="docutils literal"><span class="pre">lxc-softwarecontainer</span></code> creates several basic directories
 creating a normal unix environment as defined by Filesystem Hierarchy
 Standard (FHS).</li>
 <li>The filesystem is still mostly empty except for directories and some basic
 files such as <code class="docutils literal"><span class="pre">/etc/passwd</span></code> etc.</li>
 <li>LXC then mounts some basic directories defined in the
-<code class="docutils literal"><span class="pre">libsoftwarecontainer/softwarecontainer.conf</span></code> (copied to
-<code class="docutils literal"><span class="pre">/usr/share/lxc/conf</span></code> on installation).</li>
+<code class="docutils literal"><span class="pre">libsoftwarecontainer/softwarecontainer.conf</span></code>.</li>
 <li>On top of this, non standard mountpoints are also used to mount for example
 the gateway directories etc. inside the filesystem. These are defined using
 <a class="reference internal" href="../api/index.html#dbus-api"><span class="std std-ref">BindMountFolderInContainer</span></a>, or mounted by
