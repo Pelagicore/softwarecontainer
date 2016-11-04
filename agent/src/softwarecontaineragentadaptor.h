@@ -15,30 +15,30 @@ public:
 
     SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent);
 
-    uint32_t LaunchCommand(const uint32_t &containerID, const uint32_t &userID, const std::string &commandLine,
+    uint32_t LaunchCommand(const int32_t &containerID, const uint32_t &userID, const std::string &commandLine,
                 const std::string &workingDirectory,
                 const std::string &outputFile,
                 const std::map<std::string,
                     std::string> &env);
 
-    void ShutDownContainerWithTimeout(const uint32_t &containerID, const uint32_t &timeout);
+    void ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout);
 
-    void ShutDownContainer(const uint32_t &containerID) override;
+    void ShutDownContainer(const int32_t &containerID) override;
 
-    std::string BindMountFolderInContainer(const uint32_t &containerID, const std::string &pathInHost,
+    std::string BindMountFolderInContainer(const int32_t &containerID, const std::string &pathInHost,
                 const std::string &subPathInContainer, const bool &readOnly) override;
 
-    void SetGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs) override;
+    void SetGatewayConfigs(const int32_t &containerID, const std::map<std::string, std::string> &configs) override;
 
-    bool SetCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities) override;
+    bool SetCapabilities(const int32_t &containerID, const std::vector<std::string> &capabilities) override;
 
-    uint32_t CreateContainer(const std::string &config) override;
+    int32_t CreateContainer(const std::string &config) override;
 
-    void SetContainerName(const uint32_t &containerID, const std::string &name) override;
+    void SetContainerName(const int32_t &containerID, const std::string &name) override;
 
     void Ping() override;
 
-    void WriteToStdIn(const uint32_t &containerID, const std::vector<uint8_t> &bytes) override;
+    void WriteToStdIn(const uint32_t &processID, const std::vector<uint8_t> &bytes) override;
 
     SoftwareContainerAgent &m_agent;
 

@@ -50,7 +50,7 @@ public:
         {
         }
 
-        void ProcessStateChanged(const uint32_t &containerID, const uint32_t &pid, const bool &isRunning,
+        void ProcessStateChanged(const int32_t &containerID, const uint32_t &pid, const bool &isRunning,
                     const uint32_t &exitCode) override;
 
 private:
@@ -157,7 +157,7 @@ ReturnCode Agent::writeToStdIn(pid_t pid, const void *data, size_t length)
     return ReturnCode::SUCCESS;
 }
 
-void AgentPrivateData::SoftwareContainerAgentProxy::ProcessStateChanged(const uint32_t &containerID, const uint32_t &pid,
+void AgentPrivateData::SoftwareContainerAgentProxy::ProcessStateChanged(const int32_t &containerID, const uint32_t &pid,
             const bool &isRunning,
             const uint32_t &exitCode)
 {
