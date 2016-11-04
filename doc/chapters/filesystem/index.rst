@@ -5,9 +5,9 @@ Filesystems
 ***********
 
 The filesystem behavior and layout is documented in this chapter. The document
-discusses how the container filesystem is created, where the different mount 
-points are pulled in from and the mechanisms that changes the behavior of the 
-filesystem. 
+discusses how the container filesystem is created, where the different mount
+points are pulled in from and the mechanisms that changes the behavior of the
+filesystem.
 
 
 Standard filesystem
@@ -38,31 +38,31 @@ different parts is spread out over several involved parties because of this.
 
 The basic filesystem looks like this on startup::
 
-	.
-	├── config
-	└── rootfs
-	    ├── bin
-	    ├── dev
-	    ├── etc
-	    │   ├── group
-	    │   ├── machine-id
-	    │   ├── passwd
-	    │   ├── pulse
-	    │   │   └── client.conf
-	    │   └── resolv.conf
-	    ├── gateways
-	    ├── home
-	    ├── lib
-	    ├── lib64
-	    ├── proc
-	    ├── root
-	    ├── sbin
-	    ├── tmp
-	    └── usr
-	       	├── lib
-	       	├── lib64
-	       	├── local
-	       	└── sbin
+  .
+  ├── config
+  └── rootfs
+      ├── bin
+      ├── dev
+      ├── etc
+      │   ├── group
+      │   ├── machine-id
+      │   ├── passwd
+      │   ├── pulse
+      │   │   └── client.conf
+      │   └── resolv.conf
+      ├── gateways
+      ├── home
+      ├── lib
+      ├── lib64
+      ├── proc
+      ├── root
+      ├── sbin
+      ├── tmp
+      └── usr
+          ├── lib
+          ├── lib64
+          ├── local
+          └── sbin
 
 
 Mountpoints
@@ -105,7 +105,7 @@ the merged filesystem, but it will not be part of the ``upper`` or ``work``
 filesystems unless someone opens it from the ``merged`` filesystem, edits and
 saves it.
 
-Opening a file in ``upper`` or ``work`` does not create a file in the 
+Opening a file in ``upper`` or ``work`` does not create a file in the
 ``lower`` filesystem until it is synced to the lower filesystem.
 
 The ``upper`` directory is a temporarily created directory in the ``/tmp``
@@ -114,7 +114,7 @@ filesystem. The ``work`` is also a temporary filesystem.
 .. blockdiag::
     :alt: "Description of OverlayFS layering"
 
-    diagram { 
+    diagram {
         orientation = portrait
 
         Work -> Upper -> Lower;
@@ -122,5 +122,5 @@ filesystem. The ``work`` is also a temporary filesystem.
 
 When the container is shutdown and the mountpoints are cleaned up, the
 upper filesystem is copied into the lower filesystem causing the filesystem
-changes performed during its runtime to be merged into the lower layers. 
+changes performed during its runtime to be merged into the lower layers.
 
