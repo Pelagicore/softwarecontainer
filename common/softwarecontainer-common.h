@@ -34,7 +34,7 @@
 
 namespace softwarecontainer {
 
-typedef uint32_t ContainerID;
+typedef int32_t ContainerID;
 
 static constexpr ContainerID INVALID_CONTAINER_ID = -1;
 static constexpr pid_t INVALID_PID = -1;

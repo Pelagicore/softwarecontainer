@@ -130,7 +130,7 @@ Bind mount a directory inside the container::
     false
 
 Parameters:
- * ``containerID`` - a uint32 with the ID of the created container, as returned by the ``CreateContainer`` method.
+ * ``containerID`` - a int32 with the ID of the created container, as returned by the ``CreateContainer`` method.
  * ``pathInHost`` - a string with the host path of the directory to be bind mounted into the container. The host path must exist before running the command.
  * ``subPathInContainer`` - a string with the subpath that will be appended to ``/gateways`` inside the container.
  * ``readOnly`` - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.
@@ -155,7 +155,7 @@ Launch something in the container::
     '{"": ""}'
 
 Parameters:
- * ``containerID`` - a uint32 with the ID of the created container, as returned by the ``CreateContainer`` method.
+ * ``containerID`` - a int32 with the ID of the created container, as returned by the ``CreateContainer`` method.
  * ``userID`` - currently unused, use uint32 '0'.
  * ``commandLine`` - a string with the method to run at the method line insider the container.
  * ``workingDirectory`` - a string with a path to a directory which will be set as the working directory.

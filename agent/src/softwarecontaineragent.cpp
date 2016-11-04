@@ -48,7 +48,7 @@ bool SoftwareContainerAgent::triggerPreload()
 
 inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
 {
-    return ((containerID < UINT32_MAX)
+    return ((containerID < INT32_MAX && containerID >= 0)
             && (1 == m_containers.count(containerID)));
 }
 
@@ -260,7 +260,7 @@ void SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned
     }
 }
 
-std::string SoftwareContainerAgent::bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost, const std::string &subPathInContainer, bool readOnly)
+std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID, const std::string &pathInHost, const std::string &subPathInContainer, bool readOnly)
 {
     profilefunction("bindMountFolderInContainerFunction");
     SoftwareContainer *container = nullptr;
@@ -277,7 +277,7 @@ std::string SoftwareContainerAgent::bindMountFolderInContainer(const uint32_t co
     return "";
 }
 
-void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs)
+void SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID, const std::map<std::string, std::string> &configs)
 {
     profilefunction("setGatewayConfigsFunction");
     SoftwareContainer *container = nullptr;
@@ -286,7 +286,7 @@ void SoftwareContainerAgent::setGatewayConfigs(const uint32_t &containerID, cons
     }
 }
 
-bool SoftwareContainerAgent::setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities)
+bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID, const std::vector<std::string> &capabilities)
 {
     return true;
 }

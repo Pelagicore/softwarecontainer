@@ -180,7 +180,7 @@ public:
      *
      * @return the full path of the mounted folder in the container
      */
-    std::string bindMountFolderInContainer(const uint32_t containerID, const std::string &pathInHost,
+    std::string bindMountFolderInContainer(const ContainerID containerID, const std::string &pathInHost,
             const std::string &subPathInContainer, bool readOnly);
 
     /**
@@ -189,7 +189,7 @@ public:
      * @param containerID the container to use
      * @param configs a mapping from gateway-ids to configuration strings to send to the container
      */
-    void setGatewayConfigs(const uint32_t &containerID, const std::map<std::string, std::string> &configs);
+    void setGatewayConfigs(const ContainerID &containerID, const std::map<std::string, std::string> &configs);
 
     /**
      * @brief Set capabilities for the container
@@ -203,7 +203,7 @@ public:
      *
      * @return true on success, false otherwise
      */
-    bool setCapabilities(const uint32_t &containerID, const std::vector<std::string> &capabilities);
+    bool setCapabilities(const ContainerID &containerID, const std::vector<std::string> &capabilities);
 
     /**
      * @brief get a pointer to the workspace used

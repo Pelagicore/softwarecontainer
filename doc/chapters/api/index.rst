@@ -34,6 +34,7 @@ Controls availability of com.pelagicore.SoftwareContainerAgent interface
 CreateContainer
 ---------------
 Creates a new container and returns created container id.
+If the call fails -1 will be returned.
 
 :Parameters:
         :config: ``string`` config file in json format.
@@ -45,14 +46,14 @@ Creates a new container and returns created container id.
 |
 
 :Return Value:
-        :containerID: ``uint32`` ID of created SoftwareContainer.
+        :containerID: ``int32`` ID of created SoftwareContainer.
 
 SetContainerName
 ----------------
 Sets the name of container with unique containerID.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
         :containerName: ``string`` name.
 
 |
@@ -65,7 +66,7 @@ LaunchCommand
 Launches the specified application/code in the container.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
         :userID: ``uint32`` UID for command, currently unused, use ``0``.
         :commandLine: ``string`` the method to run in container.
         :workDirectory: ``string`` path to working directory.
@@ -83,7 +84,7 @@ ShutdownContainer
 Tears down all active gateways related to container and shuts down the container with all reserved sources.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
 
 |
 
@@ -96,7 +97,7 @@ ShutdownContainerWithTimeout
 Tears down all active gateways related to container and shuts down the container and all reserved sources after given timeout.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
         :timeout: ``uint32`` timeout.
 
 |
@@ -122,7 +123,7 @@ BindMountFolderInContainer
 Binds a directory on the host to the container.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
         :pathInHost: ``string`` path to the directory in host.
         :subPathInContainer: ``string`` path to the directory in container.
         :readOnly: ``bool`` indicates whether the directory is read-only or not.
@@ -137,7 +138,7 @@ SetGatewayConfigs
 Sets the configuration of a particular gateway. The gateway configuration contains settings as key/value pairs.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
         :configs: ``map<string, string>`` A map to key/value pairs.
 
 |
@@ -150,7 +151,7 @@ SetCapabilities
 Currently This method has no applicable usage. 
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
         :capabilities: ``array<string>``
 
 |
@@ -165,7 +166,7 @@ ProcessStateChanged
 -------------------
 The D-Bus API sends signal when process state is changed. There are four values to be emitted.
 
-:containerID: ``uint32`` The ID obtained by CreateContainer method.
+:containerID: ``int32`` The ID obtained by CreateContainer method.
 
 :processID: ``uint32`` Pocess ID of container.
 
