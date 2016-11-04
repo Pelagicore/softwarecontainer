@@ -15,22 +15,23 @@ Standard filesystem
 
 Each container has a rootfs that is bind mounted as the containers root
 filesystem of said container. The creation and bind mounting of the root
-filesystem is automated by LXC based on a configuration file and a shell script
+filesystem is automated based on a configuration file and a shell script
 provided at startup. The process of creating the filesystem and bind mounting
 different parts is spread out over several involved parties because of this.
+Following is a rough description of the steps taken when setting up the
+standard filesystem for SoftwareContainer:
 
 1. The root filesystem directory is created and the
    directory is empty on creation.
-2. It is setup by the ``lxc-softwarecontainer.in`` script, which is run by
-   lxc init when the container is created.
-3. The ``lxc-softwarecontainer.in``  creates several basic directories
+2. It is setup by the ``lxc-softwarecontainer`` script, which is run when
+   the container is created.
+3. The ``lxc-softwarecontainer`` creates several basic directories
    creating a normal unix environment as defined by Filesystem Hierarchy
    Standard (FHS).
 4. The filesystem is still mostly empty except for directories and some basic
    files such as ``/etc/passwd`` etc.
 5. LXC then mounts some basic directories defined in the
-   ``libsoftwarecontainer/softwarecontainer.conf`` (copied to
-   ``/usr/share/lxc/conf`` on installation).
+   ``libsoftwarecontainer/softwarecontainer.conf``.
 6. On top of this, non standard mountpoints are also used to mount for example
    the gateway directories etc. inside the filesystem. These are defined using
    :ref:`BindMountFolderInContainer <dbus-api>`, or mounted by
