@@ -120,7 +120,8 @@ class Container():
         """
         self.__create_container(data[Container.CONFIG])
         self.__bind_dir = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
-                                                               data[Container.BIND_MOUNT_DIR])
+                                                               data[Container.BIND_MOUNT_DIR],
+                                                               readonly=False)
 
     def terminate(self):
         """ Perform teardown of container created by call to 'start'
@@ -131,8 +132,8 @@ class Container():
     def __create_container(self, config):
         self.__container_id = self.__agent.CreateContainer(config)
 
-    def __bindmount_folder_in_container(self, host_path, dirname):
-        return self.__agent.BindMountFolderInContainer(self.__container_id, host_path, dirname, True)
+    def __bindmount_folder_in_container(self, host_path, dirname, readonly=True):
+        return self.__agent.BindMountFolderInContainer(self.__container_id, host_path, dirname, readonly)
 
 
 class SoftwareContainerAgentHandler():
