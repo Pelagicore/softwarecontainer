@@ -9,7 +9,7 @@ softwarecontainer::SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(
 {
 }
 
-uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::LaunchCommand(const int32_t &containerID, const uint32_t &userID, const std::string &commandLine, const std::string &workingDirectory, const std::string &outputFile, const std::map<std::string, std::string> &env)
+int32_t softwarecontainer::SoftwareContainerAgentAdaptor::LaunchCommand(const int32_t &containerID, const uint32_t &userID, const std::string &commandLine, const std::string &workingDirectory, const std::string &outputFile, const std::map<std::string, std::string> &env)
 {
     return m_agent.launchCommand(containerID, userID, commandLine, workingDirectory, outputFile, env,
                                  [this, containerID](pid_t pid, int exitCode) {
@@ -18,19 +18,24 @@ uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::LaunchCommand(const i
     });
 }
 
-void softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout)
+bool softwarecontainer::SoftwareContainerAgentAdaptor::SuspendContainer(const int32_t &containerID)
 {
     return m_agent.suspendContainer(containerID);
 }
 
-bool softwarecontainer::SoftwareContainerAgentAdaptor::FreezeContainer(const int32_t &containerID)
+bool softwarecontainer::SoftwareContainerAgentAdaptor::ResumeContainer(const int32_t &containerID)
 {
     return m_agent.resumeContainer(containerID);
 }
 
-void softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainer(const int32_t &containerID)
+bool softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainer(const int32_t &containerID)
 {
     return m_agent.shutdownContainer(containerID);
+}
+
+bool softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout)
+{
+    return m_agent.shutdownContainer(containerID, timeout);
 }
 
 std::string softwarecontainer::SoftwareContainerAgentAdaptor::BindMountFolderInContainer(const int32_t &containerID, const std::string &pathInHost, const std::string &subPathInContainer, const bool &readOnly)
@@ -53,7 +58,7 @@ int32_t softwarecontainer::SoftwareContainerAgentAdaptor::CreateContainer(const 
     return m_agent.createContainer(config);
 }
 
-void softwarecontainer::SoftwareContainerAgentAdaptor::SetContainerName(const int32_t &containerID, const std::string &name)
+bool softwarecontainer::SoftwareContainerAgentAdaptor::SetContainerName(const int32_t &containerID, const std::string &name)
 {
     return m_agent.setContainerName(containerID, name);
 }

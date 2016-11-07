@@ -229,29 +229,6 @@ TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
     ASSERT_FALSE(retval);
 }
 
-// Try to launch a command in a frozen container. Then resume it and try again.
-TEST_F(SoftwareContainerAgentTest, FreezeContainerAndLaunchCommand) {
-    SoftwareContainer *container;
-    ContainerID id = sca->createContainer(valid_config);
-    bool retval = sca->checkContainer(id, container);
-    ASSERT_TRUE(retval);
-
-    retval = sca->suspendContainer(id);
-    ASSERT_TRUE(retval);
-
-    std::function<void (pid_t, int)> noopFunction = [] (pid_t, int) {};
-
-    pid_t pid = sca->launchCommand(id, 0, "whoami", "", "", EnvironmentVariables(), noopFunction);
-    ASSERT_EQ(pid, INVALID_PID);
-
-    retval = sca->resumeContainer(id);
-    ASSERT_TRUE(retval);
-
-    pid = sca->launchCommand(id, 0, "whoami", "", "", EnvironmentVariables(), noopFunction);
-    ASSERT_NE(pid, INVALID_PID);
-    waitpid(pid, nullptr, 0);
-}
-
 // Make sure you can still shutdown a frozen container
 TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
     SoftwareContainer *container;

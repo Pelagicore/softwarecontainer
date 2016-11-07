@@ -15,21 +15,22 @@ public:
 
     SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent);
 
-    uint32_t LaunchCommand(const int32_t &containerID, const uint32_t &userID, const std::string &commandLine,
+    int32_t LaunchCommand(const int32_t &containerID, const uint32_t &userID, const std::string &commandLine,
                 const std::string &workingDirectory,
                 const std::string &outputFile,
                 const std::map<std::string,
                     std::string> &env);
 
-    void ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout);
+    bool ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout);
 
-    void ShutDownContainer(const int32_t &containerID) override;
+    bool ShutDownContainer(const int32_t &containerID) override;
 
     std::string BindMountFolderInContainer(const int32_t &containerID, const std::string &pathInHost,
                 const std::string &subPathInContainer, const bool &readOnly) override;
 
-    bool FreezeContainer(const int32_t &containerID) override;
-    bool ThawContainer(const int32_t &containerID) override;
+    bool SuspendContainer(const int32_t &containerID) override;
+
+    bool ResumeContainer(const int32_t &containerID) override;
 
     void SetGatewayConfigs(const int32_t &containerID, const std::map<std::string, std::string> &configs) override;
 
@@ -37,11 +38,11 @@ public:
 
     int32_t CreateContainer(const std::string &config) override;
 
-    void SetContainerName(const int32_t &containerID, const std::string &name) override;
+    bool SetContainerName(const int32_t &containerID, const std::string &name) override;
 
     void Ping() override;
 
-    void WriteToStdIn(const uint32_t &processID, const std::vector<uint8_t> &bytes) override;
+    bool WriteToStdIn(const uint32_t &processID, const std::vector<uint8_t> &bytes) override;
 
     SoftwareContainerAgent &m_agent;
 

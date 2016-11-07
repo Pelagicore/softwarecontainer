@@ -48,7 +48,9 @@ bool SoftwareContainerAgent::triggerPreload()
 
 inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
 {
-    return (containerID < UINT32_MAX) && (1 == m_containers.count(containerID));
+    return (containerID < INT32_MAX)
+        && (containerID >= 0)
+        && (1 == m_containers.count(containerID));
 }
 
 bool SoftwareContainerAgent::deleteContainer(ContainerID containerID)
