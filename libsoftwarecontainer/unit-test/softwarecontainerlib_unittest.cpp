@@ -682,11 +682,11 @@ TEST_F(SoftwareContainerApp, TestStdin) {
  * We do not enable the network gateway so we expect the ping to fail
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
-    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
     job.start();
     ASSERT_NE(job.wait(), 0);
 
-    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
+    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
     job2.start();
     ASSERT_NE(job2.wait(), 0);
 }
@@ -705,11 +705,11 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     "}]";
     setGatewayConfigs(config);
 
-    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
     job.start();
     ASSERT_NE(job.wait(), 0);
 
-    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
+    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
     job2.start();
     ASSERT_NE(job2.wait(), 0);
 }

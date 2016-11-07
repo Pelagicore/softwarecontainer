@@ -21,7 +21,7 @@ include (AddGTestTest)
 set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
 add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
 
-set(TEST_LIBRARY_DEPENDENCIES 
+set(TEST_LIBRARY_DEPENDENCIES
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
