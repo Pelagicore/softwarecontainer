@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.9.1-1a9bb5d 2016-11-04 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.9.1-585bc9d 2016-11-07 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-1a9bb5d 2016-11-04',
+        VERSION:     '0.9.1-585bc9d 2016-11-07',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-1a9bb5d 2016-11-04 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-585bc9d 2016-11-07 documentation" href="../../index.html" />
     <link rel="next" title="SoftwareContainer examples" href="../examples/index.html" />
     <link rel="prev" title="Welcome to the SoftwareContainer documentation" href="../intro/index.html" />
    
@@ -230,7 +230,7 @@ container.</p>
 <dl class="docutils">
 <dt>Parameters:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">containerID</span></code> - a uint32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
+<li><code class="docutils literal"><span class="pre">containerID</span></code> - a int32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
 <li><code class="docutils literal"><span class="pre">pathInHost</span></code> - a string with the host path of the directory to be bind mounted into the container. The host path must exist before running the command.</li>
 <li><code class="docutils literal"><span class="pre">subPathInContainer</span></code> - a string with the subpath that will be appended to <code class="docutils literal"><span class="pre">/gateways</span></code> inside the container.</li>
 <li><code class="docutils literal"><span class="pre">readOnly</span></code> - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.</li>
@@ -257,7 +257,7 @@ visible in the path <code class="docutils literal"><span class="pre">/gateways/a
 <dl class="docutils">
 <dt>Parameters:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">containerID</span></code> - a uint32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
+<li><code class="docutils literal"><span class="pre">containerID</span></code> - a int32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
 <li><code class="docutils literal"><span class="pre">userID</span></code> - currently unused, use uint32 &#8216;0&#8217;.</li>
 <li><code class="docutils literal"><span class="pre">commandLine</span></code> - a string with the method to run at the method line insider the container.</li>
 <li><code class="docutils literal"><span class="pre">workingDirectory</span></code> - a string with a path to a directory which will be set as the working directory.</li>
