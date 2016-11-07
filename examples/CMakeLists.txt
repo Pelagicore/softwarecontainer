@@ -20,4 +20,4 @@
 set(CMAKE_INSTALL_RPATH "")
 
 add_subdirectory(simple)
-add_subdirectory(hello-wayland)
+add_subdirectory(wayland)
