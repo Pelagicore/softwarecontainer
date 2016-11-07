@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>softwarecontainer: src/generators.h Source File</title>
+<title>softwarecontainer: libsoftwarecontainer/src/generators.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,6 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
+   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -98,9 +99,9 @@ $(document).ready(function(){initNavTree('generators_8h_source.html','');});
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;GEN&quot;</span>, <span class="stringliteral">&quot;Generator&quot;</span>);</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    std::string <a class="code" href="class_generator.html#a70a55add550a1afc96b35476826789c8">gen_ip_addr</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *ip_addr_net);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    std::string <a class="code" href="class_generator.html#ae3571464dd705850e8705c278e064257">genIPAddr</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *ipAddrNet);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">static</span> std::string <a class="code" href="class_generator.html#aef4b2cad9d8532c984ab9864cf9ad575">gen_ct_name</a>();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">static</span> std::string <a class="code" href="class_generator.html#a4987226acdc23f9c0a89e45ac68bebd5">genName</a>();</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">int</span> counter = 0;</div>
@@ -108,16 +109,16 @@ $(document).ready(function(){initNavTree('generators_8h_source.html','');});
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* GENERATORS_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="class_generator_html_a70a55add550a1afc96b35476826789c8"><div class="ttname"><a href="class_generator.html#a70a55add550a1afc96b35476826789c8">Generator::gen_ip_addr</a></div><div class="ttdeci">std::string gen_ip_addr(const char *ip_addr_net)</div><div class="ttdoc">Generate an IP address. </div><div class="ttdef"><b>Definition:</b> <a href="generators_8cpp_source.html#l00030">generators.cpp:30</a></div></div>
-<div class="ttc" id="class_generator_html_aef4b2cad9d8532c984ab9864cf9ad575"><div class="ttname"><a href="class_generator.html#aef4b2cad9d8532c984ab9864cf9ad575">Generator::gen_ct_name</a></div><div class="ttdeci">static std::string gen_ct_name()</div><div class="ttdoc">Generate a container name. </div><div class="ttdef"><b>Definition:</b> <a href="generators_8cpp_source.html#l00043">generators.cpp:43</a></div></div>
+<div class="ttc" id="class_generator_html_ae3571464dd705850e8705c278e064257"><div class="ttname"><a href="class_generator.html#ae3571464dd705850e8705c278e064257">Generator::genIPAddr</a></div><div class="ttdeci">std::string genIPAddr(const char *ipAddrNet)</div><div class="ttdoc">Generate an IP address. </div><div class="ttdef"><b>Definition:</b> <a href="generators_8cpp_source.html#l00030">generators.cpp:30</a></div></div>
+<div class="ttc" id="class_generator_html_a4987226acdc23f9c0a89e45ac68bebd5"><div class="ttname"><a href="class_generator.html#a4987226acdc23f9c0a89e45ac68bebd5">Generator::genName</a></div><div class="ttdeci">static std::string genName()</div><div class="ttdoc">Generate a container name. </div><div class="ttdef"><b>Definition:</b> <a href="generators_8cpp_source.html#l00042">generators.cpp:42</a></div></div>
 <div class="ttc" id="class_generator_html"><div class="ttname"><a href="class_generator.html">Generator</a></div><div class="ttdef"><b>Definition:</b> <a href="generators_8h_source.html#l00036">generators.h:36</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_c259d52b2385ab781b86f092c53a38f1.html">src</a></li><li class="navelem"><a class="el" href="generators_8h.html">generators.h</a></li>
-    <li class="footer">Generated on Wed Oct 19 2016 13:59:00 for softwarecontainer by
+    <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="generators_8h.html">generators.h</a></li>
+    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

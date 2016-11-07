@@ -1,3 +1,4 @@
 <map id="softwarecontainer::SoftwareContainer::setGatewayConfigs" name="softwarecontainer::SoftwareContainer::setGatewayConfigs">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container.html#a7db71d975b5bbfebe48e50769cf726b9" title="Continues the &#39;launch&#39; phase by allowing gateway configurations to be set. " alt="" coords="276,5,524,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#ae19799cb9be607a08a674179713adcf8" title="Set configuration for the container gateways. " alt="" coords="572,5,751,61"/>
 </map>

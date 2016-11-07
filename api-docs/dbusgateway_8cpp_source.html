@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>softwarecontainer: src/gateway/dbusgateway.cpp Source File</title>
+<title>softwarecontainer: libsoftwarecontainer/src/gateway/dbusgateway.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,6 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
+   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -166,7 +167,7 @@ $(document).ready(function(){initNavTree('dbusgateway_8cpp_source.html','');});
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                         + (m_type == SessionProxy ? <span class="stringliteral">&quot;SESSION&quot;</span> : <span class="stringliteral">&quot;SYSTEM&quot;</span>)</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                         + std::string(<span class="stringliteral">&quot;_BUS_ADDRESS&quot;</span>);</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::string value = <span class="stringliteral">&quot;unix:path=/gateways/&quot;</span> + socketName();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    setEnvironmentVariable(variable, value);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">setEnvironmentVariable</a>(variable, value);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    std::vector&lt;std::string&gt; commandVec = { <span class="stringliteral">&quot;dbus-proxy&quot;</span></div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                          , m_socket</div>
@@ -302,18 +303,19 @@ $(document).ready(function(){initNavTree('dbusgateway_8cpp_source.html','');});
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;</div>
 <div class="ttc" id="class_d_bus_gateway_html_aee158c5953c85075587af556a2c42b8f"><div class="ttname"><a href="class_d_bus_gateway.html#aee158c5953c85075587af556a2c42b8f">DBusGateway::DBusGateway</a></div><div class="ttdeci">DBusGateway(ProxyType type, const std::string &amp;gatewayDir, const std::string &amp;name)</div><div class="ttdoc">Spawn the proxy and use the supplied path for the socket. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgateway_8cpp_source.html#l00024">dbusgateway.cpp:24</a></div></div>
+<div class="ttc" id="class_gateway_html_a828b2dfa811c7fcce82d34b502e65112"><div class="ttname"><a href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00104">gateway.cpp:104</a></div></div>
 <div class="ttc" id="class_d_bus_gateway_html_a5f9b7087aedef583e950d7853350731e"><div class="ttname"><a href="class_d_bus_gateway.html#a5f9b7087aedef583e950d7853350731e">DBusGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgateway_8cpp_source.html#l00203">dbusgateway.cpp:203</a></div></div>
 <div class="ttc" id="class_d_bus_gateway_html_ab974b6b05b985d64ba5609c64e8b13fb"><div class="ttname"><a href="class_d_bus_gateway.html#ab974b6b05b985d64ba5609c64e8b13fb">DBusGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway()</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgateway_8cpp_source.html#l00095">dbusgateway.cpp:95</a></div></div>
 <div class="ttc" id="class_d_bus_gateway_html_a26605d226d94efe726e85734dd01a713"><div class="ttname"><a href="class_d_bus_gateway.html#a26605d226d94efe726e85734dd01a713">DBusGateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgateway_8cpp_source.html#l00050">dbusgateway.cpp:50</a></div></div>
-<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00043">gateway.h:43</a></div></div>
+<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00041">gateway.h:41</a></div></div>
 <div class="ttc" id="class_gateway_html_a12bc56e21985047b61012932394b4512"><div class="ttname"><a href="class_gateway.html#a12bc56e21985047b61012932394b4512">Gateway::teardown</a></div><div class="ttdeci">virtual bool teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00070">gateway.cpp:70</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_c259d52b2385ab781b86f092c53a38f1.html">src</a></li><li class="navelem"><a class="el" href="dir_8e2c7f92980921a98f9b8e9edadb2444.html">gateway</a></li><li class="navelem"><b>dbusgateway.cpp</b></li>
-    <li class="footer">Generated on Wed Oct 19 2016 13:59:00 for softwarecontainer by
+    <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>dbusgateway.cpp</b></li>
+    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
