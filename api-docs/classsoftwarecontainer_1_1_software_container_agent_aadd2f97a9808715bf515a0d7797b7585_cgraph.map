@@ -1,0 +1,5 @@
+<map id="softwarecontainer::SoftwareContainerAgent::createContainer" name="softwarecontainer::SoftwareContainerAgent::createContainer">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a990e86f21dead80c727462618ecf0e91" title="Parse config needed for starting up the container in a correct manner. " alt="" coords="242,5,421,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d" title="Set the main loop. " alt="" coords="232,85,431,141"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#a663e3ed2d84de85c6779bce75ebe840c" title="Preload additional containers if needed. " alt="" coords="242,165,421,221"/>
+</map>

@@ -1,10 +1,6 @@
 var annotated =
 [
     [ "softwarecontainer", null, [
-      [ "Agent", "classsoftwarecontainer_1_1_agent.html", "classsoftwarecontainer_1_1_agent" ],
-      [ "AgentCommand", "classsoftwarecontainer_1_1_agent_command.html", "classsoftwarecontainer_1_1_agent_command" ],
-      [ "AgentContainer", "classsoftwarecontainer_1_1_agent_container.html", "classsoftwarecontainer_1_1_agent_container" ],
-      [ "AgentPrivateData", "structsoftwarecontainer_1_1_agent_private_data.html", "structsoftwarecontainer_1_1_agent_private_data" ],
       [ "CleanUpHandler", "classsoftwarecontainer_1_1_clean_up_handler.html", "classsoftwarecontainer_1_1_clean_up_handler" ],
       [ "CommandJob", "classsoftwarecontainer_1_1_command_job.html", "classsoftwarecontainer_1_1_command_job" ],
       [ "FileToolkitWithUndo", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html", "classsoftwarecontainer_1_1_file_toolkit_with_undo" ],
@@ -31,7 +27,6 @@ var annotated =
     [ "FileGateway", "class_file_gateway.html", "class_file_gateway" ],
     [ "Gateway", "class_gateway.html", "class_gateway" ],
     [ "Generator", "class_generator.html", "class_generator" ],
-    [ "IPTableEntry", "class_i_p_table_entry.html", "class_i_p_table_entry" ],
     [ "MountCleanUpHandler", "class_mount_clean_up_handler.html", "class_mount_clean_up_handler" ],
     [ "Netlink", "class_netlink.html", "class_netlink" ],
     [ "NetworkGateway", "class_network_gateway.html", "class_network_gateway" ],
