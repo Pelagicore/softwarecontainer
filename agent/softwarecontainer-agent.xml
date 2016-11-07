@@ -23,16 +23,16 @@
             <arg direction="in" type="s" name="workingDirectory" />
             <arg direction="in" type="s" name="outputFile" />
             <arg direction="in" type="a{ss}" name="env" />
-            <arg direction="out" type="u" name="pid" />
+            <arg direction="out" type="i" name="pid" />
         </method>
 
-        <method name="FreezeContainer">
-            <arg direction="in" type="u" name="containerID" />
+        <method name="SuspendContainer">
+            <arg direction="in" type="i" name="containerID" />
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="ThawContainer">
-            <arg direction="in" type="u" name="containerID" />
+        <method name="ResumeContainer">
+            <arg direction="in" type="i" name="containerID" />
             <arg direction="out" type="b" name="success" />
         </method>
 

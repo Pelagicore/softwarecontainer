@@ -18,7 +18,7 @@
 # For further information see LICENSE
 
 
-DIRECTORIES=(dbus timingprofiling filesystem capabilities environment)
+DIRECTORIES=(dbus timingprofiling filesystem capabilities environment suspend)
 
 for DIR in ${DIRECTORIES[@]}; do
         echo "Running service tests in $DIR"

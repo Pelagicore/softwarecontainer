@@ -86,9 +86,8 @@ class Container():
                                               self.__bind_dir,
                                               stdout,
                                               env)
-        if response is -1:
+        if response == -1:
             print "Failed to launch process in container"
-            return -1
         return response
 
     def get_bind_dir(self):
@@ -125,6 +124,16 @@ class Container():
         self.__bind_dir = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
                                                                data[Container.BIND_MOUNT_DIR],
                                                                data[Container.READONLY])
+
+    def suspend(self):
+        if self.__container_id is not None:
+            result = self.__agent.SuspendContainer(self.__container_id)
+            return True if result == dbus.Boolean(True) else False
+
+    def resume(self):
+        if self.__container_id is not None:
+            result = self.__agent.ResumeContainer(self.__container_id)
+            return True if result == dbus.Boolean(True) else False
 
     def terminate(self):
         """ Perform teardown of container created by call to 'start'
