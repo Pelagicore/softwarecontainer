@@ -33,7 +33,11 @@ public:
      * @brief container for port filtering options. Used internally in a Rule.
      */
     struct portFilter {
-        portFilter() : any{0}, multiport{0}, ports{""} {};
+        portFilter(bool _any=0, bool _multiport=0, std::string _ports="") :
+            any(_any),
+            multiport(_multiport),
+            ports(_ports)
+            {};
         bool any;
         bool multiport;
         std::string ports;
@@ -67,6 +71,23 @@ public:
      */
     ReturnCode applyRules();
 
+    /**
+     * @brief Interprets a rule to iptables applicable string
+     * @return string indicating interpreted rule
+     */
+    std::string interpretRule(Rule rule);
+
+    /**
+     * @brief This function Interprets defaultTarget rule to iptables applicable policy string
+     *
+     * defaultTarget indicates what happens to packets if they don't match to any rules.
+     * iptables apply this functionality with setting policy. The role of this function is
+     * converting defaultTarget configuration value to iptables policy
+     * @return string indicating interpreted policy
+     * @return empty string when interfered incompatible m_defaultTarget
+     */
+    std::string interpretPolicy(void);
+
     unsigned int m_priority;
     std::string m_type;
     std::vector<Rule> m_rules;
@@ -78,19 +99,11 @@ private:
      */
     std::string convertTarget (Target& t);
 
-
     /**
      * @brief Inserts a rule to iptables
      * @return true  Upon success
      * @return false Upon failure
      */
-    ReturnCode insertRule(Rule rule);
-
-    /**
-    * @brief set the default policy on the m_type chain to m_defaultTarget
-    * @return true  Upon success
-    * @return false Upon failure
-    */
-    ReturnCode setPolicy();
+    ReturnCode insertCommand(std::string command);
 };
 
