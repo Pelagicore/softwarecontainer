@@ -620,7 +620,7 @@ TEST(SoftwareContainer, MultithreadTest) {
 
 }
 
-TEST_F(SoftwareContainerApp, TestPulseAudioEnabled) {
+TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
 
     GatewayConfiguration config;
     config[PulseGateway::ID] = "[ { \"audio\" : true } ]";
