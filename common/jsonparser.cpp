@@ -25,6 +25,7 @@ bool JSONParser::read(const json_t *element, const char *key, std::string &resul
 {
     json_t *value = json_object_get(element, key);
     if (!value) {
+        log_error() << "Could not fetch \"" << key << "\" from json element";
         return false;
     }
 
@@ -41,6 +42,7 @@ bool JSONParser::read(const json_t *element, const char *key, bool &result)
 {
     json_t *value = json_object_get(element, key);
     if (!value) {
+        log_error() << "Could not fetch \"" << key << "\" from json element";
         return false;
     }
 
@@ -57,6 +59,7 @@ bool JSONParser::read(const json_t *element, const char *key, int &result)
 {
     json_t *value = json_object_get(element, key);
     if (!value) {
+        log_error() << "Could not fetch \"" << key << "\" from json element";
         return false;
     }
 

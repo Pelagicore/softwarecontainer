@@ -58,7 +58,7 @@ public:
 
     std::string bindMountFolderInContainer(ContainerID containerID, const std::string &src, const std::string &dst, bool readonly);
 
-    void setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config);
+    void setGatewayConfigs(ContainerID containerID, const std::map<std::string, std::string> &config);
 
     ReturnCode writeToStdIn(pid_t pid, const void *data, size_t length);
 
@@ -147,7 +147,7 @@ public:
         return m_agent.bindMountFolderInContainer(getContainerID(), src, dst, readonly);
     }
 
-    void setGatewayConfigs(const GatewayConfiguration &config)
+    void setGatewayConfigs(const std::map<std::string, std::string> &config)
     {
         m_agent.setGatewayConfigs(getContainerID(), config);
         m_containerState = ContainerState::READY;

@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2016 Pelagicore AB
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR
+ * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+ * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+ * SOFTWARE.
+ *
+ * For further information see LICENSE
+ */
+
 #include "softwarecontaineragentadaptor.h"
 
 LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
@@ -10,12 +29,13 @@ void usage(const char *argv0)
 {
     printf("SoftwareContainer agent, v.%s\n", PACKAGE_VERSION);
     printf("Usage: %s [-p or --preload <num>] [-u or --user <uid>]", argv0);
-    printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>]\n");
+    printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>] [-m or --servicemanifest <path>]\n");
     printf("\n");
     printf("--preload <num>     : Number of containers to preload, defaults to 0\n");
     printf("--user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");
     printf("--shutdown <bool>   : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
     printf("--timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
+    printf("--servicemanifest <path> : Path to a file or directory where Service Manifest(s) exist, defaults to \"\"");
 }
 
 
@@ -31,11 +51,12 @@ int main(int argc, char **argv)
 {
     static struct option long_options[] =
     {
-        { "preload",  required_argument, 0, 'p' },
-        { "user",     required_argument, 0, 'u' },
-        { "shutdown", required_argument, 0, 's' },
-        { "timeout",  required_argument, 0, 't' },
-        { "help",     no_argument,       0, 'h' },
+        { "preload",         required_argument, 0, 'p' },
+        { "user",            required_argument, 0, 'u' },
+        { "shutdown",        required_argument, 0, 's' },
+        { "timeout",         required_argument, 0, 't' },
+        { "servicemanifest", required_argument, 0, 'm' },
+        { "help",            no_argument,       0, 'h' },
         { 0, 0, 0, 0 }
     };
 
@@ -43,10 +64,11 @@ int main(int argc, char **argv)
     int userID = 0;
     bool shutdownContainers = true;
     int timeout = 2;
+    std::string servicemanifest = "";
 
     int option_index = 0;
     int c = 0;
-    while((c = getopt_long(argc, argv, "p:u:s:ht:", long_options, &option_index)) != -1) {
+    while((c = getopt_long(argc, argv, "p:u:s:h:t:m:", long_options, &option_index)) != -1) {
         switch(c) {
             case 'p':
                 if (!parseInt(optarg, &preloadCount)) {
@@ -68,6 +90,9 @@ int main(int argc, char **argv)
                     usage(argv[0]);
                     exit(1);
                 }
+                break;
+            case 'm':
+                servicemanifest = std::string(optarg);
                 break;
             case 'h':
                 usage(argv[0]);
@@ -104,7 +129,8 @@ int main(int argc, char **argv)
     }
 
     try {
-        SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers, timeout);
+        SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers,
+                                     timeout, servicemanifest);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
             std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
 
