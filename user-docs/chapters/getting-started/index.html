@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.9.1-84f66b4 2016-11-08 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.9.1-dd5ae0f 2016-11-08 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-84f66b4 2016-11-08',
+        VERSION:     '0.9.1-dd5ae0f 2016-11-08',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-84f66b4 2016-11-08 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-dd5ae0f 2016-11-08 documentation" href="../../index.html" />
     <link rel="next" title="SoftwareContainer examples" href="../examples/index.html" />
     <link rel="prev" title="Welcome to the SoftwareContainer documentation" href="../intro/index.html" />
    
@@ -269,6 +269,27 @@ visible in the path <code class="docutils literal"><span class="pre">/gateways/a
 <p>The method returns the PID of the process run inside the container.</p>
 <p>The above method call results in a file <code class="docutils literal"><span class="pre">hello</span></code> being created inside the conainer in <code class="docutils literal"><span class="pre">/gateways/app/</span></code>. This can
 also be seen in the bind mounted location <code class="docutils literal"><span class="pre">/home/vagrant/softwarecontainer/</span></code>.</p>
+<p>Suspend the container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SuspendContainer</span> \
+<span class="mi">0</span>
+</pre></div>
+</div>
+<p>This will suspend execution inside the container. The value passed as the <cite>containerID</cite> parameter
+should be the same value that was returned from the call to <cite>CreateContainer</cite>. It is not possible
+to run LaunchCommand on a suspended container.</p>
+<p>Resume the container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ResumeContainer</span> \
+<span class="mi">0</span>
+</pre></div>
+</div>
+<p>This will resume the suspended container. The value passed as the <cite>containerID</cite> parameter
+should be the same value that was returned from the call to <cite>CreateContainer</cite>.</p>
 <p>Shut down the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \

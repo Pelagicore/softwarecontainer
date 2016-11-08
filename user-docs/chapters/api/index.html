@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.9.1-84f66b4 2016-11-08 documentation</title>
+    <title>API &#8212; softwarecontainer 0.9.1-dd5ae0f 2016-11-08 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-84f66b4 2016-11-08',
+        VERSION:     '0.9.1-dd5ae0f 2016-11-08',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-84f66b4 2016-11-08 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-dd5ae0f 2016-11-08 documentation" href="../../index.html" />
     <link rel="next" title="Design" href="../design/index.html" />
     <link rel="prev" title="SoftwareContainer examples" href="../examples/index.html" />
    
@@ -159,7 +159,15 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 </tbody>
 </table>
@@ -204,7 +212,7 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> PID of the process run inside the container.</td>
+<tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> PID of the process run inside the container. Negative on error.</td>
 </tr>
 </tbody>
 </table>
@@ -239,7 +247,93 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="suspendcontainer">
+<h3>SuspendContainer<a class="headerlink" href="#suspendcontainer" title="Permalink to this headline">¶</a></h3>
+<p>Suspends all execution inside a given container.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="resumecontainer">
+<h3>ResumeContainer<a class="headerlink" href="#resumecontainer" title="Permalink to this headline">¶</a></h3>
+<p>Resumes a suspended container</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 </tbody>
 </table>
@@ -272,7 +366,15 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 </tbody>
 </table>
@@ -305,7 +407,15 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 </tbody>
 </table>
@@ -475,6 +585,8 @@ If the call fails -1 will be returned.</p>
 <li><a class="reference internal" href="#setcontainername">SetContainerName</a></li>
 <li><a class="reference internal" href="#launchcommand">LaunchCommand</a></li>
 <li><a class="reference internal" href="#shutdowncontainer">ShutdownContainer</a></li>
+<li><a class="reference internal" href="#suspendcontainer">SuspendContainer</a></li>
+<li><a class="reference internal" href="#resumecontainer">ResumeContainer</a></li>
 <li><a class="reference internal" href="#shutdowncontainerwithtimeout">ShutdownContainerWithTimeout</a></li>
 <li><a class="reference internal" href="#writetostdin">WriteToStdIn</a></li>
 <li><a class="reference internal" href="#bindmountfolderincontainer">BindMountFolderInContainer</a></li>

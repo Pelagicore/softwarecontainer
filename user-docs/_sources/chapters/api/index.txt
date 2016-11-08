@@ -38,9 +38,9 @@ If the call fails -1 will be returned.
 
 :Parameters:
         :config: ``string`` config file in json format.
-        
+
                 Example config JSON::
-        
+
                 [{"enableWriteBuffer": true}]
 
 |
@@ -59,7 +59,7 @@ Sets the name of container with unique containerID.
 |
 
 :Return Value:
-        *None*
+        :success: ``bool`` Whether or not the operation was successful.
 
 LaunchCommand
 -------------
@@ -76,8 +76,8 @@ Launches the specified application/code in the container.
 |
 
 :Return Value:
-        :pid: ``uint32`` PID of the process run inside the container.
-       
+        :pid: ``int32`` PID of the process run inside the container. Negative on error.
+
 
 ShutdownContainer
 -----------------
@@ -89,8 +89,31 @@ Tears down all active gateways related to container and shuts down the container
 |
 
 :Return Value:
-        *None*
+        :success: ``bool`` Whether or not the operation was successful.
 
+SuspendContainer
+-----------------
+Suspends all execution inside a given container.
+
+:Parameters:
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
+
+|
+
+:Return Value:
+        :success: ``bool`` Whether or not the operation was successful.
+
+ResumeContainer
+-----------------
+Resumes a suspended container
+
+:Parameters:
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
+
+|
+
+:Return Value:
+        :success: ``bool`` Whether or not the operation was successful.
 
 ShutdownContainerWithTimeout
 ----------------------------
@@ -103,7 +126,7 @@ Tears down all active gateways related to container and shuts down the container
 |
 
 :Return Value:
-        *None*
+        :success: ``bool`` Whether or not the operation was successful.
 
 WriteToStdIn
 ------------
@@ -116,7 +139,7 @@ Send a character array to the standard input of a particular process.
 |
 
 :Return Value:
-        *None*
+        :success: ``bool`` Whether or not the operation was successful.
 
 BindMountFolderInContainer
 --------------------------
@@ -131,7 +154,7 @@ Binds a directory on the host to the container.
 |
 
 :Return Value:
-        :pathInContainer: ``string`` path to the bind folder in container. 
+        :pathInContainer: ``string`` path to the bind folder in container.
 
 SetGatewayConfigs
 -----------------
@@ -148,7 +171,7 @@ Sets the configuration of a particular gateway. The gateway configuration contai
 
 SetCapabilities
 ---------------
-Currently This method has no applicable usage. 
+Currently This method has no applicable usage.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.

@@ -10,7 +10,7 @@ This chapter documents brief overview of mechanisms that is used to configure So
 Command Line Options
 ====================
 It is possible to configure SoftwareContainer Agent with command line options.
- 
+
 **-p or --preload <num>** Number of containers to preload, defaults to 0
 
 **-u or --user <uid>**        Default user id to be used when starting processes in the container, defaults to 0
