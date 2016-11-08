@@ -97,7 +97,7 @@ option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
 option(ENABLE_SYSTEMD "Installs systemd service files" ON)
 option(ENABLE_TEST "Enables unit testing" ON)
 option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
-option(ENABLE_COVERAGE "Enable building and installation of examples" OFF)
+option(ENABLE_COVERAGE "Enable coverage support in the build" OFF)
 option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
 
