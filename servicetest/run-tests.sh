@@ -18,14 +18,19 @@
 # For further information see LICENSE
 
 
-DIRECTORIES=(dbus timingprofiling filesystem capabilities environment suspend)
+DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment)
 
+# We want to exit with bad status in case some test fail. Mostly so that any
+# CI system will notice that not everything was good.
+EXITSTATUS=0
 for DIR in ${DIRECTORIES[@]}; do
         echo "Running service tests in $DIR"
         pushd $DIR > /dev/null
         py.test -v --junit-xml=../${DIR}_test.xml
+        (( EXITSTATUS += $? ))
         # Sleep to allow some time for teardown in previous suite
         # to have full effect before we run the next suite
         sleep 1
         popd > /dev/null
 done
+exit $EXITSTATUS

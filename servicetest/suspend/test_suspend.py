@@ -38,7 +38,8 @@ def logfile_path():
 DATA = {
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
     Container.BIND_MOUNT_DIR: "app",
-    Container.HOST_PATH: CURRENT_DIR
+    Container.HOST_PATH: CURRENT_DIR,
+    Container.READONLY: False
 }
 
 def isFileGrowing(filename):
@@ -106,11 +107,12 @@ class TestSuspend(object):
             when the container is suspended, and that it is resuming execution
             when the container is resumed.
         """
+
+        filename = "yes_output.log"
         try:
             sc = Container()
             sc.start(DATA)
 
-            filename = "yes_output.log"
 
             launched = sc.launch_command("yes", stdout=filename)
             assert launched != -1
