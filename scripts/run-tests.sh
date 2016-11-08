@@ -64,17 +64,17 @@ fi
 
 ./agent/unit-test/softwarecontaineragenttest \
     $FILTER_ARG \
-    --gtest_output=xml:softwarecontaineragenttest.xml
+    --gtest_output=xml:softwarecontaineragent_unittest_result.xml
 retval=$?
 
 ./common/unit-test/softwarecontainercommontest \
     $FILTER_ARG \
-    --gtest_output=xml:softwarecontainercommontest.xml
+    --gtest_output=xml:softwarecontainercommon_unittest_result.xml
 retval=$(($retval+$?))
 
 ./libsoftwarecontainer/unit-test/softwarecontainerlibtest \
     $FILTER_ARG \
-    --gtest_output=xml:softwarecontainerlibtest.xml
+    --gtest_output=xml:softwarecontainerlib_unittest_result.xml
 retval=$(($retval+$?))
 
 if ! kill $wpid > /dev/null 2>&1 ; then

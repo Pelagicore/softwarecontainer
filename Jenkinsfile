@@ -49,11 +49,12 @@ node {
         stage 'Artifacts'
             // Store the artifacts of the entire build
             archive "**/*"
-            // Store the unit test results and graph it
-            // NOTE: the paths can not be absolute, it will not be accepted for some reason
-            step([$class: 'JUnitResultArchiver', testResults: 'build/*test.xml'])
-            step([$class: 'JUnitResultArchiver', testResults: 'servicetest/*test.xml'])
 
+            // Store the test results and graph them
+            // TODO: There is an issue with the build directory ending up as (unreachable)
+            step([$class: 'JUnitResultArchiver', testResults: '**/*_unittest_result.xml'])
+            // Store the service test results and graph them
+            step([$class: 'JUnitResultArchiver', testResults: '**/*_servicetest_result.xml'])
     }
 
     catch(err) {
