@@ -64,7 +64,8 @@ def run_test(num_starts=3):
             container_data = {
                 Container.CONFIG: '[{"enableWriteBuffer": false}]',
                 Container.BIND_MOUNT_DIR: "app",
-                Container.HOST_PATH: CURRENT_DIR
+                Container.HOST_PATH: CURRENT_DIR,
+                Container.READONLY: False
             }
             container.start(container_data)
 

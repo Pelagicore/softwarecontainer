@@ -37,7 +37,8 @@ def logfile_path():
 DATA = {
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
     Container.BIND_MOUNT_DIR: "app",
-    Container.HOST_PATH: CURRENT_DIR
+    Container.HOST_PATH: CURRENT_DIR,
+    Container.READONLY: False
 }
 
 @pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")

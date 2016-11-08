@@ -45,7 +45,8 @@ HOST_PATH = os.path.dirname(os.path.abspath(__file__))
 DATA = {
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
     Container.BIND_MOUNT_DIR: "app",
-    Container.HOST_PATH: HOST_PATH
+    Container.HOST_PATH: HOST_PATH,
+    Container.READONLY: False
 }
 
 # Simple gateway config when something just needs to be passed.
