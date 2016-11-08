@@ -52,6 +52,7 @@ node {
             // Store the unit test results and graph it
             // NOTE: the paths can not be absolute, it will not be accepted for some reason
             step([$class: 'JUnitResultArchiver', testResults: 'build/*test.xml'])
+            step([$class: 'JUnitResultArchiver', testResults: 'servicetest/*test.xml'])
 
     }
 
