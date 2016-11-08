@@ -54,7 +54,7 @@ def isFileGrowing(filename):
 
     return sizeBefore != sizeAfter
 
-@pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
+@pytest.mark.usefixtures("agent", "assert_no_proxy")
 class TestSuspend(object):
     """ This suite tests that suspend/resume can be used with SoftwareContainer with
         expected results.
@@ -130,4 +130,5 @@ class TestSuspend(object):
 
         finally:
             sc.terminate()
+            os.remove(filename)
 
