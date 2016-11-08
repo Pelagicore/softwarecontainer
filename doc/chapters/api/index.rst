@@ -76,7 +76,7 @@ Launches the specified application/code in the container.
 |
 
 :Return Value:
-        :pid: ``uint32`` PID of the process run inside the container.
+        :pid: ``int32`` PID of the process run inside the container. Negative on error.
 
 
 ShutdownContainer
@@ -96,7 +96,7 @@ SuspendContainer
 Suspends all execution inside a given container.
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
 
 |
 
@@ -108,7 +108,7 @@ ResumeContainer
 Resumes a suspended container
 
 :Parameters:
-        :containerID: ``uint32`` The ID obtained by CreateContainer method.
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
 
 |
 

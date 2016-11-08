@@ -147,20 +147,6 @@ TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
     ASSERT_FALSE(retval);
 }
 
-// Freeze and then resume a container
-TEST_F(SoftwareContainerAgentTest, FreezeAndThawContainer) {
-    SoftwareContainer *container;
-    ContainerID id = sca->createContainer(valid_config);
-    bool retval = sca->checkContainer(id, container);
-    ASSERT_TRUE(retval);
-
-    retval = sca->suspendContainer(id);
-    ASSERT_TRUE(retval);
-
-    retval = sca->resumeContainer(id);
-    ASSERT_TRUE(retval);
-}
-
 // Freeze a container and try to resume it twice
 TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
     SoftwareContainer *container;

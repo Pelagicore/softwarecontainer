@@ -15,26 +15,32 @@ public:
 
     SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent);
 
-    int32_t LaunchCommand(const int32_t &containerID, const uint32_t &userID, const std::string &commandLine,
-                const std::string &workingDirectory,
-                const std::string &outputFile,
-                const std::map<std::string,
-                    std::string> &env);
+    int32_t LaunchCommand(const int32_t &containerID,
+                          const uint32_t &userID,
+                          const std::string &commandLine,
+                          const std::string &workingDirectory,
+                          const std::string &outputFile,
+                          const std::map<std::string,
+                          std::string> &env);
 
     bool ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout);
 
     bool ShutDownContainer(const int32_t &containerID) override;
 
-    std::string BindMountFolderInContainer(const int32_t &containerID, const std::string &pathInHost,
-                const std::string &subPathInContainer, const bool &readOnly) override;
+    std::string BindMountFolderInContainer(const int32_t &containerID,
+                                           const std::string &pathInHost,
+                                           const std::string &subPathInContainer,
+                                           const bool &readOnly) override;
 
     bool SuspendContainer(const int32_t &containerID) override;
 
     bool ResumeContainer(const int32_t &containerID) override;
 
-    void SetGatewayConfigs(const int32_t &containerID, const std::map<std::string, std::string> &configs) override;
+    void SetGatewayConfigs(const int32_t &containerID,
+                           const std::map<std::string, std::string> &configs) override;
 
-    bool SetCapabilities(const int32_t &containerID, const std::vector<std::string> &capabilities) override;
+    bool SetCapabilities(const int32_t &containerID,
+                         const std::vector<std::string> &capabilities) override;
 
     int32_t CreateContainer(const std::string &config) override;
 
@@ -51,9 +57,13 @@ public:
 
 
 // Utility class for DBus Adaptors
-class DBusCppAdaptor: public SoftwareContainerAgentAdaptor, public DBus::IntrospectableAdaptor, public DBus::ObjectAdaptor {
+class DBusCppAdaptor : public SoftwareContainerAgentAdaptor,
+                       public DBus::IntrospectableAdaptor,
+                       public DBus::ObjectAdaptor {
 public:
-    DBusCppAdaptor(DBus::Connection& connection, const std::string& objectPath, SoftwareContainerAgent &agent) :
+    DBusCppAdaptor(DBus::Connection& connection,
+                   const std::string& objectPath,
+                   SoftwareContainerAgent &agent) :
         SoftwareContainerAgentAdaptor(agent), DBus::ObjectAdaptor(connection, objectPath)
     {
     }
