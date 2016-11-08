@@ -148,12 +148,6 @@ void SoftwareContainer::addGateway(Gateway *gateway)
     m_gateways.push_back(std::move(std::unique_ptr<Gateway>(gateway)));
 }
 
-void SoftwareContainer::updateGatewayConfiguration(const GatewayConfiguration &configs)
-{
-    log_debug() << "updateGatewayConfiguration called" << configs;
-    setGatewayConfigs(configs);
-}
-
 void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &configs)
 {
     // Go through the active gateways and check if there is a configuration for it
@@ -163,8 +157,10 @@ void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &configs)
         std::string gatewayId = gateway->id();
 
         if (configs.count(gatewayId) != 0) {
-            std::string config = configs.at(gatewayId);
-            gateway->setConfig(config);
+            json_t *config = configs.at(gatewayId);
+            char *configStr = json_dumps(config,0);
+            gateway->setConfig(std::string(configStr));
+            free(configStr);
         }
     }
 

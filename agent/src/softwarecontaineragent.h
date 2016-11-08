@@ -44,6 +44,7 @@
 
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
+#include "capability/configstore.h"
 
 #include <jsonparser.h>
 #include "commandjob.h"
@@ -69,10 +70,11 @@ public:
      *
      * @throws ReturnCode::FAILURE if initialization of the agent fails
      */
-    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext
-            , int preloadCount
-            , bool shutdownContainers
-            , int shutdownTimeout);
+    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
+                           int preloadCount,
+                           bool shutdownContainers,
+                           int shutdownTimeout,
+                           const std::string &configPath);
 
     ~SoftwareContainerAgent();
 
@@ -142,9 +144,13 @@ public:
      * @param env any environment variables to pass to the command
      * @param listener a function that runs when the process exits
      */
-    pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine,
-            const std::string &workingDirectory, const std::string &outputFile,
-            const EnvironmentVariables &env, std::function<void (pid_t, int)> listener);
+    pid_t launchCommand(ContainerID containerID,
+                        uid_t userID,
+                        const std::string &cmdLine,
+                        const std::string &workingDirectory,
+                        const std::string &outputFile,
+                        const EnvironmentVariables &env,
+                        std::function<void (pid_t, int)> listener);
 
     /**
      * @brief sets the container name
@@ -193,16 +199,21 @@ public:
      *
      * @return the full path of the mounted folder in the container
      */
-    std::string bindMountFolderInContainer(const ContainerID containerID, const std::string &pathInHost,
-            const std::string &subPathInContainer, bool readOnly);
+    std::string bindMountFolderInContainer(const ContainerID containerID,
+                                                const std::string &pathInHost,
+                                                const std::string &subPathInContainer,
+                                                bool readOnly);
 
     /**
-     * @brief Set configuration for the container gateways
+     * @brief Set gateway configurations for the container
      *
      * @param containerID the container to use
      * @param configs a mapping from gateway-ids to configuration strings to send to the container
+     *
+     * @return true on success, false otherwise
      */
-    void setGatewayConfigs(const ContainerID &containerID, const std::map<std::string, std::string> &configs);
+    bool setGatewayConfigs(const ContainerID &containerID,
+                           const std::map<std::string, std::string> &configs);
 
     /**
      * @brief Set capabilities for the container
@@ -216,7 +227,8 @@ public:
      *
      * @return true on success, false otherwise
      */
-    bool setCapabilities(const ContainerID &containerID, const std::vector<std::string> &capabilities);
+    bool setCapabilities(const ContainerID &containerID,
+                         const std::vector<std::string> &capabilities);
 
     /**
      * @brief get a pointer to the workspace used
@@ -232,6 +244,17 @@ private:
 
     // Helper for creating software container instances
     SoftwareContainerPtr makeSoftwareContainer(const ContainerID &containerID);
+
+    /**
+     * @brief Update gateway configurations for the container
+     *
+     * @param containerID the container to use
+     * @param configs GatewayConfiguration objects
+     *
+     * @return true on success, false otherwise
+     */
+    bool updateGatewayConfigs(const ContainerID &containerID,
+                              const GatewayConfiguration &configs);
 
     // Pre-loads container until the we have as many as configured
     bool triggerPreload();
@@ -259,5 +282,6 @@ private:
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
     std::vector<ContainerID> m_containerIdPool;
+    ConfigStore m_configStore;
 };
 }

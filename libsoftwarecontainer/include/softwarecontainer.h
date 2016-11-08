@@ -95,20 +95,6 @@ public:
     ObservableProperty<ContainerState> &getContainerState();
 
     /**
-     * @brief Continues the 'launch' phase by allowing gateway configurations to
-     *  be set.
-     *
-     * Platform Access Manager calls this method after SoftwareContainer has
-     * registered as a client, and passes all gateway configurations as
-     * argument. SoftwareContainer sets the gateway configurations and activates
-     * all gateways as a result of this call. The contained application
-     * is then started.
-     *
-     * @param configs A map of gateway IDs and their respective configurations
-     */
-    void updateGatewayConfiguration(const GatewayConfiguration &configs);
-
-    /**
      * @brief Set the gateway configuration and activate them
      */
     void setGatewayConfigs(const GatewayConfiguration &configs);

@@ -56,9 +56,13 @@ public:
 TEST_F(SoftwareContainerApp, TestWayland) {
 
     GatewayConfiguration config;
-    config[WaylandGateway::ID] = "[ { \"enabled\" : true } ]";
-
+    std::string configStr = "[ { \"enabled\" : true } ]";
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[WaylandGateway::ID] = configJson;
     setGatewayConfigs(config);
+
     FunctionJob jobTrue(getSc(), [] (){
         bool ERROR = 1;
         bool SUCCESS = 0;
@@ -233,7 +237,10 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
             ", \"read-only\": true"
         "}"
     "]";
-    config[FileGateway::ID] = configStr;
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[FileGateway::ID] = configJson;
     setGatewayConfigs(config);
 
     // Make sure the environment variables are available
@@ -349,7 +356,10 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
             ", \"read-only\": false"
         "}"
     "]";
-    config[FileGateway::ID] = configStr;
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[FileGateway::ID] = configJson;
     setGatewayConfigs(config);
 
     // Make sure the environment variables are available
@@ -623,7 +633,11 @@ TEST(SoftwareContainer, MultithreadTest) {
 TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
 
     GatewayConfiguration config;
-    config[PulseGateway::ID] = "[ { \"audio\" : true } ]";
+    std::string configStr = "[ { \"audio\" : true } ]";
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[PulseGateway::ID] = configJson;
     setGatewayConfigs(config);
 
     // We need access to the test file, so we bind mount it
@@ -696,13 +710,17 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     GatewayConfiguration config;
-    config[NetworkGateway::ID] =
-    "[{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": [],"
-        "\"default\": \"DROP\""
-    "}]";
+    std::string configStr =
+        "[{"
+            "\"type\": \"OUTGOING\","
+            "\"priority\": 1,"
+            "\"rules\": [],"
+            "\"default\": \"DROP\""
+        "}]";
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[NetworkGateway::ID] = configJson;
     setGatewayConfigs(config);
 
     CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
@@ -720,14 +738,17 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
 
     GatewayConfiguration config;
-    config[NetworkGateway::ID] =
-    "[{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": [],"
-        "\"default\": \"ACCEPT\""
-    "}]";
-
+    std::string configStr =
+        "[{"
+            "\"type\": \"OUTGOING\","
+            "\"priority\": 1,"
+            "\"rules\": [],"
+            "\"default\": \"ACCEPT\""
+        "}]";
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[NetworkGateway::ID] = configJson;
     setGatewayConfigs(config);
     CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
     job2.start();
@@ -755,12 +776,24 @@ TEST_F(SoftwareContainerApp, TestJobReturnCode) {
  */
 TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
     GatewayConfiguration config;
-    config[DBusGateway::ID] = "[{"
-        "\"dbus-gateway-config-session\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }], "
-        "\"dbus-gateway-config-system\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }]"
+    std::string configStr = "[{"
+        "\"dbus-gateway-config-session\": "
+           "[{ \"direction\": \"*\", "
+              "\"interface\": \"*\", "
+              "\"object-path\": \"*\", "
+              "\"method\": \"*\" "
+        "}], "
+        "\"dbus-gateway-config-system\": "
+           "[{ \"direction\": \"*\", "
+              "\"interface\": \"*\", "
+              "\"object-path\": \"*\", "
+              "\"method\": \"*\" "
+        "}]"
     "}]";
-
-    log_error() << config[DBusGateway::ID];
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[DBusGateway::ID] = configJson;
     setGatewayConfigs(config);
 
     {
@@ -783,12 +816,25 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
 // Regression test against previously reported bug.
 TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
     GatewayConfiguration config;
-    config[DBusGateway::ID] = "[{"
-        "\"dbus-gateway-config-session\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }], "
-        "\"dbus-gateway-config-system\": [{ \"direction\": \"*\", \"interface\": \"*\", \"object-path\": \"*\", \"method\": \"*\" }]"
+    std::string configStr =
+        "[{"
+        "\"dbus-gateway-config-session\": "
+           "[{ \"direction\": \"*\", "
+              "\"interface\": \"*\", "
+              "\"object-path\": \"*\", "
+              "\"method\": \"*\" "
+           "}], "
+        "\"dbus-gateway-config-system\": "
+           "[{ \"direction\": \"*\", "
+              "\"interface\": \"*\", "
+              "\"object-path\": \"*\", "
+              "\"method\": \"*\" "
+           "}]"
     "}]";
-
-    log_error() << config[DBusGateway::ID];
+    json_error_t error;
+    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
+    ASSERT_FALSE(configJson == nullptr);
+    config[DBusGateway::ID] = configJson;
     setGatewayConfigs(config);
 
     for(int i=0; i<2000; i++) {

@@ -67,6 +67,11 @@ fi
     --gtest_output=xml:softwarecontaineragent_unittest_result.xml
 retval=$?
 
+./agent/unit-test/configstoretest \
+    $FILTER_ARG \
+    --gtest_output=xml:configstoretest.xml
+retval=$?
+
 ./common/unit-test/softwarecontainercommontest \
     $FILTER_ARG \
     --gtest_output=xml:softwarecontainercommon_unittest_result.xml

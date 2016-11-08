@@ -25,6 +25,7 @@ add_executable(softwarecontainer-agent
     src/softwarecontaineragent.cpp
     src/softwarecontaineragentadaptor.cpp
     ${GENERATED_ADAPTOR_FILENAME}
+    src/capability/configstore.cpp
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainer-agent

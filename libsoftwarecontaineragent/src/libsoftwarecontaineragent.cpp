@@ -132,7 +132,7 @@ std::string Agent::bindMountFolderInContainer(ContainerID containerID, const std
     return getProxy().BindMountFolderInContainer(containerID, src, dst, readonly);
 }
 
-void Agent::setGatewayConfigs(ContainerID containerID, const GatewayConfiguration &config)
+void Agent::setGatewayConfigs(ContainerID containerID, const std::map<std::string, std::string> &config)
 {
     getProxy().SetGatewayConfigs(containerID, config);
 }

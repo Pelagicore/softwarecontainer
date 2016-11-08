@@ -1,14 +1,34 @@
+/*
+ * Copyright (C) 2016 Pelagicore AB
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR
+ * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+ * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+ * SOFTWARE.
+ *
+ * For further information see LICENSE
+ */
+
 #include "softwarecontaineragent.h"
 #include <cstdint>
 
 SoftwareContainerAgent::SoftwareContainerAgent(
-        Glib::RefPtr<Glib::MainContext> mainLoopContext
-        , int preloadCount
-        , bool shutdownContainers
-        , int shutdownTimeout)
-: m_mainLoopContext(mainLoopContext)
-, m_preloadCount(preloadCount)
-, m_shutdownContainers(shutdownContainers)
+        Glib::RefPtr<Glib::MainContext> mainLoopContext,
+        int preloadCount,
+        bool shutdownContainers,
+        int shutdownTimeout,
+        const std::string &configPath)
+    : m_mainLoopContext(mainLoopContext)
+    , m_preloadCount(preloadCount)
+    , m_shutdownContainers(shutdownContainers)
 {
     m_containerIdPool.push_back(0);
     m_softwarecontainerWorkspace = std::make_shared<Workspace>();
@@ -23,6 +43,14 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         log_error() << "Failed to preload";
         throw ReturnCode::FAILURE;
     }
+
+    try {
+        m_configStore = ConfigStore(configPath);
+    } catch (ReturnCode err) {
+        log_error() << "Failed to initialize ConfigStore";
+        throw ReturnCode::FAILURE;
+    }
+
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
@@ -214,7 +242,13 @@ bool SoftwareContainerAgent::writeToStdIn(pid_t pid, const std::vector<uint8_t> 
     return true;
 }
 
-pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID, uid_t userID, const std::string &cmdLine, const std::string &workingDirectory, const std::string &outputFile, const EnvironmentVariables &env, std::function<void (pid_t, int)> listener)
+pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID,
+                                            uid_t userID,
+                                            const std::string &cmdLine,
+                                            const std::string &workingDirectory,
+                                            const std::string &outputFile,
+                                            const EnvironmentVariables &env,
+                                            std::function<void (pid_t, int)> listener)
 {
     profilefunction("launchCommandFunction");
     SoftwareContainer *container = nullptr;
@@ -318,7 +352,10 @@ bool SoftwareContainerAgent::resumeContainer(ContainerID containerID)
     return isSuccess(container->resume());
 }
 
-std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID, const std::string &pathInHost, const std::string &subPathInContainer, bool readOnly)
+std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID,
+                                                               const std::string &pathInHost,
+                                                               const std::string &subPathInContainer,
+                                                               bool readOnly)
 {
     profilefunction("bindMountFolderInContainerFunction");
     SoftwareContainer *container = nullptr;
@@ -337,17 +374,56 @@ std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID
     return path;
 }
 
-void SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID, const std::map<std::string, std::string> &configs)
+bool SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID,
+                                               const std::map<std::string, std::string> &configs)
 {
-    profilefunction("setGatewayConfigsFunction");
-    SoftwareContainer *container = nullptr;
-    if (checkContainer(containerID, container)) {
-        container->updateGatewayConfiguration(configs);
+    profilefunction("setGatewayConfigs");
+    GatewayConfiguration parsedConfigs;
+
+    for (auto const &it : configs) {
+        json_error_t error;
+        std::string gwID = it.first;
+        std::string configStr = it.second;
+
+        json_t *jConfigs = json_loads(configStr.c_str(), 0, &error);
+        if (!jConfigs) {
+            log_error() << "Could not parse config while setting gateway config: " << error.text;
+            log_error() << configs;
+            return false;
+        }
+        parsedConfigs[gwID] = jConfigs;
     }
+    return updateGatewayConfigs(containerID, parsedConfigs);
 }
 
-bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID, const std::vector<std::string> &capabilities)
+bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID,
+                                                  const GatewayConfiguration &configs)
 {
+    profilefunction("updateGatewayConfigs");
+    SoftwareContainer *container = nullptr;
+    if (!checkContainer(containerID, container)) {
+        log_error() << "Could not update gateway configuration. Container ("
+                    << std::to_string(containerID) <<") does not exist";
+        return false;
+    }
+    container->setGatewayConfigs(configs);
+    return true;
+}
+
+
+bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
+                                             const std::vector<std::string> &capabilities)
+{
+    for (std::string capId : capabilities) {
+        GatewayConfiguration newConfigs = m_configStore.getGatewayConfigs(capId);
+
+        if (!updateGatewayConfigs(containerID, newConfigs)) {
+            log_error() << "Could noteset gateway configuration for capability"
+                        << std::to_string(containerID) << " does not exist";
+            return false;
+        }
+    }
+
     return true;
 }
 

@@ -21,7 +21,7 @@ include(AddGTestTest)
 set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
 add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
 
-set(TEST_LIBRARY_DEPENDENCIES 
+set(AGENT_TEST_LIBRARY_DEPENDENCIES
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
@@ -30,15 +30,33 @@ set(TEST_LIBRARY_DEPENDENCIES
     softwarecontainerlib
 )
 
-include_directories(${SOFTWARECONTAINERAGENT_DIR}/src)
+set(CS_TEST_LIBRARY_DEPENDENCIES
+    ${Glibmm_LIBRARIES}
+    ${Jansson_LIBRARIES}
+    ${IVILogging_LIBRARIES}
+    softwarecontainerlib
+)
 
-set(TEST_FILES
+include_directories(${SOFTWARECONTAINERAGENT_DIR}/src ${SOFTWARECONTAINERAGENT_DIR}/src/capability)
+
+set(AGENT_TEST_FILES
     softwarecontaineragent_unittest.cpp
     main.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/configstore.cpp
+)
+set(CS_TEST_FILES
+    configstore_unittest.cpp
+    main.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/configstore.cpp
 )
 
 add_gtest_test(softwarecontaineragenttest
-    "${TEST_FILES}"
-    "${TEST_LIBRARY_DEPENDENCIES}"
+    "${AGENT_TEST_FILES}"
+    "${AGENT_TEST_LIBRARY_DEPENDENCIES}"
+)
+
+add_gtest_test(configstoretest
+    "${CS_TEST_FILES}"
+    "${CS_TEST_LIBRARY_DEPENDENCIES}"
 )
