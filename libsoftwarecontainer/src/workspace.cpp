@@ -54,7 +54,7 @@ ReturnCode Workspace::checkWorkspace()
 #ifdef ENABLE_NETWORKGATEWAY
     // TODO: Have a way to check for the bridge using C/C++ instead of a
     // shell script. Libbridge and/or netfilter?
-    std::string cmdLine = std::string(INSTALL_PREFIX) + "/bin/setup_softwarecontainer.sh";
+    std::string cmdLine = std::string(INSTALL_BINDIR) + "/setup_softwarecontainer.sh";
     log_debug() << "Creating workspace : " << cmdLine;
     int returnCode;
     try {

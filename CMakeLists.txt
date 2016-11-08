@@ -23,10 +23,12 @@ project(softwarecontainer)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
+# load GNUInstallDirs module
+include(GNUInstallDirs)
+
 #
 # Set software version
 #
-
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
 set(${PROJECT_NAME}_MINOR_VERSION 9)
 set(${PROJECT_NAME}_PATCH_LEVEL 1)
@@ -60,7 +62,7 @@ add_definitions(${DBusCpp_CFLAGS_OTHER})
 add_definitions(${Glibmm_CFLAGS_OTHER})
 add_definitions(${LXC_CFLAGS_OTHER})
 add_definitions(${Jansson_CFLAGS_OTHER})
-add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+add_definitions(-DINSTALL_BINDIR="${CMAKE_INSTALL_FULL_BINDIR}")
 
 include_directories(${IVILogging_INCLUDE_DIRS})
 include_directories(${DBusCpp_INCLUDE_DIRS})
@@ -120,25 +122,20 @@ set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
 # when building, don't use the install RPATH already (but later on when installing)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # the RPATH to be used when installing, but only if it's not a system directory
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" isSystemDir)
 if("${isSystemDir}" STREQUAL "-1")
-   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 endif("${isSystemDir}" STREQUAL "-1")
 
-if(${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
-    SET(SYS_CONFIG_DIR /etc)
-    SET(LXC_TEMPLATE_DIR /usr/share/softwarecontainer/lxc-templates/)
-else()
-    SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_PREFIX}/etc)
-    SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_PREFIX}/share/softwarecontainer/lxc-templates)
-endif()
+SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR})
+SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer/lxc-templates)
 message(STATUS "Configuration files will be installed in " ${SYS_CONFIG_DIR})
 message(STATUS "LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
@@ -211,13 +208,13 @@ endif()
 # Pkg-config file
 #
 configure_file(softwarecontainer.pc.in softwarecontainer.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
 
 #
 # General configuration file
 #
 configure_file(softwarecontainer-config.h.in softwarecontainer-config.h @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/softwarecontainer)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.h DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/softwarecontainer)
 
 #
 # Add all sub-projects

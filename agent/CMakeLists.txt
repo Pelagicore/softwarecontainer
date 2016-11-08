@@ -15,6 +15,7 @@
 #
 # For further information see LICENSE
 
+include(GNUInstallDirs)
 include(GenerateDBusCpp)
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
@@ -48,10 +49,10 @@ INSTALL(TARGETS softwarecontainer-agent DESTINATION bin)
 #
 
 # Install the D-Bus configuration file
-if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
+if ("$ENV{USER}" STREQUAL "root")
     set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/etc/dbus-1/system.d")
 else()
-    set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/usr/share/dbus-1/system.d/")
+    set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dbus-1/system.d")
 endif()
 install(FILES softwarecontainer-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR})
 
@@ -59,11 +60,7 @@ install(FILES softwarecontainer-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGU
 if (ENABLE_SYSTEMD)
     message(STATUS "SystemD file installation enabled")
 
-    if (${CMAKE_INSTALL_PREFIX} STREQUAL "/usr")
-        set(SYSTEMD_CONFIGURATION_FILES_DIR "/lib/systemd/system")
-    else()
-        set(SYSTEMD_CONFIGURATION_FILES_DIR "systemd/system")
-    endif()
+    set(SYSTEMD_CONFIGURATION_FILES_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/systemd/system")
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.service.in  ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
 endif()
