@@ -26,7 +26,7 @@ EXITSTATUS=0
 for DIR in ${DIRECTORIES[@]}; do
         echo "Running service tests in $DIR"
         pushd $DIR > /dev/null
-        py.test -v --junit-xml=../${DIR}_test.xml
+        py.test -v --junit-xml=../${DIR}_servicetest_result.xml
         (( EXITSTATUS += $? ))
         # Sleep to allow some time for teardown in previous suite
         # to have full effect before we run the next suite
