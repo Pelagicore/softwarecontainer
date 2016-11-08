@@ -36,6 +36,7 @@ gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
 if(ENABLE_NETWORKGATEWAY)
     list(APPEND GATEWAY_SOURCES netlink.cpp)
     list(APPEND GATEWAY_SOURCES gateway/iptableentry.cpp)
+    list(APPEND GATEWAY_SOURCES gateway/networkgatewayparser.cpp)
 endif()
 
 gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)

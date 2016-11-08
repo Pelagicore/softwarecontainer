@@ -133,24 +133,4 @@ private:
 
     Generator m_generator;
     Netlink m_netlinkHost;
-
-    /**
-     * @brief Parses a json element to a Rule
-     * @return ReturnCode::SUCCESS if the rule is successfully parsed
-     * @return ReturnCode::FAILURE otherwise.
-     */
-    virtual ReturnCode parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules);
-
-    /**
-     * @brief Parses a ports from an json element
-     * @return ReturnCode::SUCCESS if the rule is successfully parsed
-     * @return ReturnCode::FAILURE otherwise.
-     */
-    virtual ReturnCode parsePort(const json_t *element, IPTableEntry::portFilter &ports);
-
-    /**
-     * @brief Parses a string to a Target
-     * @return Either the valid Target representation of true or false
-     */
-    IPTableEntry::Target parseTarget(const std::string &str);
 };

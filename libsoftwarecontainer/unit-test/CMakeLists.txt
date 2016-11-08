@@ -44,6 +44,7 @@ add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY iptableentry_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayparser_unittest.cpp)
 
 set(DEFAULT_GATEWAYS TRUE)
 add_gateway_test(DEFAULT_GATEWAYS envgateway_unittest.cpp)
