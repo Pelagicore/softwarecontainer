@@ -50,6 +50,7 @@ class Container():
     CONFIG = "config"
     BIND_MOUNT_DIR = "bind-mount-dir"
     HOST_PATH = "host-path"
+    READONLY = False
 
     def __init__(self):
         bus = dbus.SystemBus()
@@ -109,7 +110,8 @@ class Container():
             {
                 Container.CONFIG: "{enableWriteBuffer: false}",
                 Container.HOST_PATH: my_path_string_variable,
-                Container.BIND_MOUNT_DIR: "app"
+                Container.BIND_MOUNT_DIR: "app",
+                Container.READONLY: True
             }
 
             The values in the dict are passed as arguments to the D-Bus methods on SoftwareContainerAgent.
@@ -117,11 +119,12 @@ class Container():
             Container.CONFIG - argument to SoftwareContainerAgent::CreateContainer
             Container.HOST_PATH - second argument to SoftwareContainerAgent::BindMountFolderInContainer
             Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMountFolderInContainer
+            Container.READONLY - fourth argument to SoftwareContainerAgent::BindMountFolderInContainer
         """
         self.__create_container(data[Container.CONFIG])
         self.__bind_dir = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
                                                                data[Container.BIND_MOUNT_DIR],
-                                                               readonly=False)
+                                                               data[Container.READONLY])
 
     def terminate(self):
         """ Perform teardown of container created by call to 'start'
@@ -132,7 +135,7 @@ class Container():
     def __create_container(self, config):
         self.__container_id = self.__agent.CreateContainer(config)
 
-    def __bindmount_folder_in_container(self, host_path, dirname, readonly=True):
+    def __bindmount_folder_in_container(self, host_path, dirname, readonly):
         return self.__agent.BindMountFolderInContainer(self.__container_id, host_path, dirname, readonly)
 
 
