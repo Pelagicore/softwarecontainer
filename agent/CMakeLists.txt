@@ -48,13 +48,11 @@ INSTALL(TARGETS softwarecontainer-agent DESTINATION bin)
 # been installed to.
 #
 
-# Install the D-Bus configuration file
-if ("$ENV{USER}" STREQUAL "root")
-    set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "/etc/dbus-1/system.d")
-else()
-    set(DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/dbus-1/system.d")
+if (ENABLE_SYSTEM_BUS)
+    # Install the D-Bus configuration file
+    # This enables the agent to communicate over the system bus
+    install(FILES softwarecontainer-agent.conf DESTINATION "/etc/dbus-1/system.d")
 endif()
-install(FILES softwarecontainer-agent.conf DESTINATION ${DBUS_SYSTEM_BUS_CONFIGURATION_FILES_DIR})
 
 # Install systemd configuration
 if (ENABLE_SYSTEMD)

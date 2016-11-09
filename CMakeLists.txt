@@ -102,6 +102,7 @@ option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
 option(ENABLE_COVERAGE "Enable coverage support in the build" OFF)
 option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
+option(ENABLE_SYSTEM_BUS "Enables the SoftwareContainerAgent to communicate over the system bus" ON)
 
 # Options for documentation
 option(ENABLE_USER_DOC "Enable building and installation of the user documentation" OFF)
