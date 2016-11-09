@@ -60,8 +60,6 @@ section).
 To prevent SoftwareContainer from creating a network bridge on startup (and
 instead only check that one is there), build with -DCREATE_BRIDGE=OFF.
 
-**NOTE**: CMAKE_INSTALL_PREFIX must currently be defined and be set to '/usr'
-
 For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
 build this code, please take a look at the Vagrantfile.
@@ -72,6 +70,15 @@ build this code, please take a look at the Vagrantfile.
     cd build
     cmake -LAH ..
 ``
+
+## Install without root
+
+In order to install SoftwareContainer there are two things that needs to be set.
+
+1. -DENABLE_SYSTEM_BUS needs to be set to OFF. The dbus xml that is needed for
+   the system bus to be used can not be installed without root privileges.
+2. -DCMAKE_INSTALL_PREFIX needs to be set to a path the installing user has
+   write access to.
 
 ## Building in Vagrant
 
