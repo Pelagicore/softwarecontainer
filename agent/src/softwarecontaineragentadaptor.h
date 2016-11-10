@@ -80,10 +80,11 @@ class DBusCppAdaptor : public SoftwareContainerAgentAdaptor,
                        public DBus::IntrospectableAdaptor,
                        public DBus::ObjectAdaptor {
 public:
-    DBusCppAdaptor(DBus::Connection& connection,
-                   const std::string& objectPath,
+    DBusCppAdaptor(DBus::Connection &connection,
+                   const std::string &objectPath,
                    SoftwareContainerAgent &agent) :
-        SoftwareContainerAgentAdaptor(agent), DBus::ObjectAdaptor(connection, objectPath)
+        SoftwareContainerAgentAdaptor(agent),
+        DBus::ObjectAdaptor(connection, objectPath)
     {
     }
 };

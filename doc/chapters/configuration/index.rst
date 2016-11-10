@@ -19,6 +19,10 @@ It is possible to configure SoftwareContainer Agent with command line options.
 
 **-t or --timeout <seconds>** Timeout in seconds to wait for containers to shutdown, defaults to 2
 
+**-b or --session-bus** To use the session bus on D-Bus, instead of the system bus.
+
+**-h or --help** Display usage and exit
+
 
 .. _json_conf:
 
