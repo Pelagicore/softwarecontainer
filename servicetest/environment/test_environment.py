@@ -23,7 +23,7 @@ import os
 import time
 
 # Test framework and local test helper imports
-from testhelper import EnvironmentHelper
+from testframework.testhelper import EnvironmentHelper
 from testframework import Container
 
 
@@ -32,12 +32,24 @@ from testframework import Container
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput/"
 
+# The path to where the test app is located:
+#  * Will be passed in the 'data' dict when starting the container to set
+#    this test modules location as a bind mount visible inside the container.
+#  * Is used by the testframework for knowing where this test is located.
+HOST_PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 ##### Provide what the testframework requires #####
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
     return TESTOUTPUT_DIR + "/environment-test.log"
+
+
+# This function is used by the testframework 'testhelper' fixture to know where the
+# testhelper should be made available when running the tests
+def mounted_path_in_host():
+    return HOST_PATH
 
 
 ##### Local fixtures #####
@@ -68,11 +80,6 @@ def create_testoutput_dir(scope="module"):
 
 ##### Globals for setup and configuration of SC #####
 
-# The path to where the test app is located, will be passed in the 'data' dict when
-# starting the container. The test app is assumed to be located in the
-# same directory as this test.
-HOST_PATH = os.path.dirname(os.path.abspath(__file__))
-
 # These default values are used to pass various test specific values and
 # configurations to the Container helper. Tests that need to add, remove or
 # update entries can simply base their dict on this one for convenience.
@@ -90,7 +97,7 @@ DATA = {
 # when changing them.
 
 GW_CONFIG_ONE_VAR = [
-     {
+    {
         "name": "MY_ENV_VAR",
         "value": "1234"
     }
@@ -127,7 +134,7 @@ GW_CONFIG_APPEND = [
 
 ##### Test suites #####
 
-@pytest.mark.usefixtures("create_testoutput_dir", "agent", "clear_env_files")
+@pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent", "clear_env_files")
 class TestInteractionGatewayAndAPI(object):
     """ This suite tests the interaction between the environment gateway and
         setting of environment variables through the Agent D-Bus API.
@@ -161,7 +168,7 @@ class TestInteractionGatewayAndAPI(object):
             sc.terminate()
 
 
-@pytest.mark.usefixtures("create_testoutput_dir", "agent", "clear_env_files")
+@pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent", "clear_env_files")
 class TestEnvironment(object):
     """ This suite does basic tests on the environment variables inside the
         container.

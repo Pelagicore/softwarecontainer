@@ -119,7 +119,7 @@ class EnvironmentHelper(Helper):
         with open(base_path + "/" + self.__file_name(), "r") as fh:
             all_vars = json.loads(fh.read())
         return all_vars
-    
+
     def __file_name(self):
         """ Provide some de-coupling from the static-ness of the
             file name.

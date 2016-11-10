@@ -21,6 +21,7 @@ import pytest
 import subprocess
 import os
 import signal
+import shutil
 
 from testframework import SoftwareContainerAgentHandler
 
@@ -28,8 +29,8 @@ from testframework import SoftwareContainerAgentHandler
 # Add this directory (the package root) to the sys.path so the imports
 # in the tests work, e.g. importing from 'testframework' to access helper
 # classes etc.
-package_root = os.path.dirname(os.path.abspath(__file__))
-os.sys.path.insert(0, package_root)
+PACKAGE_ROOT = os.path.dirname(os.path.abspath(__file__))
+os.sys.path.insert(0, PACKAGE_ROOT)
 
 
 @pytest.fixture(scope="module")
@@ -64,6 +65,18 @@ def agent(request):
 
     # Do fixture teardown
     agent_handler.terminate()
+
+
+@pytest.fixture(scope="module")
+def testhelper(request):
+    """ Copy the testhelper module to the location that the test mounts into
+        the container. This is needed to have the helper available to execute
+        inside the container through LaunchCommand to drive the tests.
+    """
+    path = request.module.mounted_path_in_host()
+    shutil.copyfile(PACKAGE_ROOT + "/testframework/testhelper.py", path + "/testhelper.py")
+    yield
+    os.remove(path + "/testhelper.py")
 
 
 def grep_for_dbus_proxy():
