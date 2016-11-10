@@ -36,15 +36,48 @@ void usage(const char *argv0)
     printf("--shutdown <bool>        : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
     printf("--timeout <seconds>      : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
     printf("--servicemanifest <path> : Path to a file or directory where service manifest(s) exist, defaults to \"\"\n");
+    printf("--session-bus            : Use the session bus instead of the system bus\n");
     printf("--help                   : Prints this help message and exits.\n");
 }
 
-
+/*
+ * When we get signals that can be trapped, we want the main loop to be quitted.
+ */
 int signalHandler(void *data) {
     log_debug() << "Caught signal, exiting!";
     Glib::RefPtr<Glib::MainLoop> *ml = static_cast<Glib::RefPtr<Glib::MainLoop> *>(data);
     (*ml)->quit();
     return 0;
+}
+
+/*
+ * Tries to register the agent on the given bus. If the system bus is given and fails,
+ * this tries to register to the session bus instead.
+ *
+ * Throws a ReturnCode on failure
+ */
+DBus::Connection getBusConnection(bool useSystemBus)
+{
+    std::string busStr = useSystemBus ? "system" : "session";
+    try {
+        DBus::Connection bus = useSystemBus ? DBus::Connection::SystemBus()
+                                            : DBus::Connection::SessionBus();
+
+        // Check if the name is available or not
+        bool alreadyTaken = bus.has_name(AGENT_BUS_NAME);
+        if (alreadyTaken) {
+            log_error() << AGENT_BUS_NAME << " is already taken on the " << busStr << " bus.";
+            throw ReturnCode::FAILURE;
+        }
+
+        DBus::Connection connection(bus);
+        connection.request_name(AGENT_BUS_NAME);
+        return connection;
+
+    } catch (DBus::Error &err) {
+        log_warning() << "Could not register " << AGENT_BUS_NAME << " to the " << busStr << " bus";
+        throw ReturnCode::FAILURE;
+    }
 }
 
 
@@ -58,6 +91,7 @@ int main(int argc, char **argv)
         { "timeout",         required_argument, 0, 't' },
         { "servicemanifest", required_argument, 0, 'm' },
         { "help",            no_argument,       0, 'h' },
+        { "session-bus",     no_argument,       0, 'b' },
         { 0, 0, 0, 0 }
     };
 
@@ -66,10 +100,11 @@ int main(int argc, char **argv)
     bool shutdownContainers = true;
     int timeout = 2;
     std::string servicemanifest = "";
+    bool useSystemBus = true;
 
     int option_index = 0;
     int c = 0;
-    while((c = getopt_long(argc, argv, "p:u:s:t:m:h", long_options, &option_index)) != -1) {
+    while((c = getopt_long(argc, argv, "p:u:s:t:m:hb", long_options, &option_index)) != -1) {
         switch(c) {
             case 'p':
                 if (!parseInt(optarg, &preloadCount)) {
@@ -95,6 +130,9 @@ int main(int argc, char **argv)
             case 'm':
                 servicemanifest = std::string(optarg);
                 break;
+            case 'b':
+                useSystemBus = false;
+                break;
             case 'h':
                 usage(argv[0]);
                 exit(0);
@@ -117,23 +155,17 @@ int main(int argc, char **argv)
     DBus::default_dispatcher = &dbusDispatcher;
     dbusDispatcher.attach(mainContext->gobj());
 
-    std::unique_ptr<DBus::Connection> connection =
-        std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SystemBus()));
-
-    // We try to use the system bus, and fallback to the session bus if the system bus can not be used
     try {
-        connection->request_name(AGENT_BUS_NAME);
-    } catch (DBus::Error &error) {
-        log_warning() << "Can't own the name" << AGENT_BUS_NAME << " on the system bus => use session bus instead";
-        connection = std::unique_ptr<DBus::Connection>(new DBus::Connection(DBus::Connection::SessionBus()));
-        connection->request_name(AGENT_BUS_NAME);
-    }
-
-    try {
-        SoftwareContainerAgent agent(mainContext, preloadCount, shutdownContainers,
-                                     timeout, servicemanifest);
+        DBus::Connection connection = getBusConnection(useSystemBus);
+        SoftwareContainerAgent agent(mainContext,
+                                     preloadCount,
+                                     shutdownContainers,
+                                     timeout,
+                                     servicemanifest);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
-            std::unique_ptr<SoftwareContainerAgentAdaptor>(new DBusCppAdaptor(*connection, AGENT_OBJECT_PATH, agent));
+            std::unique_ptr<SoftwareContainerAgentAdaptor>(
+                new DBusCppAdaptor(connection, AGENT_OBJECT_PATH, agent)
+            );
 
         // Register UNIX signal handler
         g_unix_signal_add(SIGINT, &signalHandler, &ml);
