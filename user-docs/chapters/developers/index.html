@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developer guidelines &#8212; softwarecontainer 0.9.1-a602163 2016-11-09 documentation</title>
+    <title>Developer guidelines &#8212; softwarecontainer 0.9.1-3acfd2a 2016-11-10 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-a602163 2016-11-09',
+        VERSION:     '0.9.1-3acfd2a 2016-11-10',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-a602163 2016-11-09 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-3acfd2a 2016-11-10 documentation" href="../../index.html" />
     <link rel="next" title="SoftwareContainer using LXC" href="../lxc/index.html" />
     <link rel="prev" title="Filesystems" href="../filesystem/index.html" />
    
@@ -297,7 +297,7 @@ propagate to the others.</li>
 internally to do their specific parsing and application of the configs.</p>
 <p>SoftwareContainer also queries the gateways about state and e.g. activates the gateway when it has been configured.</p>
 <p>Below diagram show the major events during the configuration and activation sequence initiated by the Agent:</p>
-<div><svg height="506" viewBox="0 0 832 506" width="832" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+<div><svg height="434" viewBox="0 0 832 434" width="832" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs id="defs_block">
     <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
       <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
@@ -305,28 +305,28 @@ internally to do their specific parsing and application of the configs.</p>
   </defs>
   <title>blockdiag</title>
   <desc />
-  <rect fill="rgb(0,0,0)" height="417" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="84" />
-  <rect fill="rgb(0,0,0)" height="417" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="84" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="173" />
-  <rect fill="rgb(0,0,0)" height="90" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="233" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="353" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="413" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="263" />
+  <rect fill="rgb(0,0,0)" height="358" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
+  <rect fill="rgb(0,0,0)" height="358" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="71" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="101" />
+  <rect fill="rgb(0,0,0)" height="90" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="161" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="281" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="341" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="191" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="643" y="11" />
-  <path d="M 128 45 L 128 511" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="417" stroke="rgb(0,0,0)" width="8" x="124" y="78" />
-  <path d="M 320 45 L 320 511" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="417" stroke="rgb(0,0,0)" width="8" x="316" y="78" />
-  <path d="M 512 45 L 512 511" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="167" />
-  <rect fill="moccasin" height="90" stroke="rgb(0,0,0)" width="8" x="508" y="227" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="347" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="407" />
-  <path d="M 704 45 L 704 511" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="257" />
+  <path d="M 128 45 L 128 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="358" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
+  <path d="M 320 45 L 320 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="358" stroke="rgb(0,0,0)" width="8" x="316" y="65" />
+  <path d="M 512 45 L 512 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="95" />
+  <rect fill="moccasin" height="90" stroke="rgb(0,0,0)" width="8" x="508" y="155" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="275" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="335" />
+  <path d="M 704 45 L 704 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="185" />
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="5" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="128" y="31">Agent</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="5" />
@@ -335,50 +335,44 @@ internally to do their specific parsing and application of the configs.</p>
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="512" y="31">Gateway</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="5" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="90" x="704" y="31">derived-gateway</text>
-  <path d="M 136 78 L 312 78" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="304,74 312,78 304,82" stroke="rgb(0,0,0)" />
-  <path d="M 328 121 L 416 121" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 416 121 L 416 137" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 416 137 L 328 137" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="336,133 328,137 336,141" stroke="rgb(0,0,0)" />
-  <path d="M 328 167 L 504 167" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,163 504,167 496,171" stroke="rgb(0,0,0)" />
-  <path d="M 328 197 L 504 197" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,193 328,197 336,201" stroke="rgb(0,0,0)" />
-  <path d="M 328 227 L 504 227" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,223 504,227 496,231" stroke="rgb(0,0,0)" />
-  <path d="M 520 257 L 696 257" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="688,253 696,257 688,261" stroke="rgb(0,0,0)" />
-  <path d="M 520 287 L 696 287" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="528,283 520,287 528,291" stroke="rgb(0,0,0)" />
-  <path d="M 328 317 L 504 317" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,313 328,317 336,321" stroke="rgb(0,0,0)" />
-  <path d="M 328 347 L 504 347" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,343 504,347 496,351" stroke="rgb(0,0,0)" />
-  <path d="M 328 377 L 504 377" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,373 328,377 336,381" stroke="rgb(0,0,0)" />
-  <path d="M 328 407 L 504 407" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,403 504,407 496,411" stroke="rgb(0,0,0)" />
-  <path d="M 328 437 L 504 437" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,433 328,437 336,441" stroke="rgb(0,0,0)" />
-  <path d="M 232 467 L 312 467" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="240,463 232,467 240,471" stroke="rgb(0,0,0)" />
-  <path d="M 208 459 L 224 475" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 208 475 L 224 459" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="168" x="224" y="70">updateGatewayConfiguration()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="108" x="382" y="106">setGatewayConfigs(</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="6" x="331" y="119">)</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="344" y="165">id()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="12" x="498" y="195">ID</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="365" y="225">setConfig()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="581" y="255">readConfigElement()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="684" y="285">bool</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="315">bool</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="374" y="345">isConfigured()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="375">bool</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="362" y="405">activate()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="435">bool</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="465">void</text>
+  <path d="M 136 65 L 312 65" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,61 312,65 304,69" stroke="rgb(0,0,0)" />
+  <path d="M 328 95 L 504 95" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,91 504,95 496,99" stroke="rgb(0,0,0)" />
+  <path d="M 328 125 L 504 125" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,121 328,125 336,129" stroke="rgb(0,0,0)" />
+  <path d="M 328 155 L 504 155" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,151 504,155 496,159" stroke="rgb(0,0,0)" />
+  <path d="M 520 185 L 696 185" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,181 696,185 688,189" stroke="rgb(0,0,0)" />
+  <path d="M 520 215 L 696 215" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="528,211 520,215 528,219" stroke="rgb(0,0,0)" />
+  <path d="M 328 245 L 504 245" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,241 328,245 336,249" stroke="rgb(0,0,0)" />
+  <path d="M 328 275 L 504 275" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,271 504,275 496,279" stroke="rgb(0,0,0)" />
+  <path d="M 328 305 L 504 305" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,301 328,305 336,309" stroke="rgb(0,0,0)" />
+  <path d="M 328 335 L 504 335" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,331 504,335 496,339" stroke="rgb(0,0,0)" />
+  <path d="M 328 365 L 504 365" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,361 328,365 336,369" stroke="rgb(0,0,0)" />
+  <path d="M 232 395 L 312 395" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="240,391 232,395 240,399" stroke="rgb(0,0,0)" />
+  <path d="M 208 387 L 224 403" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 208 403 L 224 387" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="197" y="63">setGatewayConfigs()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="344" y="93">id()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="12" x="498" y="123">ID</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="365" y="153">setConfig()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="581" y="183">readConfigElement()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="684" y="213">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="243">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="374" y="273">isConfigured()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="303">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="362" y="333">activate()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="363">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="393">void</text>
 </svg>
 </div>
 </div>
