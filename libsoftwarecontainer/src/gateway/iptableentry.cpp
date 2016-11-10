@@ -56,7 +56,6 @@ std::string IPTableEntry::convertTarget (Target& t)
 std::string IPTableEntry::interpretRule(Rule rule)
 {
     std::string iptableCommand = "iptables -A " + m_type;
-    log_debug() << "Add network rule : " <<  iptableCommand;
 
         if (!rule.host.empty()) {
             if ("INPUT" == m_type) {
@@ -87,7 +86,6 @@ std::string IPTableEntry::interpretRule(Rule rule)
         }
 
         iptableCommand = iptableCommand + " -j " + convertTarget(rule.target);
-        log_debug() << "Add network rule : " <<  iptableCommand;
 
         return iptableCommand;
 }
