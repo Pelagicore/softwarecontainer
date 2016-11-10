@@ -60,8 +60,11 @@ class TestCaps(object):
     def test_caps(self):
         """ Test setting a capability works, i.e. the API is there  on D-Bus
         """
-        sc = Container()
-        sc.start(DATA)
-        caps_set = sc.set_capabilities(["test.dbus", "test.network"])
+        try:
+            sc = Container()
+            sc.start(DATA)
+            caps_set = sc.set_capabilities(["test.dbus", "test.network"])
 
-        assert caps_set is True
+            assert caps_set is True
+        finally:
+            sc.terminate()
