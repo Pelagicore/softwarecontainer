@@ -31,11 +31,12 @@ void usage(const char *argv0)
     printf("Usage: %s [-p or --preload <num>] [-u or --user <uid>]", argv0);
     printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>] [-m or --servicemanifest <path>]\n");
     printf("\n");
-    printf("--preload <num>     : Number of containers to preload, defaults to 0\n");
-    printf("--user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");
-    printf("--shutdown <bool>   : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
-    printf("--timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
-    printf("--servicemanifest <path> : Path to a file or directory where Service Manifest(s) exist, defaults to \"\"");
+    printf("--preload <num>          : Number of containers to preload, defaults to 0\n");
+    printf("--user <uid>             : Default user id to be used when starting processes in the container, defaults to 0\n");
+    printf("--shutdown <bool>        : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
+    printf("--timeout <seconds>      : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
+    printf("--servicemanifest <path> : Path to a file or directory where service manifest(s) exist, defaults to \"\"\n");
+    printf("--help                   : Prints this help message and exits.\n");
 }
 
 
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
 
     int option_index = 0;
     int c = 0;
-    while((c = getopt_long(argc, argv, "p:u:s:h:t:m:", long_options, &option_index)) != -1) {
+    while((c = getopt_long(argc, argv, "p:u:s:t:m:h", long_options, &option_index)) != -1) {
         switch(c) {
             case 'p':
                 if (!parseInt(optarg, &preloadCount)) {
