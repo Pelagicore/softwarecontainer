@@ -70,7 +70,7 @@ retval=$?
 ./agent/unit-test/configstoretest \
     $FILTER_ARG \
     --gtest_output=xml:configstoretest.xml
-retval=$?
+retval=$(($retval+$?))
 
 ./common/unit-test/softwarecontainercommontest \
     $FILTER_ARG \
