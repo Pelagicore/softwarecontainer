@@ -18,7 +18,7 @@
 # For further information see LICENSE
 
 
-DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment)
+DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment networkgateway)
 
 # We want to exit with bad status in case some test fail. Mostly so that any
 # CI system will notice that not everything was good.
