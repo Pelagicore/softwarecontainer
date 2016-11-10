@@ -23,7 +23,7 @@ import os
 import time
 
 # Test framework and local test helper imports
-import testhelper
+from testhelper import EnvironmentHelper
 from testframework import Container
 
 
@@ -49,7 +49,7 @@ def clear_env_files(scope="function"):
 
         TODO: Should this be a method on the helper?
     """
-    file_path = TESTOUTPUT_DIR + testhelper.ENV_VARS_FILE_NAME
+    file_path = TESTOUTPUT_DIR + EnvironmentHelper.ENV_VARS_FILE_NAME
     if os.path.exists(file_path):
         os.remove(file_path)
 
@@ -153,7 +153,8 @@ class TestInteractionGatewayAndAPI(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            my_env_var = testhelper.env_var("MY_ENV_VAR", TESTOUTPUT_DIR)
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            my_env_var = helper.env_var("MY_ENV_VAR")
             # Assert value is the one set with LaunchCommand
             assert my_env_var == "new-value"
         finally:
@@ -183,7 +184,8 @@ class TestEnvironment(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            my_env_var = testhelper.env_var("MY_ENV_VAR", TESTOUTPUT_DIR)
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            my_env_var = helper.env_var("MY_ENV_VAR")
             # Assert value is the one set first
             assert my_env_var == "1234"
         finally:
@@ -208,7 +210,8 @@ class TestEnvironment(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            ld_library_path = testhelper.env_var("LD_LIBRARY_PATH", TESTOUTPUT_DIR)
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            ld_library_path = helper.env_var("LD_LIBRARY_PATH")
             # Assert the "appended" value is kept
             assert ld_library_path == ":/another/path"
         finally:
@@ -230,7 +233,8 @@ class TestEnvironment(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            variable = testhelper.env_var("LD_LIBRARY_PATH", TESTOUTPUT_DIR)
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            variable = helper.env_var("LD_LIBRARY_PATH")
             # Assert the append resulted in the creation of the variable
             assert variable == ":/another/path"
         finally:
@@ -254,10 +258,11 @@ class TestEnvironment(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            ld_library_path = testhelper.env_var("LD_LIBRARY_PATH", TESTOUTPUT_DIR)
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            ld_library_path = helper.env_var("LD_LIBRARY_PATH")
             # Assert the append was applied
             assert ld_library_path == "/some/non/relevant/path:/another/path"
-            my_env_var = testhelper.env_var("MY_ENV_VAR", TESTOUTPUT_DIR)
+            my_env_var = helper.env_var("MY_ENV_VAR")
             # Assert other variables were not affected
             assert my_env_var == "1234"
         finally:
@@ -279,7 +284,8 @@ class TestEnvironment(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            assert testhelper.env_var("MY_ENV_VAR", TESTOUTPUT_DIR) == "1234"
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            assert helper.env_var("MY_ENV_VAR") == "1234"
         finally:
             sc.terminate()
 
@@ -299,7 +305,8 @@ class TestEnvironment(object):
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
-            assert testhelper.env_var("MY_ENV_VAR", TESTOUTPUT_DIR) == "1234"
-            assert testhelper.env_var("LD_LIBRARY_PATH", TESTOUTPUT_DIR) == "/some/non/relevant/path"
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            assert helper.env_var("MY_ENV_VAR") == "1234"
+            assert helper.env_var("LD_LIBRARY_PATH") == "/some/non/relevant/path"
         finally:
             sc.terminate()
