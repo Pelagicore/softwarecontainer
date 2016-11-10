@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Troubleshooting &#8212; softwarecontainer 0.9.1-05bafb6 2016-11-10 documentation</title>
+    <title>Troubleshooting &#8212; softwarecontainer 0.9.1-64ade21 2016-11-10 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-05bafb6 2016-11-10',
+        VERSION:     '0.9.1-64ade21 2016-11-10',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-05bafb6 2016-11-10 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-64ade21 2016-11-10 documentation" href="../../index.html" />
     <link rel="next" title="Filesystems" href="../filesystem/index.html" />
     <link rel="prev" title="Integration guidelines" href="../integration-guidelines/index.html" />
    
@@ -45,13 +45,17 @@
             
   <div class="section" id="troubleshooting">
 <span id="id1"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="known-issues">
-<h2>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Currently, when configuring the project (with CMake) the option <code class="docutils literal"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>
-must be defined and set to &#8216;/usr&#8217;, e.g: <code class="docutils literal"><span class="pre">-DCMAKE_INSTALL_PREFIX=/usr</span></code>. If this is not
-done, there are issues starting the Agent properly.</li>
+<li>When SoftwareContainerAgent starts it claims that it can not register the
+dbus interface.</li>
 </ul>
+<dl class="docutils">
+<dt>** In order for the SoftwareContainerAgent to work using the dbus system bus a</dt>
+<dd>policy file has to be installed in &#8220;/etc/dbus/system.d/&#8221;. See the README
+file for information on compile options.</dd>
+</dl>
 </div>
 </div>
 
@@ -64,7 +68,7 @@ done, there are issues starting the Agent properly.</li>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Troubleshooting</a><ul>
-<li><a class="reference internal" href="#known-issues">Known issues</a></li>
+<li><a class="reference internal" href="#faq">FAQ</a></li>
 </ul>
 </li>
 </ul>
