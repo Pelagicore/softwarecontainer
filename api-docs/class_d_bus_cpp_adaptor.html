@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
    </div>
   </td>
  </tr>
@@ -75,13 +75,13 @@ $(document).ready(function(){initNavTree('class_d_bus_cpp_adaptor.html','');});
 <div class="dynheader">
 Inheritance diagram for DBusCppAdaptor:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_d_bus_cpp_adaptor__inherit__graph.svg" width="656" height="155"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_d_bus_cpp_adaptor__inherit__graph.svg" width="615" height="155"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for DBusCppAdaptor:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_d_bus_cpp_adaptor__coll__graph.svg" width="912" height="174"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_d_bus_cpp_adaptor__coll__graph.svg" width="854" height="174"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -90,36 +90,42 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4a65f258dbf3c3f99b735a18148452d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac4a65f258dbf3c3f99b735a18148452d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DBusCppAdaptor</b> (DBus::Connection &amp;connection, const std::string &amp;objectPath, <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html">SoftwareContainerAgent</a> &amp;agent)</td></tr>
 <tr class="separator:ac4a65f258dbf3c3f99b735a18148452d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae601d132e1e00bd55cd2425b8da52135"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae601d132e1e00bd55cd2425b8da52135"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>LaunchCommand</b> (const uint32_t &amp;containerID, const uint32_t &amp;userID, const std::string &amp;commandLine, const std::string &amp;workingDirectory, const std::string &amp;outputFile, const std::map&lt; std::string, std::string &gt; &amp;env)</td></tr>
-<tr class="separator:ae601d132e1e00bd55cd2425b8da52135"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b94211e73d0eaf05ba307671490a6f7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b94211e73d0eaf05ba307671490a6f7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ShutDownContainerWithTimeout</b> (const uint32_t &amp;containerID, const uint32_t &amp;timeout)</td></tr>
-<tr class="separator:a7b94211e73d0eaf05ba307671490a6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a700d70d8a465c98e549636f3abb322f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a700d70d8a465c98e549636f3abb322f1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ShutDownContainer</b> (const uint32_t &amp;containerID) override</td></tr>
-<tr class="separator:a700d70d8a465c98e549636f3abb322f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80bd09c184c021eb5a030c32648b8696"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80bd09c184c021eb5a030c32648b8696"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>BindMountFolderInContainer</b> (const uint32_t &amp;containerID, const std::string &amp;pathInHost, const std::string &amp;subPathInContainer, const bool &amp;readOnly) override</td></tr>
-<tr class="separator:a80bd09c184c021eb5a030c32648b8696"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ada4edb25dc318aa4fca7f7f4a8090e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ada4edb25dc318aa4fca7f7f4a8090e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetGatewayConfigs</b> (const uint32_t &amp;containerID, const std::map&lt; std::string, std::string &gt; &amp;configs) override</td></tr>
-<tr class="separator:a7ada4edb25dc318aa4fca7f7f4a8090e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a093c05d4273ec737d7fb507b738cbb42"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a093c05d4273ec737d7fb507b738cbb42"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>SetCapabilities</b> (const uint32_t &amp;containerID, const std::vector&lt; std::string &gt; &amp;capabilities) override</td></tr>
-<tr class="separator:a093c05d4273ec737d7fb507b738cbb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6617117a62f1ab7cbe6a7dba9a66d0d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6617117a62f1ab7cbe6a7dba9a66d0d"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>CreateContainer</b> (const std::string &amp;config) override</td></tr>
-<tr class="separator:ae6617117a62f1ab7cbe6a7dba9a66d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bf8df0d7f52bd72ccd1ee509c2655e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bf8df0d7f52bd72ccd1ee509c2655e1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetContainerName</b> (const uint32_t &amp;containerID, const std::string &amp;name) override</td></tr>
-<tr class="separator:a5bf8df0d7f52bd72ccd1ee509c2655e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa39a76dba2811c7cf5d7ad8518d47bea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa39a76dba2811c7cf5d7ad8518d47bea"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>LaunchCommand</b> (const int32_t &amp;containerID, const uint32_t &amp;userID, const std::string &amp;commandLine, const std::string &amp;workingDirectory, const std::string &amp;outputFile, const std::map&lt; std::string, std::string &gt; &amp;env)</td></tr>
+<tr class="separator:aa39a76dba2811c7cf5d7ad8518d47bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d9fd9ced40c8ff5dccda9e9a9cc88b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d9fd9ced40c8ff5dccda9e9a9cc88b1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>ShutDownContainerWithTimeout</b> (const int32_t &amp;containerID, const uint32_t &amp;timeout)</td></tr>
+<tr class="separator:a8d9fd9ced40c8ff5dccda9e9a9cc88b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad053c52b9265f03c932032e18de36fd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad053c52b9265f03c932032e18de36fd8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>ShutDownContainer</b> (const int32_t &amp;containerID) override</td></tr>
+<tr class="separator:ad053c52b9265f03c932032e18de36fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c6b5614447024a923a5177169846d0f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c6b5614447024a923a5177169846d0f"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>BindMountFolderInContainer</b> (const int32_t &amp;containerID, const std::string &amp;pathInHost, const std::string &amp;subPathInContainer, const bool &amp;readOnly) override</td></tr>
+<tr class="separator:a0c6b5614447024a923a5177169846d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234d3d6710dd92839bc578cc1f337252"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a234d3d6710dd92839bc578cc1f337252"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>SuspendContainer</b> (const int32_t &amp;containerID) override</td></tr>
+<tr class="separator:a234d3d6710dd92839bc578cc1f337252"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23515fe50aff85f269f06a29579c6161"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23515fe50aff85f269f06a29579c6161"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>ResumeContainer</b> (const int32_t &amp;containerID) override</td></tr>
+<tr class="separator:a23515fe50aff85f269f06a29579c6161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea56eb4be2e3e9f115d92ab0ee1f38d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea56eb4be2e3e9f115d92ab0ee1f38d7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetGatewayConfigs</b> (const int32_t &amp;containerID, const std::map&lt; std::string, std::string &gt; &amp;configs) override</td></tr>
+<tr class="separator:aea56eb4be2e3e9f115d92ab0ee1f38d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d2307853329da8535d28ced965c142b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d2307853329da8535d28ced965c142b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>SetCapabilities</b> (const int32_t &amp;containerID, const std::vector&lt; std::string &gt; &amp;capabilities) override</td></tr>
+<tr class="separator:a5d2307853329da8535d28ced965c142b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a286de0b70c3a498b0a11e8df744a2083"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a286de0b70c3a498b0a11e8df744a2083"></a>
+int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>CreateContainer</b> (const std::string &amp;config) override</td></tr>
+<tr class="separator:a286de0b70c3a498b0a11e8df744a2083"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56ced5e95816ba4c9fa4ae2dec76cd5a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56ced5e95816ba4c9fa4ae2dec76cd5a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>SetContainerName</b> (const int32_t &amp;containerID, const std::string &amp;name) override</td></tr>
+<tr class="separator:a56ced5e95816ba4c9fa4ae2dec76cd5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53334077815ba56e6ff88da3fb981ab2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53334077815ba56e6ff88da3fb981ab2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Ping</b> () override</td></tr>
 <tr class="separator:a53334077815ba56e6ff88da3fb981ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66bf9893fd8ef19677408f41b38e01da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66bf9893fd8ef19677408f41b38e01da"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteToStdIn</b> (const uint32_t &amp;containerID, const std::vector&lt; uint8_t &gt; &amp;bytes) override</td></tr>
-<tr class="separator:a66bf9893fd8ef19677408f41b38e01da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cc94931a16f1bd63330953a86fe3385"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1cc94931a16f1bd63330953a86fe3385"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>WriteToStdIn</b> (const uint32_t &amp;processID, const std::vector&lt; uint8_t &gt; &amp;bytes) override</td></tr>
+<tr class="separator:a1cc94931a16f1bd63330953a86fe3385"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
@@ -129,7 +135,7 @@ Data Fields</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="softwarecontaineragentadaptor_8h_source.html#l00050">50</a> of file <a class="el" href="softwarecontaineragentadaptor_8h_source.html">softwarecontaineragentadaptor.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragentadaptor_8h_source.html#l00079">79</a> of file <a class="el" href="softwarecontaineragentadaptor_8h_source.html">softwarecontaineragentadaptor.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>agent/src/<a class="el" href="softwarecontaineragentadaptor_8h_source.html">softwarecontaineragentadaptor.h</a></li>
 </ul>
@@ -139,7 +145,7 @@ Data Fields</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_d_bus_cpp_adaptor.html">DBusCppAdaptor</a></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

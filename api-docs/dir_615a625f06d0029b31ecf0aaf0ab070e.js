@@ -15,6 +15,8 @@ var dir_615a625f06d0029b31ecf0aaf0ab070e =
     [ "iptableentry.h", "iptableentry_8h_source.html", null ],
     [ "networkgateway.cpp", "networkgateway_8cpp_source.html", null ],
     [ "networkgateway.h", "networkgateway_8h_source.html", null ],
+    [ "networkgatewayparser.cpp", "networkgatewayparser_8cpp_source.html", null ],
+    [ "networkgatewayparser.h", "networkgatewayparser_8h_source.html", null ],
     [ "pulsegateway.cpp", "pulsegateway_8cpp_source.html", null ],
     [ "pulsegateway.h", "pulsegateway_8h_source.html", null ],
     [ "waylandgateway.cpp", "waylandgateway_8cpp_source.html", null ],

@@ -19,6 +19,8 @@ var class_container =
     [ "destroy", "class_container.html#a37b70b86583b99d9d2db64f1a50388fe", null ],
     [ "shutdown", "class_container.html#ac9b3ab38c576f20fe20efa2f97a752af", null ],
     [ "shutdown", "class_container.html#aaee4991d82ef6cc8b4bccacf93d68ed6", null ],
+    [ "suspend", "class_container.html#a76669a7ebcf570421097e1850799c18e", null ],
+    [ "resume", "class_container.html#a2558b81b34a0690ee2c7e9be3245cfcf", null ],
     [ "stop", "class_container.html#a839aebc0b308fbc3c986a1630ecfe1c1", null ],
     [ "waitForState", "class_container.html#a371ea40dcc92bed135c4284a23d5a8c6", null ],
     [ "ensureContainerRunning", "class_container.html#a65fc761c6069f4e28e198a8be0236a9a", null ],

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
    </div>
   </td>
  </tr>
@@ -123,7 +123,7 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8h_source.ht
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    std::string bindMountFolderInContainer(ContainerID containerID, <span class="keyword">const</span> std::string &amp;src, <span class="keyword">const</span> std::string &amp;dst, <span class="keywordtype">bool</span> readonly);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> setGatewayConfigs(ContainerID containerID, <span class="keyword">const</span> GatewayConfiguration &amp;config);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> setGatewayConfigs(ContainerID containerID, <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;config);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    ReturnCode writeToStdIn(pid_t pid, <span class="keyword">const</span> <span class="keywordtype">void</span> *data, <span class="keywordtype">size_t</span> length);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
@@ -212,7 +212,7 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8h_source.ht
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">return</span> m_agent.bindMountFolderInContainer(getContainerID(), src, dst, readonly);</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    }</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keywordtype">void</span> setGatewayConfigs(<span class="keyword">const</span> GatewayConfiguration &amp;config)</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keywordtype">void</span> setGatewayConfigs(<span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;config)</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    {</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        m_agent.setGatewayConfigs(getContainerID(), config);</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        m_containerState = ContainerState::READY;</div>
@@ -335,17 +335,17 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8h_source.ht
 <div class="ttc" id="namespacecom_html"><div class="ttname"><a href="namespacecom.html">com</a></div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8h_source.html#l00027">libsoftwarecontaineragent.h:27</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_observable_property_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_observable_property.html">softwarecontainer::ObservableProperty&lt; ContainerState &gt;</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_agent_container_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_agent_container.html">softwarecontainer::AgentContainer</a></div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8h_source.html#l00090">libsoftwarecontaineragent.h:90</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_signal_connections_handler_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_signal_connections_handler.html">softwarecontainer::SignalConnectionsHandler</a></div><div class="ttdoc">The SignalConnectionsHandler class contains references to sigc++ connections and automatically discon...</div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00105">softwarecontainer-common.h:105</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_signal_connections_handler_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_signal_connections_handler.html">softwarecontainer::SignalConnectionsHandler</a></div><div class="ttdoc">The SignalConnectionsHandler class contains references to sigc++ connections and automatically discon...</div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00107">softwarecontainer-common.h:107</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_agent_html_ada316d4e4626cc03c96d3180928c7b09"><div class="ttname"><a href="classsoftwarecontainer_1_1_agent.html#ada316d4e4626cc03c96d3180928c7b09">softwarecontainer::Agent::setMainLoopContext</a></div><div class="ttdeci">void setMainLoopContext(Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext)</div><div class="ttdoc">Set the main loop. </div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8cpp_source.html#l00104">libsoftwarecontaineragent.cpp:104</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_agent_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_agent.html">softwarecontainer::Agent</a></div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8h_source.html#l00039">libsoftwarecontaineragent.h:39</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="main_8cpp_source.html#l00005">main.cpp:5</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="configstore_8h_source.html#l00029">configstore.h:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_dc257de57620aa42e30b6624346240c4.html">libsoftwarecontaineragent</a></li><li class="navelem"><a class="el" href="dir_da6e69df895812cb6dbc042f921c4219.html">include</a></li><li class="navelem"><b>libsoftwarecontaineragent.h</b></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
