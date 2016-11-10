@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
+   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -133,23 +133,31 @@ $(document).ready(function(){initNavTree('networkgateway_8h_source.html','');});
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <a class="code" href="class_generator.html">Generator</a> m_generator;</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <a class="code" href="class_netlink.html">Netlink</a> m_netlinkHost;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;};</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keyword">virtual</span> ReturnCode parseRule(<span class="keyword">const</span> json_t *element, std::vector&lt;IPTableEntry::Rule&gt; &amp;rules);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keyword">virtual</span> ReturnCode parsePort(<span class="keyword">const</span> json_t *element, <a class="code" href="struct_i_p_table_entry_1_1port_filter.html">IPTableEntry::portFilter</a> &amp;ports);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <a class="code" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">IPTableEntry::Target</a> parseTarget(<span class="keyword">const</span> std::string &amp;str);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;};</div>
+<div class="ttc" id="struct_i_p_table_entry_1_1port_filter_html"><div class="ttname"><a href="struct_i_p_table_entry_1_1port_filter.html">IPTableEntry::portFilter</a></div><div class="ttdoc">container for port filtering options. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00035">iptableentry.h:35</a></div></div>
 <div class="ttc" id="generators_8h_html"><div class="ttname"><a href="generators_8h.html">generators.h</a></div><div class="ttdoc">Generator functions. </div></div>
-<div class="ttc" id="class_network_gateway_html_ac62e0dcfddf4e405dc2ca09d8d39211e"><div class="ttname"><a href="class_network_gateway.html#ac62e0dcfddf4e405dc2ca09d8d39211e">NetworkGateway::ip</a></div><div class="ttdeci">const std::string ip()</div><div class="ttdoc">Returns the IP of the container. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00106">networkgateway.cpp:106</a></div></div>
-<div class="ttc" id="class_network_gateway_html_a9382509c0b14e836b6e300488c046848"><div class="ttname"><a href="class_network_gateway.html#a9382509c0b14e836b6e300488c046848">NetworkGateway::teardownGateway</a></div><div class="ttdeci">bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00101">networkgateway.cpp:101</a></div></div>
-<div class="ttc" id="class_network_gateway_html_ad19de4347291719074bde198fc61a94a"><div class="ttname"><a href="class_network_gateway.html#ad19de4347291719074bde198fc61a94a">NetworkGateway::activateGateway</a></div><div class="ttdeci">bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00062">networkgateway.cpp:62</a></div></div>
+<div class="ttc" id="class_network_gateway_html_ac62e0dcfddf4e405dc2ca09d8d39211e"><div class="ttname"><a href="class_network_gateway.html#ac62e0dcfddf4e405dc2ca09d8d39211e">NetworkGateway::ip</a></div><div class="ttdeci">const std::string ip()</div><div class="ttdoc">Returns the IP of the container. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00252">networkgateway.cpp:252</a></div></div>
+<div class="ttc" id="class_network_gateway_html_a9382509c0b14e836b6e300488c046848"><div class="ttname"><a href="class_network_gateway.html#a9382509c0b14e836b6e300488c046848">NetworkGateway::teardownGateway</a></div><div class="ttdeci">bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00247">networkgateway.cpp:247</a></div></div>
+<div class="ttc" id="class_network_gateway_html_ad19de4347291719074bde198fc61a94a"><div class="ttname"><a href="class_network_gateway.html#ad19de4347291719074bde198fc61a94a">NetworkGateway::activateGateway</a></div><div class="ttdeci">bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00209">networkgateway.cpp:209</a></div></div>
 <div class="ttc" id="class_netlink_html"><div class="ttname"><a href="class_netlink.html">Netlink</a></div><div class="ttdoc">Handles various network operations over netlink. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8h_source.html#l00035">netlink.h:35</a></div></div>
 <div class="ttc" id="class_generator_html"><div class="ttname"><a href="class_generator.html">Generator</a></div><div class="ttdef"><b>Definition:</b> <a href="generators_8h_source.html#l00036">generators.h:36</a></div></div>
 <div class="ttc" id="class_network_gateway_html"><div class="ttname"><a href="class_network_gateway.html">NetworkGateway</a></div><div class="ttdoc">Sets up and manages network access and routing to the container. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8h_source.html#l00037">networkgateway.h:37</a></div></div>
-<div class="ttc" id="class_network_gateway_html_a255e2b6c7d6b5b50fd2e096850c6f29c"><div class="ttname"><a href="class_network_gateway.html#a255e2b6c7d6b5b50fd2e096850c6f29c">NetworkGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00039">networkgateway.cpp:39</a></div></div>
+<div class="ttc" id="class_network_gateway_html_a255e2b6c7d6b5b50fd2e096850c6f29c"><div class="ttname"><a href="class_network_gateway.html#a255e2b6c7d6b5b50fd2e096850c6f29c">NetworkGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00038">networkgateway.cpp:38</a></div></div>
 <div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00041">gateway.h:41</a></div></div>
+<div class="ttc" id="class_i_p_table_entry_html_ad664714d0ab3c9cc8e17854a65200156"><div class="ttname"><a href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">IPTableEntry::Target</a></div><div class="ttdeci">Target</div><div class="ttdoc">Targets for Rules. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00045">iptableentry.h:45</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>networkgateway.h</b></li>
-    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -10,7 +10,6 @@ var hierarchy =
       [ "MountCleanUpHandler", "class_mount_clean_up_handler.html", null ],
       [ "OverlaySyncCleanupHandler", "class_overlay_sync_cleanup_handler.html", null ]
     ] ],
-    [ "softwarecontainer::ConfigStore", "classsoftwarecontainer_1_1_config_store.html", null ],
     [ "ContainerAbstractInterface", "class_container_abstract_interface.html", [
       [ "Container", "class_container.html", null ]
     ] ],
@@ -42,7 +41,6 @@ var hierarchy =
         [ "PulseGateway", "class_pulse_gateway.html", null ],
         [ "WaylandGateway", "class_wayland_gateway.html", null ]
       ] ],
-      [ "NetworkGatewayParser", "class_network_gateway_parser.html", null ],
       [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ]
     ] ],
     [ "Netlink", "class_netlink.html", null ],
