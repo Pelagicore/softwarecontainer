@@ -102,7 +102,7 @@ $SC_CMD $AGENTPREFIX.LaunchCommand \
     dict:string:string:""
 
 # Let the example run for a while
-sleep 30
+sleep 10
 
 # Clean up
 kill $AGENTPID
