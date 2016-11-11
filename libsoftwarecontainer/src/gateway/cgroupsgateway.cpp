@@ -36,12 +36,12 @@ ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
     std::string settingKey;
     std::string settingValue;
 
-    if (!read(element, "setting", settingKey)) {
+    if (!JSONParser::read(element, "setting", settingKey)) {
         log_error() << "Key \"setting\" either not a string or not in json configuration";
         return ReturnCode::FAILURE;
     }
 
-    if (!read(element, "value", settingValue)) {
+    if (!JSONParser::read(element, "value", settingValue)) {
         log_error() << "Key \"value\" either not a string or not in json configuration";
         return ReturnCode::FAILURE;
     }

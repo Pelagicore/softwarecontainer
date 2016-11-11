@@ -29,7 +29,7 @@ namespace softwarecontainer {
      * This class provides convenience functions that handles commonly used operations
      * using the Janssson JSON parser.
      */
-    class JSONParser {
+    class JSONParser final {
         LOG_DECLARE_CLASS_CONTEXT("JSON", "JSONParser");
 
     public:

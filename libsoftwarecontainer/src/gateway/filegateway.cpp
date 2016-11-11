@@ -32,13 +32,13 @@ ReturnCode FileGateway::readConfigElement(const json_t *element)
 {
     FileSetting setting;
 
-    read(element, "path-host", setting.pathInHost);
-    read(element, "path-container", setting.pathInContainer);
-    read(element, "env-var-name", setting.envVarName);
-    read(element, "env-var-prefix", setting.envVarPrefix);
-    read(element, "env-var-suffix", setting.envVarSuffix);
-    read(element, "create-symlink", setting.createSymlinkInContainer);
-    read(element, "read-only", setting.readOnly);
+    JSONParser::read(element, "path-host", setting.pathInHost);
+    JSONParser::read(element, "path-container", setting.pathInContainer);
+    JSONParser::read(element, "env-var-name", setting.envVarName);
+    JSONParser::read(element, "env-var-prefix", setting.envVarPrefix);
+    JSONParser::read(element, "env-var-suffix", setting.envVarSuffix);
+    JSONParser::read(element, "create-symlink", setting.createSymlinkInContainer);
+    JSONParser::read(element, "read-only", setting.readOnly);
 
     if (setting.pathInHost.size() == 0) {
         log_error() << "FileGateway config is lacking 'path-host' setting";

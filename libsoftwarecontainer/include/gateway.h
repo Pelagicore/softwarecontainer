@@ -38,7 +38,7 @@
  * The complete gateway config is passed as a JSON array and all
  * gateways then provide their specific parsing of the items in the array.
  */
-class Gateway: protected softwarecontainer::JSONParser
+class Gateway
 {
     LOG_DECLARE_CLASS_CONTEXT("GATE", "Gateway");
 

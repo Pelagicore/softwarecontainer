@@ -21,7 +21,7 @@
 ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &e)
 {
     std::string chain;
-    if (!read(element, "type", chain)) {
+    if (!JSONParser::read(element, "type", chain)) {
         log_error() << "No type specified in network config.";
         return ReturnCode::FAILURE;
     }
@@ -36,7 +36,7 @@ ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *
     }
 
     int p;
-    if (!read(element, "priority", p)) {
+    if (!JSONParser::read(element, "priority", p)) {
         log_error() << "No priority specified in network config.";
         return ReturnCode::FAILURE;
     }
@@ -74,7 +74,7 @@ ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *
     }
 
     std::string readTarget;
-    if (!read(element, "default", readTarget)) {
+    if (!JSONParser::read(element, "default", readTarget)) {
         log_error() << "No default target specified or default target is not a string.";
         return ReturnCode::FAILURE;
     }
@@ -94,7 +94,7 @@ ReturnCode NetworkGatewayParser::parseRule(const json_t *element, std::vector<IP
 {
     IPTableEntry::Rule r;
     std::string target;
-    if (!read(element, "target", target)) {
+    if (!JSONParser::read(element, "target", target)) {
         log_error() << "Target not specified in the network config";
         return ReturnCode::FAILURE;
     }
@@ -105,7 +105,7 @@ ReturnCode NetworkGatewayParser::parseRule(const json_t *element, std::vector<IP
         return ReturnCode::FAILURE;
     }
 
-    if (!read(element, "host", r.host)) {
+    if (!JSONParser::read(element, "host", r.host)) {
         log_error() << "Host not specified in the network config.";
         return ReturnCode::FAILURE;
     }
