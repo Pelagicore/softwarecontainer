@@ -89,11 +89,12 @@ link_directories(${Jansson_LIBRARY_DIRS})
 #
 
 # Options on enabling / disabling gateways at compile-time
-option(ENABLE_PULSEGATEWAY "Enables pulse gateway" ON)
-option(ENABLE_NETWORKGATEWAY "Enables network gateway" ON)
-option(ENABLE_DEVICENODEGATEWAY "Enables device node gateway" ON)
-option(ENABLE_DBUSGATEWAY "Enables DBus gateway" ON)
-option(ENABLE_CGROUPSGATEWAY "Enables cgroups gateway" ON)
+option(ENABLE_PULSEGATEWAY "Enables the pulse gateway" ON)
+option(ENABLE_NETWORKGATEWAY "Enables the network gateway" ON)
+option(ENABLE_DEVICENODEGATEWAY "Enables the device node gateway" ON)
+option(ENABLE_DBUSGATEWAY "Enables the DBus gateway" ON)
+option(ENABLE_CGROUPSGATEWAY "Enables the cgroups gateway" ON)
+option(ENABLE_WAYLANDGATEWAY "Enables the wayland gateway" ON)
 
 # Options on various things
 option(ENABLE_SYSTEMD "Installs systemd service files" ON)

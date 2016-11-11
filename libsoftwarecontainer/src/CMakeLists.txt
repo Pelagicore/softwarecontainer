@@ -32,6 +32,7 @@ endmacro(gateway_support flag filename)
 gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
 gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
+gateway_support(ENABLE_WAYLANDGATEWAY Wayland waylandgateway.cpp)
 gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
 if(ENABLE_NETWORKGATEWAY)
     list(APPEND GATEWAY_SOURCES netlink.cpp)
@@ -44,7 +45,6 @@ gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
 set(DEFAULT_GATEWAYS TRUE)
 gateway_support(DEFAULT_GATEWAYS environment envgateway.cpp)
 gateway_support(DEFAULT_GATEWAYS files filegateway.cpp)
-gateway_support(DEFAULT_GATEWAYS wayland waylandgateway.cpp)
 
 add_library(softwarecontainerlib SHARED 
     container.cpp
