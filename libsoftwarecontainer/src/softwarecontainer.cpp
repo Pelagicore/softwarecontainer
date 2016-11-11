@@ -41,8 +41,11 @@
 #include "gateway/cgroupsgateway.h"
 #endif
 
-#include "gateway/envgateway.h"
+#ifdef ENABLE_WAYLANDGATEWAY
 #include "gateway/waylandgateway.h"
+#endif
+
+#include "gateway/envgateway.h"
 #include "gateway/filegateway.h"
 
 namespace softwarecontainer {
@@ -134,7 +137,10 @@ ReturnCode SoftwareContainer::init()
     addGateway(new CgroupsGateway());
 #endif
 
+#ifdef ENABLE_WAYLANDGATEWAY
     addGateway(new WaylandGateway());
+#endif
+
     addGateway(new FileGateway());
     addGateway(new EnvironmentGateway());
 
