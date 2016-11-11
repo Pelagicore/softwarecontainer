@@ -37,7 +37,7 @@ ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
     std::string variableName;
     std::string variableValue;
 
-    if (!read(element, "name", variableName)) {
+    if (!JSONParser::read(element, "name", variableName)) {
         log_error() << "Key \"name\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
@@ -47,7 +47,7 @@ ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    if (!read(element, "value", variableValue)) {
+    if (!JSONParser::read(element, "value", variableValue)) {
         log_error() << "Key \"value\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
@@ -58,7 +58,7 @@ ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
     }
 
     bool appendMode = false;
-    read(element, "append", appendMode); // This key is optional
+    JSONParser::read(element, "append", appendMode); // This key is optional
 
     if (m_variables.count(variableName) == 0) {
         m_variables[variableName] = variableValue;

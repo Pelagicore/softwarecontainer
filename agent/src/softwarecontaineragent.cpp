@@ -107,7 +107,7 @@ bool SoftwareContainerAgent::checkContainer(ContainerID containerID, SoftwareCon
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
 {
     bool wo = false;
-    if(!read(element, "enableWriteBuffer", wo)) {
+    if(!JSONParser::read(element, "enableWriteBuffer", wo)) {
         log_debug() << "enableWriteBuffer not found";
     }
 

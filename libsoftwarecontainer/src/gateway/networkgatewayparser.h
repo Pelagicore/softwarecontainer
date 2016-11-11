@@ -24,7 +24,7 @@
 #include "jsonparser.h"
 
 
-class NetworkGatewayParser : protected softwarecontainer::JSONParser
+class NetworkGatewayParser
 {
     LOG_DECLARE_CLASS_CONTEXT("NETP", "Network Gateway Parser");
 public :

@@ -33,14 +33,14 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeGateway::Device dev;
 
-    if (!read(element, "name", dev.name)) {
+    if (!JSONParser::read(element, "name", dev.name)) {
         log_error() << "Key \"name\" missing or not a string in json configuration";
         return ReturnCode::FAILURE;
     }
 
-    read(element, "major", dev.major);
-    read(element, "minor", dev.minor);
-    read(element, "mode",  dev.mode);
+    JSONParser::read(element, "major", dev.major);
+    JSONParser::read(element, "minor", dev.minor);
+    JSONParser::read(element, "mode",  dev.mode);
 
     const bool majorSpecified = dev.major.length() > 0;
     const bool minorSpecified = dev.minor.length() > 0;

@@ -57,7 +57,7 @@
  */
 namespace softwarecontainer {
 
-class SoftwareContainerAgent : protected softwarecontainer::JSONParser
+class SoftwareContainerAgent
 {
     LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
     typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;

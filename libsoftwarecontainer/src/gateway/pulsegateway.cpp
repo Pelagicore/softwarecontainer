@@ -33,7 +33,7 @@ PulseGateway::~PulseGateway()
 
 ReturnCode PulseGateway::readConfigElement(const json_t *element)
 {
-    if (!read(element, "audio", m_enableAudio)) {
+    if (!JSONParser::read(element, "audio", m_enableAudio)) {
         log_error() << "Either \"audio\" key is missing, or not a bool in json configuration";
         return ReturnCode::FAILURE;
     }

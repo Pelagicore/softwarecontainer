@@ -40,7 +40,7 @@ WaylandGateway::~WaylandGateway()
 
 ReturnCode WaylandGateway::readConfigElement(const json_t *element)
 {
-    if (!read(element, ENABLED_FIELD, m_enabled)) {
+    if (!JSONParser::read(element, ENABLED_FIELD, m_enabled)) {
         log_error() << "Key " << ENABLED_FIELD << " missing or not bool in json configuration";
         return ReturnCode::FAILURE;
     }
