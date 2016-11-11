@@ -28,16 +28,15 @@ namespace softwarecontainer {
 void usage(const char *argv0)
 {
     printf("SoftwareContainer agent, v.%s\n", PACKAGE_VERSION);
-    printf("Usage: %s [-p or --preload <num>] [-u or --user <uid>]", argv0);
-    printf("[-s or --shutdown <bool>] [-t or --timeout <seconds>] [-m or --servicemanifest <path>]\n");
-    printf("\n");
-    printf("--preload <num>          : Number of containers to preload, defaults to 0\n");
-    printf("--user <uid>             : Default user id to be used when starting processes in the container, defaults to 0\n");
-    printf("--shutdown <bool>        : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
-    printf("--timeout <seconds>      : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
-    printf("--servicemanifest <path> : Path to a file or directory where service manifest(s) exist, defaults to \"\"\n");
-    printf("--session-bus            : Use the session bus instead of the system bus\n");
-    printf("--help                   : Prints this help message and exits.\n");
+    printf("Usage: %s [options]\n", argv0);
+    printf("Options:\n");
+    printf("  -p, --preload <num>     : Number of containers to preload, defaults to 0\n");
+    printf("  -u, --user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");
+    printf("  -s, --shutdown <bool>   : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
+    printf("  -t, --timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
+    printf("  -m, --manifest <path>   : Path to a file or directory where service manifest(s) exist, defaults to \"\"\n");
+    printf("  -b, --session-bus       : Use the session bus instead of the system bus\n");
+    printf("  -h, --help              : Prints this help message and exits.\n");
 }
 
 /*
@@ -85,13 +84,13 @@ int main(int argc, char **argv)
 {
     static struct option long_options[] =
     {
-        { "preload",         required_argument, 0, 'p' },
-        { "user",            required_argument, 0, 'u' },
-        { "shutdown",        required_argument, 0, 's' },
-        { "timeout",         required_argument, 0, 't' },
-        { "servicemanifest", required_argument, 0, 'm' },
-        { "help",            no_argument,       0, 'h' },
-        { "session-bus",     no_argument,       0, 'b' },
+        { "preload",     required_argument, 0, 'p' },
+        { "user",        required_argument, 0, 'u' },
+        { "shutdown",    required_argument, 0, 's' },
+        { "timeout",     required_argument, 0, 't' },
+        { "manifest",    required_argument, 0, 'm' },
+        { "session-bus", no_argument,       0, 'b' },
+        { "help",        no_argument,       0, 'h' },
         { 0, 0, 0, 0 }
     };
 
