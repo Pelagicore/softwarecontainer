@@ -25,7 +25,6 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -82,14 +81,16 @@ $(document).ready(function(){initNavTree('classsoftwarecontainer_1_1_job_abstrac
 <div class="dynheader">
 Inheritance diagram for softwarecontainer::JobAbstract:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_job_abstract__inherit__graph.svg" width="323" height="142"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
+<div class="center"><img src="classsoftwarecontainer_1_1_job_abstract__inherit__graph.png" border="0" usemap="#softwarecontainer_1_1_job_abstract_inherit__map" alt="Inheritance graph"/></div>
+<map name="softwarecontainer_1_1_job_abstract_inherit__map" id="softwarecontainer_1_1_job_abstract_inherit__map">
+<area shape="rect" id="node2" href="classsoftwarecontainer_1_1_command_job.html" title="Use this class to execute a command line in a SoftwareContainer. " alt="" coords="5,95,149,136"/><area shape="rect" id="node3" href="classsoftwarecontainer_1_1_function_job.html" title="Run a C++ function lambda inside a SoftwareContainer. " alt="" coords="173,95,317,136"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for softwarecontainer::JobAbstract:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_job_abstract__coll__graph.svg" width="155" height="247"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
+<div class="center"><img src="classsoftwarecontainer_1_1_job_abstract__coll__graph.png" border="0" usemap="#softwarecontainer_1_1_job_abstract_coll__map" alt="Collaboration graph"/></div>
+<map name="softwarecontainer_1_1_job_abstract_coll__map" id="softwarecontainer_1_1_job_abstract_coll__map">
+<area shape="rect" id="node2" href="classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="5,96,149,137"/><area shape="rect" id="node3" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="5,5,149,47"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -127,12 +128,12 @@ pid_t&#160;</td><td class="memItemRight" valign="bottom"><b>pid</b> ()</td></tr>
 <tr class="memitem:a6a545f0935300b47872b17057d2be1ed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_job_abstract.html#a6a545f0935300b47872b17057d2be1ed">isRunning</a> ()</td></tr>
 <tr class="memdesc:a6a545f0935300b47872b17057d2be1ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">That method always returns true as soon as the start() method has been called, even if the command fails to start, since we don't know if the exec() occurring after the fork into the container actually succeeds...  <a href="#a6a545f0935300b47872b17057d2be1ed">More...</a><br /></td></tr>
 <tr class="separator:a6a545f0935300b47872b17057d2be1ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75c168f32671ae7d906b52b89e4d389e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75c168f32671ae7d906b52b89e4d389e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironmentVariable</b> (const std::string &amp;key, const std::string &amp;value)</td></tr>
-<tr class="separator:a75c168f32671ae7d906b52b89e4d389e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb42924160c7e17c126221f1d488de06"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb42924160c7e17c126221f1d488de06"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironmentVariables</b> (const EnvironmentVariables &amp;env)</td></tr>
-<tr class="separator:acb42924160c7e17c126221f1d488de06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35710110101d2e6f5c286a9d06bd9500"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35710110101d2e6f5c286a9d06bd9500"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironnmentVariable</b> (const std::string &amp;key, const std::string &amp;value)</td></tr>
+<tr class="separator:a35710110101d2e6f5c286a9d06bd9500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c3b1c207125fa28b412acf325ce19b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c3b1c207125fa28b412acf325ce19b0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironnmentVariables</b> (const EnvironmentVariables &amp;env)</td></tr>
+<tr class="separator:a6c3b1c207125fa28b412acf325ce19b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -196,8 +197,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>libsoftwarecontainer/include/<a class="el" href="jobabstract_8h_source.html">jobabstract.h</a></li>
-<li>libsoftwarecontainer/src/jobs/<a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a></li>
+<li>include/<a class="el" href="jobabstract_8h_source.html">jobabstract.h</a></li>
+<li>src/jobs/<a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -205,7 +206,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_job_abstract.html">JobAbstract</a></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
+    <li class="footer">Generated on Wed Oct 19 2016 13:59:00 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
