@@ -293,30 +293,6 @@ into the container. These are then amended by the template when run.</p>
 </div>
 <div class="section" id="id1">
 <h3>Full example:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash"><div class="highlight"><pre>lxc.utsname<span class="o">=</span>contained
-
-lxc.autodev <span class="o">=</span> 1
-lxc.tty <span class="o">=</span> 1
-lxc.pts <span class="o">=</span> 1
-
-lxc.network.type <span class="o">=</span> veth
-lxc.network.link <span class="o">=</span> lxcbr0
-
-
-lxc.mount.entry <span class="o">=</span> /usr usr none ro,bind <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /lib lib none ro,bind <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /usr/lib usr/lib none ro,bind <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /proc proc proc nosuid,nodev,noexec <span class="m">0</span> 0
-
-<span class="c"># These are optional, as they may not exist in the host. If they exist</span>
-<span class="c"># they will be bind mounted from host to container.</span>
-lxc.mount.entry <span class="o">=</span> /lib64 lib64 none ro,bind,optional <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /usr/lib64 usr/lib64 none ro,bind,optional <span class="m">0</span> 0
-
-lxc.mount.entry <span class="o">=</span> /usr/local/lib usr/local/lib none ro,bind,optional <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /usr/local/lib64 usr/local/lib64 none ro,bind,optional <span class="m">0</span> 0
-</pre></div>
-</div>
 </div>
 </div>
 <div class="section" id="lxc-api">

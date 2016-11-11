@@ -25,6 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
+   &#160;<span id="projectnumber">0.9.1-7766641 2016-11-11</span>
    </div>
   </td>
  </tr>
@@ -54,6 +55,7 @@
       <li><a href="functions_func.html"><span>Functions</span></a></li>
       <li><a href="functions_vars.html"><span>Variables</span></a></li>
       <li><a href="functions_type.html"><span>Typedefs</span></a></li>
+      <li><a href="functions_enum.html"><span>Enumerations</span></a></li>
     </ul>
   </div>
   <div id="navrow4" class="tabs3">
@@ -75,7 +77,6 @@
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
       <li><a href="#index_t"><span>t</span></a></li>
-      <li><a href="#index_u"><span>u</span></a></li>
       <li><a href="#index_w"><span>w</span></a></li>
       <li class="current"><a href="#index_~"><span>~</span></a></li>
     </ul>
@@ -111,6 +112,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>addConnection()
 : <a class="el" href="classsoftwarecontainer_1_1_signal_connections_handler.html#a9e72ea9a472729ed468db79648578675">softwarecontainer::SignalConnectionsHandler</a>
 </li>
+<li>applyRules()
+: <a class="el" href="class_i_p_table_entry.html#a01609d893e0bb7c6f955bc31e283a9e1">IPTableEntry</a>
+</li>
 <li>attach()
 : <a class="el" href="class_container.html#a5ef914e41ae8e324bbfc788f23465bb7">Container</a>
 </li>
@@ -124,6 +128,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>bindMountFolderInContainer()
 : <a class="el" href="class_container.html#af602c6e290b0f9f5abb78bbc3b0828cd">Container</a>
 , <a class="el" href="class_container_abstract_interface.html#ad2d81fcd57e6c807dcdd6203c696b2e0">ContainerAbstractInterface</a>
+, <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a63e4604ed484353a9847eee38466b7ff">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 </ul>
 
@@ -143,7 +148,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="class_overlay_sync_cleanup_handler.html#a65e86b29438617c079a6aadfe6a0ff5c">OverlaySyncCleanupHandler</a>
 </li>
 <li>Container()
-: <a class="el" href="class_container.html#a70a3aa5dc190f4c6720350476cd2ed66">Container</a>
+: <a class="el" href="class_container.html#ac9509752780327d11af7d8dfda0ca293">Container</a>
 </li>
 <li>ContainerFunction
 : <a class="el" href="class_gateway.html#a76344502967c375fae0c5bc7f44d7e74">Gateway</a>
@@ -155,7 +160,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_container.html#a32b1856163054cc997f19aae33babb6a">Container</a>
 </li>
 <li>createContainer()
-: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#aadd2f97a9808715bf515a0d7797b7585">softwarecontainer::SoftwareContainerAgent</a>
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#ac5cafaf71af5858bb97f84c6fe1de917">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>createDirectory()
 : <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">softwarecontainer::FileToolkitWithUndo</a>
@@ -172,6 +177,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
 <li>DBusGateway()
 : <a class="el" href="class_d_bus_gateway.html#aee158c5953c85075587af556a2c42b8f">DBusGateway</a>
+</li>
+<li>deleteContainer()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a17a700813202c61461904bd4e25995f6">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>destroy()
 : <a class="el" href="class_container.html#ab30ee228b1680c1f8a8c1857bfbf9ccd">Container</a>
@@ -200,20 +208,26 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_g"></a>- g -</h3><ul>
-<li>gen_ct_name()
-: <a class="el" href="class_generator.html#aef4b2cad9d8532c984ab9864cf9ad575">Generator</a>
+<li>genIPAddr()
+: <a class="el" href="class_generator.html#ae3571464dd705850e8705c278e064257">Generator</a>
 </li>
-<li>gen_ip_addr()
-: <a class="el" href="class_generator.html#a70a55add550a1afc96b35476826789c8">Generator</a>
+<li>genName()
+: <a class="el" href="class_generator.html#a4987226acdc23f9c0a89e45ac68bebd5">Generator</a>
 </li>
 <li>getContainer()
 : <a class="el" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">Gateway</a>
+</li>
+<li>getGatewayConfigs()
+: <a class="el" href="classsoftwarecontainer_1_1_config_store.html#a5e91e9e5955b832832430bd5c761f49d">softwarecontainer::ConfigStore</a>
 </li>
 <li>getInstance()
 : <a class="el" href="class_recursive_copy.html#a956c056e88a6d69e4088053d285d6b21">RecursiveCopy</a>
 </li>
 <li>getKernelDump()
 : <a class="el" href="class_netlink.html#a1764702f3ed67ae491696c7632dea0cd">Netlink</a>
+</li>
+<li>getWorkspace()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#abf4a978edc41a3e89132d1aa55dd4210">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 </ul>
 
@@ -234,6 +248,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>initialize()
 : <a class="el" href="class_container.html#a0665ab6bbf3018c8cf478d3a0ee7f956">Container</a>
+</li>
+<li>interpretPolicy()
+: <a class="el" href="class_i_p_table_entry.html#a6712bcba4d643a6c0ac74ff6fe5a3760">IPTableEntry</a>
+</li>
+<li>interpretRule()
+: <a class="el" href="class_i_p_table_entry.html#ac090d9fee4b15b246d944d800ff0e12e">IPTableEntry</a>
 </li>
 <li>ip()
 : <a class="el" href="class_network_gateway.html#ac62e0dcfddf4e405dc2ca09d8d39211e">NetworkGateway</a>
@@ -291,6 +311,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>parseConfig()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a990e86f21dead80c727462618ecf0e91">softwarecontainer::SoftwareContainerAgent</a>
 </li>
+<li>parseNetworkGatewayConfiguration()
+: <a class="el" href="class_network_gateway_parser.html#ad6e18790fde52761a094651adcfd2c36">NetworkGatewayParser</a>
+</li>
 <li>preload()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container.html#a99978224d29f4d27d1801d02f44bfde6">softwarecontainer::SoftwareContainer</a>
 </li>
@@ -310,42 +333,63 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="class_gateway.html#a4413c4a754da11031de372bc0b278d92">Gateway</a>
 , <a class="el" href="class_network_gateway.html#a255e2b6c7d6b5b50fd2e096850c6f29c">NetworkGateway</a>
 , <a class="el" href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">PulseGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#aab15b844d7ed80339448a2005ea1cc9d">softwarecontainer::SoftwareContainerAgent</a>
 , <a class="el" href="class_wayland_gateway.html#aa5d2ff63631d237339cd7ec7b25f7517">WaylandGateway</a>
 </li>
 <li>RecursiveCopy()
 : <a class="el" href="class_recursive_copy.html#aa15580a877bb9fac3ee9f4c3541d9095">RecursiveCopy</a>
 </li>
+<li>resumeContainer()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a73f02d47572fa6c9a5fcb665d3287dbb">softwarecontainer::SoftwareContainerAgent</a>
+</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
+<li>setCapabilities()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a99d58370ca9150d5e1fca70ff44d5007">softwarecontainer::SoftwareContainerAgent</a>
+</li>
 <li>setConfig()
 : <a class="el" href="class_gateway.html#a04d31b1ed232f5376c5cf79e30fa2593">Gateway</a>
 </li>
 <li>setContainer()
 : <a class="el" href="class_gateway.html#ab55d52ccd92881532688847a6c2c1cba">Gateway</a>
 </li>
+<li>setContainerName()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#ad04e602ea7b514c11c24094cbf9fe5c5">softwarecontainer::SoftwareContainerAgent</a>
+</li>
 <li>setDefaultGateway()
 : <a class="el" href="class_netlink.html#a549bc6adda3142682c868a25b2af9231">Netlink</a>
 </li>
+<li>setEnvironmentVariable()
+: <a class="el" href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">Gateway</a>
+</li>
 <li>setGatewayConfigs()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container.html#af928f299cf15ecda5f625eaecd518f57">softwarecontainer::SoftwareContainer</a>
+, <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a932a69583ff9cde14bd4749a9152ba9a">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>setIP()
-: <a class="el" href="class_netlink.html#a7216869c3c231c9be48d63368bb897cc">Netlink</a>
+: <a class="el" href="class_netlink.html#ad71afe1271bbc38578d0e85e7aef0118">Netlink</a>
 </li>
 <li>setMainLoopContext()
-: <a class="el" href="classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d">softwarecontainer::SoftwareContainer</a>
+: <a class="el" href="classsoftwarecontainer_1_1_agent.html#ada316d4e4626cc03c96d3180928c7b09">softwarecontainer::Agent</a>
+, <a class="el" href="classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d">softwarecontainer::SoftwareContainer</a>
 </li>
 <li>shutdown()
 : <a class="el" href="class_container.html#ac9b3ab38c576f20fe20efa2f97a752af">Container</a>
 , <a class="el" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer</a>
+</li>
+<li>shutdownContainer()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#af1c5fb1bfd8b43e2b766ab385ac33342">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>start()
 : <a class="el" href="class_container.html#a014c76184c840df8bfc5af88e549fce5">Container</a>
 </li>
 <li>stop()
 : <a class="el" href="class_container.html#a839aebc0b308fbc3c986a1630ecfe1c1">Container</a>
+</li>
+<li>suspendContainer()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a70135e7829b531a1aa55983b708c5cd3">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>syncOverlayMount()
 : <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a011797b9d1387882a5b013d0c97ccbfd">softwarecontainer::FileToolkitWithUndo</a>
@@ -354,6 +398,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_t"></a>- t -</h3><ul>
+<li>Target
+: <a class="el" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">IPTableEntry</a>
+</li>
 <li>teardown()
 : <a class="el" href="class_gateway.html#a12bc56e21985047b61012932394b4512">Gateway</a>
 </li>
@@ -366,22 +413,15 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>tempDir()
 : <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">softwarecontainer::FileToolkitWithUndo</a>
 </li>
-<li>triggerPreload()
-: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a663e3ed2d84de85c6779bce75ebe840c">softwarecontainer::SoftwareContainerAgent</a>
-</li>
-</ul>
-
-
-<h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
-<li>updateGatewayConfiguration()
-: <a class="el" href="classsoftwarecontainer_1_1_software_container.html#a7db71d975b5bbfebe48e50769cf726b9">softwarecontainer::SoftwareContainer</a>
-</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
 <li>Workspace()
 : <a class="el" href="classsoftwarecontainer_1_1_workspace.html#ab5eb9d5dee4f59d14e6feee02c86fcd5">softwarecontainer::Workspace</a>
+</li>
+<li>writeToStdIn()
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#acaffe723057573547c3848fee624a3ed">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 </ul>
 
@@ -396,7 +436,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Oct 19 2016 13:59:00 for softwarecontainer by
+    <li class="footer">Generated on Fri Nov 11 2016 13:07:04 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

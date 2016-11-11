@@ -11,6 +11,8 @@ var class_container_abstract_interface =
     [ "stop", "class_container_abstract_interface.html#a1cda22bfec63252ffc44ad5e95743694", null ],
     [ "shutdown", "class_container_abstract_interface.html#acbc28562769ab2790ff93afd62db2ed7", null ],
     [ "shutdown", "class_container_abstract_interface.html#ac78fe54ddfe0b4313ef28b3734fdb7a3", null ],
+    [ "suspend", "class_container_abstract_interface.html#a592af199c9ab704aebdbbf66fd94dcef", null ],
+    [ "resume", "class_container_abstract_interface.html#a842bca3c44464f2812c38cf274cd2823", null ],
     [ "destroy", "class_container_abstract_interface.html#a7a1b05cd9f5d394b3ff9bcd0ddcbefe1", null ],
     [ "destroy", "class_container_abstract_interface.html#a0fc0817f7a04d7a2951b657169a30476", null ],
     [ "setUser", "class_container_abstract_interface.html#ad28f2a8a420a4f90b093c339d9bf427d", null ],
