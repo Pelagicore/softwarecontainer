@@ -53,6 +53,9 @@ To disable support for various gateways at compile time, set
 * -DENABLE_DEVICENODEGATEWAY=OFF (for device node gateway)
 * -DENABLE_DBUSGATEWAY=OFF (for dbus)
 * -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
+* -DENABLE_WAYLANDGATEWAY=OFF (for wayland)
+* -DENABLE_FILEGATEWAY=OFF (for mounting files)
+* -DENABLE_ENVGATEWAY=OFF (for manipulating environment variables)
 
 To build the examples, build with -DENABLE_EXAMPLES=ON (and see Examples
 section).

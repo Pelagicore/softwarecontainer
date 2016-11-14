@@ -45,8 +45,13 @@
 #include "gateway/waylandgateway.h"
 #endif
 
+#ifdef ENABLE_ENVGATEWAY
 #include "gateway/envgateway.h"
+#endif
+
+#ifdef ENABLE_FILEGATEWAY
 #include "gateway/filegateway.h"
+#endif
 
 namespace softwarecontainer {
 
@@ -141,8 +146,13 @@ ReturnCode SoftwareContainer::init()
     addGateway(new WaylandGateway());
 #endif
 
-    addGateway(new FileGateway());
+#ifdef ENABLE_ENVGATEWAY
     addGateway(new EnvironmentGateway());
+#endif
+
+#ifdef ENABLE_FILEGATEWAY
+    addGateway(new FileGateway());
+#endif
 
     m_initialized = true;
     return ReturnCode::SUCCESS;

@@ -41,10 +41,8 @@ if(ENABLE_NETWORKGATEWAY)
 endif()
 
 gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
-
-set(DEFAULT_GATEWAYS TRUE)
-gateway_support(DEFAULT_GATEWAYS environment envgateway.cpp)
-gateway_support(DEFAULT_GATEWAYS files filegateway.cpp)
+gateway_support(ENABLE_ENVGATEWAY environment envgateway.cpp)
+gateway_support(ENABLE_FILEGATEWAY files filegateway.cpp)
 
 add_library(softwarecontainerlib SHARED 
     container.cpp

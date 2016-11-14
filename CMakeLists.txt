@@ -95,6 +95,8 @@ option(ENABLE_DEVICENODEGATEWAY "Enables the device node gateway" ON)
 option(ENABLE_DBUSGATEWAY "Enables the DBus gateway" ON)
 option(ENABLE_CGROUPSGATEWAY "Enables the cgroups gateway" ON)
 option(ENABLE_WAYLANDGATEWAY "Enables the wayland gateway" ON)
+option(ENABLE_FILEGATEWAY "Enables the file gateway" ON)
+option(ENABLE_ENVGATEWAY "Enables the environment gateway" ON)
 
 # Options on various things
 option(ENABLE_SYSTEMD "Installs systemd service files" ON)
