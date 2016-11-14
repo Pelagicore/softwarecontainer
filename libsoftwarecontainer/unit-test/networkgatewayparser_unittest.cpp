@@ -261,3 +261,144 @@ TEST_F(NetworkGatewayParserTest, TestOutputNoPort) {
     ASSERT_EQ(0, e.m_rules[0].ports.any);
 
 }
+
+/**
+ *@brief Test that config entries with no priority specified fails gracefully.
+ */
+TEST_F(NetworkGatewayParserTest, TestSetConfigNoPriority) {
+
+    const std::string config =
+    "{"
+        "\"type\": \"OUTGOING\","
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80:85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+}
+
+
+
+/**
+ * @brief Test that config entries with no type specified fails gracefully.
+ */
+TEST_F(NetworkGatewayParserTest, TestSetConfigNoType) {
+
+    const std::string config =
+    "{"
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80:85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "],"
+        "\"default\": \"ACCEPT\""
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+}
+
+
+/**
+ * @brief Test that config entries with no rules specified fails gracefully.
+ */
+TEST_F(NetworkGatewayParserTest, TestSetConfigNoRules) {
+
+    const std::string config =
+    "{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"default\": \"ACCEPT\""
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+}
+
+/**
+ * @brief Test that config entries with empty rules specified works.
+ */
+TEST_F(NetworkGatewayParserTest, TestSetConfigEmptyRules) {
+
+    const std::string config =
+    "{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": [],"
+        "\"default\": \"ACCEPT\""
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+}
+
+/**
+ * @brief Test that config entries with no default target specified fails gracefully.
+ */
+TEST_F(NetworkGatewayParserTest, TestSetConfigNoDefaultTarget) {
+
+    const std::string config =
+    "{"
+        "\"type\": \"OUTGOING\","
+        "\"priority\": 1,"
+        "\"rules\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"google.com\", \"port\": \"80:85\", \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
+                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
+                 "]"
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+}
+
+/**
+ * @brief Test that config entries with rules specified as an integer fails gracefully.
+ */
+TEST_F(NetworkGatewayParserTest, TestSetConfigRulesIsInteger) {
+
+    const std::string config =
+    "{"
+        "\"type\": \"INCOMING\","
+        "\"priority\": 1,"
+        "\"rules\": 123,"
+        "\"default\": \"ACCEPT\""
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+}
+
