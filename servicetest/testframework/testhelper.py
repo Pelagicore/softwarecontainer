@@ -87,6 +87,52 @@ class Helper(object):
         return
 
 
+class NetworkHelper(Helper):
+    """ Helper for network related things.
+
+        Currently supports running 'ping' and 'ip' from inside the container.
+    """
+
+    def __init__(self, file_base_path):
+        Helper.__init__(self, file_base_path)
+
+    #### Below methods are executed inside container
+    def write_result(self, data):
+        with open(self._base_path + "/ping_result", "w") as fh:
+            fh.write(str(data))
+        LOG(data)
+
+    def ping(self, host):
+        LOG("pings" + host)
+        is_pingable = os.system("ping -c1 " + host)
+        return is_pingable;
+
+    def ifconfig(self, file_name):
+        os.system("ip -4 addr show eth0 | grep inet | awk '{print $2}' >> " + file_name)
+
+    #### Below methods are executed on the host (in the tests)
+    def compare_ips(self, file1, file2):
+        ip1 = None
+        ip2 = None
+        with open(self._base_path + "/" + file1, "r") as fh:
+            ip1 = fh.readline()
+        with open(self._base_path + "/" + file2, "r") as fh:
+            ip2 = fh.readline()
+        return (ip1==ip2)
+
+    def ping_result(self):
+        is_pingable = False
+        file_content = None
+        with open(self._base_path + "/ping_result", "r") as fh:
+            file_content = fh.readline()
+        LOG(file_content)
+        is_pingable = (file_content == "0")
+        return is_pingable;
+
+    def remove_file(self):
+        os.remove(self._base_path + "/ping_result")
+
+
 class EnvironmentHelper(Helper):
     """ Helper for examining the environment inside the container.
     """
@@ -129,6 +175,8 @@ class EnvironmentHelper(Helper):
 
 
 GET_ENV_VARS_OPTION = "get_env_vars"
+DO_PING_OPTION = "do_ping"
+PING_HOST_OPTION = "ping_host"
 
 if __name__ == "__main__":
     """ When the program is called from command line it is running inside
@@ -150,14 +198,52 @@ if __name__ == "__main__":
                         metavar="path",
                         help=get_env_vars_help_message)
 
+    do_ping_help_message = \
+    """ A path to a file in which to store the result of pinging
+        from inside the container. Option --ping-host is required to
+        be used in combination to this.
+    """
+    parser.add_argument("--do-ping",
+                        nargs=1,
+                        action="store",
+                        dest=DO_PING_OPTION,
+                        default=None,
+                        metavar="path",
+                        help=do_ping_help_message)
+
+    ping_host_help_message = \
+    """ A host name to ping
+    """
+    parser.add_argument("--ping-host",
+                        nargs=1,
+                        action="store",
+                        dest=PING_HOST_OPTION,
+                        default=None,
+                        metavar="hostname",
+                        help=ping_host_help_message)
+
     args = parser.parse_args()
 
-    file_base_path_parsed_value = getattr(args, GET_ENV_VARS_OPTION)
-    if file_base_path_parsed_value is not None:
+    parsed_value = getattr(args, GET_ENV_VARS_OPTION)
+    if parsed_value is not None:
         # Extract the actual path string
-        file_base_path = file_base_path_parsed_value.pop()
-        h = EnvironmentHelper(file_base_path)
+        env_vars_file_base_path = parsed_value.pop()
+        h = EnvironmentHelper(env_vars_file_base_path)
         # Get the environment from inside the container
         env_vars = h.get_env_vars()
         # Dump the information for the helper to read back later in the tests
         h.write_result(env_vars)
+
+    parsed_value = getattr(args, DO_PING_OPTION)
+    if parsed_value is not None:
+        # Extract the actual path string
+        do_ping_file_base_path = parsed_value.pop()
+        parsed_value = getattr(args, PING_HOST_OPTION)
+        if parsed_value is not None:
+            # Extract the actual host string
+            ping_host = parsed_value.pop()
+            h = NetworkHelper(do_ping_file_base_path)
+            # Do a ping from inside the container
+            is_pingable = h.ping(ping_host)
+            # Dump the information for the helper to read back later in the tests
+            h.write_result(is_pingable)
