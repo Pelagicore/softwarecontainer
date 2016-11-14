@@ -1,4 +1,3 @@
-
 .. _integration-guidelines:
 
 Integration guidelines
@@ -20,7 +19,79 @@ Service manifests
 For details about format and content of service manifests, see :ref:`Service manifests <service-manifests>`
 and :ref:`Gateways <gateways>`.
 
-Service manifests should be installed in ``/etc/softwarecontainer/caps.d/<service-name>``.
+Service manifests should be installed in ``/etc/softwarecontainer/caps.d/<service-name>`` and are
+expected to be of type JSON, including the "json" file extension.
+
+Service Manifests are read and parsed at startup of the Agent. If two Service Manifests contain
+capabilities with the same name the gateway configurations will be combined (without merging
+or removing duplicates), so when the capability's gateway configurations are set all
+configurations from the manifests are included. For more information on how Gateway
+Configurations are handled, please refer to :ref:`Gateways <gateways>`.
+
+Example
+-------
+Here is an example service manifest, with the capabilities for getting and setting temperature::
+
+  {
+    "version": "1",
+    "capabilities": [{
+        "name": "com.pelagicore.temperatureservice.gettemperature",
+        "gateways": [{
+            "id": "dbus",
+            "config": [{
+                "dbus-gateway-config-session": []
+            }, {
+                "dbus-gateway-config-system": [{
+                    "direction": "outgoing",
+                    "interface": "org.freedesktop.DBus.Introspectable",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Introspect"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Echo"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "GetTemperature"
+                }, {
+                    "direction": "incoming",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "TemperatureChanged"
+                }]
+            }]
+        }]
+    }, {
+        "name": "com.pelagicore.temperatureservice.settemperature",
+        "gateways": [{
+            "id": "dbus",
+            "config": [{
+                "dbus-gateway-config-session": []
+            }, {
+                "dbus-gateway-config-system": [{
+                    "direction": "outgoing",
+                    "interface": "org.freedesktop.DBus.Introspectable",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Introspect"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Echo"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "SetTemperature"
+                }]
+            }]
+        }]
+    }]
+  }
+
 
 Network setup
 =============
@@ -55,31 +126,22 @@ Example
 Here is an example manifest defining Wayland access::
 
     {
-      "capabilities": [
-        {
-          "name": "com.example.wayland-access",
-          "gateways": [
-            {
-              "id": "wayland",
-              "config": [
-                {
-                  "enabled": true
-                }
-              ]
-            },
-            {
-              "id": "devicenode",
-              "config": [
-                {
-                  "name": "/dev/dri/card0"
-                }
-              ]
-            }
-          ]
-        }
-      ]
+        "version": "1",
+        "capabilities": [{
+            "name": "com.example.wayland-access",
+            "gateways": [{
+                "id": "wayland",
+                "config": [{
+                    "enabled": true
+                }]
+            }, {
+                "id": "devicenode",
+                "config": [{
+                    "name": "/dev/dri/card0"
+                }]
+            }]
+        }]
     }
-
 
 The role of a launcher
 ======================

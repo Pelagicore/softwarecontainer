@@ -46,31 +46,40 @@ Examples
 
 Below is an example of a simple service manifest::
 
-    {
-      "version": "1",
-      "capabilities": {
-        "com.acme.SomeResource": {
-          "gateways": [
-            {
-              "id": "dummy-gw1",
-              "config": []
-            },
-            {
-              "id": "dummy-gw2",
-              "config": []
-            }
-          ]
-        },
-        "com.acme.AnotherResource": {
-          "gateways": []
-        }
-      }
-    }
+ {
+    "version": "1",
+    "capabilities": [{
+        "name": "com.acme.SomeResource",
+        "gateways": [{
+            "id": "dummy-gw1",
+            "config": [{
+                "config-part1": []
+            }, {
+                "config-part2": [{
+                    "config-element1": "on",
+                    "config-element2": "off",
+                    "config-element3": "config-element-optionA",
+                    "config-element4": "config-element-optionB"
+                }]
+            }, {
+                "id": "dummy-gw2",
+                "config": []
+            }]
+        }]
+    }, {
+        "name": "com.acme.AnotherResource",
+        "gateways": [{
+            "id": "dummy-gw1",
+            "config": []
+        }]
+    }]
+ }
 
 In this manifest, there is one capability named `com.acme.SomeResource`
 which defines gateway configurations for the two gateways `dummy-gw1` and
-`dummy-gw2`. In this case the configurations for both gateways are empty
+`dummy-gw2`. In this case the configuration for `dummy-gw2` is an empty
 (but valid) JSON. Exact content will depend on what gateways are involved.
 There is also a second capability named `com.acme.AnotherResource` with
 a gateway object with an empty array. The manifest also contains the required
 version element.
+

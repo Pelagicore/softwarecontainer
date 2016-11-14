@@ -162,7 +162,7 @@ Sets the configuration of a particular gateway. The gateway configuration contai
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :configs: ``map<string, string>`` A map to key/value pairs.
+        :configs: ``map<string, string>`` A map of gateway IDs and their configurations.
 
 |
 
