@@ -18,7 +18,7 @@
 # For further information see LICENSE
 
 
-DIRECTORIES=(examples/ servicetest/ build/)
+DIRECTORIES=(servicetest/ build/)
 
 for DIR in ${DIRECTORIES[@]}; do
 	echo "Running tests in $DIR"
