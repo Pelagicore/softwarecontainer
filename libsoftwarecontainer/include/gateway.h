@@ -128,7 +128,7 @@ protected:
      *
      * @returns true if there is a ContainerAbstractInterface instance set, false if not.
      */
-    bool hasContainer();
+    virtual bool hasContainer();
 
     /**
      * @brief Get a handle to the associated container

@@ -107,11 +107,6 @@ protected:
     "}]";
 };
 
-TEST_F(NetworkGatewayTest, TestNoContainer) {
-    ASSERT_FALSE(gw->activate());
-    delete gw;
-}
-
 /**
  * @brief Test NetworkGateway::activate is successful.
  */
@@ -120,19 +115,6 @@ TEST_F(NetworkGatewayTest, TestActivate) {
 
     ::testing::DefaultValue<bool>::Set(true);
     ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
-    ASSERT_TRUE(gw->activate());
-}
-
-/**
- * @brief Test NetworkGateway::activate is successful and that correct command is
- *  issued the second time it is called.
- */
-TEST_F(NetworkGatewayTest, TestActivateTwice) {
-    givenContainerIsSet(gw);
-
-    ::testing::DefaultValue<bool>::Set(true);
-    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
-    ASSERT_TRUE(gw->activate());
     ASSERT_TRUE(gw->activate());
 }
 
@@ -156,10 +138,8 @@ TEST_F(NetworkGatewayTest, TestActivateNoBridge) {
     givenContainerIsSet(gw);
 
     ::testing::DefaultValue<bool>::Set(false);
-    {
-        ::testing::InSequence sequence;
-        EXPECT_CALL(*gw, isBridgeAvailable());
-    }
+    EXPECT_CALL(*gw, isBridgeAvailable());
+
     ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
     ASSERT_FALSE(gw->activate());
 }

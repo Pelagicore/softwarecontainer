@@ -123,7 +123,6 @@ bool DeviceNodeGateway::activateGateway()
         }
     }
 
-    m_state = GatewayState::ACTIVATED;
     return true;
 }
 

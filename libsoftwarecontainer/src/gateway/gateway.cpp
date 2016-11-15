@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,12 +17,15 @@
  * For further information see LICENSE
  */
 
-
 #include "gateway.h"
 
 
 bool Gateway::setConfig(const std::string &config)
 {
+    if (m_state == GatewayState::ACTIVATED) {
+        log_error() << "Can't configure a gateway that is already activated: " << id();
+    }
+
     json_error_t error;
     json_t *root = json_loads(config.c_str(), 0, &error);
     if (!root) {
@@ -31,22 +33,27 @@ bool Gateway::setConfig(const std::string &config)
         return false;
     }
 
-    if (json_is_array(root)) {
-        for(size_t i = 0; i < json_array_size(root); i++) {
-            json_t *element = json_array_get(root, i);
-            if (json_is_object(element)) {
-                if (isError(readConfigElement(element))) {
-                    log_error() << "Could not read config element";
-                    return false;
-                }
-            } else {
-                log_error() << "json configuration is not an object";
-                return false;
-            }
-        }
-    } else {
+    if (!json_is_array(root)) {
         log_error() << "Root JSON element is not an array";
         return false;
+    }
+
+    if (json_array_size(root) == 0) {
+        log_error() << "Root JSON array is empty";
+        return false;
+    }
+
+    for(size_t i = 0; i < json_array_size(root); i++) {
+        json_t *element = json_array_get(root, i);
+        if (!json_is_object(element)) {
+            log_error() << "json configuration is not an object";
+            return false;
+        }
+
+        if (isError(readConfigElement(element))) {
+            log_error() << "Could not read config element";
+            return false;
+        }
     }
 
     m_state = GatewayState::CONFIGURED;
@@ -54,6 +61,11 @@ bool Gateway::setConfig(const std::string &config)
 }
 
 bool Gateway::activate() {
+    if (m_state == GatewayState::ACTIVATED) {
+        log_warning() << "Activate was called on a gateway which was already activated: " << id();
+        return false;
+    }
+
     if (m_state != GatewayState::CONFIGURED) {
         log_warning() << "Activate was called on a gateway which is not in configured state: " << id();
         return false;
@@ -64,15 +76,29 @@ bool Gateway::activate() {
         return false;
     }
 
-    return activateGateway();
+    if (!activateGateway()) {
+        log_error() << "Couldn't activate gateway: " << id();
+        return false;
+    }
+
+    m_state = GatewayState::ACTIVATED;
+    return true;
 }
 
 bool Gateway::teardown() {
     if (m_state != GatewayState::ACTIVATED) {
-        log_warning() << "Teardown called on non-activated gateway " << id();
+        log_error() << "Teardown called on non-activated gateway: " << id();
+        return false;
     }
 
-    return teardownGateway();
+    if (!teardownGateway()) {
+        log_error() << "Could not tear down gateway: " << id();
+        return false;
+    }
+
+    // Return to a state of nothingness
+    m_state = GatewayState::CREATED;
+    return true;
 }
 
 bool Gateway::hasContainer()
@@ -132,6 +158,7 @@ ReturnCode Gateway::executeInContainer(ContainerFunction func)
         if (isSuccess(ret)) {
             waitpid(pid, 0, 0);
         }
+
         return ret;
     } else {
         log_error() << "Can't execute in container from gateway without container";
