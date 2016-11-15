@@ -53,6 +53,7 @@ add_gateway_test(DEFAULT_GATEWAYS filegateway_unittest.cpp)
 set(TEST_FILES
     softwarecontainer_test.cpp
     softwarecontainerlib_unittest.cpp
+    gateway_unittest.cpp
     main.cpp
     ${GATEWAY_TEST_FILES}
 )

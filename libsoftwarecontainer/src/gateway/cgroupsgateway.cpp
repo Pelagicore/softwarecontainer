@@ -66,7 +66,7 @@ bool CgroupsGateway::activateGateway()
         }
     }
 
-    return success == ReturnCode::SUCCESS;
+    return isSuccess(success);
 }
 
 bool CgroupsGateway::teardownGateway()

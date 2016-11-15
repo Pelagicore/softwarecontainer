@@ -38,19 +38,6 @@ public:
     const std::string PRESENT_DEVICE = "/dev/random";
 };
 
-TEST_F(DeviceNodeGatewayTest, TestActivateWithNoConf) {
-    givenContainerIsSet(gw);
-    ASSERT_FALSE(gw->activate());
-}
-
-TEST_F(DeviceNodeGatewayTest, TestActivateWithEmptyValidJSONConf) {
-    givenContainerIsSet(gw);
-    const std::string config = "[]";
-
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
 TEST_F(DeviceNodeGatewayTest, TestActivateWithNoContainer) {
     const std::string config = "[\
                                   {\

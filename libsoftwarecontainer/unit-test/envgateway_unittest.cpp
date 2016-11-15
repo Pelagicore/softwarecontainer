@@ -37,20 +37,6 @@ public:
     const std::string VALUE = "Environment_variable_test_value";
 };
 
-
-TEST_F(EnvironmentGatewayTest, TestActivateWithNoConf) {
-    givenContainerIsSet(gw);
-    ASSERT_FALSE(gw->activate());
-}
-
-TEST_F(EnvironmentGatewayTest, TestActivateWithEmptyConf) {
-    givenContainerIsSet(gw);
-    const std::string config = "[]";
-
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
 TEST_F(EnvironmentGatewayTest, TestActivateWithEmptyJSonObjectConf) {
     givenContainerIsSet(gw);
     const std::string config = "[{}]";

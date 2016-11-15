@@ -184,7 +184,6 @@ bool DBusGateway::startDBusProxy(const std::vector<std::string> &commandVec, con
     }
 
     log_debug() << "Started dbus-proxy: " << m_pid;
-    m_state = GatewayState::ACTIVATED;
 
     return true;
 }

@@ -54,18 +54,6 @@ public:
     const std::string m_containerName = "test";
 };
 
-TEST_F(DBusGatewayTest, TestNoContainer) {
-    ASSERT_FALSE(gw->activate());
-    delete gw;
-}
-
-TEST_F(DBusGatewayTest, TestSetConfig) {
-    givenContainerIsSet(gw);
-    const std::string config = "[]";
-
-    ASSERT_TRUE(gw->setConfig(config));
-}
-
 TEST_F(DBusGatewayTest, TestActivate) {
     givenContainerIsSet(gw);
     const std::string config = "[{"

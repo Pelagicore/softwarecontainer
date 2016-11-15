@@ -57,20 +57,6 @@ public:
     const std::string SUFFIX = "TEST_SUFFIX";
 };
 
-TEST_F(FileGatewayTest, TestActivateWithNoConf) {
-    givenContainerIsSet(gw);
-    ASSERT_FALSE(gw->activate());
-}
-
-TEST_F(FileGatewayTest, TestActivateWithEmptyValidJSONConf) {
-    givenContainerIsSet(gw);
-    const std::string config = "[]";
-
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
-
 TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     givenContainerIsSet(gw);
     const std::string config =
