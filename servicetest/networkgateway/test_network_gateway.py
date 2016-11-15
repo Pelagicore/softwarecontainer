@@ -148,7 +148,7 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
-    def test_reject_outgoing_traffic_from_specific_domain_and_accept_others(self):
+    def test_reject_outgoing_traffic_to_specific_domain_and_accept_others(self):
         """ Tests two things, for outgoing traffic:
             * Test that a specific domain is rejected based on a rule.
             * Test that the default target, which is to accept, is retained when the reject rule
