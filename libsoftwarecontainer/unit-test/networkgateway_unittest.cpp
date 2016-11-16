@@ -18,8 +18,7 @@
  * For further information see LICENSE
  */
 
-
-#include "gateway/networkgateway.h"
+#include "gateway/network/networkgateway.h"
 #include "softwarecontainer_test.h"
 #include "softwarecontainer-common.h"
 

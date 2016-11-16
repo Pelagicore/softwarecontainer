@@ -29,22 +29,22 @@ macro(gateway_support flag strname filename)
     endif(${flag})
 endmacro(gateway_support flag filename)
 
-gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroupsgateway.cpp)
+gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroups/cgroupsgateway.cpp)
 gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_WAYLANDGATEWAY Wayland waylandgateway.cpp)
-gateway_support(ENABLE_NETWORKGATEWAY network networkgateway.cpp)
+gateway_support(ENABLE_NETWORKGATEWAY network network/networkgateway.cpp)
 if(ENABLE_NETWORKGATEWAY)
     list(APPEND GATEWAY_SOURCES netlink.cpp)
-    list(APPEND GATEWAY_SOURCES gateway/iptableentry.cpp)
-    list(APPEND GATEWAY_SOURCES gateway/networkgatewayparser.cpp)
+    list(APPEND GATEWAY_SOURCES gateway/network/iptableentry.cpp)
+    list(APPEND GATEWAY_SOURCES gateway/network/networkgatewayparser.cpp)
 endif()
 
 gateway_support(ENABLE_PULSEGATEWAY pulse pulsegateway.cpp)
 gateway_support(ENABLE_ENVGATEWAY environment envgateway.cpp)
 gateway_support(ENABLE_FILEGATEWAY files filegateway.cpp)
 
-add_library(softwarecontainerlib SHARED 
+add_library(softwarecontainerlib SHARED
     container.cpp
     gateway/gateway.cpp
     softwarecontainer.cpp

@@ -25,7 +25,7 @@
 #endif
 
 #ifdef ENABLE_NETWORKGATEWAY
-#include "gateway/networkgateway.h"
+#include "gateway/network/networkgateway.h"
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
@@ -37,7 +37,7 @@
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
-#include "gateway/cgroupsgateway.h"
+#include "gateway/cgroups/cgroupsgateway.h"
 #endif
 
 #ifdef ENABLE_WAYLANDGATEWAY

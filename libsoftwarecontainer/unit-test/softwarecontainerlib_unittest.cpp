@@ -23,7 +23,7 @@
 
 #include "gateway/dbusgateway.h"
 #include "gateway/waylandgateway.h"
-#include "gateway/networkgateway.h"
+#include "gateway/network/networkgateway.h"
 #include "gateway/pulsegateway.h"
 #include "gateway/filegateway.h"
 #include "functionjob.h"

@@ -20,7 +20,7 @@
 
 
 #include "softwarecontainer_test.h"
-#include "gateway/cgroupsgateway.h"
+#include "gateway/cgroups/cgroupsgateway.h"
 
 #include "jansson.h"
 
