@@ -23,6 +23,7 @@
 
 #include "softwarecontainer-common.h"
 #include "cgroupsgateway.h"
+#include "cgroupsparser.h"
 
 CgroupsGateway::CgroupsGateway()
     : Gateway(ID)
@@ -33,24 +34,15 @@ CgroupsGateway::CgroupsGateway()
 
 ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
 {
-    std::string settingKey;
-    std::string settingValue;
+    CGroupsParser::CGroupsPair pair;
+    CGroupsParser parser;
 
-    if (!JSONParser::read(element, "setting", settingKey)) {
-        log_error() << "Key \"setting\" either not a string or not in json configuration";
+    if (isError(parser.parseCGroupsGatewayConfiguration(element, pair))) {
+        log_error() << "Could not parse CGroups configuration element";
         return ReturnCode::FAILURE;
     }
 
-    if (!JSONParser::read(element, "value", settingValue)) {
-        log_error() << "Key \"value\" either not a string or not in json configuration";
-        return ReturnCode::FAILURE;
-    }
-
-    if (m_settings.count(settingKey) > 0) {
-        log_warning() << "setting '" << settingKey << "' is set more than once, may be problematic.";
-    }
-    m_settings.insert( std::pair<std::string, std::string>(settingKey, settingValue) );
-
+    m_settings.insert(pair);
     return ReturnCode::SUCCESS;
 }
 
