@@ -27,9 +27,9 @@ class MockNetworkGateway :
     public NetworkGateway
 {
 public:
-    MockNetworkGateway():NetworkGateway() {}
+    MockNetworkGateway():NetworkGateway("SC-11") {}
 
-    MOCK_METHOD0(isBridgeAvailable, bool());
+    MOCK_METHOD0(isBridgeAvailable, ReturnCode());
 };
 
 class NetworkGatewayTest : public SoftwareContainerGatewayTest
@@ -41,6 +41,7 @@ protected:
     {
         gw = new ::testing::NiceMock<MockNetworkGateway>();
         SoftwareContainerTest::SetUp();
+        ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
     }
 
     const std::string VALID_FULL_CONFIG =
@@ -110,7 +111,7 @@ protected:
 /**
  * @brief Test NetworkGateway::activate is successful.
  */
-TEST_F(NetworkGatewayTest, TestActivate) {
+TEST_F(NetworkGatewayTest, Activate) {
     givenContainerIsSet(gw);
 
     ::testing::DefaultValue<bool>::Set(true);
@@ -122,7 +123,7 @@ TEST_F(NetworkGatewayTest, TestActivate) {
  * @brief Test NetworkGateway::activate is successful but that no network interface
  *  is brought up when the networking config is malformed.
  */
-TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
+TEST_F(NetworkGatewayTest, ActivateBadConfig) {
     givenContainerIsSet(gw);
     const std::string config = "[{\"internet-access\": true}]";
 
@@ -134,11 +135,11 @@ TEST_F(NetworkGatewayTest, TestActivateBadConfig) {
  * @brief Test NetworkGateway::activate fails when there is no network bridge setup
  *  on the host.
  */
-TEST_F(NetworkGatewayTest, TestActivateNoBridge) {
+TEST_F(NetworkGatewayTest, ActivateNoBridge) {
     givenContainerIsSet(gw);
 
-    ::testing::DefaultValue<bool>::Set(false);
-    EXPECT_CALL(*gw, isBridgeAvailable());
+    ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::FAILURE);
+        EXPECT_CALL(*gw, isBridgeAvailable());
 
     ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
     ASSERT_FALSE(gw->activate());

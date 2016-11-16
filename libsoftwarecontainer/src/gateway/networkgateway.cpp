@@ -22,14 +22,16 @@
 #include "ifaddrs.h"
 #include "unistd.h"
 #include "networkgateway.h"
-#include "generators.h"
 #include "networkgatewayparser.h"
 
-NetworkGateway::NetworkGateway() :
+NetworkGateway::NetworkGateway(const std::string containerName) :
     Gateway(ID),
-    m_internetAccess(false),
+    m_netmask(0xFF),
+    m_gateway("10.0.3.1"),
     m_interfaceInitialized(false)
 {
+    std::string tmp = containerName.substr(3);
+    m_containerID = std::stoi(tmp);
 }
 
 NetworkGateway::~NetworkGateway()
@@ -46,13 +48,6 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
         m_entries.push_back(e);
     }
 
-    // --- TEMPORARY WORKAROUND ---
-    // in the wait of activate() being rewritten
-    if (IPTableEntry::Target::ACCEPT == e.m_defaultTarget) {
-        m_internetAccess = true;
-        m_gateway = "10.0.3.1";
-    }
-    // ----------------------------
     return returnValue;
 }
 
@@ -69,33 +64,31 @@ bool NetworkGateway::activateGateway()
     if (m_gateway.size() != 0) {
         log_debug() << "Default gateway set to " << m_gateway;
     } else {
-        m_internetAccess = false;
         log_debug() << "No gateway. Network access will be disabled";
     }
 
-    if ( !isBridgeAvailable() ) {
+    if (isError(isBridgeAvailable())) {
         log_error() << "Bridge not available, expected gateway to be " << m_gateway;
         return false;
     }
 
-    if (m_internetAccess) {
-        generateIP();
-        auto returnValue = up();
-
-        for (auto entry : m_entries) {
-            executeInContainer([&] () {
-                if (isSuccess(entry.applyRules())) {
-                    return 0;
-                }  else {
-                    return 1;
-                }
-            });
-        }
-
-        return returnValue;
-    } else {
-        return down();
+    if (isError(generateIP())) {
+        return false;
     }
+
+    auto returnValue = up();
+
+    for (auto entry : m_entries) {
+        executeInContainer([&] () {
+            if (isSuccess(entry.applyRules())) {
+                return 0;
+            }  else {
+                return 1;
+            }
+        });
+    }
+
+    return isSuccess(returnValue);
 }
 
 bool NetworkGateway::teardownGateway()
@@ -103,23 +96,36 @@ bool NetworkGateway::teardownGateway()
     return true;
 }
 
-const std::string NetworkGateway::ip()
-{
-    return m_ip;
-}
-
-bool NetworkGateway::generateIP()
+ReturnCode NetworkGateway::generateIP()
 {
     log_debug() << "Generating ip-address";
-    const char *ipAddrNet = m_gateway.substr(0, m_gateway.size() - 1).c_str();
+    // IP generation is designed for Ipv4 in case of transition to IPv6 it should be revised
+    uint32_t internetAddress;
+    if ( 1 != inet_pton(AF_INET, m_gateway.c_str(), &internetAddress)) {
+        log_error() << m_gateway << " does not represent a valid network address";
+        return ReturnCode::FAILURE;
+    }
 
-    m_ip = m_generator.genIPAddr(ipAddrNet);
-    log_debug() << "IP set to " << m_ip;
+    internetAddress = ntohl(internetAddress);
 
-    return true;
+    if ((internetAddress | m_netmask) < (internetAddress + m_containerID + 1)) {
+        log_error() << "There are no suitable ip address for this container.";
+        return ReturnCode::FAILURE;
+    }
+
+    internetAddress += (m_containerID + 1);
+    internetAddress = htonl(internetAddress);
+    m_ip.s_addr = internetAddress;
+
+    // convert ip to human readable form just for debug
+    char convertionTmp[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &internetAddress, convertionTmp, INET_ADDRSTRLEN);
+    log_debug() << "IP set to " << convertionTmp;
+
+    return ReturnCode::SUCCESS;
 }
 
-bool NetworkGateway::setDefaultGateway()
+ReturnCode NetworkGateway::setDefaultGateway()
 {
     ReturnCode ret = executeInContainer([this] {
         Netlink n;
@@ -127,14 +133,14 @@ bool NetworkGateway::setDefaultGateway()
         return isSuccess(success) ? 0 : 1;
     });
 
-    return isSuccess(ret);
+    return ret;
 }
 
-bool NetworkGateway::up()
+ReturnCode NetworkGateway::up()
 {
     if (m_interfaceInitialized) {
         log_debug() << "Interface already configured";
-        return true;
+        return ReturnCode::SUCCESS;
     }
 
     log_debug() << "Attempting to bring up eth0";
@@ -153,9 +159,7 @@ bool NetworkGateway::up()
             return 2;
         }
 
-        in_addr ip_addr;
-        inet_aton(ip().c_str(), &ip_addr);
-        return isSuccess(n.setIP(ifaceIndex, ip_addr, 24)) ? 0 : 3;
+        return isSuccess(n.setIP(ifaceIndex, m_ip, 24)) ? 0 : 3;
     });
 
     if (isSuccess(ret)) {
@@ -163,11 +167,11 @@ bool NetworkGateway::up()
         return setDefaultGateway();
     } else {
         log_debug() << "Failed to bring up eth0";
-        return false;
+        return ReturnCode::FAILURE;
     }
 }
 
-bool NetworkGateway::down()
+ReturnCode NetworkGateway::down()
 {
     log_debug() << "Attempting to configure eth0 to 'down state'";
     ReturnCode ret = executeInContainer([this] {
@@ -188,13 +192,13 @@ bool NetworkGateway::down()
 
     if (isError(ret)) {
         log_error() << "Configuring eth0 to 'down state' failed.";
-        return false;
+        return ReturnCode::FAILURE;
     }
 
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
-bool NetworkGateway::isBridgeAvailable()
+ReturnCode NetworkGateway::isBridgeAvailable()
 {
     Netlink::LinkInfo iface;
     if (isError(m_netlinkHost.findLink(BRIDGE_DEVICE, iface))) {
@@ -206,5 +210,5 @@ bool NetworkGateway::isBridgeAvailable()
         log_error() << "Could not fetch addresses for " << BRIDGE_DEVICE << " in the host";
     }
 
-    return isSuccess(m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str()));
+    return m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str());
 }

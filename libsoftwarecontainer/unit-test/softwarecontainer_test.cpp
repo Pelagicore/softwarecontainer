@@ -42,7 +42,9 @@ void SoftwareContainerTest::SetUp()
     ::testing::Test::SetUp();
     workspace = std::make_shared<Workspace>(false);
 
-    const std::string id = "SC-TEST-" + Generator::genName();
+    srand(time(NULL));
+    uint32_t containerId =  rand() % 100;
+    const std::string id = "SC-" + std::to_string(containerId);
     sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace, id));
     sc->setMainLoopContext(m_context);
     ASSERT_TRUE(isSuccess(sc->init()));

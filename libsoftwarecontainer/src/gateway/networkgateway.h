@@ -21,7 +21,6 @@
 #pragma once
 
 #include "gateway.h"
-#include "generators.h"
 #include "jansson.h"
 #include "netlink.h"
 #include "iptableentry.h"
@@ -42,7 +41,7 @@ class NetworkGateway :
 public:
     static constexpr const char *ID = "network";
 
-    NetworkGateway();
+    NetworkGateway(const std::string containerName);
     ~NetworkGateway();
 
     ReturnCode readConfigElement(const json_t *element) override;
@@ -56,11 +55,6 @@ public:
      * @brief Implements Gateway::teardownGateway
      */
     bool teardownGateway() override;
-
-    /**
-     * @brief Returns the IP of the container
-     */
-    const std::string ip();
 private:
     /**
      * @brief Generate IP address for the container
@@ -70,10 +64,10 @@ private:
      * Note that a file on the system acts as a placeholder for the DHCP server.
      * The file keeps track of the highest used IP address.
      *
-     * @return true  Upon success
-     * @return false Upon failure
+     * @return ReturnCode::SUCCESS on success
+     * @return ReturnCode::FAILURE otherwise
      */
-    bool generateIP();
+    ReturnCode generateIP();
 
     /**
      * @brief Set route to default gateway
@@ -84,10 +78,10 @@ private:
      * cases when a network interface that was previously enabled has been disabled
      * and then enabled again.
      *
-     * @return true  Upon success
-     * @return false Upon failure
+     * @return ReturnCode::SUCCESS on success
+     * @return ReturnCode::FAILURE otherwise
      */
-    bool setDefaultGateway();
+    ReturnCode setDefaultGateway();
 
     /**
      * @brief Enable the default network interface
@@ -98,39 +92,40 @@ private:
      * the IP and netmask are also set. During subsequent calls, this merely brings
      * up the existing network interface and calls setDefaultGateway().
      *
-     * @return true  Upon success
-     * @return false Upon failure
+     * @return ReturnCode::SUCCESS on success
+     * @return ReturnCode::FAILURE otherwise
      */
-    bool up();
+    ReturnCode up();
 
     /**
      * @brief Disable the default network interface
      *
      * Disables the network interface.
      *
-     * @return true  Upon success
-     * @return false Upon failure
+     * @return ReturnCode::SUCCESS on success
+     * @return ReturnCode::FAILURE otherwise
      */
-    bool down();
+    ReturnCode down();
 
     /**
      * @brief Check the availability of the network bridge on the host
      *
      * Checks the availability of the required network bridge on the host.
      *
-     * @return true  If bridge interface is available
-     * @return false If bridge interface is not available
+     * @return ReturnCode::SUCCESS If bridge interface is available
+     * @return ReturnCode::FAILURE If bridge interface is not available
      */
-    virtual bool isBridgeAvailable();
+    virtual ReturnCode isBridgeAvailable();
 
-    std::string m_ip;
+    struct in_addr m_ip;
+    uint32_t m_netmask;
     std::string m_gateway;
+
 
     std::vector<IPTableEntry> m_entries;
 
-    bool m_internetAccess;
     bool m_interfaceInitialized;
 
-    Generator m_generator;
+    int32_t m_containerID;
     Netlink m_netlinkHost;
 };

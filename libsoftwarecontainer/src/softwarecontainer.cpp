@@ -19,7 +19,6 @@
 
 
 #include "softwarecontainer.h"
-#include "generators.h" /* used for gen_ct_name */
 
 #ifdef ENABLE_PULSEGATEWAY
 #include "gateway/pulsegateway.h"
@@ -120,8 +119,9 @@ ReturnCode SoftwareContainer::init()
         }
     }
 
+    std::string containerID = std::string(m_container->id());
 #ifdef ENABLE_NETWORKGATEWAY
-    addGateway(new NetworkGateway());
+    addGateway(new NetworkGateway(containerID));
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
@@ -133,7 +133,6 @@ ReturnCode SoftwareContainer::init()
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-    std::string containerID = std::string(m_container->id());
     addGateway(new DBusGateway( DBusGateway::SessionProxy, getGatewayDir(), containerID ));
     addGateway(new DBusGateway( DBusGateway::SystemProxy,  getGatewayDir(), containerID ));
 #endif

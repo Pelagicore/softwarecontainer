@@ -115,8 +115,8 @@ class TestNetworkRules(object):
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
-                              " --do-ping " + sc.get_bind_dir() +
-                              " --ping-host example.com")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping example.com")
             # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout)
             time.sleep(10)
             helper = NetworkHelper(CURRENT_DIR)
@@ -138,8 +138,8 @@ class TestNetworkRules(object):
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
-                              " --do-ping " + sc.get_bind_dir() +
-                              " --ping-host example.com")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping example.com")
             time.sleep(2)
             helper = NetworkHelper(CURRENT_DIR)
             is_pingable = helper.ping_result()
@@ -161,8 +161,8 @@ class TestNetworkRules(object):
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
-                              " --do-ping " + sc.get_bind_dir() +
-                              " --ping-host example.com")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping example.com")
             # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout)
             time.sleep(10)
             helper = NetworkHelper(CURRENT_DIR)
@@ -173,8 +173,8 @@ class TestNetworkRules(object):
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
-                              " --do-ping " + sc.get_bind_dir() +
-                              " --ping-host IANA.org")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping IANA.org")
             time.sleep(2)
             is_pingable = helper.ping_result()
             assert is_pingable is True
@@ -195,8 +195,8 @@ class TestNetworkRules(object):
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
-                              " --do-ping " + sc.get_bind_dir() +
-                              " --ping-host IANA.org")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping IANA.org")
             time.sleep(2)
             helper = NetworkHelper(CURRENT_DIR)
             is_pingable = helper.ping_result()
@@ -206,8 +206,8 @@ class TestNetworkRules(object):
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
-                              " --do-ping " + sc.get_bind_dir() +
-                              " --ping-host example.com")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping example.com")
             # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout).
             # This takes longer time for incoming traffic because the busybox ping timeout is longer
             # when the host is reachable.
@@ -220,7 +220,6 @@ class TestNetworkRules(object):
             sc.terminate()
 
 
-@pytest.mark.skip(reason="ip diversity feauture is not yet implemented")
 @pytest.mark.usefixtures("testhelper", "agent")
 class TestNetworkDiversity(object):
     """ This suite tests that whether NetworkGateway can assign different ip adresses or not
@@ -239,18 +238,21 @@ class TestNetworkDiversity(object):
             sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
             sc2.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
 
-            sc.launch_command("python " + 
-                              sc.get_bind_dir() + 
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
                               "/testhelper.py " +
-                              sc.get_bind_dir() + 
-                              " --ifconfig f1") 
-            sc2.launch_command("python " + 
-                              sc.get_bind_dir() + 
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ifconfig f1")
+            time.sleep(1)
+            sc2.launch_command("python " +
+                              sc.get_bind_dir() +
                               "/testhelper.py " +
-                              sc.get_bind_dir() + 
-                              " --ifconfig f2") 
-            assert 0 == testhelper.compare_ips(CURRENT_DIR, "f1", "f2")
-            testhelper.remove_file(CURRENT_DIR, "f1")
-            testhelper.remove_file(CURRENT_DIR, "f2")
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ifconfig f2")
+            time.sleep(1)
+            helper = NetworkHelper(CURRENT_DIR)
+            assert 0 == helper.compare_ips("f1", "f2")
+            helper.remove_files("f1", "f2")
+            #testhelper.remove_file(CURRENT_DIR, "f2")
         finally:
             sc.terminate()
