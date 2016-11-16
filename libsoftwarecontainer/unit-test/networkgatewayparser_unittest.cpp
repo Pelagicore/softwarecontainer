@@ -19,9 +19,10 @@
  */
 
 
-#include "gateway/networkgatewayparser.h"
 #include "softwarecontainer-common.h"
-#include "gateway/iptableentry.h"
+#include "gateway/network/networkgatewayparser.h"
+#include "gateway/network/iptableentry.h"
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include <jansson.h>

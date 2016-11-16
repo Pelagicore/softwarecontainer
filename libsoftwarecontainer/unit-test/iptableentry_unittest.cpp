@@ -19,7 +19,7 @@
  */
 
 
-#include "gateway/iptableentry.h"
+#include "gateway/network/iptableentry.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
