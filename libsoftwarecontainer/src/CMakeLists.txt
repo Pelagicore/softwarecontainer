@@ -47,7 +47,6 @@ gateway_support(ENABLE_FILEGATEWAY files filegateway.cpp)
 add_library(softwarecontainerlib SHARED 
     container.cpp
     gateway/gateway.cpp
-    generators.cpp
     softwarecontainer.cpp
     workspace.cpp
     jobs/jobabstract.cpp

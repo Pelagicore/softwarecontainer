@@ -29,7 +29,6 @@
 #include "gtest/gtest.h"
 
 #include "gateway.h"
-#include "generators.h"
 #include "softwarecontainer.h"
 
 class SoftwareContainerTest : public ::testing::Test

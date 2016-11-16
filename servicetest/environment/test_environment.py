@@ -30,7 +30,7 @@ from testframework import Container
 ##### Useful globals #####
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput/"
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
 # The path to where the test app is located:
 #  * Will be passed in the 'data' dict when starting the container to set
@@ -154,8 +154,9 @@ class TestInteractionGatewayAndAPI(object):
             env_var = {"MY_ENV_VAR": "new-value"}
             sc.launch_command("python " +
                                   sc.get_bind_dir() +
-                                  "/testhelper.py --get-env-vars " +
-                                  sc.get_bind_dir() + "/testoutput/",
+                                  "/testhelper.py --test-dir " +
+                                  sc.get_bind_dir() + "/testoutput" +
+                                  " --do-get-env-vars",
                               env=env_var)
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
@@ -186,8 +187,9 @@ class TestEnvironment(object):
             sc.set_gateway_config("env", GW_CONFIG_SAME_VAR)
             sc.launch_command("python " +
                               sc.get_bind_dir() +
-                              "/testhelper.py --get-env-vars " +
-                              sc.get_bind_dir() + "/testoutput/")
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
@@ -212,8 +214,9 @@ class TestEnvironment(object):
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
             sc.launch_command("python " +
                               sc.get_bind_dir() +
-                              "/testhelper.py --get-env-vars " +
-                              sc.get_bind_dir() + "/testoutput/")
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
@@ -235,8 +238,9 @@ class TestEnvironment(object):
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
             sc.launch_command("python " +
                               sc.get_bind_dir() +
-                              "/testhelper.py --get-env-vars " +
-                              sc.get_bind_dir() + "/testoutput/")
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
@@ -260,8 +264,9 @@ class TestEnvironment(object):
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
             sc.launch_command("python " +
                               sc.get_bind_dir() +
-                              "/testhelper.py --get-env-vars " +
-                              sc.get_bind_dir() + "/testoutput/")
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
@@ -286,8 +291,9 @@ class TestEnvironment(object):
             sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
             sc.launch_command("python " +
                               sc.get_bind_dir() +
-                              "/testhelper.py --get-env-vars " +
-                              sc.get_bind_dir() + "/testoutput/")
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)
@@ -307,8 +313,9 @@ class TestEnvironment(object):
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
             sc.launch_command("python " +
                               sc.get_bind_dir() +
-                              "/testhelper.py --get-env-vars " +
-                              sc.get_bind_dir() + "/testoutput/")
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
 
             # The D-Bus LaunchCommand is asynch so let it take effect before assert
             time.sleep(0.5)

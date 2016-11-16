@@ -125,12 +125,18 @@ class NetworkHelper(Helper):
         file_content = None
         with open(self._base_path + "/ping_result", "r") as fh:
             file_content = fh.readline()
-        LOG(file_content)
         is_pingable = (file_content == "0")
         return is_pingable;
 
     def remove_file(self):
-        os.remove(self._base_path + "/ping_result")
+        try:
+            os.remove(self._base_path + "/ping_result")
+        except:
+            LOG("There is no file to remove")
+
+    def remove_files(self, file1, file2):
+        os.remove(self._base_path + "/" + file1)
+        os.remove(self._base_path + "/" + file2)
 
 
 class EnvironmentHelper(Helper):
@@ -175,8 +181,9 @@ class EnvironmentHelper(Helper):
 
 
 GET_ENV_VARS_OPTION = "get_env_vars"
+TEST_DIR_OPTION = "test_dir"
 DO_PING_OPTION = "do_ping"
-PING_HOST_OPTION = "ping_host"
+DO_IFCONFIG_OPTION = "do_ifconfig"
 
 if __name__ == "__main__":
     """ When the program is called from command line it is running inside
@@ -190,60 +197,75 @@ if __name__ == "__main__":
         This file is intended to be used by the helper when reading
         data for asserting values.
     """
-    parser.add_argument("--get-env-vars",
-                        nargs=1,
-                        action="store",
+    parser.add_argument("--do-get-env-vars",
+                        action="store_true",
                         dest=GET_ENV_VARS_OPTION,
-                        default=None,
-                        metavar="path",
                         help=get_env_vars_help_message)
 
+    test_dir_help_message = \
+    """ A path to a file in which to store the result of action
+        from inside the container. Either "--do-ping" or "--do_ifconfig"
+        action is required to be used in combination to this.
+    """
+    parser.add_argument("--test-dir",
+                        nargs=1,
+                        action="store",
+                        dest=TEST_DIR_OPTION,
+                        default=None,
+                        metavar="path",
+                        help=test_dir_help_message)
+
     do_ping_help_message = \
-    """ A path to a file in which to store the result of pinging
-        from inside the container. Option --ping-host is required to
-        be used in combination to this.
+    """ A host name to ping
     """
     parser.add_argument("--do-ping",
                         nargs=1,
                         action="store",
                         dest=DO_PING_OPTION,
                         default=None,
-                        metavar="path",
+                        metavar="hostname",
                         help=do_ping_help_message)
 
-    ping_host_help_message = \
-    """ A host name to ping
+    do_ifconfig_help_message = \
+    """ A path to a file in which to store ip address of the container
     """
-    parser.add_argument("--ping-host",
+    parser.add_argument("--do-ifconfig",
                         nargs=1,
                         action="store",
-                        dest=PING_HOST_OPTION,
+                        dest=DO_IFCONFIG_OPTION,
                         default=None,
-                        metavar="hostname",
-                        help=ping_host_help_message)
+                        metavar="path",
+                        help=do_ifconfig_help_message)
 
     args = parser.parse_args()
 
-    parsed_value = getattr(args, GET_ENV_VARS_OPTION)
+    parsed_value = getattr(args, TEST_DIR_OPTION,)
     if parsed_value is not None:
         # Extract the actual path string
-        env_vars_file_base_path = parsed_value.pop()
-        h = EnvironmentHelper(env_vars_file_base_path)
-        # Get the environment from inside the container
-        env_vars = h.get_env_vars()
-        # Dump the information for the helper to read back later in the tests
-        h.write_result(env_vars)
+        test_file_base_path = parsed_value.pop()
 
-    parsed_value = getattr(args, DO_PING_OPTION)
-    if parsed_value is not None:
-        # Extract the actual path string
-        do_ping_file_base_path = parsed_value.pop()
-        parsed_value = getattr(args, PING_HOST_OPTION)
+        parsed_value = getattr(args, DO_PING_OPTION)
         if parsed_value is not None:
             # Extract the actual host string
             ping_host = parsed_value.pop()
-            h = NetworkHelper(do_ping_file_base_path)
+            h = NetworkHelper(test_file_base_path)
             # Do a ping from inside the container
             is_pingable = h.ping(ping_host)
             # Dump the information for the helper to read back later in the tests
             h.write_result(is_pingable)
+
+        parsed_value = getattr(args, DO_IFCONFIG_OPTION)
+        if parsed_value is not None:
+            # Extract the actual path string
+            if_fname = parsed_value.pop()
+            h = NetworkHelper(test_file_base_path)
+            #get ip address of container
+            h.ifconfig(if_fname)
+
+        parsed_value = getattr(args, GET_ENV_VARS_OPTION)
+        if parsed_value is not None:
+            h = EnvironmentHelper(test_file_base_path)
+            # Get the environment from inside the container
+            env_vars = h.get_env_vars()
+            # Dump the information for the helper to read back later in the tests
+            h.write_result(env_vars)
