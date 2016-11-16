@@ -21,7 +21,9 @@
 #pragma once
 
 #include "jansson.h"
+
 #include "softwarecontainer-common.h"
+#include "devicenodeparser.h"
 
 #include "gateway.h"
 
@@ -68,15 +70,6 @@ public:
     virtual bool teardownGateway() override;
 
 private:
-    struct Device
-    {
-        std::string name;
-        std::string major;
-        std::string minor;
-        std::string mode;
-    };
-
-    std::vector<DeviceNodeGateway::Device> m_devList;
-    bool checkIsStrValid(std::string intStr, std::string name, std::string notSpecified);
+    std::vector<DeviceNodeParser::Device> m_devList;
 
 };

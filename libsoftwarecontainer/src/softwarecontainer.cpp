@@ -33,7 +33,7 @@
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-#include "gateway/devicenodegateway.h"
+#include "gateway/devicenode/devicenodegateway.h"
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY

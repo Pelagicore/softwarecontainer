@@ -42,7 +42,9 @@ add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_unittest.cpp)
 add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsparser_unittest.cpp)
 
 add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
+
 add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
+add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodeparser_unittest.cpp)
 
 add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)

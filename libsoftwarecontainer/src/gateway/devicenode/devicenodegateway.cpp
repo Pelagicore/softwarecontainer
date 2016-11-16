@@ -19,6 +19,7 @@
  */
 
 #include "devicenodegateway.h"
+
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -30,47 +31,18 @@ DeviceNodeGateway::DeviceNodeGateway() :
 
 ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
-    DeviceNodeGateway::Device dev;
+    DeviceNodeParser parser;
+    DeviceNodeParser::Device dev;
 
-    if (!JSONParser::read(element, "name", dev.name)) {
-        log_error() << "Key \"name\" missing or not a string in json configuration";
+    if (isError(parser.parseDeviceNodeGatewayConfiguration(element, dev))) {
+        log_error() << "Could not parse device node configuration";
         return ReturnCode::FAILURE;
-    }
-
-    JSONParser::read(element, "major", dev.major);
-    JSONParser::read(element, "minor", dev.minor);
-    JSONParser::read(element, "mode",  dev.mode);
-
-    const bool majorSpecified = dev.major.length() > 0;
-    const bool minorSpecified = dev.minor.length() > 0;
-
-    if (majorSpecified | minorSpecified) {
-        if (!checkIsStrValid(dev.major, "Major version", "Major version must be specified when minor is.")
-            || !checkIsStrValid(dev.minor, "Minor version", "Minor version must be specified when major is.")
-            || !checkIsStrValid(dev.mode, "Mode", "Mode has to be specified when major and minor is specified.")) {
-            return ReturnCode::FAILURE;
-        }
     }
 
     m_devList.push_back(dev);
     return ReturnCode::SUCCESS;
 }
 
-bool DeviceNodeGateway::checkIsStrValid(std::string intStr, std::string name, std::string notSpecified)
-{
-    if (intStr.length() == 0) {
-        log_error() << notSpecified;
-        return false;
-    }
-
-    int i = 0;
-    if (!parseInt(intStr.c_str(), &i)) {
-        log_error() << name << " must be represented as an integer.";
-        return false;
-    }
-
-    return true;
-}
 
 bool DeviceNodeGateway::activateGateway()
 {
@@ -82,18 +54,13 @@ bool DeviceNodeGateway::activateGateway()
     for (auto &dev : m_devList) {
         log_info() << "Mapping device " << dev.name;
 
-        if (dev.major.length() != 0) {
-
-            int majorVersion, minorVersion, mode;
-            parseInt(dev.major.c_str(), &majorVersion);
-            parseInt(dev.minor.c_str(), &minorVersion);
-            parseInt(dev.mode.c_str(), &mode);
+        if (dev.major != -1) {
 
             // mknod dev.name c dev.major dev.minor
             pid_t pid = INVALID_PID;
             getContainer()->executeInContainer([&] () {
-                return mknod(dev.name.c_str(), S_IFCHR | mode,
-                             makedev(majorVersion, minorVersion));
+                return mknod(dev.name.c_str(), S_IFCHR | dev.mode,
+                             makedev(dev.major, dev.minor));
             }, &pid);
 
             if (waitForProcessTermination(pid) != 0) {
@@ -105,12 +72,10 @@ bool DeviceNodeGateway::activateGateway()
             // the host into the container
             getContainer()->mountDevice(dev.name);
 
-            if (dev.mode.length() != 0) {
-                const int mode = std::atoi(dev.mode.c_str());
-
+            if (dev.mode != -1) {
                 pid_t pid = INVALID_PID;
                 getContainer()->executeInContainer([&] () {
-                    return chmod(dev.name.c_str(), mode);
+                    return chmod(dev.name.c_str(), dev.mode);
                 }, &pid);
 
                 if (waitForProcessTermination(pid) != 0) {
