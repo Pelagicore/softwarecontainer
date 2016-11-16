@@ -35,7 +35,12 @@ if(ENABLE_CGROUPSGATEWAY)
 endif()
 
 gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
-gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
+
+gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenode/devicenodegateway.cpp)
+if(ENABLE_DEVICENODEGATEWAY)
+    list(APPEND GATEWAY_SOURCES gateway/devicenode/devicenodeparser.cpp)
+endif()
+
 gateway_support(ENABLE_WAYLANDGATEWAY Wayland waylandgateway.cpp)
 gateway_support(ENABLE_NETWORKGATEWAY network network/networkgateway.cpp)
 if(ENABLE_NETWORKGATEWAY)

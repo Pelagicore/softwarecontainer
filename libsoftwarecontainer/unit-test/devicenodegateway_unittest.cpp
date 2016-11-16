@@ -19,7 +19,7 @@
  */
 
 #include "softwarecontainer_test.h"
-#include "gateway/devicenodegateway.h"
+#include "gateway/devicenode/devicenodegateway.h"
 #include <unistd.h>
 
 class DeviceNodeGatewayTest : public SoftwareContainerGatewayTest
@@ -38,17 +38,9 @@ public:
     const std::string PRESENT_DEVICE = "/dev/random";
 };
 
-TEST_F(DeviceNodeGatewayTest, TestActivateWithNoContainer) {
-    const std::string config = "[\
-                                  {\
-                                    \"name\": \"" + PRESENT_DEVICE + "\"\
-                                  }\
-                                ]";
-
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
+/*
+ * Make sure activation of the gateway works with a valid conf and a container
+ */
 TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
     givenContainerIsSet(gw);
     const std::string config = "[\
@@ -71,87 +63,3 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
     ASSERT_TRUE(gw->activate());
 }
 
-TEST_F(DeviceNodeGatewayTest, TestConfigNoMajor) {
-    givenContainerIsSet(gw);
-    const std::string config = "[\
-                                  {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"minor\": \"0\",\
-                                    \"mode\":  \"644\"\
-                                  }\
-                                ]";
-
-    ASSERT_FALSE(gw->setConfig(config));
-}
-
-TEST_F(DeviceNodeGatewayTest, TestConfigNoMinor) {
-
-    givenContainerIsSet(gw);
-    const std::string config = "[\
-                                  {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": \"1\",\
-                                    \"mode\":  \"644\"\
-                                  }\
-                                ]";
-
-    ASSERT_FALSE(gw->setConfig(config));
-}
-
-TEST_F(DeviceNodeGatewayTest, TestConfigNoMode) {
-
-    givenContainerIsSet(gw);
-    const std::string config = "[\
-                                  {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": \"1\",\
-                                    \"minor\": \"0\"\
-                                  }\
-                                ]";
-
-    ASSERT_FALSE(gw->setConfig(config));
-}
-
-TEST_F(DeviceNodeGatewayTest, TestConfigBadMajor) {
-    givenContainerIsSet(gw);
-    const std::string config = "[\
-                                  {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": \"A\",\
-                                    \"minor\": \"0\",\
-                                    \"mode\":  \"644\"\
-                                  }\
-                                ]";
-
-    ASSERT_FALSE(gw->setConfig(config));
-}
-
-TEST_F(DeviceNodeGatewayTest, TestConfigBadMinor) {
-
-    givenContainerIsSet(gw);
-    const std::string config = "[\
-                                  {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": \"1\",\
-                                    \"minor\": \"A\",\
-                                    \"mode\":  \"644\"\
-                                  }\
-                                ]";
-
-    ASSERT_FALSE(gw->setConfig(config));
-}
-
-TEST_F(DeviceNodeGatewayTest, TestConfigBadMode) {
-
-    givenContainerIsSet(gw);
-    const std::string config = "[\
-                                  {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": \"1\",\
-                                    \"minor\": \"0\",\
-                                    \"mode\":  \"A\"\
-                                  }\
-                                ]";
-
-    ASSERT_FALSE(gw->setConfig(config));
-}
