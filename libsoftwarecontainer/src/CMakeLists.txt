@@ -30,6 +30,10 @@ macro(gateway_support flag strname filename)
 endmacro(gateway_support flag filename)
 
 gateway_support(ENABLE_CGROUPSGATEWAY cgroups cgroups/cgroupsgateway.cpp)
+if(ENABLE_CGROUPSGATEWAY)
+    list(APPEND GATEWAY_SOURCES gateway/cgroups/cgroupsparser.cpp)
+endif()
+
 gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenodegateway.cpp)
 gateway_support(ENABLE_WAYLANDGATEWAY Wayland waylandgateway.cpp)
