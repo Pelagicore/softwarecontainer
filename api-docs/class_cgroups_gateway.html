@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-7766641 2016-11-11</span>
+   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
    </div>
   </td>
  </tr>
@@ -71,6 +71,7 @@ $(document).ready(function(){initNavTree('class_cgroups_gateway.html','');});
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pro-static-attribs">Static Protected Attributes</a>  </div>
   <div class="headertitle">
@@ -85,13 +86,13 @@ $(document).ready(function(){initNavTree('class_cgroups_gateway.html','');});
 <div class="dynheader">
 Inheritance diagram for CgroupsGateway:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_cgroups_gateway__inherit__graph.svg" width="134" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_cgroups_gateway__inherit__graph.svg" width="144" height="202"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for CgroupsGateway:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_cgroups_gateway__coll__graph.svg" width="134" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_cgroups_gateway__coll__graph.svg" width="144" height="202"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -165,6 +166,18 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a1654f704315b3c4a6c982f09e4aa287a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1654f704315b3c4a6c982f09e4aa287a"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (<a class="el" href="class_gateway.html#a76344502967c375fae0c5bc7f44d7e74">ContainerFunction</a> func)</td></tr>
 <tr class="separator:a1654f704315b3c4a6c982f09e4aa287a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a7ea50df505b43684c4a1d82ca6cb6e82"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a> (const json_t *element, const char *key, std::string &amp;result)</td></tr>
+<tr class="memdesc:a7ea50df505b43684c4a1d82ca6cb6e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a string from a JSON Object.  <a href="#a7ea50df505b43684c4a1d82ca6cb6e82">More...</a><br /></td></tr>
+<tr class="separator:a7ea50df505b43684c4a1d82ca6cb6e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec2365e81204446fec184fe17e573405"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#aec2365e81204446fec184fe17e573405">read</a> (const json_t *element, const char *key, bool &amp;result)</td></tr>
+<tr class="memdesc:aec2365e81204446fec184fe17e573405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a boolean from a JSON Object.  <a href="#aec2365e81204446fec184fe17e573405">More...</a><br /></td></tr>
+<tr class="separator:aec2365e81204446fec184fe17e573405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11e43ade1f694d939bfd566b64ddd460"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a11e43ade1f694d939bfd566b64ddd460">read</a> (const json_t *element, const char *key, int &amp;result)</td></tr>
+<tr class="memdesc:a11e43ade1f694d939bfd566b64ddd460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads an integer from a JSON Object.  <a href="#a11e43ade1f694d939bfd566b64ddd460">More...</a><br /></td></tr>
+<tr class="separator:a11e43ade1f694d939bfd566b64ddd460"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -253,16 +266,18 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 <p>Implements <a class="el" href="class_gateway.html#a4413c4a754da11031de372bc0b278d92">Gateway</a>.</p>
 
 <p>Definition at line <a class="el" href="cgroupsgateway_8cpp_source.html#l00034">34</a> of file <a class="el" href="cgroupsgateway_8cpp_source.html">cgroupsgateway.cpp</a>.</p>
+
+<p>References <a class="el" href="jsonparser_8cpp_source.html#l00024">softwarecontainer::JSONParser::read()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::string settingKey;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    std::string settingValue;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (!JSONParser::read(element, <span class="stringliteral">&quot;setting&quot;</span>, settingKey)) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;setting&quot;</span>, settingKey)) {</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Key \&quot;setting\&quot; either not a string or not in json configuration&quot;</span>;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">if</span> (!JSONParser::read(element, <span class="stringliteral">&quot;value&quot;</span>, settingValue)) {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;value&quot;</span>, settingValue)) {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Key \&quot;value\&quot; either not a string or not in json configuration&quot;</span>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
@@ -274,7 +289,16 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00024">jsonparser.cpp:24</a></div></div>
 </div><!-- fragment -->
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_cgroups_gateway_a6b77885877877af00df49b5aa539592d_cgraph.svg" width="387" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+</p>
+
 </div>
 </div>
 <a class="anchor" id="a01028fc541340b53b0330c03dafb6bfe"></a>
@@ -811,6 +835,205 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="a7ea50df505b43684c4a1d82ca6cb6e82"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool softwarecontainer::JSONParser::read </td>
+          <td>(</td>
+          <td class="paramtype">const json_t *&#160;</td>
+          <td class="paramname"><em>element</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads a string from a JSON Object. </p>
+<p>Tries to read a string value form a given JSON object using a given key. If the read is successful true will be returned and the result reference will be populated with the read value. If the string could not be read, either due to the given object does not contain the given key or the given key did not hold a string, false will be returned and the result reference will not be changed.</p>
+<dl class="section return"><dt>Returns</dt><dd>True: If the string was successfully read. </dd>
+<dd>
+False: If the string could not be read. </dd></dl>
+
+<p>Definition at line <a class="el" href="jsonparser_8cpp_source.html#l00024">24</a> of file <a class="el" href="jsonparser_8cpp_source.html">jsonparser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="networkgatewayparser_8cpp_source.html#l00021">NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="envgateway_8cpp_source.html#l00035">EnvironmentGateway::readConfigElement()</a>, <a class="el" href="waylandgateway_8cpp_source.html#l00041">WaylandGateway::readConfigElement()</a>, <a class="el" href="cgroupsgateway_8cpp_source.html#l00034">readConfigElement()</a>, <a class="el" href="filegateway_8cpp_source.html#l00031">FileGateway::readConfigElement()</a>, <a class="el" href="pulsegateway_8cpp_source.html#l00034">PulseGateway::readConfigElement()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00032">DeviceNodeGateway::readConfigElement()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00107">softwarecontainer::SoftwareContainerAgent::readConfigElement()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    json_t *value = json_object_get(element, key);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    }</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (!json_is_string(value)) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a string&quot;</span>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    result = json_string_value(value);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
+</div><!-- fragment -->
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_j_s_o_n_parser_a7ea50df505b43684c4a1d82ca6cb6e82_icgraph.svg" width="887" height="511"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="aec2365e81204446fec184fe17e573405"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool softwarecontainer::JSONParser::read </td>
+          <td>(</td>
+          <td class="paramtype">const json_t *&#160;</td>
+          <td class="paramname"><em>element</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads a boolean from a JSON Object. </p>
+<p>Tries to read a boolean value form a given JSON object using a given key. If the read is successful true will be returned and the result reference will be populated with the read value. If the boolean could not be read, either due to the given object does not contain the given key or the given key did not hold a boolean value, false will be returned and the result reference will not be changed.</p>
+<dl class="section return"><dt>Returns</dt><dd>True: If the boolean was successfully read. </dd>
+<dd>
+False: If the boolean could not be read. </dd></dl>
+
+<p>Definition at line <a class="el" href="jsonparser_8cpp_source.html#l00041">41</a> of file <a class="el" href="jsonparser_8cpp_source.html">jsonparser.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    json_t *value = json_object_get(element, key);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">if</span> (!json_is_boolean(value)) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a boolean&quot;</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    result = json_is_true(value);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a11e43ade1f694d939bfd566b64ddd460"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool softwarecontainer::JSONParser::read </td>
+          <td>(</td>
+          <td class="paramtype">const json_t *&#160;</td>
+          <td class="paramname"><em>element</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads an integer from a JSON Object. </p>
+<p>Tries to read an integer value form a given JSON object using a given key. If the read is successful true will be returned and the result reference will be populated with the read value. If the integer could not be read, either due to the given object does not contain the given key or the given key did not hold an integer value, false will be returned and the result reference will not be changed.</p>
+<dl class="section return"><dt>Returns</dt><dd>True: If the integer was successfully read. </dd>
+<dd>
+False: If the integer could not be read. </dd></dl>
+
+<p>Definition at line <a class="el" href="jsonparser_8cpp_source.html#l00058">58</a> of file <a class="el" href="jsonparser_8cpp_source.html">jsonparser.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    json_t *value = json_object_get(element, key);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">if</span> (!json_is_integer(value)) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not an integer&quot;</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    result = json_integer_value(value);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>libsoftwarecontainer/src/gateway/<a class="el" href="cgroupsgateway_8h_source.html">cgroupsgateway.h</a></li>
 <li>libsoftwarecontainer/src/gateway/<a class="el" href="cgroupsgateway_8cpp_source.html">cgroupsgateway.cpp</a></li>
@@ -821,7 +1044,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_cgroups_gateway.html">CgroupsGateway</a></li>
-    <li class="footer">Generated on Fri Nov 11 2016 13:07:03 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,4 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_observable_property.html" title="softwarecontainer::\lObservableProperty\&lt;\l ProcessState \&gt;" alt="" coords="5,5,151,61"/>
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_observable_writable_property.html" title="softwarecontainer::\lObservableWritableProperty\l\&lt; ProcessState \&gt;" alt="" coords="199,5,384,61"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_signal_connections_handler.html" title="The SignalConnectionsHandler class contains references to sigc++ connections and automatically discon..." alt="" coords="5,5,181,47"/>
 </map>

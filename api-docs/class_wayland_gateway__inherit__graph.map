@@ -1,3 +1,4 @@
 <map id="WaylandGateway" name="WaylandGateway">
-<area shape="rect" id="node2" href="$class_gateway.html" title="Gateway base class for SoftwareContainer. " alt="" coords="31,5,105,32"/>
+<area shape="rect" id="node2" href="$class_gateway.html" title="Gateway base class for SoftwareContainer. " alt="" coords="35,95,109,121"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html" title="Convenience layer for the Jansson JSON parser. " alt="" coords="5,5,139,47"/>
 </map>

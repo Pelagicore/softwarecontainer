@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-7766641 2016-11-11</span>
+   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
    </div>
   </td>
  </tr>
@@ -174,7 +174,7 @@ false Upon failure </dd></dl>
 
 <p>Definition at line <a class="el" href="iptableentry_8cpp_source.html#l00023">23</a> of file <a class="el" href="iptableentry_8cpp_source.html">iptableentry.cpp</a>.</p>
 
-<p>References <a class="el" href="iptableentry_8cpp_source.html#l00093">interpretPolicy()</a>, and <a class="el" href="iptableentry_8cpp_source.html#l00056">interpretRule()</a>.</p>
+<p>References <a class="el" href="iptableentry_8cpp_source.html#l00095">interpretPolicy()</a>, and <a class="el" href="iptableentry_8cpp_source.html#l00056">interpretRule()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> rule : m_rules) {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">if</span> (ReturnCode::FAILURE == insertCommand(<a class="code" href="class_i_p_table_entry.html#ac090d9fee4b15b246d944d800ff0e12e">interpretRule</a>(rule))) {</div>
@@ -190,7 +190,7 @@ false Upon failure </dd></dl>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
-<div class="ttc" id="class_i_p_table_entry_html_a6712bcba4d643a6c0ac74ff6fe5a3760"><div class="ttname"><a href="class_i_p_table_entry.html#a6712bcba4d643a6c0ac74ff6fe5a3760">IPTableEntry::interpretPolicy</a></div><div class="ttdeci">std::string interpretPolicy(void)</div><div class="ttdoc">This function Interprets defaultTarget rule to iptables applicable policy string. ...</div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00093">iptableentry.cpp:93</a></div></div>
+<div class="ttc" id="class_i_p_table_entry_html_a6712bcba4d643a6c0ac74ff6fe5a3760"><div class="ttname"><a href="class_i_p_table_entry.html#a6712bcba4d643a6c0ac74ff6fe5a3760">IPTableEntry::interpretPolicy</a></div><div class="ttdeci">std::string interpretPolicy(void)</div><div class="ttdoc">This function Interprets defaultTarget rule to iptables applicable policy string. ...</div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00095">iptableentry.cpp:95</a></div></div>
 <div class="ttc" id="class_i_p_table_entry_html_ac090d9fee4b15b246d944d800ff0e12e"><div class="ttname"><a href="class_i_p_table_entry.html#ac090d9fee4b15b246d944d800ff0e12e">IPTableEntry::interpretRule</a></div><div class="ttdeci">std::string interpretRule(Rule rule)</div><div class="ttdoc">Interprets a rule to iptables applicable string. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00056">iptableentry.cpp:56</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -225,39 +225,41 @@ Here is the call graph for this function:</div>
 <p>Referenced by <a class="el" href="iptableentry_8cpp_source.html#l00023">applyRules()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::string iptableCommand = <span class="stringliteral">&quot;iptables -A &quot;</span> + m_type;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">if</span> (!rule.host.empty()) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordflow">if</span> (<span class="stringliteral">&quot;INPUT&quot;</span> == m_type) {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -s &quot;</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -d &quot;</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            iptableCommand = iptableCommand + rule.host ;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">if</span> (rule.ports.any) {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">if</span> (rule.ports.multiport) {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -p tcp --match multiport &quot;</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="keywordflow">if</span> (<span class="stringliteral">&quot;INPUT&quot;</span> == m_type) {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--sports &quot;</span> + rule.ports.ports;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--dports &quot;</span> + rule.ports.ports;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -p tcp &quot;</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                <span class="keywordflow">if</span> (<span class="stringliteral">&quot;INPUT&quot;</span> == m_type) {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--sport &quot;</span> + rule.ports.ports;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--dport &quot;</span> + rule.ports.ports;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        iptableCommand = iptableCommand + <span class="stringliteral">&quot; -j &quot;</span> + convertTarget(rule.target);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">return</span> iptableCommand;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Add network rule : &quot;</span> &lt;&lt;  iptableCommand;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">if</span> (!rule.host.empty()) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">if</span> (<span class="stringliteral">&quot;INPUT&quot;</span> == m_type) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -s &quot;</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -d &quot;</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            iptableCommand = iptableCommand + rule.host ;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">if</span> (rule.ports.any) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">if</span> (rule.ports.multiport) {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -p tcp --match multiport &quot;</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keywordflow">if</span> (<span class="stringliteral">&quot;INPUT&quot;</span> == m_type) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--sports &quot;</span> + rule.ports.ports;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--dports &quot;</span> + rule.ports.ports;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                }</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                iptableCommand = iptableCommand + <span class="stringliteral">&quot; -p tcp &quot;</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="keywordflow">if</span> (<span class="stringliteral">&quot;INPUT&quot;</span> == m_type) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--sport &quot;</span> + rule.ports.ports;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    iptableCommand = iptableCommand + <span class="stringliteral">&quot;--dport &quot;</span> + rule.ports.ports;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        iptableCommand = iptableCommand + <span class="stringliteral">&quot; -j &quot;</span> + convertTarget(rule.target);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Add network rule : &quot;</span> &lt;&lt;  iptableCommand;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">return</span> iptableCommand;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -288,18 +290,18 @@ Here is the caller graph for this function:</div>
 <dd>
 empty string when interfered incompatible m_defaultTarget </dd></dl>
 
-<p>Definition at line <a class="el" href="iptableentry_8cpp_source.html#l00093">93</a> of file <a class="el" href="iptableentry_8cpp_source.html">iptableentry.cpp</a>.</p>
+<p>Definition at line <a class="el" href="iptableentry_8cpp_source.html#l00095">95</a> of file <a class="el" href="iptableentry_8cpp_source.html">iptableentry.cpp</a>.</p>
 
 <p>Referenced by <a class="el" href="iptableentry_8cpp_source.html#l00023">applyRules()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;{</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">if</span> (m_defaultTarget != Target::ACCEPT &amp;&amp; m_defaultTarget != Target::DROP) {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Wrong default target : &quot;</span> &lt;&lt; convertTarget(m_defaultTarget);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::string iptableCommand = <span class="stringliteral">&quot;iptables -P &quot;</span> + m_type + <span class="stringliteral">&quot; &quot;</span> + convertTarget(m_defaultTarget);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">return</span> iptableCommand;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;{</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordflow">if</span> (m_defaultTarget != Target::ACCEPT &amp;&amp; m_defaultTarget != Target::DROP) {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Wrong default target : &quot;</span> &lt;&lt; convertTarget(m_defaultTarget);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::string iptableCommand = <span class="stringliteral">&quot;iptables -P &quot;</span> + m_type + <span class="stringliteral">&quot; &quot;</span> + convertTarget(m_defaultTarget);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">return</span> iptableCommand;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -321,7 +323,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_i_p_table_entry.html">IPTableEntry</a></li>
-    <li class="footer">Generated on Fri Nov 11 2016 13:07:04 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

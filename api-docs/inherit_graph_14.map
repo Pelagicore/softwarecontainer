@@ -1,7 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_clean_up_handler.html" title="softwarecontainer::\lCleanUpHandler" alt="" coords="5,74,139,115"/>
-<area shape="rect" id="node2" href="$class_directory_clean_up_handler.html" title="DirectoryCleanUpHandler" alt="" coords="197,5,367,32"/>
-<area shape="rect" id="node3" href="$class_file_clean_up_handler.html" title="The FileCleanUpHandler class is a subclass of CleanUpHandler that deletes a file. ..." alt="" coords="213,56,351,83"/>
-<area shape="rect" id="node4" href="$class_mount_clean_up_handler.html" title="MountCleanUpHandler" alt="" coords="205,107,359,133"/>
-<area shape="rect" id="node5" href="$class_overlay_sync_cleanup_handler.html" title="The OverlaySyncCleanupHandler class is used to copy files on cleanup and can be added to the CleanupH..." alt="" coords="187,157,377,184"/>
+<area shape="rect" id="node1" href="$class_container_abstract_interface.html" title="ContainerAbstractInterface" alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node2" href="$class_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="259,5,338,32"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="25,57,165,98"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="232,57,365,98"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. " alt="" coords="232,122,365,163"/>
 </map>

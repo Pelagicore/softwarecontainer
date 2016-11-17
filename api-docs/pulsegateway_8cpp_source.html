@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-7766641 2016-11-11</span>
+   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
    </div>
   </td>
  </tr>
@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('pulsegateway_8cpp_source.html','');});
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">   34</a></span>&#160;ReturnCode <a class="code" href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">PulseGateway::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">if</span> (!JSONParser::read(element, <span class="stringliteral">&quot;audio&quot;</span>, m_enableAudio)) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;audio&quot;</span>, m_enableAudio)) {</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Either \&quot;audio\&quot; key is missing, or not a bool in json configuration&quot;</span>;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }</div>
@@ -144,13 +144,14 @@ $(document).ready(function(){initNavTree('pulsegateway_8cpp_source.html','');});
 <div class="ttc" id="class_pulse_gateway_html_a2ffb6fc3e0d690830fa4612111a60985"><div class="ttname"><a href="class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985">PulseGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00043">pulsegateway.cpp:43</a></div></div>
 <div class="ttc" id="class_pulse_gateway_html_a42d74a1d568c9734c690f32bddfe48b4"><div class="ttname"><a href="class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4">PulseGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00069">pulsegateway.cpp:69</a></div></div>
 <div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00041">gateway.h:41</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00024">jsonparser.cpp:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>pulsegateway.cpp</b></li>
-    <li class="footer">Generated on Fri Nov 11 2016 13:07:03 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

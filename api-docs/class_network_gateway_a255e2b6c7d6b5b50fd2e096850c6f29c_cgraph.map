@@ -1,3 +1,4 @@
 <map id="NetworkGateway::readConfigElement" name="NetworkGateway::readConfigElement">
 <area shape="rect" id="node2" href="$class_network_gateway_parser.html#ad6e18790fde52761a094651adcfd2c36" title="Parses NetworkGateway configuration into IPTableEntry. " alt="" coords="248,5,488,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="536,5,669,47"/>
 </map>
