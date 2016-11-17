@@ -27,7 +27,7 @@ class MockNetworkGateway :
     public NetworkGateway
 {
 public:
-    MockNetworkGateway():NetworkGateway("SC-11") {}
+    MockNetworkGateway():NetworkGateway(11) {}
 
     MOCK_METHOD0(isBridgeAvailable, ReturnCode());
 };
@@ -113,13 +113,12 @@ protected:
  */
 TEST_F(NetworkGatewayTest, Activate) {
     givenContainerIsSet(gw);
-
-    ::testing::DefaultValue<bool>::Set(true);
     ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
     ASSERT_TRUE(gw->activate());
 }
 
 /**
+
  * @brief Test NetworkGateway::activate is successful but that no network interface
  *  is brought up when the networking config is malformed.
  */

@@ -41,7 +41,7 @@ class NetworkGateway :
 public:
     static constexpr const char *ID = "network";
 
-    NetworkGateway(const std::string containerName);
+    NetworkGateway(const int32_t id);
     ~NetworkGateway();
 
     ReturnCode readConfigElement(const json_t *element) override;
@@ -120,7 +120,6 @@ private:
     struct in_addr m_ip;
     uint32_t m_netmask;
     std::string m_gateway;
-
 
     std::vector<IPTableEntry> m_entries;
 
