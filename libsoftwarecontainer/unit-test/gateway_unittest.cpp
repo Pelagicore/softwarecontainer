@@ -42,7 +42,7 @@ using ::testing::_;
 class GatewayTest : public ::testing::Test
 {
 public:
-    MockGateway gw;
+    ::testing::NiceMock<MockGateway> gw;
     std::string validConf = "[{ }]";
     std::string validEmptyConf = "[]";
 
@@ -146,7 +146,6 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
  */
 TEST_F(GatewayTest, CanConfigureManyTimes) {
     for (int i = 0; i < 3; i++) {
-        EXPECT_CALL(gw, readConfigElement(_));
         ASSERT_TRUE(gw.setConfig(validConf));
     }
 }
@@ -156,14 +155,8 @@ TEST_F(GatewayTest, CanConfigureManyTimes) {
  * which in turn means that teardown can succeed.
  */
 TEST_F(GatewayTest, ConfigEnablesActivateEnablesTeardown) {
-    EXPECT_CALL(gw, readConfigElement(_));
     ASSERT_TRUE(gw.setConfig(validConf));
-
-    EXPECT_CALL(gw, hasContainer());
-    EXPECT_CALL(gw, activateGateway());
     ASSERT_TRUE(gw.activate());
-
-    EXPECT_CALL(gw, teardownGateway());
     ASSERT_TRUE(gw.teardown());
 }
 
@@ -171,11 +164,7 @@ TEST_F(GatewayTest, ConfigEnablesActivateEnablesTeardown) {
  * Test that double activation is not possible
  */
 TEST_F(GatewayTest, CantActivateTwice) {
-    EXPECT_CALL(gw, readConfigElement(_));
     ASSERT_TRUE(gw.setConfig(validConf));
-
-    EXPECT_CALL(gw, hasContainer());
-    EXPECT_CALL(gw, activateGateway());
     ASSERT_TRUE(gw.activate());
     ASSERT_FALSE(gw.activate());
 }
@@ -185,7 +174,6 @@ TEST_F(GatewayTest, CantActivateTwice) {
  * configured gateway
  */
 TEST_F(GatewayTest, FailedActivateMeansTeardownFails) {
-    EXPECT_CALL(gw, readConfigElement(_));
     ASSERT_TRUE(gw.setConfig(validConf));
 
     // Make the checks in activate fail
@@ -200,16 +188,10 @@ TEST_F(GatewayTest, FailedActivateMeansTeardownFails) {
  * Test that it is not possible to teardown a gateway twice
  */
 TEST_F(GatewayTest, CantTeardownTwice) {
-    EXPECT_CALL(gw, readConfigElement(_));
     ASSERT_TRUE(gw.setConfig(validConf));
-
-    EXPECT_CALL(gw, hasContainer());
-    EXPECT_CALL(gw, activateGateway());
     ASSERT_TRUE(gw.activate());
 
-    EXPECT_CALL(gw, teardownGateway());
     ASSERT_TRUE(gw.teardown());
-
     ASSERT_FALSE(gw.teardown());
 }
 
@@ -219,17 +201,8 @@ TEST_F(GatewayTest, CantTeardownTwice) {
  */
 TEST_F(GatewayTest, TornDownGatewayCanBeConfigured) {
     for (int i = 0; i < 3; i++) {
-        EXPECT_CALL(gw, readConfigElement(_));
         ASSERT_TRUE(gw.setConfig(validConf));
-
-        EXPECT_CALL(gw, hasContainer());
-        EXPECT_CALL(gw, activateGateway());
         ASSERT_TRUE(gw.activate());
-
-        EXPECT_CALL(gw, teardownGateway());
         ASSERT_TRUE(gw.teardown());
-
-        EXPECT_CALL(gw, readConfigElement(_));
-        ASSERT_TRUE(gw.setConfig(validConf));
     }
 }
