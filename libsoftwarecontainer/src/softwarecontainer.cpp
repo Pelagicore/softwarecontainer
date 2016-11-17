@@ -45,7 +45,7 @@
 #endif
 
 #ifdef ENABLE_ENVGATEWAY
-#include "gateway/envgateway.h"
+#include "gateway/environment/envgateway.h"
 #endif
 
 #ifdef ENABLE_FILEGATEWAY
