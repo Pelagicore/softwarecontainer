@@ -99,7 +99,7 @@ TEST_F(SoftwareContainerApp, TestWayland) {
 TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
 
     std::shared_ptr<Workspace> workspace = std::make_shared<Workspace>();
-    const std::string id = "SC-1";
+    const ContainerID id = 1;
 
     SoftwareContainer s1(workspace, id);
     SoftwareContainer s2(workspace, id);
@@ -604,7 +604,7 @@ TEST(SoftwareContainer, MultithreadTest) {
     static const int TIMEOUT = 20;
 
     std::shared_ptr<Workspace> workspacePtr(new Workspace());
-    SoftwareContainer lib(workspacePtr, "SC-2");
+    SoftwareContainer lib(workspacePtr, 2);
     lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;

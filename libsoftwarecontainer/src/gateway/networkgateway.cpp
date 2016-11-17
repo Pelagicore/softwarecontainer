@@ -24,15 +24,12 @@
 #include "networkgateway.h"
 #include "networkgatewayparser.h"
 
-NetworkGateway::NetworkGateway(const std::string containerName) :
+NetworkGateway::NetworkGateway(const int32_t id) :
     Gateway(ID),
     m_netmask(0xFF),
     m_gateway("10.0.3.1"),
-    m_interfaceInitialized(false)
-{
-    std::string tmp = containerName.substr(3);
-    m_containerID = std::stoi(tmp);
-}
+    m_interfaceInitialized(false),
+    m_containerID(id) { }
 
 NetworkGateway::~NetworkGateway()
 {

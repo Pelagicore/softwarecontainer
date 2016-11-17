@@ -40,7 +40,7 @@ class SoftwareContainer :
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    SoftwareContainer(std::shared_ptr<Workspace> workspace, const std::string &id);
+    SoftwareContainer(std::shared_ptr<Workspace> workspace, const ContainerID id);
 
     ~SoftwareContainer();
 
@@ -104,6 +104,7 @@ private:
 
     std::shared_ptr<Workspace> m_workspace;
 
+    ContainerID m_containerID;
     std::string m_containerName;
     ObservableWritableProperty<ContainerState> m_containerState;
 

@@ -54,9 +54,10 @@
 
 namespace softwarecontainer {
 
-SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace, const std::string &containerID) :
+SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace, const ContainerID id) :
     m_workspace(workspace),
-    m_container(new Container(containerID,
+    m_containerID(id),
+    m_container(new Container("SC-" + std::to_string(id),
                               m_workspace->m_containerConfigPath,
                               m_workspace->m_containerRootDir,
                               m_workspace->m_enableWriteBuffer,
@@ -119,9 +120,8 @@ ReturnCode SoftwareContainer::init()
         }
     }
 
-    std::string containerID = std::string(m_container->id());
 #ifdef ENABLE_NETWORKGATEWAY
-    addGateway(new NetworkGateway(containerID));
+    addGateway(new NetworkGateway(m_containerID));
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
@@ -133,6 +133,7 @@ ReturnCode SoftwareContainer::init()
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
+    std::string containerID = std::string(m_container->id());
     addGateway(new DBusGateway( DBusGateway::SessionProxy, getGatewayDir(), containerID ));
     addGateway(new DBusGateway( DBusGateway::SystemProxy,  getGatewayDir(), containerID ));
 #endif
