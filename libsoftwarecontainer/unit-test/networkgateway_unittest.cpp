@@ -27,7 +27,7 @@ class MockNetworkGateway :
     public NetworkGateway
 {
 public:
-    MockNetworkGateway():NetworkGateway(11) {}
+    MockNetworkGateway():NetworkGateway(11, "10.0.3.1", 16) {}
 
     MOCK_METHOD0(isBridgeAvailable, ReturnCode());
 };

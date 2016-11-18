@@ -121,7 +121,13 @@ ReturnCode SoftwareContainer::init()
     }
 
 #ifdef ENABLE_NETWORKGATEWAY
-    addGateway(new NetworkGateway(m_containerID));
+    try {
+        addGateway(new NetworkGateway(m_containerID, "10.0.3.1", 16));
+    } catch (ReturnCode failure) {
+        log_error() << "Given netmask is not appropriate for creating ip address." +
+                       "It should be an unsigned value between 1 and 31";
+        return failure;
+    }
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
