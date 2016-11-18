@@ -57,8 +57,11 @@ void Container::init_lxc()
     }
 }
 
-Container::Container(const std::string id, const std::string &configFile,
-        const std::string &containerRoot, bool enableWriteBuffer, int shutdownTimeout) :
+Container::Container(const std::string id,
+                     const std::string &configFile,
+                     const std::string &containerRoot,
+                     bool enableWriteBuffer,
+                     int shutdownTimeout) :
     m_configFile(configFile),
     m_id(id),
     m_containerRoot(containerRoot),

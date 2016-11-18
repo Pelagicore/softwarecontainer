@@ -33,7 +33,7 @@ public:
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     int m_preloadCount = 0;
     bool m_shutdownContainers = true;
-    int m_shutdownTimeout = 2;
+    int m_shutdownTimeout = 1;
     std::shared_ptr<Workspace> workspace;
     std::string m_configPath ="";
 

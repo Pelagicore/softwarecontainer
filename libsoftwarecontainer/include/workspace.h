@@ -45,7 +45,7 @@ public:
     Workspace(bool enableWriteBuffer = false,
               const std::string &containerRootDir = SOFTWARECONTAINER_DEFAULT_WORKSPACE,
               const std::string &containerConfigPath = SOFTWARECONTAINER_DEFAULT_CONFIG,
-              unsigned int containerShutdownTimeout = 2);
+              unsigned int containerShutdownTimeout = 1);
 
     ~Workspace();
 
