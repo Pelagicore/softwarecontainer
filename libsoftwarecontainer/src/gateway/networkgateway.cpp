@@ -24,16 +24,30 @@
 #include "networkgateway.h"
 #include "networkgatewayparser.h"
 
-NetworkGateway::NetworkGateway(const int32_t id) :
+NetworkGateway::NetworkGateway(const int32_t id,
+                               const std::string gateway,
+                               const uint8_t maskBits) :
     Gateway(ID),
-    m_netmask(0xFF),
-    m_gateway("10.0.3.1"),
+    m_gateway(gateway),
     m_interfaceInitialized(false),
-    m_containerID(id) { }
-
-NetworkGateway::~NetworkGateway()
+    m_containerID(id)
 {
+    /*
+     * Netmask are used for determining range of ip adress assignment. maskBits represent bit-count
+     * for creating ip range starting from least significant bit of m_gateway. Since an ipv4 address
+     * consist of 32 bits, maskBits shall not be greater than 32. And since bit 0 and bit 31 cannot
+     * give a range but a single exact value, those will not be accepted as a maskBits.
+     */
+    if (maskBits > 31 || maskBits < 1) {
+        log_error() << "inappropriate netmask : " << maskBits;
+        throw ReturnCode::FAILURE;
+    }
+
+    // value of m_netmask interprets maskBits to a mask integer to calculate range.
+    m_netmask = (1L<<(32-maskBits));
 }
+
+NetworkGateway::~NetworkGateway() { }
 
 ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 {

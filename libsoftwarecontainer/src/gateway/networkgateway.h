@@ -41,7 +41,10 @@ class NetworkGateway :
 public:
     static constexpr const char *ID = "network";
 
-    NetworkGateway(const int32_t id);
+    NetworkGateway(const int32_t id,
+                   const std::string gateway,
+                   const uint8_t maskBits);
+
     ~NetworkGateway();
 
     ReturnCode readConfigElement(const json_t *element) override;
