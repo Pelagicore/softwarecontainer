@@ -4,6 +4,11 @@ lxc.autodev = 1
 lxc.tty = 1
 lxc.pts = 1
 
+#
+# TODO: Remove this when we get the shutdown timeout issue fixed.
+#
+lxc.haltsignal = SIGKILL
+
 @NETWORK_LXC_CONF@
 
 lxc.mount.entry = /sbin sbin none ro,bind 0 0

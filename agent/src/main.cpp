@@ -33,7 +33,7 @@ void usage(const char *argv0)
     printf("  -p, --preload <num>     : Number of containers to preload, defaults to 0\n");
     printf("  -u, --user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");
     printf("  -s, --shutdown <bool>   : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
-    printf("  -t, --timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 2\n");
+    printf("  -t, --timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 1\n");
     printf("  -m, --manifest <path>   : Path to a file or directory where service manifest(s) exist, defaults to \"\"\n");
     printf("  -b, --session-bus       : Use the session bus instead of the system bus\n");
     printf("  -h, --help              : Prints this help message and exits.\n");
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     int preloadCount = 0;
     int userID = 0;
     bool shutdownContainers = true;
-    int timeout = 2;
+    int timeout = 1;
     std::string servicemanifest = "";
     bool useSystemBus = true;
 

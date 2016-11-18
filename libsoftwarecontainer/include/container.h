@@ -74,12 +74,11 @@ public:
      * @param enableWriteBuffer Enable RAM write buffers on top of rootfs
      * @param shutdownTimeout Timeout for shutdown of container.
      */
-    Container(
-            const std::string id
+    Container(const std::string id
             , const std::string &configFile
             , const std::string &containerRoot
             , bool enableWriteBuffer = false
-            , int shutdownTimeout = 2);
+            , int shutdownTimeout = 1);
 
     ~Container();
 
@@ -221,7 +220,7 @@ private:
     // All environment variables set by gateways
     EnvironmentVariables m_gatewayEnvironmentVariables;
 
-    int m_shutdownTimeout = 2;
+    int m_shutdownTimeout = 1;
 
     enum class ContainerState : unsigned int {
         DEFAULT = 0,
