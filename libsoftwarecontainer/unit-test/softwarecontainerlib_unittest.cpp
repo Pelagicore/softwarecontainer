@@ -25,7 +25,7 @@
 #include "gateway/waylandgateway.h"
 #include "gateway/network/networkgateway.h"
 #include "gateway/pulsegateway.h"
-#include "gateway/filegateway.h"
+#include "gateway/files/filegateway.h"
 #include "functionjob.h"
 #include "commandjob.h"
 

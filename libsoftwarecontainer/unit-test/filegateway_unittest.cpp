@@ -20,7 +20,7 @@
 
 #include "softwarecontainer-common.h"
 #include "softwarecontainer_test.h"
-#include "gateway/filegateway.h"
+#include "gateway/files/filegateway.h"
 #include "functionjob.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -57,6 +57,9 @@ public:
     const std::string SUFFIX = "TEST_SUFFIX";
 };
 
+/*
+ * Test that a minimal conf is accepted and that activate works
+ */
 TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     givenContainerIsSet(gw);
     const std::string config =
@@ -70,6 +73,9 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     ASSERT_TRUE(gw->activate());
 }
 
+/*
+ * Test that symlinking files to the same place in container as in host works
+ */
 TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
     givenContainerIsSet(gw);
     const std::string config =
@@ -86,6 +92,10 @@ TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
     ASSERT_TRUE(existsInFileSystem(FILE_PATH));
 }
 
+/*
+ * Test that environment variable + prefix and suffix works in the container, and points
+ * to the file that is being mounted.
+ */
 TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     givenContainerIsSet(gw);
     FunctionJob job = FunctionJob(*sc, [&] () {
@@ -136,89 +146,3 @@ TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
     ASSERT_EQ(job.wait(), 0);
 }
 
-TEST_F(FileGatewayTest, TestActivateWithNoPathToHost) {
-    givenContainerIsSet(gw);
-    const std::string config =
-    "["
-        "{"
-            "  \"path-container\" : \"" + CONTAINER_PATH + "\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": true"
-            ", \"env-var-name\": \"" + ENV_VAR_NAME + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}"
-    "]";
-    ASSERT_FALSE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
-TEST_F(FileGatewayTest, TestActivateWithEmptyPathToHost) {
-    givenContainerIsSet(gw);
-    const std::string config =
-    "["
-        "{"
-            "  \"path-host\" : \"\""
-            ", \"path-container\" : \"" + CONTAINER_PATH + "\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": true"
-            ", \"env-var-name\": \"" + ENV_VAR_NAME + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}"
-    "]";
-    ASSERT_FALSE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-TEST_F(FileGatewayTest, TestActivateWithNoPathInContainer) {
-    givenContainerIsSet(gw);
-    const std::string config =
-    "["
-        "{"
-            "  \"path-home\" : \"" + FILE_PATH + "\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": true"
-            ", \"env-var-name\": \"" + ENV_VAR_NAME + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}"
-    "]";
-    ASSERT_FALSE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
-TEST_F(FileGatewayTest, TestActivateWithEmptyPathInContainer) {
-    givenContainerIsSet(gw);
-    const std::string config =
-    "["
-        "{"
-            "  \"path-home\" : \"" + FILE_PATH + "\""
-            ", \"path-container\" : \"\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": true"
-            ", \"env-var-name\": \"" + ENV_VAR_NAME + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}"
-    "]";
-    ASSERT_FALSE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-}
-
-TEST_F(FileGatewayTest, TestActivateWithNoContainer) {
-    const std::string config =
-    "["
-        "{"
-            "  \"path-host\" : \"" + FILE_PATH + "\""
-            ", \"path-container\" : \"" + CONTAINER_PATH + "\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": true"
-            ", \"env-var-name\": \"" + ENV_VAR_NAME + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}"
-    "]";
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
-    delete gw;
-}

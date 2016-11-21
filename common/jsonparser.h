@@ -74,5 +74,10 @@ namespace softwarecontainer {
          * @return False: If the integer could not be read.
          */
         static bool read(const json_t *element, const char *key, int &result);
+
+        /**
+         * @brief Checks if a given JSON object contains a certain key
+         */
+        static bool hasKey(const json_t *element, const char *key);
     };
 }

@@ -23,10 +23,13 @@
 
 #include <string>
 #include <unistd.h>
+
 #include "gateway.h"
+#include "filegatewayparser.h"
 
 /**
- * This gateway lets you map files (including socket files) or folders from the host into the container's filesystem.
+ * This gateway lets you map files (including socket files) or folders
+ * from the host into the container's filesystem.
  */
 class FileGateway :
     public Gateway
@@ -43,16 +46,7 @@ public:
     bool teardownGateway() override;
 
 private:
-    struct FileSetting {
-        std::string pathInHost;
-        std::string pathInContainer;
-        bool createSymlinkInContainer;
-        bool readOnly;
-        std::string envVarName;
-        std::string envVarPrefix;
-        std::string envVarSuffix;
-    };
-    virtual std::string bindMount(const FileSetting &setting);
+    virtual std::string bindMount(const FileGatewayParser::FileSetting &setting);
 
-    std::vector<FileSetting> m_settings;
+    std::vector<FileGatewayParser::FileSetting> m_settings;
 };

@@ -56,7 +56,10 @@ if (ENABLE_ENVGATEWAY)
     list(APPEND GATEWAY_SOURCES gateway/environment/envgatewayparser.cpp)
 endif()
 
-gateway_support(ENABLE_FILEGATEWAY files filegateway.cpp)
+gateway_support(ENABLE_FILEGATEWAY files files/filegateway.cpp)
+if (ENABLE_FILEGATEWAY)
+    list(APPEND GATEWAY_SOURCES gateway/files/filegatewayparser.cpp)
+endif()
 
 add_library(softwarecontainerlib SHARED
     container.cpp
