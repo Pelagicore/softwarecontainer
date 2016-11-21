@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developer guidelines &#8212; softwarecontainer 0.9.1-8639fe0 2016-11-21 documentation</title>
+    <title>Developer guidelines &#8212; softwarecontainer 0.9.1-a34c7ee 2016-11-21 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-8639fe0 2016-11-21',
+        VERSION:     '0.9.1-a34c7ee 2016-11-21',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-8639fe0 2016-11-21 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-a34c7ee 2016-11-21 documentation" href="../../index.html" />
     <link rel="next" title="SoftwareContainer using LXC" href="../lxc/index.html" />
     <link rel="prev" title="Filesystems" href="../filesystem/index.html" />
    
@@ -53,6 +53,23 @@ regarding filesystems in the container.</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <p class="last">The diagrams in this chapter do not differ between sync and async calls, should be fixed</p>
+</div>
+<div class="section" id="design-principles">
+<h2>Design principles<a class="headerlink" href="#design-principles" title="Permalink to this headline">¶</a></h2>
+<p>This section describes some major design considerations and principles mostly related to the
+internals of SC and configuration formats.</p>
+<div class="section" id="gateways">
+<h3>Gateways<a class="headerlink" href="#gateways" title="Permalink to this headline">¶</a></h3>
+<p>Gateway configs needs to be possible to extend in the future. In practice, this means that it
+should be possible to add new json objects to the root object without breaking current parsing
+of the config, or requiring unnecessary re-writes of existing integrated configs that are not affected
+by such addition.</p>
+<p>Configs should have version indicated as part of the content, so SC could perform checks and adapt
+to the format for compatibility reasons.</p>
+<p>This has implications on the json structure, e.g. it sometimes adds some redundancy to the structure.
+It also means that the parsing might not always be as efficient as it could be, as the objects need
+to be iterated to find, compared to getting values by keys already in the first level of nesting.</p>
+</div>
 </div>
 <div class="section" id="important-internal-interfaces">
 <h2>Important internal interfaces<a class="headerlink" href="#important-internal-interfaces" title="Permalink to this headline">¶</a></h2>
@@ -388,6 +405,10 @@ internally to do their specific parsing and application of the configs.</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Developer guidelines</a><ul>
+<li><a class="reference internal" href="#design-principles">Design principles</a><ul>
+<li><a class="reference internal" href="#gateways">Gateways</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#important-internal-interfaces">Important internal interfaces</a><ul>
 <li><a class="reference internal" href="#interface-softwarecontainer-h">Interface: softwarecontainer.h</a></li>
 <li><a class="reference internal" href="#interface-containerabstractinterface-h">Interface: containerabstractinterface.h</a></li>

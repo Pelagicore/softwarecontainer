@@ -16,6 +16,26 @@ regarding filesystems in the container.
     The diagrams in this chapter do not differ between sync and async calls, should be fixed
 
 
+Design principles
+=================
+This section describes some major design considerations and principles mostly related to the
+internals of SC and configuration formats.
+
+Gateways
+--------
+Gateway configs needs to be possible to extend in the future. In practice, this means that it
+should be possible to add new json objects to the root object without breaking current parsing
+of the config, or requiring unnecessary re-writes of existing integrated configs that are not affected
+by such addition.
+
+Configs should have version indicated as part of the content, so SC could perform checks and adapt
+to the format for compatibility reasons.
+
+This has implications on the json structure, e.g. it sometimes adds some redundancy to the structure.
+It also means that the parsing might not always be as efficient as it could be, as the objects need
+to be iterated to find, compared to getting values by keys already in the first level of nesting.
+
+
 Important internal interfaces
 =============================
 

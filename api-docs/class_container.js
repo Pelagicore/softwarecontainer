@@ -1,7 +1,7 @@
 var class_container =
 [
     [ "ContainerFunction", "class_container.html#a0d3e7d7867f4f1c5787e49d3a56bae3c", null ],
-    [ "Container", "class_container.html#aa52128b40746a769f02a8df367e7af6e", null ],
+    [ "Container", "class_container.html#ac9509752780327d11af7d8dfda0ca293", null ],
     [ "~Container", "class_container.html#ae9f5d07bfc3defda274aa06091c19f56", null ],
     [ "create", "class_container.html#a32b1856163054cc997f19aae33babb6a", null ],
     [ "start", "class_container.html#a014c76184c840df8bfc5af88e549fce5", null ],
@@ -19,8 +19,6 @@ var class_container =
     [ "destroy", "class_container.html#a37b70b86583b99d9d2db64f1a50388fe", null ],
     [ "shutdown", "class_container.html#ac9b3ab38c576f20fe20efa2f97a752af", null ],
     [ "shutdown", "class_container.html#aaee4991d82ef6cc8b4bccacf93d68ed6", null ],
-    [ "suspend", "class_container.html#a76669a7ebcf570421097e1850799c18e", null ],
-    [ "resume", "class_container.html#a2558b81b34a0690ee2c7e9be3245cfcf", null ],
     [ "stop", "class_container.html#a839aebc0b308fbc3c986a1630ecfe1c1", null ],
     [ "waitForState", "class_container.html#a371ea40dcc92bed135c4284a23d5a8c6", null ],
     [ "ensureContainerRunning", "class_container.html#a65fc761c6069f4e28e198a8be0236a9a", null ],
