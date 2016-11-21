@@ -19,7 +19,6 @@
  */
 
 
-#include <string>
 #include "filegateway.h"
 
 FileGateway::FileGateway()
@@ -30,23 +29,10 @@ FileGateway::FileGateway()
 
 ReturnCode FileGateway::readConfigElement(const json_t *element)
 {
-    FileSetting setting;
+    FileGatewayParser parser;
+    FileGatewayParser::FileSetting setting;
 
-    JSONParser::read(element, "path-host", setting.pathInHost);
-    JSONParser::read(element, "path-container", setting.pathInContainer);
-    JSONParser::read(element, "env-var-name", setting.envVarName);
-    JSONParser::read(element, "env-var-prefix", setting.envVarPrefix);
-    JSONParser::read(element, "env-var-suffix", setting.envVarSuffix);
-    JSONParser::read(element, "create-symlink", setting.createSymlinkInContainer);
-    JSONParser::read(element, "read-only", setting.readOnly);
-
-    if (setting.pathInHost.size() == 0) {
-        log_error() << "FileGateway config is lacking 'path-host' setting";
-        return ReturnCode::FAILURE;
-    }
-
-    if (setting.pathInContainer.size() == 0) {
-        log_error() << "FileGateway config is lacking 'path-container' setting";
+    if (isError(parser.parseFileGatewayConfigElement(element, setting))) {
         return ReturnCode::FAILURE;
     }
 
@@ -57,7 +43,7 @@ ReturnCode FileGateway::readConfigElement(const json_t *element)
 bool FileGateway::activateGateway()
 {
     if (m_settings.size() > 0) {
-        for (FileSetting &setting : m_settings) {
+        for (FileGatewayParser::FileSetting &setting : m_settings) {
             const std::string path = bindMount(setting);
             if (path.size() == 0) {
                 log_error() << "Bind mount failed";
@@ -81,7 +67,7 @@ bool FileGateway::activateGateway()
     return false;
 }
 
-std::string FileGateway::bindMount(const FileSetting &setting)
+std::string FileGateway::bindMount(const FileGatewayParser::FileSetting &setting)
 {
     std::string path;
 

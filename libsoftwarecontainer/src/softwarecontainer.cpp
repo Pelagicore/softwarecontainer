@@ -49,7 +49,7 @@
 #endif
 
 #ifdef ENABLE_FILEGATEWAY
-#include "gateway/filegateway.h"
+#include "gateway/files/filegateway.h"
 #endif
 
 namespace softwarecontainer {
