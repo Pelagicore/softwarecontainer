@@ -17,8 +17,5 @@ var classsoftwarecontainer_1_1_software_container_agent =
     [ "bindMountFolderInContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a63e4604ed484353a9847eee38466b7ff", null ],
     [ "setGatewayConfigs", "classsoftwarecontainer_1_1_software_container_agent.html#a932a69583ff9cde14bd4749a9152ba9a", null ],
     [ "setCapabilities", "classsoftwarecontainer_1_1_software_container_agent.html#a99d58370ca9150d5e1fca70ff44d5007", null ],
-    [ "getWorkspace", "classsoftwarecontainer_1_1_software_container_agent.html#abf4a978edc41a3e89132d1aa55dd4210", null ],
-    [ "read", "classsoftwarecontainer_1_1_software_container_agent.html#a7ea50df505b43684c4a1d82ca6cb6e82", null ],
-    [ "read", "classsoftwarecontainer_1_1_software_container_agent.html#aec2365e81204446fec184fe17e573405", null ],
-    [ "read", "classsoftwarecontainer_1_1_software_container_agent.html#a11e43ade1f694d939bfd566b64ddd460", null ]
+    [ "getWorkspace", "classsoftwarecontainer_1_1_software_container_agent.html#abf4a978edc41a3e89132d1aa55dd4210", null ]
 ];

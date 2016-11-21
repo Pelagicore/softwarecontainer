@@ -31,7 +31,6 @@ var annotated =
     [ "FileCleanUpHandler", "class_file_clean_up_handler.html", "class_file_clean_up_handler" ],
     [ "FileGateway", "class_file_gateway.html", "class_file_gateway" ],
     [ "Gateway", "class_gateway.html", "class_gateway" ],
-    [ "Generator", "class_generator.html", "class_generator" ],
     [ "IPTableEntry", "class_i_p_table_entry.html", "class_i_p_table_entry" ],
     [ "MountCleanUpHandler", "class_mount_clean_up_handler.html", "class_mount_clean_up_handler" ],
     [ "Netlink", "class_netlink.html", "class_netlink" ],

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-afc34b9 2016-11-10</span>
+   &#160;<span id="projectnumber">0.9.1-8639fe0 2016-11-21</span>
    </div>
   </td>
  </tr>
@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('softwarecontainer_8h_source.html','');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;PCL&quot;</span>, <span class="stringliteral">&quot;SoftwareContainer library&quot;</span>);</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a>(std::shared_ptr&lt;Workspace&gt; workspace, <span class="keyword">const</span> std::string &amp;<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a>(std::shared_ptr&lt;Workspace&gt; workspace, <span class="keyword">const</span> ContainerID <span class="keywordtype">id</span>);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a>();</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
@@ -159,26 +159,27 @@ $(document).ready(function(){initNavTree('softwarecontainer_8h_source.html','');
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    std::shared_ptr&lt;Workspace&gt; m_workspace;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    std::string m_containerName;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_observable_writable_property.html">ObservableWritableProperty&lt;ContainerState&gt;</a> m_containerState;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; m_container;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    pid_t m_pcPid = INVALID_PID;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    std::vector&lt;std::unique_ptr&lt;Gateway&gt;&gt; m_gateways;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    Glib::RefPtr&lt;Glib::MainContext&gt; m_mainLoopContext;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_signal_connections_handler.html">SignalConnectionsHandler</a> m_connections;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">bool</span> m_initialized = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;};</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00176">softwarecontainer.cpp:176</a></div></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    ContainerID m_containerID;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::string m_containerName;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_observable_writable_property.html">ObservableWritableProperty&lt;ContainerState&gt;</a> m_containerState;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; m_container;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    pid_t m_pcPid = INVALID_PID;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    std::vector&lt;std::unique_ptr&lt;Gateway&gt;&gt; m_gateways;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    Glib::RefPtr&lt;Glib::MainContext&gt; m_mainLoopContext;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_signal_connections_handler.html">SignalConnectionsHandler</a> m_connections;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">bool</span> m_initialized = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;};</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00198">softwarecontainer.cpp:198</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_observable_writable_property_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_observable_writable_property.html">softwarecontainer::ObservableWritableProperty&lt; ContainerState &gt;</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a99978224d29f4d27d1801d02f44bfde6"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a99978224d29f4d27d1801d02f44bfde6">softwarecontainer::SoftwareContainer::preload</a></div><div class="ttdeci">ReturnCode preload()</div><div class="ttdoc">Preload the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00076">softwarecontainer.cpp:76</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a84a34e91e09b30a2f62b25e0b3926a6d"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d">softwarecontainer::SoftwareContainer::setMainLoopContext</a></div><div class="ttdeci">void setMainLoopContext(Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext)</div><div class="ttdoc">Set the main loop. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00065">softwarecontainer.cpp:65</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a99978224d29f4d27d1801d02f44bfde6"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a99978224d29f4d27d1801d02f44bfde6">softwarecontainer::SoftwareContainer::preload</a></div><div class="ttdeci">ReturnCode preload()</div><div class="ttdoc">Preload the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00084">softwarecontainer.cpp:84</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a84a34e91e09b30a2f62b25e0b3926a6d"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d">softwarecontainer::SoftwareContainer::setMainLoopContext</a></div><div class="ttdeci">void setMainLoopContext(Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext)</div><div class="ttdoc">Set the main loop. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00073">softwarecontainer.cpp:73</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_observable_property_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_observable_property.html">softwarecontainer::ObservableProperty&lt; ContainerState &gt;</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_signal_connections_handler_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_signal_connections_handler.html">softwarecontainer::SignalConnectionsHandler</a></div><div class="ttdoc">The SignalConnectionsHandler class contains references to sigc++ connections and automatically discon...</div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00107">softwarecontainer-common.h:107</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_af928f299cf15ecda5f625eaecd518f57"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#af928f299cf15ecda5f625eaecd518f57">softwarecontainer::SoftwareContainer::setGatewayConfigs</a></div><div class="ttdeci">void setGatewayConfigs(const GatewayConfiguration &amp;configs)</div><div class="ttdoc">Set the gateway configuration and activate them. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00151">softwarecontainer.cpp:151</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_af928f299cf15ecda5f625eaecd518f57"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#af928f299cf15ecda5f625eaecd518f57">softwarecontainer::SoftwareContainer::setGatewayConfigs</a></div><div class="ttdeci">void setGatewayConfigs(const GatewayConfiguration &amp;configs)</div><div class="ttdoc">Set the gateway configuration and activate them. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00173">softwarecontainer.cpp:173</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html">softwarecontainer::FileToolkitWithUndo</a></div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8h_source.html#l00028">filetoolkitwithundo.h:28</a></div></div>
 <div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00041">gateway.h:41</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html">softwarecontainer::SoftwareContainer</a></div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8h_source.html#l00037">softwarecontainer.h:37</a></div></div>
@@ -189,7 +190,7 @@ $(document).ready(function(){initNavTree('softwarecontainer_8h_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><b>softwarecontainer.h</b></li>
-    <li class="footer">Generated on Thu Nov 10 2016 13:08:21 for softwarecontainer by
+    <li class="footer">Generated on Mon Nov 21 2016 13:33:15 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

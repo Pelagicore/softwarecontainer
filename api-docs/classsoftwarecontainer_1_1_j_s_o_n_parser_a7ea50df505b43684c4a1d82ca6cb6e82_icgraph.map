@@ -1,13 +1,5 @@
 <map id="softwarecontainer::JSONParser::read" name="softwarecontainer::JSONParser::read">
-<area shape="rect" id="node2" href="$class_network_gateway_parser.html#ad6e18790fde52761a094651adcfd2c36" title="Parses NetworkGateway configuration into IPTableEntry. " alt="" coords="187,5,427,47"/>
-<area shape="rect" id="node4" href="$class_environment_gateway.html#a6d276aa7c522c95276243f327f49abae" title="Gateway specific parsing of config elements. " alt="" coords="233,71,380,112"/>
-<area shape="rect" id="node5" href="$class_wayland_gateway.html#aa5d2ff63631d237339cd7ec7b25f7517" title="Gateway specific parsing of config elements. " alt="" coords="209,136,405,177"/>
-<area shape="rect" id="node6" href="$class_cgroups_gateway.html#a6b77885877877af00df49b5aa539592d" title="Gateway specific parsing of config elements. " alt="" coords="209,201,404,243"/>
-<area shape="rect" id="node7" href="$class_file_gateway.html#a4b3a520a2cce350f9b143138fe47ae29" title="Gateway specific parsing of config elements. " alt="" coords="199,267,414,294"/>
-<area shape="rect" id="node8" href="$class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca" title="Gateway specific parsing of config elements. " alt="" coords="217,319,396,360"/>
-<area shape="rect" id="node9" href="$class_device_node_gateway.html#a2dd67af3fe7d8a0fcd26abde8c1e3e74" title="Gateway specific parsing of config elements. " alt="" coords="229,384,384,425"/>
-<area shape="rect" id="node10" href="$classsoftwarecontainer_1_1_software_container_agent.html#aab15b844d7ed80339448a2005ea1cc9d" title="Tries to read a config in json format for a container. " alt="" coords="225,449,389,505"/>
-<area shape="rect" id="node3" href="$class_network_gateway.html#a255e2b6c7d6b5b50fd2e096850c6f29c" title="Gateway specific parsing of config elements. " alt="" coords="475,5,669,47"/>
-<area shape="rect" id="node11" href="$classsoftwarecontainer_1_1_software_container_agent.html#a990e86f21dead80c727462618ecf0e91" title="Parse config needed for starting up the container in a correct manner. " alt="" coords="490,449,654,505"/>
-<area shape="rect" id="node12" href="$classsoftwarecontainer_1_1_software_container_agent.html#ac5cafaf71af5858bb97f84c6fe1de917" title="Create a new container. " alt="" coords="717,449,881,505"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#aab15b844d7ed80339448a2005ea1cc9d" title="Tries to read a config in json format for a container. " alt="" coords="187,5,351,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a990e86f21dead80c727462618ecf0e91" title="Parse config needed for starting up the container in a correct manner. " alt="" coords="399,5,563,61"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#ac5cafaf71af5858bb97f84c6fe1de917" title="Create a new container. " alt="" coords="611,5,775,61"/>
 </map>

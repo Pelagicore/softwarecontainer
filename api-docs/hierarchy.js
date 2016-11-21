@@ -19,7 +19,16 @@ var hierarchy =
       [ "softwarecontainer::SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", null ],
       [ "softwarecontainer::Workspace", "classsoftwarecontainer_1_1_workspace.html", null ]
     ] ],
-    [ "Generator", "class_generator.html", null ],
+    [ "Gateway", "class_gateway.html", [
+      [ "CgroupsGateway", "class_cgroups_gateway.html", null ],
+      [ "DBusGateway", "class_d_bus_gateway.html", null ],
+      [ "DeviceNodeGateway", "class_device_node_gateway.html", null ],
+      [ "EnvironmentGateway", "class_environment_gateway.html", null ],
+      [ "FileGateway", "class_file_gateway.html", null ],
+      [ "NetworkGateway", "class_network_gateway.html", null ],
+      [ "PulseGateway", "class_pulse_gateway.html", null ],
+      [ "WaylandGateway", "class_wayland_gateway.html", null ]
+    ] ],
     [ "IntrospectableAdaptor", null, [
       [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
     ] ],
@@ -31,21 +40,9 @@ var hierarchy =
       [ "softwarecontainer::CommandJob", "classsoftwarecontainer_1_1_command_job.html", null ],
       [ "softwarecontainer::FunctionJob", "classsoftwarecontainer_1_1_function_job.html", null ]
     ] ],
-    [ "softwarecontainer::JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", [
-      [ "Gateway", "class_gateway.html", [
-        [ "CgroupsGateway", "class_cgroups_gateway.html", null ],
-        [ "DBusGateway", "class_d_bus_gateway.html", null ],
-        [ "DeviceNodeGateway", "class_device_node_gateway.html", null ],
-        [ "EnvironmentGateway", "class_environment_gateway.html", null ],
-        [ "FileGateway", "class_file_gateway.html", null ],
-        [ "NetworkGateway", "class_network_gateway.html", null ],
-        [ "PulseGateway", "class_pulse_gateway.html", null ],
-        [ "WaylandGateway", "class_wayland_gateway.html", null ]
-      ] ],
-      [ "NetworkGatewayParser", "class_network_gateway_parser.html", null ],
-      [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ]
-    ] ],
+    [ "softwarecontainer::JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", null ],
     [ "Netlink", "class_netlink.html", null ],
+    [ "NetworkGatewayParser", "class_network_gateway_parser.html", null ],
     [ "ObjectAdaptor", null, [
       [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
     ] ],
@@ -66,6 +63,7 @@ var hierarchy =
     [ "RecursiveCopy", "class_recursive_copy.html", null ],
     [ "IPTableEntry::Rule", "struct_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
+    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "SoftwareContainerAgent_adaptor", null, [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", [
         [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
