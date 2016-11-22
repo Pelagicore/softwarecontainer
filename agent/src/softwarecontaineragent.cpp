@@ -354,7 +354,7 @@ bool SoftwareContainerAgent::resumeContainer(ContainerID containerID)
 
 std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID,
                                                                const std::string &pathInHost,
-                                                               const std::string &subPathInContainer,
+                                                               const std::string &pathInContainer,
                                                                bool readOnly)
 {
     profilefunction("bindMountFolderInContainerFunction");
@@ -364,14 +364,13 @@ std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID
         return "";
     }
 
-    std::string path;
-    ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, subPathInContainer, path, readOnly);
+    ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
     if (isError(result)) {
-        log_error() << "Unable to bind mount folder " << pathInHost << " to " << subPathInContainer;
+        log_error() << "Unable to bind mount folder " << pathInHost << " to " << pathInContainer;
         return "";
     }
 
-    return path;
+    return pathInContainer;
 }
 
 bool SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID,

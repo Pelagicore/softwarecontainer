@@ -126,19 +126,19 @@ Bind mount a directory inside the container::
     --method com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer \
     0 \
     "/home/vagrant/softwarecontainer" \
-    "app" \
+    "/app" \
     false
 
 Parameters:
  * ``containerID`` - a int32 with the ID of the created container, as returned by the ``CreateContainer`` method.
  * ``pathInHost`` - a string with the host path of the directory to be bind mounted into the container. The host path must exist before running the command.
- * ``subPathInContainer`` - a string with the subpath that will be appended to ``/gateways`` inside the container.
+ * ``pathInContainer`` - a string representing the absolute mount path inside the container.
  * ``readOnly`` - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.
 
 The method assumes the path ``pathInHost`` exists, so choose another path if it is more convenient.
 The result of the method is that the content of '/home/vagrant/softwarecontainer' will be
-visible in the path ``/gateways/app`` inside the container. The actual location on the host can be found in
-``/tmp/container/SC-<container ID>/gateways/`` where the created ``app`` directory will be.
+visible in the path ``/app`` inside the container. The actual location on the host can be found in
+``/tmp/container/SC-<container ID>/`` where the created ``app`` directory will be.
 
 
 Launch something in the container::
@@ -150,7 +150,7 @@ Launch something in the container::
     0 \
     0 \
     "touch hello" \
-    "/gateways/app" \
+    "/app" \
     "" \
     '{"": ""}'
 
@@ -164,7 +164,7 @@ Parameters:
 
 The method returns the PID of the process run inside the container.
 
-The above method call results in a file ``hello`` being created inside the conainer in ``/gateways/app/``. This can
+The above method call results in a file ``hello`` being created inside the conainer in ``/app/``. This can
 also be seen in the bind mounted location ``/home/vagrant/softwarecontainer/``.
 
 Suspend the container::

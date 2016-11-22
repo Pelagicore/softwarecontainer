@@ -202,8 +202,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     close(fd2);
 
     // They will be mapped to these files
-    std::string containerPath1 = "testFile1";
-    std::string containerPath2 = "testFile2";
+    std::string containerPath1 = "/tmp/testFile1";
+    std::string containerPath2 = "/tmp/testFile2";
 
     // tempFilename2 will be symlinked into the container, so it will be
     // available at the same path inside as outside. Make sure it's not
@@ -325,8 +325,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     close(fd2);
 
     // They will be mapped to these files
-    std::string containerPath1 = "testFile1";
-    std::string containerPath2 = "testFile2";
+    std::string containerPath1 = "/tmp/testFile1";
+    std::string containerPath2 = "/tmp/testFile2";
 
     // tempFilename2 will be symlinked into the container, so it will be
     // available at the same path inside as outside. Make sure it's not
@@ -442,12 +442,11 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     job1.start();
     ASSERT_EQ(job1.wait(), NON_EXISTENT);
 
-    std::string pathInContainer;
-    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(tempFilename, basename(strdup(tempFilename)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(tempFilename, tempFilename, true);
     ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getSc(), [&] () {
-        return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
+        return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
     });
     job2.start();
     ASSERT_EQ(job2.wait(), EXISTENT);
@@ -470,12 +469,11 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     job1.start();
     ASSERT_EQ(job1.wait(), NON_EXISTENT);
 
-    std::string pathInContainer;
-    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, tempDirname, false);
     ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getSc(), [&] () {
-        return isDirectory(pathInContainer) ? EXISTENT : NON_EXISTENT;
+        return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
     });
     job2.start();
     ASSERT_EQ(job2.wait(), EXISTENT);
@@ -489,7 +487,8 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     ASSERT_TRUE(isFile(tempFilename));
 
     FunctionJob job3(getSc(), [&] () {
-                return isFile(pathInContainer + "/" + basename(strdup(tempFilename))) ? EXISTENT : NON_EXISTENT;
+                std::string td(tempDirname);
+                return isFile(td) ? EXISTENT : NON_EXISTENT;
             });
     job3.start();
     ASSERT_EQ(job3.wait(), EXISTENT);
@@ -507,15 +506,12 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    std::string pathInContainer;
-    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, basename(strdup(tempDirname)), pathInContainer, false);
+    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, tempDirname, false);
     ASSERT_TRUE(isSuccess(result));
 
-    char *tmp = new char[pathInContainer.size() + 8];
-    std::copy(pathInContainer.begin(), pathInContainer.end(), tmp);
-    tmp[pathInContainer.size()] = '\0';
+    char *tmp = new char[strlen(tempDirname) + 8];
+    strcpy(tmp, tempDirname);
     char *tempUnixSocket = strcat(tmp, "/socket");
-
 
     FunctionJob job1(getSc(), [&] () {
 
@@ -552,51 +548,48 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     pid_t forkpid = fork();
 
-    if(forkpid >= 0) // fork was successful
-    {
-        if(forkpid == 0) // child process
-        {
-            int s, len;
-            struct sockaddr_un remote;
-            char str[] = "TestData";
-
-            sleep(1);
-
-            if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
-                _exit(NON_EXISTENT);
-            }
-
-            char *x = new char[strlen(tempDirname) + 8];
-            strcpy(x, tempDirname);
-            strcat(x, "/socket");
-
-            remote.sun_family = AF_UNIX;
-            strcpy(remote.sun_path, x);
-            len = strlen(remote.sun_path) + sizeof(remote.sun_family);
-            if (connect(s, (struct sockaddr *)&remote, len) == -1) {
-                _exit(NON_EXISTENT);
-            }
-
-
-            if (send(s, str, strlen(str), 0) == -1) {
-                _exit(NON_EXISTENT);
-            }
-
-            close(s);
-            _exit(EXISTENT);
-        }
-        else //Parent process
-        {
-            job1.start();
-            ASSERT_EQ(job1.wait(), EXISTENT);
-        }
-    }
-    else // fork failed
+    if(forkpid < 0)
     {
         printf("\n Fork failed, quitting!!!!!!\n");
         return;
     }
 
+    if(forkpid == 0) // child process
+    {
+        int s, len;
+        struct sockaddr_un remote;
+        char str[] = "TestData";
+
+        sleep(1);
+
+        if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
+            _exit(NON_EXISTENT);
+        }
+
+        char *x = new char[strlen(tempDirname) + 8];
+        strcpy(x, tempDirname);
+        strcat(x, "/socket");
+
+        remote.sun_family = AF_UNIX;
+        strcpy(remote.sun_path, x);
+        len = strlen(remote.sun_path) + sizeof(remote.sun_family);
+        if (connect(s, (struct sockaddr *)&remote, len) == -1) {
+            _exit(NON_EXISTENT);
+        }
+
+
+        if (send(s, str, strlen(str), 0) == -1) {
+            _exit(NON_EXISTENT);
+        }
+
+        close(s);
+        _exit(EXISTENT);
+    }
+    else //Parent process
+    {
+        job1.start();
+        ASSERT_EQ(job1.wait(), EXISTENT);
+    }
 }
 
 
@@ -642,21 +635,19 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     setGatewayConfigs(config);
 
     // We need access to the test file, so we bind mount it
-    std::string soundFileCPP = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
-    const char *soundFile = soundFileCPP.c_str();
+    std::string soundFile = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
 
-    std::string pathInContainer;
-    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(soundFile, basename(strdup(soundFile)), pathInContainer, true);
+    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(soundFile, soundFile, true);
     ASSERT_TRUE(isSuccess(result));
 
     // Make sure the file is there
     FunctionJob job1(getSc(), [&] () {
-        return isFile(pathInContainer) ? EXISTENT : NON_EXISTENT;
+        return isFile(soundFile) ? EXISTENT : NON_EXISTENT;
     });
     job1.start();
     ASSERT_EQ(job1.wait(), EXISTENT);
 
-    CommandJob job2(getSc(), "/usr/bin/paplay " + pathInContainer);
+    CommandJob job2(getSc(), "/usr/bin/paplay " + soundFile);
     job2.start();
     ASSERT_TRUE(job2.isRunning());
     ASSERT_EQ(job2.wait(), 0);

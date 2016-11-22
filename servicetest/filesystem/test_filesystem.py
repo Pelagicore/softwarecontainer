@@ -36,7 +36,7 @@ def logfile_path():
 
 DATA = {
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
-    Container.BIND_MOUNT_DIR: "app",
+    Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
 }

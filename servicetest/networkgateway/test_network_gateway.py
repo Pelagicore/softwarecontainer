@@ -48,7 +48,7 @@ def mounted_path_in_host():
 # update entries can simply base their dict on this one for convenience.
 DATA = {
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
-    Container.BIND_MOUNT_DIR: "app",
+    Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
 }

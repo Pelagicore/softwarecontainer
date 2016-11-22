@@ -42,27 +42,31 @@ ReturnCode PulseGateway::readConfigElement(const json_t *element)
 
 bool PulseGateway::activateGateway()
 {
-    if (m_enableAudio) {
-        log_debug() << "Audio will be enabled";
-        const char *dir = getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME);
-        if (dir != nullptr) {
-            log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
-            std::string path;
-            ReturnCode result = getContainer()->bindMountFileInContainer(dir, SOCKET_FILE_NAME, path, false);
-            if (isError(result)) {
-                log_error() << "Could not bind mount pulseaudio socket in container";
-                return false;
-            }
-
-            std::string unixPath = "unix:" + path;
-            setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath );
-        } else {
-            log_error() << "Should enable pulseaudio gateway, but " << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
-            return false;
-        }
-    } else {
+    if (!m_enableAudio) {
         log_debug() << "Audio will be disabled";
+        return true;
     }
+
+    log_debug() << "Audio will be enabled";
+    const char *dir = getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME);
+
+    if (dir == nullptr) {
+        log_error() << "Should enable pulseaudio gateway, but "
+                    << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
+        return false;
+    }
+
+    log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
+    std::string pathInContainer = "/gateways/" + std::string(SOCKET_FILE_NAME);
+    ReturnCode result = getContainer()->bindMountFileInContainer(std::string(dir), pathInContainer, false);
+
+    if (isError(result)) {
+        log_error() << "Could not bind mount pulseaudio socket in container";
+        return false;
+    }
+
+    std::string unixPath = "unix:" + pathInContainer;
+    setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath );
     return true;
 }
 

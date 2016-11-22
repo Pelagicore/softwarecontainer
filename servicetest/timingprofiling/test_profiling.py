@@ -63,7 +63,7 @@ def run_test(num_starts=3):
             # A basic container configuration, content is not important for this test.
             container_data = {
                 Container.CONFIG: '[{"enableWriteBuffer": false}]',
-                Container.BIND_MOUNT_DIR: "app",
+                Container.BIND_MOUNT_DIR: "/gateways/app",
                 Container.HOST_PATH: CURRENT_DIR,
                 Container.READONLY: False
             }

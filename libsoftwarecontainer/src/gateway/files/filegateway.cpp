@@ -69,22 +69,20 @@ bool FileGateway::activateGateway()
 
 std::string FileGateway::bindMount(const FileGatewayParser::FileSetting &setting)
 {
-    std::string path;
-
     if (isDirectory(setting.pathInHost)) {
         if (isError(getContainer()->bindMountFolderInContainer(setting.pathInHost,
-                                                    setting.pathInContainer, path,
+                                                    setting.pathInContainer,
                                                     setting.readOnly))) {
             log_error() << "Could not bind mount folder into container";
         }
     } else {
         if (isError(getContainer()->bindMountFileInContainer(setting.pathInHost,
-                                                  setting.pathInContainer, path,
+                                                  setting.pathInContainer,
                                                   setting.readOnly))) {
             log_error() << "Could not bind mount file into container";
         }
     }
-    return path;
+    return setting.pathInContainer;
 }
 
 bool FileGateway::teardownGateway()

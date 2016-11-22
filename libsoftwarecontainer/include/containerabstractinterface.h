@@ -52,22 +52,32 @@ public:
 
     virtual ReturnCode mountDevice(const std::string &pathInHost) = 0;
     virtual ReturnCode createSymLink(const std::string &source, const std::string &destination) = 0;
-    virtual ReturnCode bindMountFileInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true) = 0;
 
     /**
-     * @brief Bind mount a directory from the host into the container.
+     * @brief Tries to bind mount a file in the container
      *
-     * Bind mount src to dst (relative to /gateways in container), e.g. passing '/home/foo/temp' as src and
-     * 'app' as dst, the resulting path inside the container will be '/gateways/app' and contain whatever is
-     * in '/home/foo/temp' on the host.
+     * This will not create parent directories if they are not already present.
      *
-     * 'src' and 'dst' can be any value but there might be issues if something like '..' is used.
+     * @param pathOnHost The path to the file that shall be bind mounted on the host system.
+     * @param pathInContainer Where to mount the file in the container.
+     * @param readonly Sets if the mount should be read only or read write
      *
-     * If 'readonly' is set to 'true' the mount is read only.
-     *
-     * The resulting path is written to the 'result' out-parameter.
+     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
      */
-    virtual ReturnCode bindMountFolderInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true) = 0;
+    virtual ReturnCode bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true) = 0;
+
+    /**
+     * @brief Tries to bind mount a directory in the container
+     *
+     * Will create missing parent directories.
+     *
+     * @param pathOnHost The path to the directory that shall be bind mounted on the host system.
+     * @param pathInContainer Where to mount the file in the container.
+     * @param readonly Sets if the mount should be read only or read write
+     *
+     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
+     */
+    virtual ReturnCode bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true) = 0;
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) = 0;
     virtual ReturnCode setCgroupItem(std::string subsys, std::string value) = 0;

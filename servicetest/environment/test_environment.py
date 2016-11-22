@@ -85,7 +85,7 @@ def create_testoutput_dir(scope="module"):
 # update entries can simply base their dict on this one for convenience.
 DATA = {
     Container.CONFIG: "[{\"enableWriteBuffer\": false}]",
-    Container.BIND_MOUNT_DIR: "app",
+    Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: HOST_PATH,
     Container.READONLY: False
 }
