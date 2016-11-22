@@ -21,11 +21,12 @@
 
 #include "softwarecontainer_test.h"
 
-#include "gateway/dbusgateway.h"
-#include "gateway/waylandgateway.h"
-#include "gateway/network/networkgateway.h"
 #include "gateway/pulsegateway.h"
+#include "gateway/waylandgateway.h"
+#include "gateway/dbus/dbusgateway.h"
+#include "gateway/network/networkgateway.h"
 #include "gateway/files/filegateway.h"
+
 #include "functionjob.h"
 #include "commandjob.h"
 

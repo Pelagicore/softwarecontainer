@@ -20,6 +20,7 @@
 
 
 #include "dbusgateway.h"
+#include "dbusgatewayparser.h"
 
 DBusGateway::DBusGateway(ProxyType type
                        , const std::string &gatewayDir
@@ -44,51 +45,16 @@ DBusGateway::~DBusGateway()
     }
 }
 
-static constexpr const char *SESSION_CONFIG = "dbus-gateway-config-session";
-static constexpr const char *SYSTEM_CONFIG = "dbus-gateway-config-system";
 
 ReturnCode DBusGateway::readConfigElement(const json_t *element)
 {
-    bool has_session, has_system = false;
+    DBusGatewayParser parser;
 
-    // First, parse session bus configuration
-    json_t *sessionConfig = json_object_get(element, SESSION_CONFIG);
-    if (sessionConfig) {
-        has_session = true;
-        if (!json_is_array(sessionConfig)) {
-            log_error() << "Value for " << SESSION_CONFIG << " is not an array";
-            return ReturnCode::FAILURE;
-        }
-
-        for (unsigned int i = 0; i < json_array_size(sessionConfig); i++) {
-            json_t *child = json_array_get(sessionConfig, i);
-            // TODO: Error checking here, so that dbus-proxy can accept config
-            json_array_append(m_sessionBusConfig, json_deep_copy(child));
-        }
-    }
-
-    // Then, parse system bus configuration
-    json_t *systemConfig = json_object_get(element, SYSTEM_CONFIG);
-    if (systemConfig) {
-        has_system = true;
-        if (!json_is_array(systemConfig)) {
-            log_error() << "Value for " << SYSTEM_CONFIG << " is not an array";
-            return ReturnCode::FAILURE;
-        }
-
-        for (unsigned int i = 0; i < json_array_size(systemConfig); i++) {
-            json_t *child = json_array_get(systemConfig, i);
-            // TODO: Error checking here, so that dbus-proxy can accept config
-            json_array_append(m_systemBusConfig, json_deep_copy(child));
-        }
-    }
-
-    if (!has_session && !has_system) {
-        log_error() << "Neither system nor session configuration was provided";
+    if (isError(parser.parseDBusConfigElement(element, m_sessionBusConfig, m_systemBusConfig))) {
+        log_error() << "Failed to parse DBus configuration element";
         return ReturnCode::FAILURE;
     }
 
-    m_state = GatewayState::CONFIGURED;
     return ReturnCode::SUCCESS;
 }
 
@@ -124,8 +90,8 @@ bool DBusGateway::activateGateway()
 
     // Write configuration
     json_t *jsonConfig = json_object();
-    json_object_set(jsonConfig, SESSION_CONFIG, m_sessionBusConfig);
-    json_object_set(jsonConfig, SYSTEM_CONFIG, m_systemBusConfig);
+    json_object_set(jsonConfig, DBusGatewayParser::SESSION_CONFIG, m_sessionBusConfig);
+    json_object_set(jsonConfig, DBusGatewayParser::SYSTEM_CONFIG, m_systemBusConfig);
 
     char *config_c = json_dumps(jsonConfig, JSON_COMPACT);
     std::string config = std::string(config_c);
