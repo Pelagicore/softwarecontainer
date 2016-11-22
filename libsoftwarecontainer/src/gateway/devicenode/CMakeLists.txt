@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -16,33 +15,10 @@
 #
 # For further information see LICENSE
 
+message(STATUS "Compiling with gateway support for device nodes")
 
-# Enable or disable support for gateways compile-time.
-set(GATEWAY_SOURCES "")
-set(GATEWAY_DEFINITIONS "")
-
-add_subdirectory(gateway)
-add_definitions(${GATEWAY_DEFINITIONS})
-
-add_library(softwarecontainerlib SHARED
-    container.cpp
-    softwarecontainer.cpp
-    workspace.cpp
-    jobs/jobabstract.cpp
-    jobs/functionjob.cpp
-    jobs/commandjob.cpp
-    ${GATEWAY_SOURCES}
+set(DEVICENODE_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/devicenodegateway.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/devicenodeparser.cpp
+    PARENT_SCOPE
 )
-
-TARGET_LINK_LIBRARIES(softwarecontainerlib
-    softwarecontainercommon
-    ${DBusCpp_LIBRARIES}
-    ${Glibmm_LIBRARIES}
-    ${LXC_LIBRARIES}
-    ${Jansson_LIBRARIES}
-)
-
-include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
-
-install(TARGETS softwarecontainerlib DESTINATION lib)
-set_target_properties(softwarecontainerlib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
