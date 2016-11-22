@@ -21,6 +21,7 @@
 
 #include "softwarecontainer_test.h"
 
+
 void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
 {
     sc->addGateway(gw);
@@ -41,8 +42,19 @@ void SoftwareContainerTest::SetUp()
 {
     ::testing::Test::SetUp();
     ASSERT_NO_THROW({
-        workspace = std::make_shared<Workspace>(false);
+        workspace = std::make_shared<Workspace>();
     });
+
+    /* Set up the workspace with all the config values it needs.
+     *
+     * NOTE: This could be done more nicely perhaps, but the workspace will get an overhaul
+     *       or be removed, so pending that design change this is a workaround.
+     */
+    workspace->m_enableWriteBuffer = false;
+    workspace->m_containerRootDir = SHARED_MOUNTS_DIR_TESTING; // Should be set be CMake
+    workspace->m_containerConfigPath = LXC_CONFIG_PATH_TESTING; // Should be set be CMake
+    workspace->m_containerShutdownTimeout = 1;
+
     srand(time(NULL));
     uint32_t containerId =  rand() % 100;
     sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace, containerId));

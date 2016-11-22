@@ -100,6 +100,17 @@ TEST_F(SoftwareContainerApp, TestWayland) {
 TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
 
     std::shared_ptr<Workspace> workspace = std::make_shared<Workspace>();
+
+    /* Set up the workspace with all the config values it needs.
+     *
+     * NOTE: This could be done more nicely perhaps, but the workspace will get an overhaul
+     *       or be removed, so pending that design change this is a workaround.
+     */
+    workspace->m_enableWriteBuffer = false;
+    workspace->m_containerRootDir = SHARED_MOUNTS_DIR_TESTING; // Should be set be CMake
+    workspace->m_containerConfigPath = LXC_CONFIG_PATH_TESTING; // Should be set be CMake
+    workspace->m_containerShutdownTimeout = 1;
+
     const ContainerID id = 1;
 
     SoftwareContainer s1(workspace, id);

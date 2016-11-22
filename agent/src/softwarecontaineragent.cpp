@@ -20,20 +20,42 @@
 #include "softwarecontaineragent.h"
 #include <cstdint>
 
+
 SoftwareContainerAgent::SoftwareContainerAgent(
         Glib::RefPtr<Glib::MainContext> mainLoopContext,
-        int preloadCount,
-        bool shutdownContainers,
-        int shutdownTimeout,
-        const std::string &configPath)
-    : m_mainLoopContext(mainLoopContext)
-    , m_preloadCount(preloadCount)
-    , m_shutdownContainers(shutdownContainers)
+        const Config &config):
+    m_mainLoopContext(mainLoopContext)
 {
     m_containerIdPool.push_back(0);
 
+    // Get all configs for this objects members
+    try {
+        m_preloadCount = config.getIntegerValue(Config::SC_GROUP, Config::PRELOAD_COUNT);
+        //TODO: the inversion of the value here should be worked away,
+        //      but doesn't seem to work anyway, see bug
+        m_shutdownContainers = !config.getBooleanValue(Config::SC_GROUP, Config::KEEP_ALIVE);
+    } catch (softwarecontainer::ConfigError &error) {
+        throw ReturnCode::FAILURE;
+    }
+
+    // Get all configs for the workspace
+    int shutdownTimeout;
+    std::string containerRootDir;
+    std::string lxcConfigPath;
+    try {
+        shutdownTimeout = config.getIntegerValue(Config::SC_GROUP, Config::SHUTDOWN_TIMEOUT);
+        containerRootDir = config.getStringValue(Config::SC_GROUP, Config::SHARED_MOUNTS_DIR);
+        lxcConfigPath = config.getStringValue(Config::SC_GROUP, Config::LXC_CONFIG_PATH);
+    } catch (softwarecontainer::ConfigError &error) {
+        throw ReturnCode::FAILURE;
+    }
+
+    // Create and set all values on workspace
     try {
         m_softwarecontainerWorkspace = std::make_shared<Workspace>();
+        m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
+        m_softwarecontainerWorkspace->m_containerRootDir = containerRootDir;
+        m_softwarecontainerWorkspace->m_containerConfigPath = lxcConfigPath;
         m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
     } catch (ReturnCode err) {
         log_error() << "Failed to set up workspace";
@@ -45,14 +67,25 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         throw ReturnCode::FAILURE;
     }
 
+    // Get all configs for the config stores
+    std::string serviceManifestDir;
+    std::string defaultServiceManifestDir;
     try {
-        m_filteredConfigStore = std::make_shared<FilteredConfigStore>(CAPABILITIES_DIR);
-        m_defaultConfigStore = std::make_shared<DefaultConfigStore>(DEFAULT_CAPABILITIES_DIR);
+        serviceManifestDir = config.getStringValue(Config::SC_GROUP,
+                                                   Config::SERVICE_MANIFEST_DIR);
+        defaultServiceManifestDir = config.getStringValue(Config::SC_GROUP,
+                                                          Config::DEFAULT_SERVICE_MANIFEST_DIR);
+    } catch (softwarecontainer::ConfigError &error) {
+        throw ReturnCode::FAILURE;
+    }
+
+    try {
+        m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
+        m_defaultConfigStore = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
     } catch (ReturnCode err) {
         log_error() << "Failed to initialize ConfigStore";
         throw ReturnCode::FAILURE;
     }
-
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()

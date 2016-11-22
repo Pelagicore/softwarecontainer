@@ -163,6 +163,12 @@ if(ENABLE_COVERAGE)
     add_coverage()
 endif(ENABLE_COVERAGE)
 
+# Set and define the path to the general config file, used by the agent
+# as default location if nothing else is set on command line when starting
+# the agent.
+set(SC_CONFIG_FILE ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer/softwarecontainer-config)
+add_definitions(-DSC_CONFIG_FILE="${SC_CONFIG_FILE}")
+
 #
 # Network related options
 #
@@ -211,13 +217,20 @@ endif()
 #
 # General configuration file
 #
-configure_file(softwarecontainer-config.h.in softwarecontainer-config.h @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.h DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/softwarecontainer)
+set(SHARED_MOUNTS_DIR "/tmp/container/")
+set(LXC_CONFIG_PATH "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer.conf")
+set(SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.d/")
+set(DEFAULT_SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.default.d/")
+
+# NOTE: These definitons are only set because the "middle layer" tests currently need to create a Workspace
+#       with valid values, see the setup code of SoftwareContainerTest test class.
+add_definitions(-DSHARED_MOUNTS_DIR_TESTING="${SHARED_MOUNTS_DIR}")
+add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
+
 
 #
 # Add all sub-projects
 #
-
 add_subdirectory(common)
 add_subdirectory(libsoftwarecontainer)
 
