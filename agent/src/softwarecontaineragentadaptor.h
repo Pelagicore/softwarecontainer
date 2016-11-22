@@ -17,8 +17,7 @@
  * For further information see LICENSE
  */
 
-#ifndef SOFTWARECONTAINERAGENTADAPTOR_H
-#define SOFTWARECONTAINERAGENTADAPTOR_H
+#pragma once
 
 #include "softwarecontaineragent.h"
 
@@ -89,4 +88,3 @@ public:
     }
 };
 
-#endif // SOFTWARECONTAINERAGENTADAPTOR_H

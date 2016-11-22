@@ -18,9 +18,8 @@
  * For further information see LICENSE
  */
 
+#pragma once
 
-#ifndef DEVICENODEGATEWAY_H
-#define DEVICENODEGATEWAY_H
 #include "jansson.h"
 #include "softwarecontainer-common.h"
 
@@ -81,5 +80,3 @@ private:
     bool checkIsStrValid(std::string intStr, std::string name, std::string notSpecified);
 
 };
-
-#endif /* DEVICENODEGATEWAY_H */
