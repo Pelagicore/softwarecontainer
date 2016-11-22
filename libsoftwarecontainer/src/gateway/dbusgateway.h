@@ -18,9 +18,7 @@
  * For further information see LICENSE
  */
 
-
-#ifndef DBUSGATEWAY_H
-#define DBUSGATEWAY_H
+#pragma once
 
 #include "gateway.h"
 
@@ -106,4 +104,3 @@ private:
     virtual bool testDBusConnection(const std::string &config);
 };
 
-#endif /* DBUSGATEWAY_H */

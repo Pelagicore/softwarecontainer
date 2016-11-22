@@ -18,9 +18,7 @@
  * For further information see LICENSE
  */
 
-
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -233,4 +231,3 @@ private:
     ContainerState m_state = ContainerState::DEFAULT;
 };
 
-#endif //CONTAINER_H
