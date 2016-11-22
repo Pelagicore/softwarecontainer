@@ -43,11 +43,11 @@ public:
      * @param containerRootDir The path at which the container resides in the host system
      * @param containerConfigPath The path to the configuration lxc
      * @param containerShutdownTimeout The timeout time for the softwarecontainer
+     *
+     * TODO: Remove the abouve param docs if the resulting workspace design
+     *       means we use the default constructor.
      */
-    Workspace(bool enableWriteBuffer = false,
-              const std::string &containerRootDir = SOFTWARECONTAINER_DEFAULT_WORKSPACE,
-              const std::string &containerConfigPath = SOFTWARECONTAINER_DEFAULT_CONFIG,
-              unsigned int containerShutdownTimeout = 1);
+    Workspace();
 
     ~Workspace();
 

@@ -50,9 +50,9 @@ set(SOFTWARECONTAINERAGENT_TEST_FILES
 set(CONFIGSTORE_TEST_FILES
     main.cpp
     configstore_unittest.cpp
+    config_unittest.cpp
     ${SOFTWARECONTAINERAGENT_CORE_CLASSES}
 )
-
 
 add_gtest_test(softwarecontaineragenttest
     "${SOFTWARECONTAINERAGENT_TEST_FILES}"

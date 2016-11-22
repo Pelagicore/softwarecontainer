@@ -21,13 +21,7 @@ generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "
 
 set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(CAPABILITIES_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/caps.d/" PARENT_SCOPE)
-set(DEFAULT_CAPABILITIES_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/caps.default.d/" PARENT_SCOPE)
-
-add_definitions(-DCAPABILITIES_DIR="${CAPABILITIES_DIR}")
-add_definitions(-DDEFAULT_CAPABILITIES_DIR="${DEFAULT_CAPABILITIES_DIR}")
-
-file(MAKE_DIRECTORY "${DEFAULT_CAPABILITIES_DIR}" "${CAPABILITIES_DIR}")
+file(MAKE_DIRECTORY "${DEFAULT_SERVICE_MANIFEST_DIR}" "${SERVICE_MANIFEST_DIR}")
 
 include_directories(src)
 
@@ -37,6 +31,8 @@ set(SOFTWARECONTAINERAGENT_CORE_CLASSES
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
 )
 
 add_executable(softwarecontainer-agent
@@ -45,7 +41,7 @@ add_executable(softwarecontainer-agent
     ${SOFTWARECONTAINERAGENT_CORE_CLASSES}
 )
 
-TARGET_LINK_LIBRARIES( softwarecontainer-agent
+target_link_libraries(softwarecontainer-agent
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
@@ -55,7 +51,10 @@ TARGET_LINK_LIBRARIES( softwarecontainer-agent
     softwarecontainercommon
 )
 
-INSTALL(TARGETS softwarecontainer-agent DESTINATION bin)
+install(TARGETS softwarecontainer-agent DESTINATION bin)
+
+configure_file(softwarecontainer-config.in softwarecontainer-config)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer)
 
 #
 # When we install config files, we check for if prefix is /usr, and we treat

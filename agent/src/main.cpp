@@ -17,8 +17,15 @@
  * For further information see LICENSE
  */
 
-#include "softwarecontaineragentadaptor.h"
+
 #include <glibmm/optioncontext.h>
+
+#include "config/config.h"
+#include "config/configloaderabstractinterface.h"
+#include "config/fileconfigloader.h"
+
+#include "softwarecontaineragentadaptor.h"
+
 
 LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
 
@@ -70,6 +77,13 @@ DBus::Connection getBusConnection(bool useSessionBus)
 
 int main(int argc, char **argv)
 {
+    // Config file path default 'SC_CONFIG_FILE' shuld be set by the build system
+    Glib::OptionEntry configOpt;
+    configOpt.set_long_name("config");
+    configOpt.set_short_name('c');
+    configOpt.set_arg_description("<path>");
+    configOpt.set_description("Path to SoftwareContainer configuration file, defaults to \"" + std::string(SC_CONFIG_FILE) + "\"");
+
     Glib::OptionEntry preloadOpt;
     preloadOpt.set_long_name("preload");
     preloadOpt.set_short_name('p');
@@ -82,11 +96,10 @@ int main(int argc, char **argv)
     userOpt.set_arg_description("<uid>");
     userOpt.set_description("Default user id to be used when starting processes in the container, defaults to 0");
 
-    Glib::OptionEntry shutdownOpt;
-    shutdownOpt.set_long_name("shutdown");
-    shutdownOpt.set_short_name('s');
-    shutdownOpt.set_arg_description("<bool>");
-    shutdownOpt.set_description("If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true");
+    Glib::OptionEntry keepContainersAliveOpt;
+    keepContainersAliveOpt.set_long_name("keep-containers-alive");
+    keepContainersAliveOpt.set_short_name('k');
+    keepContainersAliveOpt.set_description("Containers will not be shut down on exit. Useful for debugging");
 
     Glib::OptionEntry timeoutOpt;
     timeoutOpt.set_long_name("timeout");
@@ -105,17 +118,24 @@ int main(int argc, char **argv)
     sessionBusOpt.set_short_name('b');
     sessionBusOpt.set_description("Use the session bus instead of the system bus");
 
-    int preloadCount = 0;
+
+    /* Default values need to be somehting that should not be set explicitly
+     * by the user.
+     */
+    Glib::ustring configPath = "";
+    int preloadCount = -1;
     int userID = 0;
-    bool shutdownContainers = true;
-    int timeout = 1;
+    bool keepContainersAlive = false;
+    int timeout = -2;
     Glib::ustring servicemanifest = "";
     bool useSessionBus = false;
 
     Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
+    mainGroup.add_entry(configOpt, configPath);
     mainGroup.add_entry(preloadOpt, preloadCount);
     mainGroup.add_entry(userOpt, userID);
-    mainGroup.add_entry(shutdownOpt, shutdownContainers);
+    mainGroup.add_entry(keepContainersAliveOpt, keepContainersAlive);
+
     mainGroup.add_entry(timeoutOpt, timeout);
     mainGroup.add_entry(manifestOpt, servicemanifest);
     mainGroup.add_entry(sessionBusOpt, useSessionBus);
@@ -144,13 +164,49 @@ int main(int argc, char **argv)
     DBus::default_dispatcher = &dbusDispatcher;
     dbusDispatcher.attach(mainContext->gobj());
 
+    // Config file set on command line should take precedence over default
+    std::string configFileLocation;
+    if (configPath != "") {
+        configFileLocation = std::string(configPath);
+    } else {
+        configFileLocation = std::string(SC_CONFIG_FILE);
+    }
+
+    /* Put all configs explicitly set as command line options in maps so they
+     * can be passed to Config, and thus enable Config to prioritize these values
+     * over the static configuration.
+     */
+    std::map<std::string, std::string> stringOptions;
+    if (servicemanifest != "") {
+        stringOptions.insert(std::pair<std::string, std::string>(Config::SERVICE_MANIFEST_DIR,
+                                                                 servicemanifest));
+    }
+
+    std::map<std::string, int> intOptions;
+    if (preloadCount != -1) {
+        intOptions.insert(std::pair<std::string, int>(Config::PRELOAD_COUNT, preloadCount));
+    }
+    if (timeout != -2) {
+        intOptions.insert(std::pair<std::string, int>(Config::SHUTDOWN_TIMEOUT, timeout));
+    }
+
+    std::map<std::string, bool> boolOptions;
+    /* The bool options should be on/off flags so if they were set they are 'true'
+     * otherwise they are still the default 'false' set above.
+     */
+    if (keepContainersAlive == true) {
+        boolOptions.insert(std::pair<std::string, bool>(Config::KEEP_ALIVE, keepContainersAlive));
+    }
+    if (useSessionBus == true) {
+        boolOptions.insert(std::pair<std::string, bool>(Config::USE_SESSION_BUS, useSessionBus));
+    }
+
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new FileConfigLoader(configFileLocation));
+    Config config(std::move(loader), stringOptions, intOptions, boolOptions);
+
     try {
         DBus::Connection connection = getBusConnection(useSessionBus);
-        SoftwareContainerAgent agent(mainContext,
-                                     preloadCount,
-                                     shutdownContainers,
-                                     timeout,
-                                     servicemanifest);
+        SoftwareContainerAgent agent(mainContext, config);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
             std::unique_ptr<SoftwareContainerAgentAdaptor>(
                 new DBusCppAdaptor(connection, AGENT_OBJECT_PATH, agent)
@@ -167,5 +223,4 @@ int main(int argc, char **argv)
         log_error() << "Agent initialization failed";
         return 1;
     }
-
 }

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -45,6 +46,7 @@
 #include "softwarecontainer-common.h"
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
+#include "config/config.h"
 
 #include <jsonparser.h>
 #include "commandjob.h"
@@ -63,18 +65,19 @@ class SoftwareContainerAgent
     typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;
 
 public:
-    /*
+    /**
      * @brief creates a new agent object and runs some initialization
      *
      * This will check if the workspace is sound, and also call triggerPreload()
+     * The config is used to set various values in the agent, or for the agent
+     * to pass along to objects it creates.
+     *
+     * @param mainLoopContext A Glib::MainContext
+     * @param config A general SoftwareContainer config
      *
      * @throws ReturnCode::FAILURE if initialization of the agent fails
      */
-    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
-                           int preloadCount,
-                           bool shutdownContainers,
-                           int shutdownTimeout,
-                           const std::string &configPath);
+    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, const Config &config);
 
     ~SoftwareContainerAgent();
 

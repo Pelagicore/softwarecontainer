@@ -21,11 +21,46 @@
 #include "capability/baseconfigstore.h"
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
+#include "config/config.h"
+#include "config/configloaderabstractinterface.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <unistd.h>
 #include <memory>
+#include <utility>
+
+
+// TODO: Make this a shared test class, it's also used in the Config tests
+/*
+ * Test stub - StringConfigLoader
+ *
+ * Loads a Glib::KeyFile config from a string, compared to the "real" loader which reads
+ * from file.
+ */
+class StringConfigLoader : public ConfigLoaderAbstractInterface
+{
+
+LOG_DECLARE_CLASS_CONTEXT("CFGL", "SoftwareContainer general config loader");
+
+public:
+    // Constructor just needs to init parent with the config source string
+    StringConfigLoader(const std::string &source) : ConfigLoaderAbstractInterface(source) {}
+
+    std::unique_ptr<Glib::KeyFile> loadConfig() override
+    {
+        std::unique_ptr<Glib::KeyFile> configData = std::unique_ptr<Glib::KeyFile>(new Glib::KeyFile);
+        try {
+            configData->load_from_data(Glib::ustring(this->m_source), Glib::KEY_FILE_NONE);
+        } catch (Glib::KeyFileError &error) {
+            log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
+            throw error;
+        }
+
+        return configData;
+    }
+};
+
 
 class SoftwareContainerAgentTest: public ::testing::Test
 {
@@ -38,19 +73,26 @@ public:
     bool m_shutdownContainers = true;
     int m_shutdownTimeout = 1;
     std::shared_ptr<Workspace> workspace;
-    std::string m_configPath ="";
+
+    // Define minimal required config values
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "preload-count = 0\n"
+                                     "keep-containers-alive = false\n"
+                                     "shutdown-timeout = 1\n"
+                                     "shared-mounts-dir = /tmp/container/\n"
+                                     "deprecated-lxc-config-path = /usr/local/etc/softwarecontainer.conf\n"
+                                     "service-manifest-dir = /usr/local/etc/softwarecontainer/service-manifest.d/\n"
+                                     "default-service-manifest-dir = /usr/local/etc/softwarecontainer/service-manifest.default.d/\n";
 
     const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
 
     void SetUp() override
     {
+        std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+        Config config(std::move(loader));
+
         try {
-            sca = std::make_shared<SoftwareContainerAgent>(
-                m_context,
-                m_preloadCount,
-                m_shutdownContainers,
-                m_shutdownTimeout,
-                m_configPath);
+            sca = std::make_shared<SoftwareContainerAgent>(m_context, config);
             workspace = sca->getWorkspace();
         } catch(ReturnCode failure) {
             log_error() << "Exception in software agent constructor";

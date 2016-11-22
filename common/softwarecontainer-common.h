@@ -31,7 +31,6 @@
 
 #include <jansson.h>
 
-#include "softwarecontainer-config.h"
 #include "softwarecontainer-log.h"
 
 namespace softwarecontainer {

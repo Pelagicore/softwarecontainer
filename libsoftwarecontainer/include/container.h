@@ -58,6 +58,11 @@ class Container :
     static std::vector<const char *> s_LXCContainerStates;
     static const char *s_LXCRoot;
 
+    /**
+     * @brief Loads states from LXC to check what state we are in
+     *
+     * This needs to be run once before creating containers.
+     */
     static void init_lxc();
 
 public:

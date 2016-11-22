@@ -19,14 +19,7 @@
 
 #include "workspace.h"
 
-Workspace::Workspace(bool enableWriteBuffer,
-            const std::string &containerRootDir,
-            const std::string &containerConfigPath,
-            unsigned int containerShutdownTimeout):
-         m_enableWriteBuffer(enableWriteBuffer),
-         m_containerRootDir(containerRootDir),
-         m_containerConfigPath(containerConfigPath),
-         m_containerShutdownTimeout(containerShutdownTimeout)
+Workspace::Workspace()
 {
     // Make sure path ends in '/' since it might not always be checked
     if (m_containerRootDir.back() != '/') {
@@ -54,7 +47,7 @@ ReturnCode Workspace::checkWorkspace()
             return ReturnCode::FAILURE;
         }
     }
-    
+
 #ifdef ENABLE_NETWORKGATEWAY
     // TODO: Have a way to check for the bridge using C/C++ instead of a
     // shell script. Libbridge and/or netfilter?

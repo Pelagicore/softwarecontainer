@@ -1,0 +1,27 @@
+[SoftwareContainer]
+# Set number of containers to preload on startup of SoftwareContainer
+preload-count = 1
+
+# Set to 'true' to not shut down containers when SoftwareContainer exits
+keep-containers-alive = false
+
+# Set to 'true' to use the SessionBus
+use-session-bus = false
+
+# Timeout in seconds before containers are forcefully shut down
+shutdown-timeout = 1
+
+# Location for all sharted host/container mounts
+shared-mounts-dir = @SHARED_MOUNTS_DIR@
+
+# Path to the LXC configuration used with liblxc
+# NOTE: This option is being deprecated
+deprecated-lxc-config-path = @LXC_CONFIG_PATH@
+
+# Path to where SoftwareContainer should read service manifests
+service-manifest-dir = @SERVICE_MANIFEST_DIR@
+
+# Path to where SoftwareContainer should read service manifests
+# that are to be automatically applied to containers by default,
+# e.g. when having "default capabilities" in the platform.
+default-service-manifest-dir = @DEFAULT_SERVICE_MANIFEST_DIR@
