@@ -148,7 +148,7 @@ Binds a directory on the host to the container.
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
         :pathInHost: ``string`` path to the directory in host.
-        :subPathInContainer: ``string`` path to the directory in container.
+        :pathInContainer: ``string`` the absolute path to the directory in container.
         :readOnly: ``bool`` indicates whether the directory is read-only or not.
 
 |

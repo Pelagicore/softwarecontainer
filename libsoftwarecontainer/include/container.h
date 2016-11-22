@@ -114,8 +114,31 @@ public:
 
     ReturnCode executeInContainer(const std::string &cmd);
 
-    ReturnCode bindMountFileInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true);
-    ReturnCode bindMountFolderInContainer(const std::string &src, const std::string &dst, std::string &result, bool readonly = true);
+    /**
+     * @brief Tries to bind mount a file in the container
+     *
+     * This will not create parent directories if they are not already present.
+     *
+     * @param pathOnHost The path to the file that shall be bind mounted on the host system.
+     * @param pathInContainer Where to mount the file in the container.
+     * @param readonly Sets if the mount should be read only or read write
+     *
+     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
+     */
+    ReturnCode bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
+
+    /**
+     * @brief Tries to bind mount a directory in the container
+     *
+     * Will create missing parent directories.
+     *
+     * @param pathOnHost The path to the directory that shall be bind mounted on the host system.
+     * @param pathInContainer Where to mount the file in the container.
+     * @param readonly Sets if the mount should be read only or read write
+     *
+     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
+     */
+    ReturnCode bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
 
     ReturnCode mountDevice(const std::string &pathInHost);
 
@@ -186,6 +209,13 @@ public:
 
 private:
     static int executeInContainerEntryFunction(void *param);
+
+    ReturnCode bindMountCore(const std::string &pathOnHost,
+                             const std::string &pathInContainer,
+                             const std::string &tempDir,
+                             bool readonly);
+
+    std::string containerRoot() const;
 
     ReturnCode remountReadOnlyInContainer(const std::string &path);
 

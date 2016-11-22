@@ -201,7 +201,7 @@ public:
      */
     std::string bindMountFolderInContainer(const ContainerID containerID,
                                                 const std::string &pathInHost,
-                                                const std::string &subPathInContainer,
+                                                const std::string &pathInContainer,
                                                 bool readOnly);
 
     /**

@@ -56,7 +56,7 @@
         <method name="BindMountFolderInContainer">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="s" name="pathInHost" />
-            <arg direction="in" type="s" name="subPathInContainer" />
+            <arg direction="in" type="s" name="pathInContainer" />
             <arg direction="in" type="b" name="readOnly" />
             <arg direction="out" type="s" name="pathInContainer" />
         </method>

@@ -574,7 +574,6 @@ ReturnCode Container::destroy(unsigned int timeout)
 
 ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
                                                const std::string &pathInContainer,
-                                               std::string &result,
                                                bool readonly)
 {
     if(isError(ensureContainerRunning())) {
@@ -582,54 +581,85 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
         return ReturnCode::FAILURE;
     }
 
-    std::string dst = gatewaysDir() + "/" + pathInContainer;
 
-    if (isError(touch(dst))) {
-        log_error() << "Could not create " << dst;
+    std::string tempDir = gatewaysDir() + "/" + std::string(basename(pathInContainer.c_str()));
+
+    if (isError(touch(tempDir))) {
+        log_error() << "Could not create file " << tempDir;
         return ReturnCode::FAILURE;
     }
-    m_cleanupHandlers.push(new FileCleanUpHandler(dst));
+    m_cleanupHandlers.push(new FileCleanUpHandler(tempDir));
 
-    if (isError(bindMount(pathOnHost, dst, readonly))) {
-        log_error() << "Could not bind mount " << pathOnHost << " to " << dst;
-        return ReturnCode::FAILURE;
-    }
-
-    result = gatewaysDirInContainer() + "/" + pathInContainer;
-    if (readonly) {
-        return remountReadOnlyInContainer(result);
-    }
-
-    return ReturnCode::SUCCESS;
+    return bindMountCore(pathOnHost, pathInContainer, tempDir, readonly);
 }
 
 ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
                                                  const std::string &pathInContainer,
-                                                 std::string &result,
                                                  bool readonly)
 {
-    if(isError(ensureContainerRunning())) {
+    if (isError(ensureContainerRunning())) {
         log_error() << "Container is not running or in bad state, can't bind-mount folder";
         return ReturnCode::FAILURE;
     }
 
-    std::string dst = gatewaysDir() + "/" + pathInContainer;
+    std::string tempDir = gatewaysDir() + "/" + std::string(basename(pathInContainer.c_str()));
 
-    log_debug() << "Creating folder : " << dst;
-    if (isError(createDirectory(dst))) {
-        log_error() << "Could not create folder " << dst;
+    log_debug() << "Creating folder : " << tempDir;
+    if (isError(createDirectory(tempDir))) {
+        log_error() << "Could not create folder " << tempDir;
         return ReturnCode::FAILURE;
     }
 
-    if (isError(bindMount(pathOnHost, dst, readonly, m_enableWriteBuffer))) {
-        log_error() << "Could not bind mount " << pathOnHost << " to " << dst;
+    return bindMountCore(pathOnHost, pathInContainer, tempDir, readonly);
+
+}
+
+ReturnCode Container::bindMountCore(const std::string &pathOnHost,
+                                    const std::string &pathInContainer,
+                                    const std::string &tempDir,
+                                    bool readonly)
+{
+    if (pathInContainer.front() != '/') {
+        log_error() << "Provided path '" << pathInContainer<< "' is not absolute!";
         return ReturnCode::FAILURE;
     }
 
-    result = gatewaysDirInContainer() + "/" + pathInContainer;
+    // Bind mount to gateways
+    if (isError(bindMount(pathOnHost, tempDir, readonly, m_enableWriteBuffer))) {
+        log_error() << "Could not bind mount " << pathOnHost << " to " << tempDir;
+        return ReturnCode::FAILURE;
+    }
 
-    if (readonly) {
-        return remountReadOnlyInContainer(result);
+    std::string tempDirInContainer = gatewaysDirInContainer() + "/" + std::string(basename(pathInContainer.c_str()));
+
+    // Move the mount in the container
+    if (tempDirInContainer.compare(pathInContainer) != 0) {
+        pid_t pid = INVALID_PID;
+        ReturnCode mountMoveRes = executeInContainer([tempDirInContainer, pathInContainer] () {
+            unsigned long flags = MS_MOVE;
+            if (isDirectory(tempDirInContainer)) {
+                mkdir(pathInContainer.c_str(), 1);
+            } else {
+                touch(pathInContainer.c_str());
+            }
+            int ret = mount(tempDirInContainer.c_str(), pathInContainer.c_str(), nullptr, flags, nullptr);
+            if (ret != 0) {
+                printf("Error while mount move: %s\n", strerror(errno));
+            }
+            return ret;
+        }, &pid);
+
+        int status = waitForProcessTermination(pid);
+        if (isError(mountMoveRes) || status != 0) {
+            log_error() << "Could not move the mount inside the container: " << tempDirInContainer << " to " << pathInContainer;
+            return ReturnCode::FAILURE;
+        }
+    }
+
+    // Remount read only in the container if applicable
+    if (readonly && isError(remountReadOnlyInContainer(pathInContainer))) {
+       log_error() << "Failed to remount read only: " << pathInContainer;
+       return ReturnCode::FAILURE;
     }
 
     return ReturnCode::SUCCESS;
@@ -644,12 +674,12 @@ ReturnCode Container::remountReadOnlyInContainer(const std::string &path)
         return mount(path.c_str(), path.c_str(), "", flags, nullptr);
     }, &pid);
 
-    if (isError(ret)) {
+    int status = waitForProcessTermination(pid);
+    if (isError(ret) || status != 0) {
         log_error() << "Could not remount " << path << " read-only in container";
         return ReturnCode::FAILURE;
     }
 
-    int status = waitForProcessTermination(pid);
     return bool2ReturnCode(status == 0);
 }
 
@@ -764,6 +794,11 @@ const char *Container::id() const
 std::string Container::gatewaysDirInContainer() const
 {
     return GATEWAYS_PATH;
+}
+
+std::string Container::containerRoot() const
+{
+    return m_containerRoot + "/" + id();
 }
 
 std::string Container::gatewaysDir() const
