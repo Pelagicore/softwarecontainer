@@ -76,7 +76,8 @@ class TestDBus(object):
         for x in range(0, 10):
             ca = Container()
             try:
-                ca.start(DATA)
+                success = ca.start(DATA)
+                assert success is True
                 ca.set_gateway_config("dbus", GW_CONFIG)
                 ca.launch_command('{}/dbusapp.py server'.format(ca.get_bind_dir()))
 
@@ -94,7 +95,8 @@ class TestDBus(object):
             serv.start()
             ca = Container()
             try:
-                ca.start(DATA)
+                success = ca.start(DATA)
+                assert success is True
                 ca.set_gateway_config("dbus", GW_CONFIG)
                 ca.launch_command('{}/dbusapp.py client'.format(ca.get_bind_dir()))
 
@@ -111,8 +113,9 @@ class TestDBus(object):
         try:
             serv = dbusapp.Server()
             serv.start()
-
-            ca.start(DATA)
+            success = ca.start(DATA)
+            assert success is True
+            
             ca.set_gateway_config("dbus", GW_CONFIG)
 
             clients = 100

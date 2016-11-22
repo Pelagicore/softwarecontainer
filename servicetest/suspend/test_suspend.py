@@ -90,14 +90,14 @@ class TestSuspend(object):
             suspended = sc.suspend()
             assert suspended is True
 
-            launched = sc.launch_command("true")
-            assert launched == -1
+            _, success = sc.launch_command("true")
+            assert success is False
 
             resumed = sc.resume()
             assert resumed is True
 
-            launched = sc.launch_command("true")
-            assert launched != -1
+            _, success = sc.launch_command("true")
+            assert success is True
 
         finally:
             sc.terminate()
@@ -113,9 +113,8 @@ class TestSuspend(object):
             sc = Container()
             sc.start(DATA)
 
-
-            launched = sc.launch_command("yes", stdout=filename)
-            assert launched != -1
+            _, success = sc.launch_command("yes", stdout=filename)
+            assert success is True
 
             assert isFileGrowing(filename)
 

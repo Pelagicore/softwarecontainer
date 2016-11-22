@@ -181,10 +181,13 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             # Set once
             sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
+            
             # Set twice
             sc.set_gateway_config("env", GW_CONFIG_SAME_VAR)
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -208,10 +211,13 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
+
             # Append a variable not set before
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
+            
             # Set the variable that was "appended" previously
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
+            
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -234,8 +240,10 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             # Append a variable not set before
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
+            
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -258,10 +266,13 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             # Set a config to append to
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
+
             # Append the previously set variable
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
+            
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -288,7 +299,9 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
+            
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -310,7 +323,9 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
+
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
+            
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +

@@ -172,14 +172,15 @@ SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwar
     return container;
 }
 
-ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
+bool SoftwareContainerAgent::createContainer(const std::string &config, ContainerID &containerID)
 {
     profilepoint("createContainerStart");
     profilefunction("createContainerFunction");
 
     if (!parseConfig(config)) {
         log_error() << "The provided config could not be successfully parsed";
-        return -1;
+        containerID = INVALID_CONTAINER_ID;
+        return false;
     }
 
     std::pair<ContainerID, SoftwareContainerPtr> pair = std::move(getContainerPair());
@@ -187,7 +188,8 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 
     if (isError(pair.second->init())) {
         log_error() << "Could not init the container";
-        return -1;
+        containerID = INVALID_CONTAINER_ID;
+        return false;
     }
 
     // TODO: Would be nice if this could be done async.
@@ -197,8 +199,8 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 
     m_containers.insert(std::move(pair));
 
-    // Return the ContainerID for the container
-    return pair.first;
+    containerID = pair.first;
+    return true;
 }
 
 std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareContainerAgent::getContainerPair()
@@ -242,19 +244,21 @@ bool SoftwareContainerAgent::writeToStdIn(pid_t pid, const std::vector<uint8_t> 
     return true;
 }
 
-pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID,
+bool SoftwareContainerAgent::launchCommand(ContainerID containerID,
                                             uid_t userID,
                                             const std::string &cmdLine,
                                             const std::string &workingDirectory,
                                             const std::string &outputFile,
                                             const EnvironmentVariables &env,
+                                            int32_t &pid,
                                             std::function<void (pid_t, int)> listener)
 {
     profilefunction("launchCommandFunction");
     SoftwareContainer *container = nullptr;
     if (!checkContainer(containerID, container)) {
         log_error() << "Invalid container ID " << containerID;
-        return INVALID_PID;
+        pid = INVALID_PID;
+        return false;
     }
 
     // Set up a CommandJob for this run in the container
@@ -270,7 +274,8 @@ pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID,
     // Start it
     if (isError(job->start())) {
         log_error() << "Could not start job";
-        return INVALID_PID;
+        pid = INVALID_PID;
+        return false;
     }
 
     // If things went well, do what we need when it exits
@@ -283,7 +288,8 @@ pid_t SoftwareContainerAgent::launchCommand(ContainerID containerID,
 
     profilepoint("launchCommandEnd");
 
-    return job->pid();
+    pid = job->pid();
+    return true;
 }
 
 bool SoftwareContainerAgent::setContainerName(ContainerID containerID, const std::string &name)
@@ -352,25 +358,29 @@ bool SoftwareContainerAgent::resumeContainer(ContainerID containerID)
     return isSuccess(container->resume());
 }
 
-std::string SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID,
+bool SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID,
                                                                const std::string &pathInHost,
                                                                const std::string &pathInContainer,
-                                                               bool readOnly)
+                                                               bool readOnly,
+                                                               std::string &returnPath)
 {
     profilefunction("bindMountFolderInContainerFunction");
     SoftwareContainer *container = nullptr;
     if (!checkContainer(containerID, container)) {
         log_error() << "Invalid container ID " << containerID;
-        return "";
+        returnPath = "";
+        return false;
     }
 
     ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
     if (isError(result)) {
         log_error() << "Unable to bind mount folder " << pathInHost << " to " << pathInContainer;
-        return "";
+        returnPath = "";
+        return false;
     }
 
-    return pathInContainer;
+    returnPath = pathInContainer;
+    return true;
 }
 
 bool SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID,
