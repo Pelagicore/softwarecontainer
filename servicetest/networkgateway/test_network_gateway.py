@@ -111,7 +111,9 @@ class TestNetworkRules(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             sc.set_gateway_config("network", GW_CONFIG_POLICY_DROP)
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
@@ -134,7 +136,9 @@ class TestNetworkRules(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
@@ -157,7 +161,9 @@ class TestNetworkRules(object):
         try:
             sc = Container()
             sc.start(DATA)
+
             sc.set_gateway_config("network", GW_CONFIG_REJECT_EXAMPLE_COM)
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
@@ -191,7 +197,9 @@ class TestNetworkRules(object):
         try:
             sc = Container()
             sc.start(DATA)
+            
             sc.set_gateway_config("network", GW_CONFIG_REJECT_EXAMPLE_COM_INPUT)
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
@@ -236,6 +244,7 @@ class TestNetworkDiversity(object):
             sc2.start(DATA)
 
             sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
+
             sc2.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
 
             sc.launch_command("python " +

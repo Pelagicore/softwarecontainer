@@ -110,51 +110,85 @@ pid_t Agent::startProcess(AgentCommand &command, std::string &cmdLine, uid_t use
             const std::string &outputFile,
             EnvironmentVariables env)
 {
-    auto pid = getProxy().LaunchCommand(
-                command.getContainer().getContainerID(), userID, cmdLine, workingDirectory, outputFile, env);
+    int32_t pid;
+    auto success = false;
+    getProxy().LaunchCommand(command.getContainer().getContainerID(),
+                             userID,
+                             cmdLine,
+                             workingDirectory,
+                             outputFile,
+                             env,
+                             pid,
+                             success);
     m_commands[pid] = &command;
+
+    if (false == success) {
+        log_warning() << "Couldn't launch the command : " << cmdLine;
+    }
+
     return pid;
 }
 
 void Agent::shutDown(ContainerID containerID)
 {
-    getProxy().ShutDownContainer(containerID);
+    auto success = getProxy().ShutDownContainer(containerID);
+
+    if (false == success) {
+        log_warning() << "Couldn't shutdown container properly";
+    }
 }
 
 void Agent::shutDown(ContainerID containerID, unsigned int timeout)
 {
-    getProxy().ShutDownContainerWithTimeout(containerID, timeout);
+    auto success = getProxy().ShutDownContainerWithTimeout(containerID, timeout);
+
+    if (false == success) {
+        log_warning() << "Couldn't shutdown container properly";
+    }
 }
 
 std::string Agent::bindMountFolderInContainer(ContainerID containerID, const std::string &src, const std::string &dst,
             bool readonly)
 {
-    return getProxy().BindMountFolderInContainer(containerID, src, dst, readonly);
+    std::string pathInContainer;
+    auto success = false;
+    getProxy().BindMountFolderInContainer(containerID, src, dst, readonly, pathInContainer, success);
+
+    if (false == success) {
+        log_warning() << "Couldn't bind folder " << src << " properly";
+    }
+
+    return pathInContainer;
 }
 
 void Agent::setGatewayConfigs(ContainerID containerID, const std::map<std::string, std::string> &config)
 {
-    getProxy().SetGatewayConfigs(containerID, config);
+    auto success = getProxy().SetGatewayConfigs(containerID, config);
+
+    if (false == success) {
+        log_warning() << "Couldn't set configuration properly";
+    }
 }
 
 ReturnCode Agent::createContainer(ContainerID &containerID, const std::string &config)
 {
-    containerID = getProxy().CreateContainer(config);
-    return bool2ReturnCode(containerID != INVALID_CONTAINER_ID);
+    auto success = false;
+    getProxy().CreateContainer(config, containerID, success);
+    return (bool2ReturnCode((containerID != INVALID_CONTAINER_ID) & success));
 }
 
 ReturnCode Agent::setContainerName(ContainerID containerID, const std::string &name)
 {
-    getProxy().SetContainerName(containerID, name);
-    return ReturnCode::SUCCESS;
+    auto success = getProxy().SetContainerName(containerID, name);
+    return bool2ReturnCode(success);
 }
 
 ReturnCode Agent::writeToStdIn(pid_t pid, const void *data, size_t length)
 {
     auto c = static_cast<const uint8_t *>(data);
     std::vector<uint8_t> dataAsVector(c, c + length);
-    getProxy().WriteToStdIn(pid, dataAsVector);
-    return ReturnCode::SUCCESS;
+    auto success = getProxy().WriteToStdIn(pid, dataAsVector);
+    return bool2ReturnCode(success);
 }
 
 void AgentPrivateData::SoftwareContainerAgentProxy::ProcessStateChanged(const int32_t &containerID, const uint32_t &pid,

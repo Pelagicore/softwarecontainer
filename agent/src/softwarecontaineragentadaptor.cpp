@@ -11,21 +11,24 @@ SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(SoftwareContainerAg
 {
 }
 
-int32_t SoftwareContainerAgentAdaptor::LaunchCommand(
+void SoftwareContainerAgentAdaptor::LaunchCommand(
     const int32_t &containerID,
     const uint32_t &userID,
     const std::string &commandLine,
     const std::string &workingDirectory,
     const std::string &outputFile,
-    const std::map<std::string, std::string> &env)
+    const std::map<std::string, std::string> &env,
+    int32_t &pid,
+    bool &success)
 {
-    return m_agent.launchCommand(
+    success = m_agent.launchCommand(
         containerID,
         userID,
         commandLine,
         workingDirectory,
         outputFile,
         env,
+        pid,
         [this, containerID](pid_t pid, int exitCode) {
             ProcessStateChanged(containerID, pid, false, exitCode);
             log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
@@ -55,23 +58,26 @@ bool SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(
     return m_agent.shutdownContainer(containerID, timeout);
 }
 
-std::string SoftwareContainerAgentAdaptor::BindMountFolderInContainer(
+void SoftwareContainerAgentAdaptor::BindMountFolderInContainer(
     const int32_t &containerID,
     const std::string &pathInHost,
-    const std::string &subPathInContainer,
-    const bool &readOnly)
+    const std::string &PathInContainer,
+    const bool &readOnly,
+    std::string &returnPath,
+    bool &success)
 {
-    return m_agent.bindMountFolderInContainer(containerID,
-                                              pathInHost,
-                                              subPathInContainer,
-                                              readOnly);
+    success = m_agent.bindMountFolderInContainer(containerID,
+                                                 pathInHost,
+                                                 PathInContainer,
+                                                 readOnly,
+                                                 returnPath);
 }
 
-void SoftwareContainerAgentAdaptor::SetGatewayConfigs(
+bool SoftwareContainerAgentAdaptor::SetGatewayConfigs(
     const int32_t &containerID,
     const std::map<std::string, std::string> &configs)
 {
-    m_agent.setGatewayConfigs(containerID, configs);
+    return m_agent.setGatewayConfigs(containerID, configs);
 }
 
 bool SoftwareContainerAgentAdaptor::SetCapabilities(
@@ -81,9 +87,11 @@ bool SoftwareContainerAgentAdaptor::SetCapabilities(
     return m_agent.setCapabilities(containerID, capabilities);
 }
 
-int32_t SoftwareContainerAgentAdaptor::CreateContainer(const std::string &config)
+void SoftwareContainerAgentAdaptor::CreateContainer(const std::string &config,
+                                                    int32_t &containerID,
+                                                    bool &success)
 {
-    return m_agent.createContainer(config);
+    success = m_agent.createContainer(config, containerID);
 }
 
 bool SoftwareContainerAgentAdaptor::SetContainerName(

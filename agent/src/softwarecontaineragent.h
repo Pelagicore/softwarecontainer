@@ -116,13 +116,11 @@ public:
      * @brief Create a new container
      *
      * @param config container-wide configuration string
+     * @param a reference to ContainerID
      *
-     * @return If the container is successfully created a positive ContainerID
-     *         representing the newly created container will be returned.
-     *         Otherwise, -1 will be returned.
-     *
+     * @return If the container is successfully created true otherwise false
      */
-    ContainerID createContainer(const std::string &config);
+    bool createContainer(const std::string &config, ContainerID &containerID);
 
 
     /**
@@ -142,14 +140,17 @@ public:
      * @param workingDirectory the working directory to use when running
      * @param outputFile where to log any output
      * @param env any environment variables to pass to the command
+     * @param pid process id which belongs to given command
      * @param listener a function that runs when the process exits
+     * @return true or false indicating whether or not the operation was successful.
      */
-    pid_t launchCommand(ContainerID containerID,
+    bool launchCommand(ContainerID containerID,
                         uid_t userID,
                         const std::string &cmdLine,
                         const std::string &workingDirectory,
                         const std::string &outputFile,
                         const EnvironmentVariables &env,
+                        int32_t &pid,
                         std::function<void (pid_t, int)> listener);
 
     /**
@@ -196,14 +197,15 @@ public:
      * @param pathInHost path to the folder in the host system
      * @param subPathInContainer path (relative to a fixed start point) to use in the container
      * @param readOnly whether or not to mount read-only
+     * @param reference to the full path of the mounted folder in the container
      *
-     * @return the full path of the mounted folder in the container
+     * @return true or false indicating whether or not the operation was successful.
      */
-    std::string bindMountFolderInContainer(const ContainerID containerID,
-                                                const std::string &pathInHost,
-                                                const std::string &pathInContainer,
-                                                bool readOnly);
-
+    bool bindMountFolderInContainer(const ContainerID containerID,
+                                    const std::string &pathInHost,
+                                    const std::string &pathInContainer,
+                                    bool readOnly,
+                                    std::string &returnPath);
     /**
      * @brief Set gateway configurations for the container
      *

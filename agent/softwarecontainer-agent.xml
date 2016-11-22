@@ -8,6 +8,7 @@
         <method name="CreateContainer">
             <arg direction="in" type="s" name="config" />
             <arg direction="out" type="i" name="containerID" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="SetContainerName">
@@ -24,6 +25,7 @@
             <arg direction="in" type="s" name="outputFile" />
             <arg direction="in" type="a{ss}" name="env" />
             <arg direction="out" type="i" name="pid" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="SuspendContainer">
@@ -58,7 +60,8 @@
             <arg direction="in" type="s" name="pathInHost" />
             <arg direction="in" type="s" name="pathInContainer" />
             <arg direction="in" type="b" name="readOnly" />
-            <arg direction="out" type="s" name="pathInContainer" />
+            <arg direction="out" type="s" name="returnPath" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="SetGatewayConfigs">
@@ -68,6 +71,7 @@
                 value="int" />
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="a{ss}" name="configs" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="SetCapabilities">

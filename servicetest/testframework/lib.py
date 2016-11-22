@@ -60,17 +60,21 @@ class Container():
         self.__bind_dir = None
         self.__container_id = None
 
+
     def set_gateway_config(self, gateway_id, config):
         """ Set a gateway config by passing an id and a Python object equivalent to a JSON
             config.
         """
-        self.__agent.SetGatewayConfigs(self.__container_id, {gateway_id: json.dumps(config)})
+        result = self.__agent.SetGatewayConfigs(self.__container_id, {gateway_id: json.dumps(config)})
+        return True if result == dbus.Boolean(True) else False
+
 
     def set_capabilities(self, capabilities):
         """ Set capabilities by passsing a list of strings with capability IDs
         """
         result = self.__agent.SetCapabilities(self.__container_id, capabilities)
         return True if result == dbus.Boolean(True) else False
+
 
     def launch_command(self, binary, stdout="/tmp/stdout", env={"": ""}):
         """ Calls LaunchCommand on the Agent D-Bus interface.
@@ -80,15 +84,14 @@ class Container():
             environment dictionary are optional. The other arguments required by the D-Bus method
             are set by this helper based on other configs and data passed from the user previously.
         """
-        response = self.__agent.LaunchCommand(self.__container_id,
+        pid, success = self.__agent.LaunchCommand(self.__container_id,
                                               0,
                                               "{}".format(binary),
                                               self.__bind_dir,
                                               stdout,
                                               env)
-        if response == -1:
-            print "Failed to launch process in container"
-        return response
+        return pid, (success == dbus.Boolean(True))
+    
 
     def get_bind_dir(self):
         """ Returns the path containing the bind mounted dir set previously
@@ -120,10 +123,20 @@ class Container():
             Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMountFolderInContainer
             Container.READONLY - fourth argument to SoftwareContainerAgent::BindMountFolderInContainer
         """
-        self.__create_container(data[Container.CONFIG])
-        self.__bind_dir = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
+        success = self.__create_container(data[Container.CONFIG])
+        if False == success:
+            print "Failed to create container"
+            return False
+        
+        self.__bind_dir, success = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
                                                                data[Container.BIND_MOUNT_DIR],
                                                                data[Container.READONLY])
+        if False == success:
+            print "Failed to retrieve binded folder"
+            return False
+
+        return True
+
 
     def suspend(self):
         if self.__container_id is not None:
@@ -139,10 +152,13 @@ class Container():
         """ Perform teardown of container created by call to 'start'
         """
         if self.__container_id is not None:
-            self.__agent.ShutDownContainer(self.__container_id)
+            result = self.__agent.ShutDownContainer(self.__container_id)
+            return True if result == dbus.Boolean(True) else False
 
     def __create_container(self, config):
-        self.__container_id = self.__agent.CreateContainer(config)
+        self.__container_id, success = self.__agent.CreateContainer(config)
+        return success
+
 
     def __bindmount_folder_in_container(self, host_path, dirname, readonly):
         return self.__agent.BindMountFolderInContainer(self.__container_id, host_path, dirname, readonly)

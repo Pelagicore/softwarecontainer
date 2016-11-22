@@ -76,9 +76,10 @@ class TestFileSystem(object):
             DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
 
         try:
-            ca.start(DATA)
+            success = ca.start(DATA)
             ca.launch_command('{}/fileapp.py create {}'
                               .format(ca.get_bind_dir()), TESTFILE)
+
             ca.launch_command('{}/fileapp.py check {}'
                               .format(ca.get_bind_dir()), TESTFILE)
             # Give the command time to run inside the container

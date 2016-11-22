@@ -33,8 +33,7 @@ Controls availability of com.pelagicore.SoftwareContainerAgent interface
 
 CreateContainer
 ---------------
-Creates a new container and returns created container id.
-If the call fails -1 will be returned.
+Creates a container with given configuration.
 
 :Parameters:
         :config: ``string`` config file in json format.
@@ -45,8 +44,9 @@ If the call fails -1 will be returned.
 
 |
 
-:Return Value:
+:Return Values:
         :containerID: ``int32`` ID of created SoftwareContainer.
+        :success: ``bool`` Whether or not the operation was successful.
 
 SetContainerName
 ----------------
@@ -75,8 +75,9 @@ Launches the specified application/code in the container.
 
 |
 
-:Return Value:
-        :pid: ``int32`` PID of the process run inside the container. Negative on error.
+:Return Values:
+        :pid: ``int32`` PID of the process run inside the container.
+        :success: ``bool`` Whether or not the operation was successful.
 
 
 ShutdownContainer
@@ -153,8 +154,9 @@ Binds a directory on the host to the container.
 
 |
 
-:Return Value:
+:Return Values:
         :pathInContainer: ``string`` path to the bind folder in container.
+        :success: ``bool`` Whether or not the operation was successful.
 
 SetGatewayConfigs
 -----------------
@@ -167,7 +169,7 @@ Sets the configuration of a particular gateway. The gateway configuration contai
 |
 
 :Return Value:
-        *None*
+        :success: ``bool`` Whether or not the operation was successful.
 
 SetCapabilities
 ---------------

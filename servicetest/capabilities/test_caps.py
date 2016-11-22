@@ -36,7 +36,7 @@ def logfile_path():
 # update entries can simply base their dict on this one for convenience.
 DATA = {
     Container.CONFIG: '[{"enableWriteBuffer": false}]',
-    Container.BIND_MOUNT_DIR: "app",
+    Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
 }
@@ -62,9 +62,10 @@ class TestCaps(object):
         """
         try:
             sc = Container()
-            sc.start(DATA)
-            caps_set = sc.set_capabilities(["test.dbus", "test.network"])
+            success = sc.start(DATA)
+            assert success is True
 
+            caps_set = sc.set_capabilities(["test.dbus", "test.network"])
             assert caps_set is True
         finally:
             sc.terminate()
