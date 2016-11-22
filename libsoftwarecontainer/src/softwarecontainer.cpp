@@ -29,7 +29,7 @@
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-#include "gateway/dbusgateway.h"
+#include "gateway/dbus/dbusgateway.h"
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY

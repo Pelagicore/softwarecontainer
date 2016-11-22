@@ -34,7 +34,10 @@ if(ENABLE_CGROUPSGATEWAY)
     list(APPEND GATEWAY_SOURCES gateway/cgroups/cgroupsparser.cpp)
 endif()
 
-gateway_support(ENABLE_DBUSGATEWAY DBus dbusgateway.cpp)
+gateway_support(ENABLE_DBUSGATEWAY DBus dbus/dbusgateway.cpp)
+if(ENABLE_DBUSGATEWAY)
+    list(APPEND GATEWAY_SOURCES gateway/dbus/dbusgatewayparser.cpp)
+endif()
 
 gateway_support(ENABLE_DEVICENODEGATEWAY DeviceNode devicenode/devicenodegateway.cpp)
 if(ENABLE_DEVICENODEGATEWAY)

@@ -20,7 +20,7 @@
 
 
 #include "softwarecontainer_test.h"
-#include "gateway/dbusgateway.h"
+#include "gateway/dbus/dbusgateway.h"
 #include "softwarecontainer-common.h"
 
 class MockDBusGateway : public DBusGateway
@@ -54,6 +54,9 @@ public:
     const std::string m_containerName = "test";
 };
 
+/*
+ * Test that activate works with a proper full config
+ */
 TEST_F(DBusGatewayTest, TestActivate) {
     givenContainerIsSet(gw);
     const std::string config = "[{"
