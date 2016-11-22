@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -16,13 +15,16 @@
 #
 # For further information see LICENSE
 
-
 # Enable or disable support for gateways compile-time.
 set(GATEWAY_SOURCES "")
 set(GATEWAY_DEFINITIONS "")
 
 add_subdirectory(gateway)
 add_definitions(${GATEWAY_DEFINITIONS})
+
+# Include the job files
+set(JOB_SOURCES "")
+add_subdirectory(jobs)
 
 add_library(softwarecontainerlib SHARED
     container.cpp
@@ -32,6 +34,7 @@ add_library(softwarecontainerlib SHARED
     jobs/functionjob.cpp
     jobs/commandjob.cpp
     ${GATEWAY_SOURCES}
+    ${JOB_SOURCES}
 )
 
 TARGET_LINK_LIBRARIES(softwarecontainerlib
