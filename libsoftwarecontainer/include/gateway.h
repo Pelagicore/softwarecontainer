@@ -154,11 +154,13 @@ protected:
     static constexpr const char *ENABLED_FIELD = "enabled";
     static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
 
+    virtual bool activateGateway() = 0;
+    virtual bool teardownGateway() = 0;
+
+private:
+
     std::shared_ptr<ContainerAbstractInterface> m_container;
     const char *m_id = nullptr;
     GatewayState m_state = GatewayState::CREATED;
-
-    virtual bool activateGateway() = 0;
-    virtual bool teardownGateway() = 0;
 
 };

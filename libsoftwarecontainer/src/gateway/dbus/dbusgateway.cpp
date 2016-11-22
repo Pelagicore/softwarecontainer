@@ -28,7 +28,6 @@ DBusGateway::DBusGateway(ProxyType type
     : Gateway(ID)
     , m_type(type)
 {
-    m_state = GatewayState::CREATED;
     m_socket = gatewayDir 
              + (m_type == SessionProxy ? "/sess_" : "/sys_")
              + name 
@@ -40,7 +39,7 @@ DBusGateway::DBusGateway(ProxyType type
 
 DBusGateway::~DBusGateway()
 {
-    if (m_state == GatewayState::ACTIVATED) {
+    if (isActivated()) {
         teardown();
     }
 }

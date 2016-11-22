@@ -29,7 +29,6 @@ CgroupsGateway::CgroupsGateway()
     : Gateway(ID)
     , m_settings({})
 {
-    m_state = GatewayState::CREATED;
 }
 
 ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
