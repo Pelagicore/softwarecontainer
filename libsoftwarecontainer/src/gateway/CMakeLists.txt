@@ -1,0 +1,81 @@
+# Copyright (C) 2016 Pelagicore AB
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted, provided that the
+# above copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR
+# BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+# OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+# WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+# ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+# SOFTWARE.
+#
+# For further information see LICENSE
+
+if (ENABLE_CGROUPSGATEWAY)
+    add_subdirectory(cgroups)
+    set(CGROUPS_DEFINE -DENABLE_CGROUPSGATEWAY)
+endif()
+
+if (ENABLE_DBUSGATEWAY)
+    add_subdirectory(dbus)
+    set(DBUS_DEFINE -DENABLE_DBUSGATEWAY)
+endif()
+
+if (ENABLE_DEVICENODEGATEWAY)
+    add_subdirectory(devicenode)
+    set(DEVICENODE_DEFINE -DENABLE_DEVICENODEGATEWAY)
+endif()
+
+if (ENABLE_ENVGATEWAY)
+    add_subdirectory(environment)
+    set(ENV_DEFINE -DENABLE_ENVGATEWAY)
+endif()
+
+if (ENABLE_FILEGATEWAY)
+    add_subdirectory(files)
+    set(FILE_DEFINE -DENABLE_FILEGATEWAY)
+endif()
+
+if (ENABLE_NETWORKGATEWAY)
+    add_subdirectory(network)
+    set(NETWORK_DEFINE -DENABLE_NETWORKGATEWAY)
+endif()
+
+if (ENABLE_PULSEGATEWAY)
+    set(PULSE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/pulsegateway.cpp)
+    set(PULSE_DEFINE -DENABLE_PULSEGATEWAY)
+endif()
+
+if (ENABLE_WAYLANDGATEWAY)
+    set(WAYLAND_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/waylandgateway.cpp)
+    set(WAYLAND_DEFINE -DENABLE_WAYLANDGATEWAY)
+endif()
+
+set(GATEWAY_DEFINITIONS
+    ${CGROUPS_DEFINE}
+    ${DBUS_DEFINE}
+    ${DEVICENODE_DEFINE}
+    ${ENV_DEFINE}
+    ${FILE_DEFINE}
+    ${NETWORK_DEFINE}
+    ${PULSE_DEFINE}
+    ${WAYLAND_DEFINE}
+    PARENT_SCOPE
+)
+
+set(GATEWAY_SOURCES 
+    ${CMAKE_CURRENT_SOURCE_DIR}/gateway.cpp
+    ${CGROUPS_SOURCES}
+    ${DBUS_SOURCES}
+    ${DEVICENODE_SOURCES}
+    ${ENV_SOURCES}
+    ${FILE_SOURCES}
+    ${NETWORK_SOURCES}
+    ${PULSE_SOURCES}
+    ${WAYLAND_SOURCES}
+    PARENT_SCOPE
+)
