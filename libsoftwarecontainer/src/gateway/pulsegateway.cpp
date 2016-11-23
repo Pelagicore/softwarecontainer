@@ -66,7 +66,7 @@ bool PulseGateway::activateGateway()
     }
 
     std::string unixPath = "unix:" + pathInContainer;
-    setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath );
+    setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath);
     return true;
 }
 
