@@ -638,7 +638,7 @@ ReturnCode Container::bindMountCore(const std::string &pathOnHost,
         ReturnCode mountMoveRes = executeInContainer([tempDirInContainer, pathInContainer] () {
             unsigned long flags = MS_MOVE;
             if (isDirectory(tempDirInContainer)) {
-                mkdir(pathInContainer.c_str(), 1);
+                mkdir(pathInContainer.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
             } else {
                 touch(pathInContainer.c_str());
             }
