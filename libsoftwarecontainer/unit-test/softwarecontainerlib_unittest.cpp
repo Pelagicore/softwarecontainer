@@ -499,6 +499,22 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
 
 }
 
+/**
+ * Test whether it should not be possible to mount over LXC mounts
+ */
+TEST_F(SoftwareContainerApp, TestMountingOverRoot) {
+
+    char tempDirname[] = "/tmp/blablaXXXXXX";
+    mkdtemp(tempDirname);
+    ASSERT_TRUE(isDirectory(tempDirname));
+
+    ReturnCode result1 = getSc().getContainer()->bindMountFolderInContainer(tempDirname, "/", false);
+    ASSERT_TRUE(isError(result1));
+
+    ReturnCode result2 = getSc().getContainer()->bindMountFolderInContainer(tempDirname, "/lib", false);
+    ASSERT_TRUE(isError(result2));
+}
+
 
 /**
  * Test whether the mounting of folder works properly
