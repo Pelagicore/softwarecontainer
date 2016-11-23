@@ -30,8 +30,9 @@ class WaylandGateway :
 
 public:
     static constexpr const char *ID = "wayland";
-    static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = XDG_RUNTIME_DIR_VARIABLE_NAME;
+    static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
+    static constexpr const char *ENABLED_FIELD = "enabled";
 
     WaylandGateway();
     ~WaylandGateway();
