@@ -151,9 +151,6 @@ protected:
     typedef std::function<int ()> ContainerFunction;
     ReturnCode executeInContainer(ContainerFunction func);
 
-    static constexpr const char *ENABLED_FIELD = "enabled";
-    static constexpr const char *XDG_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
-
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;
 
