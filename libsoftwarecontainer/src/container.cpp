@@ -796,11 +796,6 @@ std::string Container::gatewaysDirInContainer() const
     return GATEWAYS_PATH;
 }
 
-std::string Container::containerRoot() const
-{
-    return m_containerRoot + "/" + id();
-}
-
 std::string Container::gatewaysDir() const
 {
     return m_containerRoot + "/" + id() + GATEWAYS_PATH;

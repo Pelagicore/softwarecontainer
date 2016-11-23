@@ -215,8 +215,6 @@ private:
                              const std::string &tempDir,
                              bool readonly);
 
-    std::string containerRoot() const;
-
     ReturnCode remountReadOnlyInContainer(const std::string &path);
 
     /**
