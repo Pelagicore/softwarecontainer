@@ -17,6 +17,12 @@
 #
 # For further information see LICENSE
 
+UID=$(id -u)
+if [ $UID != 0 ]; then
+    echo "This script must be run as root"
+    exit 1
+fi
+
 
 DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment networkgateway)
 
