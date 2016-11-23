@@ -33,6 +33,9 @@
 #include <errno.h>
 #include <string.h>
 
+#include <stdio.h>
+#include <mntent.h>
+
 #include "container.h"
 #include "filecleanuphandler.h"
 
@@ -576,32 +579,44 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
                                                const std::string &pathInContainer,
                                                bool readonly)
 {
-    if(isError(ensureContainerRunning())) {
-        log_error() << "Container is not running or in bad state, can't bind-mount file";
+    // Create a file to mount to in gateways
+    std::string tempFile = gatewaysDir() + "/" + std::string(basename(pathInContainer.c_str()));
+
+    if (isError(touch(tempFile))) {
+        log_error() << "Could not create file " << tempFile;
         return ReturnCode::FAILURE;
     }
+    m_cleanupHandlers.push(new FileCleanUpHandler(tempFile));
 
-
-    std::string tempDir = gatewaysDir() + "/" + std::string(basename(pathInContainer.c_str()));
-
-    if (isError(touch(tempDir))) {
-        log_error() << "Could not create file " << tempDir;
-        return ReturnCode::FAILURE;
-    }
-    m_cleanupHandlers.push(new FileCleanUpHandler(tempDir));
-
-    return bindMountCore(pathOnHost, pathInContainer, tempDir, readonly);
+    return bindMountCore(pathOnHost, pathInContainer, tempFile, readonly);
 }
 
 ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
                                                  const std::string &pathInContainer,
                                                  bool readonly)
 {
-    if (isError(ensureContainerRunning())) {
-        log_error() << "Container is not running or in bad state, can't bind-mount folder";
+
+    // Check that the target is not already mounted
+    pid_t pid = INVALID_PID;
+    ReturnCode checkIfAlreadyMountpoint = executeInContainer([pathInContainer] () {
+
+        FILE *mountsfile = setmntent("/proc/mounts", "r");
+        struct mntent *mounts;
+        while ((mounts = getmntent(mountsfile)) != nullptr) {
+            std::string mountDir(mounts->mnt_dir);
+            if ((mountDir).compare(pathInContainer) == 0) {
+                return -1;
+            }
+        }
+        return 0;
+    }, &pid);
+
+    if (isError(checkIfAlreadyMountpoint) || waitForProcessTermination(pid) != 0) {
+        log_error() << pathInContainer << " is already mounted to.";
         return ReturnCode::FAILURE;
     }
 
+    // Create a directory to mount to in gateways
     std::string tempDir = gatewaysDir() + "/" + std::string(basename(pathInContainer.c_str()));
 
     log_debug() << "Creating folder : " << tempDir;
@@ -619,6 +634,11 @@ ReturnCode Container::bindMountCore(const std::string &pathOnHost,
                                     const std::string &tempDir,
                                     bool readonly)
 {
+    if (isError(ensureContainerRunning())) {
+        log_error() << "Container is not running or in bad state, can't bind-mount folder";
+        return ReturnCode::FAILURE;
+    }
+
     if (pathInContainer.front() != '/') {
         log_error() << "Provided path '" << pathInContainer<< "' is not absolute!";
         return ReturnCode::FAILURE;
