@@ -18,25 +18,12 @@
  */
 
 #include "softwarecontaineragentadaptor.h"
+#include <glibmm/optioncontext.h>
 
 LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
 
 namespace softwarecontainer {
     LOG_DECLARE_DEFAULT_CONTEXT(PAM_DefaultLogContext, "MAIN", "Main context");
-}
-
-void usage(const char *argv0)
-{
-    printf("SoftwareContainer agent, v.%s\n", PACKAGE_VERSION);
-    printf("Usage: %s [options]\n", argv0);
-    printf("Options:\n");
-    printf("  -p, --preload <num>     : Number of containers to preload, defaults to 0\n");
-    printf("  -u, --user <uid>        : Default user id to be used when starting processes in the container, defaults to 0\n");
-    printf("  -s, --shutdown <bool>   : If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true\n");
-    printf("  -t, --timeout <seconds> : Timeout in seconds to wait for containers to shutdown, defaults to 1\n");
-    printf("  -m, --manifest <path>   : Path to a file or directory where service manifest(s) exist, defaults to \"\"\n");
-    printf("  -b, --session-bus       : Use the session bus instead of the system bus\n");
-    printf("  -h, --help              : Prints this help message and exits.\n");
 }
 
 /*
@@ -55,12 +42,12 @@ int signalHandler(void *data) {
  *
  * Throws a ReturnCode on failure
  */
-DBus::Connection getBusConnection(bool useSystemBus)
+DBus::Connection getBusConnection(bool useSessionBus)
 {
-    std::string busStr = useSystemBus ? "system" : "session";
+    std::string busStr = useSessionBus ? "session" : "system";
     try {
-        DBus::Connection bus = useSystemBus ? DBus::Connection::SystemBus()
-                                            : DBus::Connection::SessionBus();
+        DBus::Connection bus = useSessionBus ? DBus::Connection::SessionBus()
+                                             : DBus::Connection::SystemBus();
 
         // Check if the name is available or not
         bool alreadyTaken = bus.has_name(AGENT_BUS_NAME);
@@ -71,6 +58,7 @@ DBus::Connection getBusConnection(bool useSystemBus)
 
         DBus::Connection connection(bus);
         connection.request_name(AGENT_BUS_NAME);
+        log_debug() << "Registered " << AGENT_BUS_NAME << " on the " << busStr << " bus.";
         return connection;
 
     } catch (DBus::Error &err) {
@@ -82,66 +70,68 @@ DBus::Connection getBusConnection(bool useSystemBus)
 
 int main(int argc, char **argv)
 {
-    static struct option long_options[] =
-    {
-        { "preload",     required_argument, 0, 'p' },
-        { "user",        required_argument, 0, 'u' },
-        { "shutdown",    required_argument, 0, 's' },
-        { "timeout",     required_argument, 0, 't' },
-        { "manifest",    required_argument, 0, 'm' },
-        { "session-bus", no_argument,       0, 'b' },
-        { "help",        no_argument,       0, 'h' },
-        { 0, 0, 0, 0 }
-    };
+    Glib::OptionEntry preloadOpt;
+    preloadOpt.set_long_name("preload");
+    preloadOpt.set_short_name('p');
+    preloadOpt.set_arg_description("<number>");
+    preloadOpt.set_description("Number of containers to preload, defaults to 0");
+
+    Glib::OptionEntry userOpt;
+    userOpt.set_long_name("user");
+    userOpt.set_short_name('u');
+    userOpt.set_arg_description("<uid>");
+    userOpt.set_description("Default user id to be used when starting processes in the container, defaults to 0");
+
+    Glib::OptionEntry shutdownOpt;
+    shutdownOpt.set_long_name("shutdown");
+    shutdownOpt.set_short_name('s');
+    shutdownOpt.set_arg_description("<bool>");
+    shutdownOpt.set_description("If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true");
+
+    Glib::OptionEntry timeoutOpt;
+    timeoutOpt.set_long_name("timeout");
+    timeoutOpt.set_short_name('t');
+    timeoutOpt.set_arg_description("<seconds>");
+    timeoutOpt.set_description("Timeout in seconds to wait for containers to shutdown, defaults to 1");
+
+    Glib::OptionEntry manifestOpt;
+    manifestOpt.set_long_name("manifest");
+    manifestOpt.set_short_name('m');
+    manifestOpt.set_arg_description("<filepath>");
+    manifestOpt.set_description("Path to a file or directory where service manifest(s) exist, defaults to nothing");
+
+    Glib::OptionEntry sessionBusOpt;
+    sessionBusOpt.set_long_name("session-bus");
+    sessionBusOpt.set_short_name('b');
+    sessionBusOpt.set_description("Use the session bus instead of the system bus");
 
     int preloadCount = 0;
     int userID = 0;
     bool shutdownContainers = true;
     int timeout = 1;
-    std::string servicemanifest = "";
-    bool useSystemBus = true;
+    Glib::ustring servicemanifest = "";
+    bool useSessionBus = false;
 
-    int option_index = 0;
-    int c = 0;
-    while((c = getopt_long(argc, argv, "p:u:s:t:m:hb", long_options, &option_index)) != -1) {
-        switch(c) {
-            case 'p':
-                if (!parseInt(optarg, &preloadCount)) {
-                    usage(argv[0]);
-                    exit(1);
-                }
-                break;
-            case 'u':
-                if (!parseInt(optarg, &userID)) {
-                    usage(argv[0]);
-                    exit(1);
-                }
-                break;
-            case 's':
-                shutdownContainers = std::string(optarg).compare("true") == 0;
-                break;
-            case 't':
-                if (!parseInt(optarg, &timeout)) {
-                    usage(argv[0]);
-                    exit(1);
-                }
-                break;
-            case 'm':
-                servicemanifest = std::string(optarg);
-                break;
-            case 'b':
-                useSystemBus = false;
-                break;
-            case 'h':
-                usage(argv[0]);
-                exit(0);
-                break;
+    Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
+    mainGroup.add_entry(preloadOpt, preloadCount);
+    mainGroup.add_entry(userOpt, userID);
+    mainGroup.add_entry(shutdownOpt, shutdownContainers);
+    mainGroup.add_entry(timeoutOpt, timeout);
+    mainGroup.add_entry(manifestOpt, servicemanifest);
+    mainGroup.add_entry(sessionBusOpt, useSessionBus);
 
-            case '?':
-                usage(argv[0]);
-                exit(1);
-                break;
-        }
+    Glib::OptionContext optionContext;
+    optionContext.set_help_enabled(true); // Automatic --help
+    optionContext.set_ignore_unknown_options(false);
+    optionContext.set_summary("SoftwareContainer Agent v" + std::string(PACKAGE_VERSION));
+    optionContext.set_description("Documentation is available at http://pelagicore.github.io/softwarecontainer");
+    optionContext.set_main_group(mainGroup);
+
+    try {
+        optionContext.parse(argc, argv);
+    } catch (Glib::OptionError &err) {
+        log_error() << err.what();
+        exit(1);
     }
 
     profilepoint("softwareContainerStart");
@@ -155,7 +145,7 @@ int main(int argc, char **argv)
     dbusDispatcher.attach(mainContext->gobj());
 
     try {
-        DBus::Connection connection = getBusConnection(useSystemBus);
+        DBus::Connection connection = getBusConnection(useSessionBus);
         SoftwareContainerAgent agent(mainContext,
                                      preloadCount,
                                      shutdownContainers,
