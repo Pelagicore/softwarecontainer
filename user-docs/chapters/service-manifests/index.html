@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Service manifests &#8212; softwarecontainer 0.9.1-4fac2a5 2016-11-23 documentation</title>
+    <title>Service manifests &#8212; softwarecontainer 0.9.1-2c27ed6 2016-11-24 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-4fac2a5 2016-11-23',
+        VERSION:     '0.9.1-2c27ed6 2016-11-24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-4fac2a5 2016-11-23 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-2c27ed6 2016-11-24 documentation" href="../../index.html" />
     <link rel="next" title="Gateways" href="../gateways/index.html" />
     <link rel="prev" title="Configuration" href="../configuration/index.html" />
    
@@ -78,30 +78,38 @@ with a gateway ID.</p>
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>Below is an example of a simple service manifest:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-  <span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
-  <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s">&quot;com.acme.SomeResource&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw1&quot;</span><span class="p">,</span>
-          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw2&quot;</span><span class="p">,</span>
-          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">},</span>
-    <span class="s">&quot;com.acme.AnotherResource&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[]</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+   <span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
+   <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[{</span>
+       <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
+       <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
+           <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw1&quot;</span><span class="p">,</span>
+           <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
+               <span class="s">&quot;config-part1&quot;</span><span class="p">:</span> <span class="p">[]</span>
+           <span class="p">},</span> <span class="p">{</span>
+               <span class="s">&quot;config-part2&quot;</span><span class="p">:</span> <span class="p">[{</span>
+                   <span class="s">&quot;config-element1&quot;</span><span class="p">:</span> <span class="s">&quot;on&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;config-element2&quot;</span><span class="p">:</span> <span class="s">&quot;off&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;config-element3&quot;</span><span class="p">:</span> <span class="s">&quot;config-element-optionA&quot;</span><span class="p">,</span>
+                   <span class="s">&quot;config-element4&quot;</span><span class="p">:</span> <span class="s">&quot;config-element-optionB&quot;</span>
+               <span class="p">}]</span>
+           <span class="p">},</span> <span class="p">{</span>
+               <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw2&quot;</span><span class="p">,</span>
+               <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
+           <span class="p">}]</span>
+       <span class="p">}]</span>
+   <span class="p">},</span> <span class="p">{</span>
+       <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.AnotherResource&quot;</span><span class="p">,</span>
+       <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
+           <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw1&quot;</span><span class="p">,</span>
+           <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
+       <span class="p">}]</span>
+   <span class="p">}]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>In this manifest, there is one capability named <cite>com.acme.SomeResource</cite>
 which defines gateway configurations for the two gateways <cite>dummy-gw1</cite> and
-<cite>dummy-gw2</cite>. In this case the configurations for both gateways are empty
+<cite>dummy-gw2</cite>. In this case the configuration for <cite>dummy-gw2</cite> is an empty
 (but valid) JSON. Exact content will depend on what gateways are involved.
 There is also a second capability named <cite>com.acme.AnotherResource</cite> with
 a gateway object with an empty array. The manifest also contains the required

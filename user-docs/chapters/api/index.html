@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.9.1-4fac2a5 2016-11-23 documentation</title>
+    <title>API &#8212; softwarecontainer 0.9.1-2c27ed6 2016-11-24 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.9.1-4fac2a5 2016-11-23',
+        VERSION:     '0.9.1-2c27ed6 2016-11-24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.9.1-4fac2a5 2016-11-23 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.9.1-2c27ed6 2016-11-24 documentation" href="../../index.html" />
     <link rel="next" title="Design" href="../design/index.html" />
     <link rel="prev" title="SoftwareContainer examples" href="../examples/index.html" />
    
@@ -88,8 +88,7 @@ mostly useful for integrators.</p>
 </div>
 <div class="section" id="createcontainer">
 <h3>CreateContainer<a class="headerlink" href="#createcontainer" title="Permalink to this headline">¶</a></h3>
-<p>Creates a new container and returns created container id.
-If the call fails -1 will be returned.</p>
+<p>Creates a container with given configuration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -118,11 +117,13 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> ID of created SoftwareContainer.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -208,11 +209,13 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> PID of the process run inside the container. Negative on error.</td>
+<tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> PID of the process run inside the container.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -453,12 +456,14 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to the bind folder in container.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -480,7 +485,7 @@ If the call fails -1 will be returned.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">configs:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> A map to key/value pairs.</td>
+<tr class="field-even field"><th class="field-name">configs:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> A map of gateway IDs and their configurations.</td>
 </tr>
 </tbody>
 </table>
@@ -495,7 +500,15 @@ If the call fails -1 will be returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 </tbody>
 </table>
