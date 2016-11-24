@@ -22,7 +22,6 @@
 # by CMake, and it is there it should be run.
 #
 
-UID=$(id -u)
 if [ $UID != 0 ]; then
     echo "This script must be run as root"
     exit 1

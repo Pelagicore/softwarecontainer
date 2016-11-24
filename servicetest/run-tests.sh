@@ -17,7 +17,6 @@
 #
 # For further information see LICENSE
 
-UID=$(id -u)
 if [ $UID != 0 ]; then
     echo "This script must be run as root"
     exit 1
