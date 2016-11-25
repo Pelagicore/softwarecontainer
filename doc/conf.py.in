@@ -40,7 +40,10 @@ extensions = [
 ]
 
 # Substitutions for common names. Key is replaced value in the text of all .rst # documents.
-substs = { "bridge-device": "@BRIDGE_DEVICE@" }
+substs = { "bridge-device": "@BRIDGE_DEVICE@",
+           "capabilities-dir": "@CAPABILITIES_DIR@",
+           "default-capabilities-dir": "@DEFAULT_CAPABILITIES_DIR@"
+         }
 
 # Duplicate all entries with different formatting options
 # This ensures that even formatted versions of the words in substs variable

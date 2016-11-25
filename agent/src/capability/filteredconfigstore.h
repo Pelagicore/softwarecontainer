@@ -41,7 +41,7 @@ public:
      * @brief Returns all Gateway configurations for a certain Capability.
      *
      * @param capID a string representation of the Capability ID
-     * @return GatewayConfiguration maped by the given ID. 
+     * @return GatewayConfiguration mapped by the given ID.
      */
     GatewayConfiguration configByID(const std::string &capID) const;
 
