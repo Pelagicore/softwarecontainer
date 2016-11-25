@@ -766,10 +766,8 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     GatewayConfiguration config;
     std::string configStr =
         "[{"
-            "\"type\": \"OUTGOING\","
-            "\"priority\": 1,"
-            "\"rules\": [],"
-            "\"default\": \"DROP\""
+            "\"direction\": \"OUTGOING\","
+            "\"allow\": []"
         "}]";
     json_error_t error;
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
@@ -794,21 +792,26 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
     GatewayConfiguration config;
     std::string configStr =
         "[{"
-            "\"type\": \"OUTGOING\","
-            "\"priority\": 1,"
-            "\"rules\": [],"
-            "\"default\": \"ACCEPT\""
+            "\"direction\": \"OUTGOING\","
+            "\"allow\": ["
+                         "{ \"host\": \"*\", \"protocols\": \"icmp\"},"
+                         "{ \"host\": \"*\", \"protocols\": [\"udp\", \"tcp\"], \"ports\": 53}"
+                       "]"
+        "},"
+        "{"
+            "\"direction\": \"INCOMING\","
+            "\"allow\": ["
+                         "{ \"host\": \"*\", \"protocols\": \"icmp\"},"
+                         "{ \"host\": \"*\", \"protocols\": [\"udp\", \"tcp\"], \"ports\": 53}"
+                       "]"
         "}]";
     json_error_t error;
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(NetworkGateway::ID, configJson);
     setGatewayConfigs(config);
-    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null\"");
-    job2.start();
-    ASSERT_EQ(job2.wait(), 0);
 
-    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null\"");
+    CommandJob job(getSc(), "/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
     job.start();
     ASSERT_EQ(job.wait(), 0);
 }

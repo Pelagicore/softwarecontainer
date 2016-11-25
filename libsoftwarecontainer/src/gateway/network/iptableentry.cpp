@@ -23,7 +23,16 @@
 ReturnCode IPTableEntry::applyRules()
 {
     for (auto rule : m_rules) {
-        if (ReturnCode::FAILURE == insertCommand(interpretRule(rule))) {
+        if (rule.protocols.size()) {
+
+            for (auto proto : rule.protocols) {
+                if (ReturnCode::FAILURE == insertCommand(interpretRuleWithProtocol(rule, proto))) {
+                    log_error() << "Couldn't apply the rule " << rule.target;
+                    return ReturnCode::FAILURE;
+                }
+            }
+
+        } else if (ReturnCode::FAILURE == insertCommand(interpretRule(rule))) {
             log_error() << "Couldn't apply the rule " << rule.target;
             return ReturnCode::FAILURE;
         }
@@ -53,11 +62,12 @@ std::string IPTableEntry::convertTarget (Target& t)
     return "INVALID";
 }
 
-std::string IPTableEntry::interpretRule(Rule rule)
+std::string IPTableEntry::interpretRuleWithProtocol(Rule rule, const std::string &protocol)
 {
     std::string iptableCommand = "iptables -A " + m_type;
 
-        if (!rule.host.empty()) {
+    if (!rule.host.empty()) {
+        if (rule.host != "*") {
             if ("INPUT" == m_type) {
                 iptableCommand = iptableCommand + " -s ";
             } else {
@@ -65,29 +75,71 @@ std::string IPTableEntry::interpretRule(Rule rule)
             }
             iptableCommand = iptableCommand + rule.host ;
         }
+    }
 
-        if (rule.ports.any) {
-            if (rule.ports.multiport) {
-                iptableCommand = iptableCommand + " -p tcp --match multiport ";
+    if (rule.ports.any) {
+        if (rule.ports.multiport) {
+            iptableCommand = iptableCommand + " -p " + protocol + " --match multiport ";
 
-                if ("INPUT" == m_type) {
-                    iptableCommand = iptableCommand + "--sports " + rule.ports.ports;
-                } else {
-                    iptableCommand = iptableCommand + "--dports " + rule.ports.ports;
-                }
+            if ("INPUT" == m_type) {
+                iptableCommand = iptableCommand + "--sports " + rule.ports.ports;
             } else {
-                iptableCommand = iptableCommand + " -p tcp ";
-                if ("INPUT" == m_type) {
-                    iptableCommand = iptableCommand + "--sport " + rule.ports.ports;
-                } else {
-                    iptableCommand = iptableCommand + "--dport " + rule.ports.ports;
-                }
+                iptableCommand = iptableCommand + "--dports " + rule.ports.ports;
+            }
+        } else {
+            iptableCommand = iptableCommand + " -p " + protocol + " ";
+            if ("INPUT" == m_type) {
+                iptableCommand = iptableCommand + "--sport " + rule.ports.ports;
+            } else {
+                iptableCommand = iptableCommand + "--dport " + rule.ports.ports;
             }
         }
+    } else {
+        iptableCommand = iptableCommand + " -p " + protocol;
+    }
 
-        iptableCommand = iptableCommand + " -j " + convertTarget(rule.target);
+    iptableCommand = iptableCommand + " -j " + convertTarget(rule.target);
 
-        return iptableCommand;
+    return iptableCommand;
+}
+
+std::string IPTableEntry::interpretRule(Rule rule)
+{
+    std::string iptableCommand = "iptables -A " + m_type;
+
+    if (!rule.host.empty()) {
+        if (rule.host != "*") {
+            if ("INPUT" == m_type) {
+                iptableCommand = iptableCommand + " -s ";
+            } else {
+                iptableCommand = iptableCommand + " -d ";
+            }
+            iptableCommand = iptableCommand + rule.host ;
+        }
+    }
+
+    if (rule.ports.any) {
+        if (rule.ports.multiport) {
+            iptableCommand = iptableCommand + " -p tcp --match multiport ";
+
+            if ("INPUT" == m_type) {
+                iptableCommand = iptableCommand + "--sports " + rule.ports.ports;
+            } else {
+                iptableCommand = iptableCommand + "--dports " + rule.ports.ports;
+            }
+        } else {
+            iptableCommand = iptableCommand + " -p tcp ";
+            if ("INPUT" == m_type) {
+                iptableCommand = iptableCommand + "--sport " + rule.ports.ports;
+            } else {
+                iptableCommand = iptableCommand + "--dport " + rule.ports.ports;
+            }
+        }
+    }
+
+    iptableCommand = iptableCommand + " -j " + convertTarget(rule.target);
+
+    return iptableCommand;
 }
 
 std::string IPTableEntry::interpretPolicy()

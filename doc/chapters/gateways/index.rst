@@ -352,82 +352,35 @@ The ID used for the Network gateway is: ``network``
 Configuration
 -------------
 The configuration is structured as a list of JSON objects that each describe rules for ``OUTGOING``
-or ``INCOMING`` network traffic. During evaluation of each configuration entry, the order in which
-the rules are specified in matters. For each entry the rules are read in order starting with the
-first specified rule. The validation is done by filtering network traffic on ``host`` and ``port``,
-where ``host`` is either hostname or ip address of a destination or source depending on context and
-``port`` specifies which ports to filter on. When ``port`` is not specified, the rule applies to all
-ports. How to handle matching traffic is specified by ``target``. There are tree valid values for
-``target``: ``ACCEPT``, ``DROP`` and ``REJECT``, where ``ACCEPT`` does nothing with the traffic
-while ``REJECT`` and ``DROP`` both deny the network traffic to continue. The difference between
-the latter two being that ``REJECT`` answers the sender while ``DROP`` does not. If no rule applies
-``default`` specifies what to do with the traffic. There are only two valid values for ``default``:
-``ACCEPT`` and ``DROP``.
+or ``INCOMING`` network traffic. The validation is done by filtering network traffic on ``host``, ``ports`` and 
+``protocols``, where ``host`` is either hostname or ip address of a destination or source depending on context,
+``ports`` specifies which ports to filter on and ``protocols`` specifies which protocols to filter. 
 
-As mentioned above, different order of the rules can have profound different meaning. Following are
-an example attempting to reject all traffic from example.com on ports 1234 to 5678 and adding an
-exception for port 1423.::
+``direction`` and ``allow`` list are mandatory for Network Gateway configuration. There are only two valid values for 
+``direction``: ``INCOMING`` and ``OUTGOING``. In each entry in ``allow`` list only ``host`` is mandatory. ``host`` 
+can be specific hostname or ip address and also ``*`` indicating all available ip sources. When ``ports`` is not specified, 
+the rule applies to all ports.  ``ports`` are valid between 0 and 65536. There are three valid values for ``protocols``: 
+``"tcp"``, ``"udp"`` and ``"icmp"``. When ``protocols`` is not specified in the ``allow`` list item, the rule applies to 
+all protocols. When there is an item which has ports without protocols, tcp protocol will be applied to the rule. 
+NetworkGateway is programmed to drop all packages that do not match any entry in ``allow`` list.
 
-    [
-        {
-            "type": "INCOMING",
-            "priority": 1,
-            "rules": [
-                         { "host": "example.com", "port": "1234:5678", "target": "REJECT"},
-                         { "host": "example.com", "port": 1423, "target": "ACCEPT"},
-                     ],
-            "default": "DROP"
-        }
-    ]
-
-However, since the rejection of the ports 1234 to 5678 is declared before the exception to the port
-1423, which is included in the range of ports rejected, the exception will not have any effect. In
-order to achive this the order of the rules has to be changed::
+The following is an example which rejects all ping requests except example.com. Only port 53 on tcp and udp protocols 
+are allowed for enabling dns lookup. And only icmp protocol from "example.com" is allowed.::
 
     [
         {
-            "type": "INCOMING",
-            "priority": 1,
-            "rules": [
-                         { "host": "example.com", "port": 1423, "target": "ACCEPT"},
-                         { "host": "example.com", "port": "1234:5678", "target": "REJECT"},
-                     ],
-            "default": "DROP"
-        }
-    ]
-
-Now, any incoming traffic from example.com on port 1423 will be accepted and traffic on the rest
-of the range will be rejected.
-
-
-In order to not make the listing of capabilities, e.g. in application manifests, order dependent,
-``priority`` is used when merging network gateway configurations of the same type. This is specified
-as an unsigned int > 0 where 1 describes the highest priority.
-
-An example of valid network gateway configuration::
-
-    [
-        {
-            "type": "OUTGOING",
-            "priority": 1,
-            "rules": [
-                         { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
-                         { "host": "example.com", "port": "80:85", "target": "ACCEPT"},
-                         { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
-                         { "host": "203.0.113.0/24", "target": "DROP"},
-                     ],
-            "default": "DROP"
+            "direction": "OUTGOING",
+            "allow": [
+                        {"host": "example.com", "protocols": "icmp"},
+                        {"host": "*", "protocols": ["udp", "tcp"], "ports": 53}
+                     ]
         },
         {
-            "type": "INCOMING",
-            "priority": 3,
-            "rules": [
-                         { "host": "127.0.0.1/16", "port": 80, "target": "ACCEPT"},
-                         { "host": "example.com", "port": "80:85", "target": "ACCEPT"},
-                         { "host": "127.0.0.1/16", "port": [80, 8080], "target": "ACCEPT"},
-                         { "host": "203.0.113.0/24", "target": "REJECT"},
-                     ],
-            "default": "DROP"
+            "direction": "INCOMING",
+            "allow": [
+                        {"host": "example.com", "protocols": "icmp"},
+                        {"host": "*", "protocols": ["udp", "tcp"], "ports": 53}
+                     ]
         }
     ]
 

@@ -21,10 +21,12 @@
 ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &e)
 {
     std::string chain;
-    if (!JSONParser::read(element, "type", chain)) {
+    if (!JSONParser::read(element, "direction", chain)) {
         log_error() << "No type specified in network config.";
         return ReturnCode::FAILURE;
     }
+
+    e.m_defaultTarget = IPTableEntry::Target::DROP;
 
     if ("INCOMING" == chain) {
         e.m_type = "INPUT";
@@ -35,19 +37,7 @@ ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *
         return ReturnCode::FAILURE;
     }
 
-    int p;
-    if (!JSONParser::read(element, "priority", p)) {
-        log_error() << "No priority specified in network config.";
-        return ReturnCode::FAILURE;
-    }
-    e.m_priority = p;
-
-    if (e.m_priority < 1) {
-        log_error() << "Priority can not be less than 1 but is " << e.m_priority;
-        return ReturnCode::FAILURE;
-    }
-
-    const json_t *rules = json_object_get(element, "rules");
+    const json_t *rules = json_object_get(element, "allow");
 
     if (rules == nullptr) {
         log_error() << "No rules specified";
@@ -73,19 +63,6 @@ ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *
         }
     }
 
-    std::string readTarget;
-    if (!JSONParser::read(element, "default", readTarget)) {
-        log_error() << "No default target specified or default target is not a string.";
-        return ReturnCode::FAILURE;
-    }
-
-    e.m_defaultTarget = parseTarget(readTarget);
-    if (e.m_defaultTarget == IPTableEntry::Target::INVALID_TARGET
-        || e.m_defaultTarget == IPTableEntry::Target::REJECT) {
-        log_error() << "Default target '" << readTarget << "' is not a supported target";
-        return ReturnCode::FAILURE;
-    }
-
     return ReturnCode::SUCCESS;
 }
 
@@ -93,36 +70,31 @@ ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *
 ReturnCode NetworkGatewayParser::parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules)
 {
     IPTableEntry::Rule r;
-    std::string target;
-    if (!JSONParser::read(element, "target", target)) {
-        log_error() << "Target not specified in the network config";
-        return ReturnCode::FAILURE;
-    }
 
-    r.target = parseTarget(target);
-    if (r.target == IPTableEntry::Target::INVALID_TARGET) {
-        log_error() << target << " is not a valid target.";
-        return ReturnCode::FAILURE;
-    }
+    r.target = IPTableEntry::Target::ACCEPT;
 
     if (!JSONParser::read(element, "host", r.host)) {
         log_error() << "Host not specified in the network config.";
         return ReturnCode::FAILURE;
     }
 
-    // Parsing different port formats
-    json_t *port = json_object_get(element, "port");
-    if (port != nullptr) {
-        parsePort(port, r.ports);
+    // Parsing port formats
+    json_t *ports = json_object_get(element, "ports");
+    if (ports != nullptr) {
+        parsePort(ports, r.ports);
     }
-    // If there were no port configured, leave the port list empty
-    // and assume that all ports should be considered in the rule.
+
+    // Parsing protocols
+    json_t *protocols = json_object_get(element, "protocols");
+    if (protocols != nullptr) {
+        parseProtocol(protocols, r.protocols);
+    }
 
     rules.push_back(r);
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode NetworkGatewayParser::parsePort(const json_t *element,  IPTableEntry::portFilter &ports)
+ReturnCode NetworkGatewayParser::parsePort(const json_t *element, IPTableEntry::portFilter &ports)
 {
     // Port formatted as single integer means there is only one port
     if (json_is_integer(element)) {
@@ -162,19 +134,48 @@ ReturnCode NetworkGatewayParser::parsePort(const json_t *element,  IPTableEntry:
     return ReturnCode::SUCCESS;
 }
 
-IPTableEntry::Target NetworkGatewayParser::parseTarget(const std::string &str)
+bool NetworkGatewayParser::isProtocolValid(std::string protocol) {
+    if ((protocol ==  "tcp") ||  (protocol ==  "udp") || (protocol == "icmp")) {
+        return true;
+    } else {
+        log_error() << protocol
+                    << " is not valid value. Only tcp, udp and icmp protocols are allowed";
+        return false;
+    }
+}
+
+ReturnCode NetworkGatewayParser::parseProtocol(const json_t *element,
+                                               std::vector<std::string> &proto)
 {
-    if (str == "ACCEPT") {
-        return IPTableEntry::Target::ACCEPT;
-    }
+    // Single Protocol
+    if (json_is_string(element)) {
+        std::string protocol = json_string_value(element);
+        if (!isProtocolValid(protocol)) {
+            return ReturnCode::FAILURE;
+        }
+        proto.push_back(protocol);
+    // Multiple protocols
+    } else if (json_is_array(element)) {
+        size_t ix;
+        json_t *val;
 
-    if (str == "DROP") {
-        return IPTableEntry::Target::DROP;
-    }
+        json_array_foreach(element, ix, val) {
+            if (!json_is_string(val)) {
+                log_error() << "Listed protocol is not valid";
+                return ReturnCode::FAILURE;
+            }
 
-    if (str == "REJECT") {
-        return IPTableEntry::Target::REJECT;
-    }
+            std::string protocol = json_string_value(val);
 
-    return IPTableEntry::Target::INVALID_TARGET;
- }
+            if (!isProtocolValid(protocol)) {
+                return ReturnCode::FAILURE;
+            }
+
+            proto.push_back(protocol);
+        }
+    } else {
+        log_error() << "Protocols specified in an invalid format";
+        return ReturnCode::FAILURE;
+    }
+    return ReturnCode::SUCCESS;
+}

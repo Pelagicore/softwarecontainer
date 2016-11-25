@@ -55,40 +55,36 @@ DATA = {
 
 GW_CONFIG_POLICY_DROP = [
     {
-        "type": "OUTGOING",
-        "priority": 1,
-        "rules": [],
-        "default": "DROP"
+        "direction": "OUTGOING",
+        "allow": []
     }
 ]
 
-GW_CONFIG_POLICY_ACCEPT = [
+GW_CONFIG_POLICY_ACCEPT_PING = [
     {
-        "type": "OUTGOING",
-        "priority": 1,
-        "rules": [],
-        "default": "ACCEPT"
-    }
-]
-
-GW_CONFIG_REJECT_EXAMPLE_COM = [
+        "direction": "OUTGOING",
+        "allow": [{"host": "*", "protocols": "icmp"},
+                  {"host": "*", "protocols": ["udp", "tcp"], "ports": 53}]
+    },
     {
-        "type": "OUTGOING",
-        "priority": 1,
-        "rules": [{"host": "example.com", "target": "REJECT"}],
-        "default": "ACCEPT"
+        "direction": "INCOMING",
+        "allow": [{"host": "*", "protocols": "icmp"},
+                  {"host": "*", "protocols": ["udp", "tcp"], "ports": 53}]
     }
 ]
 
-GW_CONFIG_REJECT_EXAMPLE_COM_INPUT = [
+GW_CONFIG_ACCEPT_EXAMPLE_COM = [
     {
-        "type": "INCOMING",
-        "priority": 1,
-        "rules": [{"host": "example.com", "target": "REJECT"}],
-        "default": "ACCEPT"
+        "direction": "OUTGOING",
+        "allow": [{"host": "example.com", "protocols": "icmp"},
+                  {"host": "*", "protocols": ["udp", "tcp"], "ports": 53}]
+    },
+    {
+        "direction": "INCOMING",
+        "allow": [{"host": "example.com", "protocols": "icmp"},
+                  {"host": "*", "protocols": ["udp", "tcp"], "ports": 53}]
     }
 ]
-
 
 ##### Test suites #####
 
@@ -105,8 +101,8 @@ class TestNetworkRules(object):
         these durations will be shorten with -i option when possible
     """
     def test_network_policy_drop(self):
-        """ Test setting network default target to drop and tests the corresponding behavior
-            which is being not possible to ping a hostname
+        """ Test if the default policy is DROP as it should be
+            which behavior is being not possible to ping a hostname
         """
         try:
             sc = Container()
@@ -118,7 +114,7 @@ class TestNetworkRules(object):
                               sc.get_bind_dir() +
                               "/testhelper.py" +
                               " --test-dir " + sc.get_bind_dir() +
-                              " --do-ping example.com")
+                              " --do-ping 8.8.8.8")
             # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout)
             time.sleep(10)
             helper = NetworkHelper(CURRENT_DIR)
@@ -129,15 +125,19 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
-    def test_network_policy_accept(self):
-        """ Test setting network default target to accept and tests the corresponding behavior
-            which is being possible to ping hostname
+    def test_network_protocols(self):
+        """ Tests all allowed protocols and port filtering
+            icmp protocol is used for ping hostname
+            dns is needed for resolving hostname
+            tcp and udp protocols are used for dns lookup
+            dns uses tcp for zone transfer over port 53 and it
+            uses udp for queries over port 53
         """
         try:
             sc = Container()
             sc.start(DATA)
             
-            sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
+            sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -152,23 +152,22 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
-    def test_reject_outgoing_traffic_to_specific_domain_and_accept_others(self):
-        """ Tests two things for outgoing traffic:
-            * Test that a specific domain is rejected based on a rule.
-            * Test that the default target, which is to accept, is retained when the reject rule
-              is set.
+
+    def test_allow_ping_only_for_specific_domain(self):
+        """ Tests the specific domain is allowed to ping.
+            And other domains are not allowed to ping.
         """
         try:
             sc = Container()
             sc.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_REJECT_EXAMPLE_COM)
+            sc.set_gateway_config("network", GW_CONFIG_ACCEPT_EXAMPLE_COM)
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
                               " --test-dir " + sc.get_bind_dir() +
-                              " --do-ping example.com")
+                              " --do-ping IANA.com")
             # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout)
             time.sleep(10)
             helper = NetworkHelper(CURRENT_DIR)
@@ -180,49 +179,10 @@ class TestNetworkRules(object):
                               sc.get_bind_dir() +
                               "/testhelper.py" +
                               " --test-dir " + sc.get_bind_dir() +
-                              " --do-ping IANA.org")
-            time.sleep(2)
-            is_pingable = helper.ping_result()
-            assert is_pingable is True
-            helper.remove_file()
-        finally:
-            sc.terminate()
-
-    def test_reject_incoming_traffic_from_specific_domain_and_accept_others(self):
-        """ Tests two things for incoming traffic:
-            * Test that a specific domain is rejected based on a rule.
-            * Test that the default target, which is to accept, is retained when the reject rule
-              is set.
-        """
-        try:
-            sc = Container()
-            sc.start(DATA)
-            
-            sc.set_gateway_config("network", GW_CONFIG_REJECT_EXAMPLE_COM_INPUT)
-
-            sc.launch_command("python " +
-                              sc.get_bind_dir() +
-                              "/testhelper.py" +
-                              " --test-dir " + sc.get_bind_dir() +
-                              " --do-ping IANA.org")
-            time.sleep(2)
-            helper = NetworkHelper(CURRENT_DIR)
-            is_pingable = helper.ping_result()
-            assert is_pingable is True
-
-            helper.remove_file()
-            sc.launch_command("python " +
-                              sc.get_bind_dir() +
-                              "/testhelper.py" +
-                              " --test-dir " + sc.get_bind_dir() +
                               " --do-ping example.com")
-            # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout).
-            # This takes longer time for incoming traffic because the busybox ping timeout is longer
-            # when the host is reachable.
-            # compared to when not able to reach host.
-            time.sleep(20)
+            time.sleep(2)
             is_pingable = helper.ping_result()
-            assert is_pingable is False
+            assert is_pingable is True
             helper.remove_file()
         finally:
             sc.terminate()
@@ -243,9 +203,9 @@ class TestNetworkDiversity(object):
             sc.start(DATA)
             sc2.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
+            sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
 
-            sc2.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT)
+            sc2.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +

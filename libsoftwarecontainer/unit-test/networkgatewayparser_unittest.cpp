@@ -37,21 +37,19 @@ protected:
  * @brief Tests if configuration parsed to rules correctly
  *
  * This tests evaluates following elements parsed correctly
- *      type : INCOMING
- *      default target : DROP
+ *      direction : INCOMING
  *      a rule with singular port
  */
-TEST_F(NetworkGatewayParserTest, TestInputSingularPort) {
+TEST_F(NetworkGatewayParserTest, InputSingularPort) {
 
     const std::string config =
     "{"
-        "\"type\": \"INCOMING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"}"
-                 "],"
-        "\"default\": \"DROP\""
+        "\"direction\": \"INCOMING\","
+        "\"allow\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"ports\": 80}"
+                   "]"
     "}";
+
 
     IPTableEntry e;
     json_error_t error;
@@ -73,20 +71,17 @@ TEST_F(NetworkGatewayParserTest, TestInputSingularPort) {
  * @brief Tests if configuration parsed to rules correctly
  *
  * This tests evaluates following elements parsed correctly
- *      type : INCOMING
- *      default target : ACCEPT
+ *      direction : INCOMING
  *      a rule with port list
  */
-TEST_F(NetworkGatewayParserTest, TestInputMultiplePort) {
+TEST_F(NetworkGatewayParserTest, InputMultiplePort) {
 
     const std::string config =
     "{"
-        "\"type\": \"INCOMING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"REJECT\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"INCOMING\","
+        "\"allow\": ["
+                     "{ \"host\": \"127.0.0.1/16\", \"ports\": [80, 8080]}"
+                   "]"
     "}";
 
     IPTableEntry e;
@@ -95,57 +90,29 @@ TEST_F(NetworkGatewayParserTest, TestInputMultiplePort) {
 
     ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-    ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_defaultTarget);
+    ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
 
     ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
     ASSERT_EQ(1, e.m_rules[0].ports.any);
     ASSERT_EQ(1, e.m_rules[0].ports.multiport);
     ASSERT_EQ("80,8080", e.m_rules[0].ports.ports);
-    ASSERT_EQ(IPTableEntry::Target::REJECT, e.m_rules[0].target);
+    ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
 }
 
 /*
- * @brief Tests if configuration parsing gives error on wrong default target
+ * @brief Tests if configuration parsing fails on port typo
+ * This tests evaluates if the test fails when user writes port instead of ports
  */
-TEST_F(NetworkGatewayParserTest, TestInputWrongPolicy) {
+TEST_F(NetworkGatewayParserTest, PortTypo) {
 
     const std::string config =
     "{"
-        "\"type\": \"INCOMING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"REJECT\"}"
-                 "],"
-        "\"default\": \"REJECT\""
-    "}";
-
-    IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    ASSERT_NE(nullptr, root);
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-}
-
-/*
- * @brief Tests if configuration parsed to rules correctly
- *
- * This tests evaluates following elements parsed correctly
- *      type : OUTGOING
- *      default target : ACCEPT
- *      a rule with port range
- */
-TEST_F(NetworkGatewayParserTest, TestOutputMultiplePort) {
-
-    const std::string config =
-    "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": \"80:8080\", \"target\": \"DROP\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"OUTGOING\","
+        "\"allow\": "
+        "["
+           "{ \"host\": \"127.0.0.1/16\", \"port\": \"80:8080\", \"protocols\": \"tcp\"}"
+        "]"
     "}";
 
     IPTableEntry e;
@@ -154,77 +121,64 @@ TEST_F(NetworkGatewayParserTest, TestOutputMultiplePort) {
 
     ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-    ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_defaultTarget);
+    ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
+    ASSERT_EQ("OUTPUT", e.m_type);
+
+    ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
+    ASSERT_NE(1, e.m_rules[0].ports.any);
+    ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
+    ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+}
+
+
+/*
+ * @brief Tests if configuration parsed to rules correctly
+ *
+ * This tests evaluates following elements parsed correctly
+ *      direction : OUTGOING
+ *      a rule with port range and tcp protocol
+ */
+TEST_F(NetworkGatewayParserTest, OutputMultiplePort) {
+
+    const std::string config =
+    "{"
+        "\"direction\": \"OUTGOING\","
+        "\"allow\": "
+        "["
+           "{ \"host\": \"127.0.0.1/16\", \"ports\": \"80:8080\", \"protocols\": \"tcp\"}"
+        "]"
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("OUTPUT", e.m_type);
 
     ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
     ASSERT_EQ(1, e.m_rules[0].ports.any);
     ASSERT_EQ(1, e.m_rules[0].ports.multiport);
     ASSERT_EQ("80:8080", e.m_rules[0].ports.ports);
-    ASSERT_EQ(IPTableEntry::Target::DROP, e.m_rules[0].target);
+    ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
+    ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
 }
 
-/*
- * @brief Tests if configuration parsing gives error on wrong target
- */
-TEST_F(NetworkGatewayParserTest, TestOutputWrongTarget) {
-
-    const std::string config =
-    "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": \"80:8080\", \"target\": \"INJECT\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
-    "}";
-
-    IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    ASSERT_NE(nullptr, root);
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-
-}
-
-/*
- * @brief Tests if configuration parsing gives error on no target
- */
-TEST_F(NetworkGatewayParserTest, TestOutputNoTarget) {
-
-    const std::string config =
-    "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": \"80:8080\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
-    "}";
-
-    IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    ASSERT_NE(nullptr, root);
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-
-}
 
 /*
  * @brief Tests if configuration parsing gives error on no host
  */
-TEST_F(NetworkGatewayParserTest, TestOutputNoHost) {
+TEST_F(NetworkGatewayParserTest, OutputNoHost) {
 
     const std::string config =
     "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-            "{ \"port\": \"80:8080\", \"target\": \"REJECT\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"OUTGOING\","
+        "\"allow\": "
+        "["
+           "{ \"ports\": \"80:8080\", \"protocols\": \"tcp\"}"
+        "]"
     "}";
 
     IPTableEntry e;
@@ -240,16 +194,13 @@ TEST_F(NetworkGatewayParserTest, TestOutputNoHost) {
 /*
  * @brief Tests if configuration parsing does not gives error on no port
  */
-TEST_F(NetworkGatewayParserTest, TestOutputNoPort) {
+TEST_F(NetworkGatewayParserTest, OutputNoPort) {
 
     const std::string config =
     "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-            "{ \"host\": \"127.0.0.1/16\", \"target\": \"REJECT\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"OUTGOING\","
+        "\"allow\": "
+        "[{\"host\": \"127.0.0.1/16\"}]"
     "}";
 
     IPTableEntry e;
@@ -259,73 +210,18 @@ TEST_F(NetworkGatewayParserTest, TestOutputNoPort) {
     ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
 
+    ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
     ASSERT_EQ(0, e.m_rules[0].ports.any);
-
 }
 
 /**
- *@brief Test that config entries with no priority specified fails gracefully.
+ * @brief Test that config entries with no allow list specified fails gracefully.
  */
-TEST_F(NetworkGatewayParserTest, TestSetConfigNoPriority) {
+TEST_F(NetworkGatewayParserTest, SetConfigNoRules) {
 
     const std::string config =
     "{"
-        "\"type\": \"OUTGOING\","
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"google.com\", \"port\": \"80:85\", \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
-    "}";
-
-    IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    ASSERT_NE(nullptr, root);
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-}
-
-
-
-/**
- * @brief Test that config entries with no type specified fails gracefully.
- */
-TEST_F(NetworkGatewayParserTest, TestSetConfigNoType) {
-
-    const std::string config =
-    "{"
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"google.com\", \"port\": \"80:85\", \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
-                 "],"
-        "\"default\": \"ACCEPT\""
-    "}";
-
-    IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    ASSERT_NE(nullptr, root);
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-}
-
-
-/**
- * @brief Test that config entries with no rules specified fails gracefully.
- */
-TEST_F(NetworkGatewayParserTest, TestSetConfigNoRules) {
-
-    const std::string config =
-    "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"OUTGOING\""
     "}";
 
     IPTableEntry e;
@@ -337,16 +233,14 @@ TEST_F(NetworkGatewayParserTest, TestSetConfigNoRules) {
 }
 
 /**
- * @brief Test that config entries with empty rules specified works.
+ * @brief Test that config entries with empty allow list works.
  */
-TEST_F(NetworkGatewayParserTest, TestSetConfigEmptyRules) {
+TEST_F(NetworkGatewayParserTest, SetConfigEmptyRules) {
 
     const std::string config =
     "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": [],"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"OUTGOING\","
+        "\"allow\": []"
     "}";
 
     IPTableEntry e;
@@ -358,41 +252,14 @@ TEST_F(NetworkGatewayParserTest, TestSetConfigEmptyRules) {
 }
 
 /**
- * @brief Test that config entries with no default target specified fails gracefully.
- */
-TEST_F(NetworkGatewayParserTest, TestSetConfigNoDefaultTarget) {
-
-    const std::string config =
-    "{"
-        "\"type\": \"OUTGOING\","
-        "\"priority\": 1,"
-        "\"rules\": ["
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": 80, \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"google.com\", \"port\": \"80:85\", \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"127.0.0.1/16\", \"port\": [80, 8080], \"target\": \"ACCEPT\"},"
-                     "{ \"host\": \"50.63.202.33/24\", \"target\": \"REJECT\"}"
-                 "]"
-    "}";
-
-    IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    ASSERT_NE(nullptr, root);
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-}
-
-/**
- * @brief Test that config entries with rules specified as an integer fails gracefully.
+ * @brief Test that config entries with allow list specified as an integer fails gracefully.
  */
 TEST_F(NetworkGatewayParserTest, TestSetConfigRulesIsInteger) {
 
     const std::string config =
     "{"
-        "\"type\": \"INCOMING\","
-        "\"priority\": 1,"
-        "\"rules\": 123,"
-        "\"default\": \"ACCEPT\""
+        "\"direction\": \"INCOMING\","
+        "\"allow\": 123"
     "}";
 
     IPTableEntry e;
@@ -403,3 +270,32 @@ TEST_F(NetworkGatewayParserTest, TestSetConfigRulesIsInteger) {
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
 }
 
+
+/**
+ * @brief Test configuration with multiple protocols and one port
+ */
+TEST_F(NetworkGatewayParserTest, MultipleProtocols) {
+
+    const std::string config =
+    "{"
+        "\"direction\": \"INCOMING\","
+        "\"allow\": ["
+            "{\"host\": \"*\", \"ports\": \"80\", \"protocols\": [\"tcp\", \"udp\"]}"
+        "]"
+    "}";
+
+    IPTableEntry e;
+    json_error_t error;
+    json_t *root = json_loads(config.c_str(), 0, &error);
+
+    ASSERT_NE(nullptr, root);
+    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
+    ASSERT_EQ("INPUT", e.m_type);
+
+    ASSERT_EQ(1, e.m_rules[0].ports.any);
+    ASSERT_EQ("80", e.m_rules[0].ports.ports);
+    ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
+    ASSERT_EQ("udp", e.m_rules[0].protocols[1]);
+    ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+}
