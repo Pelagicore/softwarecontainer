@@ -203,6 +203,7 @@ std::vector<std::string> BaseConfigStore::fileList(const std::string &dirPath)
 
     return files;
 }
+
 bool BaseConfigStore::isJsonFile(const std::string &filename) {
 
     if (filename.size() <= 5) {

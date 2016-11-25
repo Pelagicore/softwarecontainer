@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -16,9 +15,14 @@
 #
 # For further information see LICENSE
 
-# Unset RPATH. This should not be needed for any example.
-set(CMAKE_INSTALL_RPATH "")
+set(TEMPSERVICE_XML ${CMAKE_CURRENT_SOURCE_DIR}/temperature-service.xml)
 
-add_subdirectory(simple)
-add_subdirectory(temperature)
-add_subdirectory(wayland)
+add_subdirectory(temperature-service)
+add_subdirectory(temperature-service-console-client)
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/launch.sh
+        DESTINATION share/softwarecontainer/examples/temperature
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                    GROUP_READ GROUP_EXECUTE 
+                    WORLD_READ WORLD_EXECUTE
+        )

@@ -19,6 +19,16 @@ this example starts the agent, bind mounts the directory in which it (and the co
 binary) exists into the container, and launches the simple binary. It runs for 30 secs, and then
 shuts down the container, and the agent.
 
+.. _temperature-example:
+
+Temperature Example
+===================
+The temperature example consists of a temperature service, and a temperature client. The service
+runs on the host system, and the client is meant to run inside the container. The two communicate
+over DBus, so the DBus gateway is set up to allow traffic on DBus between the host and container.
+
+The client tells the service to set the temperature once every second, and when the service emits
+a signal that the temperature changed, the client logs this to a file.
 
 .. _wayland-example:
 
