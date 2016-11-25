@@ -17,7 +17,10 @@
  * For further information see LICENSE
  */
 
-#include <softwarecontaineragent.h>
+#include "softwarecontaineragent.h"
+#include "capability/baseconfigstore.h"
+#include "capability/filteredconfigstore.h"
+#include "capability/defaultconfigstore.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>

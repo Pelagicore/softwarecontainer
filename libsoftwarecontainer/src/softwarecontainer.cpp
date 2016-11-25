@@ -113,6 +113,7 @@ ReturnCode SoftwareContainer::init()
         return ReturnCode::FAILURE;
     }
 
+    // TODO: Rename this... preloading is a bit wierd name
     if (getContainerState() != ContainerState::PRELOADED) {
         if (isError(preload())) {
             log_error() << "Failed to preload container";
@@ -170,7 +171,7 @@ void SoftwareContainer::addGateway(Gateway *gateway)
     m_gateways.push_back(std::move(std::unique_ptr<Gateway>(gateway)));
 }
 
-void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &configs)
+void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &gwConfig)
 {
     // Go through the active gateways and check if there is a configuration for it
     // If there is, apply it.
@@ -178,8 +179,8 @@ void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &configs)
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();
 
-        if (configs.count(gatewayId) != 0) {
-            json_t *config = configs.at(gatewayId);
+        json_t *config = gwConfig.config(gatewayId);
+        if (config != nullptr) {
             char *configStr = json_dumps(config,0);
             gateway->setConfig(std::string(configStr));
             free(configStr);

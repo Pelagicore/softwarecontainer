@@ -17,7 +17,9 @@
  * For further information see LICENSE
  */
 
-#include <configstore.h>
+#include "capability/baseconfigstore.h"
+#include "capability/filteredconfigstore.h"
+#include "capability/defaultconfigstore.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -29,7 +31,7 @@ class ConfigStoreTest: public ::testing::Test
 public:
     LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
     ConfigStoreTest() {}
-    //ConfigStore cs = ConfigStore();
+
     std::string capNameA = "com.pelagicore.temperatureservice.gettemperature";
     std::string capNameB = "com.pelagicore.temperatureservice.settemperature";
     std::string capNameC = "dummyCapC";
@@ -56,63 +58,63 @@ public:
 
 /* The tests */
 
-/* Constructing a ConfigStore with an empty file path should not throw an exception.
+/* Constructing a FilteredConfigStore with an empty file path should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorEmptyStr) {
-    ASSERT_NO_THROW(ConfigStore(""));
+    ASSERT_NO_THROW(BaseConfigStore(""));
 }
 
-/* Constructing a ConfigStore with a file path,
+/* Constructing a FilteredConfigStore with a file path,
  * pointing at a parsable json file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk) {
-    ASSERT_NO_THROW(ConfigStore(testDataDir + short_sm_path));
+    ASSERT_NO_THROW(BaseConfigStore(testDataDir + short_sm_path));
 }
 
-/* Constructing a ConfigStore with a file path,
+/* Constructing a FilteredConfigStore with a file path,
  * pointing at a parsable file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk2) {
-    ASSERT_NO_THROW(ConfigStore(testDataDir + sm_path));
+    ASSERT_NO_THROW(BaseConfigStore(testDataDir + sm_path));
 }
 
-/* Constructing a ConfigStore with a file path,
+/* Constructing a FilteredConfigStore with a file path,
  * pointing at a file which can not be parsed,
  * should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilFile) {
-    ASSERT_THROW(ConfigStore(testDataDir + evil_sm), ReturnCode);
+    ASSERT_THROW(BaseConfigStore(testDataDir + evil_sm), ReturnCode);
 }
 
-/* Constructing a ConfigStore with a directory path,
+/* Constructing a FilteredConfigStore with a directory path,
  * even if all files can not be parsed, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorDir) {
-    ASSERT_NO_THROW(ConfigStore(testDataDir + ""));
+    ASSERT_NO_THROW(BaseConfigStore(testDataDir + ""));
 }
 
-/* Constructing a ConfigStore with a directory path,
+/* Constructing a FilteredConfigStore with a directory path,
  * even if all files can not be parsed, should not throw an exception.
  */
 /* This test fails intermittently, not clear why
-TEST_F(ConfigStoreTest, constructorDir2) {
+TEST_F(FilteredConfigStoreTest, constructorDir2) {
     // No config files, but ok dir
-    ASSERT_NO_THROW(ConfigStore("/home/vagrant/softwarecontainer/"));
+    ASSERT_NO_THROW(FilteredConfigStore("/home/vagrant/softwarecontainer/"));
 }
 */
 
-/* Constructing a ConfigStore with a directory path,
+/* Constructing a FilteredConfigStore with a directory path,
  * when the directory does not exist, should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilDir) {
-    ASSERT_THROW(ConfigStore("/home/tester"), ReturnCode);
+    ASSERT_THROW(BaseConfigStore("/home/tester"), ReturnCode);
 }
 
-/* Constructing a ConfigStore with a directory path,
+/* Constructing a FilteredConfigStore with a directory path,
  * when the directory is "/", should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilDir2) {
-    ASSERT_THROW(ConfigStore("/"), ReturnCode);
+    ASSERT_THROW(FilteredConfigStore("/"), ReturnCode);
 }
 
 
@@ -121,9 +123,9 @@ TEST_F(ConfigStoreTest, constructorEvilDir2) {
  * should result in a non-empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
-    ConfigStore cs = ConfigStore(testDataDir + sm_path);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + sm_path);
 
-    GatewayConfiguration retGWs = cs.getGatewayConfigs(capNameA);
+    GatewayConfiguration retGWs = cs.configByID(capNameA);
     ASSERT_FALSE(retGWs.empty());
 }
 
@@ -132,8 +134,8 @@ TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
  * should result in an empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
-    ConfigStore cs = ConfigStore(testDataDir + sm_path);
-    GatewayConfiguration retGWs = cs.getGatewayConfigs("EvilCapName");
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + sm_path);
+    GatewayConfiguration retGWs = cs.configByID("EvilCapName");
     ASSERT_TRUE(retGWs.empty());
 }
 
@@ -142,8 +144,8 @@ TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
  * should result in a non-empty result. Match result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
-    ConfigStore cs = ConfigStore(testDataDir + short_sm_path);
-    GatewayConfiguration retGWs = cs.getGatewayConfigs(capNameA);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + short_sm_path);
+    GatewayConfiguration retGWs = cs.configByID(capNameA);
     EXPECT_FALSE(retGWs.empty());
 
     std::string configStr =
@@ -162,7 +164,7 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
     EXPECT_FALSE(nullptr == expectedJson);
 
     std::string gwID = "dbus";
-    json_t *retGWConfigs = retGWs[gwID];
+    json_t *retGWConfigs = retGWs.config(gwID);
     ASSERT_TRUE(json_is_array(retGWConfigs));
     ASSERT_TRUE(json_equal(retGWConfigs,expectedJson));
 }
@@ -175,8 +177,8 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
  * reading of file results in a warning (for the "parseError" file).
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
-    ConfigStore cs = ConfigStore(testDataDir);
-    GatewayConfiguration retGWs = cs.getGatewayConfigs(capNameA);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir);
+    GatewayConfiguration retGWs = cs.configByID(capNameA);
     EXPECT_FALSE(retGWs.empty());
     std::vector<json_t *> expectedDbusConfigs;
 
@@ -225,7 +227,7 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
     expectedDbusConfigs.push_back(expectedJson3);
 
     std::string gwID = "dbus";
-    json_t *retGWConfigs = retGWs[gwID];
+    json_t *retGWConfigs = retGWs.config(gwID);
     ASSERT_TRUE(json_is_array(retGWConfigs));
 
     // Match that all expected GW configs are present in the returned GW configs
