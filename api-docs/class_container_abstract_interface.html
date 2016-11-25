@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-057f383 2016-11-24</span>
+   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -75,7 +75,7 @@ $(document).ready(function(){initNavTree('class_container_abstract_interface.htm
 <div class="dynheader">
 Inheritance diagram for ContainerAbstractInterface:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_container_abstract_interface__inherit__graph.svg" width="190" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_container_abstract_interface__inherit__graph.svg" width="206" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -114,12 +114,6 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>shutdow
 <tr class="memitem:ac78fe54ddfe0b4313ef28b3734fdb7a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac78fe54ddfe0b4313ef28b3734fdb7a3"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>shutdown</b> (unsigned int timeout)=0</td></tr>
 <tr class="separator:ac78fe54ddfe0b4313ef28b3734fdb7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a592af199c9ab704aebdbbf66fd94dcef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a592af199c9ab704aebdbbf66fd94dcef"></a>
-virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>suspend</b> ()=0</td></tr>
-<tr class="separator:a592af199c9ab704aebdbbf66fd94dcef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a842bca3c44464f2812c38cf274cd2823"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a842bca3c44464f2812c38cf274cd2823"></a>
-virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>resume</b> ()=0</td></tr>
-<tr class="separator:a842bca3c44464f2812c38cf274cd2823"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a1b05cd9f5d394b3ff9bcd0ddcbefe1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a1b05cd9f5d394b3ff9bcd0ddcbefe1"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>destroy</b> ()=0</td></tr>
 <tr class="separator:a7a1b05cd9f5d394b3ff9bcd0ddcbefe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,12 +129,12 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>mountDe
 <tr class="memitem:a39d7376b1b410085ad224e73bd608692"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a39d7376b1b410085ad224e73bd608692"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>createSymLink</b> (const std::string &amp;source, const std::string &amp;destination)=0</td></tr>
 <tr class="separator:a39d7376b1b410085ad224e73bd608692"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90574f75e1a9ce108b158145a020b31f"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_container_abstract_interface.html#a90574f75e1a9ce108b158145a020b31f">bindMountFileInContainer</a> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)=0</td></tr>
-<tr class="memdesc:a90574f75e1a9ce108b158145a020b31f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a file in the container.  <a href="#a90574f75e1a9ce108b158145a020b31f">More...</a><br /></td></tr>
-<tr class="separator:a90574f75e1a9ce108b158145a020b31f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b308a43773e7258e307870670420ed6"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_container_abstract_interface.html#a5b308a43773e7258e307870670420ed6">bindMountFolderInContainer</a> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)=0</td></tr>
-<tr class="memdesc:a5b308a43773e7258e307870670420ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a directory in the container.  <a href="#a5b308a43773e7258e307870670420ed6">More...</a><br /></td></tr>
-<tr class="separator:a5b308a43773e7258e307870670420ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6039c1be6fe31e32bedd06dec2f24b70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6039c1be6fe31e32bedd06dec2f24b70"></a>
+virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>bindMountFileInContainer</b> (const std::string &amp;src, const std::string &amp;dst, std::string &amp;result, bool readonly=true)=0</td></tr>
+<tr class="separator:a6039c1be6fe31e32bedd06dec2f24b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2d81fcd57e6c807dcdd6203c696b2e0"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_container_abstract_interface.html#ad2d81fcd57e6c807dcdd6203c696b2e0">bindMountFolderInContainer</a> (const std::string &amp;src, const std::string &amp;dst, std::string &amp;result, bool readonly=true)=0</td></tr>
+<tr class="memdesc:ad2d81fcd57e6c807dcdd6203c696b2e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind mount a directory from the host into the container.  <a href="#ad2d81fcd57e6c807dcdd6203c696b2e0">More...</a><br /></td></tr>
+<tr class="separator:ad2d81fcd57e6c807dcdd6203c696b2e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97748066052e4f705f661144ceb5c91c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97748066052e4f705f661144ceb5c91c"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironmentVariable</b> (const std::string &amp;variable, const std::string &amp;value)=0</td></tr>
 <tr class="separator:a97748066052e4f705f661144ceb5c91c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,61 +158,7 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 <div class="textblock">
 <p>Definition at line <a class="el" href="containerabstractinterface_8h_source.html#l00026">26</a> of file <a class="el" href="containerabstractinterface_8h_source.html">containerabstractinterface.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a90574f75e1a9ce108b158145a020b31f"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual ReturnCode ContainerAbstractInterface::bindMountFileInContainer </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathOnHost</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathInContainer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>readonly</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tries to bind mount a file in the container. </p>
-<p>This will not create parent directories if they are not already present.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pathOnHost</td><td>The path to the file that shall be bind mounted on the host system. </td></tr>
-    <tr><td class="paramname">pathInContainer</td><td>Where to mount the file in the container. </td></tr>
-    <tr><td class="paramname">readonly</td><td>Sets if the mount should be read only or read write</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise. </dd></dl>
-
-<p>Implemented in <a class="el" href="class_container.html#a5923045139c392c9a74a2039ff5fec5e">Container</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5b308a43773e7258e307870670420ed6"></a>
+<a class="anchor" id="ad2d81fcd57e6c807dcdd6203c696b2e0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -229,13 +169,19 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
           <td class="memname">virtual ReturnCode ContainerAbstractInterface::bindMountFolderInContainer </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathOnHost</em>, </td>
+          <td class="paramname"><em>src</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathInContainer</em>, </td>
+          <td class="paramname"><em>dst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -256,19 +202,13 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 </table>
 </div><div class="memdoc">
 
-<p>Tries to bind mount a directory in the container. </p>
-<p>Will create missing parent directories.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pathOnHost</td><td>The path to the directory that shall be bind mounted on the host system. </td></tr>
-    <tr><td class="paramname">pathInContainer</td><td>Where to mount the file in the container. </td></tr>
-    <tr><td class="paramname">readonly</td><td>Sets if the mount should be read only or read write</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise. </dd></dl>
+<p>Bind mount a directory from the host into the container. </p>
+<p>Bind mount src to dst (relative to /gateways in container), e.g. passing '/home/foo/temp' as src and 'app' as dst, the resulting path inside the container will be '/gateways/app' and contain whatever is in '/home/foo/temp' on the host.</p>
+<p>'src' and 'dst' can be any value but there might be issues if something like '..' is used.</p>
+<p>If 'readonly' is set to 'true' the mount is read only.</p>
+<p>The resulting path is written to the 'result' out-parameter. </p>
 
-<p>Implemented in <a class="el" href="class_container.html#aba9a50a9d2cd38f04d384e00ab489998">Container</a>.</p>
+<p>Implemented in <a class="el" href="class_container.html#af602c6e290b0f9f5abb78bbc3b0828cd">Container</a>.</p>
 
 </div>
 </div>
@@ -281,7 +221,7 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_container_abstract_interface.html">ContainerAbstractInterface</a></li>
-    <li class="footer">Generated on Thu Nov 24 2016 14:58:50 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

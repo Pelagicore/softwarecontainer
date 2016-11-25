@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-057f383 2016-11-24</span>
+   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -87,7 +87,7 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;workspace.h&quot;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_workspace.html#ace3ad24a98b7198416f4d0ef0cb1d754">   22</a></span>&#160;Workspace::Workspace(<span class="keywordtype">bool</span> enableWriteBuffer,</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_workspace.html#ab5eb9d5dee4f59d14e6feee02c86fcd5">   22</a></span>&#160;Workspace::Workspace(<span class="keywordtype">bool</span> enableWriteBuffer,</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keyword">const</span> std::string &amp;containerRootDir,</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keyword">const</span> std::string &amp;containerConfigPath,</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout):</div>
@@ -122,7 +122,7 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#ifdef ENABLE_NETWORKGATEWAY</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// TODO: Have a way to check for the bridge using C/C++ instead of a</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// shell script. Libbridge and/or netfilter?</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::string cmdLine = std::string(INSTALL_BINDIR) + <span class="stringliteral">&quot;/setup_softwarecontainer.sh&quot;</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::string cmdLine = std::string(INSTALL_PREFIX) + <span class="stringliteral">&quot;/bin/setup_softwarecontainer.sh&quot;</span>;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Creating workspace : &quot;</span> &lt;&lt; cmdLine;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">int</span> returnCode;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">try</span> {</div>
@@ -153,7 +153,7 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><b>workspace.cpp</b></li>
-    <li class="footer">Generated on Thu Nov 24 2016 14:58:50 for softwarecontainer by
+    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
