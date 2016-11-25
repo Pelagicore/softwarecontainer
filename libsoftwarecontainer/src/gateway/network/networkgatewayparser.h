@@ -47,11 +47,23 @@ private :
     ReturnCode parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules);
 
     /**
-     * @brief Parses a ports from an json element
+     * @brief Parses ports from a json element
      * @return ReturnCode::SUCCESS if the rule is successfully parsed
      * @return ReturnCode::FAILURE otherwise.
      */
     ReturnCode parsePort(const json_t *element, IPTableEntry::portFilter &ports);
+
+    /**
+    * @return true or false whether the given protocol is available in NetworkGateway or not
+    */
+    bool isProtocolValid(std::string protocol);
+
+    /**
+     * @brief Parses protocols from a json element
+     * @return ReturnCode::SUCCESS if protocols are successfully parsed
+     * @return ReturnCode::FAILURE otherwise.
+     */
+    ReturnCode parseProtocol(const json_t *element, std::vector<std::string> &proto);
 
     /**
      * @brief Parses a string to a Target

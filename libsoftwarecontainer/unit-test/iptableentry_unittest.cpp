@@ -30,7 +30,7 @@ public:
     MockIPTableEntry():IPTableEntry()
     {
         m_type = "INPUT";
-        m_defaultTarget = Target::ACCEPT;
+        m_defaultTarget = Target::DROP;
     }
 };
 
@@ -40,105 +40,96 @@ protected:
     ::testing::NiceMock<MockIPTableEntry> ipTable;
 };
 
-/*
- * @brief Tests if ACCEPT policy matched with default targets
- * */
-TEST_F(IPTableEntryTest, TestIPTableEntryAcceptPolicy) {
-    ipTable.m_defaultTarget = IPTableEntry::Target::ACCEPT;
-    ASSERT_EQ("iptables -P INPUT ACCEPT", ipTable.interpretPolicy());
-}
 
 /*
  * @brief Tests if DROP policy matched with default targets
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryDropPolicy) {
+TEST_F(IPTableEntryTest, Policy) {
     ipTable.m_defaultTarget = IPTableEntry::Target::DROP;
     ASSERT_EQ("iptables -P INPUT DROP", ipTable.interpretPolicy());
 }
 
 /*
- * @brief Tests IPTableEntry behavior when run accross wrong default target
- * */
-TEST_F(IPTableEntryTest, TestIPTableEntryWrongPolicy) {
-    ipTable.m_defaultTarget = IPTableEntry::Target::REJECT;
-    ASSERT_EQ("", ipTable.interpretPolicy());
-}
-
-/*
  * @brief Tests if INPUT chain multiple port list rule is matched
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryInputMultiplePortList) {
+TEST_F(IPTableEntryTest, InputMultiplePortList) {
     ipTable.m_type = "INPUT";
     IPTableEntry::Rule r;
     r.host = "127.0.0.1/16";
     r.ports = {true, true, "80,8080"};
     r.target = IPTableEntry::Target::ACCEPT;
     ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p tcp --match multiport --sports 80,8080"
-                " -j ACCEPT", ipTable.interpretRule(r));
+              " -j ACCEPT", ipTable.interpretRule(r));
 }
 
 /*
- * @brief Tests if INPUT chain multiple port range rule is matched
+ * @brief Tests if INPUT chain multiple port range with protocol udp rule is matched
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryInputMultiplePortRange) {
+TEST_F(IPTableEntryTest, InputMultiplePortRange) {
     ipTable.m_type = "INPUT";
     IPTableEntry::Rule r;
     r.host = "127.0.0.1/16";
     r.ports = {true, true, "80:85"};
     r.target = IPTableEntry::Target::ACCEPT;
-    ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p tcp --match multiport --sports 80:85"
-            " -j ACCEPT", ipTable.interpretRule(r));
+    r.protocols = {"udp"};
+    ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p udp --match multiport --sports 80:85"
+              " -j ACCEPT", ipTable.interpretRuleWithProtocol(r, r.protocols[0]));
 }
 
 /*
- * @brief Tests if INPUT chain single port rule is matched
+ * @brief Tests if INPUT chain single port with icmp protocol rule is matched
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryInputSinglePort) {
+TEST_F(IPTableEntryTest, InputSinglePort) {
     ipTable.m_type = "INPUT";
     IPTableEntry::Rule r;
     r.host = "127.0.0.1/16";
     r.ports = {true, false, "80"};
     r.target = IPTableEntry::Target::ACCEPT;
-    ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p tcp --sport 80"
-            " -j ACCEPT", ipTable.interpretRule(r));
+    r.protocols = {"icmp"};
+    ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p icmp --sport 80"
+              " -j ACCEPT", ipTable.interpretRuleWithProtocol(r, r.protocols[0]));
 
 }
 
 /*
- * @brief Tests if OUTPUT chain multiple port list rule is matched
+ * @brief Tests if OUTPUT chain multiple port list with udp protocol rule is matched
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryOutputMultiplePortList) {
+TEST_F(IPTableEntryTest, OutputMultiplePortList) {
     ipTable.m_type = "OUTPUT";
     IPTableEntry::Rule r;
     r.host = "127.0.0.1/16";
     r.ports = {true, true, "80,8080"};
     r.target = IPTableEntry::Target::ACCEPT;
-    ASSERT_EQ("iptables -A OUTPUT -d 127.0.0.1/16 -p tcp --match multiport --dports 80,8080"
-            " -j ACCEPT", ipTable.interpretRule(r));
+    r.protocols= {"udp"};
+    ASSERT_EQ("iptables -A OUTPUT -d 127.0.0.1/16 -p udp --match multiport --dports 80,8080"
+              " -j ACCEPT", ipTable.interpretRuleWithProtocol(r, r.protocols[0]));
 }
 
 /*
  * @brief Tests if OUTPUT chain multiple port list rule is matched
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryOutputMultiplePortRange) {
+TEST_F(IPTableEntryTest, OutputMultiplePortRange) {
     ipTable.m_type = "OUTPUT";
     IPTableEntry::Rule r;
     r.host = "127.0.0.1/16";
     r.ports = {true, true, "80:85"};
+    r.protocols= {"tcp"};
     r.target = IPTableEntry::Target::ACCEPT;
     ASSERT_EQ("iptables -A OUTPUT -d 127.0.0.1/16 -p tcp --match multiport --dports 80:85"
-            " -j ACCEPT", ipTable.interpretRule(r));
+              " -j ACCEPT", ipTable.interpretRuleWithProtocol(r, r.protocols[0]));
 }
 
 /*
  * @brief Tests if OUTPUT chain multiple port list rule is matched
  * */
-TEST_F(IPTableEntryTest, TestIPTableEntryOutputSinglePort) {
+TEST_F(IPTableEntryTest, IPTableEntryOutputSinglePort) {
     ipTable.m_type = "OUTPUT";
     IPTableEntry::Rule r;
     r.host = "127.0.0.1/16";
     r.ports = {true, false, "80"};
+    r.protocols= {"tcp"};
     r.target = IPTableEntry::Target::ACCEPT;
     ASSERT_EQ("iptables -A OUTPUT -d 127.0.0.1/16 -p tcp --dport 80"
-            " -j ACCEPT", ipTable.interpretRule(r));
+              " -j ACCEPT", ipTable.interpretRule(r));
 }
+

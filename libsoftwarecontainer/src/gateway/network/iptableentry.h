@@ -28,7 +28,7 @@ class IPTableEntry
 {
     LOG_DECLARE_CLASS_CONTEXT("IPTE", "IPTable Entry");
 public:
-    IPTableEntry() : m_priority{0}, m_type{""}, m_defaultTarget{INVALID_TARGET} {};
+    IPTableEntry() : m_type{""}, m_defaultTarget{DROP} {};
     /**
      * @brief container for port filtering options. Used internally in a Rule.
      */
@@ -60,6 +60,7 @@ public:
     struct Rule
     {
         std::string host;
+        std::vector<std::string> protocols;
         portFilter  ports;
         Target target;
     };
@@ -78,6 +79,12 @@ public:
     std::string interpretRule(Rule rule);
 
     /**
+     * @brief Interprets a rule with protocol information to iptables applicable string
+     * @return string indicating interpreted rule
+     */
+    std::string interpretRuleWithProtocol(Rule rule, const std::string &protocol);
+
+    /**
      * @brief This function Interprets defaultTarget rule to iptables applicable policy string
      *
      * defaultTarget indicates what happens to packets if they don't match to any rules.
@@ -88,7 +95,6 @@ public:
      */
     std::string interpretPolicy(void);
 
-    unsigned int m_priority;
     std::string m_type;
     std::vector<Rule> m_rules;
     Target m_defaultTarget;
