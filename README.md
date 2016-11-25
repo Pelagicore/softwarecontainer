@@ -21,88 +21,9 @@ The SoftwareContainer is composed of the following components:
 * libsoftwarecontainer-agent, a library that can be used by other applications
   to interface with the softwarecontainer-agent interfaces and to control it.
 
-SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer
-The documentation is avaliable at https://pelagicore.github.io/softwarecontainer/
-
-Pelagicore maintainer:
-Tobias Olausson <tobias.olausson@pelagicore.com>
-
-# Building
-
-Building and installing is simple:
-```
-$ mkdir build
-$ cd build
-$ cmake ../
-$ make
-$ sudo make install
-```
-
-To build the project documentation set -DENABLE_ALL_DOC=ON when running cmake.
-You can also build the docs separately by pointing cmake to the doc
-directory. Documentation is separated into doxygen docs (API level docs)
-and docs built with sphinx (user documentation and general docs on a higher
-level).
-
-To run the unit-tests build with -DENABLE_TEST=ON. To run code coverage tools
-build with -DENABLE_COVERAGE=ON.
-
-To disable support for various gateways at compile time, set
-* -DENABLE_PULSEGATEWAY=OFF (for pulse)
-* -DENABLE_NETWORKGATEWAY=OFF (for network)
-* -DENABLE_DEVICENODEGATEWAY=OFF (for device node gateway)
-* -DENABLE_DBUSGATEWAY=OFF (for dbus)
-* -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
-* -DENABLE_WAYLANDGATEWAY=OFF (for wayland)
-* -DENABLE_FILEGATEWAY=OFF (for mounting files)
-* -DENABLE_ENVGATEWAY=OFF (for manipulating environment variables)
-
-To build the examples, build with -DENABLE_EXAMPLES=ON (and see Examples
-section).
-
-To prevent SoftwareContainer from creating a network bridge on startup (and
-instead only check that one is there), build with -DCREATE_BRIDGE=OFF.
-
-For a concrete example of building SoftwareContainer and setting up
-dependencies, see Vagrantfile in this repository. For an example on how to
-build this code, please take a look at the Vagrantfile.
-
-**Note**: It is possible to get the complete list of CMake options by running:
-``
-    mkdir build
-    cd build
-    cmake -LAH ..
-``
-
-## Install without root
-
-In order to install SoftwareContainer there are two things that needs to be set.
-
-1. -DENABLE_SYSTEM_BUS needs to be set to OFF. The dbus xml that is needed for
-   the system bus to be used can not be installed without root privileges.
-2. -DCMAKE_INSTALL_PREFIX needs to be set to a path the installing user has
-   write access to.
-
-## Building in Vagrant
-
-Vagrant can be used to quickly set up a virtualized environment for building.
-On a debian-based system, issue the following commands to build using Vagrant:
-
-```
-git submodule init
-git submodule update
-
-sudo apt update
-sudo apt install virtualbox vagrant
-
-vagrant up
-```
-
-The vagrant machine can then be inspected by running `vagrant ssh`
-
-This will create an environment for building softwarecontainer, download all
-the requirements, build the ones necessary to build, build softwarecontainer,
-run unit tests and perform a clang code analysis run on the code.
+SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer.
+The documentation is avaliable at https://pelagicore.github.io/softwarecontainer/.
+Pelagicore maintainer: Tobias Olausson <tobias.olausson@pelagicore.com>.
 
 # Dependencies
 
@@ -151,9 +72,82 @@ $ sudo apt-get install lxc lxc-dev libglib2.0-dev libglibmm-2.4 \
 - iptables
 - brctl, available in bridge-utils on Debian-based systems
 
-# Running
+# Building
+Building and installing is simple:
+```
+$ mkdir build
+$ cd build
+$ cmake ../
+$ make
+$ sudo make install
+```
 
-You normally only want to run the softwarecontaineragent, which requires root
+To build the project documentation set -DENABLE_ALL_DOC=ON when running cmake.
+You can also build the docs separately by pointing cmake to the doc
+directory. Documentation is separated into doxygen docs (API level docs)
+and docs built with sphinx (user documentation and general docs on a higher
+level).
+
+To run the unit-tests build with -DENABLE_TEST=ON. To run code coverage tools
+build with -DENABLE_COVERAGE=ON.
+
+To disable support for various gateways at compile time, set
+* -DENABLE_PULSEGATEWAY=OFF (for pulse)
+* -DENABLE_NETWORKGATEWAY=OFF (for network)
+* -DENABLE_DEVICENODEGATEWAY=OFF (for device node gateway)
+* -DENABLE_DBUSGATEWAY=OFF (for dbus)
+* -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
+* -DENABLE_WAYLANDGATEWAY=OFF (for wayland)
+* -DENABLE_FILEGATEWAY=OFF (for mounting files)
+* -DENABLE_ENVGATEWAY=OFF (for manipulating environment variables)
+
+To build the examples, build with -DENABLE_EXAMPLES=ON (and see Examples
+section).
+
+To prevent SoftwareContainer from creating a network bridge on startup (and
+instead only check that one is there), build with -DCREATE_BRIDGE=OFF.
+
+For a concrete example of building SoftwareContainer and setting up
+dependencies, see Vagrantfile in this repository. For an example on how to
+build this code, please take a look at the Vagrantfile.
+
+**Note**: It is possible to get the complete list of CMake options by running:
+``
+    mkdir build
+    cd build
+    cmake -LAH ..
+``
+
+## Install without root
+In order to install SoftwareContainer without root there are two things that needs to be set.
+
+1. -DENABLE_SYSTEM_BUS needs to be set to OFF. The dbus xml that is needed for
+   the system bus to be used can not be installed without root privileges.
+2. -DCMAKE_INSTALL_PREFIX needs to be set to a path the installing user has
+   write access to.
+
+## Building in Vagrant
+Vagrant can be used to quickly set up a virtualized environment for building.
+On a debian-based system, issue the following commands to build using Vagrant:
+
+```
+git submodule init
+git submodule update
+
+sudo apt update
+sudo apt install virtualbox vagrant
+
+vagrant up
+```
+
+The vagrant machine can then be inspected by running `vagrant ssh`
+
+This will create an environment for building softwarecontainer, download all
+the requirements, build the ones necessary to build, build softwarecontainer,
+run unit tests and perform a clang code analysis run on the code.
+
+# Running
+You normally only want to run the softwarecontainer-agent, which requires root
 privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
 
@@ -163,12 +157,10 @@ network bridge using brctl and ifconfig/iptables typically also does require
 that.
 
 # Examples
-
 For examples see the `examples` directory and the README.md there for more
 information.
 
 # Testing
-
 There are currently three levels of tests: unit tests, component tests, and
 service tests. To run all tests after building, run `run-all-tests.sh`
 in the project root.
@@ -185,34 +177,7 @@ to be reworked.
 The service tests are in service-test/ and can be run with run-tests.sh.
 See servicetest/README.md for more details about these tests.
 
-# Troubleshooting
-
-SoftwareContainer is not very complex to begin with but due to a lot of
-dependencies there may be some issues with running it. Here are a few common
-pitfalls that might be good to be aware of.
-
-## Note on PulseAudio
-
-In order for pulseaudio to work inside the container it needs to be running when
-the container is started. This is the case because when softwarecontainer sets
-up the container it will look for the socket pointed out by `PULSE_SERVER`, and
-mount it into the container, so that socket has to exist.
-
-## DBus service files
-
-softwarecontainer-agent requires dbus for it to work, this also means that you
-need to setup the DBus policies for the softwarecontainer-agent to work. This is
-automatically done when you make install the project, but if you install to
-somewhere else than the root directory, the DBus policy configuration will wind
-up in <prefix>/etc/dbus-1/system.d/ instead of /etc/dbus-1/system.d. If you
-don't have the correctly setup configuration, you will get an error along these
-lines:
-
-> MAIN [Warning] Can't own the namecom.pelagicore.SoftwareContainerAgent on the system
-> bus => use session bus instead         | softwarecontaineragent.cpp:337
-
 # License and Copyright
-
 Copyright (c) 2016 Pelagicore AB
 
 The source code included here is licensed under the LGPL 2.1. Please
