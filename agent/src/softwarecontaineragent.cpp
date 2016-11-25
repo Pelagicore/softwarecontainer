@@ -430,8 +430,7 @@ bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
 
     // Update container gateway configuration
     if (!updateGatewayConfigs(containerID, gatewayConfigs)) {
-        log_error() << "Could noteset gateway configuration for capability"
-                    << std::to_string(containerID) << " does not exist";
+        log_error() << "Could not set gateway configuration for capability";
         return false;
     }
 

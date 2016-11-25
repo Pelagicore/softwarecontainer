@@ -25,8 +25,8 @@ GatewayConfiguration::GatewayConfiguration()
 
 GatewayConfiguration::~GatewayConfiguration()
 {
-    for (auto &i : m_configMap) {
-        free(i.second);
+    for (auto &it : m_configMap) {
+        free(it.second);
     }
 }
 
