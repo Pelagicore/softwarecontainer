@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -44,7 +43,8 @@
 
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
-#include "capability/configstore.h"
+#include "capability/filteredconfigstore.h"
+#include "capability/defaultconfigstore.h"
 
 #include <jsonparser.h>
 #include "commandjob.h"
@@ -284,6 +284,8 @@ private:
     SignalConnectionsHandler m_connections;
     bool m_shutdownContainers = true;
     std::vector<ContainerID> m_containerIdPool;
-    ConfigStore m_configStore;
+
+    std::shared_ptr<FilteredConfigStore> m_filteredConfigStore;
+    std::shared_ptr<DefaultConfigStore>  m_defaultConfigStore;
 };
 }

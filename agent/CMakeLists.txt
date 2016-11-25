@@ -21,12 +21,28 @@ generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "
 
 set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(CAPABILITIES_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/caps.d/")
+set(DEFAULT_CAPABILITIES_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/caps.default.d/")
+
+add_definitions(-DCAPABILITIES_DIR="${CAPABILITIES_DIR}")
+add_definitions(-DDEFAULT_CAPABILITIES_DIR="${DEFAULT_CAPABILITIES_DIR}")
+
+file(MAKE_DIRECTORY "${DEFAULT_CAPABILITIES_DIR}" "${CAPABILITIES_DIR}")
+
+include_directories(src)
+
+set(SOFTWARECONTAINERAGENT_CORE_CLASSES
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragentadaptor.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
+)
+
 add_executable(softwarecontainer-agent
     src/main.cpp
-    src/softwarecontaineragent.cpp
-    src/softwarecontaineragentadaptor.cpp
     ${GENERATED_ADAPTOR_FILENAME}
-    src/capability/configstore.cpp
+    ${SOFTWARECONTAINERAGENT_CORE_CLASSES}
 )
 
 TARGET_LINK_LIBRARIES( softwarecontainer-agent

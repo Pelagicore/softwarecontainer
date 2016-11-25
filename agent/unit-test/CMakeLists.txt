@@ -28,35 +28,37 @@ set(AGENT_TEST_LIBRARY_DEPENDENCIES
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainerlib
+    softwarecontainercommon
 )
 
-set(CS_TEST_LIBRARY_DEPENDENCIES
+set(CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES
     ${Glibmm_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainerlib
+    softwarecontainercommon
 )
 
 include_directories(${SOFTWARECONTAINERAGENT_DIR}/src ${SOFTWARECONTAINERAGENT_DIR}/src/capability)
 
-set(AGENT_TEST_FILES
+set(SOFTWARECONTAINERAGENT_TEST_FILES
+    main.cpp
     softwarecontaineragent_unittest.cpp
-    main.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/configstore.cpp
 )
-set(CS_TEST_FILES
-    configstore_unittest.cpp
+
+set(CONFIGSTORE_TEST_FILES
     main.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/configstore.cpp
+    configstore_unittest.cpp
 )
 
 add_gtest_test(softwarecontaineragenttest
-    "${AGENT_TEST_FILES}"
+    "${SOFTWARECONTAINERAGENT_CORE_CLASSES}"
     "${AGENT_TEST_LIBRARY_DEPENDENCIES}"
+    "${SOFTWARECONTAINERAGENT_TEST_FILES}"
 )
 
 add_gtest_test(configstoretest
-    "${CS_TEST_FILES}"
-    "${CS_TEST_LIBRARY_DEPENDENCIES}"
+    "${SOFTWARECONTAINERAGENT_CORE_CLASSES}"
+    "${CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES}"
+    "${CONFIGSTORE_TEST_FILES}"
 )

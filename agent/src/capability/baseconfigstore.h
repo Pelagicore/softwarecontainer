@@ -19,40 +19,35 @@
 
 /**
  * @file configstore.h
- * @brief Contains the softwarecontainer::ConfigStore class
+ * @brief Contains the softwarecontainer::BaseConfigStore class
  */
 
+#pragma once
 #include "softwarecontainer-common.h"
+#include "gatewayconfig.h"
 
 #include <jsonparser.h>
 
 namespace softwarecontainer {
 
-class ConfigStore
+class BaseConfigStore
 {
-    LOG_DECLARE_CLASS_CONTEXT("CS", "ConfigStore");
+    LOG_DECLARE_CLASS_CONTEXT("BCS", "BaseConfigStore");
 
 public:
-    ConfigStore();
-
     /*
-     * @brief Creates a new ConfigStore object and searches for Service Manifests
+     * @brief Creates a new BaseConfigStore object and searches for Service Manifests
      * (of file type json) in the input path, and stores the Capabilities'
      * Gateway configurations.
      *
      * @throws ReturnCode::FAILURE if parsing of the json file(s) fails
      */
-    ConfigStore(const std::string &filePath);
+    BaseConfigStore(const std::string &filePath);
 
-    ~ConfigStore();
+    virtual ~BaseConfigStore();
 
-    /**
-     * @brief Returns all Gateway configurations for a certain Capability.
-     *
-     * @param capID a string representation of the Capability ID
-     * @return GatewayConfiguration a map of gateway ID and config as json_t
-     */
-    GatewayConfiguration getGatewayConfigs(const std::string capID);
+protected:
+    std::map<std::string, GatewayConfiguration> m_capMap;
 
 private:
 
@@ -115,6 +110,5 @@ private:
      */
     bool isJsonFile(const std::string &filename);
 
-    std::map<std::string, GatewayConfiguration> m_configStore;
 };
 }

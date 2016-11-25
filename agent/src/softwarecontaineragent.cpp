@@ -45,7 +45,8 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     }
 
     try {
-        m_configStore = ConfigStore(configPath);
+        m_filteredConfigStore = std::make_shared<FilteredConfigStore>(CAPABILITIES_DIR);
+        m_defaultConfigStore = std::make_shared<DefaultConfigStore>(DEFAULT_CAPABILITIES_DIR);
     } catch (ReturnCode err) {
         log_error() << "Failed to initialize ConfigStore";
         throw ReturnCode::FAILURE;
@@ -400,7 +401,7 @@ bool SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID,
             log_error() << configs;
             return false;
         }
-        parsedConfigs[gwID] = jConfigs;
+        parsedConfigs.append(gwID, jConfigs);
     }
     return updateGatewayConfigs(containerID, parsedConfigs);
 }
@@ -423,14 +424,15 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
 bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
                                              const std::vector<std::string> &capabilities)
 {
-    for (std::string capId : capabilities) {
-        GatewayConfiguration newConfigs = m_configStore.getGatewayConfigs(capId);
+    auto gatewayConfigs = m_defaultConfigStore->configs();
+    auto filteredConfigs = m_filteredConfigStore->configsByID(capabilities);
+    gatewayConfigs.append(filteredConfigs);
 
-        if (!updateGatewayConfigs(containerID, newConfigs)) {
-            log_error() << "Could noteset gateway configuration for capability"
-                        << std::to_string(containerID) << " does not exist";
-            return false;
-        }
+    // Update container gateway configuration
+    if (!updateGatewayConfigs(containerID, gatewayConfigs)) {
+        log_error() << "Could noteset gateway configuration for capability"
+                    << std::to_string(containerID) << " does not exist";
+        return false;
     }
 
     return true;

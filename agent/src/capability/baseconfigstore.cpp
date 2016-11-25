@@ -17,14 +17,9 @@
  * For further information see LICENSE
  */
 
-#include "configstore.h"
+#include "baseconfigstore.h"
 
-
-ConfigStore::ConfigStore()
-{
-}
-
-ConfigStore::ConfigStore(const std::string &inputPath)
+BaseConfigStore::BaseConfigStore(const std::string &inputPath)
 {
     ReturnCode retval = ReturnCode::SUCCESS;
 
@@ -47,11 +42,11 @@ ConfigStore::ConfigStore(const std::string &inputPath)
     }
 }
 
-ConfigStore::~ConfigStore()
+BaseConfigStore::~BaseConfigStore()
 {
 }
 
-ReturnCode ConfigStore::readCapsFromDir(const std::string &dirPath)
+ReturnCode BaseConfigStore::readCapsFromDir(const std::string &dirPath)
 {
     if (dirPath.compare("/") == 0) {
         log_warning() << "Searching for configuration files from root dir not allowed";
@@ -59,7 +54,7 @@ ReturnCode ConfigStore::readCapsFromDir(const std::string &dirPath)
     }
     if (isDirectoryEmpty(dirPath)) {
         log_warning() << "Path to configuration files is empty: " << dirPath;
-        return ReturnCode::FAILURE;
+        return ReturnCode::SUCCESS;
     }
 
     std::vector<std::string> files = fileList(dirPath);
@@ -68,11 +63,6 @@ ReturnCode ConfigStore::readCapsFromDir(const std::string &dirPath)
         log_info() << "No configuration files found: " << dirPath;
         return ReturnCode::SUCCESS;
     }
-
-    // log_debug() << "The list of files:";
-    // for (std::string file : files) {
-    //     log_debug() << "File: " << file;
-    // }
 
     for (std::string file : files) {
         std::string filePath = dirPath + file;
@@ -85,7 +75,7 @@ ReturnCode ConfigStore::readCapsFromDir(const std::string &dirPath)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode ConfigStore::readCapsFromFile(const std::string &filePath)
+ReturnCode BaseConfigStore::readCapsFromFile(const std::string &filePath)
 {
     if (!isJsonFile(filePath)) {
         log_debug() << "File is not a json file: " << filePath;
@@ -118,20 +108,7 @@ ReturnCode ConfigStore::readCapsFromFile(const std::string &filePath)
     return parseCapabilities(capabilities);
 }
 
-
-GatewayConfiguration ConfigStore::getGatewayConfigs(const std::string capID)
-{
-    if (m_configStore.count(capID) == 0) {
-        log_warning() << "Couldn't find " << capID << " in ConfigStore";
-        log_debug() << "ConfigStore contains "
-                    << std::to_string(m_configStore.size()) << " element(s)";
-        return GatewayConfiguration();
-    }
-    return m_configStore[capID];
-}
-
-
-ReturnCode ConfigStore::parseCapabilities(json_t *capabilities)
+ReturnCode BaseConfigStore::parseCapabilities(json_t *capabilities)
 {
     size_t i;
     json_t *capability;
@@ -166,13 +143,17 @@ ReturnCode ConfigStore::parseCapabilities(json_t *capabilities)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode ConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)
+ReturnCode BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)
 {
+    if (m_capMap.count(capName) > 0) {
+        log_debug() << "Capability " << capName << " already loaded.";
+        return ReturnCode::SUCCESS;
+    }
+
     size_t i;
     json_t *gateway;
 
-    GatewayConfiguration gwConfs;
-
+    GatewayConfiguration gwConf;
     json_array_foreach(gateways, i, gateway) {
         if (!json_is_object(gateway)) {
             log_error() << "Gateway is not a json object";
@@ -194,37 +175,14 @@ ReturnCode ConfigStore::parseGatewayConfigs(std::string capName, json_t *gateway
             log_error() << "Gateway Config is not an array";
             return ReturnCode::FAILURE;
         }
-        gwConfs[gwID] = confs;
-
+        gwConf.append(gwID, confs);
     }
-
-    GatewayConfiguration oldGwConfs = m_configStore[capName];
-
-    /* If there is already a Gateway Configuration saved with the
-     * same ID, then append the configs from this file to the
-     * existing Gateway in the m_configstore
-     */
-    for (auto const &it : gwConfs) {
-        std::string gwID = it.first;
-        if (oldGwConfs.count(gwID) == 1) {
-            json_t *val = oldGwConfs[gwID];
-            log_debug() << "Appending gateway configuration to " << gwID;
-            if (json_array_extend(val, it.second) == -1) {
-                log_error() << "Could not add Gateway Config to json array: " << gwID;
-                return ReturnCode::FAILURE;
-            }
-        } else {
-            log_debug() << "Adding gateway configuration for new element " << gwID;
-            oldGwConfs[gwID] = it.second;
-        }
-    }
-    log_debug() << "Adding/Updating gateway configuration for capability \"" << capName << "\"";
-    m_configStore[capName] = oldGwConfs;
+    m_capMap[capName] = gwConf;
 
     return ReturnCode::SUCCESS;
 }
 
-std::vector<std::string> ConfigStore::fileList(const std::string &dirPath)
+std::vector<std::string> BaseConfigStore::fileList(const std::string &dirPath)
 {
     std::vector<std::string> files;
 
@@ -241,11 +199,11 @@ std::vector<std::string> ConfigStore::fileList(const std::string &dirPath)
             files.push_back(filename);
         }
     }
-        closedir(dirFile);
+    closedir(dirFile);
 
     return files;
 }
-bool ConfigStore::isJsonFile(const std::string &filename) {
+bool BaseConfigStore::isJsonFile(const std::string &filename) {
     size_t lastdot = filename.find_last_of(".");
     std::string prefix = filename.substr(lastdot);
     if (prefix.compare(".json") != 0) {

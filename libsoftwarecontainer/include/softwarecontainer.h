@@ -31,6 +31,7 @@
 #include "workspace.h"
 #include "gateway.h"
 #include "container.h"
+#include "gatewayconfig.h"
 
 namespace softwarecontainer {
 

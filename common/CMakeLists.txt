@@ -28,6 +28,7 @@ set(HEADERS
     filecleanuphandler.h
     mountcleanuphandler.h
     filetoolkitwithundo.h
+    gatewayconfig.h
 )
 
 add_library(softwarecontainercommon SHARED
@@ -39,6 +40,7 @@ add_library(softwarecontainercommon SHARED
     overlaysynccleanuphandler.cpp
     softwarecontainer-common.cpp
     recursivecopy.cpp
+    gatewayconfig.cpp
 )
 
 

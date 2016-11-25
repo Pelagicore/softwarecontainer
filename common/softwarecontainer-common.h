@@ -42,8 +42,6 @@ static constexpr ContainerID INVALID_CONTAINER_ID = -1;
 static constexpr pid_t INVALID_PID = -1;
 static constexpr int INVALID_FD = -1;
 
-typedef std::map<std::string, json_t *> GatewayConfiguration;
-
 enum class ContainerState
 {
     CREATED,
