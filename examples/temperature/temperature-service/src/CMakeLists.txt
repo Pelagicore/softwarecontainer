@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -16,9 +15,19 @@
 #
 # For further information see LICENSE
 
-# Unset RPATH. This should not be needed for any example.
-set(CMAKE_INSTALL_RPATH "")
+include(GenerateDBusCpp)
+generate_dbuscpp_hfile(${TEMPSERVICE_XML} "TemperatureService")
 
-add_subdirectory(simple)
-add_subdirectory(temperature)
-add_subdirectory(wayland)
+add_executable(temperatureservice
+    main.cpp
+    ${GENERATED_ADAPTOR_FILENAME}
+    temperatureservice.cpp
+    temperatureservicetodbusadapter.cpp
+)
+
+TARGET_LINK_LIBRARIES( temperatureservice
+    ${DBusCpp_LIBRARIES}
+)
+
+install(TARGETS temperatureservice
+        RUNTIME DESTINATION share/softwarecontainer/examples/temperature)

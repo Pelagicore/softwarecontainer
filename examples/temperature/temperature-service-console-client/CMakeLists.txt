@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -16,9 +15,25 @@
 #
 # For further information see LICENSE
 
-# Unset RPATH. This should not be needed for any example.
-set(CMAKE_INSTALL_RPATH "")
+include(GenerateDBusCpp)
+generate_dbuscpp_hfile(${TEMPSERVICE_XML} "TemperatureServiceConsoleClient")
 
-add_subdirectory(simple)
-add_subdirectory(temperature)
-add_subdirectory(wayland)
+add_executable( temperatureserviceconsoleclient
+    main.cpp
+    ${GENERATED_PROXY_FILENAME}
+    temperatureserviceinterface.cpp
+    periodictemperature.cpp
+)
+
+find_package(Threads REQUIRED)
+
+TARGET_LINK_LIBRARIES( temperatureserviceconsoleclient
+    ${DBusCpp_LIBRARIES}
+    ${DBusCppGlib_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+)
+
+install(TARGETS temperatureserviceconsoleclient
+        RUNTIME DESTINATION share/softwarecontainer/examples/temperature
+)
+

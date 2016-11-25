@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=com.pelagicore.TemperatureService
+Exec=@CMAKE_INSTALL_PREFIX@/share/softwarecontainer/examples/temperatureservice
+User=root
+

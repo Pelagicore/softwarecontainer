@@ -1,0 +1,86 @@
+{
+    "capabilities": [
+        {
+            "name": "com.pelagicore.temperatureservice.gettemperature",
+            "gateways": [
+                {
+                    "id": "dbus",
+                    "config": [
+                        { "dbus-gateway-config-session": []},
+                        { "dbus-gateway-config-system": [
+                             {
+                                 "direction": "outgoing",
+                                 "interface": "org.freedesktop.DBus.Introspectable",
+                                 "object-path": "/com/pelagicore/TemperatureService",
+                                 "method": "Introspect"
+                             },
+                             {
+                                 "direction": "outgoing",
+                                 "interface": "com.pelagicore.TemperatureService",
+                                 "object-path": "/com/pelagicore/TemperatureService",
+                                 "method": "Echo"
+                             },
+                             {
+                                 "direction": "outgoing",
+                                 "interface": "com.pelagicore.TemperatureService",
+                                 "object-path": "/com/pelagicore/TemperatureService",
+                                 "method": "GetTemperature"
+                             },
+                            {
+                                 "direction": "incoming",
+                                 "interface": "com.pelagicore.TemperatureService",
+                                 "object-path": "/com/pelagicore/TemperatureService",
+                                 "method": "TemperatureChanged"
+                            }
+                        ]}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "com.pelagicore.temperatureservice.settemperature",
+            "gateways": [
+                {
+                    "id": "dbus",
+                    "config": [
+                        { "dbus-gateway-config-session": []},
+                        { "dbus-gateway-config-system": [
+                            {
+                                "direction": "outgoing",
+                                "interface": "org.freedesktop.DBus.Introspectable",
+                                "object-path": "/com/pelagicore/TemperatureService",
+                                "method": "Introspect"
+                            },
+                            {
+                                "direction": "outgoing",
+                                "interface": "com.pelagicore.TemperatureService",
+                                "object-path": "/com/pelagicore/TemperatureService",
+                                "method": "Echo"
+                            },
+                            {
+                                "direction": "outgoing",
+                                "interface": "com.pelagicore.TemperatureService",
+                                "object-path": "/com/pelagicore/TemperatureService",
+                                "method": "SetTemperature"
+                            }
+                        ]}
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "com.pelagicore.sethome",
+            "gateways": [
+                {
+                    "id": "env",
+                    "config": [
+                        { 
+                            "name": "HOME",
+                            "value": "/gateways/app"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
