@@ -58,7 +58,15 @@ def agent(request):
     # fixture means the module is received through the 'request' parameter
     # and thus the path should be defined on the module level.
     logfile_path = request.module.logfile_path()
-    agent_handler = SoftwareContainerAgentHandler(logfile_path)
+
+    # Check if caps_dirs is defined
+    if 'caps_dirs' in request.module.__dict__:
+        caps_dir, default_caps_dir = request.module.caps_dirs()
+    else:
+        caps_dir = None
+        default_caps_dir = None
+
+    agent_handler = SoftwareContainerAgentHandler(logfile_path, caps_dir, default_caps_dir)
 
     # Return the setup agent to the consuming test
     yield agent_handler
