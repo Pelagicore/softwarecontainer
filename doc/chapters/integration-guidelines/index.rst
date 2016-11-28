@@ -19,8 +19,8 @@ Service manifests
 For details about format and content of service manifests, see :ref:`Service manifests <service-manifests>`
 and :ref:`Gateways <gateways>`.
 
-Service manifests should be installed in either ``capabilities-dir/<service-name>`` or
-``default-capabilities-dir/<service-name>`` depending on if it should be applied by default
+Service manifests should be installed in either |capabilities-dir| or
+|default-capabilities-dir| depending on if it should be applied by default
 or not. Each manifest are expected to be of type JSON, including the "json" file extension.
 
 Service Manifests are read and parsed at startup of the Agent. If two Service Manifests contain

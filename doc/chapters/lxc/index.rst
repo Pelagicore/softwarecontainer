@@ -62,7 +62,7 @@ The configuration file contains three things: network setup, device and pty/tty 
 Network setup
 ^^^^^^^^^^^^^
 The Network setup configuration is used when LXC creates a veth interface, connected to
-bridge-device (not set up here!), and for the network to be up.
+|bridge-device| (not set up here!), and for the network to be up.
 
 Device and pty/tty allocation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
