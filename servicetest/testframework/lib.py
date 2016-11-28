@@ -171,12 +171,19 @@ class SoftwareContainerAgentHandler():
         Used by e.g. ContainerApp over D-Bus.
     """
 
-    def __init__(self, log_file_path=None):
-        self.__log_file = None
+    def __init__(self, log_file_path=None, caps_dir=None, default_caps_dir=None):
         if log_file_path is None:
             self.__log_file = subprocess.STDOUT
         else:
             self.__log_file = open(log_file_path, "w")
+
+        # Applying arguments to the softwarecontainer-agent call
+        cmd = ["softwarecontainer-agent"]
+        if caps_dir is not None:
+            cmd += ['--caps-dir', caps_dir]
+        if default_caps_dir is not None:
+            cmd += ['--default-caps-dir', default_caps_dir]
+
         self.__rec = Receiver()
         self.__rec.start()
         self.__rec.wait_until_setup_is_done()
@@ -184,7 +191,9 @@ class SoftwareContainerAgentHandler():
         # Starting softwarecontainer-agent
         # TODO: This doesn't work if the user pass 'None' as log_file_path
         assert log_file_path is not None
-        self.__agent = subprocess.Popen("softwarecontainer-agent", stdout=self.__log_file, stderr=self.__log_file)
+        print(cmd)
+        self.__agent = subprocess.Popen(cmd, stdout=self.__log_file, stderr=self.__log_file)
+        print(self.__agent)
 
         try:
             # Wait for the softwarecontainerStarted message to appear on the

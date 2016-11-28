@@ -33,7 +33,7 @@ public:
      * @brief Returns all Gateway configurations for certain Capabilities.
      *
      * @param capIDs vector of strings representating Capability IDs
-     * @return A vector of GatewayConfigurations matching the given Capability ids.
+     * @return GatewayConfiguration containing config mapped by the given Capability ids.
      */
     GatewayConfiguration configsByID(const std::vector<std::string> &capIDs) const;
 
@@ -41,7 +41,7 @@ public:
      * @brief Returns all Gateway configurations for a certain Capability.
      *
      * @param capID a string representation of the Capability ID
-     * @return GatewayConfiguration mapped by the given ID.
+     * @return GatewayConfiguration containing config mapped by the given ID.
      */
     GatewayConfiguration configByID(const std::string &capID) const;
 

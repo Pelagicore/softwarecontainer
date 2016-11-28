@@ -30,6 +30,9 @@ CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 def logfile_path():
     return CURRENT_DIR + "/test.log"
 
+# This function is used by the 'agent' fixture to know where to search for capabilities
+def caps_dirs():
+    return "{}/caps.d".format(CURRENT_DIR), "{}/caps.default.d".format(CURRENT_DIR)
 
 # These default values are used to pass various test specific values and
 # configurations to the Container helper. Tests that need to add, remove or
@@ -40,7 +43,6 @@ DATA = {
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
 }
-
 
 @pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
 class TestCaps(object):
@@ -60,8 +62,8 @@ class TestCaps(object):
     def test_caps(self):
         """ Test setting a capability works, i.e. the API is there  on D-Bus
         """
+        sc = Container()
         try:
-            sc = Container()
             success = sc.start(DATA)
             assert success is True
 
