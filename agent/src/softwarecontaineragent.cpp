@@ -31,10 +31,11 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     , m_shutdownContainers(shutdownContainers)
 {
     m_containerIdPool.push_back(0);
-    m_softwarecontainerWorkspace = std::make_shared<Workspace>();
-    m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
 
-    if (isError(m_softwarecontainerWorkspace->checkWorkspace())) {
+    try {
+        m_softwarecontainerWorkspace = std::make_shared<Workspace>();
+        m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
+    } catch (ReturnCode err) {
         log_error() << "Failed to set up workspace";
         throw ReturnCode::FAILURE;
     }

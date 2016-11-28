@@ -32,6 +32,10 @@ Workspace::Workspace(bool enableWriteBuffer,
     if (m_containerRootDir.back() != '/') {
         m_containerRootDir += "/";
     }
+
+    if (isError(checkWorkspace())) {
+        throw ReturnCode::FAILURE;
+    }
 }
 
 Workspace::~Workspace()
