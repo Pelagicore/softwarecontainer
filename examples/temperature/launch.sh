@@ -44,6 +44,7 @@ while getopts ":b:h" opt; do
     esac
 done
 
+export PATH=$PATH:$SCRIPTPATH
 if ! which temperatureservice; then
     echo "temperatureservice is not in your \$PATH"
     exit 1
@@ -56,8 +57,8 @@ temperatureservice &
 TEMPERATUREPID="$!"
 
 # Launch a new agent
-#softwarecontainer-agent -m ${SCRIPTPATH}/ &
-#AGENTPID="$!"
+softwarecontainer-agent -m ${SCRIPTPATH}/ &
+AGENTPID="$!"
 
 # Let the agent start up
 sleep 2
@@ -70,11 +71,8 @@ SCOBJPATH="/com/pelagicore/SoftwareContainerAgent"
 AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
 SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 
-# Ping the agent
-$SC_CMD $AGENTPREFIX.Ping
-
 # Create a new container
-$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.Create string:'[{"writeOften": "0"}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="int32:0"
@@ -83,7 +81,7 @@ OUTFILE="/tmp/stdout"
 
 # Expose a directory to the container
 APPBASE="/gateways/app"
-$SC_CMD $AGENTPREFIX.BindMountFolderInContainer \
+$SC_CMD $AGENTPREFIX.BindMount \
     $CONTAINERID \
     string:${SCRIPTPATH} \
     string:${APPBASE} \
@@ -92,12 +90,12 @@ $SC_CMD $AGENTPREFIX.BindMountFolderInContainer \
 # Set the capabilities needed to get and set temperature
 $SC_CMD $AGENTPREFIX.SetCapabilities \
     $CONTAINERID \
-    array:string:"com.pelagicore.temperatureservice.settemperature",\
-                 "com.pelagicore.temperatureservice.gettemperature",\
-                 "com.pelagicore.sethome"
+    array:string:"com.pelagicore.temperatureservice.settemperature","com.pelagicore.temperatureservice.gettemperature","com.pelagicore.sethome"
+
+sleep 1
 
 # Run the simple example
-$SC_CMD $AGENTPREFIX.LaunchCommand \
+$SC_CMD $AGENTPREFIX.Execute \
     $CONTAINERID \
     $ROOTID \
     string:$APPBASE/temperatureserviceconsoleclient \
@@ -105,9 +103,17 @@ $SC_CMD $AGENTPREFIX.LaunchCommand \
     string:$OUTFILE \
     dict:string:string:""
 
+tail -F ${SCRIPTPATH}/temperatureservice_client.log &
+TAILPID="$!"
+
 # Let the example run for a while
 sleep 10
 
+kill $TAILPID
+
+$SC_CMD $AGENTPREFIX.Destroy $CONTAINERID
+sleep 1
+
 # Clean up
-#kill $AGENTPID
+kill $AGENTPID
 kill $TEMPERATUREPID
