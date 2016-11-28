@@ -107,11 +107,17 @@ int main(int argc, char **argv)
     timeoutOpt.set_arg_description("<seconds>");
     timeoutOpt.set_description("Timeout in seconds to wait for containers to shutdown, defaults to 1");
 
-    Glib::OptionEntry manifestOpt;
-    manifestOpt.set_long_name("manifest");
-    manifestOpt.set_short_name('m');
-    manifestOpt.set_arg_description("<filepath>");
-    manifestOpt.set_description("Path to a file or directory where service manifest(s) exist, defaults to nothing");
+    Glib::OptionEntry capsDirOpt;
+    capsDirOpt.set_long_name("caps-dir");
+    capsDirOpt.set_short_name('c');
+    capsDirOpt.set_arg_description("<filepath>");
+    capsDirOpt.set_description("Path to a file or directory where service manifest(s) exist, defaults to" + std::string(CAPABILITIES_DIR));
+
+    Glib::OptionEntry defaultCapsDirOpt;
+    defaultCapsDirOpt.set_long_name("default-caps-dir");
+    defaultCapsDirOpt.set_short_name('d');
+    defaultCapsDirOpt.set_arg_description("<filepath>");
+    defaultCapsDirOpt.set_description("Path to a file or directory where default service manifest(s) exist, defaults to " + std::string(DEFAULT_CAPABILITIES_DIR));
 
     Glib::OptionEntry sessionBusOpt;
     sessionBusOpt.set_long_name("session-bus");
@@ -127,7 +133,8 @@ int main(int argc, char **argv)
     int userID = 0;
     bool keepContainersAlive = false;
     int timeout = -2;
-    Glib::ustring servicemanifest = "";
+    Glib::ustring capsDir = CAPABILITIES_DIR;
+    Glib::ustring defaultCapsDir = DEFAULT_CAPABILITIES_DIR;
     bool useSessionBus = false;
 
     Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
@@ -137,7 +144,8 @@ int main(int argc, char **argv)
     mainGroup.add_entry(keepContainersAliveOpt, keepContainersAlive);
 
     mainGroup.add_entry(timeoutOpt, timeout);
-    mainGroup.add_entry(manifestOpt, servicemanifest);
+    mainGroup.add_entry(capsDirOpt, capsDir);
+    mainGroup.add_entry(defaultCapsDirOpt, defaultCapsDir);
     mainGroup.add_entry(sessionBusOpt, useSessionBus);
 
     Glib::OptionContext optionContext;
@@ -180,6 +188,13 @@ int main(int argc, char **argv)
     if (servicemanifest != "") {
         stringOptions.insert(std::pair<std::string, std::string>(Config::SERVICE_MANIFEST_DIR,
                                                                  servicemanifest));
+    }
+
+    // TODO (ethenor): DO THIS!!
+    std::map<std::string, std::string> stringOptions;
+    if (defaultServicemanifest != "") {
+        stringOptions.insert(std::pair<std::string, std::string>(Config::DEFAULT_SERVICE_MANIFEST_DIR,
+                                                                 defaultServicemanifest));
     }
 
     std::map<std::string, int> intOptions;
