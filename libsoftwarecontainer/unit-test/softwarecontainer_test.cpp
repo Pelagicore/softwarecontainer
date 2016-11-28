@@ -40,8 +40,9 @@ void SoftwareContainerTest::exit()
 void SoftwareContainerTest::SetUp()
 {
     ::testing::Test::SetUp();
-    workspace = std::make_shared<Workspace>(false);
-
+    ASSERT_NO_THROW({
+        workspace = std::make_shared<Workspace>(false);
+    });
     srand(time(NULL));
     uint32_t containerId =  rand() % 100;
     sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace, containerId));

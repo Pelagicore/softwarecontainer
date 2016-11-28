@@ -37,6 +37,8 @@ public:
     /**
      * @brief Creates a workspace.
      *
+     * @throws ReturnCode::FAILURE if there is an error during the setup.
+     *
      * @param enableWriteBuffer Enable writebuffers on mountpoints
      * @param containerRootDir The path at which the container resides in the host system
      * @param containerConfigPath The path to the configuration lxc
