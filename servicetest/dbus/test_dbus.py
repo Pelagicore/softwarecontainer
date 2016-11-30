@@ -52,7 +52,7 @@ DATA = {
 # Simple gateway config when something just needs to be passed.
 GW_CONFIG = [{
     "dbus-gateway-config-session": [{
-        "direction": "*",
+        "direction": "outgoing",
         "interface": "*",
         "object-path": "*",
         "method": "*"
@@ -60,6 +60,15 @@ GW_CONFIG = [{
     "dbus-gateway-config-system": []
 }]
 
+WL_CONFIG = [{
+    "dbus-gateway-config-session": [{
+        "direction": "*",
+        "interface": "*",
+        "object-path": "*",
+        "method": "*"
+    }],
+    "dbus-gateway-config-system": []
+}]
 
 @pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
 class TestDBus(object):
@@ -78,6 +87,7 @@ class TestDBus(object):
             try:
                 success = ca.start(DATA)
                 assert success is True
+                ca.set_gateway_config("dbus", WL_CONFIG)
                 ca.set_gateway_config("dbus", GW_CONFIG)
                 ca.launch_command('{}/dbusapp.py server'.format(ca.get_bind_dir()))
 
