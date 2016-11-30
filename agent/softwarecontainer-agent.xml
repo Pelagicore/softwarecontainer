@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <node name="/com/pelagicore/SoftwareContainer">
     <interface name="com.pelagicore.SoftwareContainerAgent">
-
-        <method name="Ping">
+        <method name="List">
+            <arg direction="out" type="ai" name="containers" />
+            <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="CreateContainer">
+        <method name="Create">
             <arg direction="in" type="s" name="config" />
             <arg direction="out" type="i" name="containerID" />
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="SetContainerName">
-            <arg direction="in" type="i" name="containerID" />
-            <arg direction="in" type="s" name="containerName" />
-            <arg direction="out" type="b" name="success" />
-        </method>
-
-        <method name="LaunchCommand">
+        <method name="Execute">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="u" name="userID" />
             <arg direction="in" type="s" name="commandLine" />
@@ -28,47 +23,30 @@
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="SuspendContainer">
+        <method name="Suspend">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="ResumeContainer">
+        <method name="Resume">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="ShutDownContainer">
+        <method name="Destroy">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="ShutDownContainerWithTimeout">
-            <arg direction="in" type="i" name="containerID" />
-            <arg direction="in" type="u" name="timeout" />
-            <arg direction="out" type="b" name="success" />
-        </method>
-
-        <method name="WriteToStdIn">
-            <arg direction="in" type="u" name="processID" />
-            <arg direction="in" type="ay" name="bytes" />
-            <arg direction="out" type="b" name="success" />
-        </method>
-
-        <method name="BindMountFolderInContainer">
+        <method name="BindMount">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="s" name="pathInHost" />
             <arg direction="in" type="s" name="pathInContainer" />
             <arg direction="in" type="b" name="readOnly" />
-            <arg direction="out" type="s" name="returnPath" />
             <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="SetGatewayConfigs">
-            <!-- <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QList
-                &lt; QString &gt; "/> -->
-            <annotation name="org.qtproject.QtDBus.QtTypeName.In0"
-                value="int" />
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="a{ss}" name="configs" />
             <arg direction="out" type="b" name="success" />

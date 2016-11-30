@@ -84,14 +84,14 @@ class Container():
             environment dictionary are optional. The other arguments required by the D-Bus method
             are set by this helper based on other configs and data passed from the user previously.
         """
-        pid, success = self.__agent.LaunchCommand(self.__container_id,
-                                              0,
-                                              "{}".format(binary),
-                                              self.__bind_dir,
-                                              stdout,
-                                              env)
+        pid, success = self.__agent.Execute(self.__container_id,
+                                            0,
+                                            "{}".format(binary),
+                                            self.__bind_dir,
+                                            stdout,
+                                            env)
         return pid, (success == dbus.Boolean(True))
-    
+
 
     def get_bind_dir(self):
         """ Returns the path containing the bind mounted dir set previously
@@ -118,50 +118,51 @@ class Container():
 
             The values in the dict are passed as arguments to the D-Bus methods on SoftwareContainerAgent.
             The dict is mapped like so:
-            Container.CONFIG - argument to SoftwareContainerAgent::CreateContainer
-            Container.HOST_PATH - second argument to SoftwareContainerAgent::BindMountFolderInContainer
-            Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMountFolderInContainer
-            Container.READONLY - fourth argument to SoftwareContainerAgent::BindMountFolderInContainer
+            Container.CONFIG - argument to SoftwareContainerAgent::Create
+            Container.HOST_PATH - second argument to SoftwareContainerAgent::BindMount
+            Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMount
+            Container.READONLY - fourth argument to SoftwareContainerAgent::BindMount
         """
         success = self.__create_container(data[Container.CONFIG])
         if False == success:
             print "Failed to create container"
             return False
-        
-        self.__bind_dir, success = self.__bindmount_folder_in_container(data[Container.HOST_PATH],
-                                                               data[Container.BIND_MOUNT_DIR],
-                                                               data[Container.READONLY])
-        if False == success:
-            print "Failed to retrieve binded folder"
-            return False
 
-        return True
+        success = self.__bindmount(data[Container.HOST_PATH],
+                                   data[Container.BIND_MOUNT_DIR],
+                                   data[Container.READONLY])
+        if success is False:
+            print "Failed to bind mount into the container"
+            return False
+        else:
+            self.__bind_dir = data[Container.BIND_MOUNT_DIR]
+            return True
 
 
     def suspend(self):
         if self.__container_id is not None:
-            result = self.__agent.SuspendContainer(self.__container_id)
+            result = self.__agent.Suspend(self.__container_id)
             return True if result == dbus.Boolean(True) else False
 
     def resume(self):
         if self.__container_id is not None:
-            result = self.__agent.ResumeContainer(self.__container_id)
+            result = self.__agent.Resume(self.__container_id)
             return True if result == dbus.Boolean(True) else False
 
     def terminate(self):
         """ Perform teardown of container created by call to 'start'
         """
         if self.__container_id is not None:
-            result = self.__agent.ShutDownContainer(self.__container_id)
+            result = self.__agent.Destroy(self.__container_id)
             return True if result == dbus.Boolean(True) else False
 
     def __create_container(self, config):
-        self.__container_id, success = self.__agent.CreateContainer(config)
+        self.__container_id, success = self.__agent.Create(config)
         return success
 
 
-    def __bindmount_folder_in_container(self, host_path, dirname, readonly):
-        return self.__agent.BindMountFolderInContainer(self.__container_id, host_path, dirname, readonly)
+    def __bindmount(self, host_path, dirname, readonly):
+        return self.__agent.BindMount(self.__container_id, host_path, dirname, readonly)
 
 
 class SoftwareContainerAgentHandler():

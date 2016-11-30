@@ -79,6 +79,11 @@ public:
     ~SoftwareContainerAgent();
 
     /**
+     * @brief get a list of all containers
+     */
+    bool listContainers(std::vector<ContainerID> &containers);
+
+    /**
      * @brief delete container by ID
      */
     bool deleteContainer(ContainerID containerID);
@@ -122,15 +127,6 @@ public:
      */
     bool createContainer(const std::string &config, ContainerID &containerID);
 
-
-    /**
-     * @brief writes to stdin of a process inside a container
-     *
-     * @param pid the pid of the process (must be created through launchCommand)
-     * @param bytes the bytes to write to stdin
-     */
-    bool writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes);
-
     /**
      * @brief Launch the given command in a the given container
      *
@@ -144,22 +140,14 @@ public:
      * @param listener a function that runs when the process exits
      * @return true or false indicating whether or not the operation was successful.
      */
-    bool launchCommand(ContainerID containerID,
-                        uid_t userID,
-                        const std::string &cmdLine,
-                        const std::string &workingDirectory,
-                        const std::string &outputFile,
-                        const EnvironmentVariables &env,
-                        int32_t &pid,
-                        std::function<void (pid_t, int)> listener);
-
-    /**
-     * @brief sets the container name
-     *
-     * @param containerID the id for the container
-     * @param name the name to set
-     */
-    bool setContainerName(ContainerID containerID, const std::string &name);
+    bool execute(ContainerID containerID,
+                 uid_t userID,
+                 const std::string &cmdLine,
+                 const std::string &workingDirectory,
+                 const std::string &outputFile,
+                 const EnvironmentVariables &env,
+                 int32_t &pid,
+                 std::function<void (pid_t, int)> listener);
 
     /**
      * @brief shuts down a container
@@ -167,14 +155,6 @@ public:
      * @param containerID the container to shut down
      */
     bool shutdownContainer(ContainerID containerID);
-
-    /**
-     * @brief shuts down a container with a custom timeout
-     *
-     * @param containerID the container to shut down
-     * @param timeout timeout in seconds to wait before forcing
-     */
-    bool shutdownContainer(ContainerID containerID, unsigned int timeout);
 
     /**
      * @brief suspends execution of a container
@@ -201,11 +181,10 @@ public:
      *
      * @return true or false indicating whether or not the operation was successful.
      */
-    bool bindMountFolderInContainer(const ContainerID containerID,
-                                    const std::string &pathInHost,
-                                    const std::string &pathInContainer,
-                                    bool readOnly,
-                                    std::string &returnPath);
+    bool bindMount(const ContainerID containerID,
+                   const std::string &pathInHost,
+                   const std::string &pathInContainer,
+                   bool readOnly);
     /**
      * @brief Set gateway configurations for the container
      *
