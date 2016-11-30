@@ -60,6 +60,11 @@ GW_CONFIG_POLICY_DROP = [
     }
 ]
 
+""" Dns lookup is needed for resolving domain name for ping purposes.
+    DNS uses tcp for zone transfer over Port: 53 and uses udp for
+    queries over Port: 53. To enable dns lookup mentioned ports and
+    protocols are added to allow list
+"""
 GW_CONFIG_POLICY_ACCEPT_PING = [
     {
         "direction": "OUTGOING",
@@ -86,6 +91,17 @@ GW_CONFIG_ACCEPT_EXAMPLE_COM = [
     }
 ]
 
+GW_CONFIG_ACCEPT_IANA_ORG = [
+    {
+        "direction": "OUTGOING",
+        "allow": [{"host": "iana.org", "protocols": "icmp"}]
+    },
+    {
+        "direction": "INCOMING",
+        "allow": [{"host": "iana.org", "protocols": "icmp"}]
+    }
+]
+
 ##### Test suites #####
 
 @pytest.mark.usefixtures("testhelper", "agent")
@@ -96,7 +112,7 @@ class TestNetworkRules(object):
         timeouts are:
              2 seconds for expected connectivity
             10 for expected output discconnectivity
-            15 for expected input connectivity
+            15 for expected input diconnectivity
 
         these durations will be shorten with -i option when possible
     """
@@ -187,6 +203,53 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
+    def test_whitelist(self):
+        """ Tests the whitelisting feature.
+            a config for allowing ping to example.com is set first
+            then another config for allowing ping to iana.org is set
+            consequences are questioned with asserts
+        """
+        try:
+            sc = Container()
+            sc.start(DATA)
+
+            sc.set_gateway_config("network", GW_CONFIG_ACCEPT_EXAMPLE_COM)
+            sc.set_gateway_config("network", GW_CONFIG_ACCEPT_IANA_ORG)
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py" +
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping iana.org")
+            time.sleep(2)
+            helper = NetworkHelper(CURRENT_DIR)
+            is_pingable = helper.ping_result()
+            assert is_pingable is True
+            helper.remove_file()
+
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py" +
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping example.org")
+            time.sleep(2)
+            helper = NetworkHelper(CURRENT_DIR)
+            is_pingable = helper.ping_result()
+            assert is_pingable is True
+            helper.remove_file()
+
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py" +
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping pelagicore.com")
+            time.sleep(10)
+            helper = NetworkHelper(CURRENT_DIR)
+            is_pingable = helper.ping_result()
+            assert is_pingable is False
+            helper.remove_file()
+ 
+        finally:
+            sc.terminate()
 
 @pytest.mark.usefixtures("testhelper", "agent")
 class TestNetworkDiversity(object):
