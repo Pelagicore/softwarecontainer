@@ -11,7 +11,7 @@ SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(SoftwareContainerAg
 {
 }
 
-void SoftwareContainerAgentAdaptor::LaunchCommand(
+void SoftwareContainerAgentAdaptor::Execute(
     const int32_t &containerID,
     const uint32_t &userID,
     const std::string &commandLine,
@@ -21,7 +21,7 @@ void SoftwareContainerAgentAdaptor::LaunchCommand(
     int32_t &pid,
     bool &success)
 {
-    success = m_agent.launchCommand(
+    success = m_agent.execute(
         containerID,
         userID,
         commandLine,
@@ -36,41 +36,34 @@ void SoftwareContainerAgentAdaptor::LaunchCommand(
     );
 }
 
-bool SoftwareContainerAgentAdaptor::SuspendContainer(const int32_t &containerID)
+bool SoftwareContainerAgentAdaptor::Suspend(const int32_t &containerID)
 {
     return m_agent.suspendContainer(containerID);
 }
 
-bool SoftwareContainerAgentAdaptor::ResumeContainer(const int32_t &containerID)
+bool SoftwareContainerAgentAdaptor::Resume(const int32_t &containerID)
 {
     return m_agent.resumeContainer(containerID);
 }
 
-bool SoftwareContainerAgentAdaptor::ShutDownContainer(const int32_t &containerID)
+bool SoftwareContainerAgentAdaptor::Destroy(const int32_t &containerID)
 {
     return m_agent.shutdownContainer(containerID);
 }
 
-bool SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(
-    const int32_t &containerID,
-    const uint32_t &timeout)
+void SoftwareContainerAgentAdaptor::List(std::vector<int32_t> &containers, bool &success)
 {
-    return m_agent.shutdownContainer(containerID, timeout);
+    success = m_agent.listContainers(containers);
+    return;
 }
 
-void SoftwareContainerAgentAdaptor::BindMountFolderInContainer(
+bool SoftwareContainerAgentAdaptor::BindMount(
     const int32_t &containerID,
     const std::string &pathInHost,
     const std::string &PathInContainer,
-    const bool &readOnly,
-    std::string &returnPath,
-    bool &success)
+    const bool &readOnly)
 {
-    success = m_agent.bindMountFolderInContainer(containerID,
-                                                 pathInHost,
-                                                 PathInContainer,
-                                                 readOnly,
-                                                 returnPath);
+    return m_agent.bindMount(containerID, pathInHost, PathInContainer, readOnly);
 }
 
 bool SoftwareContainerAgentAdaptor::SetGatewayConfigs(
@@ -87,29 +80,11 @@ bool SoftwareContainerAgentAdaptor::SetCapabilities(
     return m_agent.setCapabilities(containerID, capabilities);
 }
 
-void SoftwareContainerAgentAdaptor::CreateContainer(const std::string &config,
-                                                    int32_t &containerID,
-                                                    bool &success)
+void SoftwareContainerAgentAdaptor::Create(const std::string &config,
+                                           int32_t &containerID,
+                                           bool &success)
 {
     success = m_agent.createContainer(config, containerID);
-}
-
-bool SoftwareContainerAgentAdaptor::SetContainerName(
-    const int32_t &containerID,
-    const std::string &name)
-{
-    return m_agent.setContainerName(containerID, name);
-}
-
-void SoftwareContainerAgentAdaptor::Ping()
-{
-}
-
-bool SoftwareContainerAgentAdaptor::WriteToStdIn(
-    const uint32_t &processID,
-    const std::vector<uint8_t> &bytes)
-{
-    return m_agent.writeToStdIn(processID, bytes);
 }
 
 } // End namespace softwarecontainer

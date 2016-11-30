@@ -33,29 +33,27 @@ public:
 
     SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent);
 
-    void LaunchCommand(const int32_t &containerID,
-                          const uint32_t &userID,
-                          const std::string &commandLine,
-                          const std::string &workingDirectory,
-                          const std::string &outputFile,
-                          const std::map<std::string, std::string> &env,
-                          int32_t &pid,
-                          bool &success);
+    void List(std::vector<int32_t> &containers, bool &success);
 
-    bool ShutDownContainerWithTimeout(const int32_t &containerID, const uint32_t &timeout);
+    void Execute(const int32_t &containerID,
+                 const uint32_t &userID,
+                 const std::string &commandLine,
+                 const std::string &workingDirectory,
+                 const std::string &outputFile,
+                 const std::map<std::string, std::string> &env,
+                 int32_t &pid,
+                 bool &success);
 
-    bool ShutDownContainer(const int32_t &containerID) override;
+    bool Destroy(const int32_t &containerID) override;
 
-    void BindMountFolderInContainer(const int32_t &containerID,
-                                    const std::string &pathInHost,
-                                    const std::string &PathInContainer,
-                                    const bool &readOnly,
-                                    std::string &returnPath,
-                                    bool &success) override;
+    bool BindMount(const int32_t &containerID,
+                   const std::string &pathInHost,
+                   const std::string &PathInContainer,
+                   const bool &readOnly) override;
 
-    bool SuspendContainer(const int32_t &containerID) override;
+    bool Suspend(const int32_t &containerID) override;
 
-    bool ResumeContainer(const int32_t &containerID) override;
+    bool Resume(const int32_t &containerID) override;
 
     bool SetGatewayConfigs(const int32_t &containerID,
                            const std::map<std::string, std::string> &configs) override;
@@ -63,15 +61,7 @@ public:
     bool SetCapabilities(const int32_t &containerID,
                          const std::vector<std::string> &capabilities) override;
 
-    void CreateContainer(const std::string &config,
-                         int32_t &containerID,
-                         bool &success) override;
-
-    bool SetContainerName(const int32_t &containerID, const std::string &name) override;
-
-    void Ping() override;
-
-    bool WriteToStdIn(const uint32_t &processID, const std::vector<uint8_t> &bytes) override;
+    void Create(const std::string &config, int32_t &containerID, bool &success) override;
 
     SoftwareContainerAgent &m_agent;
 

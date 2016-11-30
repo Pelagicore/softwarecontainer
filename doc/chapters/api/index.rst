@@ -19,20 +19,15 @@ D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API p
 Methods
 -------
 
-Ping
+List
 ----
-Controls availability of com.pelagicore.SoftwareContainerAgent interface
+Returns a list of the current containers
 
-:Parameters:
-        *None*
+:Return Values:
+        :containers: ``array<int32>`` IDs for all containers
 
-|
-
-:Return Value:
-        *None*
-
-CreateContainer
----------------
+Create
+------
 Creates a container with given configuration.
 
 :Parameters:
@@ -48,21 +43,8 @@ Creates a container with given configuration.
         :containerID: ``int32`` ID of created SoftwareContainer.
         :success: ``bool`` Whether or not the operation was successful.
 
-SetContainerName
-----------------
-Sets the name of container with unique containerID.
-
-:Parameters:
-        :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :containerName: ``string`` name.
-
-|
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
-LaunchCommand
--------------
+Execute
+-------
 Launches the specified application/code in the container.
 
 :Parameters:
@@ -80,8 +62,8 @@ Launches the specified application/code in the container.
         :success: ``bool`` Whether or not the operation was successful.
 
 
-ShutdownContainer
------------------
+Destroy
+-------
 Tears down all active gateways related to container and shuts down the container with all reserved sources.
 
 :Parameters:
@@ -92,8 +74,8 @@ Tears down all active gateways related to container and shuts down the container
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
 
-SuspendContainer
------------------
+Suspend
+-------
 Suspends all execution inside a given container.
 
 :Parameters:
@@ -104,8 +86,8 @@ Suspends all execution inside a given container.
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
 
-ResumeContainer
------------------
+Resume
+------
 Resumes a suspended container
 
 :Parameters:
@@ -116,46 +98,19 @@ Resumes a suspended container
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
 
-ShutdownContainerWithTimeout
-----------------------------
-Tears down all active gateways related to container and shuts down the container and all reserved sources after given timeout.
-
-:Parameters:
-        :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :timeout: ``uint32`` timeout.
-
-|
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
-WriteToStdIn
-------------
-Send a character array to the standard input of a particular process.
-
-:Parameters:
-        :processID: ``uint32`` PID of the process; obtained by LaunchCommand.
-        :bytes: ``array<char>`` character array to sent to the stdin.
-
-|
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
-BindMountFolderInContainer
---------------------------
+BindMount
+---------
 Binds a directory on the host to the container.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :pathInHost: ``string`` path to the directory in host.
+        :pathInHost: ``string`` absolute path to the directory in the host.
         :pathInContainer: ``string`` the absolute path to the directory in container.
         :readOnly: ``bool`` indicates whether the directory is read-only or not.
 
 |
 
 :Return Values:
-        :pathInContainer: ``string`` path to the bind folder in container.
         :success: ``bool`` Whether or not the operation was successful.
 
 SetGatewayConfigs
@@ -182,7 +137,7 @@ Currently This method has no applicable usage.
 |
 
 :Return Value:
-        :success: ``boolean`` either true or false.
+        :success: ``bool`` Whether or not the operation was successful.
 
 Signals
 -------

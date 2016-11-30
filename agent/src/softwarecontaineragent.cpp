@@ -76,11 +76,20 @@ bool SoftwareContainerAgent::triggerPreload()
     return true;
 }
 
-inline bool SoftwareContainerAgent::isIdValid (ContainerID containerID)
+inline bool SoftwareContainerAgent::isIdValid(ContainerID containerID)
 {
     return (containerID < INT32_MAX)
         && (containerID >= 0)
         && (1 == m_containers.count(containerID));
+}
+
+bool SoftwareContainerAgent::listContainers(std::vector<ContainerID> &containers)
+{
+    for (auto &cont : m_containers) {
+        containers.push_back(cont.first);
+    }
+
+    return true;
 }
 
 bool SoftwareContainerAgent::deleteContainer(ContainerID containerID)
@@ -233,29 +242,16 @@ bool SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&result)
     return false;
 }
 
-bool SoftwareContainerAgent::writeToStdIn(pid_t pid, const std::vector<uint8_t> &bytes)
+bool SoftwareContainerAgent::execute(ContainerID containerID,
+                                     uid_t userID,
+                                     const std::string &cmdLine,
+                                     const std::string &workingDirectory,
+                                     const std::string &outputFile,
+                                     const EnvironmentVariables &env,
+                                     int32_t &pid,
+                                     std::function<void (pid_t, int)> listener)
 {
-    CommandJob *job = nullptr;
-    if (!checkJob(pid, job)) {
-        log_error() << "Unknown pid " << pid;
-        return false;
-    }
-
-    log_debug() << "writing bytes to process with PID:" << job->pid() << " : " << bytes;
-    write(job->stdin(), bytes.data(), bytes.size());
-    return true;
-}
-
-bool SoftwareContainerAgent::launchCommand(ContainerID containerID,
-                                            uid_t userID,
-                                            const std::string &cmdLine,
-                                            const std::string &workingDirectory,
-                                            const std::string &outputFile,
-                                            const EnvironmentVariables &env,
-                                            int32_t &pid,
-                                            std::function<void (pid_t, int)> listener)
-{
-    profilefunction("launchCommandFunction");
+    profilefunction("executeFunction");
     SoftwareContainer *container = nullptr;
     if (!checkContainer(containerID, container)) {
         log_error() << "Invalid container ID " << containerID;
@@ -265,9 +261,6 @@ bool SoftwareContainerAgent::launchCommand(ContainerID containerID,
 
     // Set up a CommandJob for this run in the container
     auto job = new CommandJob(*container, cmdLine);
-    // Capturing this leaves an open pipe for every container, even
-    // after it has terminated.
-    // job->captureStdin();
     job->setOutputFile(outputFile);
     job->setUserID(userID);
     job->setEnvironmentVariables(env);
@@ -287,31 +280,13 @@ bool SoftwareContainerAgent::launchCommand(ContainerID containerID,
 
     // Save the job
     m_jobs.push_back(job);
-
-    profilepoint("launchCommandEnd");
+    profilepoint("executeEnd");
 
     pid = job->pid();
     return true;
 }
 
-bool SoftwareContainerAgent::setContainerName(ContainerID containerID, const std::string &name)
-{
-    SoftwareContainer *container = nullptr;
-    if (!checkContainer(containerID, container)) {
-        log_error() << "Invalid container ID " << containerID;
-        return false;
-    }
-
-    container->setContainerName(name);
-    return true;
-}
-
 bool SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
-{
-    return shutdownContainer(containerID, m_softwarecontainerWorkspace->m_containerShutdownTimeout);
-}
-
-bool SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned int timeout)
 {
     profilefunction("shutdownContainerFunction");
     if (!m_shutdownContainers) {
@@ -325,6 +300,7 @@ bool SoftwareContainerAgent::shutdownContainer(ContainerID containerID, unsigned
         return false;
     }
 
+    int timeout = m_softwarecontainerWorkspace->m_containerShutdownTimeout;
     if (isError(container->shutdown(timeout))) {
         log_error() << "Could not shut down the container";
         return false;
@@ -360,28 +336,24 @@ bool SoftwareContainerAgent::resumeContainer(ContainerID containerID)
     return isSuccess(container->resume());
 }
 
-bool SoftwareContainerAgent::bindMountFolderInContainer(const ContainerID containerID,
-                                                               const std::string &pathInHost,
-                                                               const std::string &pathInContainer,
-                                                               bool readOnly,
-                                                               std::string &returnPath)
+bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
+                                       const std::string &pathInHost,
+                                       const std::string &pathInContainer,
+                                       bool readOnly)
 {
-    profilefunction("bindMountFolderInContainerFunction");
+    profilefunction("bindMountFunction");
     SoftwareContainer *container = nullptr;
     if (!checkContainer(containerID, container)) {
         log_error() << "Invalid container ID " << containerID;
-        returnPath = "";
         return false;
     }
 
     ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
     if (isError(result)) {
         log_error() << "Unable to bind mount folder " << pathInHost << " to " << pathInContainer;
-        returnPath = "";
         return false;
     }
 
-    returnPath = pathInContainer;
     return true;
 }
 
