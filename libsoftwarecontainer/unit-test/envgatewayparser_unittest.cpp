@@ -33,6 +33,7 @@ public:
     // Sample values
     std::string name = "XDG_RUNTIME_DIR";
     std::string value = "/run/user/1000";
+    std::string separator = ":";
 
     json_error_t err;
     json_t *configJSON;
@@ -69,9 +70,9 @@ TEST_F(EnvGatewayParserTest, TestNoValue) {
 }
 
 /*
- * Test a general valid conf that doesn't use the append field
+ * Test a general valid conf that doesn't use the mode field
  */
-TEST_F(EnvGatewayParserTest, TestValidConfWithoutAppend) {
+TEST_F(EnvGatewayParserTest, TestValidConfWithoutMode) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\"}";
     convertToJSON(config);
@@ -82,13 +83,14 @@ TEST_F(EnvGatewayParserTest, TestValidConfWithoutAppend) {
     ASSERT_EQ(result.second, value);
 }
 
+
 /*
- * Test that setting append to false works as intended
+ * Test that setting mode to just "set" works as intended
  */
-TEST_F(EnvGatewayParserTest, TestValidConfAppendFalse) {
+TEST_F(EnvGatewayParserTest, TestValidConfModeSet) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
-                                  \"append\": false }";
+                                  \"mode\": \"set\" }";
     convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
@@ -97,13 +99,35 @@ TEST_F(EnvGatewayParserTest, TestValidConfAppendFalse) {
     ASSERT_EQ(result.second, value);
 }
 
+TEST_F(EnvGatewayParserTest, TestBadMode) {
+    const std::string config = "{ \"name\": \"" + name + "\",\
+                                  \"value\": \"" + value + "\",\
+                                  \"mode\": \"foo\" }";
+    convertToJSON(config);
+
+    ASSERT_EQ(ReturnCode::FAILURE,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+}
+
 /*
  * Test that appending to a non-existing var just sets it to the given value
  */
-TEST_F(EnvGatewayParserTest, TestValidConfAppendTrue) {
+TEST_F(EnvGatewayParserTest, TestValidConfAppendEmpty) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
-                                  \"append\": true }";
+                                  \"mode\": \"append\" }";
+    convertToJSON(config);
+
+    ASSERT_EQ(ReturnCode::SUCCESS,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+    ASSERT_EQ(result.first, name);
+    ASSERT_EQ(result.second, value);
+}
+
+TEST_F(EnvGatewayParserTest, TestValidConfPrependEmpty) {
+    const std::string config = "{ \"name\": \"" + name + "\",\
+                                  \"value\": \"" + value + "\",\
+                                  \"mode\": \"prepend\" }";
     convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
@@ -118,20 +142,64 @@ TEST_F(EnvGatewayParserTest, TestValidConfAppendTrue) {
 TEST_F(EnvGatewayParserTest, TestValidConfAppendActuallyAppends) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
-                                  \"append\": true }";
+                                  \"mode\": \"append\" }";
     convertToJSON(config);
-    store[name] = value;
+    store[name] = name;
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
     ASSERT_EQ(result.first, name);
-    ASSERT_EQ(result.second, value + value);
+    ASSERT_EQ(result.second, name + value);
+}
+
+/*
+ * Test that prepending to an already existing var actually prepends the value
+ */
+TEST_F(EnvGatewayParserTest, TestValidConfPrependActuallyPrepends) {
+    const std::string config = "{ \"name\": \"" + name + "\",\
+                                  \"value\": \"" + value + "\",\
+                                  \"mode\": \"prepend\" }";
+    convertToJSON(config);
+    store[name] = name;
+
+    ASSERT_EQ(ReturnCode::SUCCESS,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+    ASSERT_EQ(result.first, name);
+    ASSERT_EQ(result.second, value + name);
+}
+
+TEST_F(EnvGatewayParserTest, TestValidConfPrependSeparatorSeparates) {
+    const std::string config = "{ \"name\": \"" + name + "\",\
+                                  \"value\": \"" + value + "\",\
+                                  \"separator\": \"" + separator + "\",\
+                                  \"mode\": \"prepend\" }";
+    convertToJSON(config);
+    store[name] = name;
+
+    ASSERT_EQ(ReturnCode::SUCCESS,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+    ASSERT_EQ(result.first, name);
+    ASSERT_EQ(result.second, value + separator + name);
+}
+
+TEST_F(EnvGatewayParserTest, TestValidConfAppendSeparatorSeparates) {
+    const std::string config = "{ \"name\": \"" + name + "\",\
+                                  \"value\": \"" + value + "\",\
+                                  \"separator\": \"" + separator + "\",\
+                                  \"mode\": \"append\" }";
+    convertToJSON(config);
+    store[name] = name;
+
+    ASSERT_EQ(ReturnCode::SUCCESS,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+    ASSERT_EQ(result.first, name);
+    ASSERT_EQ(result.second, name + separator + value);
 }
 
 /*
  * Test that setting an already existing var without append fails
  */
-TEST_F(EnvGatewayParserTest, TestSameVarWithoutAppendFails) {
+TEST_F(EnvGatewayParserTest, TestSameVarWithoutAppendOrPrependFails) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\"}";
     convertToJSON(config);

@@ -126,11 +126,20 @@ GW_CONFIG_TWO_VARS = [
 GW_CONFIG_APPEND = [
     {
         "name": "LD_LIBRARY_PATH",
-        "value": ":/another/path",
-        "append": True
+        "value": "/another/path",
+        "mode": "append",
+        "separator": ":"
     }
 ]
 
+GW_CONFIG_PREPEND = [
+    {
+        "name": "LD_LIBRARY_PATH",
+        "value": "/another/path",
+        "mode": "prepend",
+        "separator": ":"
+    }
+]
 
 ##### Test suites #####
 
@@ -181,10 +190,10 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
-            
+
             # Set once
             sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
-            
+
             # Set twice
             sc.set_gateway_config("env", GW_CONFIG_SAME_VAR)
 
@@ -214,10 +223,10 @@ class TestEnvironment(object):
 
             # Append a variable not set before
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
-            
+
             # Set the variable that was "appended" previously
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
-            
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -229,7 +238,7 @@ class TestEnvironment(object):
             helper = EnvironmentHelper(TESTOUTPUT_DIR)
             ld_library_path = helper.env_var("LD_LIBRARY_PATH")
             # Assert the "appended" value is kept
-            assert ld_library_path == ":/another/path"
+            assert ld_library_path == "/another/path"
         finally:
             sc.terminate()
 
@@ -240,10 +249,10 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
-            
+
             # Append a variable not set before
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
-            
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -255,7 +264,7 @@ class TestEnvironment(object):
             helper = EnvironmentHelper(TESTOUTPUT_DIR)
             variable = helper.env_var("LD_LIBRARY_PATH")
             # Assert the append resulted in the creation of the variable
-            assert variable == ":/another/path"
+            assert variable == "/another/path"
         finally:
             sc.terminate()
 
@@ -266,13 +275,13 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
-            
+
             # Set a config to append to
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
 
             # Append the previously set variable
             sc.set_gateway_config("env", GW_CONFIG_APPEND)
-            
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -291,6 +300,38 @@ class TestEnvironment(object):
         finally:
             sc.terminate()
 
+    def test_env_var_is_prepended(self):
+        """ Set a config and then an prepending config, assert the prepended
+            variable looks as expected.
+        """
+        try:
+            sc = Container()
+            sc.start(DATA)
+
+            # Set a config to append to
+            sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
+
+            # Append the previously set variable
+            sc.set_gateway_config("env", GW_CONFIG_PREPEND)
+
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
+
+            # The D-Bus LaunchCommand is asynch so let it take effect before assert
+            time.sleep(0.5)
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            ld_library_path = helper.env_var("LD_LIBRARY_PATH")
+            # Assert the append was applied
+            assert ld_library_path == "/another/path:/some/non/relevant/path"
+            my_env_var = helper.env_var("MY_ENV_VAR")
+            # Assert other variables were not affected
+            assert my_env_var == "1234"
+        finally:
+            sc.terminate()
+
     def test_env_var_is_set(self):
         """ Set an Environment gateway config that sets a variable inside
             the container. Use helper to get the inside environment and
@@ -299,9 +340,9 @@ class TestEnvironment(object):
         try:
             sc = Container()
             sc.start(DATA)
-            
+
             sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
-            
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -325,7 +366,7 @@ class TestEnvironment(object):
             sc.start(DATA)
 
             sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
-            
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +

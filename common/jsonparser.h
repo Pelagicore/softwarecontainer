@@ -33,6 +33,19 @@ namespace softwarecontainer {
         LOG_DECLARE_CLASS_CONTEXT("JSON", "JSONParser");
 
     public:
+
+        /**
+         * @brief Reads an optional value from a JSON object.
+         *
+         * This differs from the read functions in that it return true instead of
+         * false if the key was not found, so the only way it returns false is if
+         * the key was of bad type or could not be parsed (but existed)
+         *
+         * @return false if the key existed and was of bad type
+         * @return true otherwise
+         */
+        static bool readOptional(const json_t *element, const char *key, std::string &result);
+
         /**
          * @brief Reads a string from a JSON Object.
          *
