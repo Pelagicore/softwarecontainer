@@ -38,6 +38,9 @@ ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
         return ReturnCode::FAILURE;
     }
 
+    // Convert to lowercase
+    std::transform(mode.begin(), mode.end(), mode.begin(), ::tolower);
+
     std::vector<std::string> validModes = { "set", "prepend", "append" };
     if (validModes.end() == std::find(validModes.begin(), validModes.end(), mode)) {
         log_error() << "Invalid mode, only " << validModes << " are valid";
