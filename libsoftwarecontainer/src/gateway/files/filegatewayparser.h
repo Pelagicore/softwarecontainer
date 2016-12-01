@@ -36,7 +36,4 @@ public:
     };
 
     ReturnCode parseFileGatewayConfigElement(const json_t *element, FileSetting &setting);
-    template<typename T> ReturnCode parseObligatory(const json_t *element, std::string key, T &result);
-    template<typename T> ReturnCode parseOptional(const json_t *element, std::string key, T &result);
-    template<typename T> ReturnCode assumeFormat(const json_t *element, std::string key, T &result);
 };

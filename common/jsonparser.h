@@ -45,6 +45,8 @@ namespace softwarecontainer {
          * @return true otherwise
          */
         static bool readOptional(const json_t *element, const char *key, std::string &result);
+        static bool readOptional(const json_t *element, const char *key, bool &result);
+        static bool readOptional(const json_t *element, const char *key, int &result);
 
         /**
          * @brief Reads a string from a JSON Object.

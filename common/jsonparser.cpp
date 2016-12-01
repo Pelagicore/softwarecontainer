@@ -30,6 +30,24 @@ bool JSONParser::readOptional(const json_t *element, const char *key, std::strin
     return read(element, key, result);
 }
 
+bool JSONParser::readOptional(const json_t *element, const char *key, bool &result)
+{
+    if (!hasKey(element, key)) {
+        return true;
+    }
+
+    return read(element, key, result);
+}
+
+bool JSONParser::readOptional(const json_t *element, const char *key, int &result)
+{
+    if (!hasKey(element, key)) {
+        return true;
+    }
+
+    return read(element, key, result);
+}
+
 bool JSONParser::read(const json_t *element, const char *key, std::string &result)
 {
     json_t *value = json_object_get(element, key);
