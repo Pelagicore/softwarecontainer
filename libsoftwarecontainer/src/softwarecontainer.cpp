@@ -75,12 +75,6 @@ void SoftwareContainer::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainL
     m_mainLoopContext = mainLoopContext;
 }
 
-void SoftwareContainer::setContainerName(const std::string &name)
-{
-    m_containerName = name;
-    log_debug() << m_container->toString();
-}
-
 ReturnCode SoftwareContainer::preload()
 {
     log_debug() << "Initializing container";

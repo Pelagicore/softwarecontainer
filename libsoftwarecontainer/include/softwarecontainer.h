@@ -91,8 +91,6 @@ public:
     std::string getContainerDir();
     std::string getGatewayDir();
 
-    void setContainerName(const std::string &name);
-
     ObservableProperty<ContainerState> &getContainerState();
 
     /**
@@ -106,7 +104,6 @@ private:
     std::shared_ptr<Workspace> m_workspace;
 
     ContainerID m_containerID;
-    std::string m_containerName;
     ObservableWritableProperty<ContainerState> m_containerState;
 
     std::shared_ptr<ContainerAbstractInterface> m_container;
