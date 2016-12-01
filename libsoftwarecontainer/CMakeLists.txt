@@ -66,5 +66,8 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/lxc-softwarecontainer
 )
 
+configure_file(softwarecontainer.pc.in softwarecontainer.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
+
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/lxc-softwarecontainer DESTINATION ${LXC_TEMPLATE_DIR})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.conf DESTINATION ${SYS_CONFIG_DIR})

@@ -30,8 +30,8 @@ include(GNUInstallDirs)
 # Set software version
 #
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 9)
-set(${PROJECT_NAME}_PATCH_LEVEL 1)
+set(${PROJECT_NAME}_MINOR_VERSION 10)
+set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
@@ -209,12 +209,6 @@ if (ENABLE_NETWORKGATEWAY)
 endif()
 
 #
-# Pkg-config file
-#
-configure_file(softwarecontainer.pc.in softwarecontainer.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
-
-#
 # General configuration file
 #
 configure_file(softwarecontainer-config.h.in softwarecontainer-config.h @ONLY)
@@ -228,7 +222,6 @@ add_subdirectory(common)
 add_subdirectory(libsoftwarecontainer)
 
 add_subdirectory(agent)
-add_subdirectory(libsoftwarecontaineragent)
 
 if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
