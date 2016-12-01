@@ -30,22 +30,41 @@ ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
         return ReturnCode::FAILURE;
     }
 
-    bool appendMode = false;
-    JSONParser::read(element, "append", appendMode); // This key is optional
+    std::string mode = "set";
+    std::string separator = "";
+
+    if (!JSONParser::readOptional(element, "mode", mode)) {
+        log_error() << "Could not parse \"mode\" key";
+        return ReturnCode::FAILURE;
+    }
+
+    std::vector<std::string> validModes = { "set", "prepend", "append" };
+    if (validModes.end() == std::find(validModes.begin(), validModes.end(), mode)) {
+        log_error() << "Invalid mode, only " << validModes << " are valid";
+        return ReturnCode::FAILURE;
+    }
+
+    if (!JSONParser::readOptional(element, "separator", separator)) {
+        log_error() << "Could not parse \"separator\" key";
+        return ReturnCode::FAILURE;
+    }
 
     if (store.count(result.first) == 0) {
-        if (appendMode) {
-            log_info() << "Env variable \"" << result.first
-                       << "\" was configured to be appended but the variable has not previously"
+        if (mode != "set") {
+            log_info() << "Env variable \"" << result.first << "\" was configured to "
+                       << "be appended/prepended but the variable has not previously"
                        << " been set, so it will be created. Value is set to: \""
                        << result.second << "\"";
         }
         return ReturnCode::SUCCESS;
     } else {
-        if (appendMode) {
-            result.second = store.at(result.first) + result.second;
+        if (mode == "append") {
+            result.second = store.at(result.first) + separator + result.second;
             return ReturnCode::SUCCESS;
-        } else {
+        } else if (mode == "prepend") {
+            result.second = result.second + separator + store.at(result.first);
+            return ReturnCode::SUCCESS;
+        } else { // mode == set
             log_error() << "Env variable " << result.first
                         << " already defined with value : " << store.at(result.first);
             return ReturnCode::FAILURE;
@@ -69,3 +88,4 @@ ReturnCode EnvironmentGatewayParser::requireNonEmptyKeyValue(const json_t *eleme
 
     return ReturnCode::SUCCESS;
 }
+

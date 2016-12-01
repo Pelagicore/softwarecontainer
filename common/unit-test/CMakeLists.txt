@@ -21,10 +21,9 @@ include(AddGTestTest)
 set(TEST_LIBRARY_DEPENDENCIES
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
-    ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerlib
+    softwarecontainercommon
 )
 
 include_directories(${SOFTWARECONTAINER_COMMON_DIR})

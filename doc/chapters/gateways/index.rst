@@ -271,10 +271,15 @@ a log warning.
 
 The configuration may also, optionally, specify the following parameters:
 
-- ``append`` (bool) If the environment variable is already defined by the gateway, append the new value to the value already defined. Defaults to false.
+- ``mode``: A string that can be either:
+    - ``set``: set the variable (this is the default, so one does not usually need to set it)
+    - ``append``: append the value given to the previous value for the given variable.
+    - ``prepend``: prepend the value given to the previous value for the given variable.
+- ``separator``: A string that will be squeezed in between the old and new value if one wants to
+                 prepend or append to a variable
 
-If a previously undefined variable is appended, the variable is set to the value
-provided, i.e. it will behave as if the variable is to be set, not appended.
+Both ``append`` and ``prepend`` will have the same effect as ``set`` if the variable was not already
+set.
 
 Example configurations
 ----------------------
@@ -297,8 +302,9 @@ There is also the possibility to append to an already defined variable::
     [
         {
             "name": "SOME_ENVIRONMENT_VARIABLE",
-            "value": ":/some/path",
-            "append": true
+            "value": "/some/path",
+            "mode": "append"
+            "separator": ":"
         }
     ]
 
@@ -306,7 +312,6 @@ With the above configuration, if ``SOME_ENVIRONMENT_VARIABLE`` had previously be
 to e.g. ``/tmp/test``, the varaiable value would now be set to ``/tmp/test:/some/path``.
 If ``SOME_ENVIRONMENT_VARIABLE`` had not been previously set, the value would now be
 set to ``:/some/path``.
-
 
 File gateway
 ============
