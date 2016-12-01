@@ -23,12 +23,12 @@
 ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *element,
                                                             FileSetting &setting)
 {
-    if (isError(parseObligatory(element, "path-host", setting.pathInHost))) {
+    if (!JSONParser::read(element, "path-host", setting.pathInHost)) {
         log_error() << "path-host key missing or of wrong type";
         return ReturnCode::FAILURE;
     }
 
-    if (isError(parseObligatory(element, "path-container", setting.pathInContainer))) {
+    if (!JSONParser::read(element, "path-container", setting.pathInContainer)) {
         log_error() << "path-container key missing or of wrong type";
         return ReturnCode::FAILURE;
     }
@@ -43,25 +43,27 @@ ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *elemen
         return ReturnCode::FAILURE;
     }
 
-    if (isError(parseOptional(element, "create-symlink", setting.createSymlinkInContainer))) {
+    if (!JSONParser::readOptional(element, "create-symlink", setting.createSymlinkInContainer)) {
         log_error() << "create-symlink has wrong format";
         return ReturnCode::FAILURE;
     }
 
-    if (isError(parseOptional(element, "read-only", setting.readOnly))) {
+    if (!JSONParser::readOptional(element, "read-only", setting.readOnly)) {
         log_error() << "read-only has wrong format";
         return ReturnCode::FAILURE;
     }
 
     bool hasEnvVar = JSONParser::hasKey(element, "env-var-name");
     if (hasEnvVar) {
-        if (isError(assumeFormat(element, "env-var-name", setting.envVarName))) {
+        if (!JSONParser::read(element, "env-var-name", setting.envVarName)) {
+            log_error() << "Key \"env-var-name\" is badly formed";
             return ReturnCode::FAILURE;
         }
     }
 
     if (JSONParser::hasKey(element, "env-var-prefix")) {
-        if (isError(assumeFormat(element, "env-var-prefix", setting.envVarPrefix))) {
+        if (!JSONParser::read(element, "env-var-prefix", setting.envVarPrefix)) {
+            log_error() << "Key \"env-var-prefix\" is badly formed";
             return ReturnCode::FAILURE;
         }
 
@@ -72,7 +74,8 @@ ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *elemen
     }
 
     if (JSONParser::hasKey(element, "env-var-suffix")) {
-        if (isError(assumeFormat(element, "env-var-suffix", setting.envVarSuffix))) {
+        if (!JSONParser::read(element, "env-var-suffix", setting.envVarSuffix)) {
+            log_error() << "Key \"env-var-suffix\" is badly formed";
             return ReturnCode::FAILURE;
         }
 
@@ -85,35 +88,3 @@ ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *elemen
     return ReturnCode::SUCCESS;
 }
 
-template<typename T>
-ReturnCode FileGatewayParser::assumeFormat(const json_t *element, std::string key, T &result) {
-    if (!JSONParser::read(element, key.c_str(), result)) {
-        log_error() << "Key " << key << " has wrong format";
-        return ReturnCode::FAILURE;
-    }
-
-    return ReturnCode::SUCCESS;
-}
-
-template<typename T>
-ReturnCode FileGatewayParser::parseObligatory(const json_t *element, std::string key, T &result)
-{
-    bool keyFound = JSONParser::read(element, key.c_str(), result);
-    if (!keyFound) {
-        log_error() << "Key " << key << " is obligatory";
-        return ReturnCode::FAILURE;
-    }
-
-    return ReturnCode::SUCCESS;
-}
-
-template<typename T>
-ReturnCode FileGatewayParser::parseOptional(const json_t *element, std::string key, T &result)
-{
-    bool keyFound = JSONParser::hasKey(element, key.c_str());
-    if (!keyFound) {
-        return ReturnCode::SUCCESS;
-    }
-
-    return bool2ReturnCode(JSONParser::read(element, key.c_str(), result));
-}
