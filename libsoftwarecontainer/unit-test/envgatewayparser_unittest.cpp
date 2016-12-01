@@ -109,6 +109,25 @@ TEST_F(EnvGatewayParserTest, TestBadMode) {
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
 }
 
+TEST_F(EnvGatewayParserTest, TestModeIsCaseInsensitive) {
+    const std::string config1 = "{ \"name\": \"" + name + "\",\
+                                   \"value\": \"" + value + "\",\
+                                   \"mode\": \"SET\" }";
+    convertToJSON(config1);
+
+    ASSERT_EQ(ReturnCode::SUCCESS,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+
+    const std::string config2 = "{ \"name\": \"" + name + "\",\
+                                   \"value\": \"" + value + "\",\
+                                   \"mode\": \"PrEpEnD\" }";
+    convertToJSON(config2);
+    ASSERT_EQ(ReturnCode::SUCCESS,
+              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+    ASSERT_EQ(result.first, name);
+    ASSERT_EQ(result.second, value);
+}
+
 /*
  * Test that appending to a non-existing var just sets it to the given value
  */
