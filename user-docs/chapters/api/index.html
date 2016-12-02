@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.10.0-d6a2807 2016-12-02 documentation</title>
+    <title>API &#8212; softwarecontainer 0.11.0-d62daad 2016-12-02 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.10.0-d6a2807 2016-12-02',
+        VERSION:     '0.11.0-d62daad 2016-12-02',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.10.0-d6a2807 2016-12-02 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.11.0-d62daad 2016-12-02 documentation" href="../../index.html" />
     <link rel="next" title="Design" href="../design/index.html" />
     <link rel="prev" title="SoftwareContainer examples" href="../examples/index.html" />
    
@@ -63,31 +63,28 @@ mostly useful for integrators.</p>
 <div class="section" id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="ping">
-<h3>Ping<a class="headerlink" href="#ping" title="Permalink to this headline">¶</a></h3>
-<p>Controls availability of com.pelagicore.SoftwareContainerAgent interface</p>
+<div class="section" id="list">
+<h3>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
+<p>Returns a list of the current containers</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><em>None</em></td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
+<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><em>None</em></td>
+<tr class="field-odd field"><th class="field-name">containers:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="createcontainer">
-<h3>CreateContainer<a class="headerlink" href="#createcontainer" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="create">
+<h3>Create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h3>
 <p>Creates a container with given configuration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -132,49 +129,8 @@ mostly useful for integrators.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="setcontainername">
-<h3>SetContainerName<a class="headerlink" href="#setcontainername" title="Permalink to this headline">¶</a></h3>
-<p>Sets the name of container with unique containerID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">containerName:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> name.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="launchcommand">
-<h3>LaunchCommand<a class="headerlink" href="#launchcommand" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="execute">
+<h3>Execute<a class="headerlink" href="#execute" title="Permalink to this headline">¶</a></h3>
 <p>Launches the specified application/code in the container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -224,8 +180,8 @@ mostly useful for integrators.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="shutdowncontainer">
-<h3>ShutdownContainer<a class="headerlink" href="#shutdowncontainer" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="destroy">
+<h3>Destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
 <p>Tears down all active gateways related to container and shuts down the container with all reserved sources.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -263,8 +219,8 @@ mostly useful for integrators.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="suspendcontainer">
-<h3>SuspendContainer<a class="headerlink" href="#suspendcontainer" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="suspend">
+<h3>Suspend<a class="headerlink" href="#suspend" title="Permalink to this headline">¶</a></h3>
 <p>Suspends all execution inside a given container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -302,8 +258,8 @@ mostly useful for integrators.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="resumecontainer">
-<h3>ResumeContainer<a class="headerlink" href="#resumecontainer" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="resume">
+<h3>Resume<a class="headerlink" href="#resume" title="Permalink to this headline">¶</a></h3>
 <p>Resumes a suspended container</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -341,90 +297,8 @@ mostly useful for integrators.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="shutdowncontainerwithtimeout">
-<h3>ShutdownContainerWithTimeout<a class="headerlink" href="#shutdowncontainerwithtimeout" title="Permalink to this headline">¶</a></h3>
-<p>Tears down all active gateways related to container and shuts down the container and all reserved sources after given timeout.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">timeout:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> timeout.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="writetostdin">
-<h3>WriteToStdIn<a class="headerlink" href="#writetostdin" title="Permalink to this headline">¶</a></h3>
-<p>Send a character array to the standard input of a particular process.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">processID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> PID of the process; obtained by LaunchCommand.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">bytes:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;char&gt;</span></code> character array to sent to the stdin.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="bindmountfolderincontainer">
-<h3>BindMountFolderInContainer<a class="headerlink" href="#bindmountfolderincontainer" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="bindmount">
+<h3>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h3>
 <p>Binds a directory on the host to the container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -436,7 +310,7 @@ mostly useful for integrators.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to the directory in host.</td>
+<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> absolute path to the directory in the host.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the absolute path to the directory in container.</td>
@@ -460,10 +334,7 @@ mostly useful for integrators.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to the bind folder in container.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -545,7 +416,7 @@ mostly useful for integrators.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">boolean</span></code> either true or false.</td>
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -593,16 +464,13 @@ mostly useful for integrators.</p>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
 <li><a class="reference internal" href="#methods">Methods</a></li>
-<li><a class="reference internal" href="#ping">Ping</a></li>
-<li><a class="reference internal" href="#createcontainer">CreateContainer</a></li>
-<li><a class="reference internal" href="#setcontainername">SetContainerName</a></li>
-<li><a class="reference internal" href="#launchcommand">LaunchCommand</a></li>
-<li><a class="reference internal" href="#shutdowncontainer">ShutdownContainer</a></li>
-<li><a class="reference internal" href="#suspendcontainer">SuspendContainer</a></li>
-<li><a class="reference internal" href="#resumecontainer">ResumeContainer</a></li>
-<li><a class="reference internal" href="#shutdowncontainerwithtimeout">ShutdownContainerWithTimeout</a></li>
-<li><a class="reference internal" href="#writetostdin">WriteToStdIn</a></li>
-<li><a class="reference internal" href="#bindmountfolderincontainer">BindMountFolderInContainer</a></li>
+<li><a class="reference internal" href="#list">List</a></li>
+<li><a class="reference internal" href="#create">Create</a></li>
+<li><a class="reference internal" href="#execute">Execute</a></li>
+<li><a class="reference internal" href="#destroy">Destroy</a></li>
+<li><a class="reference internal" href="#suspend">Suspend</a></li>
+<li><a class="reference internal" href="#resume">Resume</a></li>
+<li><a class="reference internal" href="#bindmount">BindMount</a></li>
 <li><a class="reference internal" href="#setgatewayconfigs">SetGatewayConfigs</a></li>
 <li><a class="reference internal" href="#setcapabilities">SetCapabilities</a></li>
 <li><a class="reference internal" href="#signals">Signals</a></li>
