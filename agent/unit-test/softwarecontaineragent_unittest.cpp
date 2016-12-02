@@ -46,11 +46,11 @@ public:
     {
         try {
             sca = std::make_shared<SoftwareContainerAgent>(
-            m_context,
-            m_preloadCount,
-            m_shutdownContainers,
-            m_shutdownTimeout,
-            m_configPath);
+                m_context,
+                m_preloadCount,
+                m_shutdownContainers,
+                m_shutdownTimeout,
+                m_configPath);
             workspace = sca->getWorkspace();
         } catch(ReturnCode failure) {
             log_error() << "Exception in software agent constructor";

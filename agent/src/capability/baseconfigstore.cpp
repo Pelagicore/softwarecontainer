@@ -204,11 +204,10 @@ std::vector<std::string> BaseConfigStore::fileList(const std::string &dirPath)
     return files;
 }
 bool BaseConfigStore::isJsonFile(const std::string &filename) {
-    size_t lastdot = filename.find_last_of(".");
-    std::string prefix = filename.substr(lastdot);
-    if (prefix.compare(".json") != 0) {
-        log_debug() << "File does not have json as prefix (" << prefix <<")";
+
+    if (filename.size() <= 5) {
+        // Even if the file name is ".json" we will not classify this as a json file
         return false;
     }
-    return true;
+    return filename.substr(filename.size()-5) == ".json";
 }

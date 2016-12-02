@@ -23,10 +23,17 @@ GatewayConfiguration::GatewayConfiguration()
 {
 }
 
+GatewayConfiguration::GatewayConfiguration(const GatewayConfiguration &gwConf)
+{
+    if (isError(append(gwConf))) {
+        throw ReturnCode::FAILURE;
+    }
+}
+
 GatewayConfiguration::~GatewayConfiguration()
 {
     for (auto &it : m_configMap) {
-        free(it.second);
+        json_decref(it.second);
     }
 }
 
@@ -46,13 +53,14 @@ ReturnCode GatewayConfiguration::append(const std::string &id, json_t *sourceArr
             if (json_array_append(destArray, copy) < 0) {
                 log_error() << "Could not add Gateway Config to json array: " << id;
                 m_configMap[id] = backupArray;
-                free(destArray);
+                json_decref(destArray);
                 return ReturnCode::FAILURE;
             }
         }
-        free(backupArray);
+        json_decref(backupArray);
     } else {
-        m_configMap[id] = json_deep_copy(sourceArray);
+        m_configMap[id] = sourceArray;
+        json_incref(sourceArray);
     }
 
     return ReturnCode::SUCCESS;
@@ -74,7 +82,7 @@ json_t *GatewayConfiguration::config(const std::string &gatewayId) const
          return nullptr;
     }
 
-    return m_configMap.at(gatewayId);
+    return json_deep_copy(m_configMap.at(gatewayId));
 }
 
 bool GatewayConfiguration::empty()

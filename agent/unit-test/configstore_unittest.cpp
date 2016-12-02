@@ -39,46 +39,36 @@ public:
 
     /* The Service Manifests' (relative) file paths */
     std::string testDataDir   = std::string(TEST_DATA_DIR) + "/";
+    std::string dirPath       = testDataDir + "testDirectory/";
     std::string sm_path       = "CS_unittest_ServiceManifest.json";
     std::string short_sm_path = "CS_unittest_short_ServiceManifest.json";
     std::string evil_sm       = "CS_unittest_parseError.json";
 
-    /* Setting up the environment */
-    void SetUp() override
-    {
-        // Code here will be called right before each test
-    }
-
-    /* Destroy objects created */
-    void TearDown() override
-    {
-        // Code here will be called right before the destructor.
-    }
 };
 
 /* The tests */
 
-/* Constructing a FilteredConfigStore with an empty file path should not throw an exception.
+/* Constructing a BaseConfigStore with an empty file path should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorEmptyStr) {
     ASSERT_NO_THROW(BaseConfigStore(""));
 }
 
-/* Constructing a FilteredConfigStore with a file path,
+/* Constructing a BaseConfigStore with a file path,
  * pointing at a parsable json file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk) {
     ASSERT_NO_THROW(BaseConfigStore(testDataDir + short_sm_path));
 }
 
-/* Constructing a FilteredConfigStore with a file path,
+/* Constructing a BaseConfigStore with a file path,
  * pointing at a parsable file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk2) {
     ASSERT_NO_THROW(BaseConfigStore(testDataDir + sm_path));
 }
 
-/* Constructing a FilteredConfigStore with a file path,
+/* Constructing a BaseConfigStore with a file path,
  * pointing at a file which can not be parsed,
  * should throw an exception of type ReturnCode.
  */
@@ -86,7 +76,7 @@ TEST_F(ConfigStoreTest, constructorEvilFile) {
     ASSERT_THROW(BaseConfigStore(testDataDir + evil_sm), ReturnCode);
 }
 
-/* Constructing a FilteredConfigStore with a directory path,
+/* Constructing a BaseConfigStore with a directory path,
  * even if all files can not be parsed, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorDir) {
@@ -96,12 +86,11 @@ TEST_F(ConfigStoreTest, constructorDir) {
 /* Constructing a FilteredConfigStore with a directory path,
  * even if all files can not be parsed, should not throw an exception.
  */
-/* This test fails intermittently, not clear why
-TEST_F(FilteredConfigStoreTest, constructorDir2) {
+TEST_F(ConfigStoreTest, constructorDir2) {
     // No config files, but ok dir
-    ASSERT_NO_THROW(FilteredConfigStore("/home/vagrant/softwarecontainer/"));
+    ASSERT_NO_THROW(FilteredConfigStore(dirPath +""));
 }
-*/
+
 
 /* Constructing a FilteredConfigStore with a directory path,
  * when the directory does not exist, should throw an exception of type ReturnCode.
