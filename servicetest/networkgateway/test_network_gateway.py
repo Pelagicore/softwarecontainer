@@ -116,15 +116,15 @@ class TestNetworkRules(object):
 
         these durations will be shorten with -i option when possible
     """
-    def test_network_policy_drop(self):
-        """ Test if the default policy is DROP as it should be
-            which behavior is being not possible to ping a hostname
+    def test_no_network_rules(self):
+        """ Test that packets are dropped if there are no network
+            rules given
         """
         try:
             sc = Container()
             sc.start(DATA)
-            
-            sc.set_gateway_config("network", GW_CONFIG_POLICY_DROP)
+
+            sc.set_gateway_config("network", [])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -141,6 +141,30 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
+    def test_network_policy_drop(self):
+        """ Test if the default policy is DROP as it should be
+            which behavior is being not possible to ping a hostname
+        """
+        try:
+            sc = Container()
+            sc.start(DATA)
+
+            sc.set_gateway_config("network", GW_CONFIG_POLICY_DROP)
+
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py" +
+                              " --test-dir " + sc.get_bind_dir() +
+                              " --do-ping 8.8.8.8")
+            # Allow 'ping' to timeout (the currently used busybox ping can't have custom timeout)
+            time.sleep(10)
+            helper = NetworkHelper(CURRENT_DIR)
+            is_pingable = helper.ping_result()
+            assert is_pingable is False
+            helper.remove_file()
+        finally:
+            sc.terminate()
+
     def test_network_protocols(self):
         """ Tests all allowed protocols and port filtering
             icmp protocol is used for ping hostname
@@ -152,7 +176,7 @@ class TestNetworkRules(object):
         try:
             sc = Container()
             sc.start(DATA)
-            
+
             sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
 
             sc.launch_command("python " +
