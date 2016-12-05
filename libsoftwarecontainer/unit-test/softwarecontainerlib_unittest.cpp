@@ -199,53 +199,27 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     job0.start();
     ASSERT_EQ(job0.wait(), EXISTENT);
 
-    // Create two temporary files
+    // Create a temporary file, and verify that we could indeed create it.
     char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
-    char tempFilename2[] = "/tmp/fileGatewayXXXXXX";
     int fd1 = mkstemp(tempFilename1);
-    int fd2 = mkstemp(tempFilename2);
-
-    // We could indeed create them.
     ASSERT_NE(fd1, 0);
-    ASSERT_NE(fd2, 0);
-
     close(fd1);
-    close(fd2);
 
-    // They will be mapped to these files
+    // They will be mapped to these files, which should not yet exist
     std::string containerPath1 = "/tmp/testFile1";
-    std::string containerPath2 = "/tmp/testFile2";
-
-    // tempFilename2 will be symlinked into the container, so it will be
-    // available at the same path inside as outside. Make sure it's not
-    // there before we've mounted it.
-    FunctionJob jobNotMounted(getSc(), [&] () {
-        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
+    FunctionJob jobMounted(getSc(), [&] () {
+        return isFile(containerPath1) ? EXISTENT : NON_EXISTENT;
     });
-    jobNotMounted.start();
-    ASSERT_EQ(jobNotMounted.wait(), NON_EXISTENT);
+    jobMounted.start();
+    ASSERT_EQ(jobMounted.wait(), NON_EXISTENT);
 
-    // We configure the FileGateway to have both files mounted to their
-    // respective locations. The first one's location can be found through
-    // an environment variable, the other will have the same name inside
-    // the container as outside.
-    std::string envVarName = "TEST_FILE_PATH";
+    // Let's configure the env gateway
     GatewayConfiguration config;
     std::string configStr =
     "["
         "{"
             "  \"path-host\" : \"" + std::string(tempFilename1) + "\""
             ", \"path-container\" : \"" + containerPath1 + "\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": true"
-            ", \"env-var-name\": \"" + envVarName + "\""
-            ", \"env-var-prefix\": \"\""
-            ", \"env-var-suffix\": \"\""
-        "},"
-        "{"
-            "  \"path-host\" : \"" + std::string(tempFilename2) + "\""
-            ", \"path-container\" : \"" + containerPath2 + "\""
-            ", \"create-symlink\" : true"
             ", \"read-only\": true"
         "}"
     "]";
@@ -255,40 +229,18 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     config.append(FileGateway::ID, configJson);
     setGatewayConfigs(config);
 
-    // Make sure the environment variables are available
-    FunctionJob jobEnv(getSc(), [&] () {
-        return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
-    });
-    jobEnv.start();
-    ASSERT_EQ(jobEnv.wait(), EXISTENT);
-
-    // Now the files pointed out by the env var should be available
-    FunctionJob jobEnvFile(getSc(), [&] () {
-        std::string envVal = getenv(envVarName.c_str());
-        return isFile(envVal) ? EXISTENT : NON_EXISTENT;
-    });
-    jobEnvFile.start();
-    ASSERT_EQ(jobEnvFile.wait(), EXISTENT);
-
-    // The files with symlinks should be available at its original location,
-    // but inside the container
-    FunctionJob jobSymlink(getSc(), [&] () {
-        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
-    });
-    jobSymlink.start();
-    ASSERT_EQ(jobSymlink.wait(), EXISTENT);
+    jobMounted.start();
+    ASSERT_EQ(jobMounted.wait(), EXISTENT);
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
     std::string testData = "testdata";
     writeToFile(tempFilename1, testData);
-    writeToFile(tempFilename2, testData);
 
     // Test if we can read the data back into a variable
     FunctionJob jobReadData(getSc(), [&] () {
-        std::string envVal = getenv(envVarName.c_str());
         std::string readBack;
-        readFromFile(envVal, readBack);
+        readFromFile(containerPath1, readBack);
         return readBack == testData ? 0 : 1;
     });
     jobReadData.start();
@@ -297,8 +249,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     // Make sure we can't write to the file
     std::string badData = "This data should never be read";
     FunctionJob jobWriteDataRO(getSc(), [&] () {
-        std::string envVal = getenv(envVarName.c_str());
-        writeToFile(envVal, badData);
+        writeToFile(containerPath1, badData);
         return 0;
     });
     jobWriteDataRO.start();
@@ -310,7 +261,6 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     // Remove the temp files
     ASSERT_EQ(unlink(tempFilename1), 0);
-    ASSERT_EQ(unlink(tempFilename2), 0);
 }
 
 TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
@@ -322,49 +272,26 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     job0.start();
     ASSERT_EQ(job0.wait(), EXISTENT);
 
-    // Create two temporary files
+    // Create one temporary file, and verify that we indeed could create it.
     char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
-    char tempFilename2[] = "/tmp/fileGatewayXXXXXX";
     int fd1 = mkstemp(tempFilename1);
-    int fd2 = mkstemp(tempFilename2);
-
-    // We could indeed create them.
     ASSERT_NE(fd1, 0);
-    ASSERT_NE(fd2, 0);
-
     close(fd1);
-    close(fd2);
 
     // They will be mapped to these files
     std::string containerPath1 = "/tmp/testFile1";
-    std::string containerPath2 = "/tmp/testFile2";
-
-    // tempFilename2 will be symlinked into the container, so it will be
-    // available at the same path inside as outside. Make sure it's not
-    // there before we've mounted it.
-    FunctionJob jobNotMounted(getSc(), [&] () {
-        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
+    FunctionJob jobMounted(getSc(), [&] () {
+        return isFile(containerPath1) ? EXISTENT : NON_EXISTENT;
     });
-    jobNotMounted.start();
-    ASSERT_EQ(jobNotMounted.wait(), NON_EXISTENT);
+    jobMounted.start();
+    ASSERT_EQ(jobMounted.wait(), NON_EXISTENT);
 
-    std::string envVarName = "TEST_FILE_PATH";
     GatewayConfiguration config;
     std::string configStr =
     "["
         "{" // The files below are mounted read-only
             "  \"path-host\" : \"" + std::string(tempFilename1) + "\""
             ", \"path-container\" : \"" + containerPath1 + "\""
-            ", \"create-symlink\" : false"
-            ", \"read-only\": false"
-            ", \"env-var-name\": \"" + envVarName + "\""
-            ", \"env-var-prefix\": \"\""
-            ", \"env-var-suffix\": \"\""
-        "},"
-        "{"
-            "  \"path-host\" : \"" + std::string(tempFilename2) + "\""
-            ", \"path-container\" : \"" + containerPath2 + "\""
-            ", \"create-symlink\" : true"
             ", \"read-only\": false"
         "}"
     "]";
@@ -374,40 +301,18 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     config.append(FileGateway::ID, configJson);
     setGatewayConfigs(config);
 
-    // Make sure the environment variables are available
-    FunctionJob jobEnv(getSc(), [&] () {
-        return getenv(envVarName.c_str()) != nullptr ? EXISTENT : NON_EXISTENT;
-    });
-    jobEnv.start();
-    ASSERT_EQ(jobEnv.wait(), EXISTENT);
-
-    // Now the files pointed out by the env var should be available
-    FunctionJob jobEnvFile(getSc(), [&] () {
-        std::string envVal = getenv(envVarName.c_str());
-        return isFile(envVal) ? EXISTENT : NON_EXISTENT;
-    });
-    jobEnvFile.start();
-    ASSERT_EQ(jobEnvFile.wait(), EXISTENT);
-
-    // The files with symlinks should be available at its original location,
-    // but inside the container
-    FunctionJob jobSymlink(getSc(), [&] () {
-        return isFile(tempFilename2) ? EXISTENT : NON_EXISTENT;
-    });
-    jobSymlink.start();
-    ASSERT_EQ(jobSymlink.wait(), EXISTENT);
+    jobMounted.start();
+    ASSERT_EQ(jobMounted.wait(), EXISTENT);
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
     std::string testData = "testdata";
     writeToFile(tempFilename1, testData);
-    writeToFile(tempFilename2, testData);
 
     // Test if we can read the data back into a variable
     FunctionJob jobReadData(getSc(), [&] () {
-        std::string envVal = getenv(envVarName.c_str());
         std::string readBack;
-        readFromFile(envVal, readBack);
+        readFromFile(containerPath1, readBack);
         return readBack == testData ? 0 : 1;
     });
     jobReadData.start();
@@ -416,8 +321,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     // Make sure we can write to the file
     std::string newData = "This data should have been written";
     FunctionJob jobWriteData(getSc(), [&] () {
-        std::string envVal = getenv(envVarName.c_str());
-        writeToFile(envVal, newData);
+        writeToFile(containerPath1, newData);
         return 0;
     });
     jobWriteData.start();
@@ -429,7 +333,6 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
 
     // Let's remove the temp files also
     ASSERT_EQ(unlink(tempFilename1), 0);
-    ASSERT_EQ(unlink(tempFilename2), 0);
 }
 
 /**

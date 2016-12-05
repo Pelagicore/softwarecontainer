@@ -46,7 +46,7 @@ public:
     bool teardownGateway() override;
 
 private:
-    virtual std::string bindMount(const FileGatewayParser::FileSetting &setting);
+    virtual bool bindMount(const FileGatewayParser::FileSetting &setting);
 
     std::vector<FileGatewayParser::FileSetting> m_settings;
 };

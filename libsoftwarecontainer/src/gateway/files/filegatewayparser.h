@@ -28,11 +28,7 @@ public:
     struct FileSetting {
         std::string pathInHost;
         std::string pathInContainer;
-        bool createSymlinkInContainer;
         bool readOnly;
-        std::string envVarName;
-        std::string envVarPrefix;
-        std::string envVarSuffix;
     };
 
     ReturnCode parseFileGatewayConfigElement(const json_t *element, FileSetting &setting);

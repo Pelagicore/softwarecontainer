@@ -43,46 +43,9 @@ ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *elemen
         return ReturnCode::FAILURE;
     }
 
-    if (!JSONParser::readOptional(element, "create-symlink", setting.createSymlinkInContainer)) {
-        log_error() << "create-symlink has wrong format";
-        return ReturnCode::FAILURE;
-    }
-
     if (!JSONParser::readOptional(element, "read-only", setting.readOnly)) {
         log_error() << "read-only has wrong format";
         return ReturnCode::FAILURE;
-    }
-
-    bool hasEnvVar = JSONParser::hasKey(element, "env-var-name");
-    if (hasEnvVar) {
-        if (!JSONParser::read(element, "env-var-name", setting.envVarName)) {
-            log_error() << "Key \"env-var-name\" is badly formed";
-            return ReturnCode::FAILURE;
-        }
-    }
-
-    if (JSONParser::hasKey(element, "env-var-prefix")) {
-        if (!JSONParser::read(element, "env-var-prefix", setting.envVarPrefix)) {
-            log_error() << "Key \"env-var-prefix\" is badly formed";
-            return ReturnCode::FAILURE;
-        }
-
-        if (!hasEnvVar) {
-            log_error() << "Can't set env-var-prefix without env-var-name";
-            return ReturnCode::FAILURE;
-        }
-    }
-
-    if (JSONParser::hasKey(element, "env-var-suffix")) {
-        if (!JSONParser::read(element, "env-var-suffix", setting.envVarSuffix)) {
-            log_error() << "Key \"env-var-suffix\" is badly formed";
-            return ReturnCode::FAILURE;
-        }
-
-        if (!hasEnvVar) {
-            log_error() << "Can't set env-var-suffix without env-var-name";
-            return ReturnCode::FAILURE;
-        }
     }
 
     return ReturnCode::SUCCESS;

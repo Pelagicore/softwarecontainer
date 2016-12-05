@@ -40,9 +40,6 @@ public:
     const std::string FILE_CONTENT = "ahdkhqweuyreqiwenomndlaskmd";
     const std::string FILE_PATH = "/tmp/filename.txt";
     const std::string CONTAINER_PATH = "/filename.txt";
-    const std::string ENV_VAR_NAME = "TEST_ENVIRONMENT_VARIABLE_NAME";
-    const std::string PREFIX = "TEST_PREFIX";
-    const std::string SUFFIX = "TEST_SUFFIX";
 };
 
 /*
@@ -84,13 +81,11 @@ TEST_F(FileGatewayParserTest, TestBadBools) {
             "  \"path-host\": \"" + FILE_PATH + "\""
             ", \"path-container\": \"" + CONTAINER_PATH + "\""
             ", \"read-only\": 0"
-            ", \"create-symlink\": []"
         "}";
     convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
     ASSERT_FALSE(result.readOnly);
-    ASSERT_FALSE(result.createSymlinkInContainer);
 }
 
 /*
@@ -147,32 +142,3 @@ TEST_F(FileGatewayParserTest, TestEmptyPathInContainer) {
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
 }
 
-/*
- * Make sure configuration is rejected if env variable prefix is given without an env var name
- */
-TEST_F(FileGatewayParserTest, TestEnvPrefixWithoutEnvName) {
-    const std::string config = 
-        "{"
-            "  \"path-host\": \"" + FILE_PATH + "\""
-            ", \"path-container\": \"" + CONTAINER_PATH + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-        "}";
-    convertToJSON(config);
-
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
-}
-
-/*
- * Make sure configuration is rejected if env variable suffix is given without an env var name
- */
-TEST_F(FileGatewayParserTest, TestEnvSuffixWithoutEnvName) {
-    const std::string config = 
-        "{"
-            "  \"path-host\": \"" + FILE_PATH + "\""
-            ", \"path-container\": \"" + CONTAINER_PATH + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}";
-    convertToJSON(config);
-
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
-}
