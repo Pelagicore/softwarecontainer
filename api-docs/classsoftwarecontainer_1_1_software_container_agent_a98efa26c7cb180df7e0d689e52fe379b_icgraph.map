@@ -1,7 +1,8 @@
 <map id="softwarecontainer::SoftwareContainerAgent::checkContainer" name="softwarecontainer::SoftwareContainerAgent::checkContainer">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#ad3e6e3cab9bad8db6f5ed87deeffd3a2" title="Bind mount a folder into the container. " alt="" coords="232,5,441,61"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#ac7b411263200e708872bb49af2352e13" title="Launch the given command in a the given container. " alt="" coords="247,85,426,141"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#a28c1a89c1020304c89f4bd153f5ee6c0" title="sets the container name " alt="" coords="247,165,426,221"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_software_container_agent.html#ae19799cb9be607a08a674179713adcf8" title="Set configuration for the container gateways. " alt="" coords="247,245,426,301"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container_agent.html#acff22e38c79ba4242872fbc96b3cbdbe" title="shuts down a container with a custom timeout " alt="" coords="247,325,426,381"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a2e4851ab4fd41971e2d68ec1e46477dc" title="Bind mount a folder into the container. " alt="" coords="217,5,411,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a16ed21f757ef854cbf0ab8dd8a9b935c" title="Launch the given command in a the given container. " alt="" coords="232,85,396,141"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#a73f02d47572fa6c9a5fcb665d3287dbb" title="resumes execution of a container " alt="" coords="232,165,396,221"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_software_container_agent.html#ad04e602ea7b514c11c24094cbf9fe5c5" title="sets the container name " alt="" coords="232,245,396,301"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container_agent.html#aa7fd00afeef66a7c8c90e4c96454a200" title="shuts down a container with a custom timeout " alt="" coords="232,325,396,381"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_software_container_agent.html#a70135e7829b531a1aa55983b708c5cd3" title="suspends execution of a container " alt="" coords="232,405,396,461"/>
 </map>

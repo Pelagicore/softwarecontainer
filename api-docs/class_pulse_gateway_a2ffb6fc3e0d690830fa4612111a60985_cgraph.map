@@ -1,5 +1,5 @@
 <map id="PulseGateway::activateGateway" name="PulseGateway::activateGateway">
-<area shape="rect" id="node2" href="$class_gateway.html#ab03846b347174727f70ab4e4ce5db09f" title="Get a handle to the associated container. " alt="" coords="563,5,729,32"/>
-<area shape="rect" id="node3" href="$class_gateway.html#a828b2dfa811c7fcce82d34b502e65112" title="Set an environment variable in the associated container. " alt="" coords="277,56,513,83"/>
-<area shape="rect" id="node4" href="$class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2" title="Check if the gateway has an associated container. " alt="" coords="561,56,731,83"/>
+<area shape="rect" id="node2" href="$class_gateway.html#ab03846b347174727f70ab4e4ce5db09f" title="Get a handle to the associated container. " alt="" coords="536,5,692,32"/>
+<area shape="rect" id="node3" href="$class_gateway.html#a828b2dfa811c7fcce82d34b502e65112" title="Set an environment variable in the associated container. " alt="" coords="267,56,487,83"/>
+<area shape="rect" id="node4" href="$class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2" title="Check if the gateway has an associated container. " alt="" coords="535,56,693,83"/>
 </map>

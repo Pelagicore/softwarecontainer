@@ -1,15 +1,16 @@
 <map id="agent/src/softwarecontaineragent.h" name="agent/src/softwarecontaineragent.h">
-<area shape="rect" id="node7" href="$ivi-profiling_8h_source.html" title="ivi&#45;profiling.h" alt="" coords="116,87,219,114"/>
-<area shape="rect" id="node13" href="$softwarecontainer_8h_source.html" title="softwarecontainer.h" alt="" coords="1135,244,1282,271"/>
-<area shape="rect" id="node22" href="$softwarecontainer-common_8h_source.html" title="softwarecontainer&#45;common.h" alt="" coords="1053,543,1263,569"/>
-<area shape="rect" id="node33" href="$jsonparser_8h_source.html" title="jsonparser.h" alt="" coords="668,393,768,420"/>
-<area shape="rect" id="node37" href="$commandjob_8h_source.html" title="commandjob.h" alt="" coords="1121,87,1240,114"/>
-<area shape="rect" id="node19" href="$workspace_8h_source.html" title="workspace.h" alt="" coords="858,319,959,345"/>
-<area shape="rect" id="node30" href="$gateway_8h_source.html" title="gateway.h" alt="" coords="1166,319,1251,345"/>
-<area shape="rect" id="node35" href="$container_8h_source.html" title="container.h" alt="" coords="1275,319,1369,345"/>
-<area shape="rect" id="node20" href="$filetoolkitwithundo_8h_source.html" title="filetoolkitwithundo.h" alt="" coords="844,393,992,420"/>
-<area shape="rect" id="node21" href="$cleanuphandler_8h_source.html" title="cleanuphandler.h" alt="" coords="783,468,914,495"/>
-<area shape="rect" id="node29" href="$softwarecontainer-log_8h_source.html" title="softwarecontainer&#45;log.h" alt="" coords="562,617,733,644"/>
-<area shape="rect" id="node32" href="$containerabstractinterface_8h_source.html" title="containerabstractinterface.h" alt="" coords="1098,393,1301,420"/>
-<area shape="rect" id="node38" href="$jobabstract_8h_source.html" title="jobabstract.h" alt="" coords="1146,169,1253,196"/>
+<area shape="rect" id="node7" href="$ivi-profiling_8h_source.html" title="ivi&#45;profiling.h" alt="" coords="1217,87,1312,114"/>
+<area shape="rect" id="node13" href="$softwarecontainer_8h_source.html" title="softwarecontainer.h" alt="" coords="446,244,582,271"/>
+<area shape="rect" id="node22" href="$softwarecontainer-common_8h_source.html" title="softwarecontainer&#45;common.h" alt="" coords="788,543,979,569"/>
+<area shape="rect" id="node34" href="$jsonparser_8h_source.html" title="jsonparser.h" alt="" coords="1205,393,1298,420"/>
+<area shape="rect" id="node37" href="$configstore_8h.html" title="Contains the softwarecontainer::ConfigStore class. " alt="" coords="1057,319,1213,345"/>
+<area shape="rect" id="node38" href="$commandjob_8h_source.html" title="commandjob.h" alt="" coords="799,87,906,114"/>
+<area shape="rect" id="node19" href="$workspace_8h_source.html" title="workspace.h" alt="" coords="869,319,965,345"/>
+<area shape="rect" id="node31" href="$gateway_8h_source.html" title="gateway.h" alt="" coords="721,319,803,345"/>
+<area shape="rect" id="node35" href="$container_8h_source.html" title="container.h" alt="" coords="571,319,657,345"/>
+<area shape="rect" id="node20" href="$filetoolkitwithundo_8h_source.html" title="filetoolkitwithundo.h" alt="" coords="851,393,988,420"/>
+<area shape="rect" id="node21" href="$cleanuphandler_8h_source.html" title="cleanuphandler.h" alt="" coords="1114,468,1234,495"/>
+<area shape="rect" id="node30" href="$softwarecontainer-log_8h_source.html" title="softwarecontainer&#45;log.h" alt="" coords="1105,617,1262,644"/>
+<area shape="rect" id="node33" href="$containerabstractinterface_8h_source.html" title="containerabstractinterface.h" alt="" coords="565,393,748,420"/>
+<area shape="rect" id="node39" href="$jobabstract_8h_source.html" title="jobabstract.h" alt="" coords="761,169,859,196"/>
 </map>
