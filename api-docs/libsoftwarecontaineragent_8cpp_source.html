@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.9.1-8639fe0 2016-11-21</span>
    </div>
   </td>
  </tr>
@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8cpp_source.
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        {</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        }</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">void</span> ProcessStateChanged(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> uint32_t &amp;pid, <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;isRunning,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">void</span> ProcessStateChanged(<span class="keyword">const</span> int32_t &amp;containerID, <span class="keyword">const</span> uint32_t &amp;pid, <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;isRunning,</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                    <span class="keyword">const</span> uint32_t &amp;exitCode) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">private</span>:</div>
@@ -200,7 +200,7 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8cpp_source.
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordflow">return</span> getProxy().BindMountFolderInContainer(containerID, src, dst, readonly);</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="keywordtype">void</span> Agent::setGatewayConfigs(ContainerID containerID, <span class="keyword">const</span> GatewayConfiguration &amp;config)</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="keywordtype">void</span> Agent::setGatewayConfigs(ContainerID containerID, <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;config)</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;{</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    getProxy().SetGatewayConfigs(containerID, config);</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
@@ -225,7 +225,7 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8cpp_source.
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;}</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keywordtype">void</span> AgentPrivateData::SoftwareContainerAgentProxy::ProcessStateChanged(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> uint32_t &amp;pid,</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keywordtype">void</span> AgentPrivateData::SoftwareContainerAgentProxy::ProcessStateChanged(<span class="keyword">const</span> int32_t &amp;containerID, <span class="keyword">const</span> uint32_t &amp;pid,</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;isRunning,</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            <span class="keyword">const</span> uint32_t &amp;exitCode)</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;{</div>
@@ -244,14 +244,14 @@ $(document).ready(function(){initNavTree('libsoftwarecontaineragent_8cpp_source.
 <div class="ttc" id="classsoftwarecontainer_1_1_agent_private_data_1_1_software_container_agent_proxy_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_agent_private_data_1_1_software_container_agent_proxy.html">softwarecontainer::AgentPrivateData::SoftwareContainerAgentProxy</a></div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8cpp_source.html#l00044">libsoftwarecontaineragent.cpp:44</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_agent_html_ada316d4e4626cc03c96d3180928c7b09"><div class="ttname"><a href="classsoftwarecontainer_1_1_agent.html#ada316d4e4626cc03c96d3180928c7b09">softwarecontainer::Agent::setMainLoopContext</a></div><div class="ttdeci">void setMainLoopContext(Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext)</div><div class="ttdoc">Set the main loop. </div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8cpp_source.html#l00104">libsoftwarecontaineragent.cpp:104</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_agent_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_agent.html">softwarecontainer::Agent</a></div><div class="ttdef"><b>Definition:</b> <a href="libsoftwarecontaineragent_8h_source.html#l00039">libsoftwarecontaineragent.h:39</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="main_8cpp_source.html#l00005">main.cpp:5</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="configstore_8h_source.html#l00029">configstore.h:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_dc257de57620aa42e30b6624346240c4.html">libsoftwarecontaineragent</a></li><li class="navelem"><a class="el" href="dir_871e39736e85a68e4feda91b99ad97bc.html">src</a></li><li class="navelem"><b>libsoftwarecontaineragent.cpp</b></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
+    <li class="footer">Generated on Mon Nov 21 2016 13:33:15 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

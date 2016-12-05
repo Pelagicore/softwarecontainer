@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.9.1-8639fe0 2016-11-21</span>
    </div>
   </td>
  </tr>
@@ -68,75 +68,130 @@ $(document).ready(function(){initNavTree('softwarecontaineragentadaptor_8cpp_sou
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;softwarecontaineragentadaptor.h&quot;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;softwarecontainer::SoftwareContainerAgentAdaptor::~SoftwareContainerAgentAdaptor()</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;{</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;}</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;softwarecontainer::SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html">softwarecontainer::SoftwareContainerAgent</a> &amp;agent) :</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    m_agent(agent)</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;}</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::LaunchCommand(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> uint32_t &amp;userID, <span class="keyword">const</span> std::string &amp;commandLine, <span class="keyword">const</span> std::string &amp;workingDirectory, <span class="keyword">const</span> std::string &amp;outputFile, <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;env)</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordflow">return</span> m_agent.launchCommand(containerID, userID, commandLine, workingDirectory, outputFile, env,</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                                 [<span class="keyword">this</span>, containerID](pid_t pid, <span class="keywordtype">int</span> exitCode) {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        ProcessStateChanged(containerID, pid, <span class="keyword">false</span>, exitCode);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;ProcessStateChanged &quot;</span> &lt;&lt; pid &lt;&lt; <span class="stringliteral">&quot; code &quot;</span> &lt;&lt; exitCode;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    });</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">void</span> softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> uint32_t &amp;timeout)</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    m_agent.shutdownContainer(containerID, timeout);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> softwarecontainer::SoftwareContainerAgentAdaptor::ShutDownContainer(<span class="keyword">const</span> uint32_t &amp;containerID)</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    m_agent.shutdownContainer(containerID);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;std::string softwarecontainer::SoftwareContainerAgentAdaptor::BindMountFolderInContainer(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> std::string &amp;pathInHost, <span class="keyword">const</span> std::string &amp;subPathInContainer, <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;readOnly)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">return</span> m_agent.bindMountFolderInContainer(containerID, pathInHost, subPathInContainer, readOnly);</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;SoftwareContainerAgentAdaptor::~SoftwareContainerAgentAdaptor()</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;}</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html">SoftwareContainerAgent</a> &amp;agent) :</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    m_agent(agent)</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;int32_t SoftwareContainerAgentAdaptor::LaunchCommand(</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">const</span> int32_t &amp;containerID,</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">const</span> uint32_t &amp;userID,</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">const</span> std::string &amp;commandLine,</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">const</span> std::string &amp;workingDirectory,</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">const</span> std::string &amp;outputFile,</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;env)</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ac7b411263200e708872bb49af2352e13">launchCommand</a>(</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        containerID,</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        userID,</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        commandLine,</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        workingDirectory,</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        outputFile,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        env,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        [<span class="keyword">this</span>, containerID](pid_t pid, <span class="keywordtype">int</span> exitCode) {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            ProcessStateChanged(containerID, pid, <span class="keyword">false</span>, exitCode);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            log_info() &lt;&lt; <span class="stringliteral">&quot;ProcessStateChanged &quot;</span> &lt;&lt; pid &lt;&lt; <span class="stringliteral">&quot; code &quot;</span> &lt;&lt; exitCode;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    );</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> softwarecontainer::SoftwareContainerAgentAdaptor::SetGatewayConfigs(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;configs)</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::SuspendContainer(<span class="keyword">const</span> int32_t &amp;containerID)</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    m_agent.setGatewayConfigs(containerID, configs);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a70135e7829b531a1aa55983b708c5cd3">suspendContainer</a>(containerID);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">bool</span> softwarecontainer::SoftwareContainerAgentAdaptor::SetCapabilities(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> std::vector&lt;std::string&gt; &amp;capabilities)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::ResumeContainer(<span class="keyword">const</span> int32_t &amp;containerID)</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> m_agent.setCapabilities(containerID, capabilities);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a73f02d47572fa6c9a5fcb665d3287dbb">resumeContainer</a>(containerID);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;uint32_t softwarecontainer::SoftwareContainerAgentAdaptor::CreateContainer(<span class="keyword">const</span> std::string &amp;config)</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::ShutDownContainer(<span class="keyword">const</span> int32_t &amp;containerID)</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> m_agent.createContainer(config);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#af1c5fb1bfd8b43e2b766ab385ac33342">shutdownContainer</a>(containerID);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keywordtype">void</span> softwarecontainer::SoftwareContainerAgentAdaptor::SetContainerName(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> std::string &amp;name)</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">return</span> m_agent.setContainerName(containerID, name);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">void</span> softwarecontainer::SoftwareContainerAgentAdaptor::Ping()</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keywordtype">void</span> softwarecontainer::SoftwareContainerAgentAdaptor::WriteToStdIn(<span class="keyword">const</span> uint32_t &amp;containerID, <span class="keyword">const</span> std::vector&lt;uint8_t&gt; &amp;bytes)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    m_agent.writeToStdIn(containerID, bytes);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::ShutDownContainerWithTimeout(</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">const</span> int32_t &amp;containerID,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">const</span> uint32_t &amp;timeout)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;{</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#af1c5fb1bfd8b43e2b766ab385ac33342">shutdownContainer</a>(containerID, timeout);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;std::string SoftwareContainerAgentAdaptor::BindMountFolderInContainer(</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">const</span> int32_t &amp;containerID,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">const</span> std::string &amp;pathInHost,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">const</span> std::string &amp;subPathInContainer,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;readOnly)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a63e4604ed484353a9847eee38466b7ff">bindMountFolderInContainer</a>(containerID,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                              pathInHost,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                              subPathInContainer,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                              readOnly);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">void</span> SoftwareContainerAgentAdaptor::SetGatewayConfigs(</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">const</span> int32_t &amp;containerID,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;configs)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a932a69583ff9cde14bd4749a9152ba9a">setGatewayConfigs</a>(containerID, configs);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::SetCapabilities(</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">const</span> int32_t &amp;containerID,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">const</span> std::vector&lt;std::string&gt; &amp;capabilities)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;{</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a99d58370ca9150d5e1fca70ff44d5007">setCapabilities</a>(containerID, capabilities);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;int32_t SoftwareContainerAgentAdaptor::CreateContainer(<span class="keyword">const</span> std::string &amp;config)</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ac5cafaf71af5858bb97f84c6fe1de917">createContainer</a>(config);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::SetContainerName(</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">const</span> int32_t &amp;containerID,</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">const</span> std::string &amp;name)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;{</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ad04e602ea7b514c11c24094cbf9fe5c5">setContainerName</a>(containerID, name);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keywordtype">void</span> SoftwareContainerAgentAdaptor::Ping()</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;{</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgentAdaptor::WriteToStdIn(</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">const</span> uint32_t &amp;processID,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">const</span> std::vector&lt;uint8_t&gt; &amp;bytes)</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;{</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordflow">return</span> m_agent.<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#acaffe723057573547c3848fee624a3ed">writeToStdIn</a>(processID, bytes);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;} <span class="comment">// End namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a70135e7829b531a1aa55983b708c5cd3"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a70135e7829b531a1aa55983b708c5cd3">softwarecontainer::SoftwareContainerAgent::suspendContainer</a></div><div class="ttdeci">bool suspendContainer(ContainerID containerID)</div><div class="ttdoc">suspends execution of a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00333">softwarecontaineragent.cpp:333</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a63e4604ed484353a9847eee38466b7ff"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a63e4604ed484353a9847eee38466b7ff">softwarecontainer::SoftwareContainerAgent::bindMountFolderInContainer</a></div><div class="ttdeci">std::string bindMountFolderInContainer(const ContainerID containerID, const std::string &amp;pathInHost, const std::string &amp;subPathInContainer, bool readOnly)</div><div class="ttdoc">Bind mount a folder into the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00355">softwarecontaineragent.cpp:355</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a73f02d47572fa6c9a5fcb665d3287dbb"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a73f02d47572fa6c9a5fcb665d3287dbb">softwarecontainer::SoftwareContainerAgent::resumeContainer</a></div><div class="ttdeci">bool resumeContainer(ContainerID containerID)</div><div class="ttdoc">resumes execution of a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00344">softwarecontaineragent.cpp:344</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ac7b411263200e708872bb49af2352e13"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ac7b411263200e708872bb49af2352e13">softwarecontainer::SoftwareContainerAgent::launchCommand</a></div><div class="ttdeci">pid_t launchCommand(ContainerID containerID, uid_t userID, const std::string &amp;cmdLine, const std::string &amp;workingDirectory, const std::string &amp;outputFile, const EnvironmentVariables &amp;env, std::function&lt; void(pid_t, int)&gt; listener)</div><div class="ttdoc">Launch the given command in a the given container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00245">softwarecontaineragent.cpp:245</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_acaffe723057573547c3848fee624a3ed"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#acaffe723057573547c3848fee624a3ed">softwarecontainer::SoftwareContainerAgent::writeToStdIn</a></div><div class="ttdeci">bool writeToStdIn(pid_t pid, const std::vector&lt; uint8_t &gt; &amp;bytes)</div><div class="ttdoc">writes to stdin of a process inside a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00232">softwarecontaineragent.cpp:232</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a99d58370ca9150d5e1fca70ff44d5007"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a99d58370ca9150d5e1fca70ff44d5007">softwarecontainer::SoftwareContainerAgent::setCapabilities</a></div><div class="ttdeci">bool setCapabilities(const ContainerID &amp;containerID, const std::vector&lt; std::string &gt; &amp;capabilities)</div><div class="ttdoc">Set capabilities for the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00414">softwarecontaineragent.cpp:414</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ad04e602ea7b514c11c24094cbf9fe5c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ad04e602ea7b514c11c24094cbf9fe5c5">softwarecontainer::SoftwareContainerAgent::setContainerName</a></div><div class="ttdeci">bool setContainerName(ContainerID containerID, const std::string &amp;name)</div><div class="ttdoc">sets the container name </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00289">softwarecontaineragent.cpp:289</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_af1c5fb1bfd8b43e2b766ab385ac33342"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#af1c5fb1bfd8b43e2b766ab385ac33342">softwarecontainer::SoftwareContainerAgent::shutdownContainer</a></div><div class="ttdeci">bool shutdownContainer(ContainerID containerID)</div><div class="ttdoc">shuts down a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00301">softwarecontaineragent.cpp:301</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="configstore_8h_source.html#l00029">configstore.h:29</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ac5cafaf71af5858bb97f84c6fe1de917"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ac5cafaf71af5858bb97f84c6fe1de917">softwarecontainer::SoftwareContainerAgent::createContainer</a></div><div class="ttdeci">ContainerID createContainer(const std::string &amp;config)</div><div class="ttdoc">Create a new container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00175">softwarecontaineragent.cpp:175</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html">softwarecontainer::SoftwareContainerAgent</a></div><div class="ttdoc">A wrapper class. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8h_source.html#l00060">softwarecontaineragent.h:60</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a932a69583ff9cde14bd4749a9152ba9a"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a932a69583ff9cde14bd4749a9152ba9a">softwarecontainer::SoftwareContainerAgent::setGatewayConfigs</a></div><div class="ttdeci">bool setGatewayConfigs(const ContainerID &amp;containerID, const std::map&lt; std::string, std::string &gt; &amp;configs)</div><div class="ttdoc">Set gateway configurations for the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00377">softwarecontaineragent.cpp:377</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><b>softwarecontaineragentadaptor.cpp</b></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:27 for softwarecontainer by
+    <li class="footer">Generated on Mon Nov 21 2016 13:33:15 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

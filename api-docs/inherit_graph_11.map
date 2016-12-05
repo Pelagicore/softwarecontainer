@@ -1,4 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_agent_private_data_1_1_d_bus_cpp_proxy.html" title="softwarecontainer::\lAgentPrivateData::DBusCppProxy" alt="" coords="479,49,716,90"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_agent_private_data_1_1_software_container_agent_proxy.html" title="softwarecontainer::\lAgentPrivateData::Software\lContainerAgentProxy" alt="" coords="232,107,431,163"/>
+<area shape="rect" id="node1" href="$structsoftwarecontainer_1_1_agent_private_data.html" title="softwarecontainer::\lAgentPrivateData" alt="" coords="5,5,139,47"/>
 </map>

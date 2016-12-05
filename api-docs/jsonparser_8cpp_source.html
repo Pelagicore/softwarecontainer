@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.9.1-8639fe0 2016-11-21</span>
    </div>
   </td>
  </tr>
@@ -93,60 +93,63 @@ $(document).ready(function(){initNavTree('jsonparser_8cpp_source.html','');});
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    json_t *value = json_object_get(element, key);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (!json_is_string(value)) {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a string&quot;</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    result = json_string_value(value);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#aec2365e81204446fec184fe17e573405">   40</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(<span class="keyword">const</span> json_t *element, <span class="keyword">const</span> <span class="keywordtype">char</span> *key, <span class="keywordtype">bool</span> &amp;result)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    json_t *value = json_object_get(element, key);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">if</span> (!json_is_boolean(value)) {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a boolean&quot;</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    result = json_is_true(value);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a11e43ade1f694d939bfd566b64ddd460">   56</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(<span class="keyword">const</span> json_t *element, <span class="keyword">const</span> <span class="keywordtype">char</span> *key, <span class="keywordtype">int</span> &amp;result)</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    json_t *value = json_object_get(element, key);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">if</span> (!json_is_integer(value)) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not an integer&quot;</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    result = json_integer_value(value);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="main_8cpp_source.html#l00005">main.cpp:5</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00024">jsonparser.cpp:24</a></div></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    }</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (!json_is_string(value)) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a string&quot;</span>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    result = json_string_value(value);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#aec2365e81204446fec184fe17e573405">   41</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(<span class="keyword">const</span> json_t *element, <span class="keyword">const</span> <span class="keywordtype">char</span> *key, <span class="keywordtype">bool</span> &amp;result)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    json_t *value = json_object_get(element, key);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">if</span> (!json_is_boolean(value)) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a boolean&quot;</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    result = json_is_true(value);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a11e43ade1f694d939bfd566b64ddd460">   58</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(<span class="keyword">const</span> json_t *element, <span class="keyword">const</span> <span class="keywordtype">char</span> *key, <span class="keywordtype">int</span> &amp;result)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    json_t *value = json_object_get(element, key);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">if</span> (!value) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">if</span> (!json_is_integer(value)) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not an integer&quot;</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    result = json_integer_value(value);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="configstore_8h_source.html#l00029">configstore.h:29</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00024">jsonparser.cpp:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html">common</a></li><li class="navelem"><b>jsonparser.cpp</b></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:27 for softwarecontainer by
+    <li class="footer">Generated on Mon Nov 21 2016 13:33:15 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
