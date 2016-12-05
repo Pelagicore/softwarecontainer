@@ -327,7 +327,8 @@ set to ``:/some/path``.
 File gateway
 ============
 
-The File Gateway is used to expose individual files from the host filesystem inside the container.
+The File Gateway is used to expose individual files and directories from the host filesystem inside
+the container.
 
 ID
 --
