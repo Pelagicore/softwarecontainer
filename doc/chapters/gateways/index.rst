@@ -4,28 +4,32 @@
 Gateways
 ********
 
-SoftwareContainer provides a set of gateways to enable communication between the host system and the contained system.
+SoftwareContainer provides a set of gateways to enable communication between the host system and the
+contained system.
 
-Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services. This makes the
-system scalable, as the number of IPC mechanisms is limited while the number of possible services are unlimited.
-*Currently, some gateways break this principle, which is subject to correction in the future. The design intention
-is to have the gateways IPC centric and construct more abstract concepts like a Wayland "gateway" on top of
-multiple IPC gateways.*
+Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services.
+This makes the system scalable, as the number of IPC mechanisms is limited while the number of
+possible services are unlimited.  *Currently, some gateways break this principle, which is subject
+to correction in the future. The design intention is to have the gateways IPC centric and construct
+more abstract concepts like a Wayland "gateway" on top of multiple IPC gateways.*
 
-This chapter contains descriptions of the available gateways, their IDs,  and their configuration options.
-It is intended to explain to e.g. a service integrator how to write gateway configurations suitable for the service.
+This chapter contains descriptions of the available gateways, their IDs,  and their configuration
+options.  It is intended to explain to e.g. a service integrator how to write gateway configurations
+suitable for the service.
 
 For more information how to integrate and use the configurations in a project,
 see :ref:`Integration guidelines <integration-guidelines>`.
 
-For more information how to develop and integrate gateways in SoftwareContainer, see :ref:`Developer guidelines <developers>`.
+For more information how to develop and integrate gateways in SoftwareContainer,
+see :ref:`Developer guidelines <developers>`.
 
 
 Note on configurations
 ======================
 
-All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer requires this.
-Beyond that, the structure and content of this JSON is the responsibility of the respective gateway.
+All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer
+requires this.  Beyond that, the structure and content of this JSON is the responsibility of the
+respective gateway.
 
 
 CGroups gateway
@@ -71,7 +75,8 @@ must have the ``setting`` and ``value`` defined.
 D-Bus gateway
 =============
 
-The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and interfaces.
+The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and
+interfaces.
 
 The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
@@ -85,14 +90,15 @@ libdbus uses these variables to find the socket to use for D-Bus
 communication, and the application running within the container is
 expected to use these variables (probably by means of the binding used).
 
-The ``dbus-proxy`` does not modify the messages passed via D-Bus, it only provides a filter function.
-This means that some filters may cause unwanted behaviour used in combination with dynamic
-interpretation of introspection data. For example, if introspection is configured to be allowed,
-the introspection data might contain interfaces and object paths that are not accessible for the
-application (unless the configuration also allowes everything on the connection).
+The ``dbus-proxy`` does not modify the messages passed via D-Bus, it only provides a filter
+function.  This means that some filters may cause unwanted behaviour used in combination with
+dynamic interpretation of introspection data. For example, if introspection is configured to be
+allowed, the introspection data might contain interfaces and object paths that are not accessible
+for the application (unless the configuration also allowes everything on the connection).
 
-The gateway will not do any analysis of the configuration passed to it, but will pass this configuration
-along to ``dbus-proxy`` verbatim. This is to support future changes in the configuration format.
+The gateway will not do any analysis of the configuration passed to it, but will pass this
+configuration along to ``dbus-proxy`` verbatim. This is to support future changes in the
+configuration format.
 
 ID
 --
@@ -111,7 +117,8 @@ objects with the names:
 The arrays contain JSON objects where each object is an access rule specified as a combination
 of:
 
-- Direction of method call or signal, i.e. if the call or signal is outgoing from inside the container or incoming from the outside of the container.
+- Direction of method call or signal, i.e. if the call or signal is outgoing from inside the
+  container or incoming from the outside of the container.
 - D-Bus interface of the method or signal.
 - Object path where the interface is implemented.
 - The method or signal name the rule is for.
@@ -124,8 +131,8 @@ The rules are implemented as name/value pairs:
 - ``method`` - A string specifying a D-Bus method name or signal name, e.g. ``EnumerateDevices``.
 
 All the values can be substituted with the wildcard character ``*`` with the meaning "all", e.g. a
-"direction" set to ``*`` will mean both incoming and outgoing, and a ``method`` set to ``*`` will match
-all method and signal names for the interface and object path specified.
+"direction" set to ``*`` will mean both incoming and outgoing, and a ``method`` set to ``*`` will
+match all method and signal names for the interface and object path specified.
 
 If a bus configuration is just an empty array it means all access to that bus will be blocked.
 
@@ -203,7 +210,8 @@ The ID used for the Device node gateway is: ``devicenode``
 Configuration
 -------------
 
-The configuration consists of a root list consisting of individual devices. Each device contains the following fields:
+The configuration consists of a root list consisting of individual devices. Each device contains the
+following fields:
 
 - ``name`` The name of the device, with or without path. This is passed verbatim to ``mknod``
 - ``major`` The major device number, passed verbatim to ``mknod``
@@ -248,6 +256,9 @@ The Environment Gateway is used to set environment variables in the container.
 The environment gateway allows users to specify environment variables that
 should be known to the container and all commands and functions running
 inside the container.
+
+Note that any environment variables set here can be overridden when starting a binary on the
+D-Bus interface, see :ref:`D-Bus API <dbus-api>`.
 
 ID
 --
@@ -326,7 +337,8 @@ The ID used for the File gateway is: ``file``
 Configuration
 -------------
 
-In the container, the files are mapped into a subdirectory (currently ``/gateways``), at the location specified by the ``path-container`` field (see below).
+The paths inside the container has to be absolute. There is a check for not mounting over already
+existing mount paths.
 
 Example configurations
 ----------------------
@@ -336,19 +348,16 @@ An example configuration can look like this::
     [
         {
             "path-host": "/tmp/someIPSocket",   // Path to the file in host's file-system
-            "path-container": "someIPSocket",   // Sub-path of the mount point in the container
-            "create-symlink": true, // specifies whether a symbolic link should to be created so that the file is available in the container under the same path is in the host.
+            "path-container": "/tmp/someIPSocket",   // Absolute path to the mount point in the container
             "read-only": false,  // if true, the file is accessible in read-only mode in the container
-            "env-var-name": "SOMEIP_SOCKET_PATH", // name of a environment variable to be set
-            "env-var-prefix": "some-path-prefix", // define a prefix for the path set in the environment variable defined by "env-var-name"
-            "env-var-suffix": "some-path-suffix", // define a suffix for the path set in the environment variable defined by "env-var-name"
         }
     ]
 
 Network gateway
 ===============
 
-The Network Gateway is used to setup network connection and configure which traffic is allowed and not.
+The Network Gateway is used to setup network connection and configure which traffic is allowed and
+not.
 
 ID
 --
@@ -357,20 +366,24 @@ The ID used for the Network gateway is: ``network``
 Configuration
 -------------
 The configuration is structured as a list of JSON objects that each describe rules for ``OUTGOING``
-or ``INCOMING`` network traffic. The validation is done by filtering network traffic on ``host``, ``ports`` and 
-``protocols``, where ``host`` is either hostname or ip address of a destination or source depending on context,
-``ports`` specifies which ports to filter on and ``protocols`` specifies which protocols to filter. 
+or ``INCOMING`` network traffic. The validation is done by filtering network traffic on ``host``,
+``ports`` and ``protocols``, where ``host`` is either hostname or ip address of a destination or
+source depending on context, ``ports`` specifies which ports to filter on and ``protocols``
+specifies which protocols to filter.
 
-``direction`` and ``allow`` list are mandatory for Network Gateway configuration. There are only two valid values for 
-``direction``: ``INCOMING`` and ``OUTGOING``. In each entry in ``allow`` list only ``host`` is mandatory. ``host`` 
-can be specific hostname or ip address and also ``*`` indicating all available ip sources. When ``ports`` is not specified, 
-the rule applies to all ports.  ``ports`` are valid between 0 and 65536. There are three valid values for ``protocols``: 
-``"tcp"``, ``"udp"`` and ``"icmp"``. When ``protocols`` is not specified in the ``allow`` list item, the rule applies to 
-all protocols. When there is an item which has ports without protocols, tcp protocol will be applied to the rule. 
-NetworkGateway is programmed to drop all packages that do not match any entry in ``allow`` list.
+``direction`` and ``allow`` list are mandatory for Network Gateway configuration. There are only two
+valid values for ``direction``: ``INCOMING`` and ``OUTGOING``. In each entry in ``allow`` list only
+``host`` is mandatory. ``host`` can be specific hostname or ip address and also ``*`` indicating all
+available ip sources. When ``ports`` is not specified, the rule applies to all ports.  ``ports`` are
+valid between 0 and 65536. There are three valid values for ``protocols``: ``"tcp"``, ``"udp"`` and
+``"icmp"``. When ``protocols`` is not specified in the ``allow`` list item, the rule applies to all
+protocols. When there is an item which has ports without protocols, tcp protocol will be applied to
+the rule.  NetworkGateway is programmed to drop all packages that do not match any entry in
+``allow`` list.
 
-The following is an example which rejects all ping requests except example.com. Only port 53 on tcp and udp protocols 
-are allowed for enabling dns lookup. And only icmp protocol from "example.com" is allowed.::
+The following is an example which rejects all ping requests except example.com. Only port 53 on tcp
+and udp protocols are allowed for enabling dns lookup. And only icmp protocol from "example.com" is
+allowed.::
 
     [
         {

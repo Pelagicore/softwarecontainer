@@ -52,9 +52,6 @@ public:
     const std::string FILE_CONTENT = "ahdkhqweuyreqiwenomndlaskmd";
     const std::string FILE_PATH = "/tmp/filename.txt";
     const std::string CONTAINER_PATH = "/filename.txt";
-    const std::string ENV_VAR_NAME = "TEST_ENVIRONMENT_VARIABLE_NAME";
-    const std::string PREFIX = "TEST_PREFIX";
-    const std::string SUFFIX = "TEST_SUFFIX";
 };
 
 /*
@@ -71,78 +68,5 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     "]";
     ASSERT_TRUE(gw->setConfig(config));
     ASSERT_TRUE(gw->activate());
-}
-
-/*
- * Test that symlinking files to the same place in container as in host works
- */
-TEST_F(FileGatewayTest, TestActivateCreateSymlink) {
-    givenContainerIsSet(gw);
-    const std::string config =
-    "["
-        "{"
-            "  \"path-host\" : \"" + FILE_PATH + "\""
-            ", \"path-container\" : \"" + CONTAINER_PATH + "\""
-            ", \"create-symlink\" : true"
-        "}"
-    "]";
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_TRUE(gw->activate());
-
-    ASSERT_TRUE(existsInFileSystem(FILE_PATH));
-}
-
-/*
- * Test that environment variable + prefix and suffix works in the container, and points
- * to the file that is being mounted.
- */
-TEST_F(FileGatewayTest, TestActivateSetEnvWPrefixAndSuffix) {
-    givenContainerIsSet(gw);
-    FunctionJob job = FunctionJob(*sc, [&] () {
-        const char* envC = getenv(ENV_VAR_NAME.c_str());
-
-        if (envC == nullptr) {
-            return 1;
-        }
-
-        const std::string env = std::string(envC);
-        if (env.length() < PREFIX.length() + SUFFIX.length()) {
-            return 2;
-        }
-
-        for (size_t i = 0; i < PREFIX.length(); ++i) {
-            if (env[i] != PREFIX[i]) {
-               return 3;
-            }
-        }
-
-        const int suffixStart = env.length() - SUFFIX.length();
-        for (size_t i = 0; i < SUFFIX.length(); ++i) {
-            if (env[suffixStart + i] != SUFFIX[i]) {
-               return 4;
-            }
-        }
-
-        return 0;
-    });
-
-    job.start();
-    ASSERT_EQ(job.wait(), 1);
-
-    const std::string config =
-    "["
-        "{"
-            "  \"path-host\" : \"" + FILE_PATH + "\""
-            ", \"path-container\" : \"" + CONTAINER_PATH + "\""
-            ", \"env-var-name\": \"" + ENV_VAR_NAME + "\""
-            ", \"env-var-prefix\": \"" + PREFIX + "\""
-            ", \"env-var-suffix\": \"" + SUFFIX + "\""
-        "}"
-    "]";
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_TRUE(gw->activate());
-
-    job.start();
-    ASSERT_EQ(job.wait(), 0);
 }
 

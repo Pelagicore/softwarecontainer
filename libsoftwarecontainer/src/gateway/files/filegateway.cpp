@@ -44,21 +44,9 @@ bool FileGateway::activateGateway()
 {
     if (m_settings.size() > 0) {
         for (FileGatewayParser::FileSetting &setting : m_settings) {
-            const std::string path = bindMount(setting);
-            if (path.size() == 0) {
+            if (!bindMount(setting)) {
                 log_error() << "Bind mount failed";
                 return false;
-            }
-
-            if (setting.envVarName.size()) {
-                std::string value = StringBuilder() << setting.envVarPrefix
-                                                    << path << setting.envVarSuffix;
-                setEnvironmentVariable(setting.envVarName, value);
-            }
-
-            if (setting.createSymlinkInContainer) {
-                const std::string source = getContainer()->rootFS() + setting.pathInHost;
-                getContainer()->createSymLink(source, path);
             }
         }
         return true;
@@ -67,22 +55,24 @@ bool FileGateway::activateGateway()
     return false;
 }
 
-std::string FileGateway::bindMount(const FileGatewayParser::FileSetting &setting)
+bool FileGateway::bindMount(const FileGatewayParser::FileSetting &setting)
 {
     if (isDirectory(setting.pathInHost)) {
         if (isError(getContainer()->bindMountFolderInContainer(setting.pathInHost,
                                                     setting.pathInContainer,
                                                     setting.readOnly))) {
             log_error() << "Could not bind mount folder into container";
+            return false;
         }
     } else {
         if (isError(getContainer()->bindMountFileInContainer(setting.pathInHost,
                                                   setting.pathInContainer,
                                                   setting.readOnly))) {
             log_error() << "Could not bind mount file into container";
+            return false;
         }
     }
-    return setting.pathInContainer;
+    return true;
 }
 
 bool FileGateway::teardownGateway()
