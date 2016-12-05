@@ -9,7 +9,7 @@ var classsoftwarecontainer_1_1_agent_container =
     [ "isInitialized", "classsoftwarecontainer_1_1_agent_container.html#abec146c97a1fbb6c6490251e21ac7daf", null ],
     [ "getContainerState", "classsoftwarecontainer_1_1_agent_container.html#a7918e77fa814dfa52148d2f4fd12f667", null ],
     [ "bindMountFolderInContainer", "classsoftwarecontainer_1_1_agent_container.html#a326e7bdaf3369557a7de63143ee02a89", null ],
-    [ "setGatewayConfigs", "classsoftwarecontainer_1_1_agent_container.html#a9ea1f72570958bcbf54fa874af2d33c3", null ],
+    [ "setGatewayConfigs", "classsoftwarecontainer_1_1_agent_container.html#ac0112218fe68da12d8ebc1b5970611ee", null ],
     [ "getAgent", "classsoftwarecontainer_1_1_agent_container.html#ac3bbc53cd5b5c4ef3d1cc886a7896f24", null ],
     [ "getContainerID", "classsoftwarecontainer_1_1_agent_container.html#a39e5e4fa815dd805bf33834ce6b8fd12", null ]
 ];

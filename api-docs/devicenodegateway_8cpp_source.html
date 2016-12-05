@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>softwarecontainer: libsoftwarecontainer/src/gateway/devicenode/devicenodegateway.cpp Source File</title>
+<title>softwarecontainer: libsoftwarecontainer/src/gateway/devicenodegateway.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-057f383 2016-11-24</span>
+   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
    </div>
   </td>
  </tr>
@@ -86,8 +86,8 @@ $(document).ready(function(){initNavTree('devicenodegateway_8cpp_source.html',''
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;devicenodegateway.h&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="generators_8h.html">generators.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;devicenodegateway.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;sys/stat.h&gt;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;sys/types.h&gt;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
@@ -99,83 +99,120 @@ $(document).ready(function(){initNavTree('devicenodegateway_8cpp_source.html',''
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
 <div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="class_device_node_gateway.html#a2dd67af3fe7d8a0fcd26abde8c1e3e74">   32</a></span>&#160;ReturnCode <a class="code" href="class_device_node_gateway.html#a2dd67af3fe7d8a0fcd26abde8c1e3e74">DeviceNodeGateway::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="class_device_node_parser.html">DeviceNodeParser</a> parser;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="struct_device_node_parser_1_1_device.html">DeviceNodeParser::Device</a> dev;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">if</span> (isError(parser.parseDeviceNodeGatewayConfiguration(element, dev))) {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse device node configuration&quot;</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    m_devList.push_back(dev);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">   47</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway::activateGateway</a>()</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">if</span> (m_devList.empty()) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Activate was called when no devices has been configured.&quot;</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;dev : m_devList) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Mapping device &quot;</span> &lt;&lt; dev.name;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (dev.major != -1) {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="comment">// mknod dev.name c dev.major dev.minor</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            pid_t pid = INVALID_PID;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;executeInContainer([&amp;] () {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keywordflow">return</span> mknod(dev.name.c_str(), S_IFCHR | dev.mode,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                             makedev(dev.major, dev.minor));</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            }, &amp;pid);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">if</span> (waitForProcessTermination(pid) != 0) {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                log_error() &lt;&lt; <span class="stringliteral">&quot;Failed to create device &quot;</span> &lt;&lt; dev.name;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="comment">// No major &amp; minor numbers specified =&gt; simply map the device from</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="comment">// the host into the container</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;mountDevice(dev.name);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">if</span> (dev.mode != -1) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                pid_t pid = INVALID_PID;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;executeInContainer([&amp;] () {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    <span class="keywordflow">return</span> chmod(dev.name.c_str(), dev.mode);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                }, &amp;pid);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="keywordflow">if</span> (waitForProcessTermination(pid) != 0) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    log_error() &lt;&lt; <span class="stringliteral">&quot;Could not &#39;chmod &quot;</span> &lt;&lt; dev.mode</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                &lt;&lt; <span class="stringliteral">&quot;&#39; the mounted device &quot;</span> &lt;&lt; dev.name;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    DeviceNodeGateway::Device dev;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;name&quot;</span>, dev.name)) {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Key \&quot;name\&quot; missing or not a string in json configuration&quot;</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;major&quot;</span>, dev.major);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;minor&quot;</span>, dev.minor);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">read</a>(element, <span class="stringliteral">&quot;mode&quot;</span>,  dev.mode);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">bool</span> majorSpecified = dev.major.length() &gt; 0;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">bool</span> minorSpecified = dev.minor.length() &gt; 0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">if</span> (majorSpecified | minorSpecified) {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">if</span> (!checkIsStrValid(dev.major, <span class="stringliteral">&quot;Major version&quot;</span>, <span class="stringliteral">&quot;Major version must be specified when minor is.&quot;</span>)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            || !checkIsStrValid(dev.minor, <span class="stringliteral">&quot;Minor version&quot;</span>, <span class="stringliteral">&quot;Minor version must be specified when major is.&quot;</span>)</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            || !checkIsStrValid(dev.mode, <span class="stringliteral">&quot;Mode&quot;</span>, <span class="stringliteral">&quot;Mode has to be specified when major and minor is specified.&quot;</span>)) {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    m_devList.push_back(dev);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keywordtype">bool</span> DeviceNodeGateway::checkIsStrValid(std::string intStr, std::string name, std::string notSpecified)</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">if</span> (intStr.length() == 0) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        log_error() &lt;&lt; notSpecified;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">int</span> i = 0;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (!parseInt(intStr.c_str(), &amp;i)) {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        log_error() &lt;&lt; name &lt;&lt; <span class="stringliteral">&quot; must be represented as an integer.&quot;</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">   76</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway::activateGateway</a>()</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;{</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span> (m_devList.empty()) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Activate was called when no devices has been configured.&quot;</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;dev : m_devList) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Mapping device &quot;</span> &lt;&lt; dev.name;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordflow">if</span> (dev.major.length() != 0) {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordtype">int</span> majorVersion, minorVersion, mode;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            parseInt(dev.major.c_str(), &amp;majorVersion);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            parseInt(dev.minor.c_str(), &amp;minorVersion);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            parseInt(dev.mode.c_str(), &amp;mode);</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">   93</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway::teardownGateway</a>()</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;{</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}</div>
-<div class="ttc" id="struct_device_node_parser_1_1_device_html"><div class="ttname"><a href="struct_device_node_parser_1_1_device.html">DeviceNodeParser::Device</a></div><div class="ttdef"><b>Definition:</b> <a href="devicenodeparser_8h_source.html#l00031">devicenodeparser.h:31</a></div></div>
-<div class="ttc" id="class_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00109">gateway.cpp:109</a></div></div>
-<div class="ttc" id="class_device_node_gateway_html_a626ac7de0fa9acc167d1b355cbb3d8ee"><div class="ttname"><a href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00047">devicenodegateway.cpp:47</a></div></div>
-<div class="ttc" id="class_device_node_gateway_html_a942850c76d0ab429dec21661b53f7055"><div class="ttname"><a href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00093">devicenodegateway.cpp:93</a></div></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="comment">// mknod dev.name c dev.major dev.minor</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            pid_t pid = INVALID_PID;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;executeInContainer([&amp;] () {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <span class="keywordflow">return</span> mknod(dev.name.c_str(), S_IFCHR | mode,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                             makedev(majorVersion, minorVersion));</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            }, &amp;pid);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">if</span> (waitForProcessTermination(pid) != 0) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                log_error() &lt;&lt; <span class="stringliteral">&quot;Failed to create device &quot;</span> &lt;&lt; dev.name;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="comment">// No major &amp; minor numbers specified =&gt; simply map the device from</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="comment">// the host into the container</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;mountDevice(dev.name);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">if</span> (dev.mode.length() != 0) {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">int</span> mode = std::atoi(dev.mode.c_str());</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                pid_t pid = INVALID_PID;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;executeInContainer([&amp;] () {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                    <span class="keywordflow">return</span> chmod(dev.name.c_str(), mode);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                }, &amp;pid);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                <span class="keywordflow">if</span> (waitForProcessTermination(pid) != 0) {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                    log_error() &lt;&lt; <span class="stringliteral">&quot;Could not &#39;chmod &quot;</span> &lt;&lt; dev.mode</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                                &lt;&lt; <span class="stringliteral">&quot;&#39; the mounted device &quot;</span> &lt;&lt; dev.name;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            }</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    }</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    m_state = GatewayState::ACTIVATED;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">  130</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway::teardownGateway</a>()</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;{</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
+<div class="ttc" id="class_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00083">gateway.cpp:83</a></div></div>
+<div class="ttc" id="generators_8h_html"><div class="ttname"><a href="generators_8h.html">generators.h</a></div><div class="ttdoc">Generator functions. </div></div>
+<div class="ttc" id="class_device_node_gateway_html_a626ac7de0fa9acc167d1b355cbb3d8ee"><div class="ttname"><a href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00076">devicenodegateway.cpp:76</a></div></div>
+<div class="ttc" id="class_device_node_gateway_html_a942850c76d0ab429dec21661b53f7055"><div class="ttname"><a href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00130">devicenodegateway.cpp:130</a></div></div>
 <div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00041">gateway.h:41</a></div></div>
 <div class="ttc" id="class_device_node_gateway_html_a2dd67af3fe7d8a0fcd26abde8c1e3e74"><div class="ttname"><a href="class_device_node_gateway.html#a2dd67af3fe7d8a0fcd26abde8c1e3e74">DeviceNodeGateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00032">devicenodegateway.cpp:32</a></div></div>
-<div class="ttc" id="class_device_node_parser_html"><div class="ttname"><a href="class_device_node_parser.html">DeviceNodeParser</a></div><div class="ttdef"><b>Definition:</b> <a href="devicenodeparser_8h_source.html#l00026">devicenodeparser.h:26</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00024">jsonparser.cpp:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_385e7606189d1fb5ca15ea16396c7241.html">devicenode</a></li><li class="navelem"><b>devicenodegateway.cpp</b></li>
-    <li class="footer">Generated on Thu Nov 24 2016 14:58:50 for softwarecontainer by
+    <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>devicenodegateway.cpp</b></li>
+    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

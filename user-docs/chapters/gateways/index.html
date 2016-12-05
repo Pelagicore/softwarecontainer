@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.12.0-b2785ea 2016-12-05 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.12.0-f41b944 2016-12-05 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-b2785ea 2016-12-05',
+        VERSION:     '0.12.0-f41b944 2016-12-05',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-b2785ea 2016-12-05 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-f41b944 2016-12-05 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -45,21 +45,25 @@
             
   <div class="section" id="gateways">
 <span id="id1"></span><h1>Gateways<a class="headerlink" href="#gateways" title="Permalink to this headline">¶</a></h1>
-<p>SoftwareContainer provides a set of gateways to enable communication between the host system and the contained system.</p>
-<p>Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services. This makes the
-system scalable, as the number of IPC mechanisms is limited while the number of possible services are unlimited.
-<em>Currently, some gateways break this principle, which is subject to correction in the future. The design intention
-is to have the gateways IPC centric and construct more abstract concepts like a Wayland &#8220;gateway&#8221; on top of
-multiple IPC gateways.</em></p>
-<p>This chapter contains descriptions of the available gateways, their IDs,  and their configuration options.
-It is intended to explain to e.g. a service integrator how to write gateway configurations suitable for the service.</p>
+<p>SoftwareContainer provides a set of gateways to enable communication between the host system and the
+contained system.</p>
+<p>Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services.
+This makes the system scalable, as the number of IPC mechanisms is limited while the number of
+possible services are unlimited.  <em>Currently, some gateways break this principle, which is subject
+to correction in the future. The design intention is to have the gateways IPC centric and construct
+more abstract concepts like a Wayland &#8220;gateway&#8221; on top of multiple IPC gateways.</em></p>
+<p>This chapter contains descriptions of the available gateways, their IDs,  and their configuration
+options.  It is intended to explain to e.g. a service integrator how to write gateway configurations
+suitable for the service.</p>
 <p>For more information how to integrate and use the configurations in a project,
 see <a class="reference internal" href="../integration-guidelines/index.html#integration-guidelines"><span class="std std-ref">Integration guidelines</span></a>.</p>
-<p>For more information how to develop and integrate gateways in SoftwareContainer, see <a class="reference internal" href="../developers/index.html#developers"><span class="std std-ref">Developer guidelines</span></a>.</p>
+<p>For more information how to develop and integrate gateways in SoftwareContainer,
+see <a class="reference internal" href="../developers/index.html#developers"><span class="std std-ref">Developer guidelines</span></a>.</p>
 <div class="section" id="note-on-configurations">
 <h2>Note on configurations<a class="headerlink" href="#note-on-configurations" title="Permalink to this headline">¶</a></h2>
-<p>All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer requires this.
-Beyond that, the structure and content of this JSON is the responsibility of the respective gateway.</p>
+<p>All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer
+requires this.  Beyond that, the structure and content of this JSON is the responsibility of the
+respective gateway.</p>
 </div>
 <div class="section" id="cgroups-gateway">
 <h2>CGroups gateway<a class="headerlink" href="#cgroups-gateway" title="Permalink to this headline">¶</a></h2>
@@ -97,7 +101,8 @@ must have the <code class="docutils literal"><span class="pre">setting</span></c
 </div>
 <div class="section" id="d-bus-gateway">
 <h2>D-Bus gateway<a class="headerlink" href="#d-bus-gateway" title="Permalink to this headline">¶</a></h2>
-<p>The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and interfaces.</p>
+<p>The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and
+interfaces.</p>
 <p>The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
@@ -108,13 +113,14 @@ program <code class="docutils literal"><span class="pre">dbus-proxy</span></code
 libdbus uses these variables to find the socket to use for D-Bus
 communication, and the application running within the container is
 expected to use these variables (probably by means of the binding used).</p>
-<p>The <code class="docutils literal"><span class="pre">dbus-proxy</span></code> does not modify the messages passed via D-Bus, it only provides a filter function.
-This means that some filters may cause unwanted behaviour used in combination with dynamic
-interpretation of introspection data. For example, if introspection is configured to be allowed,
-the introspection data might contain interfaces and object paths that are not accessible for the
-application (unless the configuration also allowes everything on the connection).</p>
-<p>The gateway will not do any analysis of the configuration passed to it, but will pass this configuration
-along to <code class="docutils literal"><span class="pre">dbus-proxy</span></code> verbatim. This is to support future changes in the configuration format.</p>
+<p>The <code class="docutils literal"><span class="pre">dbus-proxy</span></code> does not modify the messages passed via D-Bus, it only provides a filter
+function.  This means that some filters may cause unwanted behaviour used in combination with
+dynamic interpretation of introspection data. For example, if introspection is configured to be
+allowed, the introspection data might contain interfaces and object paths that are not accessible
+for the application (unless the configuration also allowes everything on the connection).</p>
+<p>The gateway will not do any analysis of the configuration passed to it, but will pass this
+configuration along to <code class="docutils literal"><span class="pre">dbus-proxy</span></code> verbatim. This is to support future changes in the
+configuration format.</p>
 <div class="section" id="id2">
 <h3>ID<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>The ID used for the D-Bus gateway is: <code class="docutils literal"><span class="pre">dbus</span></code></p>
@@ -130,7 +136,8 @@ objects with the names:</p>
 <p>The arrays contain JSON objects where each object is an access rule specified as a combination
 of:</p>
 <ul class="simple">
-<li>Direction of method call or signal, i.e. if the call or signal is outgoing from inside the container or incoming from the outside of the container.</li>
+<li>Direction of method call or signal, i.e. if the call or signal is outgoing from inside the
+container or incoming from the outside of the container.</li>
 <li>D-Bus interface of the method or signal.</li>
 <li>Object path where the interface is implemented.</li>
 <li>The method or signal name the rule is for.</li>
@@ -143,8 +150,8 @@ of:</p>
 <li><code class="docutils literal"><span class="pre">method</span></code> - A string specifying a D-Bus method name or signal name, e.g. <code class="docutils literal"><span class="pre">EnumerateDevices</span></code>.</li>
 </ul>
 <p>All the values can be substituted with the wildcard character <code class="docutils literal"><span class="pre">*</span></code> with the meaning &#8220;all&#8221;, e.g. a
-&#8220;direction&#8221; set to <code class="docutils literal"><span class="pre">*</span></code> will mean both incoming and outgoing, and a <code class="docutils literal"><span class="pre">method</span></code> set to <code class="docutils literal"><span class="pre">*</span></code> will match
-all method and signal names for the interface and object path specified.</p>
+&#8220;direction&#8221; set to <code class="docutils literal"><span class="pre">*</span></code> will mean both incoming and outgoing, and a <code class="docutils literal"><span class="pre">method</span></code> set to <code class="docutils literal"><span class="pre">*</span></code> will
+match all method and signal names for the interface and object path specified.</p>
 <p>If a bus configuration is just an empty array it means all access to that bus will be blocked.</p>
 </div>
 <div class="section" id="id4">
@@ -217,7 +224,8 @@ access at all to the system bus would look like:</p>
 </div>
 <div class="section" id="id6">
 <h3>Configuration<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-<p>The configuration consists of a root list consisting of individual devices. Each device contains the following fields:</p>
+<p>The configuration consists of a root list consisting of individual devices. Each device contains the
+following fields:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">name</span></code> The name of the device, with or without path. This is passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
 <li><code class="docutils literal"><span class="pre">major</span></code> The major device number, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
@@ -261,6 +269,8 @@ access at all to the system bus would look like:</p>
 <p>The environment gateway allows users to specify environment variables that
 should be known to the container and all commands and functions running
 inside the container.</p>
+<p>Note that any environment variables set here can be overridden when starting a binary on the
+D-Bus interface, see <a class="reference internal" href="../api/index.html#dbus-api"><span class="std std-ref">D-Bus API</span></a>.</p>
 <div class="section" id="id8">
 <h3>ID<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <p>The ID used for the Environment gateway is: <code class="docutils literal"><span class="pre">env</span></code></p>
@@ -332,14 +342,16 @@ set to <code class="docutils literal"><span class="pre">:/some/path</span></code
 </div>
 <div class="section" id="file-gateway">
 <h2>File gateway<a class="headerlink" href="#file-gateway" title="Permalink to this headline">¶</a></h2>
-<p>The File Gateway is used to expose individual files from the host filesystem inside the container.</p>
+<p>The File Gateway is used to expose individual files and directories from the host filesystem inside
+the container.</p>
 <div class="section" id="id11">
 <h3>ID<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <p>The ID used for the File gateway is: <code class="docutils literal"><span class="pre">file</span></code></p>
 </div>
 <div class="section" id="id12">
 <h3>Configuration<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
-<p>In the container, the files are mapped into a subdirectory (currently <code class="docutils literal"><span class="pre">/gateways</span></code>), at the location specified by the <code class="docutils literal"><span class="pre">path-container</span></code> field (see below).</p>
+<p>The paths inside the container has to be absolute. There is a check for not mounting over already
+existing mount paths.</p>
 </div>
 <div class="section" id="id13">
 <h3>Example configurations<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
@@ -347,12 +359,8 @@ set to <code class="docutils literal"><span class="pre">:/some/path</span></code
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
         <span class="s">&quot;path-host&quot;</span><span class="p">:</span> <span class="s">&quot;/tmp/someIPSocket&quot;</span><span class="p">,</span>   <span class="o">//</span> <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">host</span><span class="s">&#39;s file-system</span>
-        <span class="s">&quot;path-container&quot;</span><span class="p">:</span> <span class="s">&quot;someIPSocket&quot;</span><span class="p">,</span>   <span class="o">//</span> <span class="n">Sub</span><span class="o">-</span><span class="n">path</span> <span class="n">of</span> <span class="n">the</span> <span class="n">mount</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">container</span>
-        <span class="s">&quot;create-symlink&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span> <span class="o">//</span> <span class="n">specifies</span> <span class="n">whether</span> <span class="n">a</span> <span class="n">symbolic</span> <span class="n">link</span> <span class="n">should</span> <span class="n">to</span> <span class="n">be</span> <span class="n">created</span> <span class="n">so</span> <span class="n">that</span> <span class="n">the</span> <span class="n">file</span> <span class="ow">is</span> <span class="n">available</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">container</span> <span class="n">under</span> <span class="n">the</span> <span class="n">same</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">host</span><span class="o">.</span>
+        <span class="s">&quot;path-container&quot;</span><span class="p">:</span> <span class="s">&quot;/tmp/someIPSocket&quot;</span><span class="p">,</span>   <span class="o">//</span> <span class="n">Absolute</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">mount</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">container</span>
         <span class="s">&quot;read-only&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>  <span class="o">//</span> <span class="k">if</span> <span class="n">true</span><span class="p">,</span> <span class="n">the</span> <span class="n">file</span> <span class="ow">is</span> <span class="n">accessible</span> <span class="ow">in</span> <span class="n">read</span><span class="o">-</span><span class="n">only</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">container</span>
-        <span class="s">&quot;env-var-name&quot;</span><span class="p">:</span> <span class="s">&quot;SOMEIP_SOCKET_PATH&quot;</span><span class="p">,</span> <span class="o">//</span> <span class="n">name</span> <span class="n">of</span> <span class="n">a</span> <span class="n">environment</span> <span class="n">variable</span> <span class="n">to</span> <span class="n">be</span> <span class="nb">set</span>
-        <span class="s">&quot;env-var-prefix&quot;</span><span class="p">:</span> <span class="s">&quot;some-path-prefix&quot;</span><span class="p">,</span> <span class="o">//</span> <span class="n">define</span> <span class="n">a</span> <span class="n">prefix</span> <span class="k">for</span> <span class="n">the</span> <span class="n">path</span> <span class="nb">set</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">environment</span> <span class="n">variable</span> <span class="n">defined</span> <span class="n">by</span> <span class="s">&quot;env-var-name&quot;</span>
-        <span class="s">&quot;env-var-suffix&quot;</span><span class="p">:</span> <span class="s">&quot;some-path-suffix&quot;</span><span class="p">,</span> <span class="o">//</span> <span class="n">define</span> <span class="n">a</span> <span class="n">suffix</span> <span class="k">for</span> <span class="n">the</span> <span class="n">path</span> <span class="nb">set</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">environment</span> <span class="n">variable</span> <span class="n">defined</span> <span class="n">by</span> <span class="s">&quot;env-var-name&quot;</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
@@ -361,7 +369,8 @@ set to <code class="docutils literal"><span class="pre">:/some/path</span></code
 </div>
 <div class="section" id="network-gateway">
 <h2>Network gateway<a class="headerlink" href="#network-gateway" title="Permalink to this headline">¶</a></h2>
-<p>The Network Gateway is used to setup network connection and configure which traffic is allowed and not.</p>
+<p>The Network Gateway is used to setup network connection and configure which traffic is allowed and
+not.</p>
 <div class="section" id="id14">
 <h3>ID<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <p>The ID used for the Network gateway is: <code class="docutils literal"><span class="pre">network</span></code></p>
@@ -369,18 +378,22 @@ set to <code class="docutils literal"><span class="pre">:/some/path</span></code
 <div class="section" id="id15">
 <h3>Configuration<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <p>The configuration is structured as a list of JSON objects that each describe rules for <code class="docutils literal"><span class="pre">OUTGOING</span></code>
-or <code class="docutils literal"><span class="pre">INCOMING</span></code> network traffic. The validation is done by filtering network traffic on <code class="docutils literal"><span class="pre">host</span></code>, <code class="docutils literal"><span class="pre">ports</span></code> and
-<code class="docutils literal"><span class="pre">protocols</span></code>, where <code class="docutils literal"><span class="pre">host</span></code> is either hostname or ip address of a destination or source depending on context,
-<code class="docutils literal"><span class="pre">ports</span></code> specifies which ports to filter on and <code class="docutils literal"><span class="pre">protocols</span></code> specifies which protocols to filter.</p>
-<p><code class="docutils literal"><span class="pre">direction</span></code> and <code class="docutils literal"><span class="pre">allow</span></code> list are mandatory for Network Gateway configuration. There are only two valid values for
-<code class="docutils literal"><span class="pre">direction</span></code>: <code class="docutils literal"><span class="pre">INCOMING</span></code> and <code class="docutils literal"><span class="pre">OUTGOING</span></code>. In each entry in <code class="docutils literal"><span class="pre">allow</span></code> list only <code class="docutils literal"><span class="pre">host</span></code> is mandatory. <code class="docutils literal"><span class="pre">host</span></code>
-can be specific hostname or ip address and also <code class="docutils literal"><span class="pre">*</span></code> indicating all available ip sources. When <code class="docutils literal"><span class="pre">ports</span></code> is not specified,
-the rule applies to all ports.  <code class="docutils literal"><span class="pre">ports</span></code> are valid between 0 and 65536. There are three valid values for <code class="docutils literal"><span class="pre">protocols</span></code>:
-<code class="docutils literal"><span class="pre">&quot;tcp&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;udp&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;icmp&quot;</span></code>. When <code class="docutils literal"><span class="pre">protocols</span></code> is not specified in the <code class="docutils literal"><span class="pre">allow</span></code> list item, the rule applies to
-all protocols. When there is an item which has ports without protocols, tcp protocol will be applied to the rule.
-NetworkGateway is programmed to drop all packages that do not match any entry in <code class="docutils literal"><span class="pre">allow</span></code> list.</p>
-<p>The following is an example which rejects all ping requests except example.com. Only port 53 on tcp and udp protocols
-are allowed for enabling dns lookup. And only icmp protocol from &#8220;example.com&#8221; is allowed.:</p>
+or <code class="docutils literal"><span class="pre">INCOMING</span></code> network traffic. The validation is done by filtering network traffic on <code class="docutils literal"><span class="pre">host</span></code>,
+<code class="docutils literal"><span class="pre">ports</span></code> and <code class="docutils literal"><span class="pre">protocols</span></code>, where <code class="docutils literal"><span class="pre">host</span></code> is either hostname or ip address of a destination or
+source depending on context, <code class="docutils literal"><span class="pre">ports</span></code> specifies which ports to filter on and <code class="docutils literal"><span class="pre">protocols</span></code>
+specifies which protocols to filter.</p>
+<p><code class="docutils literal"><span class="pre">direction</span></code> and <code class="docutils literal"><span class="pre">allow</span></code> list are mandatory for Network Gateway configuration. There are only two
+valid values for <code class="docutils literal"><span class="pre">direction</span></code>: <code class="docutils literal"><span class="pre">INCOMING</span></code> and <code class="docutils literal"><span class="pre">OUTGOING</span></code>. In each entry in <code class="docutils literal"><span class="pre">allow</span></code> list only
+<code class="docutils literal"><span class="pre">host</span></code> is mandatory. <code class="docutils literal"><span class="pre">host</span></code> can be specific hostname or ip address and also <code class="docutils literal"><span class="pre">*</span></code> indicating all
+available ip sources. When <code class="docutils literal"><span class="pre">ports</span></code> is not specified, the rule applies to all ports.  <code class="docutils literal"><span class="pre">ports</span></code> are
+valid between 0 and 65536. There are three valid values for <code class="docutils literal"><span class="pre">protocols</span></code>: <code class="docutils literal"><span class="pre">&quot;tcp&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;udp&quot;</span></code> and
+<code class="docutils literal"><span class="pre">&quot;icmp&quot;</span></code>. When <code class="docutils literal"><span class="pre">protocols</span></code> is not specified in the <code class="docutils literal"><span class="pre">allow</span></code> list item, the rule applies to all
+protocols. When there is an item which has ports without protocols, tcp protocol will be applied to
+the rule.  NetworkGateway is programmed to drop all packages that do not match any entry in
+<code class="docutils literal"><span class="pre">allow</span></code> list.</p>
+<p>The following is an example which rejects all ping requests except example.com. Only port 53 on tcp
+and udp protocols are allowed for enabling dns lookup. And only icmp protocol from &#8220;example.com&#8221; is
+allowed.:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
         <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
@@ -546,7 +559,7 @@ to graphics hardware is <strong>not</strong> setup by the Wayland gateway.</p>
       &copy;2016, Pelagicore AB.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
