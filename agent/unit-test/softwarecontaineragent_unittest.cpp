@@ -79,11 +79,10 @@ public:
                                      "preload-count = 0\n"
                                      "keep-containers-alive = false\n"
                                      "shutdown-timeout = 1\n"
-                                     "shared-mounts-dir = /tmp/container/\n"
-                                     "deprecated-lxc-config-path = /usr/local/etc/softwarecontainer.conf\n"
-                                     "service-manifest-dir = /usr/local/etc/softwarecontainer/service-manifest.d/\n"
-                                     "default-service-manifest-dir = /usr/local/etc/softwarecontainer/service-manifest.default.d/\n";
-
+                                     "shared-mounts-dir = " + std::string(SHARED_MOUNTS_DIR_TESTING) + "\n"
+                                     "deprecated-lxc-config-path = " + std::string(LXC_CONFIG_PATH_TESTING) + "\n"
+                                     "service-manifest-dir = " + std::string(SERVICE_MANIFEST_DIR_TESTING) + "\n"
+                                     "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING);
     const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
 
     void SetUp() override
