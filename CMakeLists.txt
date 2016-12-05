@@ -226,6 +226,8 @@ set(DEFAULT_SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwareconta
 #       with valid values, see the setup code of SoftwareContainerTest test class.
 add_definitions(-DSHARED_MOUNTS_DIR_TESTING="${SHARED_MOUNTS_DIR}")
 add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
+add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
+add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
 
 
 #
