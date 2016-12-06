@@ -21,6 +21,7 @@
 #include <glibmm/optioncontext.h>
 
 #include "config/config.h"
+#include "config/configdefaults.h"
 #include "config/configloaderabstractinterface.h"
 #include "config/fileconfigloader.h"
 
@@ -113,7 +114,7 @@ int main(int argc, char **argv)
     serviceManifestDirOpt.set_arg_description("<filepath>");
     serviceManifestDirOpt.set_description("Path to a file or directory where service manifest(s) "
                                           "exist, defaults to " +
-                                          std::string(SERVICE_MANIFEST_DIR_OPT));
+                                          std::string(SERVICE_MANIFEST_DIR));
 
     Glib::OptionEntry defaultServiceManifestDirOpt;
     defaultServiceManifestDirOpt.set_long_name("default-manifest-dir");
@@ -121,7 +122,7 @@ int main(int argc, char **argv)
     defaultServiceManifestDirOpt.set_arg_description("<filepath>");
     defaultServiceManifestDirOpt.set_description("Path to a file or directory where default "
                                                  "service manifest(s) exist, defaults to " +
-                                                 std::string(DEFAULT_SERVICE_MANIFEST_DIR_OPT));
+                                                 std::string(DEFAULT_SERVICE_MANIFEST_DIR));
 
     Glib::OptionEntry sessionBusOpt;
     sessionBusOpt.set_long_name("session-bus");
@@ -132,14 +133,14 @@ int main(int argc, char **argv)
     /* Default values need to be somehting that should not be set explicitly
      * by the user.
      */
-    Glib::ustring configPath = "";
-    int preloadCount = -1;
+    Glib::ustring configPath = Config::SC_CONFIG_PATH_INITIAL_VALUE;
+    int preloadCount = Config::PRELOAD_COUNT_INITIAL_VALUE;
     int userID = 0;
-    bool keepContainersAlive = false;
-    int timeout = -2;
-    Glib::ustring serviceManifestDir = SERVICE_MANIFEST_DIR_OPT;
-    Glib::ustring defaultServiceManifestDir = DEFAULT_SERVICE_MANIFEST_DIR_OPT;
-    bool useSessionBus = false;
+    bool keepContainersAlive = Config::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
+    int timeout = Config::SHUTDOWN_TIMEOUT_INITIAL_VALUE;
+    Glib::ustring serviceManifestDir = Config::SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    Glib::ustring defaultServiceManifestDir = Config::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    bool useSessionBus = Config::USE_SESSION_BUS_INITIAL_VALUE;
 
     Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
     mainGroup.add_entry(configOpt, configPath);
@@ -178,7 +179,7 @@ int main(int argc, char **argv)
 
     // Config file set on command line should take precedence over default
     std::string configFileLocation;
-    if (configPath != "") {
+    if (configPath != Config::SC_CONFIG_PATH_INITIAL_VALUE) {
         configFileLocation = std::string(configPath);
     } else {
         configFileLocation = std::string(SC_CONFIG_FILE);
@@ -189,21 +190,23 @@ int main(int argc, char **argv)
      * over the static configuration.
      */
     std::map<std::string, std::string> stringOptions;
-    if (serviceManifestDir != "") {
-        stringOptions.insert(std::pair<std::string, std::string>(Config::SERVICE_MANIFEST_DIR,
+    if (serviceManifestDir != Config::SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
+        stringOptions.insert(std::pair<std::string, std::string>(Config::SERVICE_MANIFEST_DIR_KEY,
                                                                  serviceManifestDir));
     }
-    if (defaultServiceManifestDir != "") {
-        stringOptions.insert(std::pair<std::string, std::string>(Config::DEFAULT_SERVICE_MANIFEST_DIR,
+    if (defaultServiceManifestDir != Config::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
+        stringOptions.insert(std::pair<std::string, std::string>(Config::DEFAULT_SERVICE_MANIFEST_DIR_KEY,
                                                                  defaultServiceManifestDir));
     }
 
     std::map<std::string, int> intOptions;
-    if (preloadCount != -1) {
-        intOptions.insert(std::pair<std::string, int>(Config::PRELOAD_COUNT, preloadCount));
+    if (preloadCount != Config::PRELOAD_COUNT_INITIAL_VALUE) {
+        intOptions.insert(std::pair<std::string, int>(Config::PRELOAD_COUNT_KEY,
+                                                      preloadCount));
     }
-    if (timeout != -2) {
-        intOptions.insert(std::pair<std::string, int>(Config::SHUTDOWN_TIMEOUT, timeout));
+    if (timeout != Config::SHUTDOWN_TIMEOUT_INITIAL_VALUE) {
+        intOptions.insert(std::pair<std::string, int>(Config::SHUTDOWN_TIMEOUT_KEY,
+                                                      timeout));
     }
 
     std::map<std::string, bool> boolOptions;
@@ -211,14 +214,18 @@ int main(int argc, char **argv)
      * otherwise they are still the default 'false' set above.
      */
     if (keepContainersAlive == true) {
-        boolOptions.insert(std::pair<std::string, bool>(Config::KEEP_ALIVE, keepContainersAlive));
+        boolOptions.insert(std::pair<std::string, bool>(Config::KEEP_CONTAINERS_ALIVE_KEY,
+                                                        keepContainersAlive));
     }
     if (useSessionBus == true) {
-        boolOptions.insert(std::pair<std::string, bool>(Config::USE_SESSION_BUS, useSessionBus));
+        boolOptions.insert(std::pair<std::string, bool>(Config::USE_SESSION_BUS_KEY,
+                                                        useSessionBus));
     }
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new FileConfigLoader(configFileLocation));
-    Config config(std::move(loader), stringOptions, intOptions, boolOptions);
+    std::unique_ptr<ConfigDefaults> defaults(new ConfigDefaults);
+
+    Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
 
     try {
         DBus::Connection connection = getBusConnection(useSessionBus);

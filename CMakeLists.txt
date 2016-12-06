@@ -118,6 +118,56 @@ if(ENABLE_ALL_DOC)
 endif()
 
 #
+# Setup config default values, definitions, and configure files etc.
+#
+# These values are used to configure the general config file and are
+# picked up by the ConfigDefaults class to be used for default config
+# values.
+#
+
+# Since the general config file needs a lower case string as value
+# for the booleans, we need to set specific variables for these
+set(KEEP_CONTAINERS_ALIVE FALSE)
+if(${KEEP_CONTAINERS_ALIVE})
+    set(KEEP_CONTAINERS_ALIVE_VALUE_STRING "true")
+else(${KEEP_CONTAINERS_ALIVE})
+    set(KEEP_CONTAINERS_ALIVE_VALUE_STRING "false")
+endif()
+
+set(USE_SESSION_BUS FALSE)
+if(${USE_SESSION_BUS})
+    set(USE_SESSION_BUS_VALUE_STRING "true")
+else(${USE_SESSION_BUS})
+    set(USE_SESSION_BUS_VALUE_STRING "false")
+endif()
+
+set(PRELOAD_COUNT 1)
+set(SHUTDOWN_TIMEOUT 1)
+set(SHARED_MOUNTS_DIR "/tmp/container/")
+set(LXC_CONFIG_PATH "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer.conf")
+set(SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.d/")
+set(DEFAULT_SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.default.d/")
+
+# Export definitions for the ConfigDefaults class
+add_definitions(-DPRELOAD_COUNT=${PRELOAD_COUNT})
+add_definitions(-DKEEP_CONTAINERS_ALIVE=${KEEP_CONTAINERS_ALIVE})
+add_definitions(-DUSE_SESSION_BUS=${USE_SESSION_BUS})
+add_definitions(-DSHUTDOWN_TIMEOUT=${SHUTDOWN_TIMEOUT})
+add_definitions(-DSHARED_MOUNTS_DIR="${SHARED_MOUNTS_DIR}")
+add_definitions(-DLXC_CONFIG_PATH="${LXC_CONFIG_PATH}")
+add_definitions(-DSERVICE_MANIFEST_DIR="${SERVICE_MANIFEST_DIR}")
+add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR="${DEFAULT_SERVICE_MANIFEST_DIR}")
+
+# export_configs_needed_by_tests()
+# NOTE: These definitons are only set because the "middle layer" tests currently need to create a Workspace
+#       with valid values, see the setup code of SoftwareContainerTest test class.
+add_definitions(-DSHARED_MOUNTS_DIR_TESTING="${SHARED_MOUNTS_DIR}")
+add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
+add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
+add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
+
+
+#
 # RPATH options
 #
 
@@ -226,13 +276,13 @@ add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
 add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
 add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
 
-add_definitions(-DSERVICE_MANIFEST_DIR_OPT="${SERVICE_MANIFEST_DIR}")
-add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_OPT="${DEFAULT_SERVICE_MANIFEST_DIR}")
+
 #
 # Add all sub-projects
 #
 add_subdirectory(common)
 add_subdirectory(libsoftwarecontainer)
+
 add_subdirectory(agent)
 add_subdirectory(doc)
 

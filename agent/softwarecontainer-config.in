@@ -1,27 +1,39 @@
+
+#
+# General SoftwareContainer configuration.
+#
+# Optional configs are commented out by default, but are set to the default
+# values that will be used by SoftwareContainer if nothing else is specified.
+# Any configs that are not commented out by default are mandatory and must
+# be present and set to a valid value.
+#
+# The group 'SoftwareContainer' must be present.
+#
+
 [SoftwareContainer]
 # Set number of containers to preload on startup of SoftwareContainer
-preload-count = 1
+# preload-count = @PRELOAD_COUNT@
 
 # Set to 'true' to not shut down containers when SoftwareContainer exits
-keep-containers-alive = false
+# keep-containers-alive = @KEEP_CONTAINERS_ALIVE_VALUE_STRING@
 
 # Set to 'true' to use the SessionBus
-use-session-bus = false
+# use-session-bus = @USE_SESSION_BUS_VALUE_STRING@
 
 # Timeout in seconds before containers are forcefully shut down
-shutdown-timeout = 1
+# shutdown-timeout = @SHUTDOWN_TIMEOUT@
 
 # Location for all sharted host/container mounts
-shared-mounts-dir = @SHARED_MOUNTS_DIR@
+# shared-mounts-dir = @SHARED_MOUNTS_DIR@
 
 # Path to the LXC configuration used with liblxc
 # NOTE: This option is being deprecated
-deprecated-lxc-config-path = @LXC_CONFIG_PATH@
+# deprecated-lxc-config-path = @LXC_CONFIG_PATH@
 
 # Path to where SoftwareContainer should read service manifests
-service-manifest-dir = @SERVICE_MANIFEST_DIR@
+# service-manifest-dir = @SERVICE_MANIFEST_DIR@
 
 # Path to where SoftwareContainer should read service manifests
 # that are to be automatically applied to containers by default,
 # e.g. when having "default capabilities" in the platform.
-default-service-manifest-dir = @DEFAULT_SERVICE_MANIFEST_DIR@
+# default-service-manifest-dir = @DEFAULT_SERVICE_MANIFEST_DIR@

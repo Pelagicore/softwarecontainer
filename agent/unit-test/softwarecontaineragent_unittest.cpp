@@ -31,7 +31,6 @@
 #include <utility>
 
 
-// TODO: Make this a shared test class, it's also used in the Config tests
 /*
  * Test stub - StringConfigLoader
  *
@@ -62,6 +61,28 @@ public:
 };
 
 
+/*
+ * Test stub - PreparedConfigDefaults
+ *
+ * Used for initializing a DefaultConfigs parent with values
+ * to support testing.
+ */
+class PreparedConfigDefaults : public ConfigDefaults
+{
+public:
+    PreparedConfigDefaults(std::map<std::string, std::string> stringOptions,
+                           std::map<std::string, int> intOptions,
+                           std::map<std::string, bool> boolOptions)
+    {
+        m_stringOptions = stringOptions;
+        m_intOptions = intOptions;
+        m_boolOptions = boolOptions;
+    }
+
+    ~PreparedConfigDefaults() {}
+};
+
+
 class SoftwareContainerAgentTest: public ::testing::Test
 {
 public:
@@ -88,7 +109,14 @@ public:
     void SetUp() override
     {
         std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-        Config config(std::move(loader));
+
+        // Empty defaults, can only be used if the test is never to fall back on default config values
+        std::unique_ptr<ConfigDefaults> defaults(
+            new PreparedConfigDefaults(std::map<std::string, std::string>(),
+                                       std::map<std::string, int>(),
+                                       std::map<std::string, bool>()));
+
+        Config config(std::move(loader), std::move(defaults));
 
         try {
             sca = std::make_shared<SoftwareContainerAgent>(m_context, config);
