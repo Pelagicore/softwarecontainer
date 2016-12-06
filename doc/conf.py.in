@@ -41,8 +41,8 @@ extensions = [
 
 # Substitutions for common names. Key is replaced value in the text of all .rst # documents.
 substs = { "bridge-device": "@BRIDGE_DEVICE@",
-           "capabilities-dir": "@CAPABILITIES_DIR@<service-name>",
-           "default-capabilities-dir": "@DEFAULT_CAPABILITIES_DIR@<service-name>"
+           "capabilities-dir": "@SERVICE_MANIFEST_DIR@<service-name>",
+           "default-capabilities-dir": "@DEFAULT_SERVICE_MANIFEST_DIR@<service-name>"
          }
 
 # Duplicate all entries with different formatting options

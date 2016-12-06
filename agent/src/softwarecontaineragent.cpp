@@ -30,10 +30,12 @@ SoftwareContainerAgent::SoftwareContainerAgent(
 
     // Get all configs for this objects members
     try {
-        m_preloadCount = config.getIntegerValue(Config::SC_GROUP, Config::PRELOAD_COUNT);
+        m_preloadCount = config.getIntegerValue(Config::SC_GROUP,
+                                                Config::PRELOAD_COUNT_KEY);
         //TODO: the inversion of the value here should be worked away,
         //      but doesn't seem to work anyway, see bug
-        m_shutdownContainers = !config.getBooleanValue(Config::SC_GROUP, Config::KEEP_ALIVE);
+        m_shutdownContainers = !config.getBooleanValue(Config::SC_GROUP,
+                                                       Config::KEEP_CONTAINERS_ALIVE_KEY);
     } catch (softwarecontainer::ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -43,9 +45,9 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     std::string containerRootDir;
     std::string lxcConfigPath;
     try {
-        shutdownTimeout = config.getIntegerValue(Config::SC_GROUP, Config::SHUTDOWN_TIMEOUT);
-        containerRootDir = config.getStringValue(Config::SC_GROUP, Config::SHARED_MOUNTS_DIR);
-        lxcConfigPath = config.getStringValue(Config::SC_GROUP, Config::LXC_CONFIG_PATH);
+        shutdownTimeout = config.getIntegerValue(Config::SC_GROUP, Config::SHUTDOWN_TIMEOUT_KEY);
+        containerRootDir = config.getStringValue(Config::SC_GROUP, Config::SHARED_MOUNTS_DIR_KEY);
+        lxcConfigPath = config.getStringValue(Config::SC_GROUP, Config::LXC_CONFIG_PATH_KEY);
     } catch (softwarecontainer::ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -72,9 +74,9 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     std::string defaultServiceManifestDir;
     try {
         serviceManifestDir = config.getStringValue(Config::SC_GROUP,
-                                                   Config::SERVICE_MANIFEST_DIR);
+                                                   Config::SERVICE_MANIFEST_DIR_KEY);
         defaultServiceManifestDir = config.getStringValue(Config::SC_GROUP,
-                                                          Config::DEFAULT_SERVICE_MANIFEST_DIR);
+                                                          Config::DEFAULT_SERVICE_MANIFEST_DIR_KEY);
     } catch (softwarecontainer::ConfigError &error) {
         throw ReturnCode::FAILURE;
     }

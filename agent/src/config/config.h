@@ -26,13 +26,9 @@
 
 #include "softwarecontainer-common.h"
 #include "configloaderabstractinterface.h"
+#include "configdefaults.h"
 
 
-/*
- * TODO:
- *      * Propose we have this inherit a general SoftwareContainer exception instead
- *      * And also add some error types that can indicate what went wrong
- */
 namespace softwarecontainer {
 
 class ConfigError : public std::exception
@@ -58,16 +54,28 @@ public:
      * as command line options. These values will take precedence over any
      * existing values with the same key in the static configuration.
      *
+     * If no configs are found among the explicit set configs or in the config file
+     * provided by the loader, the default values will be used as a last resort.
+     *
      * If no explicit configs are to be used, this Constructor can be called
-     * by passing only the 'loader'. Otherwise all parameters needs to be passed.
+     * by passing only the 'loader' and 'defaults' arguments.
+     * Otherwise all parameters needs to be passed.
+     *
+     * It is an error to not provide default configuration values. Not finding values
+     * in any of the other sources, i.e. explicit or config file, will not cause an
+     * error unless there are problems parsing.
      *
      * @param loader An interface to a loader which provides the underlying
      *               config to this class
+     * @param defaults An interface to default configs
      * @param stringOptions A string:string map with config keys and corresponding values
      * @param intOptions A string:int map with config keys and corresponding values
      * @param boolOptions A string:bool map with config keys and corresponding values
+     *
+     * @throws softwarecontainer::ConfigError On error
      */
     Config(std::unique_ptr<ConfigLoaderAbstractInterface> loader,
+           std::unique_ptr<ConfigDefaults> defaults,
            const std::map<std::string, std::string> &stringOptions = std::map<std::string, std::string>(),
            const std::map<std::string, int> &intOptions = std::map<std::string, int>(),
            const std::map<std::string, bool> &boolOptions = std::map<std::string, bool>());
@@ -102,21 +110,41 @@ public:
      */
     bool getBooleanValue(const std::string &group, const std::string &key) const;
 
+    // Illegal values used as initial command line option values to check if user
+    // set them or not
+    static const std::string SC_CONFIG_PATH_INITIAL_VALUE;
+    static const int PRELOAD_COUNT_INITIAL_VALUE;
+    static const bool KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
+    static const int SHUTDOWN_TIMEOUT_INITIAL_VALUE;
+    static const std::string SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    static const std::string DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    static const bool USE_SESSION_BUS_INITIAL_VALUE;
+
     // Config group "SoftwareContainer"
     static const std::string SC_GROUP;
 
     // Config keys for SoftwareContainer group
-    static const std::string PRELOAD_COUNT;
-    static const std::string KEEP_ALIVE;
-    static const std::string USE_SESSION_BUS;
-    static const std::string SHUTDOWN_TIMEOUT;
-    static const std::string SHARED_MOUNTS_DIR;
-    static const std::string LXC_CONFIG_PATH;
-    static const std::string SERVICE_MANIFEST_DIR;
-    static const std::string DEFAULT_SERVICE_MANIFEST_DIR;
+    static const std::string PRELOAD_COUNT_KEY;
+    static const std::string KEEP_CONTAINERS_ALIVE_KEY;
+    static const std::string USE_SESSION_BUS_KEY;
+    static const std::string SHUTDOWN_TIMEOUT_KEY;
+    static const std::string SHARED_MOUNTS_DIR_KEY;
+    static const std::string LXC_CONFIG_PATH_KEY;
+    static const std::string SERVICE_MANIFEST_DIR_KEY;
+    static const std::string DEFAULT_SERVICE_MANIFEST_DIR_KEY;
 
 private:
+    template<typename T>
+    T getValue(const std::string &group,
+               const std::string &key,
+               const std::map<std::string, T> &options) const;
+
+    template<typename T>
+    T getGlibValue(const std::string &group,
+                   const std::string &key) const;
+
     std::unique_ptr<Glib::KeyFile> m_config;
+    std::unique_ptr<ConfigDefaults> m_defaults;
     std::map<std::string, std::string> m_stringOptions;
     std::map<std::string, int> m_intOptions;
     std::map<std::string, bool> m_boolOptions;

@@ -114,6 +114,28 @@ TEST_F(StringConfigLoaderTest, UnsuccessfulLoadThrowsExpectedErrorCode) {
 
 
 /*
+ * Test stub - PreparedConfigDefaults
+ *
+ * Used for initializing a DefaultConfigs parent with values
+ * to support testing.
+ */
+class PreparedConfigDefaults : public ConfigDefaults
+{
+public:
+    PreparedConfigDefaults(std::map<std::string, std::string> stringOptions,
+                           std::map<std::string, int> intOptions,
+                           std::map<std::string, bool> boolOptions)
+    {
+        m_stringOptions = stringOptions;
+        m_intOptions = intOptions;
+        m_boolOptions = boolOptions;
+    }
+
+    ~PreparedConfigDefaults() {}
+};
+
+
+/*
  * ConfigTest suite
  *
  * This suite tests the Config class. It uses a stubbed loader, the StringConfigLoader, to
@@ -121,21 +143,87 @@ TEST_F(StringConfigLoaderTest, UnsuccessfulLoadThrowsExpectedErrorCode) {
  */
 class ConfigTest : public ::testing::Test
 {
+public:
+    /*
+     * Empty defaults, can only be used if the test is never to fall back on default config values
+     */
+    std::unique_ptr<ConfigDefaults> emptyDefaultConfig()
+    {
+        return std::unique_ptr<ConfigDefaults>(
+            new PreparedConfigDefaults(std::map<std::string, std::string>(),
+                                       std::map<std::string, int>(),
+                                       std::map<std::string, bool>()));
+    }
 };
 
+
 /*
- * Test that Config contain expected string value.
+ * Test that default string values are used when nothing else is specified.
+ *
+ * The loader will provide an empty config, in which case the Config class should fall back
+ * on the defaults provided.
  */
-TEST_F(ConfigTest, ContainExpectedStringValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
+TEST_F(ConfigTest, FallsBackOnDefaultStringValues) {
+    // Well formed config empty of values.
+    const std::string configString = "[SoftwareContainer]\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-    Config config(std::move(loader));
 
-    ASSERT_TRUE(config.getStringValue("SoftwareContainer", "sc.foo") == "bar");
+    std::map<std::string, std::string> stringOptions;
+    stringOptions.insert(std::pair<std::string, std::string>("sc.foo", "bar"));
+
+    std::unique_ptr<ConfigDefaults> defaults(
+        new PreparedConfigDefaults(stringOptions,
+                                   std::map<std::string, int>(),
+                                   std::map<std::string, bool>()));
+
+    Config config(std::move(loader), std::move(defaults));
+
+    ASSERT_EQ(config.getStringValue("SoftwareContainer", "sc.foo"), "bar");
+}
+
+/*
+ * Same as above but with integer values
+ */
+TEST_F(ConfigTest, FallsBackOnDefaultIntegerValues) {
+    // Well formed config empty of values.
+    const std::string configString = "[SoftwareContainer]\n";
+
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    std::map<std::string, int> intOptions;
+    intOptions.insert(std::pair<std::string, int>("sc.foo", 123));
+
+    std::unique_ptr<ConfigDefaults> defaults(
+        new PreparedConfigDefaults(std::map<std::string, std::string>(),
+                                   intOptions,
+                                   std::map<std::string, bool>()));
+
+    Config config(std::move(loader), std::move(defaults));
+
+    ASSERT_EQ(config.getIntegerValue("SoftwareContainer", "sc.foo"), 123);
+}
+
+/*
+ * Same as above but with bool values
+ */
+TEST_F(ConfigTest, FallsBackOnDefaultBooleanValues) {
+    // Well formed config empty of values.
+    const std::string configString = "[SoftwareContainer]\n";
+
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    std::map<std::string, bool> boolOptions;
+    boolOptions.insert(std::pair<std::string, bool>("sc.foo", true));
+
+    std::unique_ptr<ConfigDefaults> defaults(
+        new PreparedConfigDefaults(std::map<std::string, std::string>(),
+                                   std::map<std::string, int>(),
+                                   boolOptions));
+
+    Config config(std::move(loader), std::move(defaults));
+
+    ASSERT_EQ(config.getBooleanValue("SoftwareContainer", "sc.foo"), true);
 }
 
 /*
@@ -148,24 +236,58 @@ TEST_F(ConfigTest, IncorrectGroupThrows) {
                                      "sc.preload=2\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-    Config config(std::move(loader));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
     ASSERT_THROW(config.getStringValue("DoesNotExist", "sc.foo"), softwarecontainer::ConfigError);
 }
 
 /*
- * Test that Config throws exception on wrong key
+ * Test that Config throws exception on wrong key, when getting string value
  */
-TEST_F(ConfigTest, IncorrectKeyThrows) {
+TEST_F(ConfigTest, IncorrectKeyThrowsForStringValue) {
     // Well formed config
     const std::string configString = "[SoftwareContainer]\n"
                                      "sc.foo=bar\n"
                                      "sc.preload=2\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-    Config config(std::move(loader));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
     ASSERT_THROW(config.getStringValue("SoftwareContainer", "does-not-exist"), softwarecontainer::ConfigError);
+}
+
+/*
+ * As above but for integer values
+ */
+TEST_F(ConfigTest, IncorrectKeyThrowsForIntValue) {
+    // Well formed config
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "sc.foo=bar\n"
+                                     "sc.preload=2\n";
+
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
+
+    ASSERT_THROW(config.getIntegerValue("SoftwareContainer", "does-not-exist"), softwarecontainer::ConfigError);
+}
+
+/*
+ * As above but for bool values
+ */
+TEST_F(ConfigTest, IncorrectKeyThrowsForBoolValue) {
+    // Well formed config
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "sc.foo=bar\n"
+                                     "sc.preload=2\n";
+
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
+
+    ASSERT_THROW(config.getBooleanValue("SoftwareContainer", "does-not-exist"), softwarecontainer::ConfigError);
 }
 
 /*
@@ -177,7 +299,24 @@ TEST_F(ConfigTest, UnsucessfulCreationThrows) {
                                      "sc.foo=bar\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-    ASSERT_THROW(Config config(std::move(loader)), softwarecontainer::ConfigError);
+
+    ASSERT_THROW(Config config(std::move(loader), std::move(emptyDefaultConfig())), softwarecontainer::ConfigError);
+}
+
+/*
+ * Test that Config contain expected string value.
+ */
+TEST_F(ConfigTest, ContainExpectedStringValue) {
+    // Well formed config
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "sc.foo=bar\n"
+                                     "sc.preload=2\n";
+
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
+
+    ASSERT_TRUE(config.getStringValue("SoftwareContainer", "sc.foo") == "bar");
 }
 
 /*
@@ -190,7 +329,8 @@ TEST_F(ConfigTest, ContainExpectedIntegerValue) {
                                      "sc.preload=2\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-    Config config(std::move(loader));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
     ASSERT_TRUE(config.getIntegerValue("SoftwareContainer", "sc.preload") == 2);
 }
@@ -205,7 +345,8 @@ TEST_F(ConfigTest, ContainExpectedBooleanValue) {
                                      "shut-down-containers = true\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-    Config config(std::move(loader));
+
+    Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
     ASSERT_TRUE(config.getBooleanValue("SoftwareContainer", "shut-down-containers") == true);
 }
@@ -220,9 +361,12 @@ TEST_F(ConfigTest, ExplicitStringValuesTakesPrecedence) {
                                      "sc.foo = bar\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
     std::map<std::string, std::string> stringOptions;
     stringOptions.insert(std::pair<std::string, std::string>("sc.foo", "baz"));
+
     Config config(std::move(loader),
+                  std::move(emptyDefaultConfig()),
                   stringOptions,
                   std::map<std::string, int>(),
                   std::map<std::string, bool>());
@@ -239,9 +383,12 @@ TEST_F(ConfigTest, ExplicitIntegerValuesTakesPrecedence) {
                                      "sc.preload = 2\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
     std::map<std::string, int> intOptions;
     intOptions.insert(std::pair<std::string, int>("sc.preload", 2));
+
     Config config(std::move(loader),
+                  std::move(emptyDefaultConfig()),
                   std::map<std::string, std::string>(),
                   intOptions,
                   std::map<std::string, bool>());
@@ -258,9 +405,12 @@ TEST_F(ConfigTest, ExplicitBoolValuesTakesPrecedence) {
                                      "sc.shut-down-containers = true\n";
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
     std::map<std::string, bool> boolOptions;
     boolOptions.insert(std::pair<std::string, bool>("sc.shut-down-containers", true));
+
     Config config(std::move(loader),
+                  std::move(emptyDefaultConfig()),
                   std::map<std::string, std::string>(),
                   std::map<std::string, int>(),
                   boolOptions);

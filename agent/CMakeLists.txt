@@ -19,10 +19,11 @@ include(GNUInstallDirs)
 include(GenerateDBusCpp)
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
+# This path is by the unit-test cmake list file
 set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-install (DIRECTORY DESTINATION ${SERVICE_MANIFEST_DIR})
-install (DIRECTORY DESTINATION ${DEFAULT_SERVICE_MANIFEST_DIR})
+install(DIRECTORY DESTINATION ${SERVICE_MANIFEST_DIR})
+install(DIRECTORY DESTINATION ${DEFAULT_SERVICE_MANIFEST_DIR})
 
 include_directories(src)
 
@@ -34,6 +35,7 @@ set(SOFTWARECONTAINERAGENT_CORE_CLASSES
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefaults.cpp
 )
 
 add_executable(softwarecontainer-agent
@@ -54,16 +56,16 @@ target_link_libraries(softwarecontainer-agent
 
 install(TARGETS softwarecontainer-agent DESTINATION bin)
 
+# Configure and install the general config file
 configure_file(softwarecontainer-config.in softwarecontainer-config)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer)
 
 #
-# When we install config files, we check for if prefix is /usr, and we treat
+# When we install systemd config files, we check for if prefix is /usr, and we treat
 # this as installing system-wide, which means some config files should also
 # be installed system-wide to other locations than they would otherwise have
 # been installed to.
 #
-
 if (ENABLE_SYSTEM_BUS)
     # Install the D-Bus configuration file
     # This enables the agent to communicate over the system bus
