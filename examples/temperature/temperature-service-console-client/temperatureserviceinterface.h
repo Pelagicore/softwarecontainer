@@ -34,7 +34,7 @@ public:
     TemperatureServiceInterface(DBus::Connection &connection, std::string logfilepath);
     std::string echo(const std::string &argument);
     double getTemperature();
-    bool setTemperature(const double &temperature);
+    void setTemperature(const double &temperature);
     void TemperatureChanged(const double& argin0);
 private:
     std::string m_logfilepath;

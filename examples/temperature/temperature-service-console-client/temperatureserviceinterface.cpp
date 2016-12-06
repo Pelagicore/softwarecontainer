@@ -39,10 +39,9 @@ double TemperatureServiceInterface::getTemperature()
     return GetTemperature();
 }
 
-bool TemperatureServiceInterface::setTemperature(const double &temperature)
+void TemperatureServiceInterface::setTemperature(const double &temperature)
 {
     SetTemperature(temperature);
-    return true; // Always succesfull
 }
 
 /*! On temperature changed signal write the change into logfile */
