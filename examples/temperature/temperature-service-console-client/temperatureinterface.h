@@ -21,15 +21,15 @@
 
 #include <string>
 
-/*! Abstract interface for temperature service
+/*
+ * Abstract interface for temperature service
  */
-
 class TemperatureInterface
 {
 public:
     virtual std::string echo(const std::string &argument) = 0;
     virtual double getTemperature() = 0;
     virtual void setTemperature(const double &temperature) = 0;
-    
+
 };
 

@@ -31,8 +31,7 @@ int main()
     DBus::default_dispatcher = &dispatcher;
     DBus::Connection bus = DBus::Connection::SystemBus();
 
-    // The interface class needs a path to a logfile because we
-    // can't access stdout.
+    // We use the $HOME to point to where we want to log messages
     std::string homeDir = getenv("HOME");
     if (homeDir.empty()) {
         std::cout << "No $HOME set, can't run" << std::endl;
@@ -45,7 +44,6 @@ int main()
     // We use a different thread to set the temperature periodically
     // that way we don't block the main thread which is used by dbus
     // when we sleep.
-    
     std::thread setterThread(setTemperaturePeriodically, &tsInterface);
 
     // Listen for DBus

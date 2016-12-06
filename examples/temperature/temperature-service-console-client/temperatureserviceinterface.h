@@ -21,9 +21,9 @@
 #include "TemperatureServiceConsoleClient_dbuscpp_proxy.h"
 #include "temperatureinterface.h"
 
-/*! Adapter between DBus and TemperatureService_proxy class
+/*
+ * Adapter between DBus and TemperatureService_proxy class
  */
-
 class TemperatureServiceInterface:
     public com::pelagicore::TemperatureService_proxy,
     public DBus::IntrospectableProxy,
