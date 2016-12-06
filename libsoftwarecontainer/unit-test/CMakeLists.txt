@@ -27,7 +27,7 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerlib
+    softwarecontainer
 )
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 

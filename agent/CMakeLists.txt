@@ -48,7 +48,7 @@ target_link_libraries(softwarecontainer-agent
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerlib
+    softwarecontainer
     softwarecontainercommon
 )
 

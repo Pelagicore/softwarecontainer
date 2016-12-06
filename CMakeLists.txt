@@ -121,22 +121,16 @@ endif()
 # RPATH options
 #
 
-# use, i.e. don't skip the full RPATH for the build tree
-set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+# Use RPATH only if we're not installing to a system directory
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" IS_SYSTEM_DIR)
+if(${IS_SYSTEM_DIR} STREQUAL "-1")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
 
-# when building, don't use the install RPATH already (but later on when installing)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
-
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-# the RPATH to be used when installing, but only if it's not a system directory
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
-endif("${isSystemDir}" STREQUAL "-1")
+#
+# Config options
+#
 
 SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR})
 SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer/lxc-templates)
@@ -152,6 +146,9 @@ if(ENABLE_PROFILING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILING_ENABLED=1")
 endif()
 
+#
+# Optionally include testing and coverage
+#
 if(ENABLE_TEST)
     include(AddGMock)
     add_gmock()
@@ -229,17 +226,15 @@ add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
 add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
 add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
 
-
 #
 # Add all sub-projects
 #
 add_subdirectory(common)
 add_subdirectory(libsoftwarecontainer)
-
 add_subdirectory(agent)
+add_subdirectory(doc)
 
 if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-add_subdirectory(doc)

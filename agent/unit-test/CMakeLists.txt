@@ -27,7 +27,7 @@ set(AGENT_TEST_LIBRARY_DEPENDENCIES
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerlib
+    softwarecontainer
     softwarecontainercommon
 )
 
@@ -35,7 +35,7 @@ set(CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES
     ${Glibmm_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
-    softwarecontainerlib
+    softwarecontainer
     softwarecontainercommon
 )
 
