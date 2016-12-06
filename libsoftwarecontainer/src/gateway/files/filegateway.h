@@ -47,6 +47,7 @@ public:
 
 private:
     virtual bool bindMount(const FileGatewayParser::FileSetting &setting);
+    ReturnCode mergeSetting(FileGatewayParser::FileSetting setting);
 
     std::vector<FileGatewayParser::FileSetting> m_settings;
 };

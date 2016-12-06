@@ -32,11 +32,14 @@ ReturnCode FileGateway::readConfigElement(const json_t *element)
     FileGatewayParser parser;
     FileGatewayParser::FileSetting setting;
 
-    if (isError(parser.parseFileGatewayConfigElement(element, setting))) {
+    if (isError(parser.parseConfigElement(element, setting))) {
         return ReturnCode::FAILURE;
     }
 
-    m_settings.push_back(setting);
+    if (isError(parser.matchEntry(setting, m_settings))) {
+        return ReturnCode::FAILURE;
+    }
+
     return ReturnCode::SUCCESS;
 }
 

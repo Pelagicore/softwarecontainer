@@ -70,3 +70,4 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     ASSERT_TRUE(gw->activate());
 }
 
+

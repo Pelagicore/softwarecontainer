@@ -81,6 +81,12 @@ retval=$(($retval+$?))
     --gtest_output=xml:softwarecontainerlib_unittest_result.xml
 retval=$(($retval+$?))
 
+if [ $retval -ne 0 ]; then
+	echo "********************************"
+	echo "*** ONE OR MORE TESTS FAILED ***"
+	echo "********************************"
+fi
+
 if ! kill $wpid > /dev/null 2>&1 ; then
     echo "Failed to kill weston at pid $wpid"
 fi
