@@ -345,7 +345,7 @@ The paths inside the container has to be absolute. There is a check for not moun
 existing mount paths.
 
 It is possible to supply the same host path in several configuration snippets to get the same file
-mounted onto several locations in the container. It is however not possible to supply the same
+mounted onto several locations in the container. However, It is not possible to supply the same
 container path several times unless the host path is also the same. In those cases, the gateway will
 merge the configurations and set the more permissive of the read-only settings for the file, with
 read-write being more permissive than read-only.

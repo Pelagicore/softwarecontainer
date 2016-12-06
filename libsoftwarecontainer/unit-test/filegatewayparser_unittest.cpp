@@ -38,7 +38,6 @@ public:
         ASSERT_TRUE(configJSON != NULL);
     }
 
-    const std::string FILE_CONTENT = "ahdkhqweuyreqiwenomndlaskmd";
     const std::string FILE_PATH = "/tmp/filename.txt";
     const std::string CONTAINER_PATH = "/filename.txt";
 };
@@ -46,7 +45,7 @@ public:
 /*
  * Test that a minimal working conf is accepted
  */
-TEST_F(FileGatewayParserTest, TestMinimalWorkingConf) {
+TEST_F(FileGatewayParserTest, MinimalWorkingConf) {
     const std::string config =
         "{"
             "  \"path-host\" : \"" + FILE_PATH + "\""
@@ -60,7 +59,7 @@ TEST_F(FileGatewayParserTest, TestMinimalWorkingConf) {
 /*
  * Test that things that should be strings are not accepted if they are not strings
  */
-TEST_F(FileGatewayParserTest, TestBadStrings) {
+TEST_F(FileGatewayParserTest, BadStrings) {
     const std::string config =
         "{"
             "  \"path-host\": true"
@@ -76,7 +75,7 @@ TEST_F(FileGatewayParserTest, TestBadStrings) {
 /*
  * Test that things that should be bools are not accepted if they are not bools
  */
-TEST_F(FileGatewayParserTest, TestBadBools) {
+TEST_F(FileGatewayParserTest, BadBools) {
     const std::string config =
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
@@ -92,7 +91,7 @@ TEST_F(FileGatewayParserTest, TestBadBools) {
 /*
  * Make sure configuration is rejected if no path in host is provided
  */
-TEST_F(FileGatewayParserTest, TestNoPathInHost) {
+TEST_F(FileGatewayParserTest, NoPathInHost) {
     const std::string config = 
         "{"
             "\"path-container\" : \"" + CONTAINER_PATH + "\""
@@ -105,7 +104,7 @@ TEST_F(FileGatewayParserTest, TestNoPathInHost) {
 /*
  * Make sure configuration is rejected if the path in host is an empty string
  */
-TEST_F(FileGatewayParserTest, TestEmptyPathInHost) {
+TEST_F(FileGatewayParserTest, EmptyPathInHost) {
     const std::string config = 
         "{"
             "  \"path-host\": \"\""
@@ -119,7 +118,7 @@ TEST_F(FileGatewayParserTest, TestEmptyPathInHost) {
 /*
  * Make sure configuration is rejected if the path in container is missing.
  */
-TEST_F(FileGatewayParserTest, TestNoPathInContainer) {
+TEST_F(FileGatewayParserTest, NoPathInContainer) {
     const std::string config =
         "{"
             "\"path-host\" : \"" + FILE_PATH + "\""
@@ -132,7 +131,7 @@ TEST_F(FileGatewayParserTest, TestNoPathInContainer) {
 /*
  * Make sure configuration is rejected if path in container is an empty string
  */
-TEST_F(FileGatewayParserTest, TestEmptyPathInContainer) {
+TEST_F(FileGatewayParserTest, EmptyPathInContainer) {
     const std::string config = 
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
@@ -147,7 +146,7 @@ TEST_F(FileGatewayParserTest, TestEmptyPathInContainer) {
  * Using the same configuration twice is ok, as long as the container path
  * is the same
  */
-TEST_F(FileGatewayParserTest, TestSameConfigTwice) {
+TEST_F(FileGatewayParserTest, SameConfigTwice) {
     const std::string config = 
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
@@ -168,7 +167,7 @@ TEST_F(FileGatewayParserTest, TestSameConfigTwice) {
  * Using the same paths but with different values on read-only is fine, since we
  * will use the most permissive setting.
  */
-TEST_F(FileGatewayParserTest, TestSameConfigReadWrite) {
+TEST_F(FileGatewayParserTest, ReadOnlyPrecedence) {
     const std::string config1 =
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
@@ -199,7 +198,7 @@ TEST_F(FileGatewayParserTest, TestSameConfigReadWrite) {
  * Testing same host path but different container paths is fine, we will
  * mount the same file to two places, no problems.
  */
-TEST_F(FileGatewayParserTest, TestSameHostPathDifferentContainerPath) {
+TEST_F(FileGatewayParserTest, SameHostPathDifferentContainerPath) {
     const std::string config1 =
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
@@ -223,7 +222,7 @@ TEST_F(FileGatewayParserTest, TestSameHostPathDifferentContainerPath) {
     ASSERT_EQ(2u, settings.size());
 }
 
-TEST_F(FileGatewayParserTest, TestDifferentHostPathSameContainerPath) {
+TEST_F(FileGatewayParserTest, DifferentHostPathSameContainerPath) {
     const std::string config1 =
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
