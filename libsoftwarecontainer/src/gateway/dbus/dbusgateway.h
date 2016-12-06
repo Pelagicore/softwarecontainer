@@ -101,6 +101,18 @@ private:
     int m_infp = INVALID_FD;
 
     virtual bool startDBusProxy(const std::vector<std::string> &commandVec, const std::vector<std::string> &envVec);
+
+    /**
+     * @brief This function will send configuration to dbus-proxy. The configuration here indicates
+     * a list off all configuration parameters that set. The dbus-proxy uses configuration as a
+     * filter list.
+     *
+     * When a D-Bus message comes to dbus-proxy, it is allowed only if there is a configuration with
+     * all matched parameters direction, interface, path and method.
+     *
+     * @return true if the configuration is successfully passed to dbus-proxy.
+     *         false otherwise
+     */
     virtual bool testDBusConnection(const std::string &config);
 };
 
