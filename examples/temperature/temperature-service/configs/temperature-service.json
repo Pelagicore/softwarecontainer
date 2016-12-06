@@ -74,7 +74,7 @@
                 {
                     "id": "env",
                     "config": [
-                        { 
+                        {
                             "name": "HOME",
                             "value": "/gateways/app"
                         }

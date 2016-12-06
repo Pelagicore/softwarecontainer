@@ -21,22 +21,22 @@
 #include "periodictemperature.h"
 #include "temperatureinterface.h"
 
-/*! Sets temperature periodically
+/*! 
+ *  Sets temperature periodically
  *  Until it reaches 40 and starts over from 0 after that
  */
 
 void setTemperaturePeriodically(TemperatureInterface *interface)
 {
     double temperature = 0.0;
-    bool success = true; 
-    while(success) {
+    while(true) {
 
         if(temperature > 40) {
             temperature = 0;
         }
 
         temperature = temperature + 0.5;
-        success = interface->setTemperature(temperature);
+        interface->setTemperature(temperature);
 
         // wait two seconds before seting temperature again
         sleep(2);
