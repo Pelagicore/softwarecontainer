@@ -26,7 +26,7 @@ add_definitions(${GATEWAY_DEFINITIONS})
 set(JOB_SOURCES "")
 add_subdirectory(jobs)
 
-add_library(softwarecontainerlib SHARED
+add_library(softwarecontainer SHARED
     container.cpp
     softwarecontainer.cpp
     workspace.cpp
@@ -37,7 +37,7 @@ add_library(softwarecontainerlib SHARED
     ${JOB_SOURCES}
 )
 
-TARGET_LINK_LIBRARIES(softwarecontainerlib
+TARGET_LINK_LIBRARIES(softwarecontainer
     softwarecontainercommon
     ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
@@ -47,5 +47,5 @@ TARGET_LINK_LIBRARIES(softwarecontainerlib
 
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 
-install(TARGETS softwarecontainerlib DESTINATION lib)
-set_target_properties(softwarecontainerlib PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
+install(TARGETS softwarecontainer DESTINATION lib)
+set_target_properties(softwarecontainer PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
