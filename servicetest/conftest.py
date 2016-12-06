@@ -98,6 +98,6 @@ def assert_no_proxy():
 
         Do the check both on setup and teardown
     """
-    assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouln't be"
+    assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouldn't be"
     yield
-    assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouln't be"
+    assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouldn't be"

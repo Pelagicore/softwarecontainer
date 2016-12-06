@@ -226,6 +226,8 @@ add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
 add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
 add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
 
+add_definitions(-DSERVICE_MANIFEST_DIR_OPT="${SERVICE_MANIFEST_DIR}")
+add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_OPT="${DEFAULT_SERVICE_MANIFEST_DIR}")
 #
 # Add all sub-projects
 #
@@ -237,4 +239,3 @@ add_subdirectory(doc)
 if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
-

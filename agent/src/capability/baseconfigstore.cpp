@@ -149,7 +149,7 @@ ReturnCode BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gat
         log_debug() << "Capability " << capName << " already loaded.";
         return ReturnCode::SUCCESS;
     }
-
+    
     size_t i;
     json_t *gateway;
 
