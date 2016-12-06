@@ -26,9 +26,9 @@
 
 class TemperatureService;
 
-/*! Adapter between DBus and TemperatureService class
+/*
+ * Adapter between DBus and TemperatureService class
  */
-
 class TemperatureServiceToDBusAdapter :
     public com::pelagicore::TemperatureService_adaptor,
     public DBus::IntrospectableAdaptor,

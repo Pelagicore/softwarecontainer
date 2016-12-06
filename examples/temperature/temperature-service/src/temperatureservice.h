@@ -24,31 +24,30 @@
 
 class TemperatureServiceToDBusAdapter;
 
-/*!
+/*
  * The TemperatureService class is where you implement
  * your service, this is the work horse.
  */
 
 class TemperatureService {
 public:
-    /*! Constructor
-     *
-     * Sets temperature to 0.0 per default.
+    /*
+     * @brief Sets temperature to 0.0 per default.
      */
     TemperatureService();
     ~TemperatureService();
 
     void setAdapter(TemperatureServiceToDBusAdapter *adapter);
 
-    /*! Returns temperature
-     *
-     * \return The current set temperature
+    /*
+     * @brief Return the current temperature
+     * @return The current set temperature
      */
     double getTemperature();
 
-    /*! Set temperature
-     *
-     * \param temperature the desired temperature to set
+    /*
+     * @brief Set the temperature
+     * @param temperature the desired temperature to set
      */
     void setTemperature(double temperature);
 
