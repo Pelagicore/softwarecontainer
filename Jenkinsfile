@@ -41,7 +41,7 @@ node {
         stage 'API documentation'
             runInVagrant(workspace, 'cd softwarecontainer/build && make api-doc')
         stage 'UnitTest'
-            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.sh")
+            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py")
         stage 'ServiceTest'
             runInVagrant(workspace, "cd softwarecontainer/servicetest && sudo ./run-tests.sh")
         stage 'Examples'

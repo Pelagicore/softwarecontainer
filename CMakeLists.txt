@@ -155,7 +155,7 @@ endif()
 if(ENABLE_TEST)
     include(AddGMock)
     add_gmock()
-    configure_file(scripts/run-tests.sh run-tests.sh COPYONLY)
+    configure_file(scripts/run-tests.py run-tests.py COPYONLY)
 endif()
 
 if(ENABLE_COVERAGE)
