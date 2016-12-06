@@ -29,7 +29,21 @@ public:
         std::string pathInHost;
         std::string pathInContainer;
         bool readOnly;
+
+        bool operator==(const FileSetting &rhs) {
+            return pathInContainer == rhs.pathInContainer;
+        }
     };
 
-    ReturnCode parseFileGatewayConfigElement(const json_t *element, FileSetting &setting);
+    /*
+     * Check that the provided json configuration is syntactically correct
+     */
+    ReturnCode parseConfigElement(const json_t *element, FileSetting &setting);
+
+    /*
+     * Check if the supplied file setting is already present in the list of settings,
+     * and if so, check that we can merge it or not. If it is not already present, we
+     * add the entry to the list.
+     */
+    ReturnCode matchEntry(FileSetting &setting, std::vector<FileSetting> &settings);
 };

@@ -27,6 +27,7 @@ class FileGatewayParserTest : public ::testing::Test
 public:
     FileGatewayParser parser;
     FileGatewayParser::FileSetting result;
+    std::vector<FileGatewayParser::FileSetting> settings;
 
     json_error_t err;
     json_t *configJSON;
@@ -53,7 +54,7 @@ TEST_F(FileGatewayParserTest, TestMinimalWorkingConf) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -67,7 +68,7 @@ TEST_F(FileGatewayParserTest, TestBadStrings) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
     ASSERT_TRUE(result.pathInHost.empty());
     ASSERT_TRUE(result.pathInContainer.empty());
 }
@@ -84,7 +85,7 @@ TEST_F(FileGatewayParserTest, TestBadBools) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
     ASSERT_FALSE(result.readOnly);
 }
 
@@ -98,7 +99,7 @@ TEST_F(FileGatewayParserTest, TestNoPathInHost) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -112,7 +113,7 @@ TEST_F(FileGatewayParserTest, TestEmptyPathInHost) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -125,7 +126,7 @@ TEST_F(FileGatewayParserTest, TestNoPathInContainer) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -139,6 +140,109 @@ TEST_F(FileGatewayParserTest, TestEmptyPathInContainer) {
         "}";
     convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseFileGatewayConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
 
+/*
+ * Using the same configuration twice is ok, as long as the container path
+ * is the same
+ */
+TEST_F(FileGatewayParserTest, TestSameConfigTwice) {
+    const std::string config = 
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "\""
+        "}";
+    convertToJSON(config);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+}
+
+/*
+ * Using the same paths but with different values on read-only is fine, since we
+ * will use the most permissive setting.
+ */
+TEST_F(FileGatewayParserTest, TestSameConfigReadWrite) {
+    const std::string config1 =
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "\""
+            ", \"read-only\": true"
+        "}";
+    convertToJSON(config1);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+
+    const std::string config2 =
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "\""
+            ", \"read-only\": false"
+        "}";
+    convertToJSON(config2);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+    ASSERT_EQ(settings.at(0).readOnly, false);
+}
+
+/*
+ * Testing same host path but different container paths is fine, we will
+ * mount the same file to two places, no problems.
+ */
+TEST_F(FileGatewayParserTest, TestSameHostPathDifferentContainerPath) {
+    const std::string config1 =
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "\""
+        "}";
+    convertToJSON(config1);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+
+    const std::string config2 =
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "2\""
+        "}";
+    convertToJSON(config2);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(2u, settings.size());
+}
+
+TEST_F(FileGatewayParserTest, TestDifferentHostPathSameContainerPath) {
+    const std::string config1 =
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "\""
+        "}";
+    convertToJSON(config1);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+
+    const std::string config2 =
+        "{"
+            "  \"path-host\": \"" + FILE_PATH + "2\""
+            ", \"path-container\": \"" + CONTAINER_PATH + "\""
+        "}";
+    convertToJSON(config2);
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_EQ(ReturnCode::FAILURE, parser.matchEntry(result, settings));
+    ASSERT_EQ(1u, settings.size());
+}

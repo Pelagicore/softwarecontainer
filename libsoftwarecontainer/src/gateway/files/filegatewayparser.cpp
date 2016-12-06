@@ -20,8 +20,7 @@
 #include "filegatewayparser.h"
 #include "jsonparser.h"
 
-ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *element,
-                                                            FileSetting &setting)
+ReturnCode FileGatewayParser::parseConfigElement(const json_t *element, FileSetting &setting)
 {
     if (!JSONParser::read(element, "path-host", setting.pathInHost)) {
         log_error() << "path-host key missing or of wrong type";
@@ -51,3 +50,21 @@ ReturnCode FileGatewayParser::parseFileGatewayConfigElement(const json_t *elemen
     return ReturnCode::SUCCESS;
 }
 
+ReturnCode FileGatewayParser::matchEntry(FileSetting &setting, std::vector<FileSetting> &settings)
+{
+    auto it = std::find(settings.begin(), settings.end(), setting);
+    if (it != settings.end()) {
+        if (it->pathInHost != setting.pathInHost) {
+            log_error() << "Specifying two files with destination path "
+                        << setting.pathInContainer << " but different host paths, "
+                        << "this is an error";
+            return ReturnCode::FAILURE;
+        } else {
+            it->readOnly &= setting.readOnly;
+            return ReturnCode::SUCCESS;
+        }
+    }
+
+    settings.push_back(setting);
+    return ReturnCode::SUCCESS;
+}
