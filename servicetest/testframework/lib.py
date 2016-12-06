@@ -1,4 +1,4 @@
-
+#
 # Copyright (C) 2016 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -65,7 +65,8 @@ class Container():
         """ Set a gateway config by passing an id and a Python object equivalent to a JSON
             config.
         """
-        result = self.__agent.SetGatewayConfigs(self.__container_id, {gateway_id: json.dumps(config)})
+        result = self.__agent.SetGatewayConfigs(self.__container_id,
+                                                {gateway_id: json.dumps(config)})
         return True if result == dbus.Boolean(True) else False
 
 
@@ -180,9 +181,9 @@ class SoftwareContainerAgentHandler():
         # Applying arguments to the softwarecontainer-agent call
         cmd = ["softwarecontainer-agent"]
         if caps_dir is not None:
-            cmd += ['--caps-dir', caps_dir]
+            cmd += ['--manifest-dir', caps_dir]
         if default_caps_dir is not None:
-            cmd += ['--default-caps-dir', default_caps_dir]
+            cmd += ['--default-manifest-dir', default_caps_dir]
 
         self.__rec = Receiver()
         self.__rec.start()
@@ -191,9 +192,7 @@ class SoftwareContainerAgentHandler():
         # Starting softwarecontainer-agent
         # TODO: This doesn't work if the user pass 'None' as log_file_path
         assert log_file_path is not None
-        print(cmd)
         self.__agent = subprocess.Popen(cmd, stdout=self.__log_file, stderr=self.__log_file)
-        print(self.__agent)
 
         try:
             # Wait for the softwarecontainerStarted message to appear on the

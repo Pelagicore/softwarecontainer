@@ -1,7 +1,7 @@
 {
     "version": "1",
     "capabilities": [{
-        "name": "com.pelagicore.sample.default",
+        "name": "com.pelagicore.sample.simple",
         "gateways": [{
             "id": "dbus",
             "config": [{
@@ -11,7 +11,7 @@
                     "direction": "outgoing",
                     "interface": "org.freedesktop.DBus.Introspectable",
                     "object-path": "/com/pelagicore/TemperatureService",
-                    "method": "Introspect"
+                    "method": "GetTemperature"
                 }]
             }]
         }]

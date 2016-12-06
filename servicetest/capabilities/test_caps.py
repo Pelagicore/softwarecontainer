@@ -25,6 +25,11 @@ from testframework import Container
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 
+##### Configs #####
+
+# These configurations are passed to the Helper to write Service Manifests
+# to file which can be read by ConfigStore when initiating the Agent.
+
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
@@ -32,7 +37,7 @@ def logfile_path():
 
 # This function is used by the 'agent' fixture to know where to search for capabilities
 def caps_dirs():
-    return "{}/caps.d".format(CURRENT_DIR), "{}/caps.default.d".format(CURRENT_DIR)
+    return "{}/caps.d/".format(CURRENT_DIR), "{}/caps.default.d/".format(CURRENT_DIR)
 
 # These default values are used to pass various test specific values and
 # configurations to the Container helper. Tests that need to add, remove or
@@ -49,18 +54,52 @@ class TestCaps(object):
     """ This suite tests that capabilities can be used with SoftwareContainer with
         expected results.
 
-        The tests use the Agent D-Bus interface to drive the tests. Test apps are used
-        inside the container to excercise different gateways. The purpose is not to test
-        the gatways or their configs, which is done in more specific test suites, but rather
-        to make sure the capabilities result in the correct gatway configs being applied.
+        The tests use the Agent D-Bus interface to enable gateway configurations,
+        for a specified list of capabilities. Default gateway configurations will
+        always be applied.
 
-        TODO: Above is not currently true, these tests are only for the currently stubbed
-              implementation in SC.
-        TODO: How to piggy-back on the other tests that already do these things?
+        The purpose is not to test the gatweays or their configs, which is done in
+        more specific test suites, but rather to make sure the capabilities result
+        in the correct gateway configs being applied.
     """
 
-    def test_caps(self):
-        """ Test setting a capability works, i.e. the API is there  on D-Bus
+    def test_set_caps_only_default(self):
+        """ Test that setting the default capabilities works when sending
+            an empty list of capabilities, i.e. no error is returned
+        """
+        sc = Container()
+        try:
+            success = sc.start(DATA)
+            assert success is True
+
+            caps_set = sc.set_capabilities([])
+            assert caps_set is True
+
+            ## TODO verify that config is valid and can be used
+        finally:
+            sc.terminate()
+
+    def test_set_caps(self):
+        """ Test that setting an existing capability works,
+            i.e. no error is returned
+        """
+        sc = Container()
+        try:
+            success = sc.start(DATA)
+            assert success is True
+
+            caps_set = sc.set_capabilities(["com.pelagicore.sample.simple"])
+            assert caps_set is True
+
+            ## TODO verify that config is valid and can be used
+        finally:
+            sc.terminate()
+
+    def test_evil_caps(self):
+        """ Test that setting a non-existing capability works,
+            i.e. no error is returned by the D-Bus API.
+            Note: Since we do have a default Service Manifest this test
+            will still send configuration to D-BUS.
         """
         sc = Container()
         try:
@@ -68,6 +107,9 @@ class TestCaps(object):
             assert success is True
 
             caps_set = sc.set_capabilities(["test.dbus", "test.network"])
-            assert caps_set is True
+            assert caps_set is True ## This may need to be revised if error handling is changed
+
+            ## The default config will be applied.
+            ## TODO verify that config is valid and can be used?
         finally:
             sc.terminate()
