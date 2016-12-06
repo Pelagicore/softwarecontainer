@@ -134,7 +134,10 @@ All the values can be substituted with the wildcard character ``*`` with the mea
 "direction" set to ``*`` will mean both incoming and outgoing, and a ``method`` set to ``*`` will
 match all method and signal names for the interface and object path specified.
 
-If a bus configuration is just an empty array it means all access to that bus will be blocked.
+If a bus configuration is just an empty array it means all access to that bus will be blocked. When
+a D-Bus message is sent, the ``dbus-proxy`` compares message's ``direction``, ``interface``, ``path``
+and ``method`` with configuration list. if a matching rule is found, the message is allowed to forward;
+otherwise it is dropped.
 
 Example configurations
 ----------------------
