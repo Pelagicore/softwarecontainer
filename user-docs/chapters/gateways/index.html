@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.12.0-43b4de2 2016-12-06 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.12.0-ffaffca 2016-12-07 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-43b4de2 2016-12-06',
+        VERSION:     '0.12.0-ffaffca 2016-12-07',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-43b4de2 2016-12-06 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-ffaffca 2016-12-07 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -355,6 +355,11 @@ the container.</p>
 <h3>Configuration<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <p>The paths inside the container has to be absolute. There is a check for not mounting over already
 existing mount paths.</p>
+<p>It is possible to supply the same host path in several configuration snippets to get the same file
+mounted onto several locations in the container. However, It is not possible to supply the same
+container path several times unless the host path is also the same. In those cases, the gateway will
+merge the configurations and set the more permissive of the read-only settings for the file, with
+read-write being more permissive than read-only.</p>
 </div>
 <div class="section" id="id13">
 <h3>Example configurations<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
