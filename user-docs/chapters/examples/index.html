@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SoftwareContainer examples &#8212; softwarecontainer 0.12.0-6603d7f 2016-12-07 documentation</title>
+    <title>SoftwareContainer examples &#8212; softwarecontainer 0.12.0-e0e348a 2016-12-07 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-6603d7f 2016-12-07',
+        VERSION:     '0.12.0-e0e348a 2016-12-07',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-6603d7f 2016-12-07 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-e0e348a 2016-12-07 documentation" href="../../index.html" />
     <link rel="next" title="API" href="../api/index.html" />
     <link rel="prev" title="Getting started" href="../getting-started/index.html" />
    
@@ -56,8 +56,16 @@ this example starts the agent, bind mounts the directory in which it (and the co
 binary) exists into the container, and launches the simple binary. It runs for 30 secs, and then
 shuts down the container, and the agent.</p>
 </div>
+<div class="section" id="temperature-example">
+<span id="id2"></span><h2>Temperature Example<a class="headerlink" href="#temperature-example" title="Permalink to this headline">¶</a></h2>
+<p>The temperature example consists of a temperature service, and a temperature client. The service
+runs on the host system, and the client is meant to run inside the container. The two communicate
+over DBus, so the DBus gateway is set up to allow traffic on DBus between the host and container.</p>
+<p>The client tells the service to set the temperature once every second, and when the service emits
+a signal that the temperature changed, the client logs this to a file.</p>
+</div>
 <div class="section" id="wayland-example">
-<span id="id2"></span><h2>Wayland example<a class="headerlink" href="#wayland-example" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h2>Wayland example<a class="headerlink" href="#wayland-example" title="Permalink to this headline">¶</a></h2>
 <p>The Wayland example is not an example that is built in SoftwareContainer. Instead, it is only a
 launch script that, before it launches the agent, sets up weston (a Wayland compositor). It then
 creates a container and configures it for wayland access.  Then, it relies on the weston example
@@ -76,6 +84,7 @@ while, and shuts down.</p>
   <ul>
 <li><a class="reference internal" href="#">SoftwareContainer examples</a><ul>
 <li><a class="reference internal" href="#simple-example">Simple example</a></li>
+<li><a class="reference internal" href="#temperature-example">Temperature Example</a></li>
 <li><a class="reference internal" href="#wayland-example">Wayland example</a></li>
 </ul>
 </li>
