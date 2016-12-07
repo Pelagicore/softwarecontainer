@@ -468,3 +468,5 @@ Example configuration enabling Wayland::
         { "enabled": true }
     ]
 
+The configuration of the Wayland gateway can be set several times, but once it has been set to ``true``
+it will retain its value.

@@ -30,7 +30,8 @@ constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
 
 WaylandGateway::WaylandGateway() :
-    Gateway(ID)
+    Gateway(ID),
+    m_enabled(false)
 {
 }
 
@@ -40,9 +41,15 @@ WaylandGateway::~WaylandGateway()
 
 ReturnCode WaylandGateway::readConfigElement(const json_t *element)
 {
-    if (!JSONParser::read(element, ENABLED_FIELD, m_enabled)) {
+    bool configValue = false;
+
+    if (!JSONParser::read(element, ENABLED_FIELD, configValue)) {
         log_error() << "Key " << ENABLED_FIELD << " missing or not bool in json configuration";
         return ReturnCode::FAILURE;
+    }
+
+    if (!m_enabled) {
+        m_enabled = configValue;
     }
 
     return ReturnCode::SUCCESS;

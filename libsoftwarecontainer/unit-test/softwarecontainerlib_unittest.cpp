@@ -54,13 +54,17 @@ public:
     }
 };
 
-TEST_F(SoftwareContainerApp, TestWayland) {
+TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
 
     GatewayConfiguration config;
     std::string configStr = "[ { \"enabled\" : true } ]";
+    std::string configStrFalse = "[ { \"enabled\" : false } ]";
     json_error_t error;
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
+    config.append(WaylandGateway::ID ,configJson);
+
+    configJson = json_loads(configStrFalse.c_str(), 0, &error);
     config.append(WaylandGateway::ID ,configJson);
     setGatewayConfigs(config);
 
