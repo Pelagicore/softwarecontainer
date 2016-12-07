@@ -72,7 +72,11 @@ bool DBusGateway::activateGateway()
 
     // Give the dbus-proxy access to the real dbus bus address.
     std::vector<std::string> envVec;
-    if (char *envValue = getenv(variable.c_str())) {
+
+    bool hasEnvVar = false;
+    std::string envValue = Glib::getenv(variable, hasEnvVar);
+
+    if (hasEnvVar) {
         envVec.push_back(variable + "=" + envValue);
     } else if (m_type == SessionProxy) {
         log_error() << "Using DBus gateway in session mode"

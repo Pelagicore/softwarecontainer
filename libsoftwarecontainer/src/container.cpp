@@ -145,7 +145,7 @@ ReturnCode Container::create()
     }
 
     setenv("GATEWAY_DIR", gatewaysDir().c_str(), true);
-    log_debug() << "GATEWAY_DIR : " << getenv("GATEWAY_DIR");
+    log_debug() << "GATEWAY_DIR : " << Glib::getenv("GATEWAY_DIR");
 
     auto configFile = m_configFile.c_str();
     log_debug() << "Config file : " << configFile;

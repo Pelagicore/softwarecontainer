@@ -72,16 +72,17 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
         bool ERROR = 1;
         bool SUCCESS = 0;
 
-        const char *waylandDir = getenv("XDG_RUNTIME_DIR");
-        log_debug() << "Wayland dir : " << waylandDir;
-        if (waylandDir == nullptr) {
+        bool hasWayland = false;
+        std::string waylandDir = Glib::getenv(WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME,
+                                              hasWayland);
+        if (!hasWayland) {
+            log_error() << "No wayland dir";
             return ERROR;
         }
-
+        log_debug() << "Wayland dir : " << waylandDir;
         std::string socketPath = StringBuilder() << waylandDir << "/"
                                                  << WaylandGateway::SOCKET_FILE_NAME;
         log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
-
         if ( !isSocket(socketPath) ) {
             return ERROR;
         }
@@ -183,7 +184,9 @@ TEST_F(SoftwareContainerApp, CommonFunctions) {
 
 TEST_F(SoftwareContainerApp, EnvVarsSet) {
     FunctionJob job(getSc(), [&] () {
-        return getenv("TESTVAR") != NULL ? 0 : 1;
+        bool hasTestVar = false;
+        Glib::getenv("TESTVAR", hasTestVar);
+        return hasTestVar ? 0 : 1;
     });
     job.setEnvironmentVariable("TESTVAR","YES");
     job.start();
