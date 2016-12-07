@@ -73,11 +73,8 @@ export SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 # Introspect the agent
 $SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 
-# Ping the agent
-$SC_CMD $AGENTPREFIX.Ping
-
 # Create a new container
-$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.Create string:'[{"writeOften": "0"}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="uint32:0"
@@ -85,7 +82,7 @@ ROOTID="uint32:0"
 OUTFILE="/tmp/stdout"
 
 # Expose a directory to the container
-$SC_CMD $AGENTPREFIX.BindMountFolderInContainer \
+$SC_CMD $AGENTPREFIX.BindMount \
     $CONTAINERID \
     string:${SCRIPTPATH} \
     string:app \
@@ -93,7 +90,7 @@ $SC_CMD $AGENTPREFIX.BindMountFolderInContainer \
 APPBASE="/gateways/app"
 
 # Run the simple example
-$SC_CMD $AGENTPREFIX.LaunchCommand \
+$SC_CMD $AGENTPREFIX.Execute \
     $CONTAINERID \
     $ROOTID \
     string:$APPBASE/simple \
