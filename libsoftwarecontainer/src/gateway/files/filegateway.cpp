@@ -23,7 +23,7 @@
 
 FileGateway::FileGateway()
     : Gateway(ID)
-    , m_settings({})
+    , m_store()
 {
 }
 
@@ -36,7 +36,7 @@ ReturnCode FileGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    if (isError(parser.matchEntry(setting, m_settings))) {
+    if (isError(m_store.addSetting(setting))) {
         return ReturnCode::FAILURE;
     }
 
@@ -45,30 +45,28 @@ ReturnCode FileGateway::readConfigElement(const json_t *element)
 
 bool FileGateway::activateGateway()
 {
-    if (m_settings.size() > 0) {
-        for (FileGatewayParser::FileSetting &setting : m_settings) {
-            if (!bindMount(setting)) {
-                log_error() << "Bind mount failed";
-                return false;
-            }
+    const std::vector<FileGatewayParser::FileSetting> settings = m_store.getSettings();
+    for (const FileGatewayParser::FileSetting &setting : settings) {
+        if (!bindMount(setting)) {
+            return false;
         }
-        return true;
     }
-
-    return false;
+    return true;
 }
 
 bool FileGateway::bindMount(const FileGatewayParser::FileSetting &setting)
 {
+    std::shared_ptr<ContainerAbstractInterface> con = getContainer();
+
     if (isDirectory(setting.pathInHost)) {
-        if (isError(getContainer()->bindMountFolderInContainer(setting.pathInHost,
+        if (isError(con->bindMountFolderInContainer(setting.pathInHost, 
                                                     setting.pathInContainer,
                                                     setting.readOnly))) {
             log_error() << "Could not bind mount folder into container";
             return false;
         }
     } else {
-        if (isError(getContainer()->bindMountFileInContainer(setting.pathInHost,
+        if (isError(con->bindMountFileInContainer(setting.pathInHost,
                                                   setting.pathInContainer,
                                                   setting.readOnly))) {
             log_error() << "Could not bind mount file into container";

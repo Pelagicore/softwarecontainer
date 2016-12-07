@@ -56,6 +56,7 @@ set(DEFAULT_GATEWAYS TRUE)
 add_gateway_test(DEFAULT_GATEWAYS envgatewayparser_unittest.cpp)
 add_gateway_test(DEFAULT_GATEWAYS filegateway_unittest.cpp)
 add_gateway_test(DEFAULT_GATEWAYS filegatewayparser_unittest.cpp)
+add_gateway_test(DEFAULT_GATEWAYS filegatewaysettingstore_unittest.cpp)
 
 set(TEST_FILES
     softwarecontainer_test.cpp
