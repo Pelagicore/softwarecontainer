@@ -46,11 +46,12 @@ bool PulseGateway::activateGateway()
         log_debug() << "Audio will be disabled";
         return true;
     }
-
     log_debug() << "Audio will be enabled";
-    const char *dir = getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME);
 
-    if (dir == nullptr) {
+    bool hasPulse = false;
+    std::string dir = Glib::getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, hasPulse);
+
+    if (!hasPulse) {
         log_error() << "Should enable pulseaudio gateway, but "
                     << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
         return false;

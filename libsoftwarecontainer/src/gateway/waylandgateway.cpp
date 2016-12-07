@@ -62,8 +62,9 @@ bool WaylandGateway::activateGateway()
         return true;
     }
 
-    const char *dir = getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME);
-    if (dir == nullptr) {
+    bool hasWayland = false;
+    std::string dir = Glib::getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, hasWayland);
+    if (!hasWayland) {
         log_error() << "Should enable wayland gateway, but " << WAYLAND_RUNTIME_DIR_VARIABLE_NAME << " is not defined";
         return false;
     }

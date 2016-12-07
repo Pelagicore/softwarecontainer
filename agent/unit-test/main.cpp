@@ -30,7 +30,9 @@ LOG_DECLARE_CONTEXT(SoftwareContainer_DefaultLogContext, "PCON", "Main context")
 
 int main(int argc, char * *argv)
 {
-    if (!std::getenv("LOG_OUTPUT")) {
+    bool logOutput = false;
+    Glib::getenv("LOG_OUTPUT", logOutput);
+    if (!logOutput) {
         // Silence the logger
         logging::ConsoleLogContext::setGlobalLogLevel(logging::LogLevel::None);
     }
