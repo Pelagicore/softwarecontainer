@@ -26,6 +26,7 @@
 
 #include "gateway.h"
 #include "filegatewayparser.h"
+#include "filegatewaysettingstore.h"
 
 /**
  * This gateway lets you map files (including socket files) or folders
@@ -47,7 +48,6 @@ public:
 
 private:
     virtual bool bindMount(const FileGatewayParser::FileSetting &setting);
-    ReturnCode mergeSetting(FileGatewayParser::FileSetting setting);
 
-    std::vector<FileGatewayParser::FileSetting> m_settings;
+    FileGatewaySettingStore m_store;
 };

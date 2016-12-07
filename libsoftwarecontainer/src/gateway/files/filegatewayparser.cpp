@@ -49,22 +49,3 @@ ReturnCode FileGatewayParser::parseConfigElement(const json_t *element, FileSett
 
     return ReturnCode::SUCCESS;
 }
-
-ReturnCode FileGatewayParser::matchEntry(FileSetting &setting, std::vector<FileSetting> &settings)
-{
-    auto it = std::find(settings.begin(), settings.end(), setting);
-    if (it != settings.end()) {
-        if (it->pathInHost != setting.pathInHost) {
-            log_error() << "Specifying two files with destination path "
-                        << setting.pathInContainer << " but different host paths, "
-                        << "this is an error";
-            return ReturnCode::FAILURE;
-        } else {
-            it->readOnly &= setting.readOnly;
-            return ReturnCode::SUCCESS;
-        }
-    }
-
-    settings.push_back(setting);
-    return ReturnCode::SUCCESS;
-}
