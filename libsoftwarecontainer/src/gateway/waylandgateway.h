@@ -42,5 +42,5 @@ public:
     virtual bool teardownGateway();
 
 private:
-    bool m_enabled = false;
+    bool m_enabled;
 };
