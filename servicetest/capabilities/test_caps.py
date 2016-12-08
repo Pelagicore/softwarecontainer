@@ -95,6 +95,7 @@ class TestCaps(object):
         finally:
             sc.terminate()
 
+    @pytest.mark.xfail() # See reported issue
     def test_evil_caps(self):
         """ Test that setting a non-existing capability works,
             i.e. no error is returned by the D-Bus API.
@@ -107,9 +108,6 @@ class TestCaps(object):
             assert success is True
 
             caps_set = sc.set_capabilities(["test.dbus", "test.network"])
-            assert caps_set is True ## This may need to be revised if error handling is changed
-
-            ## The default config will be applied.
-            ## TODO verify that config is valid and can be used?
+            assert caps_set is False ## This should fail when error handling is revised
         finally:
             sc.terminate()
