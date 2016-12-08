@@ -16,8 +16,6 @@
 #
 # For further information see LICENSE
 
-
-
 set(HEADERS
     softwarecontainer-common.h
     softwarecontainer-log.h
@@ -42,7 +40,6 @@ add_library(softwarecontainercommon SHARED
     recursivecopy.cpp
     gatewayconfig.cpp
 )
-
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
 install(TARGETS softwarecontainercommon DESTINATION lib)

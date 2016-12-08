@@ -26,8 +26,6 @@ set(TEST_LIBRARY_DEPENDENCIES
     softwarecontainercommon
 )
 
-include_directories(${SOFTWARECONTAINER_COMMON_DIR})
-
 set(TEST_FILES
     softwarecontainer-common_unittest.cpp
     recursivecopy_unittest.cpp

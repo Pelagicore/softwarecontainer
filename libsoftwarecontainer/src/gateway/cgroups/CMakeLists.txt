@@ -15,8 +15,6 @@
 #
 # For further information see LICENSE
 
-message(STATUS "Compiling with gateway support for cgroups")
-
 set(CGROUPS_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/cgroupsgateway.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cgroupsparser.cpp

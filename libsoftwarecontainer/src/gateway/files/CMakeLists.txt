@@ -15,8 +15,6 @@
 #
 # For further information see LICENSE
 
-message(STATUS "Compiling with gateway support for files")
-
 set(FILE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/filegateway.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/filegatewayparser.cpp

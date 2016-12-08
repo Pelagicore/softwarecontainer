@@ -29,7 +29,10 @@ set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainer
 )
-include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
+
+include_directories(
+    ${LIBSOFTWARECONTAINER_DIR}/src
+)
 
 set(GATEWAY_TEST_FILES "")
 macro(add_gateway_test GATEWAY_FLAG FILENAME)
@@ -52,11 +55,11 @@ add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY iptableentry_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayparser_unittest.cpp)
 
-set(DEFAULT_GATEWAYS TRUE)
-add_gateway_test(DEFAULT_GATEWAYS envgatewayparser_unittest.cpp)
-add_gateway_test(DEFAULT_GATEWAYS filegateway_unittest.cpp)
-add_gateway_test(DEFAULT_GATEWAYS filegatewayparser_unittest.cpp)
-add_gateway_test(DEFAULT_GATEWAYS filegatewaysettingstore_unittest.cpp)
+add_gateway_test(ENABLE_ENVGATEWAY envgatewayparser_unittest.cpp)
+
+add_gateway_test(ENABLE_FILEGATEWAY filegateway_unittest.cpp)
+add_gateway_test(ENABLE_FILEGATEWAY filegatewayparser_unittest.cpp)
+add_gateway_test(ENABLE_FILEGATEWAY filegatewaysettingstore_unittest.cpp)
 
 set(TEST_FILES
     softwarecontainer_test.cpp
