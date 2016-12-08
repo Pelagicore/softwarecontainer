@@ -23,8 +23,10 @@ project(softwarecontainer)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
-# load GNUInstallDirs module
+# load the GNUInstallDirs module to get some standard paths defined, and load the FeatureSummary
+# module to be able to print a nice summary of configuration in the end of the script.
 include(GNUInstallDirs)
+include(FeatureSummary)
 
 #
 # Set software version
@@ -46,7 +48,6 @@ string(TIMESTAMP DATE "%Y-%m-%d")
 
 if(EXTRA_PKG_CONFIG_PATH)
     set(ENV{PKG_CONFIG_PATH} ${EXTRA_PKG_CONFIG_PATH})
-    message(STATUS "Using PKG_CONFIG_PATH: " ${EXTRA_PKG_CONFIG_PATH})
 endif(EXTRA_PKG_CONFIG_PATH)
 
 find_package(PkgConfig          REQUIRED)
@@ -57,11 +58,13 @@ pkg_check_modules(Glibmm        REQUIRED glibmm-2.4>=2.42.0)
 pkg_check_modules(LXC           REQUIRED lxc>=2.0.0)
 pkg_check_modules(Jansson       REQUIRED jansson>=2.6)
 
+# These are needed by all sub-projects
 add_definitions(${IVILogging_CFLAGS_OTHER})
+add_definitions(${Jansson_CFLAGS_OTHER})
+
 add_definitions(${DBusCpp_CFLAGS_OTHER})
 add_definitions(${Glibmm_CFLAGS_OTHER})
 add_definitions(${LXC_CFLAGS_OTHER})
-add_definitions(${Jansson_CFLAGS_OTHER})
 add_definitions(-DINSTALL_BINDIR="${CMAKE_INSTALL_FULL_BINDIR}")
 
 include_directories(${IVILogging_INCLUDE_DIRS})
@@ -70,19 +73,16 @@ include_directories(${Glibmm_INCLUDE_DIRS})
 include_directories(${LXC_INCLUDE_DIRS})
 include_directories(${Jansson_INCLUDE_DIRS})
 
-include_directories(
-    common
-    libsoftwarecontainer/src
-    libsoftwarecontainer/include
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/libsoftwarecontainer/src
-)
-
 link_directories(${IVILogging_LIBRARY_DIRS})
 link_directories(${DBusCpp_LIBRARY_DIRS})
 link_directories(${Glibmm_LIBRARY_DIRS})
 link_directories(${LXC_LIBRARY_DIRS})
 link_directories(${Jansson_LIBRARY_DIRS})
+
+include_directories(
+    common
+    libsoftwarecontainer/include
+)
 
 #
 # All available options goes here
@@ -90,28 +90,62 @@ link_directories(${Jansson_LIBRARY_DIRS})
 
 # Options on enabling / disabling gateways at compile-time
 option(ENABLE_PULSEGATEWAY "Enables the pulse gateway" ON)
+add_feature_info("PulseAudio Gateway" ENABLE_PULSEGATEWAY "Provides access to PulseAudio sockets")
+
 option(ENABLE_NETWORKGATEWAY "Enables the network gateway" ON)
+add_feature_info("Network Gateway" ENABLE_NETWORKGATEWAY "Provides firewalled network access")
+
 option(ENABLE_DEVICENODEGATEWAY "Enables the device node gateway" ON)
+add_feature_info("Device Node Gateway" ENABLE_DEVICENODEGATEWAY "Provides access to device nodes")
+
 option(ENABLE_DBUSGATEWAY "Enables the DBus gateway" ON)
+add_feature_info("D-Bus Gateway" ENABLE_DBUSGATEWAY "Allows access to D-Bus services")
+
 option(ENABLE_CGROUPSGATEWAY "Enables the cgroups gateway" ON)
+add_feature_info("CGroups Gateway" ENABLE_CGROUPSGATEWAY
+                 "The CGroups gateway allows to set cgroups options for the container")
+
 option(ENABLE_WAYLANDGATEWAY "Enables the wayland gateway" ON)
+add_feature_info("Wayland Gateway" ENABLE_WAYLANDGATEWAY "Makes it possible to use wayland")
+
 option(ENABLE_FILEGATEWAY "Enables the file gateway" ON)
+add_feature_info("File Gateway" ENABLE_FILEGATEWAY
+                 "Makes it possible to mount files and directories into the container")
+
 option(ENABLE_ENVGATEWAY "Enables the environment gateway" ON)
+add_feature_info("Environment Gateway" ENABLE_ENVGATEWAY
+                 "Allows for setting environment variables in the container")
 
 # Options on various things
 option(ENABLE_SYSTEMD "Installs systemd service files" ON)
+add_feature_info("SystemD Service File" ENABLE_SYSTEMD "Install the systemd service files")
+
 option(ENABLE_TEST "Enables unit testing" ON)
+add_feature_info("Unit Tests" ENABLE_TEST "Build the unit tests")
+
 option(ENABLE_PROFILING "Enables profiling support in the application" OFF)
+add_feature_info("Profiling support" ENABLE_PROFILING "Enables profiling support")
+
 option(ENABLE_COVERAGE "Enable coverage support in the build" OFF)
+add_feature_info("Coverage support" ENABLE_COVERAGE "Build with coverage support")
+
 option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
+add_feature_info("Examples" ENABLE_EXAMPLES "Enable building and installation of examples")
+
 option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
+add_feature_info("Network Bridge" CREATE_BRIDGE "SoftwareContainer will create network bridge if missing")
+
 option(ENABLE_SYSTEM_BUS "Enables the SoftwareContainerAgent to communicate over the system bus" ON)
+add_feature_info("System D-Bus" ENABLE_SYSTEM_BUS "Install policy file for the D-Bus system bus")
 
 # Options for documentation
 option(ENABLE_USER_DOC "Enable building and installation of the user documentation" OFF)
-option(ENABLE_API_DOC "Enable building and installation of the api documentation" OFF)
-option(ENABLE_ALL_DOC "Enable building and installation of both the user and the api documentation." OFF)
+add_feature_info("User documentation" ENABLE_USER_DOC "Enable building and installation of the user documentation")
 
+option(ENABLE_API_DOC "Enable building and installation of the api documentation" OFF)
+add_feature_info("API documentation" ENABLE_API_DOC "Enable building and installation of the api documentation")
+
+option(ENABLE_ALL_DOC "Enable building and installation of both the user and the api documentation." OFF)
 if(ENABLE_ALL_DOC)
     set(ENABLE_API_DOC ON)
     set(ENABLE_USER_DOC ON)
@@ -124,6 +158,9 @@ endif()
 # picked up by the ConfigDefaults class to be used for default config
 # values.
 #
+
+SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/)
+add_feature_info("Config directory" TRUE "Configuration files will be installed in ${SYS_CONFIG_DIR}")
 
 # Since the general config file needs a lower case string as value
 # for the booleans, we need to set specific variables for these
@@ -144,9 +181,9 @@ endif()
 set(PRELOAD_COUNT 1)
 set(SHUTDOWN_TIMEOUT 1)
 set(SHARED_MOUNTS_DIR "/tmp/container/")
-set(LXC_CONFIG_PATH "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer.conf")
-set(SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.d/")
-set(DEFAULT_SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.default.d/")
+set(LXC_CONFIG_PATH "${SYS_CONFIG_DIR}/softwarecontainer.conf")
+set(SERVICE_MANIFEST_DIR "${SYS_CONFIG_DIR}/service-manifest.d/")
+set(DEFAULT_SERVICE_MANIFEST_DIR "${SYS_CONFIG_DIR}/service-manifest.default.d/")
 
 # Export definitions for the ConfigDefaults class
 add_definitions(-DPRELOAD_COUNT=${PRELOAD_COUNT})
@@ -166,6 +203,14 @@ add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
 add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
 add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
 
+# Set and define the path to the general config file, used by the agent
+# as default location if nothing else is set on command line when starting
+# the agent.
+set(SC_CONFIG_FILE "${SYS_CONFIG_DIR}/softwarecontainer-config")
+add_definitions(-DSC_CONFIG_FILE="${SC_CONFIG_FILE}")
+
+SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer/lxc-templates)
+add_feature_info("LXC template" TRUE "LXC template will be installed in ${LXC_TEMPLATE_DIR}")
 
 #
 # RPATH options
@@ -177,15 +222,6 @@ if(${IS_SYSTEM_DIR} STREQUAL "-1")
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif()
-
-#
-# Config options
-#
-
-SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR})
-SET(LXC_TEMPLATE_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer/lxc-templates)
-message(STATUS "Configuration files will be installed in " ${SYS_CONFIG_DIR})
-message(STATUS "LXC template will be installed in " ${LXC_TEMPLATE_DIR})
 
 #
 # Set C++ compiler flags
@@ -210,11 +246,6 @@ if(ENABLE_COVERAGE)
     add_coverage()
 endif(ENABLE_COVERAGE)
 
-# Set and define the path to the general config file, used by the agent
-# as default location if nothing else is set on command line when starting
-# the agent.
-set(SC_CONFIG_FILE ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer/softwarecontainer-config)
-add_definitions(-DSC_CONFIG_FILE="${SC_CONFIG_FILE}")
 
 #
 # Network related options
@@ -230,14 +261,13 @@ if (ENABLE_NETWORKGATEWAY)
 
     set_default(BRIDGE_DEVICE lxcbr0)
     add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
-    message(STATUS "Network bridge defined as ${BRIDGE_DEVICE}")
+    add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${BRIDGE_DEVICE}")
 
     #
     # Some settings for whether or not SC should create a bridge
     # if one is not found.
     #
     if(CREATE_BRIDGE)
-        message(STATUS "SoftwareContainer will create ${BRIDGE_DEVICE} if not present at runtime")
         add_definitions(-DCREATE_BRIDGE=true)
 
         set_default(BRIDGE_IP 10.0.3.1)
@@ -250,7 +280,6 @@ if (ENABLE_NETWORKGATEWAY)
         file(READ ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh NOBRIDGE)
 
     else()
-        message(WARNING "SoftwareContainer will exit if ${BRIDGE_DEVICE} is not present at runtime")
         configure_file(scripts/setup_exit_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/exit_nobridge.sh)
         file(READ exit_nobridge.sh NOBRIDGE)
     endif()
@@ -260,22 +289,6 @@ if (ENABLE_NETWORKGATEWAY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh DESTINATION bin
             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif()
-
-#
-# General configuration file
-#
-set(SHARED_MOUNTS_DIR "/tmp/container/")
-set(LXC_CONFIG_PATH "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer.conf")
-set(SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.d/")
-set(DEFAULT_SERVICE_MANIFEST_DIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/service-manifest.default.d/")
-
-# NOTE: These definitons are only set because the "middle layer" tests currently need to create a Workspace
-#       with valid values, see the setup code of SoftwareContainerTest test class.
-add_definitions(-DSHARED_MOUNTS_DIR_TESTING="${SHARED_MOUNTS_DIR}")
-add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
-add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
-add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
-
 
 #
 # Add all sub-projects
@@ -289,3 +302,11 @@ add_subdirectory(doc)
 if (ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
+
+message("")
+message("")
+message(STATUS "SUMMARY OF CONFIGURATION")
+message("")
+feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features")
+feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features and options")
+

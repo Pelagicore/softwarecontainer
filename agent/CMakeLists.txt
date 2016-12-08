@@ -58,7 +58,7 @@ install(TARGETS softwarecontainer-agent DESTINATION bin)
 
 # Configure and install the general config file
 configure_file(softwarecontainer-config.in softwarecontainer-config)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/softwarecontainer)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config" DESTINATION ${SYS_CONFIG_DIR})
 
 #
 # When we install systemd config files, we check for if prefix is /usr, and we treat
@@ -74,11 +74,11 @@ endif()
 
 # Install systemd configuration
 if (ENABLE_SYSTEMD)
-    message(STATUS "SystemD file installation enabled")
-
     set(SYSTEMD_CONFIGURATION_FILES_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/systemd/system")
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.service.in  ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR})
+    configure_file(softwarecontainer-agent.service.in softwarecontainer-agent.service)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service
+            DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR}
+    )
 endif()
 
 if (ENABLE_TEST)

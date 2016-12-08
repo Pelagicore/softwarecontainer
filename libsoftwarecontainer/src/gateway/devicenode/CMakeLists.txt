@@ -15,8 +15,6 @@
 #
 # For further information see LICENSE
 
-message(STATUS "Compiling with gateway support for device nodes")
-
 set(DEVICENODE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/devicenodegateway.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devicenodeparser.cpp

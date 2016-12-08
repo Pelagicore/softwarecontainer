@@ -15,8 +15,6 @@
 #
 # For further information see LICENSE
 
-message(STATUS "Compiling with gateway support for network")
-
 set(NETWORK_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/networkgateway.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/networkgatewayparser.cpp

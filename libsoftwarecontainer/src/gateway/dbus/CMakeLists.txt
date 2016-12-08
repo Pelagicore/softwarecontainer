@@ -15,8 +15,6 @@
 #
 # For further information see LICENSE
 
-message(STATUS "Compiling with gateway support for dbus")
-
 set(DBUS_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/dbusgateway.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbusgatewayparser.cpp

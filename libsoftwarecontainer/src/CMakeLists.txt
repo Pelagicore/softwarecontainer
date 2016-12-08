@@ -30,9 +30,6 @@ add_library(softwarecontainer SHARED
     container.cpp
     softwarecontainer.cpp
     workspace.cpp
-    jobs/jobabstract.cpp
-    jobs/functionjob.cpp
-    jobs/commandjob.cpp
     ${GATEWAY_SOURCES}
     ${JOB_SOURCES}
 )
