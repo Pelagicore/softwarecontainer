@@ -39,6 +39,5 @@ public:
     bool teardownGateway();
 
 private:
-    bool m_enabled = false;
     EnvironmentVariables m_variables;
 };

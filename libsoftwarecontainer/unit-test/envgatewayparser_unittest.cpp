@@ -48,7 +48,7 @@ public:
 /*
  * Test that not supplying a name fails
  */
-TEST_F(EnvGatewayParserTest, TestNoName) {
+TEST_F(EnvGatewayParserTest, NoName) {
     const std::string config = "{ \"value\": \"" + value + "\" }";
     convertToJSON(config);
 
@@ -60,7 +60,7 @@ TEST_F(EnvGatewayParserTest, TestNoName) {
 /*
  * Test that not supplying a value fails
  */
-TEST_F(EnvGatewayParserTest, TestNoValue) {
+TEST_F(EnvGatewayParserTest, NoValue) {
     const std::string config = "{ \"name\": \"" + name + "\" }";
     convertToJSON(config);
 
@@ -72,7 +72,7 @@ TEST_F(EnvGatewayParserTest, TestNoValue) {
 /*
  * Test a general valid conf that doesn't use the mode field
  */
-TEST_F(EnvGatewayParserTest, TestValidConfWithoutMode) {
+TEST_F(EnvGatewayParserTest, ValidConfWithoutMode) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\"}";
     convertToJSON(config);
@@ -87,7 +87,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfWithoutMode) {
 /*
  * Test that setting mode to just "set" works as intended
  */
-TEST_F(EnvGatewayParserTest, TestValidConfModeSet) {
+TEST_F(EnvGatewayParserTest, ValidConfModeSet) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"set\" }";
@@ -99,7 +99,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfModeSet) {
     ASSERT_EQ(result.second, value);
 }
 
-TEST_F(EnvGatewayParserTest, TestBadMode) {
+TEST_F(EnvGatewayParserTest, BadMode) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"foo\" }";
@@ -109,7 +109,7 @@ TEST_F(EnvGatewayParserTest, TestBadMode) {
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
 }
 
-TEST_F(EnvGatewayParserTest, TestModeIsCaseInsensitive) {
+TEST_F(EnvGatewayParserTest, ModeIsCaseInsensitive) {
     const std::string config1 = "{ \"name\": \"" + name + "\",\
                                    \"value\": \"" + value + "\",\
                                    \"mode\": \"SET\" }";
@@ -131,7 +131,7 @@ TEST_F(EnvGatewayParserTest, TestModeIsCaseInsensitive) {
 /*
  * Test that appending to a non-existing var just sets it to the given value
  */
-TEST_F(EnvGatewayParserTest, TestValidConfAppendEmpty) {
+TEST_F(EnvGatewayParserTest, ValidConfAppendEmpty) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"append\" }";
@@ -143,7 +143,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfAppendEmpty) {
     ASSERT_EQ(result.second, value);
 }
 
-TEST_F(EnvGatewayParserTest, TestValidConfPrependEmpty) {
+TEST_F(EnvGatewayParserTest, ValidConfPrependEmpty) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"prepend\" }";
@@ -158,7 +158,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfPrependEmpty) {
 /*
  * Test that appending to an already existing var actually appends the value
  */
-TEST_F(EnvGatewayParserTest, TestValidConfAppendActuallyAppends) {
+TEST_F(EnvGatewayParserTest, ValidConfAppendActuallyAppends) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"append\" }";
@@ -174,7 +174,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfAppendActuallyAppends) {
 /*
  * Test that prepending to an already existing var actually prepends the value
  */
-TEST_F(EnvGatewayParserTest, TestValidConfPrependActuallyPrepends) {
+TEST_F(EnvGatewayParserTest, ValidConfPrependActuallyPrepends) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"prepend\" }";
@@ -187,7 +187,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfPrependActuallyPrepends) {
     ASSERT_EQ(result.second, value + name);
 }
 
-TEST_F(EnvGatewayParserTest, TestValidConfPrependSeparatorSeparates) {
+TEST_F(EnvGatewayParserTest, ValidConfPrependSeparatorSeparates) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"separator\": \"" + separator + "\",\
@@ -201,7 +201,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfPrependSeparatorSeparates) {
     ASSERT_EQ(result.second, value + separator + name);
 }
 
-TEST_F(EnvGatewayParserTest, TestValidConfAppendSeparatorSeparates) {
+TEST_F(EnvGatewayParserTest, ValidConfAppendSeparatorSeparates) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"separator\": \"" + separator + "\",\
@@ -218,7 +218,7 @@ TEST_F(EnvGatewayParserTest, TestValidConfAppendSeparatorSeparates) {
 /*
  * Test that setting an already existing var without append fails
  */
-TEST_F(EnvGatewayParserTest, TestSameVarWithoutAppendOrPrependFails) {
+TEST_F(EnvGatewayParserTest, SameVarWithoutAppendOrPrependFails) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\"}";
     convertToJSON(config);
