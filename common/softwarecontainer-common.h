@@ -17,29 +17,23 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
-#include <sys/wait.h>
-#include <sys/mount.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include "softwarecontainer-log.h"
 
 #include <map>
-#include <memory>
-#include <vector>
 
-#include <jansson.h>
-
-#include "softwarecontainer-log.h"
+#include <glibmm.h>
+#include <sys/wait.h>
 
 namespace softwarecontainer {
 
 typedef int32_t ContainerID;
+typedef std::map<std::string, std::string> EnvironmentVariables;
 
-static constexpr ContainerID INVALID_CONTAINER_ID = -1;
 static constexpr pid_t INVALID_PID = -1;
 static constexpr int INVALID_FD = -1;
+static constexpr uid_t ROOT_UID = 0;
 
 enum class ContainerState
 {
@@ -88,52 +82,6 @@ inline bool isError(ReturnCode code)
 inline bool isSuccess(ReturnCode code)
 {
     return !isError(code);
-}
-
-typedef std::map<std::string, std::string> EnvironmentVariables;
-
-static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/SoftwareContainerAgent";
-static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.SoftwareContainerAgent";
-
-static constexpr uid_t ROOT_UID = 0;
-
-/**
- * @brief The SignalConnectionsHandler class contains references to sigc++ connections and
- * automatically disconnects them on destruction.
- */
-class SignalConnectionsHandler
-{
-
-public:
-    /**
-     * Add a new connection
-     */
-    void addConnection(sigc::connection &connection);
-
-    ~SignalConnectionsHandler();
-
-private:
-    std::vector<sigc::connection> m_connections;
-
-};
-
-/**
- * @brief addProcessListener Adds a glib child watch for a process.
- * @warning This is not thread safe!
- * @param connections Add the signal to this list of connections
- * @param pid The pid to watch for.
- * @param function A lambda/function pointer to run when the signal is sent for a process.
- * @param context glib context to attach the SignalChildWatch to.
- */
-inline void addProcessListener(
-    SignalConnectionsHandler &connections,
-    pid_t pid,
-    std::function<void(pid_t, int)> function,
-    Glib::RefPtr<Glib::MainContext> context)
-{
-    Glib::SignalChildWatch watch = context->signal_child_watch();
-    auto connection = watch.connect(function, pid);
-    connections.addConnection(connection);
 }
 
 /**
@@ -199,75 +147,6 @@ ReturnCode writeToFile(const std::string &path, const std::string &content);
 ReturnCode readFromFile(const std::string &path, std::string &content);
 bool parseInt(const char *args, int *result);
 
-template<typename Type>
-class ObservableProperty
-{
-public:
-    typedef std::function<void (const Type &)> Listener;
-
-    ObservableProperty(Type &value) :
-        m_value(value)
-    {
-    }
-
-    void addListener(Listener listener)
-    {
-        m_listeners.push_back(listener);
-    }
-
-    operator const Type &() {
-        return m_value;
-    }
-
-protected:
-    std::vector<Listener> m_listeners;
-
-private:
-    const Type &m_value;
-
-};
-
-template<typename Type>
-class ObservableWritableProperty :
-    public ObservableProperty<Type>
-{
-public:
-    ObservableWritableProperty(Type value) :
-        ObservableProperty<Type>(m_value), m_value(value)
-    {
-    }
-
-    ObservableWritableProperty() :
-        ObservableProperty<Type>(m_value)
-    {
-    }
-
-    void setValueNotify(Type value)
-    {
-        m_value = value;
-        for (auto &listener : ObservableProperty<Type>::m_listeners) {
-            listener(getValue());
-        }
-    }
-
-    const Type &getValue() const
-    {
-        return m_value;
-    }
-
-    ObservableWritableProperty &operator=(const Type &type)
-    {
-        m_value = type;
-        return *this;
-    }
-
-
-private:
-    Type m_value;
-
-};
-
 }
 
 using namespace softwarecontainer;
-using logging::StringBuilder;

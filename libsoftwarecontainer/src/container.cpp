@@ -22,8 +22,11 @@
 #include <vector>
 #include <fstream>
 #include <unistd.h>
+
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/mount.h>
+
 #include <lxc/lxccontainer.h>
 #include <lxc/version.h>
 
@@ -174,7 +177,7 @@ ReturnCode Container::create()
     log_debug() << "Successfully loaded container config";
 
     // File system stuff
-    m_rootFSPath = StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
+    m_rootFSPath = logging::StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
 
     if (m_enableWriteBuffer) {
         const std::string rootFSPathLower = m_rootFSPath + "-lower";
@@ -400,7 +403,7 @@ ReturnCode Container::setUser(uid_t userID)
             return ReturnCode::FAILURE;
         }
 
-        StringBuilder s;
+        logging::StringBuilder s;
         for (auto &gid : groups) {
             s << " " << gid;
         }
@@ -754,7 +757,7 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
     m_gatewayEnvironmentVariables[var] = val;
 
     // We generate a file containing all variables for convenience when connecting to the container in command-line
-    StringBuilder s;
+    logging::StringBuilder s;
     for (auto &var : m_gatewayEnvironmentVariables) {
         s << "export " << var.first << "='" << var.second << "'\n";
     }

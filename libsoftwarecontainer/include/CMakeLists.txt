@@ -24,6 +24,7 @@ set(HEADERS
     containerabstractinterface.h
     workspace.h
     gateway.h
+    observableproperty.h
 )
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)

@@ -52,6 +52,7 @@ int signalHandler(void *data) {
  */
 DBus::Connection getBusConnection(bool useSessionBus)
 {
+    static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.SoftwareContainerAgent";
     std::string busStr = useSessionBus ? "session" : "system";
     try {
         DBus::Connection bus = useSessionBus ? DBus::Connection::SessionBus()
@@ -228,6 +229,7 @@ int main(int argc, char **argv)
     Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
 
     try {
+        static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/SoftwareContainerAgent";
         DBus::Connection connection = getBusConnection(useSessionBus);
         SoftwareContainerAgent agent(mainContext, config);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =

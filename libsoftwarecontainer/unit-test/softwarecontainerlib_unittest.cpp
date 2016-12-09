@@ -80,8 +80,8 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
             return ERROR;
         }
         log_debug() << "Wayland dir : " << waylandDir;
-        std::string socketPath = StringBuilder() << waylandDir << "/"
-                                                 << WaylandGateway::SOCKET_FILE_NAME;
+        std::string socketPath = logging::StringBuilder() << waylandDir << "/"
+                                                          << WaylandGateway::SOCKET_FILE_NAME;
         log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
         if ( !isSocket(socketPath) ) {
             return ERROR;

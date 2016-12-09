@@ -18,19 +18,20 @@
  * For further information see LICENSE
  */
 
+#include "softwarecontainer-common.h"
 
-#include <string.h>
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <fcntl.h>
 #include <fstream>
-#include "softwarecontainer-common.h"
 
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <fcntl.h>
 
 namespace softwarecontainer {
-
-LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
+    LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 
 struct stat getStat(const std::string &path)
 {
@@ -168,18 +169,7 @@ bool parseInt(const char *arg, int *result)
     return true;
 }
 
-void SignalConnectionsHandler::addConnection(sigc::connection &connection) {
-    m_connections.push_back(connection);
-}
-
-SignalConnectionsHandler::~SignalConnectionsHandler()
-{
-    for (auto &connection : m_connections) {
-        connection.disconnect();
-    }
-}
-
-}
+} // end namespace
 
 
 

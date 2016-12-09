@@ -27,6 +27,7 @@ set(HEADERS
     mountcleanuphandler.h
     filetoolkitwithundo.h
     gatewayconfig.h
+    signalconnectionshandler.h
 )
 
 add_library(softwarecontainercommon SHARED
@@ -39,6 +40,7 @@ add_library(softwarecontainercommon SHARED
     softwarecontainer-common.cpp
     recursivecopy.cpp
     gatewayconfig.cpp
+    signalconnectionshandler.cpp
 )
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
