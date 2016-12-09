@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.12.0-335efc6 2016-12-08 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.12.0-4a936b6 2016-12-09 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-335efc6 2016-12-08',
+        VERSION:     '0.12.0-4a936b6 2016-12-09',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-335efc6 2016-12-08 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-4a936b6 2016-12-09 documentation" href="../../index.html" />
     <link rel="next" title="Troubleshooting" href="../troubleshooting/index.html" />
     <link rel="prev" title="Gateways" href="../gateways/index.html" />
    
@@ -58,8 +58,8 @@ IPC mechanisms and examples of configuration and usage.</p>
 <h2>Service manifests<a class="headerlink" href="#service-manifests" title="Permalink to this headline">¶</a></h2>
 <p>For details about format and content of service manifests, see <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">Service manifests</span></a>
 and <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
-<p>Service manifests should be installed in either <code class="docutils literal"><span class="pre">&lt;service-name&gt;</span></code> or
-<code class="docutils literal"><span class="pre">&lt;service-name&gt;</span></code> depending on if it should be applied by default
+<p>Service manifests should be installed in either <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer/service-manifest.d/&lt;service-name&gt;</span></code> or
+<code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer/service-manifest.default.d/&lt;service-name&gt;</span></code> depending on if it should be applied by default
 or not. Each manifest are expected to be of type JSON, including the &#8220;json&#8221; file extension.</p>
 <p>Service Manifests are read and parsed at startup of the Agent. If two Service Manifests contain
 capabilities with the same name the gateway configurations will be combined (without merging
