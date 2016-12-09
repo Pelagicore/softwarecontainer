@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,13 +17,10 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include "ivi-logging.h"
-#include <glibmm.h>
 
 namespace softwarecontainer {
     typedef logging::DefaultLogContext LogContext;
-    // LOG_IMPORT_DEFAULT_CONTEXT(defaultLogContext);
 }

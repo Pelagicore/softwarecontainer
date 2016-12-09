@@ -17,27 +17,19 @@
  * For further information see LICENSE
  */
 
-#pragma once
+#include "signalconnectionshandler.h"
 
-#include "softwarecontainer-common.h"
-#include <jansson.h>
+namespace softwarecontainer {
 
-class FileGatewayParser
+void SignalConnectionsHandler::addConnection(sigc::connection &connection) {
+    m_connections.push_back(connection);
+}
+
+SignalConnectionsHandler::~SignalConnectionsHandler()
 {
-    LOG_DECLARE_CLASS_CONTEXT("FILP", "File gateway parser");
-public:
-    struct FileSetting {
-        std::string pathInHost;
-        std::string pathInContainer;
-        bool readOnly;
+    for (auto &connection : m_connections) {
+        connection.disconnect();
+    }
+}
 
-        bool operator==(const FileSetting &rhs) {
-            return pathInContainer == rhs.pathInContainer;
-        }
-    };
-
-    /*
-     * Check that the provided json configuration is syntactically correct
-     */
-    ReturnCode parseConfigElement(const json_t *element, FileSetting &setting);
-};
+}

@@ -20,6 +20,7 @@
 
 #include "mountcleanuphandler.h"
 
+#include <sys/mount.h>
 
 MountCleanUpHandler::MountCleanUpHandler(const std::string &path)
 {

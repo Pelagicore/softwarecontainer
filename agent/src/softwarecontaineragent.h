@@ -33,8 +33,6 @@
     #include <dbus-c++/glib-integration.h>
 #pragma GCC diagnostic pop
 
-#include <getopt.h>
-
 #include <ivi-profiling.h>
 
 #pragma GCC diagnostic push
@@ -52,12 +50,13 @@
 #include "commandjob.h"
 #include <queue>
 
-
 /**
  * @class softwarecontainer::SoftwareContainerAgent
  * @brief A wrapper class
  */
 namespace softwarecontainer {
+
+static constexpr ContainerID INVALID_CONTAINER_ID = -1;
 
 class SoftwareContainerAgent
 {

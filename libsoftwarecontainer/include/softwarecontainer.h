@@ -21,17 +21,20 @@
 
 #pragma once
 
+#include "observableproperty.h"
+#include "workspace.h"
+#include "gateway.h"
+#include "container.h"
+#include "gatewayconfig.h"
+#include "signalconnectionshandler.h"
+
+#include <glibmm.h>
+
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <glibmm.h>
-#include "workspace.h"
-#include "gateway.h"
-#include "container.h"
-#include "gatewayconfig.h"
 
 namespace softwarecontainer {
 

@@ -18,6 +18,9 @@
  * For further information see LICENSE
  */
 
+#include <sys/stat.h>
+#include <sys/mount.h>
+
 #include "filetoolkitwithundo.h"
 
 #include "directorycleanuphandler.h"
@@ -173,9 +176,9 @@ ReturnCode FileToolkitWithUndo::overlayMount(
         return ReturnCode::FAILURE;
     }
 
-    std::string mountoptions = StringBuilder() << "lowerdir=" << lower
-                                               << ",upperdir=" << upper
-                                               << ",workdir=" << work;
+    std::string mountoptions = logging::StringBuilder() << "lowerdir=" << lower
+                                                        << ",upperdir=" << upper
+                                                        << ",workdir=" << work;
 
     int mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, mountoptions.c_str());
 

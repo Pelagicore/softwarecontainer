@@ -2,6 +2,7 @@
 #pragma once
 
 #include "softwarecontainer-common.h"
+#include <jansson.h>
 
 class CGroupsParser
 {
