@@ -19,6 +19,7 @@
  */
 
 #include "devicenodegateway.h"
+#include "devicenodelogic.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -32,11 +33,26 @@ DeviceNodeGateway::DeviceNodeGateway() :
 ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeParser parser;
+    DeviceNodeLogic logic;
     DeviceNodeParser::Device dev;
 
     if (isError(parser.parseDeviceNodeGatewayConfiguration(element, dev))) {
         log_error() << "Could not parse device node configuration";
         return ReturnCode::FAILURE;
+    }
+
+    auto item = std::find_if(m_devList.begin(), m_devList.end(),
+        [&] (DeviceNodeParser::Device const &d) { return d.name == dev.name; });
+
+    if (item == std::end(m_devList)) {
+        m_devList.push_back(dev);
+    } else {
+        if ((item->major == dev.major) && (item->major == dev.minor)) {
+            item->mode = logic.calculateDeviceMode(item->mode, dev.mode);
+        } else {
+            //now we have a new device with same name
+            m_devList.push_back(dev);
+        }
     }
 
     m_devList.push_back(dev);
