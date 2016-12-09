@@ -50,12 +50,11 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
         if ((item->major == dev.major) && (item->major == dev.minor)) {
             item->mode = logic.calculateDeviceMode(item->mode, dev.mode);
         } else {
-            //now we have a new device with same name
-            m_devList.push_back(dev);
+            //now we have a new device with same name which shouldn't be existed
+            return ReturnCode::FAILURE;
         }
     }
 
-    m_devList.push_back(dev);
     return ReturnCode::SUCCESS;
 }
 
@@ -75,8 +74,12 @@ bool DeviceNodeGateway::activateGateway()
             // mknod dev.name c dev.major dev.minor
             pid_t pid = INVALID_PID;
             getContainer()->executeInContainer([&] () {
-                return mknod(dev.name.c_str(), S_IFCHR | dev.mode,
+                auto err =  mknod(dev.name.c_str(), S_IFCHR | dev.mode,
                              makedev(dev.major, dev.minor));
+                if (err) {
+                    log_error() << "err code " << err << " : " << strerror(errno);
+                }
+                return err;
             }, &pid);
 
             if (waitForProcessTermination(pid) != 0) {
