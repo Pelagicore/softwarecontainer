@@ -79,11 +79,21 @@ TEST_F(DeviceNodeParserTest, TestFullConfig) {
     convertToJSON(config);
     DeviceNodeParser::Device dev;
 
+    const std::string config2 = "{\
+                                    \"name\":  \"/dev/new_device\",\
+                                    \"major\": 1,\
+                                    \"minor\": 0,\
+                                    \"mode\":  764\
+                                }";
+
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
+    convertToJSON(config2);
     ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
     ASSERT_FALSE(dev.name.empty());
     ASSERT_NE(dev.major, -1);
     ASSERT_NE(dev.minor, -1);
     ASSERT_NE(dev.mode, -1);
+    ASSERT_EQ(dev.mode, 764);
 }
 
 /*
