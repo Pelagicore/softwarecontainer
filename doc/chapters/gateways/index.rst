@@ -217,8 +217,8 @@ The configuration consists of a root list consisting of individual devices. Each
 following fields:
 
 - ``name`` The name of the device, with or without path. This is passed verbatim to ``mknod``
-- ``major`` The major device number, passed verbatim to ``mknod``
-- ``minor`` The minor device number, passed verbatim to ``mknod``
+- ``major`` The major device number, as an integer, passed verbatim to ``mknod``
+- ``minor`` The minor device number, as an integer, passed verbatim to ``mknod``
 - ``mode`` Permission mode, passed verbatim to ``chmod``
 
 Example configurations
@@ -232,20 +232,20 @@ An example configuration can look like this::
         },
         {
             "name":  "tty0",
-            "major": "4",
-            "minor": "0",
-            "mode":  "666"
+            "major": 4,
+            "minor": 0,
+            "mode":  "644"
         },
         {
             "name":  "tty1",
-            "major": "4",
-            "minor": "0",
+            "major": 4,
+            "minor": 0,
             "mode":  "400"
         },
         {
             "name":  "/dev/galcore",
-            "major": "199",
-            "minor": "0",
+            "major": 199,
+            "minor": 0,
             "mode":  "666"
         }
     ]
