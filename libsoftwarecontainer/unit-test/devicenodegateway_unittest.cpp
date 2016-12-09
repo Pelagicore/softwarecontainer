@@ -34,8 +34,8 @@ public:
         SoftwareContainerTest::SetUp();
     }
 
-    const std::string NEW_DEVICE = "/dev/new_device";
-    const std::string PRESENT_DEVICE = "/dev/random";
+    const std::string NEW_DEVICE = "/tmp/thenewfile";
+    const std::string PRESENT_DEVICE = "/tmp/random";
 };
 
 /*
@@ -46,16 +46,17 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
     const std::string config = "[\
                                   {\
                                     \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": \"1\",\
-                                    \"minor\": \"0\",\
-                                    \"mode\":  \"644\"\
-                                  },\
-                                  {\
-                                    \"name\": \"" + PRESENT_DEVICE + "\"\
+                                    \"major\": 4,\
+                                    \"minor\": 32,\
+                                    \"mode\":  644\
                                   },\
                                   {\
                                     \"name\": \"" + PRESENT_DEVICE + "\",\
-                                    \"mode\":  \"644\"\
+                                    \"mode\":  \"654\"\
+                                  },\
+                                  {\
+                                    \"name\": \"" + PRESENT_DEVICE + "\",\
+                                    \"mode\":  \"645\"\
                                   }\
                                 ]";
 

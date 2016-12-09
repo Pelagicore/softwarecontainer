@@ -22,16 +22,19 @@
 
 int DeviceNodeLogic::calculateDeviceMode(const int storedMode, const int appliedMode)
 {
-    int mode = -1;
-    if (storedMode != appliedMode) {
-        int mode = 0;
+    int mode = storedMode;
 
-        (appliedMode/100 >= storedMode/100) ? mode =
-                (appliedMode/100) * 100 : mode = (storedMode/100) * 100;
-        ((appliedMode/10)%10 >= (storedMode/10)%10) ?
+    if (storedMode != appliedMode) {
+
+        ((appliedMode/100) >= (storedMode/100)) ?
+                mode = (appliedMode/100) * 100 : mode = (storedMode/100) * 100;
+
+        (((appliedMode/10)%10) >= ((storedMode/10)%10)) ?
                 mode += (((appliedMode/10)%10) * 10) : mode += (((storedMode/10)%10) * 10);
-        (appliedMode%10 >= storedMode%10) ?
+
+        ((appliedMode%10) >= (storedMode%10)) ?
                 mode += (appliedMode%10) :  mode += (storedMode%10);
+
     }
 
     return mode;

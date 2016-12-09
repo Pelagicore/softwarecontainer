@@ -35,11 +35,7 @@ public:
     void SetUp() override
     {
         dnl = new DeviceNodeLogic();
-        //SoftwareContainerTest::SetUp();
     }
-
-    const std::string NEW_DEVICE = "/dev/new_device";
-    const std::string PRESENT_DEVICE = "/dev/random";
 };
 
 /*
@@ -73,7 +69,7 @@ TEST_F(DeviceNodeLogicTest, BothChangeAndNoChangeMode1) {
  */
 TEST_F(DeviceNodeLogicTest, BothChangeAndNoChangeMode2) {
     const int itemMode = 444;
-    const int newMode  = 067;
+    const int newMode  = 67;
 
     const int expectedMode = 467;
 
@@ -98,10 +94,22 @@ TEST_F(DeviceNodeLogicTest, NoModeChangeLessPremissive1) {
  * implying no change will be made to the mode
  */
 TEST_F(DeviceNodeLogicTest, NoModeChangeLessPremissive2) {
-    const int itemMode = 020;
+    const int itemMode = 20;
     const int newMode  = 644;
 
     const int expectedMode = 644;
+
+    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+}
+
+/*
+ * Validate whitelisting in the case when mode the same as before
+ */
+TEST_F(DeviceNodeLogicTest, ModeEqual) {
+    const int itemMode  = 666;
+    const int newMode   = 666;
+
+    const int expectedMode = 666;
 
     ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
 }
