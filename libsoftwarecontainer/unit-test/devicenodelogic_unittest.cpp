@@ -39,7 +39,7 @@ public:
 };
 
 /*
- * Validate whitelisting in the case when mode is set to more permissive
+ * Verify whitelisting in the case when mode is set to more permissive
  */
 TEST_F(DeviceNodeLogicTest, ChangeModeMorePermissive) {
     const int itemMode = 644;
@@ -47,11 +47,11 @@ TEST_F(DeviceNodeLogicTest, ChangeModeMorePermissive) {
 
     const int expectedMode = 777;
 
-    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+    ASSERT_EQ(expectedMode, dnl->calculateDeviceMode(itemMode,newMode));
 }
 
 /*
- * Validate whitelisting in the case when mode is set to more permissive
+ * Verify whitelisting in the case when mode is set to more permissive
  * for some groups, but not all
  */
 TEST_F(DeviceNodeLogicTest, BothChangeAndNoChangeMode1) {
@@ -60,11 +60,11 @@ TEST_F(DeviceNodeLogicTest, BothChangeAndNoChangeMode1) {
 
     const int expectedMode = 466;
 
-    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+    ASSERT_EQ(expectedMode, dnl->calculateDeviceMode(itemMode,newMode));
 }
 
 /*
- * Validate whitelisting in the case when mode is set to more permissive
+ * Verify whitelisting in the case when mode is set to more permissive
  * for some groups, but not all
  */
 TEST_F(DeviceNodeLogicTest, BothChangeAndNoChangeMode2) {
@@ -73,11 +73,11 @@ TEST_F(DeviceNodeLogicTest, BothChangeAndNoChangeMode2) {
 
     const int expectedMode = 467;
 
-    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+    ASSERT_EQ(expectedMode, dnl->calculateDeviceMode(itemMode,newMode));
 }
 
 /*
- * Validate whitelisting in the case when mode is set to less permissive,
+ * Verify whitelisting in the case when mode is set to less permissive,
  * implying no change will be made to the mode
  */
 TEST_F(DeviceNodeLogicTest, NoModeChangeLessPremissive1) {
@@ -86,11 +86,11 @@ TEST_F(DeviceNodeLogicTest, NoModeChangeLessPremissive1) {
 
     const int expectedMode = 644;
 
-    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+    ASSERT_EQ(expectedMode, dnl->calculateDeviceMode(itemMode,newMode));
 }
 
 /*
- * Validate whitelisting in the case when mode is set to less permissive,
+ * Verify whitelisting in the case when mode is set to less permissive,
  * implying no change will be made to the mode
  */
 TEST_F(DeviceNodeLogicTest, NoModeChangeLessPremissive2) {
@@ -99,11 +99,11 @@ TEST_F(DeviceNodeLogicTest, NoModeChangeLessPremissive2) {
 
     const int expectedMode = 644;
 
-    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+    ASSERT_EQ(expectedMode, dnl->calculateDeviceMode(itemMode,newMode));
 }
 
 /*
- * Validate whitelisting in the case when mode the same as before
+ * Verify whitelisting in the case when mode the same as before
  */
 TEST_F(DeviceNodeLogicTest, ModeEqual) {
     const int itemMode  = 666;
@@ -111,5 +111,50 @@ TEST_F(DeviceNodeLogicTest, ModeEqual) {
 
     const int expectedMode = 666;
 
-    ASSERT_EQ(expectedMode,dnl->calculateDeviceMode(itemMode,newMode));
+    ASSERT_EQ(expectedMode, dnl->calculateDeviceMode(itemMode,newMode));
+}
+
+/*
+ * Verify updateDeviceList and findDeviceByName functions working as expected
+ */
+TEST_F(DeviceNodeLogicTest, findDeviceByNameFunction) {
+    DeviceNodeParser::Device testDevice{"testDevice", 3, 5, 753};
+    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+
+    testDevice.name = "anotherTestDevice";
+    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+
+    testDevice.name = "yetAnotherTestDevice";
+    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+
+    auto device = dnl->findDeviceByName("anotherTestDevice");
+    ASSERT_EQ("anotherTestDevice", device->name);
+}
+
+/*
+ * Verify updateDeviceList function is failing as expected when user tries to add
+ * another device with same name but different major ID
+ */
+TEST_F(DeviceNodeLogicTest, failureMismatchingDevice) {
+    DeviceNodeParser::Device testDevice{"testDevice", 3, 5, 753};
+    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+
+    testDevice.name  = "testDevice";
+    testDevice.major = 4;
+    testDevice.mode  = 777;
+    ASSERT_EQ(ReturnCode::FAILURE, dnl->updateDeviceList(testDevice));
+}
+
+/*
+ * Verify updateDeviceList function is failing as expected when user tries to add
+ * another device with same name but different minor ID
+ */
+TEST_F(DeviceNodeLogicTest, failureMismatchingDevice2) {
+    DeviceNodeParser::Device testDevice{"testDevice", 3, 5, 753};
+    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+
+    testDevice.name  = "testDevice";
+    testDevice.minor = 44;
+    testDevice.mode  = 777;
+    ASSERT_EQ(ReturnCode::FAILURE, dnl->updateDeviceList(testDevice));
 }

@@ -19,7 +19,6 @@
  */
 
 #include "devicenodegateway.h"
-#include "devicenodelogic.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -33,7 +32,6 @@ DeviceNodeGateway::DeviceNodeGateway() :
 ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeParser parser;
-    DeviceNodeLogic logic;
     DeviceNodeParser::Device dev;
 
     if (isError(parser.parseDeviceNodeGatewayConfiguration(element, dev))) {
@@ -41,32 +39,29 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
         return ReturnCode::FAILURE;
     }
 
-    auto item = std::find_if(m_devList.begin(), m_devList.end(),
-        [&] (DeviceNodeParser::Device const &d) { return d.name == dev.name; });
-
-    if (item == std::end(m_devList)) {
-        m_devList.push_back(dev);
-    } else {
-        if ((item->major == dev.major) && (item->major == dev.minor)) {
-            item->mode = logic.calculateDeviceMode(item->mode, dev.mode);
-        } else {
-            //now we have a new device with same name which shouldn't be existed
-            return ReturnCode::FAILURE;
-        }
-    }
-
-    return ReturnCode::SUCCESS;
+    return m_logic.updateDeviceList(dev);
 }
-
 
 bool DeviceNodeGateway::activateGateway()
 {
-    if (m_devList.empty()) {
+    auto returnValue = applySettings();
+    return isSuccess(returnValue);
+}
+
+bool DeviceNodeGateway::teardownGateway()
+{
+    return true;
+}
+
+ReturnCode DeviceNodeGateway::applySettings()
+{
+    auto devlist = m_logic.getDevList();
+    if (devlist.empty()) {
         log_info() << "Activate was called when no devices has been configured.";
-        return false;
+        return ReturnCode::FAILURE;
     }
 
-    for (auto &dev : m_devList) {
+    for (auto &dev : devlist) {
         log_info() << "Mapping device " << dev.name;
 
         if (dev.major != -1) {
@@ -77,14 +72,15 @@ bool DeviceNodeGateway::activateGateway()
                 auto err =  mknod(dev.name.c_str(), S_IFCHR | dev.mode,
                              makedev(dev.major, dev.minor));
                 if (err) {
-                    log_error() << "err code " << err << " : " << strerror(errno);
+                    log_error() << "Err happened while trying to run mknod in container" <<
+                                   " error: " << err << " - " << strerror(errno);
                 }
                 return err;
             }, &pid);
 
             if (waitForProcessTermination(pid) != 0) {
                 log_error() << "Failed to create device " << dev.name;
-                return false;
+                return ReturnCode::FAILURE;
             }
         } else {
             // No major & minor numbers specified => simply map the device from
@@ -100,16 +96,10 @@ bool DeviceNodeGateway::activateGateway()
                 if (waitForProcessTermination(pid) != 0) {
                     log_error() << "Could not 'chmod " << dev.mode
                                 << "' the mounted device " << dev.name;
-                    return false;
+                    return ReturnCode::FAILURE;
                 }
             }
         }
     }
-
-    return true;
-}
-
-bool DeviceNodeGateway::teardownGateway()
-{
-    return true;
+    return ReturnCode::SUCCESS;
 }

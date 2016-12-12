@@ -20,20 +20,54 @@
 
 #include "devicenodelogic.h"
 
+std::vector<DeviceNodeParser::Device>::iterator
+DeviceNodeLogic::findDeviceByName(const std::string name)
+{
+    std::vector<DeviceNodeParser::Device>::iterator item =
+            std::find_if(m_devList.begin(), m_devList.end(),
+            [&] (DeviceNodeParser::Device const &d) { return d.name == name; });
+
+    return item;
+}
+
+ReturnCode DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
+{
+    auto item = findDeviceByName(dev.name);
+
+    if (item == std::end(m_devList)) {
+        m_devList.push_back(dev);
+    } else {
+        if ((item->major == dev.major) && (item->major == dev.minor)) {
+            item->mode = calculateDeviceMode(item->mode, dev.mode);
+        } else {
+            //Unexpected behavior : a device has found with same name.
+            return ReturnCode::FAILURE;
+        }
+    }
+
+    return ReturnCode::SUCCESS;
+}
+
+const std::vector<DeviceNodeParser::Device> &DeviceNodeLogic::getDevList()
+{
+    return m_devList;
+}
+
+
 int DeviceNodeLogic::calculateDeviceMode(const int storedMode, const int appliedMode)
 {
     int mode = storedMode;
 
     if (storedMode != appliedMode) {
-
-        ((appliedMode/100) >= (storedMode/100)) ?
-                mode = (appliedMode/100) * 100 : mode = (storedMode/100) * 100;
-
-        (((appliedMode/10)%10) >= ((storedMode/10)%10)) ?
-                mode += (((appliedMode/10)%10) * 10) : mode += (((storedMode/10)%10) * 10);
-
-        ((appliedMode%10) >= (storedMode%10)) ?
-                mode += (appliedMode%10) :  mode += (storedMode%10);
+        //apply more permissive option for owner
+        ((appliedMode / 100) >= (storedMode / 100)) ?
+                mode = (appliedMode / 100) * 100 : mode = (storedMode / 100) * 100;
+        //apply more permissive option for group
+        (((appliedMode / 10) % 10) >= ((storedMode / 10) % 10)) ?
+                mode += (((appliedMode / 10) % 10) * 10) : mode += (((storedMode / 10) % 10) * 10);
+        //apply more permissive option for others
+        ((appliedMode % 10) >= (storedMode % 10)) ?
+                mode += (appliedMode % 10) :  mode += (storedMode % 10);
 
     }
 

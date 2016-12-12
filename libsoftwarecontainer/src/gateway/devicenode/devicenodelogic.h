@@ -20,9 +20,11 @@
 
 #pragma once
 #include "softwarecontainer-common.h"
+#include "devicenodeparser.h"
 
 /**
- * @brief This is responsible for *
+ * @brief This class is responsible for storing all device node configurations
+ * in a well-formed list.
  */
 class DeviceNodeLogic
 {
@@ -30,7 +32,41 @@ class DeviceNodeLogic
 
 public:
     DeviceNodeLogic() {};
+
+    /*
+     * @brief Calculate the device node mode after applying white-listing policy
+     * i.e. if the appliedMode is 706 and storedMode is 622 then
+     *      the calculated mode will be 726
+     *
+     * @return integer value representing new device mode
+     */
     int calculateDeviceMode(int storedMode, int appliedMode);
 
+    /*
+     * @brief Find device node which has the same name with the argument
+     *
+     * @return Iterator to the founded device node element or end of the list
+     * if no such element is found.
+     */
+    std::vector<DeviceNodeParser::Device>::iterator findDeviceByName(const std::string name);
+
+    /*
+     * @brief Update the device node list due to white-listing policy
+     * i.e. if the device name does not exist new device node will be added
+     *      if the device name exist and major and minor minor device IDs are also matched
+     *      then update the  mode of device node
+     *
+     * @return either SUCCESS or FAILURE due to state of operation
+     */
+    ReturnCode updateDeviceList(DeviceNodeParser::Device dev);
+
+    /*
+     * @brief Get the list of device nodes
+     *
+     * @return A list of well-formed device nodes ready to be applied
+     */
+    const std::vector<DeviceNodeParser::Device> &getDevList();
+
 private:
+    std::vector<DeviceNodeParser::Device> m_devList;
 };
