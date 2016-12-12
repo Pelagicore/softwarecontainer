@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.12.0-f5ca93c 2016-12-12 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.12.0-1f0445a 2016-12-12 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-f5ca93c 2016-12-12',
+        VERSION:     '0.12.0-1f0445a 2016-12-12',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-f5ca93c 2016-12-12 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-1f0445a 2016-12-12 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -231,10 +231,12 @@ access at all to the system bus would look like:</p>
 following fields:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">name</span></code> The name of the device, with or without path. This is passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
-<li><code class="docutils literal"><span class="pre">major</span></code> The major device number, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
-<li><code class="docutils literal"><span class="pre">minor</span></code> The minor device number, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
+<li><code class="docutils literal"><span class="pre">major</span></code> The major device number, as an integer, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
+<li><code class="docutils literal"><span class="pre">minor</span></code> The minor device number, as an integer, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
 <li><code class="docutils literal"><span class="pre">mode</span></code> Permission mode, passed verbatim to <code class="docutils literal"><span class="pre">chmod</span></code></li>
 </ul>
+<p>In the case where the same device node is configured more than once, the most permissive mode
+is chosen per user type.</p>
 </div>
 <div class="section" id="id7">
 <h3>Example configurations<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
@@ -245,25 +247,32 @@ following fields:</p>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;tty0&quot;</span><span class="p">,</span>
-        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="s">&quot;4&quot;</span><span class="p">,</span>
-        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="s">&quot;0&quot;</span><span class="p">,</span>
-        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;666&quot;</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;644&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;tty1&quot;</span><span class="p">,</span>
-        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="s">&quot;4&quot;</span><span class="p">,</span>
-        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="s">&quot;0&quot;</span><span class="p">,</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;400&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;/dev/galcore&quot;</span><span class="p">,</span>
-        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="s">&quot;199&quot;</span><span class="p">,</span>
-        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="s">&quot;0&quot;</span><span class="p">,</span>
-        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;666&quot;</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;722&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;/dev/galcore&quot;</span><span class="p">,</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;466&quot;</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
 </div>
+<p>In the last example shown above the mode for <code class="docutils literal"><span class="pre">/dev/galcore</span></code> will be set to 766.</p>
 </div>
 </div>
 <div class="section" id="environment-gateway">
@@ -569,7 +578,7 @@ it will retain its value.</p>
       &copy;2016, Pelagicore AB.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
