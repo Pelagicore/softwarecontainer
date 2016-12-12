@@ -69,6 +69,11 @@ class Container():
                                                 {gateway_id: json.dumps(config)})
         return True if result == dbus.Boolean(True) else False
 
+    def list_capabilities(self):
+        """ List all capabilities that can be used for set_capabilities
+        """
+        caps, success = self.__agent.ListCapabilities()
+        return caps, (success == dbus.Boolean(True))
 
     def set_capabilities(self, capabilities):
         """ Set capabilities by passsing a list of strings with capability IDs

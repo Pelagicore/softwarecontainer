@@ -30,6 +30,13 @@ public:
     ~FilteredConfigStore();
 
     /**
+     * @brief Returns all capability IDs
+     *
+     * @return a vector of all IDs as strings
+     */
+    const std::vector<std::string> IDs() const;
+
+    /**
      * @brief Returns all Gateway configurations for certain Capabilities.
      *
      * @param capIDs vector of strings representating Capability IDs

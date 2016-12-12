@@ -58,6 +58,7 @@ public:
     bool SetGatewayConfigs(const int32_t &containerID,
                            const std::map<std::string, std::string> &configs) override;
 
+    void ListCapabilities(std::vector<std::string> &capabilities, bool &success) override;
     bool SetCapabilities(const int32_t &containerID,
                          const std::vector<std::string> &capabilities) override;
 

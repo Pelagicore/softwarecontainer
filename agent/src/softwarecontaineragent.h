@@ -199,6 +199,16 @@ public:
                            const std::map<std::string, std::string> &configs);
 
     /**
+     * @brief List all capabilities that the user can set.
+     *
+     * Capabilities are a mapping from a string to a set of gateway configurations. This method
+     * returns all capability names that can be used through setCapabilities.
+     *
+     * @return a list of capabilities
+     */
+    std::vector<std::string> listCapabilities();
+
+    /**
      * @brief Set capabilities for the container
      *
      * Capabilities are a mapping from a string to a set of gateway configurations. Capabilities
