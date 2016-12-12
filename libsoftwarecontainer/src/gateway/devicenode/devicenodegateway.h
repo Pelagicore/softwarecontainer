@@ -23,9 +23,8 @@
 #include "jansson.h"
 
 #include "softwarecontainer-common.h"
-#include "devicenodeparser.h"
-
 #include "gateway.h"
+#include "devicenodelogic.h"
 
 /**
  * @brief This gateway is responsible for exposing device nodes in an LXC container.
@@ -70,6 +69,12 @@ public:
     virtual bool teardownGateway() override;
 
 private:
-    std::vector<DeviceNodeParser::Device> m_devList;
+    /*
+     * @brief apply all setting of device node list
+     *
+     * @return success or failure due to state of operation
+     */
+    ReturnCode applySettings(void);
 
+    DeviceNodeLogic m_logic;
 };
