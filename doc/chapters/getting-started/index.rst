@@ -51,6 +51,9 @@ Below is an example of the major entities involved in a call to create a contain
 Container config
 ================
 
+This section is about the config used when a container is created using the D-Bus interface. This config is only one
+pice of the overall configuration, for more info see :ref:`Configuration <configuration>`
+
 When creating containers, a configuration is passed as a JSON string. The string is an array with objects, in the JSON sense.
 The currently supported configs are:
 

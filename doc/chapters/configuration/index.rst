@@ -11,17 +11,26 @@ Command Line Options
 ====================
 It is possible to configure SoftwareContainer Agent with command line options.
 
-**-p or --preload <num>** Number of containers to preload, defaults to 0
+**-c or --config <path>** Path to SoftwareContainer configuration file, defaults to |sc-config-file-code|
 
-**-u or --user <uid>** Default user id to be used when starting processes in the container, defaults to 0
+**-p or --preload <num>** Number of containers to preload, defaults to |preload-count-code|
 
-**-s or --shutdown <bool>** If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true
+**-u or --user <uid>** Default user id to be used when starting processes in the container, defaults to ``0``.
+This option is deprecated.
 
-**-t or --timeout <seconds>** Timeout in seconds to wait for containers to shutdown, defaults to 2
+**-k or --keep-containers-alive** Containers will not be shut down on exit. Useful for debugging.
+Defaults to |keep-containers-alive-code|
 
-**-m or --manifest <path>** Path to a file or directory where service manifest(s) exist, defaults to ""
+**-t or --timeout <seconds>** Timeout in seconds to wait for containers to shutdown,
+defaults to |shutdown-timeout-code|
 
-**-b or --session-bus** To use the session bus on D-Bus, instead of the system bus.
+**-m or --manifest-dir <path>** Path to a file or directory where service manifest(s) exist,
+defaults to |service-manifest-dir-code|
+
+**-d or --default-manifest-dir <filepath>** Path to a file or directory where default service manifest(s) exist,
+defaults to |default-service-manifest-dir-code|
+
+**-b or --session-bus** To use the session bus on D-Bus, instead of the system bus. Defaults to |use-session-bus-code|
 
 **-h or --help** Display usage and exit
 

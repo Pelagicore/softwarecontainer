@@ -40,10 +40,18 @@ extensions = [
 ]
 
 # Substitutions for common names. Key is replaced value in the text of all .rst # documents.
-substs = { "bridge-device": "@BRIDGE_DEVICE@",
-           "capabilities-dir": "@SERVICE_MANIFEST_DIR@<service-name>",
-           "default-capabilities-dir": "@DEFAULT_SERVICE_MANIFEST_DIR@<service-name>"
-         }
+substs = {
+    "bridge-device": "@BRIDGE_DEVICE@",
+    "sc-config-file": "@SC_CONFIG_FILE@",
+    "preload-count": "@PRELOAD_COUNT@",
+    "keep-containers-alive": "@KEEP_CONTAINERS_ALIVE_VALUE_STRING@",
+    "use-session-bus": "@USE_SESSION_BUS@",
+    "shutdown-timeout": "@SHUTDOWN_TIMEOUT@",
+    "shared-mounts-dir": "@SHARED_MOUNTS_DIR@",
+    "lxc-config-path": "@LXC_CONFIG_PATH@",
+    "service-manifest-dir": "@SERVICE_MANIFEST_DIR@",
+    "default-service-manifest-dir": "@DEFAULT_SERVICE_MANIFEST_DIR@"
+}
 
 # Duplicate all entries with different formatting options
 # This ensures that even formatted versions of the words in substs variable
