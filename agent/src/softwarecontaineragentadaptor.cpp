@@ -73,6 +73,13 @@ bool SoftwareContainerAgentAdaptor::SetGatewayConfigs(
     return m_agent.setGatewayConfigs(containerID, configs);
 }
 
+void SoftwareContainerAgentAdaptor::ListCapabilities(std::vector<std::string> &capabilities,
+                                                     bool &success)
+{
+    capabilities = m_agent.listCapabilities();
+    success = true; // This operation can not fail
+}
+
 bool SoftwareContainerAgentAdaptor::SetCapabilities(
     const int32_t &containerID,
     const std::vector<std::string> &capabilities)

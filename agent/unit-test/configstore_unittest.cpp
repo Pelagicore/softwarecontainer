@@ -40,9 +40,9 @@ public:
     /* The Service Manifests' (relative) file paths */
     std::string testDataDir   = std::string(TEST_DATA_DIR) + "/";
     std::string dirPath       = testDataDir + "testDirectory/";
-    std::string sm_path       = "CS_unittest_ServiceManifest.json";
-    std::string short_sm_path = "CS_unittest_short_ServiceManifest.json";
-    std::string evil_sm       = "CS_unittest_parseError.json";
+    std::string manifestPath       = "CS_unittest_ServiceManifest.json";
+    std::string shortManifestPath  = "CS_unittest_short_ServiceManifest.json";
+    std::string evilManifest       = "CS_unittest_parseError.json";
 
 };
 
@@ -58,14 +58,14 @@ TEST_F(ConfigStoreTest, constructorEmptyStr) {
  * pointing at a parsable json file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk) {
-    ASSERT_NO_THROW(BaseConfigStore(testDataDir + short_sm_path));
+    ASSERT_NO_THROW(BaseConfigStore(testDataDir + shortManifestPath));
 }
 
 /* Constructing a BaseConfigStore with a file path,
  * pointing at a parsable file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk2) {
-    ASSERT_NO_THROW(BaseConfigStore(testDataDir + sm_path));
+    ASSERT_NO_THROW(BaseConfigStore(testDataDir + manifestPath));
 }
 
 /* Constructing a BaseConfigStore with a file path,
@@ -73,7 +73,7 @@ TEST_F(ConfigStoreTest, constructorFileOk2) {
  * should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilFile) {
-    ASSERT_THROW(BaseConfigStore(testDataDir + evil_sm), ReturnCode);
+    ASSERT_THROW(BaseConfigStore(testDataDir + evilManifest), ReturnCode);
 }
 
 /* Constructing a BaseConfigStore with a directory path,
@@ -112,10 +112,24 @@ TEST_F(ConfigStoreTest, constructorEvilDir2) {
  * should result in a non-empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + sm_path);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + manifestPath);
 
     GatewayConfiguration retGWs = cs.configByID(capNameA);
     ASSERT_FALSE(retGWs.empty());
+}
+
+/* Getting all capability names after reading a service manifest should
+ * result in getting all those names that are listed in the manifest file.
+ */
+TEST_F(ConfigStoreTest, readConfigFetchAllCaps) {
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + manifestPath);
+
+    std::vector<std::string> ids = cs.IDs();
+    ASSERT_FALSE(ids.empty());
+    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameA), ids.end());
+    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameB), ids.end());
+    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameC), ids.end());
+    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameD), ids.end());
 }
 
 /* Reading gateway configurations from a Service Manifest file
@@ -123,7 +137,7 @@ TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
  * should result in an empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + sm_path);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + manifestPath);
     GatewayConfiguration retGWs = cs.configByID("EvilCapName");
     ASSERT_TRUE(retGWs.empty());
 }
@@ -133,7 +147,7 @@ TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
  * should result in a non-empty result. Match result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + short_sm_path);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + shortManifestPath);
     GatewayConfiguration retGWs = cs.configByID(capNameA);
     EXPECT_FALSE(retGWs.empty());
 

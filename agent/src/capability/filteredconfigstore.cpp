@@ -27,6 +27,16 @@ FilteredConfigStore::~FilteredConfigStore()
 {
 }
 
+const std::vector<std::string> FilteredConfigStore::IDs() const
+{
+    std::vector<std::string> ids;
+    for (auto &it : m_capMap) {
+        ids.push_back(it.first);
+    }
+
+    return ids;
+}
+
 GatewayConfiguration FilteredConfigStore::configsByID(const std::vector<std::string> &capIDs) const
 {
     GatewayConfiguration conf;

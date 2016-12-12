@@ -88,6 +88,10 @@ class TestCaps(object):
             success = sc.start(DATA)
             assert success is True
 
+            caps, success = sc.list_capabilities()
+            assert success is True
+            assert "com.pelagicore.sample.simple" in caps
+
             caps_set = sc.set_capabilities(["com.pelagicore.sample.simple"])
             assert caps_set is True
 

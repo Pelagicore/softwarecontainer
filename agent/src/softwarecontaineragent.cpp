@@ -428,6 +428,10 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
     return true;
 }
 
+std::vector<std::string> SoftwareContainerAgent::listCapabilities()
+{
+    return m_filteredConfigStore->IDs();
+}
 
 bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
                                              const std::vector<std::string> &capabilities)

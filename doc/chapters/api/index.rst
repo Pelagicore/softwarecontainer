@@ -115,7 +115,8 @@ Binds a directory on the host to the container.
 
 SetGatewayConfigs
 -----------------
-Sets the configuration of a particular gateway. The gateway configuration contains settings as key/value pairs.
+Sets the configuration of a particular gateway. The gateway configuration contains settings as
+key/value pairs.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
@@ -126,13 +127,23 @@ Sets the configuration of a particular gateway. The gateway configuration contai
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
 
+ListCapabilities
+----------------
+Lists all capabilities that the user can apply.
+
+:Return Value:
+        :capabilities: ``array<string>`` all available capability names
+        :success: ``bool`` Whether or not the operation was successful
+
+
 SetCapabilities
 ---------------
-Currently This method has no applicable usage.
+Applies the given list of capability names to the container. Capabilities are mapped to gateway
+configurations and applied to each gateway for which they map a configuration.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :capabilities: ``array<string>``
+        :capabilities: ``array<string>`` of capability names
 
 |
 
