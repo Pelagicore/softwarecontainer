@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &#8212; softwarecontainer 0.12.0-57c03b0 2016-12-09 documentation</title>
+    <title>Configuration &#8212; softwarecontainer 0.12.0-f5ca93c 2016-12-12 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-57c03b0 2016-12-09',
+        VERSION:     '0.12.0-f5ca93c 2016-12-12',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-57c03b0 2016-12-09 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-f5ca93c 2016-12-12 documentation" href="../../index.html" />
     <link rel="next" title="Service manifests" href="../service-manifests/index.html" />
     <link rel="prev" title="Design" href="../design/index.html" />
    
@@ -49,12 +49,19 @@
 <div class="section" id="command-line-options">
 <span id="cmd-options"></span><h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
 <p>It is possible to configure SoftwareContainer Agent with command line options.</p>
-<p><strong>-p or &#8211;preload &lt;num&gt;</strong> Number of containers to preload, defaults to 0</p>
-<p><strong>-u or &#8211;user &lt;uid&gt;</strong> Default user id to be used when starting processes in the container, defaults to 0</p>
-<p><strong>-s or &#8211;shutdown &lt;bool&gt;</strong> If false, containers will not be shutdown on exit. Useful for debugging. Defaults to true</p>
-<p><strong>-t or &#8211;timeout &lt;seconds&gt;</strong> Timeout in seconds to wait for containers to shutdown, defaults to 2</p>
-<p><strong>-m or &#8211;manifest &lt;path&gt;</strong> Path to a file or directory where service manifest(s) exist, defaults to &#8220;&#8221;</p>
-<p><strong>-b or &#8211;session-bus</strong> To use the session bus on D-Bus, instead of the system bus.</p>
+<p><strong>-c or &#8211;config &lt;path&gt;</strong> Path to SoftwareContainer configuration file, defaults to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//softwarecontainer-config</span></code></p>
+<p><strong>-p or &#8211;preload &lt;num&gt;</strong> Number of containers to preload, defaults to <code class="docutils literal"><span class="pre">1</span></code></p>
+<p><strong>-u or &#8211;user &lt;uid&gt;</strong> Default user id to be used when starting processes in the container, defaults to <code class="docutils literal"><span class="pre">0</span></code>.
+This option is deprecated.</p>
+<p><strong>-k or &#8211;keep-containers-alive</strong> Containers will not be shut down on exit. Useful for debugging.
+Defaults to <code class="docutils literal"><span class="pre">false</span></code></p>
+<p><strong>-t or &#8211;timeout &lt;seconds&gt;</strong> Timeout in seconds to wait for containers to shutdown,
+defaults to <code class="docutils literal"><span class="pre">1</span></code></p>
+<p><strong>-m or &#8211;manifest-dir &lt;path&gt;</strong> Path to a file or directory where service manifest(s) exist,
+defaults to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.d/</span></code></p>
+<p><strong>-d or &#8211;default-manifest-dir &lt;filepath&gt;</strong> Path to a file or directory where default service manifest(s) exist,
+defaults to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.default.d/</span></code></p>
+<p><strong>-b or &#8211;session-bus</strong> To use the session bus on D-Bus, instead of the system bus. Defaults to <code class="docutils literal"><span class="pre">FALSE</span></code></p>
 <p><strong>-h or &#8211;help</strong> Display usage and exit</p>
 </div>
 <div class="section" id="json">
