@@ -16,13 +16,14 @@ node {
         buildParams       += "-DENABLE_EXAMPLES=ON -DCMAKE_INSTALL_PREFIX=/usr"
 
         // Stages are subtasks that will be shown as subsections of the finiished build in Jenkins.
-        stage 'Download'
+        stage('Download') {
             // Checkout the git repository and refspec pointed to by jenkins
             checkout scm
             // Update the submodules in the repository.
             sh 'git submodule update --init'
+        }
 
-        stage 'StartVM'
+        stage('StartVM') {
             // Calculate available amount of RAM
             String gigsramStr = sh (
                 script: 'free -tg | tail -n1 | awk \'{ print $2 }\'',
@@ -43,29 +44,42 @@ node {
             sh "cd ${workspace} && vagrant destroy -f || true"
             sh "cd ${workspace} && VAGRANT_RAM=\"${gigsram}\" VAGRANT_CPUS=\"${numcpus}\" \
                                    APT_CACHE_SERVER=\"10.8.36.16\" vagrant up"
+        }
 
-        stage 'Build'
+        stage('Build') {
             runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
                                      softwarecontainer \"${buildParams}\"")
+        }
 
         // TODO: Haven't figured out how to make the parallel jobs run on the same slave/agent
         // or if it is possible. Very annoying. Let's run sequentially in a single slave for now.
-        stage 'Clang'
+        stage('Clang') {
             runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
                                      softwarecontainer clang \"${buildParams}\"")
-        stage 'User documentation'
+        }
+
+        stage('User documentation') {
             runInVagrant(workspace, 'cd softwarecontainer/build && make user-doc')
-        stage 'API documentation'
+        }
+
+        stage('API documentation') {
             runInVagrant(workspace, 'cd softwarecontainer/build && make api-doc')
-        stage 'UnitTest'
+        }
+
+        stage('UnitTest') {
             runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py")
-        stage 'ServiceTest'
+        }
+
+        stage('ServiceTest') {
             runInVagrant(workspace, "cd softwarecontainer/servicetest && sudo ./run-tests.sh")
-        stage 'Examples'
+        }
+
+        stage('Examples') {
             runInVagrant(workspace, "cd softwarecontainer/examples && sudo ./run-tests.sh")
+        }
         // END TODO
 
-        stage 'Artifacts'
+        stage('Artifacts') {
             // Store the artifacts of the entire build
             archive "**/*"
 
@@ -74,6 +88,7 @@ node {
             step([$class: 'JUnitResultArchiver', testResults: '**/*_unittest_result.xml'])
             // Store the service test results and graph them
             step([$class: 'JUnitResultArchiver', testResults: '**/*_servicetest_result.xml'])
+        }
     }
 
     catch(err) {
