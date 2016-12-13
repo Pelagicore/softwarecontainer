@@ -23,7 +23,8 @@
 #include "pulsegateway.h"
 
 PulseGateway::PulseGateway() :
-    Gateway(ID)
+    Gateway(ID),
+    m_enableAudio(false)
 {
 }
 
@@ -33,10 +34,41 @@ PulseGateway::~PulseGateway()
 
 ReturnCode PulseGateway::readConfigElement(const json_t *element)
 {
-    if (!JSONParser::read(element, "audio", m_enableAudio)) {
+    bool configValue = false;
+
+    if (!JSONParser::read(element, "audio", configValue)) {
         log_error() << "Either \"audio\" key is missing, or not a bool in json configuration";
         return ReturnCode::FAILURE;
     }
+
+    if (!m_enableAudio) {
+        m_enableAudio = configValue;
+    }
+
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode PulseGateway::enablePulseAudio() {
+    bool hasPulse = false;
+    std::string dir = Glib::getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, hasPulse);
+
+    if (!hasPulse) {
+        log_error() << "Should enable pulseaudio gateway, but "
+                    << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
+        return ReturnCode::FAILURE;
+    }
+
+    log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
+    std::string pathInContainer = "/gateways/" + std::string(SOCKET_FILE_NAME);
+    ReturnCode result = getContainer()->bindMountFileInContainer(std::string(dir), pathInContainer, false);
+
+    if (isError(result)) {
+        log_error() << "Could not bind mount pulseaudio socket in container";
+        return ReturnCode::FAILURE;
+    }
+
+    std::string unixPath = "unix:" + pathInContainer;
+    setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath);
     return ReturnCode::SUCCESS;
 }
 
@@ -48,27 +80,7 @@ bool PulseGateway::activateGateway()
     }
     log_debug() << "Audio will be enabled";
 
-    bool hasPulse = false;
-    std::string dir = Glib::getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, hasPulse);
-
-    if (!hasPulse) {
-        log_error() << "Should enable pulseaudio gateway, but "
-                    << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
-        return false;
-    }
-
-    log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
-    std::string pathInContainer = "/gateways/" + std::string(SOCKET_FILE_NAME);
-    ReturnCode result = getContainer()->bindMountFileInContainer(std::string(dir), pathInContainer, false);
-
-    if (isError(result)) {
-        log_error() << "Could not bind mount pulseaudio socket in container";
-        return false;
-    }
-
-    std::string unixPath = "unix:" + pathInContainer;
-    setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath);
-    return true;
+    return isSuccess(enablePulseAudio());
 }
 
 bool PulseGateway::teardownGateway()

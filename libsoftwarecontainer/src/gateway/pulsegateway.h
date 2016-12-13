@@ -60,6 +60,10 @@ public:
     virtual bool teardownGateway() override;
 
 private:
-    bool m_enableAudio = false;
-};
+    bool m_enableAudio;
 
+    /**
+    * @brief enables Pulse audio
+    */
+    virtual ReturnCode enablePulseAudio();
+};
