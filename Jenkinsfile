@@ -23,9 +23,26 @@ node {
             sh 'git submodule update --init'
 
         stage 'StartVM'
+            // Calculate available amount of RAM
+            String gigsramStr = sh (
+                script: 'free -tg | tail -n1 | awk \'{ print $2 }\'',
+                returnStdout: true
+            )
+            int gigsram = gigsramStr.trim() as Integer
+            if (gigsram >= 2) {
+                gigsram = gigsram / 2
+            }
+
+            // And calculate number of CPUS available
+            String numcpus = sh (
+                script: 'nproc',
+                returnStdout: true
+            )
+
             // Start the machine (destroy it if present) and provision it
             sh "cd ${workspace} && vagrant destroy -f || true"
-            sh "cd ${workspace} && APT_CACHE_SERVER=\"10.8.36.16\" vagrant up"
+            sh "cd ${workspace} && VAGRANT_RAM=\"${gigsram}\" VAGRANT_CPUS=\"${numcpus}\" \
+                                   APT_CACHE_SERVER=\"10.8.36.16\" vagrant up"
 
         stage 'Build'
             runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
