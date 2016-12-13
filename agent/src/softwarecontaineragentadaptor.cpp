@@ -11,6 +11,16 @@ SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(SoftwareContainerAg
 {
 }
 
+std::vector<int32_t> SoftwareContainerAgentAdaptor::List()
+{
+    return m_agent.listContainers();
+}
+
+std::vector<std::string> SoftwareContainerAgentAdaptor::ListCapabilities()
+{
+    return m_agent.listCapabilities();
+}
+
 void SoftwareContainerAgentAdaptor::Execute(
     const int32_t &containerID,
     const uint32_t &userID,
@@ -51,12 +61,6 @@ bool SoftwareContainerAgentAdaptor::Destroy(const int32_t &containerID)
     return m_agent.shutdownContainer(containerID);
 }
 
-void SoftwareContainerAgentAdaptor::List(std::vector<int32_t> &containers, bool &success)
-{
-    success = m_agent.listContainers(containers);
-    return;
-}
-
 bool SoftwareContainerAgentAdaptor::BindMount(
     const int32_t &containerID,
     const std::string &pathInHost,
@@ -71,13 +75,6 @@ bool SoftwareContainerAgentAdaptor::SetGatewayConfigs(
     const std::map<std::string, std::string> &configs)
 {
     return m_agent.setGatewayConfigs(containerID, configs);
-}
-
-void SoftwareContainerAgentAdaptor::ListCapabilities(std::vector<std::string> &capabilities,
-                                                     bool &success)
-{
-    capabilities = m_agent.listCapabilities();
-    success = true; // This operation can not fail
 }
 
 bool SoftwareContainerAgentAdaptor::SetCapabilities(

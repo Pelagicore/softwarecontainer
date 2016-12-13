@@ -3,7 +3,6 @@
     <interface name="com.pelagicore.SoftwareContainerAgent">
         <method name="List">
             <arg direction="out" type="ai" name="containers" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="Create">
@@ -54,7 +53,6 @@
 
         <method name="ListCapabilities">
             <arg direction="out" type="as" name="capabilities" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="SetCapabilities">
