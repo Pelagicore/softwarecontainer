@@ -321,7 +321,7 @@ TEST_F(NetlinkTest, FindUnexistingLink) {
     Netlink::LinkInfo link;
     memset(&link.first, 0, sizeof(link.first));
 
-    ASSERT_FALSE(isSuccess(netlink.findLink("bajs3", link)));
+    ASSERT_FALSE(isSuccess(netlink.findLink("badlink3", link)));
     ASSERT_TRUE(link.second.empty());
 
     // Check that no fields were set
