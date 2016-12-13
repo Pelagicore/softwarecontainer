@@ -62,6 +62,8 @@ add_gateway_test(ENABLE_FILEGATEWAY filegateway_unittest.cpp)
 add_gateway_test(ENABLE_FILEGATEWAY filegatewayparser_unittest.cpp)
 add_gateway_test(ENABLE_FILEGATEWAY filegatewaysettingstore_unittest.cpp)
 
+add_gateway_test(ENABLE_PULSEGATEWAY pulsegateway_unittest.cpp)
+
 set(TEST_FILES
     softwarecontainer_test.cpp
     softwarecontainerlib_unittest.cpp
