@@ -33,7 +33,8 @@ public:
 
     SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent);
 
-    void List(std::vector<int32_t> &containers, bool &success);
+    std::vector<int32_t> List() override;
+    std::vector<std::string> ListCapabilities() override;
 
     void Execute(const int32_t &containerID,
                  const uint32_t &userID,
@@ -58,7 +59,6 @@ public:
     bool SetGatewayConfigs(const int32_t &containerID,
                            const std::map<std::string, std::string> &configs) override;
 
-    void ListCapabilities(std::vector<std::string> &capabilities, bool &success) override;
     bool SetCapabilities(const int32_t &containerID,
                          const std::vector<std::string> &capabilities) override;
 

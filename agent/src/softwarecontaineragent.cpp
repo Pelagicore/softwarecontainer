@@ -118,13 +118,14 @@ inline bool SoftwareContainerAgent::isIdValid(ContainerID containerID)
         && (1 == m_containers.count(containerID));
 }
 
-bool SoftwareContainerAgent::listContainers(std::vector<ContainerID> &containers)
+std::vector<ContainerID> SoftwareContainerAgent::listContainers()
 {
+    std::vector<ContainerID> containers;
     for (auto &cont : m_containers) {
         containers.push_back(cont.first);
     }
 
-    return true;
+    return containers;
 }
 
 bool SoftwareContainerAgent::deleteContainer(ContainerID containerID)

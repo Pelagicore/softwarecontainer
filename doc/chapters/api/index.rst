@@ -18,6 +18,9 @@ D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API p
 
 Methods
 -------
+All methods that modify the state of the containers return a ``success`` variable along with the
+actual return value. This is to not have to rely on magic values. The two methods ``List`` and
+``ListCapabilities`` are the only ones that doesn't modify the state.
 
 List
 ----
@@ -25,6 +28,13 @@ Returns a list of the current containers
 
 :Return Values:
         :containers: ``array<int32>`` IDs for all containers
+
+ListCapabilities
+----------------
+Lists all capabilities that the user can apply.
+
+:Return Value:
+        :capabilities: ``array<string>`` all available capability names
 
 Create
 ------
@@ -126,14 +136,6 @@ key/value pairs.
 
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
-
-ListCapabilities
-----------------
-Lists all capabilities that the user can apply.
-
-:Return Value:
-        :capabilities: ``array<string>`` all available capability names
-        :success: ``bool`` Whether or not the operation was successful
 
 
 SetCapabilities
