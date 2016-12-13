@@ -159,20 +159,18 @@ information.
 
 # Testing
 There are currently three levels of tests: unit tests, component tests, and
-service tests. To run all tests after building, run `run-all-tests.sh`
-in the project root.
+service tests.
 
 The unit tests written in gtest/gmock are available in */unit-test/*. The tests
-are run using `run-tests.sh` from the build directory. Note that you have
-to run them as root, since the actual container creation is not stubbed of
+are run using `run-tests.py` from the build directory. Note that you have
+to run them as root, since the actual container creation is not stubbed off
 and requires root access.
-
-The component tests are in libsoftwarecontainer/component-test/ and are run
-with test_runner.sh. Currently, the component tests are outdated and need
-to be reworked.
 
 The service tests are in service-test/ and can be run with run-tests.sh.
 See servicetest/README.md for more details about these tests.
+
+All the examples can also be build and tested against the current codebase by
+running run-tests.sh from the examples/ directory.
 
 # License and Copyright
 Copyright (c) 2016 Pelagicore AB
