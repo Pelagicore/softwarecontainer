@@ -32,6 +32,7 @@ node {
             int gigsram = gigsramStr.trim() as Integer
             if (gigsram >= 2) {
                 gigsram = gigsram / 2
+                println "Will set VAGRANT_RAM to ${gigsram}"
             }
 
             // And calculate number of CPUS available
@@ -40,10 +41,15 @@ node {
                 returnStdout: true
             )
 
+            println "Will set VAGRANT_CPUS to ${numcpus}"
+
             // Start the machine (destroy it if present) and provision it
             sh "cd ${workspace} && vagrant destroy -f || true"
-            sh "cd ${workspace} && VAGRANT_RAM=\"${gigsram}\" VAGRANT_CPUS=\"${numcpus}\" \
-                                   APT_CACHE_SERVER=\"10.8.36.16\" vagrant up"
+            withEnv(["VAGRANT_RAM=${gigsram}",
+                     "VAGRANT_CPUS=${numcpus}",
+                     "APT_CACHE_SERVER=10.8.36.16"]) {
+                sh "cd ${workspace} && vagrant up"
+            }
         }
 
         stage('Build') {
