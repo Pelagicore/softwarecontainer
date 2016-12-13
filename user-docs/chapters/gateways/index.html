@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Gateways &#8212; softwarecontainer 0.12.0-6bf7fad 2016-12-13 documentation</title>
+    <title>Gateways &#8212; softwarecontainer 0.12.0-5af005b 2016-12-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-6bf7fad 2016-12-13',
+        VERSION:     '0.12.0-5af005b 2016-12-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-6bf7fad 2016-12-13 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-5af005b 2016-12-13 documentation" href="../../index.html" />
     <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
     <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
    
@@ -147,7 +147,7 @@ container or incoming from the outside of the container.</li>
 <li><code class="docutils literal"><span class="pre">direction</span></code> - A string set to either <code class="docutils literal"><span class="pre">incoming</span></code> if the call or signal is coming from the outside of the container, or <code class="docutils literal"><span class="pre">outgoing</span></code> if the call or signal is coming from inside of the container.</li>
 <li><code class="docutils literal"><span class="pre">interface</span></code> - A string specifying a D-Bus interface name, e.g. <code class="docutils literal"><span class="pre">org.freedesktop.DBus</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">object-path</span></code> - A string specifying a D-Bus object path, e.g. <code class="docutils literal"><span class="pre">/org/freedesktop/UPower/Policy</span></code>.</li>
-<li><code class="docutils literal"><span class="pre">method</span></code> - A string specifying a D-Bus method name or signal name, e.g. <code class="docutils literal"><span class="pre">EnumerateDevices</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">method</span></code> - A string or an array of strings specifying a D-Bus method name or signal name, e.g. <code class="docutils literal"><span class="pre">EnumerateDevices</span></code>.</li>
 </ul>
 <p>All the values can be substituted with the wildcard character <code class="docutils literal"><span class="pre">*</span></code> with the meaning &#8220;all&#8221;, e.g. a
 &#8220;direction&#8221; set to <code class="docutils literal"><span class="pre">*</span></code> will mean both incoming and outgoing, and a <code class="docutils literal"><span class="pre">method</span></code> set to <code class="docutils literal"><span class="pre">*</span></code> will
@@ -209,6 +209,22 @@ access at all to the system bus would look like:</p>
                 <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
                 <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/&quot;</span><span class="p">,</span>
                 <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Introspect&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that allows access to the session bus on only methods &#8220;Method1&#8221;, &#8220;Method2&#8221;,&#8221;Method3&#8221; and &#8220;Method4&#8221;:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;Method1&quot;</span><span class="p">,</span> <span class="s">&quot;Method3&quot;</span><span class="p">,</span> <span class="s">&quot;Method4&quot;</span><span class="p">,</span> <span class="s">&quot;Method2&quot;</span><span class="p">]</span>
             <span class="p">}</span>
         <span class="p">],</span>
         <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
