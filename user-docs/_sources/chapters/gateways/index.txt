@@ -458,6 +458,9 @@ A malformed configuration or a configuration that sets audio to false will simpl
 disable audio and in such case, the gateway will not connect to the PulseAudio
 server at all.
 
+The configuration can be set several times, but once it has been set to ``true``
+it will retain its value.
+
 
 Wayland gateway
 ===============
