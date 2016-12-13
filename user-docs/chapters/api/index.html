@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.12.0-41bb9fc 2016-12-13 documentation</title>
+    <title>API &#8212; softwarecontainer 0.12.0-82568c5 2016-12-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-41bb9fc 2016-12-13',
+        VERSION:     '0.12.0-82568c5 2016-12-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-41bb9fc 2016-12-13 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-82568c5 2016-12-13 documentation" href="../../index.html" />
     <link rel="next" title="Design" href="../design/index.html" />
     <link rel="prev" title="SoftwareContainer examples" href="../examples/index.html" />
    
@@ -62,6 +62,9 @@ mostly useful for integrators.</p>
 </table>
 <div class="section" id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<p>All methods that modify the state of the containers return a <code class="docutils literal"><span class="pre">success</span></code> variable along with the
+actual return value. This is to not have to rely on magic values. The two methods <code class="docutils literal"><span class="pre">List</span></code> and
+<code class="docutils literal"><span class="pre">ListCapabilities</span></code> are the only ones that doesn&#8217;t modify the state.</p>
 </div>
 <div class="section" id="list">
 <h3>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
@@ -75,6 +78,26 @@ mostly useful for integrators.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containers:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="listcapabilities">
+<h3>ListCapabilities<a class="headerlink" href="#listcapabilities" title="Permalink to this headline">¶</a></h3>
+<p>Lists all capabilities that the user can apply.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> all available capability names</td>
 </tr>
 </tbody>
 </table>
@@ -345,7 +368,8 @@ mostly useful for integrators.</p>
 </div>
 <div class="section" id="setgatewayconfigs">
 <h3>SetGatewayConfigs<a class="headerlink" href="#setgatewayconfigs" title="Permalink to this headline">¶</a></h3>
-<p>Sets the configuration of a particular gateway. The gateway configuration contains settings as key/value pairs.</p>
+<p>Sets the configuration of a particular gateway. The gateway configuration contains settings as
+key/value pairs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -386,7 +410,8 @@ mostly useful for integrators.</p>
 </div>
 <div class="section" id="setcapabilities">
 <h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
-<p>Currently This method has no applicable usage.</p>
+<p>Applies the given list of capability names to the container. Capabilities are mapped to gateway
+configurations and applied to each gateway for which they map a configuration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -397,7 +422,7 @@ mostly useful for integrators.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code></td>
+<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> of capability names</td>
 </tr>
 </tbody>
 </table>
@@ -465,6 +490,7 @@ mostly useful for integrators.</p>
 <li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
 <li><a class="reference internal" href="#methods">Methods</a></li>
 <li><a class="reference internal" href="#list">List</a></li>
+<li><a class="reference internal" href="#listcapabilities">ListCapabilities</a></li>
 <li><a class="reference internal" href="#create">Create</a></li>
 <li><a class="reference internal" href="#execute">Execute</a></li>
 <li><a class="reference internal" href="#destroy">Destroy</a></li>
