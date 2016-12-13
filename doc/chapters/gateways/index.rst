@@ -128,7 +128,7 @@ The rules are implemented as name/value pairs:
 - ``direction`` - A string set to either ``incoming`` if the call or signal is coming from the outside of the container, or ``outgoing`` if the call or signal is coming from inside of the container.
 - ``interface`` - A string specifying a D-Bus interface name, e.g. ``org.freedesktop.DBus``.
 - ``object-path`` - A string specifying a D-Bus object path, e.g. ``/org/freedesktop/UPower/Policy``.
-- ``method`` - A string specifying a D-Bus method name or signal name, e.g. ``EnumerateDevices``.
+- ``method`` - A string or an array of strings specifying a D-Bus method name or signal name, e.g. ``EnumerateDevices``.
 
 All the values can be substituted with the wildcard character ``*`` with the meaning "all", e.g. a
 "direction" set to ``*`` will mean both incoming and outgoing, and a ``method`` set to ``*`` will
@@ -193,6 +193,22 @@ access at all to the system bus would look like::
                     "interface": "org.freedesktop.DBus.Introspectable",
                     "object-path": "/",
                     "method": "Introspect"
+                }
+            ],
+            "dbus-gateway-config-system": []
+        }
+    ]
+
+A configuration that allows access to the session bus on only methods "Method1", "Method2","Method3" and "Method4"::
+
+    [
+        {
+            "dbus-gateway-config-session": [
+                {
+                    "direction": "*",
+                    "interface": "*",
+                    "object-path": "*",
+                    "method": ["Method1", "Method3", "Method4", "Method2"]
                 }
             ],
             "dbus-gateway-config-system": []
