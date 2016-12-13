@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &#8212; softwarecontainer 0.12.0-3ab5aef 2016-12-13 documentation</title>
+    <title>Configuration &#8212; softwarecontainer 0.12.0-12b9072 2016-12-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-3ab5aef 2016-12-13',
+        VERSION:     '0.12.0-12b9072 2016-12-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-3ab5aef 2016-12-13 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-12b9072 2016-12-13 documentation" href="../../index.html" />
     <link rel="next" title="Service manifests" href="../service-manifests/index.html" />
     <link rel="prev" title="Design" href="../design/index.html" />
    
@@ -45,10 +45,62 @@
             
   <div class="section" id="configuration">
 <span id="id1"></span><h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<p>This chapter gives a brief overview of mechanisms that are used to configure SoftwareContainer.</p>
+<p>This chapter gives a brief overview of mechanisms that are used to configure SoftwareContainer (SC).</p>
+<p>There are different categories of configuration sources for SC:</p>
+<ul class="simple">
+<li>Build configuration</li>
+<li>Main configuration of SC itself</li>
+<li>Command line options</li>
+<li>LXC configuration</li>
+<li>Gateway configuration</li>
+<li>Dynamic configuration on D-Bus interface</li>
+</ul>
+<p>There are different purposes of the configurations:</p>
+<ul class="simple">
+<li>SC functionality and behavior</li>
+<li>LXC container configuration</li>
+<li>Environment of the application running inside a container</li>
+</ul>
+<p>Configurations are applied at startup by means of installed config files, or at a later stage
+through the D-Bus API.</p>
+<div class="section" id="build-configuration">
+<h2>Build configuration<a class="headerlink" href="#build-configuration" title="Permalink to this headline">¶</a></h2>
+<p>CMake options can be used to configure SC during the configure stage of building. Which gateways
+that will be enabled are defined at this stage and are explained below. For a complete list of
+options and the details about them, see the top level <code class="docutils literal"><span class="pre">README.md</span></code> and top level <code class="docutils literal"><span class="pre">CMakeLists.txt</span></code>
+in the SC repo.</p>
+<p>Some configuraion options might affect the content of other config files that are created during
+the build process, or default values used by SC at runtime.</p>
+<div class="section" id="gateways-build-options">
+<h3>Gateways build options<a class="headerlink" href="#gateways-build-options" title="Permalink to this headline">¶</a></h3>
+<p>If a gateway is disabled this means that the gateway will not be part of SoftwareContainer at
+compile time, hence this will disable the IPC mechanism that the gateway in question handles.
+As an example, the following snippet will configure SC without any network support:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">cmake</span> <span class="o">-</span><span class="n">DENABLE_NETWORKGATEWAY</span><span class="o">=</span><span class="n">OFF</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="main-softwarecontainer-config">
+<h2>Main SoftwareContainer config<a class="headerlink" href="#main-softwarecontainer-config" title="Permalink to this headline">¶</a></h2>
+<p>The main configuration of SC is defined in a configuration file which is configured and installed
+by the build system and located (by default) in <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//softwarecontainer-config</span></code>.</p>
+<p>In the config file, all options available are present and the ones that are optional are set to their
+default value and commented out. The values they are set to is what will be used unless otherwise
+specified by being uncommented and set to a different value.</p>
+<p>Any options in the config file that are not commented out by default are mandatory and needs to
+be present. It is an error to comment these out or remove them.</p>
+<p>Some of the options in this config can also be set on command line, see <a class="reference internal" href="#cmd-line-options"><span class="std std-ref">Command line options</span></a>.</p>
+<p>In the case of multiple sources of the same config option being available, the order of precedence is:</p>
+<ul class="simple">
+<li>Command line options related to the main config options are always considered first</li>
+<li>Config file options are considered secondly</li>
+<li>Defaults are applied if nothing else was specified</li>
+</ul>
+</div>
 <div class="section" id="command-line-options">
-<span id="cmd-options"></span><h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
-<p>It is possible to configure SoftwareContainer Agent with command line options.</p>
+<span id="cmd-line-options"></span><h2>Command line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to configure SoftwareContainer with command line options.</p>
 <p><strong>-c or &#8211;config &lt;path&gt;</strong> Path to SoftwareContainer configuration file, defaults to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//softwarecontainer-config</span></code></p>
 <p><strong>-p or &#8211;preload &lt;num&gt;</strong> Number of containers to preload, defaults to <code class="docutils literal"><span class="pre">1</span></code></p>
 <p><strong>-u or &#8211;user &lt;uid&gt;</strong> Default user id to be used when starting processes in the container, defaults to <code class="docutils literal"><span class="pre">0</span></code>.
@@ -59,84 +111,29 @@ Defaults to <code class="docutils literal"><span class="pre">false</span></code>
 defaults to <code class="docutils literal"><span class="pre">1</span></code></p>
 <p><strong>-m or &#8211;manifest-dir &lt;path&gt;</strong> Path to a file or directory where service manifest(s) exist,
 defaults to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.d/</span></code></p>
-<p><strong>-d or &#8211;default-manifest-dir &lt;filepath&gt;</strong> Path to a file or directory where default service manifest(s) exist,
+<p><strong>-d or &#8211;default-manifest-dir &lt;path&gt;</strong> Path to a file or directory where default service manifest(s) exist,
 defaults to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.default.d/</span></code></p>
 <p><strong>-b or &#8211;session-bus</strong> To use the session bus on D-Bus, instead of the system bus. Defaults to <code class="docutils literal"><span class="pre">FALSE</span></code></p>
 <p><strong>-h or &#8211;help</strong> Display usage and exit</p>
 </div>
-<div class="section" id="json">
-<span id="json-conf"></span><h2>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h2>
-<p>JSON is a lightweight data-interchange format. One method to configure SoftwareContainer is using
-a JSON string as runtime configuration for specific objects.
-For more information about JSON : <a class="reference external" href="http://www.json.org">http://www.json.org</a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Container Configure Options:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<p>When creating containers, a configuration is passed as a JSON string. The string is an array with
-objects. For more information about supported parameters <a class="reference internal" href="../getting-started/index.html#getting-started"><span class="std std-ref">Getting Started</span></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Gateway Configure Options:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<p>SoftwareContainer provides a set of gateways. All of these gateways can be configured on
-runtime by using SetGatewayConfigs method with a configuration parameter passed as a JSON
-string. For more information about gateways and parameters <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a></p>
+<div class="section" id="lxc-config">
+<h2>LXC config<a class="headerlink" href="#lxc-config" title="Permalink to this headline">¶</a></h2>
+<p>LXC is configured partly by the LXC template <code class="docutils literal"><span class="pre">libsoftwarecontainer/lxc-softwarecontainer.in</span></code> which is configured
+and installed by CMake. This is passed to LXC by SC.</p>
+<p>The other source of LXC specific configuration is in <code class="docutils literal"><span class="pre">libsoftwarecontainer/softwarecontainer.conf.in</span></code> which is
+configured and installed by CMake to <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//softwarecontainer.conf</span></code>.</p>
 </div>
-<div class="section" id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
-<p>For some features configuration files are used to pass values to particular operations.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">LXC Configuration File:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<p>There is a <code class="docutils literal"><span class="pre">softwarecontainer.conf</span></code> file to define many options used by The linux containers (lxc).
-It is possible to configure back-end container with this file. For more information about LXC
-configuration : <a class="reference external" href="http://man7.org/linux/man-pages/man5/lxc.container.conf.5.html">http://man7.org/linux/man-pages/man5/lxc.container.conf.5.html</a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">Service Manifests:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<p>As it is indicated in the <a class="reference internal" href="../design/index.html#design"><span class="std std-ref">design chapter</span></a>, each IPC is managed by a gateway. Service
-manifests contain capabilities, which map to gateway configurations. For more information about
-service manifests <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">Service manifests</span></a>.</p>
+<div class="section" id="gateway-configuration">
+<h2>Gateway configuration<a class="headerlink" href="#gateway-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Gateways (that are configured to be built) are configured by means of gateway configs. For details about
+these configs, their content and format, and how they are applied, see <a class="reference internal" href="../design/index.html#design"><span class="std std-ref">Design</span></a>,
+<a class="reference internal" href="../integration-guidelines/index.html#integration-guidelines"><span class="std std-ref">Integration guidelines</span></a>, and <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
 </div>
-<div class="section" id="cmake-options">
-<h2>CMake Options<a class="headerlink" href="#cmake-options" title="Permalink to this headline">¶</a></h2>
-<p>CMake options can be used to configure SoftwareContainer. The following is an explanation of some
-of them together with use case examples.</p>
-<div class="section" id="gateways-options">
-<h3>Gateways options<a class="headerlink" href="#gateways-options" title="Permalink to this headline">¶</a></h3>
-<p>If a gateway is disabled this means that the gateway will not be part of SoftwareContainer at
-compile time, hence this will disable the IPC mechanism that the gateway in question handles.
-As an example, the following snippet will install SoftwareContainer without any network support:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cmake</span> <span class="o">-</span><span class="n">DENABLE_NETWORKGATEWAY</span><span class="o">=</span><span class="n">OFF</span> <span class="o">..</span>
-<span class="n">make</span>
-<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
-</pre></div>
-</div>
-<p>A complete list of available gateways can be found at <a class="reference internal" href="../gateways/index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
-</div>
+<div class="section" id="dynamic-configuration">
+<h2>Dynamic configuration<a class="headerlink" href="#dynamic-configuration" title="Permalink to this headline">¶</a></h2>
+<p>When creating containers using the D-Bus interface, a configuration is passed as a JSON string.
+For more details, see <a class="reference internal" href="../getting-started/index.html#getting-started"><span class="std std-ref">Getting Started</span></a>.</p>
+<p>This configuration is used for configs that needs to be set per container at runtime.</p>
 </div>
 </div>
 
@@ -149,13 +146,15 @@ As an example, the following snippet will install SoftwareContainer without any 
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Configuration</a><ul>
-<li><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
-<li><a class="reference internal" href="#json">JSON</a></li>
-<li><a class="reference internal" href="#files">Files</a></li>
-<li><a class="reference internal" href="#cmake-options">CMake Options</a><ul>
-<li><a class="reference internal" href="#gateways-options">Gateways options</a></li>
+<li><a class="reference internal" href="#build-configuration">Build configuration</a><ul>
+<li><a class="reference internal" href="#gateways-build-options">Gateways build options</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#main-softwarecontainer-config">Main SoftwareContainer config</a></li>
+<li><a class="reference internal" href="#command-line-options">Command line options</a></li>
+<li><a class="reference internal" href="#lxc-config">LXC config</a></li>
+<li><a class="reference internal" href="#gateway-configuration">Gateway configuration</a></li>
+<li><a class="reference internal" href="#dynamic-configuration">Dynamic configuration</a></li>
 </ul>
 </li>
 </ul>
