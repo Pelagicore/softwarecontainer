@@ -81,16 +81,15 @@ TEST_F(NetworkGatewayTest, Activate) {
 }
 
 /**
-
- * @brief Test NetworkGateway::activate is successful but that no network interface
- *  is brought up when the networking config is malformed.
+ * @brief Test that setConfig fails on malformed config and that activate throws
+ *        an exception when called and gateway is not configured.
  */
 TEST_F(NetworkGatewayTest, ActivateBadConfig) {
     givenContainerIsSet(gw);
     const std::string config = "[{\"internet-access\": true}]";
 
     ASSERT_FALSE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
+    ASSERT_THROW(gw->activate(), GatewayError);
 }
 
 /**
