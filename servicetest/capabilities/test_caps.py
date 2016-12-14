@@ -21,23 +21,18 @@ import pytest
 import os
 
 from testframework import Container
+from testframework import Capability
+from testframework import StandardManifest
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-
-##### Configs #####
-
-# These configurations are passed to the Helper to write Service Manifests
-# to file which can be read by ConfigStore when initiating the Agent.
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
-    return CURRENT_DIR + "/test.log"
+    return TESTOUTPUT_DIR + "/test.log"
 
-# This function is used by the 'agent' fixture to know where to search for capabilities
-def caps_dirs():
-    return "{}/caps.d/".format(CURRENT_DIR), "{}/caps.default.d/".format(CURRENT_DIR)
 
 # These default values are used to pass various test specific values and
 # configurations to the Container helper. Tests that need to add, remove or
@@ -49,7 +44,67 @@ DATA = {
     Container.READONLY: False
 }
 
-@pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
+
+DBUS_GW_CONFIG = [{
+    "dbus-gateway-config-session": [{
+        "direction": "outgoing",
+        "interface": "*",
+        "object-path": "*",
+        "method": "*"
+    }],
+    "dbus-gateway-config-system": []
+}]
+
+
+""" Cap with the purpose of just providing a valid cap """
+# TODO: Using this cap should actually fail when we get the error handling correct,
+#       see reported issue
+test_cap = Capability("test.cap",
+                      [
+                          {"id": "test", "config": []}
+                      ])
+
+""" A valid dbus GW cap to test e.g. listing of available caps """
+test_cap_dbus = Capability("test.cap.valid-dbus",
+                            [
+                                {"id": "dbus", "config": DBUS_GW_CONFIG}
+                            ])
+
+test_cap_broken = Capability("test.cap.broken-gw-config",
+                             [
+                                 {"id": "dbus", "config": ["malformed"]}
+                             ])
+
+manifest = StandardManifest(TESTOUTPUT_DIR,
+                            "caps-test-manifest.json",
+                            [test_cap, test_cap_dbus, test_cap_broken])
+
+
+def service_manifests():
+    """ The agent fixture calls this function when it creates the service manifests
+        that should be used with this test module. The agent fixture expects a list
+        of StandardManifest and/or DefaultManifest objects.
+    """
+    return [manifest]
+
+
+@pytest.fixture
+def create_testoutput_dir(scope="module"):
+    """ Create a directory for the generated test files.
+
+        This directory is ignored by git but it's nice to have
+        somewhere locally to store test output to support
+        troubleshooting etc.
+    """
+    if not os.path.exists(TESTOUTPUT_DIR):
+        os.makedirs(TESTOUTPUT_DIR)
+
+
+""" TODO:
+            * Add tests for default caps
+"""
+
+@pytest.mark.usefixtures("dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
 class TestCaps(object):
     """ This suite tests that capabilities can be used with SoftwareContainer with
         expected results.
@@ -63,54 +118,73 @@ class TestCaps(object):
         in the correct gateway configs being applied.
     """
 
-    def test_set_caps_only_default(self):
-        """ Test that setting the default capabilities works when sending
-            an empty list of capabilities, i.e. no error is returned
+    def test_set_caps_with_empty_arg_is_allowed(self):
+        """ Test that there is no error when passing an empty list of caps, i.e. no caps
         """
         sc = Container()
         try:
-            success = sc.start(DATA)
-            assert success is True
-
+            sc.start(DATA)
             caps_set = sc.set_capabilities([])
             assert caps_set is True
 
-            ## TODO verify that config is valid and can be used
         finally:
             sc.terminate()
 
-    def test_set_caps(self):
-        """ Test that setting an existing capability works,
-            i.e. no error is returned
+    def test_set_caps_works(self):
+        """ Test that setting an existing capability works, i.e. no error is returned
         """
         sc = Container()
         try:
-            success = sc.start(DATA)
-            assert success is True
-
-            caps = sc.list_capabilities()
-            assert "com.pelagicore.sample.simple" in caps
-
-            caps_set = sc.set_capabilities(["com.pelagicore.sample.simple"])
+            sc.start(DATA)
+            caps_set = sc.set_capabilities(["test.cap.valid-dbus"])
             assert caps_set is True
-
-            ## TODO verify that config is valid and can be used
         finally:
             sc.terminate()
 
-    @pytest.mark.xfail() # See reported issue
-    def test_evil_caps(self):
-        """ Test that setting a non-existing capability works,
-            i.e. no error is returned by the D-Bus API.
-            Note: Since we do have a default Service Manifest this test
-            will still send configuration to D-BUS.
+    def test_non_existent_cap_results_in_failure(self):
+        """ Test that setting a non-existing capability results in a failure
         """
         sc = Container()
         try:
-            success = sc.start(DATA)
-            assert success is True
+            sc.start(DATA)
+            caps_set = sc.set_capabilities(["does.not.exist"])
+            assert caps_set is False
+        finally:
+            sc.terminate()
 
-            caps_set = sc.set_capabilities(["test.dbus", "test.network"])
-            assert caps_set is False ## This should fail when error handling is revised
+    @pytest.mark.xfail()
+    def test_setting_capability_with_unkown_gw_id_fails(self):
+        """ Setting a capability that results in a gateway config with an unknown
+            gateway ID should fail
+        """
+        sc = Container()
+        try:
+            sc.start(DATA)
+            caps_set = sc.set_capabilities(["test.cap"])
+            assert caps_set is False
+        finally:
+            sc.terminate()
+
+
+    def test_setting_capability_with_broken_gw_config_fails(self):
+        """ Setting a capability that leads to a broken gateway config should fail
+        """
+        sc = Container()
+        try:
+            sc.start(DATA)
+            caps_set = sc.set_capabilities(["test.cap.broken-gw-config"])
+            assert caps_set is False
+        finally:
+            sc.terminate()
+
+    def test_list_capabilities(self):
+        """ Test listing available caps works as expected
+        """
+        sc = Container()
+        try:
+            sc.start(DATA)
+            caps = sc.list_capabilities()
+            # All caps present in the service manifest(s) set up previously should be listed
+            assert "test.cap" in caps and "test.cap.valid-dbus" in caps and "test.cap.broken-gw-config" in caps
         finally:
             sc.terminate()

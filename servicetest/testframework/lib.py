@@ -35,6 +35,114 @@ import dbus.mainloop.glib
 from gi.repository import GObject
 
 
+class Capability(object):
+    """ Represents a capability
+
+        Tests use this to create a capability with associated gateway configs.
+
+        Intention is to allow the configs to be defined as close to the test
+        code as possible and avoid the need to have test data files in the
+        test tree representing service manifests.
+
+    """
+
+    def __init__(self, name, gw_confs):
+        """ name        A string with name of capability.
+            gw_confs    A list of dicts with gateway id as key and config as
+                        value.
+        """
+        self.__name = name
+        self.__gw_confs = gw_confs
+        self.__data = dict()
+
+        self.__create_capability_json()
+
+    def __create_capability_json(self):
+        """ Creates a structure like so:
+
+            {
+              "name": "some.cap.name",
+              "gateways": []
+            }
+
+            Where the content of "gateways" will be set by the test. The test
+            should also specify the cap name.
+        """
+        self.__data["name"] = self.__name
+        self.__data["gateways"] = list()
+        for gw in self.__gw_confs:
+            self.__data["gateways"].append(gw)
+
+    def data(self):
+        return self.__data
+
+
+class ServiceManifest(object):
+    """ Represents a service manifest which is read by SC at startup
+
+        The 'agent' fixture use this class to create an actual manifest file
+        on disk which is used while testing and then cleaned up again.
+    """
+
+    def __init__(self, location, name, caps):
+        """ location    A string with full path to the directory where the service
+                        manifest file will be created.
+            name        A string with the service manifest file name
+            caps        A list of Capability objects.
+        """
+        self.__location = location
+        self.__name = name
+        self.__caps = caps
+        self.__manifest_content = dict()
+
+        self.__create_manifest_content()
+
+    def __create_manifest_content(self):
+        """ Creates a structure like so:
+
+            {
+              "capabilities": []
+            }
+
+            Where the content of "capabilities" is defined by the Capability
+            objects passed to this object.
+        """
+        self.__manifest_content["capabilities"] = list()
+        for cap in self.__caps:
+            self.__manifest_content["capabilities"].append(cap.data())
+
+    def json_as_string(self):
+        return json.dumps(self.__manifest_content, indent=4, separators=(",", ": "))
+
+    def name(self):
+        return self.__name
+
+    def location(self):
+        return self.__location
+
+
+class StandardManifest(ServiceManifest):
+    """ Represents a service manifest that will not be recognised as a default manifest
+    """
+
+    def __init__(self, location, name, caps):
+        super(StandardManifest, self).__init__(location, name, caps)
+
+    def is_default(self):
+        return False
+
+
+class DefaultManifest(ServiceManifest):
+    """ Represents a service manifest that will be recognised as a default manifest
+    """
+
+    def __init__(self, location, name, caps):
+        super(DefaultManifest, self).__init__(location, name, caps)
+
+    def is_default(self):
+        return True
+
+
 class Container():
     """ This represents a container for most purposes.
 
@@ -59,15 +167,6 @@ class Container():
         self.__agent = dbus.Interface(pca_obj, "com.pelagicore.SoftwareContainerAgent")
         self.__bind_dir = None
         self.__container_id = None
-
-
-    def set_gateway_config(self, gateway_id, config):
-        """ Set a gateway config by passing an id and a Python object equivalent to a JSON
-            config.
-        """
-        result = self.__agent.SetGatewayConfigs(self.__container_id,
-                                                {gateway_id: json.dumps(config)})
-        return True if result == dbus.Boolean(True) else False
 
     def list_capabilities(self):
         """ List all capabilities that can be used for set_capabilities

@@ -1,0 +1,80 @@
+{
+    "version": "1",
+    "capabilities": [{
+        "name": "com.pelagicore.temperatureservice.gettemperature",
+        "gateways": [{
+            "id": "dbus",
+            "config": [{
+                "dbus-gateway-config-session": []
+            }, {
+                "dbus-gateway-config-system": [{
+                    "direction": "outgoing",
+                    "interface": "org.freedesktop.DBus.Introspectable",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Introspect"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Echo"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "GetTemperature"
+                }, {
+                    "direction": "incoming",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "TemperatureChanged"
+                }]
+            }]
+        }, {
+            "id": "dummy-gw2",
+            "config": []
+        }]
+    }, {
+        "name": "com.pelagicore.temperatureservice.settemperature",
+        "gateways": [{
+            "id": "dbus",
+            "config": [{
+                "dbus-gateway-config-session": []
+            }, {
+                "dbus-gateway-config-system": [{
+                    "direction": "outgoing",
+                    "interface": "org.freedesktop.DBus.Introspectable",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Introspect"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "Echo"
+                }, {
+                    "direction": "outgoing",
+                    "interface": "com.pelagicore.TemperatureService",
+                    "object-path": "/com/pelagicore/TemperatureService",
+                    "method": "SetTemperature"
+                }]
+            }]
+        }]
+    }, {
+        "name": "dummyCapC",
+        "gateways": [{
+            "id": "dbus",
+            "config": []
+        }, {
+            "id": "dummy-gw2",
+            "config": []
+        }]
+    }, {
+        "name": "dummyCapD",
+        "gateways": [{
+            "id": "dummy-gw1",
+            "config": []
+        }, {
+            "id": "dummy-gw2",
+            "config": []
+        }]
+    }]
+}

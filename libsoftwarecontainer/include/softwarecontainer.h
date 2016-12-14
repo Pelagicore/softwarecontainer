@@ -97,11 +97,15 @@ public:
     ObservableProperty<ContainerState> &getContainerState();
 
     /**
-     * @brief Set the gateway configuration and activate them
+     * @brief Set the gateway configurations and activates the configured gateway
+     *
+     * @return ReturnCode::FAILURE if configuration or activation failed
      */
-    void setGatewayConfigs(const GatewayConfiguration &configs);
+    ReturnCode setGatewayConfigs(const GatewayConfiguration &configs);
 
 private:
+    ReturnCode configureGateways(const GatewayConfiguration &gwConfig);
+    ReturnCode activateGateways();
     ReturnCode shutdownGateways();
 
     std::shared_ptr<Workspace> m_workspace;

@@ -1,8 +1,5 @@
-CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
 simple
 dlt.log
 *.properties
 test.log
+testoutput/

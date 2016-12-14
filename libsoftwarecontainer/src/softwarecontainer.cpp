@@ -165,30 +165,91 @@ void SoftwareContainer::addGateway(Gateway *gateway)
     m_gateways.push_back(std::move(std::unique_ptr<Gateway>(gateway)));
 }
 
-void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &gwConfig)
+ReturnCode SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &gwConfig)
 {
-    // Go through the active gateways and check if there is a configuration for it
-    // If there is, apply it.
+    ReturnCode result = ReturnCode::SUCCESS;
 
+    result = configureGateways(gwConfig);
+    if (isError(result)) {
+        return result;
+    }
+
+    result = activateGateways();
+    if (isError(result)) {
+        return result;
+    }
+
+    m_containerState.setValueNotify(ContainerState::READY);
+
+    return result;
+}
+
+ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
+{
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();
 
         json_t *config = gwConfig.config(gatewayId);
         if (config != nullptr) {
-            char *configStr = json_dumps(config,0);
-            gateway->setConfig(std::string(configStr));
-            free(configStr);
+            std::string configStr = json_dumps(config,0);
+            log_debug() << "Configuring gateway \""
+                        << gatewayId
+                        << "\" with config: "
+                        << configStr;
+            try {
+                ReturnCode configurationResult = gateway->setConfig(configStr);
+                if (isError(configurationResult)) {
+                    log_error() << "Failed to apply gateway configuration: " << configStr;
+                    return configurationResult;
+                }
+            } catch (GatewayError &error) {
+                /*
+                 * Exceptions in gateways during configuration are fatal errors for the whole of SC
+                 * as it means one or more capabilities are broken.
+                 */
+                log_error() << "Fatal error when configuring gateway \""
+                            << gatewayId
+                            << "\" : "
+                            << error.what();
+                throw error;
+            }
             json_decref(config);
         }
     }
 
+    return ReturnCode::SUCCESS;
+}
+
+ReturnCode SoftwareContainer::activateGateways()
+{
     for (auto &gateway : m_gateways) {
-        if (gateway->isConfigured()) {
-            gateway->activate();
+        std::string gatewayId = gateway->id();
+
+        try {
+            if (gateway->isConfigured()) {
+                ReturnCode activationResult = gateway->activate();
+                if (isError(activationResult)) {
+                    log_error() << "Failed to activate gateway \""
+                                << gatewayId
+                                << "\"";
+                    return activationResult;
+                }
+            }
+        } catch (GatewayError &error) {
+            /*
+             * Exceptions in gateways during activation are fatal errors for the whole of SC
+             * as it means one or more gateways will not be active in the way one or more
+             * capabilities implies, i.e. the application environment will be in a broken state.
+             */
+            log_error() << "Fatal error when activating gateway \""
+                        << gatewayId
+                        << "\" : "
+                        << error.what();
+            throw error;
         }
     }
 
-    m_containerState.setValueNotify(ContainerState::READY);
+    return ReturnCode::SUCCESS;
 }
 
 ReturnCode SoftwareContainer::shutdown()
@@ -228,7 +289,7 @@ ReturnCode SoftwareContainer::shutdownGateways()
     ReturnCode status = ReturnCode::SUCCESS;
     for (auto &gateway : m_gateways) {
         if (gateway->isActivated()) {
-            if (!gateway->teardown()) {
+            if (isError(gateway->teardown())) {
                 log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
                 status = ReturnCode::FAILURE;
             }

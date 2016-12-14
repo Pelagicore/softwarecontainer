@@ -52,21 +52,35 @@ def agent(request):
     """ Start the Agent and return an interface to it.
 
         This fixture requires the test module to have a function named 'logfile_path'
-        on the module level
+        on the module level.
     """
     # Introspect the consuming module for the logfile path. The scope of this
     # fixture means the module is received through the 'request' parameter
     # and thus the path should be defined on the module level.
     logfile_path = request.module.logfile_path()
 
-    # Check if caps_dirs is defined
-    if 'caps_dirs' in request.module.__dict__:
-        caps_dir, default_caps_dir = request.module.caps_dirs()
-    else:
-        caps_dir = None
-        default_caps_dir = None
+    # Set up and create the service manifests to be used with the calling test module
+    standard_manifest_location = None
+    default_manifest_location = None
 
-    agent_handler = SoftwareContainerAgentHandler(logfile_path, caps_dir, default_caps_dir)
+    if "service_manifests" in request.module.__dict__:
+        manifests = request.module.service_manifests()
+        for manifest in manifests:
+            if manifest.is_default():
+                default_manifest_location = manifest.location() + "/service-manifest.default.d/"
+                if not os.path.exists(default_manifest_location):
+                    os.makedirs(default_manifest_location)
+                service_manifest_file = default_manifest_location + manifest.name()
+            else:
+                standard_manifest_location = manifest.location() + "/service-manifest.d/"
+                if not os.path.exists(standard_manifest_location):
+                    os.makedirs(standard_manifest_location)
+                service_manifest_file = standard_manifest_location + manifest.name()
+
+            with open(service_manifest_file, "w") as fh:
+                fh.write(manifest.json_as_string())
+
+    agent_handler = SoftwareContainerAgentHandler(logfile_path, standard_manifest_location, default_manifest_location)
 
     # Return the setup agent to the consuming test
     yield agent_handler

@@ -24,14 +24,17 @@ import subprocess
 import dbusapp
 
 from testframework import Container
+from testframework import Capability
+from testframework import StandardManifest
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
-    return CURRENT_DIR + "/test.log"
+    return TESTOUTPUT_DIR + "/test.log"
 
 
 # The path to where the test app is located, will be passed in the 'data' dict when
@@ -70,7 +73,45 @@ WL_CONFIG = [{
     "dbus-gateway-config-system": []
 }]
 
-@pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
+
+""" Cap with only GW_CONFIG"""
+test_cap_1 = Capability("test.cap.gwconfig",
+                        [
+                            {"id": "dbus", "config": GW_CONFIG}
+                        ])
+
+""" Cap with only WL_CONFIG """
+test_cap_2 = Capability("test.cap.wlconfig",
+                        [
+                            {"id": "dbus", "config": WL_CONFIG}
+                        ])
+
+manifest = StandardManifest(TESTOUTPUT_DIR,
+                            "dbus-test-manifest.json",
+                            [test_cap_1, test_cap_2])
+
+
+def service_manifests():
+    """ The agent fixture calls this function when it creates the service manifests
+        that should be used with this test module. The agent fixture expects a list
+        of StandardManifest and/or DefaultManifest objects.
+    """
+    return [manifest]
+
+
+@pytest.fixture
+def create_testoutput_dir(scope="module"):
+    """ Create a directory for the generated test files.
+
+        This directory is ignored by git but it's nice to have
+        somewhere locally to store test output to support
+        troubleshooting etc.
+    """
+    if not os.path.exists(TESTOUTPUT_DIR):
+        os.makedirs(TESTOUTPUT_DIR)
+
+
+@pytest.mark.usefixtures("dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
 class TestDBus(object):
     """ This suite should do some basic testing of the D-Bus setup with the gateway,
         an app in a container, the proxy, etc. After that, the main point is to
@@ -87,8 +128,8 @@ class TestDBus(object):
             try:
                 success = ca.start(DATA)
                 assert success is True
-                ca.set_gateway_config("dbus", WL_CONFIG)
-                ca.set_gateway_config("dbus", GW_CONFIG)
+                result = ca.set_capabilities(["test.cap.gwconfig", "test.cap.wlconfig"])
+                assert result is True
                 ca.launch_command('{}/dbusapp.py server'.format(ca.get_bind_dir()))
 
                 time.sleep(0.5)
@@ -107,7 +148,7 @@ class TestDBus(object):
             try:
                 success = ca.start(DATA)
                 assert success is True
-                ca.set_gateway_config("dbus", GW_CONFIG)
+                ca.set_capabilities(["test.cap.gwconfig"])
                 ca.launch_command('{}/dbusapp.py client'.format(ca.get_bind_dir()))
 
                 assert serv.wait_until_requests() is True
@@ -125,8 +166,8 @@ class TestDBus(object):
             serv.start()
             success = ca.start(DATA)
             assert success is True
-            
-            ca.set_gateway_config("dbus", GW_CONFIG)
+
+            ca.set_capabilities(["test.cap.gwconfig"])
 
             clients = 100
             message_size = 8192  # Bytes

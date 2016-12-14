@@ -76,21 +76,20 @@ protected:
  */
 TEST_F(NetworkGatewayTest, Activate) {
     givenContainerIsSet(gw);
-    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
-    ASSERT_TRUE(gw->activate());
+    ASSERT_TRUE(isSuccess(gw->setConfig(VALID_FULL_CONFIG)));
+    ASSERT_TRUE(isSuccess(gw->activate()));
 }
 
 /**
-
- * @brief Test NetworkGateway::activate is successful but that no network interface
- *  is brought up when the networking config is malformed.
+ * @brief Test that setConfig fails on malformed config and that activate throws
+ *        an exception when called and gateway is not configured.
  */
 TEST_F(NetworkGatewayTest, ActivateBadConfig) {
     givenContainerIsSet(gw);
     const std::string config = "[{\"internet-access\": true}]";
 
-    ASSERT_FALSE(gw->setConfig(config));
-    ASSERT_FALSE(gw->activate());
+    ASSERT_TRUE(isError(gw->setConfig(config)));
+    ASSERT_THROW(gw->activate(), GatewayError);
 }
 
 /**
@@ -103,6 +102,6 @@ TEST_F(NetworkGatewayTest, ActivateNoBridge) {
     ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::FAILURE);
         EXPECT_CALL(*gw, isBridgeAvailable());
 
-    ASSERT_TRUE(gw->setConfig(VALID_FULL_CONFIG));
-    ASSERT_FALSE(gw->activate());
+    ASSERT_TRUE(isSuccess(gw->setConfig(VALID_FULL_CONFIG)));
+    ASSERT_TRUE(isError(gw->activate()));
 }

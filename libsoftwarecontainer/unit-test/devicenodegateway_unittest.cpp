@@ -60,7 +60,7 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
                                   }\
                                 ]";
 
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_TRUE(gw->activate());
+    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    ASSERT_TRUE(isSuccess(gw->activate()));
 }
 
