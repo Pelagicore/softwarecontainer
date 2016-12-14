@@ -74,7 +74,8 @@ node {
         }
 
         stage('UnitTest') {
-            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py")
+            String testArg = "-*OutputBuffer"
+            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py ${testArg}")
         }
 
         stage('ServiceTest') {
