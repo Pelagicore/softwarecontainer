@@ -243,6 +243,16 @@ if __name__ == "__main__":
     if parsed_value is not None:
         # Extract the actual path string
         test_file_base_path = parsed_value.pop()
+        """ This test work with two options, first one is base path
+            and the second one is one of below options
+            * do_ping
+            * do_ifconfig
+            * get_env_vars
+            if the second option is matched with one of them, there
+            will be no need to search another value for an option.
+            Thus after matching second option and processing necessary
+            operations, python will exit.
+        """
 
         parsed_value = getattr(args, DO_PING_OPTION)
         if parsed_value is not None:
@@ -253,6 +263,7 @@ if __name__ == "__main__":
             is_pingable = h.ping(ping_host)
             # Dump the information for the helper to read back later in the tests
             h.write_result(is_pingable)
+            sys.exit(0)
 
         parsed_value = getattr(args, DO_IFCONFIG_OPTION)
         if parsed_value is not None:
@@ -261,6 +272,7 @@ if __name__ == "__main__":
             h = NetworkHelper(test_file_base_path)
             #get ip address of container
             h.ifconfig(if_fname)
+            sys.exit(0)
 
         parsed_value = getattr(args, GET_ENV_VARS_OPTION)
         if parsed_value is not None:
@@ -269,3 +281,4 @@ if __name__ == "__main__":
             env_vars = h.get_env_vars()
             # Dump the information for the helper to read back later in the tests
             h.write_result(env_vars)
+            sys.exit(0)
