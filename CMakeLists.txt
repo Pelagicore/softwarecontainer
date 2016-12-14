@@ -243,7 +243,7 @@ endif()
 
 if(ENABLE_COVERAGE)
     include(AddLCov)
-    add_coverage()
+    add_coverage("${CMAKE_BINARY_DIR}/run-tests.py")
 endif(ENABLE_COVERAGE)
 
 

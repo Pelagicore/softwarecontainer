@@ -79,30 +79,31 @@ $ make
 $ sudo make install
 ```
 
-To build the project documentation set -DENABLE_ALL_DOC=ON when running cmake.
-You can also build the docs separately by pointing cmake to the doc
+To build the project documentation set ``-DENABLE_ALL_DOC=ON`` when running
+cmake. You can also build the docs separately by pointing cmake to the doc
 directory. Documentation is separated into doxygen docs (API level docs)
 and docs built with sphinx (user documentation and general docs on a higher
 level).
 
-To run the unit-tests build with -DENABLE_TEST=ON. To run code coverage tools
-build with -DENABLE_COVERAGE=ON.
+To run the unit-tests build with ``-DENABLE_TEST=ON``. To run code coverage tools
+build with ``-DENABLE_COVERAGE=ON``. Then run coverage with ``make lcov`` (needs
+to be run as root).
 
 To disable support for various gateways at compile time, set
-* -DENABLE_PULSEGATEWAY=OFF (for pulse)
-* -DENABLE_NETWORKGATEWAY=OFF (for network)
-* -DENABLE_DEVICENODEGATEWAY=OFF (for device node gateway)
-* -DENABLE_DBUSGATEWAY=OFF (for dbus)
-* -DENABLE_CGROUPSGATEWAY=OFF (for cgroups)
-* -DENABLE_WAYLANDGATEWAY=OFF (for wayland)
-* -DENABLE_FILEGATEWAY=OFF (for mounting files)
-* -DENABLE_ENVGATEWAY=OFF (for manipulating environment variables)
+* ``-DENABLE_PULSEGATEWAY=OFF`` (for pulse)
+* ``-DENABLE_NETWORKGATEWAY=OFF`` (for network)
+* ``-DENABLE_DEVICENODEGATEWAY=OFF`` (for device node gateway)
+* ``-DENABLE_DBUSGATEWAY=OFF`` (for dbus)
+* ``-DENABLE_CGROUPSGATEWAY=OFF`` (for cgroups)
+* ``-DENABLE_WAYLANDGATEWAY=OFF`` (for wayland)
+* ``-DENABLE_FILEGATEWAY=OFF`` (for mounting files)
+* ``-DENABLE_ENVGATEWAY=OFF`` (for manipulating environment variables)
 
-To build the examples, build with -DENABLE_EXAMPLES=ON (and see Examples
+To build the examples, build with ``-DENABLE_EXAMPLES=ON`` (and see Examples
 section).
 
 To prevent SoftwareContainer from creating a network bridge on startup (and
-instead only check that one is there), build with -DCREATE_BRIDGE=OFF.
+instead only check that one is there), build with ``-DCREATE_BRIDGE=OFF``.
 
 For a concrete example of building SoftwareContainer and setting up
 dependencies, see Vagrantfile in this repository. For an example on how to
@@ -118,9 +119,9 @@ build this code, please take a look at the Vagrantfile.
 ## Install without root
 In order to install SoftwareContainer without root there are two things that needs to be set.
 
-1. -DENABLE_SYSTEM_BUS needs to be set to OFF. The dbus xml that is needed for
+1. ``-DENABLE_SYSTEM_BUS`` needs to be set to OFF. The dbus xml that is needed for
    the system bus to be used can not be installed without root privileges.
-2. -DCMAKE_INSTALL_PREFIX needs to be set to a path the installing user has
+2. ``-DCMAKE_INSTALL_PREFIX`` needs to be set to a path the installing user has
    write access to.
 
 ## Building in Vagrant
