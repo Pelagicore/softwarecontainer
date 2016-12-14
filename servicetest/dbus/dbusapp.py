@@ -65,13 +65,21 @@ class Server(threading.Thread):
         self.service = Service(bus)
         self.__loop.run()
 
-    def wait_until_requests(self, multiplier=1, timeout=1):
+    def wait_until_requests(self, multiplier=1, timeout=5):
         if self.service is None:
             print("Server not started yet, aborting wait...")
             return False
         expected_requests = NR_OF_REQUESTS * multiplier
-        ans = wait_until(lambda: self.service.requests == expected_requests, timeout)
-        return ans
+
+        mustend = time.time() + timeout
+        period = 0.25
+        while time.time() < mustend:
+            if self.service.requests == expected_requests:
+                return True
+            time.sleep(period)
+
+        print "Didn't get {} requests in time, only {} requests arrived".format(expected_requests, self.service.requests)
+        return False
 
     def terminate(self):
         self.service.remove_from_connection()
@@ -79,16 +87,6 @@ class Server(threading.Thread):
         if self.__loop is not None:
             self.__loop.quit()
             self.__loop = None
-
-
-def wait_until(somepredicate, timeout, period=0.25, *args, **kwargs):
-    mustend = time.time() + timeout
-    while time.time() < mustend:
-        if somepredicate(*args, **kwargs):
-            return True
-        time.sleep(period)
-    return False
-
 
 class Client():
 
@@ -113,11 +111,9 @@ class Client():
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description='Choose client or server application')
     parser.add_argument('mode', choices=["client", "server"],
                         help='Run the dbusapp as "server" or "client"')
-    parser.add_argument('--size', type=int, default=CLIENT_MESSAGE_SIZE,
-                        help='Size of the messages sent by client')
 
     args = parser.parse_args()
     if args.mode == "server":
