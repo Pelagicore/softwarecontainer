@@ -197,6 +197,9 @@ bool SoftwareContainerAgent::parseConfig(const std::string &config)
         }
     }
 
+    json_decref(root);
+    json_decref(element);
+
     return true;
 }
 

@@ -28,9 +28,9 @@ DBusGateway::DBusGateway(ProxyType type
     : Gateway(ID)
     , m_type(type)
 {
-    m_socket = gatewayDir 
+    m_socket = gatewayDir
              + (m_type == SessionProxy ? "/sess_" : "/sys_")
-             + name 
+             + name
              + ".sock";
 
     m_sessionBusConfig = json_array();
@@ -98,6 +98,7 @@ bool DBusGateway::activateGateway()
 
     char *config_c = json_dumps(jsonConfig, JSON_COMPACT);
     std::string config = std::string(config_c);
+    json_decref(jsonConfig);
     free(config_c);
 
     return testDBusConnection(config);

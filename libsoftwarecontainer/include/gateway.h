@@ -155,6 +155,10 @@ protected:
     virtual bool teardownGateway() = 0;
 
 private:
+    /**
+     * @brief A help function for setConfig to log an error and decref the json element
+     */
+    void setConfigRollback(std::string message, json_t *element);
 
     std::shared_ptr<ContainerAbstractInterface> m_container;
     const char *m_id = nullptr;

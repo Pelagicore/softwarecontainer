@@ -178,6 +178,7 @@ void SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &gwConfig)
             char *configStr = json_dumps(config,0);
             gateway->setConfig(std::string(configStr));
             free(configStr);
+            json_decref(config);
         }
     }
 

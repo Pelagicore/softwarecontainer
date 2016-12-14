@@ -57,5 +57,3 @@ GatewayConfiguration FilteredConfigStore::configByID(const std::string &capID) c
     }
     return m_capMap.at(capID);
 }
-
-
