@@ -28,7 +28,7 @@ class DeviceNodeParserTest : public ::testing::TestWithParam<std::string>
 public:
     DeviceNodeParser parser;
     DeviceNodeParser::Device result;
-    
+
     json_error_t err;
     json_t *configJSON;
 
@@ -45,7 +45,7 @@ public:
     void TearDown()
     {
         if (configJSON) {
-            free(configJSON);
+            json_decref(configJSON);
         }
     }
 

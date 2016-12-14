@@ -43,6 +43,13 @@ public:
         configJSON = json_loads(config.c_str(), 0, &err);
         ASSERT_TRUE(configJSON != NULL);
     }
+
+    void TearDown() override
+    {
+        if (configJSON) {
+            json_decref(configJSON);
+        }
+    }
 };
 
 /*

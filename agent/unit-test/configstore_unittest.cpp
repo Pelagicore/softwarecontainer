@@ -170,6 +170,9 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
     json_t *retGWConfigs = retGWs.config(gwID);
     ASSERT_TRUE(json_is_array(retGWConfigs));
     ASSERT_TRUE(json_equal(retGWConfigs,expectedJson));
+
+    json_decref(expectedJson);
+    json_decref(retGWConfigs);
 }
 
 /* Reading gateway configurations from several Service Manifest files,
@@ -249,5 +252,8 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
         // the retval will have been set to 'true'
         ASSERT_TRUE(retval);
     }
-
+    json_decref(expectedJson1);
+    json_decref(expectedJson2);
+    json_decref(expectedJson3);
+    json_decref(retGWConfigs);
 }

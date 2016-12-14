@@ -40,7 +40,7 @@ public:
     void TearDown() override
     {
         if (configJSON) {
-            free(configJSON);
+            json_decref(configJSON);
         }
     }
 };
@@ -69,7 +69,7 @@ TEST_P(CGroupsPositiveTest, SuccessWhenConfigIsGood) {
 
 /*
  * This data is fed to the NegativeTest
- */ 
+ */
 INSTANTIATE_TEST_CASE_P(TestBadConfigs, CGroupsNegativeTest, ::testing::Values(
     // Missing setting
     "{ \"value\": \"256\" }",

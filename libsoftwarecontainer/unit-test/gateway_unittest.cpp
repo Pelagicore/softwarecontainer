@@ -124,7 +124,7 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
             json_error_t err;
             json_t *arr1 = json_loads(notObjOuter.c_str(), 0, &err);
             json_t *arr2 = json_loads(notObjInner.c_str(), 0, &err);
-            
+
             json_array_extend(arr1, arr2);
             std::string notObjCombined = json_dumps(arr1, 0);
 
@@ -132,8 +132,8 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
             ASSERT_FALSE(gw.activate());
             ASSERT_FALSE(gw.teardown());
 
-            free(arr1);
-            free(arr2);
+            json_decref(arr1);
+            json_decref(arr2);
         }
     }
 }

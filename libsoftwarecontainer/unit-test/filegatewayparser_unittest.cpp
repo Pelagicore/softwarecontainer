@@ -38,6 +38,13 @@ public:
         ASSERT_TRUE(configJSON != NULL);
     }
 
+    void TearDown() override
+    {
+        if (configJSON) {
+            json_decref(configJSON);
+        }
+    }
+
     const std::string FILE_PATH = "/tmp/filename.txt";
     const std::string CONTAINER_PATH = "/filename.txt";
 };
@@ -92,7 +99,7 @@ TEST_F(FileGatewayParserTest, BadBools) {
  * Make sure configuration is rejected if no path in host is provided
  */
 TEST_F(FileGatewayParserTest, NoPathInHost) {
-    const std::string config = 
+    const std::string config =
         "{"
             "\"path-container\" : \"" + CONTAINER_PATH + "\""
         "}";
@@ -105,7 +112,7 @@ TEST_F(FileGatewayParserTest, NoPathInHost) {
  * Make sure configuration is rejected if the path in host is an empty string
  */
 TEST_F(FileGatewayParserTest, EmptyPathInHost) {
-    const std::string config = 
+    const std::string config =
         "{"
             "  \"path-host\": \"\""
             ", \"path-container\" : \"" + CONTAINER_PATH + "\""
@@ -132,7 +139,7 @@ TEST_F(FileGatewayParserTest, NoPathInContainer) {
  * Make sure configuration is rejected if path in container is an empty string
  */
 TEST_F(FileGatewayParserTest, EmptyPathInContainer) {
-    const std::string config = 
+    const std::string config =
         "{"
             "  \"path-host\": \"" + FILE_PATH + "\""
             ", \"path-container\": \"\""
@@ -141,4 +148,3 @@ TEST_F(FileGatewayParserTest, EmptyPathInContainer) {
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
-

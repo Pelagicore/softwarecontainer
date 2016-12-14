@@ -67,6 +67,7 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
     configJson = json_loads(configStrFalse.c_str(), 0, &error);
     config.append(WaylandGateway::ID ,configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     FunctionJob jobTrue(getSc(), [] (){
         bool ERROR = 1;
@@ -235,6 +236,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     ASSERT_FALSE(configJson == nullptr);
     config.append(FileGateway::ID, configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     jobMounted.start();
     ASSERT_EQ(jobMounted.wait(), EXISTENT);
@@ -307,6 +309,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     ASSERT_FALSE(configJson == nullptr);
     config.append(FileGateway::ID, configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     jobMounted.start();
     ASSERT_EQ(jobMounted.wait(), EXISTENT);
@@ -616,6 +619,7 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     ASSERT_FALSE(configJson == nullptr);
     config.append(PulseGateway::ID, configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     // We need access to the test file, so we bind mount it
     std::string soundFile = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
@@ -731,6 +735,7 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
     ASSERT_FALSE(configJson == nullptr);
     config.append(NetworkGateway::ID, configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     CommandJob job(getSc(), "/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
     job.start();
@@ -773,6 +778,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
     ASSERT_FALSE(configJson == nullptr);
     config.append(DBusGateway::ID, configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     {
         CommandJob jobTrue(
@@ -814,6 +820,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
     ASSERT_FALSE(configJson == nullptr);
     config.append(DBusGateway::ID, configJson);
     setGatewayConfigs(config);
+    json_decref(configJson);
 
     for(int i=0; i<2000; i++) {
         CommandJob jobTrue(

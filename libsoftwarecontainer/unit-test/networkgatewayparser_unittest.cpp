@@ -65,6 +65,8 @@ TEST_F(NetworkGatewayParserTest, InputSingularPort) {
     ASSERT_EQ(0, e.m_rules[0].ports.multiport);
     ASSERT_EQ("80", e.m_rules[0].ports.ports);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+
+    json_decref(root);
 }
 
 /*
@@ -98,6 +100,8 @@ TEST_F(NetworkGatewayParserTest, InputMultiplePort) {
     ASSERT_EQ(1, e.m_rules[0].ports.multiport);
     ASSERT_EQ("80,8080", e.m_rules[0].ports.ports);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+
+    json_decref(root);
 }
 
 /*
@@ -128,6 +132,8 @@ TEST_F(NetworkGatewayParserTest, PortTypo) {
     ASSERT_NE(1, e.m_rules[0].ports.any);
     ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+
+    json_decref(root);
 }
 
 
@@ -164,6 +170,8 @@ TEST_F(NetworkGatewayParserTest, OutputMultiplePort) {
     ASSERT_EQ("80:8080", e.m_rules[0].ports.ports);
     ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+
+    json_decref(root);
 }
 
 
@@ -188,6 +196,8 @@ TEST_F(NetworkGatewayParserTest, OutputNoHost) {
     ASSERT_NE(nullptr, root);
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
 
+
+    json_decref(root);
 }
 
 
@@ -212,6 +222,8 @@ TEST_F(NetworkGatewayParserTest, OutputNoPort) {
 
     ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
     ASSERT_EQ(0, e.m_rules[0].ports.any);
+
+    json_decref(root);
 }
 
 /**
@@ -230,6 +242,8 @@ TEST_F(NetworkGatewayParserTest, SetConfigNoRules) {
 
     ASSERT_NE(nullptr, root);
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+
+    json_decref(root);
 }
 
 /**
@@ -249,6 +263,8 @@ TEST_F(NetworkGatewayParserTest, SetConfigEmptyRules) {
 
     ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+
+    json_decref(root);
 }
 
 /**
@@ -268,6 +284,8 @@ TEST_F(NetworkGatewayParserTest, TestSetConfigRulesIsInteger) {
 
     ASSERT_NE(nullptr, root);
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+
+    json_decref(root);
 }
 
 
@@ -298,4 +316,6 @@ TEST_F(NetworkGatewayParserTest, MultipleProtocols) {
     ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
     ASSERT_EQ("udp", e.m_rules[0].protocols[1]);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
+
+    json_decref(root);
 }

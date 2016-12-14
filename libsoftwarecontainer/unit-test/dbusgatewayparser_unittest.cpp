@@ -49,13 +49,26 @@ public:
         ASSERT_EQ(json_array_size(sessionConf), empty);
         ASSERT_EQ(json_array_size(systemConf), empty);
     }
+
+    void TearDown() override
+    {
+        if (sessionConf) {
+            json_decref(sessionConf);
+        }
+        if (systemConf) {
+            json_decref(systemConf);
+        }
+        if (configJSON) {
+            json_decref(configJSON);
+        }
+    }
 };
 
 /*
  * Make sure it is possible to config without a system config (but with a session config)
  */
 TEST_F(DBusGatewayParserTest, TestNoSystemConf) {
-    const std::string config = 
+    const std::string config =
         "{"
             "\"" + std::string(parser.SESSION_CONFIG) + "\": [{}]"
         "}";
@@ -63,7 +76,7 @@ TEST_F(DBusGatewayParserTest, TestNoSystemConf) {
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseDBusConfigElement(configJSON, sessionConf, systemConf));
-    
+
     ASSERT_EQ(json_array_size(systemConf), empty);
     ASSERT_NE(json_array_size(sessionConf), empty);
 }
@@ -72,7 +85,7 @@ TEST_F(DBusGatewayParserTest, TestNoSystemConf) {
  * Make sure it is possible to config without a session config (but with a system config)
  */
 TEST_F(DBusGatewayParserTest, TestNoSessionConf) {
-    const std::string config = 
+    const std::string config =
         "{"
             "\"" + std::string(parser.SYSTEM_CONFIG) + "\": [{}]"
         "}";
@@ -80,7 +93,7 @@ TEST_F(DBusGatewayParserTest, TestNoSessionConf) {
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseDBusConfigElement(configJSON, sessionConf, systemConf));
-    
+
     ASSERT_EQ(json_array_size(sessionConf), empty);
     ASSERT_NE(json_array_size(systemConf), empty);
 }
@@ -94,7 +107,7 @@ TEST_F(DBusGatewayParserTest, TestNoConfAtAll) {
 
     ASSERT_EQ(ReturnCode::FAILURE,
               parser.parseDBusConfigElement(configJSON, sessionConf, systemConf));
-    
+
     ASSERT_EQ(json_array_size(sessionConf), empty);
     ASSERT_EQ(json_array_size(systemConf), empty);
 }
@@ -103,13 +116,13 @@ TEST_F(DBusGatewayParserTest, TestNoConfAtAll) {
  * Make sure we fail whenever the configs are of wrong types
  */
 TEST_F(DBusGatewayParserTest, TestConfigsOfWrongType) {
-    const std::string configObject = 
+    const std::string configObject =
         "{"
             "  \"" + std::string(parser.SYSTEM_CONFIG) + "\": {}"
         "}";
     TestWrongTypeFails(configObject);
 
-    const std::string configString = 
+    const std::string configString =
         "{"
             "  \"" + std::string(parser.SYSTEM_CONFIG) + "\": \"string\""
         "}";
@@ -126,7 +139,7 @@ TEST_F(DBusGatewayParserTest, TestConfigsOfWrongType) {
  * Make sure we succeed configuration when a valid (although minimal) config is given.
  */
 TEST_F(DBusGatewayParserTest, TestFullValidConfig) {
-    const std::string config = 
+    const std::string config =
         "{"
             "  \"" + std::string(parser.SYSTEM_CONFIG) + "\": [{}]"
             ", \"" + std::string(parser.SESSION_CONFIG) + "\": [{}]"
@@ -136,7 +149,7 @@ TEST_F(DBusGatewayParserTest, TestFullValidConfig) {
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseDBusConfigElement(configJSON, sessionConf, systemConf));
-    
+
     ASSERT_NE(json_array_size(sessionConf), empty);
     ASSERT_NE(json_array_size(systemConf), empty);
 }
