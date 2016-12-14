@@ -20,6 +20,7 @@
 
 #include "softwarecontainer-common.h"
 #include "config/config.h"
+#include "config/fileconfigloader.h"
 
 #include "gtest/gtest.h"
 
@@ -416,4 +417,18 @@ TEST_F(ConfigTest, ExplicitBoolValuesTakesPrecedence) {
                   boolOptions);
 
     ASSERT_TRUE(config.getBooleanValue("SoftwareContainer", "sc.shut-down-containers") == true);
+}
+
+/*
+ * Test that using the real FileConfigLoader and passing a path to a non-existent
+ * config file results in the expected exception FileError.
+ *
+ * The other possible exception from FileConfigLoader is KeyFileError when the file
+ * exists but is not well formed, but that is not tested in the unit-tests becuase of the
+ * dependency to having actual files.
+ */
+TEST_F(ConfigTest, LoadingMissingConfigFileThrows) {
+    FileConfigLoader loader("non-existent-path");
+
+    ASSERT_THROW(loader.loadConfig(), Glib::FileError);
 }
