@@ -58,7 +58,6 @@ Config::Config(std::unique_ptr<ConfigLoaderAbstractInterface> loader,
     try {
         m_config = loader->loadConfig();
     } catch (Glib::Error &error) {
-        log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
         throw softwarecontainer::ConfigError();
     }
 }

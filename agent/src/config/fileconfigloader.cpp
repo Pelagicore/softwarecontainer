@@ -28,8 +28,11 @@ std::unique_ptr<Glib::KeyFile> FileConfigLoader::loadConfig()
     try {
         configData->load_from_file(Glib::ustring(this->m_source), Glib::KEY_FILE_NONE);
         log_debug() << "Loaded config file: \"" << this->m_source << "\"";
+    } catch (Glib::FileError &error) {
+        log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
+        log_debug() << "Config file that failed to load: \"" << this->m_source << "\"";
+        throw error;
     } catch (Glib::KeyFileError &error) {
-        // TODO: Why isn't this log output seen?
         log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
         log_debug() << "Config file that failed to load: \"" << this->m_source << "\"";
         throw error;
