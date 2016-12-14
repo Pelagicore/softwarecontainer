@@ -23,56 +23,68 @@
 bool Gateway::setConfig(const std::string &config)
 {
     if (m_state == GatewayState::ACTIVATED) {
-        log_error() << "Can't configure a gateway that is already activated: " << id();
+        log_error() << "Can not configure a gateway that is already activated: " << id();
     }
 
     json_error_t error;
     json_t *root = json_loads(config.c_str(), 0, &error);
     if (!root) {
-        log_error() << "Could not parse config: " << error.text;
+        std::string errorText = logging::StringBuilder()
+            << "Could not parse config: " << error.text;
+        setConfigRollback(errorText,root);
         return false;
     }
 
     if (!json_is_array(root)) {
-        log_error() << "Root JSON element is not an array";
+        setConfigRollback("Root JSON element is not an array",root);
         return false;
     }
 
     if (json_array_size(root) == 0) {
-        log_error() << "Root JSON array is empty";
+        setConfigRollback("Root JSON array is empty",root);
         return false;
     }
 
     for(size_t i = 0; i < json_array_size(root); i++) {
         json_t *element = json_array_get(root, i);
         if (!json_is_object(element)) {
-            log_error() << "json configuration is not an object";
+            setConfigRollback("json configuration is not an object",root);
             return false;
         }
 
         if (isError(readConfigElement(element))) {
-            log_error() << "Could not read config element";
+            setConfigRollback("Could not read config element",root);
             return false;
         }
     }
 
+    json_decref(root);
     m_state = GatewayState::CONFIGURED;
     return true;
 }
 
+void Gateway::setConfigRollback(std::string message, json_t *element)
+{
+    log_error() << message;
+    json_decref(element);
+}
+
 bool Gateway::activate() {
     if (m_state == GatewayState::ACTIVATED) {
-        log_warning() << "Activate was called on a gateway which was already activated: " << id();
+        log_warning() << "Activate was called on a gateway which "
+            "was already activated: " << id();
         return false;
     }
 
     if (m_state != GatewayState::CONFIGURED) {
-        log_warning() << "Activate was called on a gateway which is not in configured state: " << id();
+        log_warning() << "Activate was called on a gateway which "
+            "is not in configured state: " << id();
         return false;
     }
 
     if (!hasContainer()) {
-        log_warning() << "Activate was called on a gateway which has no associated container: " << id();
+        log_warning() << "Activate was called on a gateway which "
+            "has no associated container: " << id();
         return false;
     }
 

@@ -105,6 +105,8 @@ ReturnCode BaseConfigStore::readCapsFromFile(const std::string &filePath)
         return ReturnCode::FAILURE;
     }
 
+    // Can't use json_decref on fileroot, it removes objects too early
+
     return parseCapabilities(capabilities);
 }
 
@@ -149,7 +151,7 @@ ReturnCode BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gat
         log_debug() << "Capability " << capName << " already loaded.";
         return ReturnCode::SUCCESS;
     }
-    
+
     size_t i;
     json_t *gateway;
 
