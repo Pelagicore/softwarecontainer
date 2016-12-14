@@ -30,6 +30,7 @@ node {
                 returnStdout: true
             )
             int gigsram = gigsramStr.trim() as Integer
+            // Only use half of the available memory if it is more than 2GB
             if (gigsram >= 2) {
                 gigsram = gigsram / 2
                 println "Will set VAGRANT_RAM to ${gigsram}"
@@ -80,6 +81,10 @@ node {
             runInVagrant(workspace, "cd softwarecontainer/servicetest && sudo ./run-tests.sh")
         }
 
+        stage('Coverage') {
+            runInVagrant(workspace, "cd softwarecontainer/build && sudo make lcov")
+        }
+
         stage('Examples') {
             runInVagrant(workspace, "cd softwarecontainer/examples && sudo ./run-tests.sh")
         }
@@ -88,6 +93,16 @@ node {
         stage('Artifacts') {
             // Store the artifacts of the entire build
             archive "**/*"
+
+            // Save the coverage report
+            publishHTML (target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: 'build/coverage',
+                reportFiles: 'index.html',
+                reportName: 'Coverage report'
+            ])
 
             // Store the test results and graph them
             // TODO: There is an issue with the build directory ending up as (unreachable)
