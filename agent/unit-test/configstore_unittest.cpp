@@ -46,8 +46,6 @@ public:
 
 };
 
-/* The tests */
-
 /* Constructing a BaseConfigStore with an empty file path should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorEmptyStr) {
@@ -77,10 +75,10 @@ TEST_F(ConfigStoreTest, constructorEvilFile) {
 }
 
 /* Constructing a BaseConfigStore with a directory path,
- * even if all files can not be parsed, should not throw an exception.
+ * that contains a file that can't be parsed results in an exception.
  */
 TEST_F(ConfigStoreTest, constructorDir) {
-    ASSERT_NO_THROW(BaseConfigStore(testDataDir + ""));
+    ASSERT_THROW(BaseConfigStore(testDataDir + ""), ReturnCode);
 }
 
 /* Constructing a FilteredConfigStore with a directory path,
@@ -88,7 +86,7 @@ TEST_F(ConfigStoreTest, constructorDir) {
  */
 TEST_F(ConfigStoreTest, constructorDir2) {
     // No config files, but ok dir
-    ASSERT_NO_THROW(FilteredConfigStore(dirPath +""));
+    ASSERT_NO_THROW(FilteredConfigStore(dirPath + ""));
 }
 
 
@@ -105,7 +103,6 @@ TEST_F(ConfigStoreTest, constructorEvilDir) {
 TEST_F(ConfigStoreTest, constructorEvilDir2) {
     ASSERT_THROW(FilteredConfigStore("/"), ReturnCode);
 }
-
 
 /* Reading gateway configurations from a Service Manifest file
  * and attempting to read an existing capabilities configs
@@ -183,7 +180,7 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
  * reading of file results in a warning (for the "parseError" file).
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir);
+    FilteredConfigStore cs = FilteredConfigStore(testDataDir + "onlyValidManifests/");
     GatewayConfiguration retGWs = cs.configByID(capNameA);
     EXPECT_FALSE(retGWs.empty());
     std::vector<json_t *> expectedDbusConfigs;

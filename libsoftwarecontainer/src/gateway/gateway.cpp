@@ -20,10 +20,11 @@
 #include "gateway.h"
 
 
-bool Gateway::setConfig(const std::string &config)
+ReturnCode Gateway::setConfig(const std::string &config)
 {
     if (m_state == GatewayState::ACTIVATED) {
         log_error() << "Can not configure a gateway that is already activated: " << id();
+        throw GatewayError("Gateway already activated");
     }
 
     json_error_t error;
@@ -32,35 +33,35 @@ bool Gateway::setConfig(const std::string &config)
         std::string errorText = logging::StringBuilder()
             << "Could not parse config: " << error.text;
         setConfigRollback(errorText,root);
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     if (!json_is_array(root)) {
         setConfigRollback("Root JSON element is not an array",root);
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     if (json_array_size(root) == 0) {
         setConfigRollback("Root JSON array is empty",root);
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     for(size_t i = 0; i < json_array_size(root); i++) {
         json_t *element = json_array_get(root, i);
         if (!json_is_object(element)) {
             setConfigRollback("json configuration is not an object",root);
-            return false;
+            return ReturnCode::FAILURE;
         }
 
         if (isError(readConfigElement(element))) {
             setConfigRollback("Could not read config element",root);
-            return false;
+            return ReturnCode::FAILURE;
         }
     }
 
     json_decref(root);
     m_state = GatewayState::CONFIGURED;
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
 void Gateway::setConfigRollback(std::string message, json_t *element)
@@ -69,51 +70,45 @@ void Gateway::setConfigRollback(std::string message, json_t *element)
     json_decref(element);
 }
 
-bool Gateway::activate() {
+ReturnCode Gateway::activate() {
     if (m_state == GatewayState::ACTIVATED) {
-        log_warning() << "Activate was called on a gateway which "
-                      << "was already activated: "
-                      << id();
-        return false;
+        log_error() << "Activate was called on a gateway which was already activated: " << id();
+        throw GatewayError("Gateway already activated");
     }
 
     if (m_state != GatewayState::CONFIGURED) {
-        log_warning() << "Activate was called on a gateway which "
-                      << "is not in configured state: "
-                      << id();
-        return false;
+        log_error() << "Activate was called on a gateway which is not in configured state: " << id();
+        throw GatewayError("Gateway is not configured");
     }
 
     if (!hasContainer()) {
-        log_warning() << "Activate was called on a gateway which "
-                      << "has no associated container: "
-                      << id();
-        return false;
+        log_error() << "Activate was called on a gateway which has no associated container: " << id();
+        throw GatewayError("Gateway does not have a container instance");
     }
 
     if (!activateGateway()) {
         log_error() << "Couldn't activate gateway: " << id();
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     m_state = GatewayState::ACTIVATED;
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
-bool Gateway::teardown() {
+ReturnCode Gateway::teardown() {
     if (m_state != GatewayState::ACTIVATED) {
         log_error() << "Teardown called on non-activated gateway: " << id();
-        return false;
+        throw GatewayError("Gateway not previosly activated");
     }
 
     if (!teardownGateway()) {
         log_error() << "Could not tear down gateway: " << id();
-        return false;
+        return ReturnCode::FAILURE;
     }
 
     // Return to a state of nothingness
     m_state = GatewayState::CREATED;
-    return true;
+    return ReturnCode::SUCCESS;
 }
 
 bool Gateway::hasContainer()

@@ -22,9 +22,41 @@
 #pragma once
 
 #include <string>
+#include <exception>
 
 #include "containerabstractinterface.h"
 #include "jsonparser.h"
+
+
+namespace softwarecontainer {
+
+class GatewayError : public std::exception
+{
+public:
+    GatewayError():
+        m_message(std::string("Gateway error."))
+    {
+    }
+
+    GatewayError(const std::string &message):
+        m_message(message)
+    {
+    }
+
+    ~GatewayError()
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+
+private:
+    std::string m_message;
+};
+}
+
 
 /**
  * @brief Gateway base class for SoftwareContainer
@@ -70,27 +102,39 @@ public:
 
     /**
      * @brief Configure this gateway according to the supplied JSON configuration
-     *  string
+     *        string
      *
      * @param config JSON string containing gateway-specific JSON configuration
-     * @returns true if \p config was successfully parsed
-     *          false otherwise
+     *
+     * @returns ReturnCode::SUCCESS if \p config was successfully parsed,
+     *          ReturnCode::FAILURE otherwise
+     *
+     * @throws GatewayError If called on an already activated gateway.
      */
-    virtual bool setConfig(const std::string &config);
+    virtual ReturnCode setConfig(const std::string &config);
 
     /**
      * @brief Applies any configuration set by setConfig()
-     * @returns true upon successful application of configuration, false otherwise
+     *
+     * @returns ReturnCode::SUCCESS upon successful application of configuration,
+     *          ReturnCode::FAILURE otherwise
+     *
+     * @throws GatewayError If called on an already activated gateway, or if the
+     *                      gateway has not been previously configured, or if there
+     *                      is not container instance set.
      */
-    virtual bool activate();
+    virtual ReturnCode activate();
 
     /**
      * @brief Restore system to the state prior to launching of gateway. Any cleanup
      *  code (removal of files, virtual interfaces, etc) should be placed here.
      *
-     * @returns true upon successful clean-up, false otherwise
+     * @returns ReturnCode::SUCCESS upon successful clean-up,
+     *          ReturnCode::FAILURE otherwise
+     *
+     * @throws GatewayError If called on a non activated gateway.
      */
-    virtual bool teardown();
+    virtual ReturnCode teardown();
 
     /**
      * @brief Set the associated container for this gateway

@@ -66,8 +66,8 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
             ", \"path-container\" : \"" + CONTAINER_PATH + "\""
         "}"
     "]";
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_TRUE(gw->activate());
+    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    ASSERT_TRUE(isSuccess(gw->activate()));
 }
 
 

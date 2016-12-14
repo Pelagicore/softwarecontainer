@@ -34,6 +34,7 @@ BaseConfigStore::BaseConfigStore(const std::string &inputPath)
         retval = readCapsFromFile(inputPath);
     } else {
         //Could not find a matching clause
+        log_error() << "\"" << inputPath << "\"" << " does not exist";
         retval = ReturnCode::FAILURE;
     }
 
@@ -67,8 +68,9 @@ ReturnCode BaseConfigStore::readCapsFromDir(const std::string &dirPath)
     for (std::string file : files) {
         std::string filePath = dirPath + file;
 
-        if (readCapsFromFile(filePath) != ReturnCode::SUCCESS) {
+        if (isError(readCapsFromFile(filePath))) {
             log_warning() << "Could not parse a file in directory: " << filePath;
+            return ReturnCode::FAILURE;
         }
     }
 
@@ -140,7 +142,11 @@ ReturnCode BaseConfigStore::parseCapabilities(json_t *capabilities)
         }
 
         log_debug() << "Found capability \"" << capName << "\", parsing gateways...";
-        parseGatewayConfigs(capName, gateways);
+
+        ReturnCode parseGatewayResult = parseGatewayConfigs(capName, gateways);
+        if (isError(parseGatewayResult)) {
+            return ReturnCode::FAILURE;
+        }
     }
     return ReturnCode::SUCCESS;
 }

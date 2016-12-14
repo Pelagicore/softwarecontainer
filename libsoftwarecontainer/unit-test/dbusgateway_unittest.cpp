@@ -73,6 +73,6 @@ TEST_F(DBusGatewayTest, TestActivate) {
         EXPECT_CALL(*gw, startDBusProxy(_, _));
         EXPECT_CALL(*gw, testDBusConnection(_));
     }
-    ASSERT_TRUE(gw->setConfig(config));
-    ASSERT_TRUE(gw->activate());
+    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    ASSERT_TRUE(isSuccess(gw->activate()));
 }

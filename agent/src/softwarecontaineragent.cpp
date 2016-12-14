@@ -425,11 +425,13 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
     SoftwareContainer *container = nullptr;
     if (!checkContainer(containerID, container)) {
         log_error() << "Could not update gateway configuration. Container ("
-                    << std::to_string(containerID) <<") does not exist";
+                    << std::to_string(containerID)
+                    << ") does not exist";
         return false;
     }
-    container->setGatewayConfigs(configs);
-    return true;
+
+    ReturnCode result = container->setGatewayConfigs(configs);
+    return isSuccess(result);
 }
 
 std::vector<std::string> SoftwareContainerAgent::listCapabilities()
@@ -440,8 +442,20 @@ std::vector<std::string> SoftwareContainerAgent::listCapabilities()
 bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
                                              const std::vector<std::string> &capabilities)
 {
+    if (capabilities.empty()) {
+        log_warning() << "Got empty list of capabilities";
+        return true;
+    }
+
     auto gatewayConfigs = m_defaultConfigStore->configs();
     auto filteredConfigs = m_filteredConfigStore->configsByID(capabilities);
+
+    // If we get an empty config the user passed a non existent cap name
+    if (filteredConfigs.empty()) {
+        log_debug() << "One or more capabilities were not found";
+        return false;
+    }
+
     gatewayConfigs.append(filteredConfigs);
 
     // Update container gateway configuration

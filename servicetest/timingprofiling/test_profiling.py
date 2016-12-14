@@ -42,14 +42,58 @@ import string
 import re
 
 from testframework import Container
+from testframework import Capability
+from testframework import StandardManifest
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
     return CURRENT_DIR + "/test.log"
+
+
+GW_CONFIG = [{
+    "dbus-gateway-config-session": [{
+        "direction": "*",
+        "interface": "*",
+        "object-path": "*",
+        "method": "*"
+    }],
+    "dbus-gateway-config-system": []
+}]
+
+
+test_cap = Capability("test.cap.profiling",
+                      [
+                          {"id": "dbus", "config": GW_CONFIG}
+                      ])
+
+
+manifest = StandardManifest(TESTOUTPUT_DIR,
+                            "profiling-test-manifest.json",
+                            [test_cap])
+
+def service_manifests():
+    """ The agent fixture calls this function when it creates the service manifests
+        that should be used with this test module. The agent fixture expects a list
+        of StandardManifest and/or DefaultManifest objects.
+    """
+    return [manifest]
+
+
+@pytest.fixture
+def create_testoutput_dir(scope="module"):
+    """ Create a directory for the generated test files.
+
+        This directory is ignored by git but it's nice to have
+        somewhere locally to store test output to support
+        troubleshooting etc.
+    """
+    if not os.path.exists(TESTOUTPUT_DIR):
+        os.makedirs(TESTOUTPUT_DIR)
 
 
 def run_test(num_starts=3):
@@ -70,16 +114,7 @@ def run_test(num_starts=3):
             container.start(container_data)
 
             # A minimal gateway config so the gateway can be configured and enabled.
-            dbus_gw_config = [{
-                "dbus-gateway-config-session": [{
-                    "direction": "*",
-                    "interface": "*",
-                    "object-path": "*",
-                    "method": "*"
-                }],
-                "dbus-gateway-config-system": []
-            }]
-            container.set_gateway_config("dbus", dbus_gw_config)
+            container.set_capabilities("test.cap.profiling")
 
             container.launch_command("/gateways/app/simple")
             apps.append(container)
@@ -180,7 +215,7 @@ def measure(log_file):
         write_measurement("result-" + value + ".properties", float(get_function_log(log_file, value)))
 
 
-@pytest.mark.usefixtures("agent")
+@pytest.mark.usefixtures("create_testoutput_dir", "agent")
 class TestTimingProfiling(object):
 
     def test_start_profiling(self):

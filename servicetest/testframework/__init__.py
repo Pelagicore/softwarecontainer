@@ -17,6 +17,9 @@
 # For further information see LICENSE
 
 
+from lib import Capability
+from lib import StandardManifest
+from lib import DefaultManifest
 from lib import Receiver
 from lib import Container
 from lib import SoftwareContainerAgentHandler

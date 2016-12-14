@@ -24,6 +24,8 @@ import time
 
 # Test framework and local test helper imports
 from testframework.testhelper import EnvironmentHelper
+from testframework import Capability
+from testframework import StandardManifest
 from testframework import Container
 
 
@@ -141,6 +143,66 @@ GW_CONFIG_PREPEND = [
     }
 ]
 
+
+""" Cap that appends to a non existent env variable """
+test_cap_2 = Capability("environment.test.cap.2",
+                        [
+                            {"id": "env", "config": GW_CONFIG_APPEND}
+                        ])
+
+""" Cap that sets one env variable """
+test_cap_4 = Capability("environment.test.cap.4",
+                        [
+                            {"id": "env", "config": GW_CONFIG_ONE_VAR}
+                        ])
+
+""" Cap that sets the same env variable twice """
+test_cap_1 = Capability("environment.test.cap.1",
+                                  [
+                                      {"id": "env", "config": GW_CONFIG_ONE_VAR},
+                                      {"id": "env", "config": GW_CONFIG_SAME_VAR}
+                                  ])
+
+""" Cap that sets two env variables """
+test_cap_6 = Capability("environment.test.cap.6",
+                        [
+                            {"id": "env", "config": GW_CONFIG_TWO_VARS}
+                        ])
+
+""" Cap that sets two env variables and appends one of them """
+test_cap_3 = Capability("environment.test.cap.3",
+                        [
+                            {"id": "env", "config": GW_CONFIG_TWO_VARS},
+                            {"id": "env", "config": GW_CONFIG_APPEND}
+                        ])
+
+""" Cap that sets two env variables and prepends one of them """
+test_cap_5 = Capability("environment.test.cap.5",
+                        [
+                            {"id": "env", "config": GW_CONFIG_TWO_VARS},
+                            {"id": "env", "config": GW_CONFIG_PREPEND}
+                        ])
+
+manifest = StandardManifest(TESTOUTPUT_DIR,
+                            "environment-test-manifest.json",
+                            [
+                                test_cap_1,
+                                test_cap_2,
+                                test_cap_3,
+                                test_cap_4,
+                                test_cap_5,
+                                test_cap_6
+                            ])
+
+
+def service_manifests():
+    """ The agent fixture calls this function when it creates the service manifests
+        that should be used with this test module. The agent fixture expects a list
+        of StandardManifest and/or DefaultManifest objects.
+    """
+    return [manifest]
+
+
 ##### Test suites #####
 
 @pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent", "clear_env_files")
@@ -154,11 +216,11 @@ class TestInteractionGatewayAndAPI(object):
             takes precedence over a variable previously set by the environment
             gateway.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
             # Set variable through gateway
-            sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
+            sc.set_capabilities(["environment.test.cap.4"])
             # Set the same variable with LaunchCommand
             env_var = {"MY_ENV_VAR": "new-value"}
             sc.launch_command("python " +
@@ -184,75 +246,28 @@ class TestEnvironment(object):
         container.
     """
 
-    def test_setting_same_var_keeps_initial_value(self):
-        """ Setting a variable twice should result first value being set and kept.
+    def test_setting_same_var_fails(self):
+        """ Setting a variable twice should result in failed call to set the capability
+            that results in the bad config combo.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
 
-            # Set once
-            sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
+            result = sc.set_capabilities(["environment.test.cap.1"])
 
-            # Set twice
-            sc.set_gateway_config("env", GW_CONFIG_SAME_VAR)
-
-            sc.launch_command("python " +
-                              sc.get_bind_dir() +
-                              "/testhelper.py --test-dir " +
-                              sc.get_bind_dir() + "/testoutput" +
-                              " --do-get-env-vars")
-
-            # The D-Bus LaunchCommand is asynch so let it take effect before assert
-            time.sleep(0.5)
-            helper = EnvironmentHelper(TESTOUTPUT_DIR)
-            my_env_var = helper.env_var("MY_ENV_VAR")
-            # Assert value is the one set first
-            assert my_env_var == "1234"
+            assert result is False
         finally:
             sc.terminate()
 
-    def test_appending_then_adding_keeps_initial_value(self):
-        """ Append a non existing variable. Then set it per the normal way.
-            Assert the value created when "appending" non existing value
-            is kept intact.
-        """
-        try:
-            sc = Container()
-            sc.start(DATA)
-
-            # Append a variable not set before
-            sc.set_gateway_config("env", GW_CONFIG_APPEND)
-
-            # Set the variable that was "appended" previously
-            sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
-
-            sc.launch_command("python " +
-                              sc.get_bind_dir() +
-                              "/testhelper.py --test-dir " +
-                              sc.get_bind_dir() + "/testoutput" +
-                              " --do-get-env-vars")
-
-            # The D-Bus LaunchCommand is asynch so let it take effect before assert
-            time.sleep(0.5)
-            helper = EnvironmentHelper(TESTOUTPUT_DIR)
-            ld_library_path = helper.env_var("LD_LIBRARY_PATH")
-            # Assert the "appended" value is kept
-            assert ld_library_path == "/another/path"
-        finally:
-            sc.terminate()
-
-    def test_appending_non_existing_var_creates_it(self):
+    def test_appending_non_existent_var_creates_it(self):
         """ Append to a non existing env var and assert that the variable is created
             as a result.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
-
-            # Append a variable not set before
-            sc.set_gateway_config("env", GW_CONFIG_APPEND)
-
+            sc.set_capabilities(["environment.test.cap.2"])
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -272,16 +287,10 @@ class TestEnvironment(object):
         """ Set a config and then an appending config, assert the appended
             variable looks as expected.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
-
-            # Set a config to append to
-            sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
-
-            # Append the previously set variable
-            sc.set_gateway_config("env", GW_CONFIG_APPEND)
-
+            sc.set_capabilities(["environment.test.cap.3"])
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -304,16 +313,10 @@ class TestEnvironment(object):
         """ Set a config and then an prepending config, assert the prepended
             variable looks as expected.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
-
-            # Set a config to append to
-            sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
-
-            # Append the previously set variable
-            sc.set_gateway_config("env", GW_CONFIG_PREPEND)
-
+            sc.set_capabilities(["environment.test.cap.5"])
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -337,12 +340,10 @@ class TestEnvironment(object):
             the container. Use helper to get the inside environment and
             assert the expected result.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
-
-            sc.set_gateway_config("env", GW_CONFIG_ONE_VAR)
-
+            sc.set_capabilities(["environment.test.cap.4"])
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +
@@ -361,12 +362,10 @@ class TestEnvironment(object):
             the container. Use helper to get the inside environment and
             assert the expected reisult.
         """
+        sc = Container()
         try:
-            sc = Container()
             sc.start(DATA)
-
-            sc.set_gateway_config("env", GW_CONFIG_TWO_VARS)
-
+            sc.set_capabilities(["environment.test.cap.6"])
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py --test-dir " +

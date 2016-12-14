@@ -23,16 +23,19 @@ import time
 
 from testframework.testhelper import NetworkHelper
 from testframework import Container
+from testframework import Capability
+from testframework import StandardManifest
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
 
 ##### Provide what the testframework requires #####
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
-    return CURRENT_DIR + "/test.log"
+    return TESTOUTPUT_DIR + "/test.log"
 
 
 # This function is used by the testframework 'testhelper' fixture to know where the
@@ -102,9 +105,62 @@ GW_CONFIG_ACCEPT_IANA_ORG = [
     }
 ]
 
+
+""" An empty network GW config """
+test_cap_1 = Capability("test.cap.empty",
+                        [
+                            {"id": "network", "config": []}
+                        ])
+
+test_cap_2 = Capability("test.cap.policy-drop",
+                        [
+                            {"id": "network", "config": GW_CONFIG_POLICY_DROP}
+                        ])
+
+test_cap_3 = Capability("test.cap.policy-accept-ping",
+                        [
+                            {"id": "network", "config": GW_CONFIG_POLICY_ACCEPT_PING}
+                        ])
+
+test_cap_4 = Capability("test.cap.accept-example-com",
+                        [
+                            {"id": "network", "config": GW_CONFIG_ACCEPT_EXAMPLE_COM}
+                        ])
+
+test_cap_5 = Capability("test.cap.accept-two-domains",
+                        [
+                            {"id": "network", "config": GW_CONFIG_ACCEPT_EXAMPLE_COM},
+                            {"id": "network", "config": GW_CONFIG_ACCEPT_IANA_ORG}
+                        ])
+
+manifest = StandardManifest(TESTOUTPUT_DIR,
+                            "network-test-manifest.json",
+                            [test_cap_1, test_cap_2, test_cap_3, test_cap_4, test_cap_5])
+
+
+def service_manifests():
+    """ The agent fixture calls this function when it creates the service manifests
+        that should be used with this test module. The agent fixture expects a list
+        of StandardManifest and/or DefaultManifest objects.
+    """
+    return [manifest]
+
+
+@pytest.fixture
+def create_testoutput_dir(scope="module"):
+    """ Create a directory for the generated test files.
+
+        This directory is ignored by git but it's nice to have
+        somewhere locally to store test output to support
+        troubleshooting etc.
+    """
+    if not os.path.exists(TESTOUTPUT_DIR):
+        os.makedirs(TESTOUTPUT_DIR)
+
+
 ##### Test suites #####
 
-@pytest.mark.usefixtures("testhelper", "agent")
+@pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent")
 class TestNetworkRules(object):
     """ This suite tests that whether NetworkGateway can parse given configuration and applies it to be used
         in SoftwareContainer with expected results.
@@ -124,7 +180,7 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            sc.set_gateway_config("network", [])
+            sc.set_capabilities(["test.cap.empty"])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -149,7 +205,7 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_POLICY_DROP)
+            sc.set_capabilities(["test.cap.policy-drop"])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -177,7 +233,7 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
+            sc.set_capabilities(["test.cap.policy-accept-ping"])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -201,7 +257,7 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_ACCEPT_EXAMPLE_COM)
+            sc.set_capabilities(["test.cap.accept-example-com"])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -237,8 +293,8 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_ACCEPT_EXAMPLE_COM)
-            sc.set_gateway_config("network", GW_CONFIG_ACCEPT_IANA_ORG)
+            sc.set_capabilities(["test.cap.accept-two-domains"])
+
             sc.launch_command("python " +
                               sc.get_bind_dir() +
                               "/testhelper.py" +
@@ -275,7 +331,7 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
-@pytest.mark.usefixtures("testhelper", "agent")
+@pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent")
 class TestNetworkDiversity(object):
     """ This suite tests that whether NetworkGateway can assign different ip adresses or not
 
@@ -290,9 +346,9 @@ class TestNetworkDiversity(object):
             sc.start(DATA)
             sc2.start(DATA)
 
-            sc.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
+            sc.set_capabilities(["test.cap.policy-accept-ping"])
 
-            sc2.set_gateway_config("network", GW_CONFIG_POLICY_ACCEPT_PING)
+            sc2.set_capabilities(["test.cap.policy-accept-ping"])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -309,6 +365,5 @@ class TestNetworkDiversity(object):
             helper = NetworkHelper(CURRENT_DIR)
             assert 0 == helper.compare_ips("f1", "f2")
             helper.remove_files("f1", "f2")
-            #testhelper.remove_file(CURRENT_DIR, "f2")
         finally:
             sc.terminate()

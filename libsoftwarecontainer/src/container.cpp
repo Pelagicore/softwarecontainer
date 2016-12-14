@@ -74,7 +74,6 @@ Container::Container(const std::string id,
     m_enableWriteBuffer(enableWriteBuffer),
     m_shutdownTimeout(shutdownTimeout)
 {
-    log_debug() << "Config file now: \"" << m_configFile << "\"";
     init_lxc();
     log_debug() << "Container constructed with " << id;
 }
