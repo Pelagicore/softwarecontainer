@@ -24,6 +24,7 @@ bool Gateway::setConfig(const std::string &config)
 {
     if (m_state == GatewayState::ACTIVATED) {
         log_error() << "Can't configure a gateway that is already activated: " << id();
+        throw GatewayError("Gateway already activated");
     }
 
     json_error_t error;
@@ -62,18 +63,18 @@ bool Gateway::setConfig(const std::string &config)
 
 bool Gateway::activate() {
     if (m_state == GatewayState::ACTIVATED) {
-        log_warning() << "Activate was called on a gateway which was already activated: " << id();
-        return false;
+        log_error() << "Activate was called on a gateway which was already activated: " << id();
+        throw GatewayError("Gateway already activated");
     }
 
     if (m_state != GatewayState::CONFIGURED) {
-        log_warning() << "Activate was called on a gateway which is not in configured state: " << id();
-        return false;
+        log_error() << "Activate was called on a gateway which is not in configured state: " << id();
+        throw GatewayError("Gateway is not configured");
     }
 
     if (!hasContainer()) {
-        log_warning() << "Activate was called on a gateway which has no associated container: " << id();
-        return false;
+        log_error() << "Activate was called on a gateway which has no associated container: " << id();
+        throw GatewayError("Gateway does not have any container instance");
     }
 
     if (!activateGateway()) {
@@ -88,7 +89,7 @@ bool Gateway::activate() {
 bool Gateway::teardown() {
     if (m_state != GatewayState::ACTIVATED) {
         log_error() << "Teardown called on non-activated gateway: " << id();
-        return false;
+        throw GatewayError("Gateway not previosly activated");
     }
 
     if (!teardownGateway()) {

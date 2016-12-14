@@ -57,8 +57,8 @@ public:
  * Test that neither activate nor teardown works on a gateway that has not been configured.
  */
 TEST_F(GatewayTest, ActivateWithoutConfigure) {
-    ASSERT_FALSE(gw.activate());
-    ASSERT_FALSE(gw.teardown());
+    ASSERT_THROW(gw.activate(), GatewayError);
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
@@ -66,7 +66,7 @@ TEST_F(GatewayTest, ActivateWithoutConfigure) {
  */
 TEST_F(GatewayTest, TeardownWithoutActivate) {
     ASSERT_TRUE(gw.setConfig(validConf));
-    ASSERT_FALSE(gw.teardown());
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
@@ -75,8 +75,8 @@ TEST_F(GatewayTest, TeardownWithoutActivate) {
 TEST_F(GatewayTest, ConfigIsNotJSON) {
     const std::string config = "apabepacepa";
     ASSERT_FALSE(gw.setConfig(config));
-    ASSERT_FALSE(gw.activate());
-    ASSERT_FALSE(gw.teardown());
+    ASSERT_THROW(gw.activate(), GatewayError);
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
@@ -85,8 +85,8 @@ TEST_F(GatewayTest, ConfigIsNotJSON) {
 TEST_F(GatewayTest, ConfigIsNotArray) {
     const std::string config = "{ \"key\": \"value\" }";
     ASSERT_FALSE(gw.setConfig(config));
-    ASSERT_FALSE(gw.activate());
-    ASSERT_FALSE(gw.teardown());
+    ASSERT_THROW(gw.activate(), GatewayError);
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
@@ -94,8 +94,8 @@ TEST_F(GatewayTest, ConfigIsNotArray) {
  */
 TEST_F(GatewayTest, ConfigIsEmpty) {
     ASSERT_FALSE(gw.setConfig(validEmptyConf));
-    ASSERT_FALSE(gw.activate());
-    ASSERT_FALSE(gw.teardown());
+    ASSERT_THROW(gw.activate(), GatewayError);
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
@@ -114,8 +114,8 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
     // Array of bad types
     for (std::string notObj : notObjects) {
         ASSERT_FALSE(gw.setConfig(notObj));
-        ASSERT_FALSE(gw.activate());
-        ASSERT_FALSE(gw.teardown());
+        ASSERT_THROW(gw.activate(), GatewayError);
+        ASSERT_THROW(gw.teardown(), GatewayError);
     }
 
     // Combined arrays of different types
@@ -124,22 +124,19 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
             json_error_t err;
             json_t *arr1 = json_loads(notObjOuter.c_str(), 0, &err);
             json_t *arr2 = json_loads(notObjInner.c_str(), 0, &err);
-            
+
             json_array_extend(arr1, arr2);
             std::string notObjCombined = json_dumps(arr1, 0);
 
             ASSERT_FALSE(gw.setConfig(notObjCombined));
-            ASSERT_FALSE(gw.activate());
-            ASSERT_FALSE(gw.teardown());
+            ASSERT_THROW(gw.activate(), GatewayError);
+            ASSERT_THROW(gw.teardown(), GatewayError);
 
             free(arr1);
             free(arr2);
         }
     }
 }
-
-// Since each gateway has to take care of its own configure, we just provide an empty
-// object here. It doesn't matter for the internal logic of this superclass anyway.
 
 /*
  * Test that it is possible to configure gateways several times
@@ -166,22 +163,38 @@ TEST_F(GatewayTest, ConfigEnablesActivateEnablesTeardown) {
 TEST_F(GatewayTest, CantActivateTwice) {
     ASSERT_TRUE(gw.setConfig(validConf));
     ASSERT_TRUE(gw.activate());
-    ASSERT_FALSE(gw.activate());
+    ASSERT_THROW(gw.activate(), GatewayError);
 }
 
 /*
- * Test that teardown fails if activate fails even on a properly
- * configured gateway
+ * Test that activate throws an exception if there is no container instance
+ * set on gateway.
+ */
+TEST_F(GatewayTest, NoContainerSetMeansActivateThrows) {
+    ASSERT_TRUE(gw.setConfig(validConf));
+
+    // Make the check for a container instance in activate fail
+    ::testing::DefaultValue<bool>::Set(false);
+    EXPECT_CALL(gw, hasContainer()); // Namely this check
+
+    ASSERT_THROW(gw.activate(), GatewayError);
+    ASSERT_THROW(gw.teardown(), GatewayError);
+}
+
+/*
+ * Test that teardown throws exception if called on a non activated gateway
  */
 TEST_F(GatewayTest, FailedActivateMeansTeardownFails) {
     ASSERT_TRUE(gw.setConfig(validConf));
 
-    // Make the checks in activate fail
-    ::testing::DefaultValue<bool>::Set(false);
-    EXPECT_CALL(gw, hasContainer()); // Namely this one
+    // Override the default mock return value set in test base class
+    EXPECT_CALL(gw, activateGateway())
+        .WillOnce(::testing::Return(false));
 
+    // activate() will fail becuase activateGateway() returned false
     ASSERT_FALSE(gw.activate());
-    ASSERT_FALSE(gw.teardown());
+    // teardown() should throw an exception when in this state
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
@@ -192,7 +205,7 @@ TEST_F(GatewayTest, CantTeardownTwice) {
     ASSERT_TRUE(gw.activate());
 
     ASSERT_TRUE(gw.teardown());
-    ASSERT_FALSE(gw.teardown());
+    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
