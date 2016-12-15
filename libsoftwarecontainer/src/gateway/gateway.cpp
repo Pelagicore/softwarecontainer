@@ -72,19 +72,22 @@ void Gateway::setConfigRollback(std::string message, json_t *element)
 bool Gateway::activate() {
     if (m_state == GatewayState::ACTIVATED) {
         log_warning() << "Activate was called on a gateway which "
-            "was already activated: " << id();
+                      << "was already activated: "
+                      << id();
         return false;
     }
 
     if (m_state != GatewayState::CONFIGURED) {
         log_warning() << "Activate was called on a gateway which "
-            "is not in configured state: " << id();
+                      << "is not in configured state: "
+                      << id();
         return false;
     }
 
     if (!hasContainer()) {
         log_warning() << "Activate was called on a gateway which "
-            "has no associated container: " << id();
+                      << "has no associated container: "
+                      << id();
         return false;
     }
 

@@ -198,7 +198,6 @@ bool SoftwareContainerAgent::parseConfig(const std::string &config)
     }
 
     json_decref(root);
-    json_decref(element);
 
     return true;
 }
@@ -414,6 +413,7 @@ bool SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID,
             return false;
         }
         parsedConfigs.append(gwID, jConfigs);
+        json_decref(jConfigs);
     }
     return updateGatewayConfigs(containerID, parsedConfigs);
 }
