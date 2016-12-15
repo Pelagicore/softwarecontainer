@@ -125,6 +125,6 @@ node {
 
     // Always try to shut down the machine
     // Shutdown the machine
-    sh "cd ${workspace} && vagrant halt || true"
+    sh "cd ${workspace} && vagrant destroy -f || true"
 }
 
