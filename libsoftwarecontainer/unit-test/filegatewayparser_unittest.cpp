@@ -18,32 +18,14 @@
  */
 
 #include "gateway/files/filegatewayparser.h"
+#include "gateway_parser_common.h"
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
-
-class FileGatewayParserTest : public ::testing::Test
+class FileGatewayParserTest : public GatewayParserCommon<std::string>
 {
 public:
     FileGatewayParser parser;
     FileGatewayParser::FileSetting result;
     std::vector<FileGatewayParser::FileSetting> settings;
-
-    json_error_t err;
-    json_t *configJSON;
-
-    void convertToJSON(const std::string config)
-    {
-        configJSON = json_loads(config.c_str(), 0, &err);
-        ASSERT_TRUE(configJSON != NULL);
-    }
-
-    void TearDown() override
-    {
-        if (configJSON) {
-            json_decref(configJSON);
-        }
-    }
 
     const std::string FILE_PATH = "/tmp/filename.txt";
     const std::string CONTAINER_PATH = "/filename.txt";
@@ -58,7 +40,7 @@ TEST_F(FileGatewayParserTest, MinimalWorkingConf) {
             "  \"path-host\" : \"" + FILE_PATH + "\""
             ", \"path-container\" : \"" + CONTAINER_PATH + "\""
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
 }
@@ -72,7 +54,7 @@ TEST_F(FileGatewayParserTest, BadStrings) {
             "  \"path-host\": true"
             ", \"path-container\": 243"
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
     ASSERT_TRUE(result.pathInHost.empty());
@@ -89,7 +71,7 @@ TEST_F(FileGatewayParserTest, BadBools) {
             ", \"path-container\": \"" + CONTAINER_PATH + "\""
             ", \"read-only\": 0"
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
     ASSERT_FALSE(result.readOnly);
@@ -103,7 +85,7 @@ TEST_F(FileGatewayParserTest, NoPathInHost) {
         "{"
             "\"path-container\" : \"" + CONTAINER_PATH + "\""
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
@@ -117,7 +99,7 @@ TEST_F(FileGatewayParserTest, EmptyPathInHost) {
             "  \"path-host\": \"\""
             ", \"path-container\" : \"" + CONTAINER_PATH + "\""
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
@@ -130,7 +112,7 @@ TEST_F(FileGatewayParserTest, NoPathInContainer) {
         "{"
             "\"path-host\" : \"" + FILE_PATH + "\""
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }
@@ -144,7 +126,7 @@ TEST_F(FileGatewayParserTest, EmptyPathInContainer) {
             "  \"path-host\": \"" + FILE_PATH + "\""
             ", \"path-container\": \"\""
         "}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
 }

@@ -18,30 +18,19 @@
  */
 
 #include "gateway/cgroups/cgroupsparser.h"
+#include "gateway_parser_common.h"
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
-
-class CGroupsParserTest : public ::testing::TestWithParam<std::string>
+class CGroupsParserTest : public GatewayParserCommon<std::string>
 {
 public:
     CGroupsParser parser;
     CGroupsParser::CGroupsPair result;
-    json_error_t err;
-    json_t *configJSON;
+
+    std::string config;
 
     void SetUp() override
     {
-        std::string config = GetParam();
-        configJSON = json_loads(config.c_str(), 0, &err);
-        ASSERT_TRUE(configJSON != NULL);
-    }
-
-    void TearDown() override
-    {
-        if (configJSON) {
-            json_decref(configJSON);
-        }
+        config = GetParam();
     }
 };
 
@@ -51,6 +40,7 @@ public:
  */
 typedef CGroupsParserTest CGroupsNegativeTest;
 TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
+    json_t *configJSON = convertToJSON(config);
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseCGroupsGatewayConfiguration(configJSON, result));
     ASSERT_TRUE(result.first.empty());
     ASSERT_TRUE(result.second.empty());
@@ -62,6 +52,7 @@ TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
  */
 typedef CGroupsParserTest CGroupsPositiveTest;
 TEST_P(CGroupsPositiveTest, SuccessWhenConfigIsGood) {
+    json_t *configJSON = convertToJSON(config);
     ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(configJSON, result));
     ASSERT_FALSE(result.first.empty());
     ASSERT_FALSE(result.second.empty());

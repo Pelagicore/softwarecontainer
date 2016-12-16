@@ -20,35 +20,13 @@
 
 
 #include "gateway/devicenode/devicenodeparser.h"
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
+#include "gateway_parser_common.h"
 
-class DeviceNodeParserTest : public ::testing::TestWithParam<std::string>
+class DeviceNodeParserTest : public GatewayParserCommon<std::string>
 {
 public:
     DeviceNodeParser parser;
     DeviceNodeParser::Device result;
-
-    json_error_t err;
-    json_t *configJSON;
-
-    void SetUp() override
-    {
-    }
-
-    void convertToJSON(const std::string config)
-    {
-        configJSON = json_loads(config.c_str(), 0, &err);
-        ASSERT_TRUE(configJSON != NULL);
-    }
-
-    void TearDown()
-    {
-        if (configJSON) {
-            json_decref(configJSON);
-        }
-    }
-
 };
 
 /*
@@ -56,7 +34,7 @@ public:
  */
 TEST_F(DeviceNodeParserTest, TestConfigJustName) {
     const std::string config = "{ \"name\": \"/dev/random\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -70,13 +48,13 @@ TEST_F(DeviceNodeParserTest, TestConfigJustName) {
  * Test that a full proper config works.
  */
 TEST_F(DeviceNodeParserTest, TestFullConfig) {
-    const std::string config = "{\
+    const std::string config1 = "{\
                                     \"name\":  \"/dev/new_device\",\
                                     \"major\": 1,\
                                     \"minor\": 0,\
                                     \"mode\":  644\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON1 = convertToJSON(config1);
     DeviceNodeParser::Device dev;
 
     const std::string config2 = "{\
@@ -86,9 +64,10 @@ TEST_F(DeviceNodeParserTest, TestFullConfig) {
                                     \"mode\":  764\
                                 }";
 
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
-    convertToJSON(config2);
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON1, dev));
+
+    json_t *configJSON2 = convertToJSON(config2);
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseDeviceNodeGatewayConfiguration(configJSON2, dev));
     ASSERT_FALSE(dev.name.empty());
     ASSERT_NE(dev.major, -1);
     ASSERT_NE(dev.minor, -1);
@@ -104,7 +83,7 @@ TEST_F(DeviceNodeParserTest, TestConfigNoName) {
                                   \"minor\": 0,\
                                   \"mode\": 644\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -119,7 +98,7 @@ TEST_F(DeviceNodeParserTest, TestConfigNoMajor) {
                                   \"minor\": 0,\
                                   \"mode\": 644\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -134,7 +113,7 @@ TEST_F(DeviceNodeParserTest, TestConfigNoMinor) {
                                   \"major\": 0,\
                                   \"mode\": 644\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -149,7 +128,7 @@ TEST_F(DeviceNodeParserTest, TestConfigNoMode) {
                                   \"major\": 0,\
                                   \"minor\": 6\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -165,7 +144,7 @@ TEST_F(DeviceNodeParserTest, TestConfigBadMajor) {
                                   \"minor\": 6,\
                                   \"mode\": 644\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -181,7 +160,7 @@ TEST_F(DeviceNodeParserTest, TestConfigBadMainor) {
                                   \"minor\": \"B\",\
                                   \"mode\": 644\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
@@ -197,7 +176,7 @@ TEST_F(DeviceNodeParserTest, TestConfigBadMode) {
                                   \"minor\": 6,\
                                   \"mode\": \"C\"\
                                 }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
     ASSERT_EQ(ReturnCode::FAILURE, parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
