@@ -36,18 +36,9 @@ node {
                 println "Will set VAGRANT_RAM to ${gigsram}"
             }
 
-            // And calculate number of CPUS available
-            String numcpus = sh (
-                script: 'nproc',
-                returnStdout: true
-            )
-
-            println "Will set VAGRANT_CPUS to ${numcpus}"
-
             // Start the machine (destroy it if present) and provision it
             sh "cd ${workspace} && vagrant destroy -f || true"
             withEnv(["VAGRANT_RAM=${gigsram}",
-                     "VAGRANT_CPUS=${numcpus}",
                      "APT_CACHE_SERVER=10.8.36.16"]) {
                 sh "cd ${workspace} && vagrant up"
             }
@@ -74,8 +65,7 @@ node {
         }
 
         stage('UnitTest') {
-            String testArg = "-*OutputBuffer"
-            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py ${testArg}")
+            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py")
         }
 
         stage('ServiceTest') {
