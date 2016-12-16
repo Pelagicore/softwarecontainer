@@ -22,12 +22,11 @@
 #include "softwarecontainer-common.h"
 #include "gateway/network/networkgatewayparser.h"
 #include "gateway/network/iptableentry.h"
+#include "gateway_parser_common.h"
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 #include <jansson.h>
 
-class NetworkGatewayParserTest : public ::testing::Test
+class NetworkGatewayParserTest : public GatewayParserCommon<std::string>
 {
 protected:
     NetworkGatewayParser networkParser;
@@ -52,10 +51,8 @@ TEST_F(NetworkGatewayParserTest, InputSingularPort) {
 
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
@@ -65,8 +62,6 @@ TEST_F(NetworkGatewayParserTest, InputSingularPort) {
     ASSERT_EQ(0, e.m_rules[0].ports.multiport);
     ASSERT_EQ("80", e.m_rules[0].ports.ports);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
-
-    json_decref(root);
 }
 
 /*
@@ -87,10 +82,8 @@ TEST_F(NetworkGatewayParserTest, InputMultiplePort) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
@@ -100,8 +93,6 @@ TEST_F(NetworkGatewayParserTest, InputMultiplePort) {
     ASSERT_EQ(1, e.m_rules[0].ports.multiport);
     ASSERT_EQ("80,8080", e.m_rules[0].ports.ports);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
-
-    json_decref(root);
 }
 
 /*
@@ -120,10 +111,8 @@ TEST_F(NetworkGatewayParserTest, PortTypo) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("OUTPUT", e.m_type);
@@ -132,8 +121,6 @@ TEST_F(NetworkGatewayParserTest, PortTypo) {
     ASSERT_NE(1, e.m_rules[0].ports.any);
     ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
-
-    json_decref(root);
 }
 
 
@@ -156,10 +143,8 @@ TEST_F(NetworkGatewayParserTest, OutputMultiplePort) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("OUTPUT", e.m_type);
@@ -170,8 +155,6 @@ TEST_F(NetworkGatewayParserTest, OutputMultiplePort) {
     ASSERT_EQ("80:8080", e.m_rules[0].ports.ports);
     ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
-
-    json_decref(root);
 }
 
 
@@ -190,14 +173,9 @@ TEST_F(NetworkGatewayParserTest, OutputNoHost) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-
-
-    json_decref(root);
 }
 
 
@@ -214,16 +192,12 @@ TEST_F(NetworkGatewayParserTest, OutputNoPort) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
 
     ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
     ASSERT_EQ(0, e.m_rules[0].ports.any);
-
-    json_decref(root);
 }
 
 /**
@@ -237,13 +211,9 @@ TEST_F(NetworkGatewayParserTest, SetConfigNoRules) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-
-    json_decref(root);
 }
 
 /**
@@ -258,13 +228,9 @@ TEST_F(NetworkGatewayParserTest, SetConfigEmptyRules) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-
-    json_decref(root);
 }
 
 /**
@@ -279,13 +245,9 @@ TEST_F(NetworkGatewayParserTest, TestSetConfigRulesIsInteger) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
-
-    json_decref(root);
 }
 
 
@@ -303,10 +265,8 @@ TEST_F(NetworkGatewayParserTest, MultipleProtocols) {
     "}";
 
     IPTableEntry e;
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
+    json_t *root = convertToJSON(config);
 
-    ASSERT_NE(nullptr, root);
     ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
@@ -316,6 +276,4 @@ TEST_F(NetworkGatewayParserTest, MultipleProtocols) {
     ASSERT_EQ("tcp", e.m_rules[0].protocols[0]);
     ASSERT_EQ("udp", e.m_rules[0].protocols[1]);
     ASSERT_EQ(IPTableEntry::Target::ACCEPT, e.m_rules[0].target);
-
-    json_decref(root);
 }

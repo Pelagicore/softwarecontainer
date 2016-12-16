@@ -19,11 +19,9 @@
 
 
 #include "gateway/environment/envgatewayparser.h"
+#include "gateway_parser_common.h"
 
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
-
-class EnvGatewayParserTest : public ::testing::Test
+class EnvGatewayParserTest : public GatewayParserCommon<std::string>
 {
 public:
     EnvironmentGatewayParser parser;
@@ -34,22 +32,6 @@ public:
     std::string name = "XDG_RUNTIME_DIR";
     std::string value = "/run/user/1000";
     std::string separator = ":";
-
-    json_error_t err;
-    json_t *configJSON;
-
-    void convertToJSON(const std::string config)
-    {
-        configJSON = json_loads(config.c_str(), 0, &err);
-        ASSERT_TRUE(configJSON != NULL);
-    }
-
-    void TearDown() override
-    {
-        if (configJSON) {
-            json_decref(configJSON);
-        }
-    }
 };
 
 /*
@@ -57,7 +39,7 @@ public:
  */
 TEST_F(EnvGatewayParserTest, NoName) {
     const std::string config = "{ \"value\": \"" + value + "\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -69,7 +51,7 @@ TEST_F(EnvGatewayParserTest, NoName) {
  */
 TEST_F(EnvGatewayParserTest, NoValue) {
     const std::string config = "{ \"name\": \"" + name + "\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -82,7 +64,7 @@ TEST_F(EnvGatewayParserTest, NoValue) {
 TEST_F(EnvGatewayParserTest, ValidConfWithoutMode) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\"}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -98,7 +80,7 @@ TEST_F(EnvGatewayParserTest, ValidConfModeSet) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"set\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -110,7 +92,7 @@ TEST_F(EnvGatewayParserTest, BadMode) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"foo\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::FAILURE,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -120,17 +102,17 @@ TEST_F(EnvGatewayParserTest, ModeIsCaseInsensitive) {
     const std::string config1 = "{ \"name\": \"" + name + "\",\
                                    \"value\": \"" + value + "\",\
                                    \"mode\": \"SET\" }";
-    convertToJSON(config1);
+    json_t *configJSON1 = convertToJSON(config1);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
-              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+              parser.parseEnvironmentGatewayConfigElement(configJSON1, result, store));
 
     const std::string config2 = "{ \"name\": \"" + name + "\",\
                                    \"value\": \"" + value + "\",\
                                    \"mode\": \"PrEpEnD\" }";
-    convertToJSON(config2);
+    json_t *configJSON2 = convertToJSON(config2);
     ASSERT_EQ(ReturnCode::SUCCESS,
-              parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
+              parser.parseEnvironmentGatewayConfigElement(configJSON2, result, store));
     ASSERT_EQ(result.first, name);
     ASSERT_EQ(result.second, value);
 }
@@ -142,7 +124,7 @@ TEST_F(EnvGatewayParserTest, ValidConfAppendEmpty) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"append\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -154,7 +136,7 @@ TEST_F(EnvGatewayParserTest, ValidConfPrependEmpty) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"prepend\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
 
     ASSERT_EQ(ReturnCode::SUCCESS,
               parser.parseEnvironmentGatewayConfigElement(configJSON, result, store));
@@ -169,7 +151,7 @@ TEST_F(EnvGatewayParserTest, ValidConfAppendActuallyAppends) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"append\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     store[name] = name;
 
     ASSERT_EQ(ReturnCode::SUCCESS,
@@ -185,7 +167,7 @@ TEST_F(EnvGatewayParserTest, ValidConfPrependActuallyPrepends) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\",\
                                   \"mode\": \"prepend\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     store[name] = name;
 
     ASSERT_EQ(ReturnCode::SUCCESS,
@@ -199,7 +181,7 @@ TEST_F(EnvGatewayParserTest, ValidConfPrependSeparatorSeparates) {
                                   \"value\": \"" + value + "\",\
                                   \"separator\": \"" + separator + "\",\
                                   \"mode\": \"prepend\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     store[name] = name;
 
     ASSERT_EQ(ReturnCode::SUCCESS,
@@ -213,7 +195,7 @@ TEST_F(EnvGatewayParserTest, ValidConfAppendSeparatorSeparates) {
                                   \"value\": \"" + value + "\",\
                                   \"separator\": \"" + separator + "\",\
                                   \"mode\": \"append\" }";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     store[name] = name;
 
     ASSERT_EQ(ReturnCode::SUCCESS,
@@ -228,7 +210,7 @@ TEST_F(EnvGatewayParserTest, ValidConfAppendSeparatorSeparates) {
 TEST_F(EnvGatewayParserTest, SameVarWithoutAppendOrPrependFails) {
     const std::string config = "{ \"name\": \"" + name + "\",\
                                   \"value\": \"" + value + "\"}";
-    convertToJSON(config);
+    json_t *configJSON = convertToJSON(config);
     store[name] = value;
 
     ASSERT_EQ(ReturnCode::FAILURE,
