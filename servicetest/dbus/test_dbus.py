@@ -98,7 +98,6 @@ class TestDBus(object):
             finally:
                 ca.terminate()
 
-    @pytest.mark.skip(reason="See reported issue about this")
     def test_query_out(self):
         """ Launch client in container and test if it communicates out """
         for x in range(0, 10):
