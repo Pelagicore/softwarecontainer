@@ -24,6 +24,7 @@ macro(add_coverage testCommand testArgs)
             COMMAND ${LCOV} --remove ${COV_DIR}/baseline.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/baseline.info
             COMMAND ${LCOV} --remove ${COV_DIR}/baseline.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/baseline.info
             COMMAND ${LCOV} --remove ${COV_DIR}/baseline.info \"build*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/baseline.info
+            COMMAND ${LCOV} --remove ${COV_DIR}/baseline.info \"examples*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/baseline.info
             COMMENT "Getting lcov baseline data"
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         )
@@ -43,6 +44,7 @@ macro(add_coverage testCommand testArgs)
             COMMAND ${LCOV} --remove ${COV_DIR}/testrun.info \"gtest*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/testrun.info
             COMMAND ${LCOV} --remove ${COV_DIR}/testrun.info \"unit-test*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/testrun.info
             COMMAND ${LCOV} --remove ${COV_DIR}/testrun.info \"build*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/testrun.info
+            COMMAND ${LCOV} --remove ${COV_DIR}/testrun.info \"examples*\" --no-checksum --directory . --base-directory . --output-file ${COV_DIR}/testrun.info
             COMMENT "Running tests (${testCommand}) and lcov"
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         )
