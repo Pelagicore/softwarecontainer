@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Network gateway &#8212; softwarecontainer 0.12.0-d900a03 2016-12-16 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.12.0-d900a03 2016-12-16',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-d900a03 2016-12-16 documentation" href="../../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="network-gateway">
+<h1>Network gateway<a class="headerlink" href="#network-gateway" title="Permalink to this headline">¶</a></h1>
+<p>The Network Gateway is used to setup network connection and configure which traffic is allowed and
+not.</p>
+<div class="section" id="id">
+<h2>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h2>
+<p>The ID used for the Network gateway is: <code class="docutils literal"><span class="pre">network</span></code></p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>The configuration is structured as a list of JSON objects that each describe rules for <code class="docutils literal"><span class="pre">OUTGOING</span></code>
+or <code class="docutils literal"><span class="pre">INCOMING</span></code> network traffic. The validation is done by filtering network traffic on <code class="docutils literal"><span class="pre">host</span></code>,
+<code class="docutils literal"><span class="pre">ports</span></code> and <code class="docutils literal"><span class="pre">protocols</span></code>, where <code class="docutils literal"><span class="pre">host</span></code> is either hostname or ip address of a destination or
+source depending on context, <code class="docutils literal"><span class="pre">ports</span></code> specifies which ports to filter on and <code class="docutils literal"><span class="pre">protocols</span></code>
+specifies which protocols to filter.</p>
+<p><code class="docutils literal"><span class="pre">direction</span></code> and <code class="docutils literal"><span class="pre">allow</span></code> list are mandatory for Network Gateway configuration. There are only two
+valid values for <code class="docutils literal"><span class="pre">direction</span></code>: <code class="docutils literal"><span class="pre">INCOMING</span></code> and <code class="docutils literal"><span class="pre">OUTGOING</span></code>. In each entry in <code class="docutils literal"><span class="pre">allow</span></code> list only
+<code class="docutils literal"><span class="pre">host</span></code> is mandatory.</p>
+<p><code class="docutils literal"><span class="pre">host</span></code> can be specific hostname or ip address and also <code class="docutils literal"><span class="pre">*</span></code> indicating all available ip sources.</p>
+<p>When <code class="docutils literal"><span class="pre">ports</span></code> is not specified, the rule applies to all ports.  <code class="docutils literal"><span class="pre">ports</span></code> are valid between 0 and
+65536. Ports can be specified as a single port, as a string with a range <code class="docutils literal"><span class="pre">&quot;X-Y&quot;</span></code>, or as a list
+<code class="docutils literal"><span class="pre">[X,Y,Z]</span></code>.</p>
+<p>There are three valid values for <code class="docutils literal"><span class="pre">protocols</span></code>: <code class="docutils literal"><span class="pre">&quot;tcp&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;udp&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;icmp&quot;</span></code>. When
+<code class="docutils literal"><span class="pre">protocols</span></code> is not specified in the <code class="docutils literal"><span class="pre">allow</span></code> list item, the rule applies to all protocols. When
+there is an item which has ports without protocols, the rule will be applied to all protocols.</p>
+<p>The NetworkGateway is programmed to drop all packages that do not match any entry in <code class="docutils literal"><span class="pre">allow</span></code> list.</p>
+</div>
+<div class="section" id="sample-use-cases">
+<h2>Sample use-cases<a class="headerlink" href="#sample-use-cases" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="app-has-unlimited-network-access">
+<h3>App has unlimited network access:<a class="headerlink" href="#app-has-unlimited-network-access" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="app-has-limited-network-access">
+<h3>App has limited network access<a class="headerlink" href="#app-has-limited-network-access" title="Permalink to this headline">¶</a></h3>
+<p>Below is a simple browser example, allowing tcp access on ports 80 and 443 for any host.  Note that
+for domain name resolution to work, traffic on port 53 is opened also.</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;tcp&quot;</span><span class="p">,</span> <span class="s">&quot;ports&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">443</span><span class="p">]</span> <span class="p">},</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;udp&quot;</span><span class="p">,</span> <span class="s">&quot;tcp&quot;</span><span class="p">],</span> <span class="s">&quot;ports&quot;</span><span class="p">:</span> <span class="mi">53</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;udp&quot;</span><span class="p">,</span> <span class="s">&quot;tcp&quot;</span><span class="p">],</span> <span class="s">&quot;ports&quot;</span><span class="p">:</span> <span class="mi">53</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Below is an example where the app is able to use ICMP (so it would be able to ping), but nothing
+else, also meaning no DNS!)</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;icmp&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;icmp&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Below is a localhost example, where any traffic is allowed locally</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Network gateway</a><ul>
+<li><a class="reference internal" href="#id">ID</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#sample-use-cases">Sample use-cases</a><ul>
+<li><a class="reference internal" href="#app-has-unlimited-network-access">App has unlimited network access:</a></li>
+<li><a class="reference internal" href="#app-has-limited-network-access">App has limited network access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/gateways/10-network-gateway.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../../_sources/chapters/gateways/10-network-gateway.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Gateways &#8212; softwarecontainer 0.12.0-d900a03 2016-12-16 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.12.0-d900a03 2016-12-16',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-d900a03 2016-12-16 documentation" href="../../index.html" />
+    <link rel="next" title="Integration guidelines" href="../integration-guidelines/index.html" />
+    <link rel="prev" title="Service manifests" href="../service-manifests/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gateways">
+<span id="id1"></span><h1>Gateways<a class="headerlink" href="#gateways" title="Permalink to this headline">¶</a></h1>
+<p>SoftwareContainer provides a set of gateways to enable communication between the host system and the
+contained system.</p>
+<p>Each gateway is dedicated to an IPC mechanism and can then be applied to support multiple services.
+This makes the system scalable, as the number of IPC mechanisms is limited while the number of
+possible services are unlimited.  <em>Currently, some gateways break this principle, which is subject
+to correction in the future. The design intention is to have the gateways IPC centric and construct
+more abstract concepts like a Wayland &#8220;gateway&#8221; on top of multiple IPC gateways.</em></p>
+<p>This chapter contains descriptions of the available gateways, their IDs,  and their configuration
+options.  It is intended to explain to e.g. a service integrator how to write gateway configurations
+suitable for the service.</p>
+<p>For more information how to integrate and use the configurations in a project,
+see <a class="reference internal" href="../integration-guidelines/index.html#integration-guidelines"><span class="std std-ref">Integration guidelines</span></a>.</p>
+<p>For more information how to develop and integrate gateways in SoftwareContainer,
+see <a class="reference internal" href="../developers/index.html#developers"><span class="std std-ref">Developer guidelines</span></a>.</p>
+<div class="section" id="note-on-configurations">
+<h2>Note on configurations<a class="headerlink" href="#note-on-configurations" title="Permalink to this headline">¶</a></h2>
+<p>All gateway configurations are JSON arrays containing valid JSON elements, and SoftwareContainer
+requires this.  Beyond that, the structure and content of this JSON is the responsibility of the
+respective gateway.</p>
+</div>
+<div class="section" id="cgroups-gateway">
+<h2>CGroups gateway<a class="headerlink" href="#cgroups-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The CGroups Gateway is used to limit the contained system&#8217;s access to CPU and RAM resources.</p>
+<div class="section" id="id">
+<h3>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the CGroups gateway is: <code class="docutils literal"><span class="pre">cgroups</span></code></p>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The gateway configuration contains settings as key/value pairs. The <code class="docutils literal"><span class="pre">setting</span></code> key
+is a string in the format &lt;cgroup subsystem&gt;.&lt;setting&gt; and the <code class="docutils literal"><span class="pre">value</span></code> is a string
+with the value to apply.</p>
+<p>No syntax or other checks for correctness is performed on the key/value pairs,
+see the <cite>lxc.container.conf</cite> man page for more details about valid settings.</p>
+</div>
+<div class="section" id="example-configurations">
+<h3>Example configurations<a class="headerlink" href="#example-configurations" title="Permalink to this headline">¶</a></h3>
+<p>Example gateway config:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.limit_in_bytes&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;128M&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;cpu.shares&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span>  <span class="s">&quot;256&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The root object is an array of setting key/value pair objects. Each key/value pair
+must have the <code class="docutils literal"><span class="pre">setting</span></code> and <code class="docutils literal"><span class="pre">value</span></code> defined.</p>
+</div>
+</div>
+<div class="section" id="device-node-gateway">
+<h2>Device node gateway<a class="headerlink" href="#device-node-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The Device Node Gateway is used to provide access to host system device nodes.</p>
+<div class="section" id="id2">
+<h3>ID<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Device node gateway is: <code class="docutils literal"><span class="pre">devicenode</span></code></p>
+</div>
+<div class="section" id="id3">
+<h3>Configuration<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>The configuration consists of a root list consisting of individual devices. Each device contains the
+following fields:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> The name of the device, with or without path. This is passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
+<li><code class="docutils literal"><span class="pre">major</span></code> The major device number, as an integer, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
+<li><code class="docutils literal"><span class="pre">minor</span></code> The minor device number, as an integer, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
+<li><code class="docutils literal"><span class="pre">mode</span></code> Permission mode, passed verbatim to <code class="docutils literal"><span class="pre">chmod</span></code></li>
+</ul>
+<p>In the case where the same device node is configured more than once, the most permissive mode
+is chosen per user type.</p>
+</div>
+<div class="section" id="id4">
+<h3>Example configurations<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>An example configuration can look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;/dev/dri/card0&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;tty0&quot;</span><span class="p">,</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;644&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;tty1&quot;</span><span class="p">,</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;400&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;/dev/galcore&quot;</span><span class="p">,</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;722&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span>  <span class="s">&quot;/dev/galcore&quot;</span><span class="p">,</span>
+        <span class="s">&quot;major&quot;</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span>
+        <span class="s">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span>  <span class="s">&quot;466&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In the last example shown above the mode for <code class="docutils literal"><span class="pre">/dev/galcore</span></code> will be set to 766.</p>
+</div>
+</div>
+<div class="section" id="d-bus-gateway">
+<h2>D-Bus gateway<a class="headerlink" href="#d-bus-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and
+interfaces.</p>
+<p>The gateway will create a socket for the D-Bus connection being proxied.
+The socket will be placed in a directory accessible from within the
+container, and the applications running inside the container are expected
+to use this socket when communicating with the outside D-Bus system. The gateway uses an external
+program <code class="docutils literal"><span class="pre">dbus-proxy</span></code> for creation and communication over the proxied bus connection.</p>
+<p>The gateway will also set the <code class="docutils literal"><span class="pre">DBUS_SESSION_BUS_ADDRESS</span></code> or
+<code class="docutils literal"><span class="pre">DBUS_SYSTEM_BUS_ADDRESS</span></code> for the session and system bus, respectively.
+libdbus uses these variables to find the socket to use for D-Bus
+communication, and the application running within the container is
+expected to use these variables (probably by means of the binding used).</p>
+<p>The <code class="docutils literal"><span class="pre">dbus-proxy</span></code> does not modify the messages passed via D-Bus, it only provides a filter
+function.  This means that some filters may cause unwanted behaviour used in combination with
+dynamic interpretation of introspection data. For example, if introspection is configured to be
+allowed, the introspection data might contain interfaces and object paths that are not accessible
+for the application (unless the configuration also allowes everything on the connection).</p>
+<p>The gateway will not do any analysis of the configuration passed to it, but will pass this
+configuration along to <code class="docutils literal"><span class="pre">dbus-proxy</span></code> verbatim. This is to support future changes in the
+configuration format.</p>
+<div class="section" id="id5">
+<h3>ID<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the D-Bus gateway is: <code class="docutils literal"><span class="pre">dbus</span></code></p>
+</div>
+<div class="section" id="id6">
+<h3>Configuration<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>The session and system buses have separate configurations implemented as separate JSON array
+objects with the names:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">dbus-gateway-config-session</span></code></li>
+<li><code class="docutils literal"><span class="pre">dbus-gateway-config-system</span></code></li>
+</ul>
+<p>The arrays contain JSON objects where each object is an access rule specified as a combination
+of:</p>
+<ul class="simple">
+<li>Direction of method call or signal, i.e. if the call or signal is outgoing from inside the
+container or incoming from the outside of the container.</li>
+<li>D-Bus interface of the method or signal.</li>
+<li>Object path where the interface is implemented.</li>
+<li>The method or signal name the rule is for.</li>
+</ul>
+<p>The rules are implemented as name/value pairs:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">direction</span></code> - A string set to either <code class="docutils literal"><span class="pre">incoming</span></code> if the call or signal is coming from the outside of the container, or <code class="docutils literal"><span class="pre">outgoing</span></code> if the call or signal is coming from inside of the container.</li>
+<li><code class="docutils literal"><span class="pre">interface</span></code> - A string specifying a D-Bus interface name, e.g. <code class="docutils literal"><span class="pre">org.freedesktop.DBus</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">object-path</span></code> - A string specifying a D-Bus object path, e.g. <code class="docutils literal"><span class="pre">/org/freedesktop/UPower/Policy</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">method</span></code> - A string or an array of strings specifying a D-Bus method name or signal name, e.g. <code class="docutils literal"><span class="pre">EnumerateDevices</span></code>.</li>
+</ul>
+<p>All the values can be substituted with the wildcard character <code class="docutils literal"><span class="pre">*</span></code> with the meaning &#8220;all&#8221;, e.g. a
+&#8220;direction&#8221; set to <code class="docutils literal"><span class="pre">*</span></code> will mean both incoming and outgoing, and a <code class="docutils literal"><span class="pre">method</span></code> set to <code class="docutils literal"><span class="pre">*</span></code> will
+match all method and signal names for the interface and object path specified.</p>
+<p>If a bus configuration is just an empty array it means all access to that bus will be blocked. When
+a D-Bus message is sent, the <code class="docutils literal"><span class="pre">dbus-proxy</span></code> compares message&#8217;s <code class="docutils literal"><span class="pre">direction</span></code>, <code class="docutils literal"><span class="pre">interface</span></code>, <code class="docutils literal"><span class="pre">path</span></code>
+and <code class="docutils literal"><span class="pre">method</span></code> with configuration list. if a matching rule is found, the message is allowed to forward;
+otherwise it is dropped.</p>
+</div>
+<div class="section" id="id7">
+<h3>Example configurations<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>A configuration that provides full access to the system and session buses would look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that provides full access to the session bus and no access at all to the system
+bus would look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that allows introspection on the session bus from within the container and no
+access at all to the system bus would look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Introspect&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that allows access to the session bus on only methods &#8220;Method1&#8221;, &#8220;Method2&#8221;,&#8221;Method3&#8221; and &#8220;Method4&#8221;:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;Method1&quot;</span><span class="p">,</span> <span class="s">&quot;Method3&quot;</span><span class="p">,</span> <span class="s">&quot;Method4&quot;</span><span class="p">,</span> <span class="s">&quot;Method2&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="environment-gateway">
+<h2>Environment gateway<a class="headerlink" href="#environment-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The Environment Gateway is used to set environment variables in the container.</p>
+<p>The environment gateway allows users to specify environment variables that
+should be known to the container and all commands and functions running
+inside the container.</p>
+<p>Note that any environment variables set here can be overridden when starting a binary on the
+D-Bus interface, see <a class="reference internal" href="../api/index.html#dbus-api"><span class="std std-ref">D-Bus API</span></a>.</p>
+<div class="section" id="id8">
+<h3>ID<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Environment gateway is: <code class="docutils literal"><span class="pre">env</span></code></p>
+</div>
+<div class="section" id="id9">
+<h3>Configuration<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>The configuration consists of a list of environment variable definitions. Each
+such element must contain the following parameters:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> The name of the environment variable in question</li>
+<li><code class="docutils literal"><span class="pre">value</span></code> The value to attach to the name</li>
+</ul>
+<p>Note that <code class="docutils literal"><span class="pre">value</span></code> will be read as a string.</p>
+<p>If a variable is added that has previously been added already, the new value is ignored
+and the old value is kept intact. This is considered a misconfiguration and will generate
+a log warning.</p>
+<p>The configuration may also, optionally, specify the following parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">mode</span></code>: A string that can be either:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">set</span></code>: set the variable (this is the default, so one does not usually need to set it)</li>
+<li><code class="docutils literal"><span class="pre">append</span></code>: append the value given to the previous value for the given variable.</li>
+<li><code class="docutils literal"><span class="pre">prepend</span></code>: prepend the value given to the previous value for the given variable.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">separator</span></code>: A string that will be squeezed in between the old and new value if one wants to</dt>
+<dd><p class="first last">prepend or append to a variable</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Both <code class="docutils literal"><span class="pre">append</span></code> and <code class="docutils literal"><span class="pre">prepend</span></code> will have the same effect as <code class="docutils literal"><span class="pre">set</span></code> if the variable was not already
+set.</p>
+</div>
+<div class="section" id="id10">
+<h3>Example configurations<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p>En example configuration would look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;SOME_ENVIRONMENT_VARIABLE&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;SOME_VALUE&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>With the above configuration, <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code> would be set to <code class="docutils literal"><span class="pre">SOME_VALUE</span></code>,
+if the variable had not been previously set. In the case where <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code>
+would have been previously set to e.g. <code class="docutils literal"><span class="pre">ORIGINAL_VALUE</span></code>, that value would be kept.</p>
+<p>There is also the possibility to append to an already defined variable:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;SOME_ENVIRONMENT_VARIABLE&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;/some/path&quot;</span><span class="p">,</span>
+        <span class="s">&quot;mode&quot;</span><span class="p">:</span> <span class="s">&quot;append&quot;</span>
+        <span class="s">&quot;separator&quot;</span><span class="p">:</span> <span class="s">&quot;:&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>With the above configuration, if <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code> had previously been set
+to e.g. <code class="docutils literal"><span class="pre">/tmp/test</span></code>, the varaiable value would now be set to <code class="docutils literal"><span class="pre">/tmp/test:/some/path</span></code>.
+If <code class="docutils literal"><span class="pre">SOME_ENVIRONMENT_VARIABLE</span></code> had not been previously set, the value would now be
+set to <code class="docutils literal"><span class="pre">:/some/path</span></code>.</p>
+</div>
+</div>
+<div class="section" id="file-gateway">
+<h2>File gateway<a class="headerlink" href="#file-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The File Gateway is used to expose individual files and directories from the host filesystem inside
+the container.</p>
+<div class="section" id="id11">
+<h3>ID<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the File gateway is: <code class="docutils literal"><span class="pre">file</span></code></p>
+</div>
+<div class="section" id="id12">
+<h3>Configuration<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>The paths inside the container has to be absolute. There is a check for not mounting over already
+existing mount paths.</p>
+<p>It is possible to supply the same host path in several configuration snippets to get the same file
+mounted onto several locations in the container. However, It is not possible to supply the same
+container path several times unless the host path is also the same. In those cases, the gateway will
+merge the configurations and set the more permissive of the read-only settings for the file, with
+read-write being more permissive than read-only.</p>
+</div>
+<div class="section" id="id13">
+<h3>Example configurations<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p>An example configuration can look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;path-host&quot;</span><span class="p">:</span> <span class="s">&quot;/tmp/someIPSocket&quot;</span><span class="p">,</span>   <span class="o">//</span> <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">host</span><span class="s">&#39;s file-system</span>
+        <span class="s">&quot;path-container&quot;</span><span class="p">:</span> <span class="s">&quot;/tmp/someIPSocket&quot;</span><span class="p">,</span>   <span class="o">//</span> <span class="n">Absolute</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">mount</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">container</span>
+        <span class="s">&quot;read-only&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>  <span class="o">//</span> <span class="k">if</span> <span class="n">true</span><span class="p">,</span> <span class="n">the</span> <span class="n">file</span> <span class="ow">is</span> <span class="n">accessible</span> <span class="ow">in</span> <span class="n">read</span><span class="o">-</span><span class="n">only</span> <span class="n">mode</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">container</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="network-gateway">
+<h2>Network gateway<a class="headerlink" href="#network-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The Network Gateway is used to setup network connection and configure which traffic is allowed and
+not.</p>
+<div class="section" id="id14">
+<h3>ID<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Network gateway is: <code class="docutils literal"><span class="pre">network</span></code></p>
+</div>
+<div class="section" id="id15">
+<h3>Configuration<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<p>The configuration is structured as a list of JSON objects that each describe rules for <code class="docutils literal"><span class="pre">OUTGOING</span></code>
+or <code class="docutils literal"><span class="pre">INCOMING</span></code> network traffic. The validation is done by filtering network traffic on <code class="docutils literal"><span class="pre">host</span></code>,
+<code class="docutils literal"><span class="pre">ports</span></code> and <code class="docutils literal"><span class="pre">protocols</span></code>, where <code class="docutils literal"><span class="pre">host</span></code> is either hostname or ip address of a destination or
+source depending on context, <code class="docutils literal"><span class="pre">ports</span></code> specifies which ports to filter on and <code class="docutils literal"><span class="pre">protocols</span></code>
+specifies which protocols to filter.</p>
+<p><code class="docutils literal"><span class="pre">direction</span></code> and <code class="docutils literal"><span class="pre">allow</span></code> list are mandatory for Network Gateway configuration. There are only two
+valid values for <code class="docutils literal"><span class="pre">direction</span></code>: <code class="docutils literal"><span class="pre">INCOMING</span></code> and <code class="docutils literal"><span class="pre">OUTGOING</span></code>. In each entry in <code class="docutils literal"><span class="pre">allow</span></code> list only
+<code class="docutils literal"><span class="pre">host</span></code> is mandatory.</p>
+<p><code class="docutils literal"><span class="pre">host</span></code> can be specific hostname or ip address and also <code class="docutils literal"><span class="pre">*</span></code> indicating all available ip sources.</p>
+<p>When <code class="docutils literal"><span class="pre">ports</span></code> is not specified, the rule applies to all ports.  <code class="docutils literal"><span class="pre">ports</span></code> are valid between 0 and
+65536. Ports can be specified as a single port, as a string with a range <code class="docutils literal"><span class="pre">&quot;X-Y&quot;</span></code>, or as a list
+<code class="docutils literal"><span class="pre">[X,Y,Z]</span></code>.</p>
+<p>There are three valid values for <code class="docutils literal"><span class="pre">protocols</span></code>: <code class="docutils literal"><span class="pre">&quot;tcp&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;udp&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;icmp&quot;</span></code>. When
+<code class="docutils literal"><span class="pre">protocols</span></code> is not specified in the <code class="docutils literal"><span class="pre">allow</span></code> list item, the rule applies to all protocols. When
+there is an item which has ports without protocols, the rule will be applied to all protocols.</p>
+<p>The NetworkGateway is programmed to drop all packages that do not match any entry in <code class="docutils literal"><span class="pre">allow</span></code> list.</p>
+</div>
+<div class="section" id="sample-use-cases">
+<h3>Sample use-cases<a class="headerlink" href="#sample-use-cases" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="app-has-unlimited-network-access">
+<h4>App has unlimited network access:<a class="headerlink" href="#app-has-unlimited-network-access" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="app-has-limited-network-access">
+<h4>App has limited network access<a class="headerlink" href="#app-has-limited-network-access" title="Permalink to this headline">¶</a></h4>
+<p>Below is a simple browser example, allowing tcp access on ports 80 and 443 for any host.  Note that
+for domain name resolution to work, traffic on port 53 is opened also.</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;tcp&quot;</span><span class="p">,</span> <span class="s">&quot;ports&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span> <span class="mi">443</span><span class="p">]</span> <span class="p">},</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;udp&quot;</span><span class="p">,</span> <span class="s">&quot;tcp&quot;</span><span class="p">],</span> <span class="s">&quot;ports&quot;</span><span class="p">:</span> <span class="mi">53</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;udp&quot;</span><span class="p">,</span> <span class="s">&quot;tcp&quot;</span><span class="p">],</span> <span class="s">&quot;ports&quot;</span><span class="p">:</span> <span class="mi">53</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Below is an example where the app is able to use ICMP (so it would be able to ping), but nothing
+else, also meaning no DNS!)</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;icmp&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;icmp&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Below is a localhost example, where any traffic is allowed locally</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
+    <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span> <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;127.0.0.1&quot;</span> <span class="p">}</span>
+             <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="pulseaudio-gateway">
+<h2>PulseAudio gateway<a class="headerlink" href="#pulseaudio-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The PulseAudio Gateway is used to provide access to the host system PulseAudio server.</p>
+<p>This gateway is responsible for setting up a connection to the
+PulseAudio server running on the host system. The gateway decides whether to
+connect to the PulseAudio server or not based on the configuration.</p>
+<p>When configured to enable audio, the gateway sets up a mainloop and then connects
+to the default PulseAudio server by calling <code class="docutils literal"><span class="pre">pa_context_connect()</span></code>. This is done
+during the <code class="docutils literal"><span class="pre">activate()</span></code> phase.</p>
+<p>Once <code class="docutils literal"><span class="pre">activate</span></code> has been initiated, the gateway listens to changes in the connection
+through the <code class="docutils literal"><span class="pre">stateCallback</span></code> function and, once the connection has been successfully
+set up, loads the <code class="docutils literal"><span class="pre">module-native-protocol-unix</span></code> PulseAudio module.</p>
+<div class="section" id="id16">
+<h3>ID<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the PulseAudio gateway is: <code class="docutils literal"><span class="pre">pulseaudio</span></code></p>
+</div>
+<div class="section" id="id17">
+<h3>Configuration<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<p>Example configuration enabling audio:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span> <span class="s">&quot;audio&quot;</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A malformed configuration or a configuration that sets audio to false will simply
+disable audio and in such case, the gateway will not connect to the PulseAudio
+server at all.</p>
+<p>The configuration can be set several times, but once it has been set to <code class="docutils literal"><span class="pre">true</span></code>
+it will retain its value.</p>
+</div>
+</div>
+<div class="section" id="wayland-gateway">
+<h2>Wayland gateway<a class="headerlink" href="#wayland-gateway" title="Permalink to this headline">¶</a></h2>
+<p>The Wayland Gateway is used to provide access to the hsot system Wayland server.</p>
+<p>Please note that the Wayland Gateway only provides access to the Wayland
+socket and sets the <code class="docutils literal"><span class="pre">XDG_RUNTIME_DIR</span></code> accordingly. For a Wayland
+<em>capability</em>, it is also necessary to ensure that the contained application
+has access to the graphics hardware devices and associated libraries. Access
+to graphics hardware is <strong>not</strong> setup by the Wayland gateway.</p>
+<div class="section" id="id18">
+<h3>ID<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<p>The ID used for the Wayland gateway is: <code class="docutils literal"><span class="pre">wayland</span></code></p>
+</div>
+<div class="section" id="id19">
+<h3>Configuration<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<p>Example configuration enabling Wayland:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span> <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The configuration of the Wayland gateway can be set several times, but once it has been set to <code class="docutils literal"><span class="pre">true</span></code>
+it will retain its value.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Gateways</a><ul>
+<li><a class="reference internal" href="#note-on-configurations">Note on configurations</a></li>
+<li><a class="reference internal" href="#cgroups-gateway">CGroups gateway</a><ul>
+<li><a class="reference internal" href="#id">ID</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#example-configurations">Example configurations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#device-node-gateway">Device node gateway</a><ul>
+<li><a class="reference internal" href="#id2">ID</a></li>
+<li><a class="reference internal" href="#id3">Configuration</a></li>
+<li><a class="reference internal" href="#id4">Example configurations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#d-bus-gateway">D-Bus gateway</a><ul>
+<li><a class="reference internal" href="#id5">ID</a></li>
+<li><a class="reference internal" href="#id6">Configuration</a></li>
+<li><a class="reference internal" href="#id7">Example configurations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-gateway">Environment gateway</a><ul>
+<li><a class="reference internal" href="#id8">ID</a></li>
+<li><a class="reference internal" href="#id9">Configuration</a></li>
+<li><a class="reference internal" href="#id10">Example configurations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-gateway">File gateway</a><ul>
+<li><a class="reference internal" href="#id11">ID</a></li>
+<li><a class="reference internal" href="#id12">Configuration</a></li>
+<li><a class="reference internal" href="#id13">Example configurations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#network-gateway">Network gateway</a><ul>
+<li><a class="reference internal" href="#id14">ID</a></li>
+<li><a class="reference internal" href="#id15">Configuration</a></li>
+<li><a class="reference internal" href="#sample-use-cases">Sample use-cases</a><ul>
+<li><a class="reference internal" href="#app-has-unlimited-network-access">App has unlimited network access:</a></li>
+<li><a class="reference internal" href="#app-has-limited-network-access">App has limited network access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pulseaudio-gateway">PulseAudio gateway</a><ul>
+<li><a class="reference internal" href="#id16">ID</a></li>
+<li><a class="reference internal" href="#id17">Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wayland-gateway">Wayland gateway</a><ul>
+<li><a class="reference internal" href="#id18">ID</a></li>
+<li><a class="reference internal" href="#id19">Configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../service-manifests/index.html" title="previous chapter">Service manifests</a></li>
+      <li>Next: <a href="../integration-guidelines/index.html" title="next chapter">Integration guidelines</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/gateways/00-index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../../_sources/chapters/gateways/00-index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

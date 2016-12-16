@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Troubleshooting &#8212; softwarecontainer 0.12.0-d900a03 2016-12-16 documentation</title>
+    <title>CGroups gateway &#8212; softwarecontainer 0.12.0-d900a03 2016-12-16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -26,8 +26,6 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="top" title="softwarecontainer 0.12.0-d900a03 2016-12-16 documentation" href="../../index.html" />
-    <link rel="next" title="Filesystems" href="../filesystem/index.html" />
-    <link rel="prev" title="Integration guidelines" href="../integration-guidelines/index.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
@@ -43,41 +41,38 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="troubleshooting">
-<span id="id1"></span><h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="general">
-<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Make sure that the file <code class="docutils literal"><span class="pre">/etc/mtab</span></code> is a link to <code class="docutils literal"><span class="pre">/proc/self/mounts</span></code>, or you may end up with
-strange mount issues.</li>
-</ul>
+  <div class="section" id="cgroups-gateway">
+<h1>CGroups gateway<a class="headerlink" href="#cgroups-gateway" title="Permalink to this headline">¶</a></h1>
+<p>The CGroups Gateway is used to limit the contained system&#8217;s access to CPU and RAM resources.</p>
+<div class="section" id="id">
+<h2>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h2>
+<p>The ID used for the CGroups gateway is: <code class="docutils literal"><span class="pre">cgroups</span></code></p>
 </div>
-<div class="section" id="faq">
-<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h2>
-<ul>
-<li><p class="first">When SoftwareContainerAgent starts it claims that it can not register the
-dbus interface.</p>
-<blockquote>
-<div><ul class="simple">
-<li>In order for the SoftwareContainerAgent to work using the dbus system bus a
-policy file has to be installed in <code class="docutils literal"><span class="pre">/etc/dbus/system.d/</span></code>. See the <code class="docutils literal"><span class="pre">README.md</span></code>
-file for information on compile options.</li>
-<li>You can also run the agent with <code class="docutils literal"><span class="pre">--session-bus</span></code> on the command-line, to run on the
-session bus instead.</li>
-</ul>
-</div></blockquote>
-</li>
-<li><p class="first">Why isn&#8217;t pulseaudio working inside the container?</p>
-<blockquote>
-<div><ul class="simple">
-<li>In order for pulseaudio to work inside the container it needs to be running when the container
-is started. This is the case because when softwarecontainer sets up the container it will look
-for the socket pointed out by <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code>, and mount it into the container, so that
-socket has to exist.</li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>The gateway configuration contains settings as key/value pairs. The <code class="docutils literal"><span class="pre">setting</span></code> key
+is a string in the format &lt;cgroup subsystem&gt;.&lt;setting&gt; and the <code class="docutils literal"><span class="pre">value</span></code> is a string
+with the value to apply.</p>
+<p>No syntax or other checks for correctness is performed on the key/value pairs,
+see the <cite>lxc.container.conf</cite> man page for more details about valid settings.</p>
+</div>
+<div class="section" id="example-configurations">
+<h2>Example configurations<a class="headerlink" href="#example-configurations" title="Permalink to this headline">¶</a></h2>
+<p>Example gateway config:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.limit_in_bytes&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;128M&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;cpu.shares&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span>  <span class="s">&quot;256&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The root object is an array of setting key/value pair objects. Each key/value pair
+must have the <code class="docutils literal"><span class="pre">setting</span></code> and <code class="docutils literal"><span class="pre">value</span></code> defined.</p>
 </div>
 </div>
 
@@ -89,9 +84,10 @@ socket has to exist.</li>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Troubleshooting</a><ul>
-<li><a class="reference internal" href="#general">General</a></li>
-<li><a class="reference internal" href="#faq">FAQ</a></li>
+<li><a class="reference internal" href="#">CGroups gateway</a><ul>
+<li><a class="reference internal" href="#id">ID</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#example-configurations">Example configurations</a></li>
 </ul>
 </li>
 </ul>
@@ -99,15 +95,13 @@ socket has to exist.</li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../integration-guidelines/index.html" title="previous chapter">Integration guidelines</a></li>
-      <li>Next: <a href="../filesystem/index.html" title="next chapter">Filesystems</a></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/chapters/troubleshooting/index.txt"
+      <li><a href="../../_sources/chapters/gateways/10-cgroups-gateway.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -133,7 +127,7 @@ socket has to exist.</li>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="../../_sources/chapters/troubleshooting/index.txt"
+      <a href="../../_sources/chapters/gateways/10-cgroups-gateway.txt"
           rel="nofollow">Page source</a>
     </div>
 

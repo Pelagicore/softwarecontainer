@@ -16,7 +16,7 @@ Contents:
     chapters/design/*
     chapters/configuration/*
     chapters/service-manifests/*
-    chapters/gateways/*
+    chapters/gateways/00-index.rst
     chapters/integration-guidelines/*
     chapters/troubleshooting/*
     chapters/filesystem/*

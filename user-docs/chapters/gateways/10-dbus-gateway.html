@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>D-Bus gateway &#8212; softwarecontainer 0.12.0-d900a03 2016-12-16 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.12.0-d900a03 2016-12-16',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="softwarecontainer 0.12.0-d900a03 2016-12-16 documentation" href="../../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="d-bus-gateway">
+<h1>D-Bus gateway<a class="headerlink" href="#d-bus-gateway" title="Permalink to this headline">¶</a></h1>
+<p>The D-Bus Gateway is used to provide access to host system D-Bus buses, object paths, and
+interfaces.</p>
+<p>The gateway will create a socket for the D-Bus connection being proxied.
+The socket will be placed in a directory accessible from within the
+container, and the applications running inside the container are expected
+to use this socket when communicating with the outside D-Bus system. The gateway uses an external
+program <code class="docutils literal"><span class="pre">dbus-proxy</span></code> for creation and communication over the proxied bus connection.</p>
+<p>The gateway will also set the <code class="docutils literal"><span class="pre">DBUS_SESSION_BUS_ADDRESS</span></code> or
+<code class="docutils literal"><span class="pre">DBUS_SYSTEM_BUS_ADDRESS</span></code> for the session and system bus, respectively.
+libdbus uses these variables to find the socket to use for D-Bus
+communication, and the application running within the container is
+expected to use these variables (probably by means of the binding used).</p>
+<p>The <code class="docutils literal"><span class="pre">dbus-proxy</span></code> does not modify the messages passed via D-Bus, it only provides a filter
+function.  This means that some filters may cause unwanted behaviour used in combination with
+dynamic interpretation of introspection data. For example, if introspection is configured to be
+allowed, the introspection data might contain interfaces and object paths that are not accessible
+for the application (unless the configuration also allowes everything on the connection).</p>
+<p>The gateway will not do any analysis of the configuration passed to it, but will pass this
+configuration along to <code class="docutils literal"><span class="pre">dbus-proxy</span></code> verbatim. This is to support future changes in the
+configuration format.</p>
+<div class="section" id="id">
+<h2>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h2>
+<p>The ID used for the D-Bus gateway is: <code class="docutils literal"><span class="pre">dbus</span></code></p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>The session and system buses have separate configurations implemented as separate JSON array
+objects with the names:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">dbus-gateway-config-session</span></code></li>
+<li><code class="docutils literal"><span class="pre">dbus-gateway-config-system</span></code></li>
+</ul>
+<p>The arrays contain JSON objects where each object is an access rule specified as a combination
+of:</p>
+<ul class="simple">
+<li>Direction of method call or signal, i.e. if the call or signal is outgoing from inside the
+container or incoming from the outside of the container.</li>
+<li>D-Bus interface of the method or signal.</li>
+<li>Object path where the interface is implemented.</li>
+<li>The method or signal name the rule is for.</li>
+</ul>
+<p>The rules are implemented as name/value pairs:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">direction</span></code> - A string set to either <code class="docutils literal"><span class="pre">incoming</span></code> if the call or signal is coming from the outside of the container, or <code class="docutils literal"><span class="pre">outgoing</span></code> if the call or signal is coming from inside of the container.</li>
+<li><code class="docutils literal"><span class="pre">interface</span></code> - A string specifying a D-Bus interface name, e.g. <code class="docutils literal"><span class="pre">org.freedesktop.DBus</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">object-path</span></code> - A string specifying a D-Bus object path, e.g. <code class="docutils literal"><span class="pre">/org/freedesktop/UPower/Policy</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">method</span></code> - A string or an array of strings specifying a D-Bus method name or signal name, e.g. <code class="docutils literal"><span class="pre">EnumerateDevices</span></code>.</li>
+</ul>
+<p>All the values can be substituted with the wildcard character <code class="docutils literal"><span class="pre">*</span></code> with the meaning &#8220;all&#8221;, e.g. a
+&#8220;direction&#8221; set to <code class="docutils literal"><span class="pre">*</span></code> will mean both incoming and outgoing, and a <code class="docutils literal"><span class="pre">method</span></code> set to <code class="docutils literal"><span class="pre">*</span></code> will
+match all method and signal names for the interface and object path specified.</p>
+<p>If a bus configuration is just an empty array it means all access to that bus will be blocked. When
+a D-Bus message is sent, the <code class="docutils literal"><span class="pre">dbus-proxy</span></code> compares message&#8217;s <code class="docutils literal"><span class="pre">direction</span></code>, <code class="docutils literal"><span class="pre">interface</span></code>, <code class="docutils literal"><span class="pre">path</span></code>
+and <code class="docutils literal"><span class="pre">method</span></code> with configuration list. if a matching rule is found, the message is allowed to forward;
+otherwise it is dropped.</p>
+</div>
+<div class="section" id="example-configurations">
+<h2>Example configurations<a class="headerlink" href="#example-configurations" title="Permalink to this headline">¶</a></h2>
+<p>A configuration that provides full access to the system and session buses would look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that provides full access to the session bus and no access at all to the system
+bus would look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that allows introspection on the session bus from within the container and no
+access at all to the system bus would look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Introspect&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A configuration that allows access to the session bus on only methods &#8220;Method1&#8221;, &#8220;Method2&#8221;,&#8221;Method3&#8221; and &#8220;Method4&#8221;:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+                <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;Method1&quot;</span><span class="p">,</span> <span class="s">&quot;Method3&quot;</span><span class="p">,</span> <span class="s">&quot;Method4&quot;</span><span class="p">,</span> <span class="s">&quot;Method2&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">D-Bus gateway</a><ul>
+<li><a class="reference internal" href="#id">ID</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#example-configurations">Example configurations</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/gateways/10-dbus-gateway.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../../_sources/chapters/gateways/10-dbus-gateway.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
