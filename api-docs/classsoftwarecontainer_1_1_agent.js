@@ -7,7 +7,7 @@ var classsoftwarecontainer_1_1_agent =
     [ "shutDown", "classsoftwarecontainer_1_1_agent.html#afeac547dae64a29fecc513ab4b2479cd", null ],
     [ "shutDown", "classsoftwarecontainer_1_1_agent.html#a43a41e8989d354751d11f2e819f7d838", null ],
     [ "bindMountFolderInContainer", "classsoftwarecontainer_1_1_agent.html#a2938a6bb286463188c87fb6bdeb7afcb", null ],
-    [ "setGatewayConfigs", "classsoftwarecontainer_1_1_agent.html#ac8d6bf024550523d2d20835bf4289906", null ],
+    [ "setGatewayConfigs", "classsoftwarecontainer_1_1_agent.html#a00886e8ec2b8f5755874ad14db9ef5b0", null ],
     [ "writeToStdIn", "classsoftwarecontainer_1_1_agent.html#a3f89bfd964fceac806c5d6ad02912efc", null ],
     [ "createContainer", "classsoftwarecontainer_1_1_agent.html#a4d03599c1bf71d74751aaef236eefd0b", null ],
     [ "setContainerName", "classsoftwarecontainer_1_1_agent.html#ac330e741d89322d788d2ddfc89304271", null ],
