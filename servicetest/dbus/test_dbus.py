@@ -89,21 +89,25 @@ class TestDBus(object):
                 assert success is True
                 ca.set_gateway_config("dbus", WL_CONFIG)
                 ca.set_gateway_config("dbus", GW_CONFIG)
-                ca.launch_command('{}/dbusapp.py server'.format(ca.get_bind_dir()))
 
-                time.sleep(0.5)
+                # Launch server inside the container
+                ca.launch_command('{}/dbusapp.py server'.format(ca.get_bind_dir()))
+                time.sleep(1)
+
+                # Launch client on the host
                 client = dbusapp.Client()
                 client.run()
                 assert client.check_all_good_resp() is True
             finally:
                 ca.terminate()
 
-    @pytest.mark.skip(reason="See reported issue about this")
     def test_query_out(self):
         """ Launch client in container and test if it communicates out """
         for x in range(0, 10):
             serv = dbusapp.Server()
             serv.start()
+            time.sleep(1)
+
             ca = Container()
             try:
                 success = ca.start(DATA)
@@ -126,7 +130,7 @@ class TestDBus(object):
             serv.start()
             success = ca.start(DATA)
             assert success is True
-            
+
             ca.set_gateway_config("dbus", GW_CONFIG)
 
             clients = 100
