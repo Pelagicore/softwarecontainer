@@ -120,7 +120,7 @@ std::string IPTableEntry::interpretRule(Rule rule)
 
     if (rule.ports.any) {
         if (rule.ports.multiport) {
-            iptableCommand = iptableCommand + " -p tcp --match multiport ";
+            iptableCommand = iptableCommand + " -p all --match multiport ";
 
             if ("INPUT" == m_type) {
                 iptableCommand = iptableCommand + "--sports " + rule.ports.ports;

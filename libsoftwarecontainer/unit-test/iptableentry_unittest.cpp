@@ -58,7 +58,7 @@ TEST_F(IPTableEntryTest, InputMultiplePortList) {
     r.host = "127.0.0.1/16";
     r.ports = {true, true, "80,8080"};
     r.target = IPTableEntry::Target::ACCEPT;
-    ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p tcp --match multiport --sports 80,8080"
+    ASSERT_EQ("iptables -A INPUT -s 127.0.0.1/16 -p all --match multiport --sports 80,8080"
               " -j ACCEPT", ipTable.interpretRule(r));
 }
 
