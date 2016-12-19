@@ -27,10 +27,6 @@ class DBusGatewayParser
     LOG_DECLARE_CLASS_CONTEXT("DBGP", "D-Bus gateway parser");
 
 public:
-    static constexpr const char *SESSION_CONFIG = "dbus-gateway-config-session";
-    static constexpr const char *SYSTEM_CONFIG = "dbus-gateway-config-system";
-    ReturnCode parseDBusConfigElement(const json_t *element, json_t *session, json_t *system);
 
-private:
-    ReturnCode parseDBusBusConfig(const json_t *element, const char *key, json_t *config);
+    ReturnCode parseDBusConfig(const json_t *element, const char *key, json_t *config);
 };

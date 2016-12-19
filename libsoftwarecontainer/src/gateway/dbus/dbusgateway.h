@@ -36,6 +36,9 @@ class DBusGateway :
 public:
     enum ProxyType { SessionProxy, SystemProxy };
 
+    static constexpr const char *SESSION_CONFIG = "dbus-gateway-config-session";
+    static constexpr const char *SYSTEM_CONFIG = "dbus-gateway-config-system";
+
     static constexpr const char *ID = "dbus";
 
     /**
@@ -82,6 +85,12 @@ public:
     virtual bool teardownGateway() override;
 
 private:
+
+    // JSON stuff. These are members to allow continous appends to the config
+    json_t *m_totConfig;
+    json_t *m_busConfig;
+    const char* typeStr;
+
     std::string socketName();
     bool isSocketCreated() const;
 
@@ -90,9 +99,6 @@ private:
 
     // Session or system, depending on the type of gateway being started
     ProxyType m_type;
-
-    json_t *m_sessionBusConfig;
-    json_t *m_systemBusConfig;
 
     // pid of dbus-proxy instance
     pid_t m_pid = INVALID_PID;
