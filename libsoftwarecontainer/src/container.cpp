@@ -589,7 +589,10 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
         log_error() << "Could not create file " << tempFile;
         return ReturnCode::FAILURE;
     }
-    m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
+
+    if (!pathInList(tempFile)) {
+        m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
+    }
 
     return bindMountCore(pathOnHost, pathInContainer, tempFile, readonly);
 }
@@ -655,15 +658,25 @@ ReturnCode Container::bindMountCore(const std::string &pathOnHost,
 
     std::string tempDirInContainer = gatewaysDirInContainer() + "/" + std::string(basename(pathInContainer.c_str()));
 
+    log_error() << "tempDirInContainer: " << tempDirInContainer << " pathInContainer " << pathInContainer;
     // Move the mount in the container
     if (tempDirInContainer.compare(pathInContainer) != 0) {
         pid_t pid = INVALID_PID;
         ReturnCode mountMoveRes = executeInContainer([tempDirInContainer, pathInContainer] () {
             unsigned long flags = MS_MOVE;
             if (isDirectory(tempDirInContainer)) {
-                mkdir(pathInContainer.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+                int ret = mkdir(pathInContainer.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+                if (ret != 0) {
+                    printf("Error while creating directory: %s - %s\n",
+                            pathInContainer.c_str(),
+                            strerror(errno));
+                    return ret;
+                }
             } else {
-                touch(pathInContainer.c_str());
+                if (isError(touch(pathInContainer.c_str()))) {
+                    printf("Error while creating file: %s", pathInContainer.c_str());
+                    return -1;
+                }
             }
             int ret = mount(tempDirInContainer.c_str(), pathInContainer.c_str(), nullptr, flags, nullptr);
             if (ret != 0) {

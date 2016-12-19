@@ -43,6 +43,18 @@ public:
      * @return ReturnCode::FAILURE on failure
      */
     ReturnCode clean() override;
+
+    /**
+     * @brief queryName is needed to query member name yet its full functionality is not needed for
+     * this class.
+     *
+     * Since no directory removal operation occurs within OverlaySyncCleanupHandler, it is
+     * irrelevant when the code checks whether the overlaying directory is in the list or not since
+     * the purpose of this function is to be used for cleaning path.
+     *
+     * @return an empty string
+     */
+    const std::string queryName() override;
 private:
     std::string m_src;
     std::string m_dst;

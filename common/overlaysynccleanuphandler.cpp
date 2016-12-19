@@ -32,3 +32,8 @@ ReturnCode OverlaySyncCleanupHandler::clean()
 {
     return RecursiveCopy::getInstance().copy(m_src, m_dst);
 }
+
+const std::string OverlaySyncCleanupHandler::queryName()
+{
+    return "";
+}

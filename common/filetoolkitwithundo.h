@@ -118,7 +118,7 @@ public:
      * @param a string path name to check
      * @return true if the path is already exist, false otherwise
      */
-    bool isPathExist(const std::string path);
+    bool pathInList(const std::string path);
 protected:
     /**
      * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the

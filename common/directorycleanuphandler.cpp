@@ -40,3 +40,8 @@ ReturnCode DirectoryCleanUpHandler::clean()
         return ReturnCode::FAILURE;
     }
 }
+
+const std::string DirectoryCleanUpHandler::queryName()
+{
+    return m_path;
+}

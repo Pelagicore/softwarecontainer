@@ -393,33 +393,29 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
     close(fileDescriptor);
 
     // Make sure that the file is not already in the container
-    FunctionJob job1(getSc(), [&] () {
+    FunctionJob job(getSc(), [&] () {
         return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
     });
-    job1.start();
-    ASSERT_EQ(job1.wait(), NON_EXISTENT);
+    job.start();
+    ASSERT_EQ(job.wait(), NON_EXISTENT);
 
     // Bind mount the file
     ReturnCode result1 = getSc().getContainer()->bindMountFileInContainer(tempFilename, tempFilename, true);
     ASSERT_TRUE(isSuccess(result1));
 
     // Check that the file is now in the container
-    FunctionJob job2(getSc(), [&] () {
-        return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
-    });
-    job2.start();
-    ASSERT_EQ(job2.wait(), EXISTENT);
+
+    job.start();
+    ASSERT_EQ(job.wait(), EXISTENT);
 
     // Try to bind mount again. This should fail!
     ReturnCode result2 = getSc().getContainer()->bindMountFileInContainer(tempFilename, tempFilename, true);
     ASSERT_TRUE(isError(result2));
 
     // Check that the file is still in the container
-    FunctionJob job3(getSc(), [&] () {
-        return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
-    });
-    job3.start();
-    ASSERT_EQ(job3.wait(), EXISTENT);
+
+    job.start();
+    ASSERT_EQ(job.wait(), EXISTENT);
 
 }
 
