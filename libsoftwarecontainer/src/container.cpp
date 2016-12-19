@@ -589,7 +589,7 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
         log_error() << "Could not create file " << tempFile;
         return ReturnCode::FAILURE;
     }
-    m_cleanupHandlers.push(new FileCleanUpHandler(tempFile));
+    m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
 
     return bindMountCore(pathOnHost, pathInContainer, tempFile, readonly);
 }

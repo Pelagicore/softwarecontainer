@@ -112,12 +112,19 @@ public:
      * @return A string path pointing to the newly creted temporary directory.
      */
     std::string tempDir(std::string templatePath);
+
+    /**
+     * @brief checks whether given path is already added to clean up handlers or not
+     * @param a string path name to check
+     * @return true if the path is already exist, false otherwise
+     */
+    bool isPathExist(const std::string path);
 protected:
     /**
-     * @brief m_cleanupHandlers A stack of cleanupHandlers added during the lifetime of the
+     * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
      *  FileToolKitWithUndo that will be run from the destructor.
      */
-    std::stack<CleanUpHandler *> m_cleanupHandlers;
+    std::vector<CleanUpHandler *> m_cleanupHandlers;
 };
 
 }
