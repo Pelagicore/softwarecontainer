@@ -27,5 +27,13 @@ var class_d_bus_gateway =
     [ "setEnvironmentVariable", "class_d_bus_gateway.html#a828b2dfa811c7fcce82d34b502e65112", null ],
     [ "executeInContainer", "class_d_bus_gateway.html#a77348e5ce86b82302764b10e3203b42c", null ],
     [ "executeInContainer", "class_d_bus_gateway.html#a1654f704315b3c4a6c982f09e4aa287a", null ],
-    [ "ID", "class_d_bus_gateway.html#a5cd98a45ed75dd4a2579c56e1d7eb38f", null ]
+    [ "read", "class_d_bus_gateway.html#a7ea50df505b43684c4a1d82ca6cb6e82", null ],
+    [ "read", "class_d_bus_gateway.html#aec2365e81204446fec184fe17e573405", null ],
+    [ "read", "class_d_bus_gateway.html#a11e43ade1f694d939bfd566b64ddd460", null ],
+    [ "ID", "class_d_bus_gateway.html#a5cd98a45ed75dd4a2579c56e1d7eb38f", null ],
+    [ "ENABLED_FIELD", "class_d_bus_gateway.html#af0a2a443c50865a1556f8ad971c4c9e1", null ],
+    [ "XDG_RUNTIME_DIR_VARIABLE_NAME", "class_d_bus_gateway.html#ad4264741d566d2ee954cd7dccd5e58c1", null ],
+    [ "m_container", "class_d_bus_gateway.html#af0ce46d7b8bf606129980aa0fd5324f4", null ],
+    [ "m_id", "class_d_bus_gateway.html#a9c130210e82f993d64ee50764ddcc393", null ],
+    [ "m_state", "class_d_bus_gateway.html#a54d282882210c55d9f60ba1ad338a56d", null ]
 ];
