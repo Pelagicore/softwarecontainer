@@ -34,6 +34,7 @@ public:
     {
     }
     virtual ReturnCode clean() = 0;
+    virtual const std::string queryName() = 0;
 };
 
 }

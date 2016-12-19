@@ -29,5 +29,13 @@ public:
     MountCleanUpHandler(const std::string &path);
 
     ReturnCode clean() override;
+
+    /**
+     * @brief this function is needed to query member name
+     *
+     * @return a read-only m_path
+     */
+    const std::string queryName() override;
+
     std::string m_path;
 };

@@ -44,3 +44,7 @@ ReturnCode MountCleanUpHandler::clean()
     }
 }
 
+const std::string MountCleanUpHandler::queryName()
+{
+    return m_path;
+}

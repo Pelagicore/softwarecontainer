@@ -35,3 +35,8 @@ ReturnCode FileCleanUpHandler::clean()
         return ReturnCode::FAILURE;
     }
 }
+
+const std::string FileCleanUpHandler::queryName()
+{
+    return m_path;
+}
