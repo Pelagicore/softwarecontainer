@@ -33,8 +33,19 @@ DBusGateway::DBusGateway(ProxyType type
              + name
              + ".sock";
 
-    m_sessionBusConfig = json_array();
-    m_systemBusConfig = json_array();
+    // Write configuration
+    m_totConfig = json_object();
+    m_busConfig = json_array();
+
+    typeStr = m_type == SessionProxy ? SESSION_CONFIG : SYSTEM_CONFIG;
+    json_object_set(m_totConfig, typeStr, m_busConfig);
+
+    // Send an empty array as config for the irrelevant proxy type
+    const char* unusedTypeStr = m_type == SystemProxy ? SESSION_CONFIG : SYSTEM_CONFIG;
+    json_t* emptyArray = json_array();
+    json_object_set(m_totConfig, unusedTypeStr, emptyArray);
+
+
 }
 
 DBusGateway::~DBusGateway()
@@ -44,12 +55,12 @@ DBusGateway::~DBusGateway()
     }
 }
 
-
 ReturnCode DBusGateway::readConfigElement(const json_t *element)
 {
     DBusGatewayParser parser;
 
-    if (isError(parser.parseDBusConfigElement(element, m_sessionBusConfig, m_systemBusConfig))) {
+    // TODO: This should really be done with exceptions instead and json_t* as return type.
+    if (isError(parser.parseDBusConfig(element, typeStr, m_busConfig))) {
         log_error() << "Failed to parse DBus configuration element";
         return ReturnCode::FAILURE;
     }
@@ -76,29 +87,26 @@ bool DBusGateway::activateGateway()
     bool hasEnvVar = false;
     std::string envValue = Glib::getenv(variable, hasEnvVar);
 
-    if (hasEnvVar) {
-        envVec.push_back(variable + "=" + envValue);
-    } else if (m_type == SessionProxy) {
-        log_error() << "Using DBus gateway in session mode"
-                    << " and no " + variable + " set in host environment, dbus-proxy won't work";
-        return false;
+    if (!hasEnvVar) {
+        if (m_type == SessionProxy) {
+            log_error() << "Using DBus gateway in session mode"
+                        << " and no " + variable + " set in host environment, dbus-proxy won't work";
+            return false;
+        } else {
+            log_warn() << "Using DBus gateway in system mode"
+                       << " and no " + variable + " set in host environment, this could be a problem";
+        }
     } else {
-        log_warn() << "Using DBus gateway in system mode"
-                   << " and no " + variable + " set in host environment, this could be a problem";
+        envVec.push_back(variable + "=" + envValue);
     }
 
     if (!startDBusProxy(commandVec, envVec)) {
         return false;
     }
 
-    // Write configuration
-    json_t *jsonConfig = json_object();
-    json_object_set(jsonConfig, DBusGatewayParser::SESSION_CONFIG, m_sessionBusConfig);
-    json_object_set(jsonConfig, DBusGatewayParser::SYSTEM_CONFIG, m_systemBusConfig);
-
-    char *config_c = json_dumps(jsonConfig, JSON_COMPACT);
+    // Dump to string and clean up
+    char *config_c = json_dumps(m_totConfig, JSON_COMPACT);
     std::string config = std::string(config_c);
-    json_decref(jsonConfig);
     free(config_c);
 
     return testDBusConnection(config);
@@ -175,6 +183,7 @@ bool DBusGateway::isSocketCreated() const
 bool DBusGateway::teardownGateway()
 {
     bool success = true;
+    json_decref(m_totConfig);
 
     if (m_pid != INVALID_PID) {
         log_debug() << "Killing dbus-proxy with pid " << m_pid;
@@ -192,6 +201,7 @@ bool DBusGateway::teardownGateway()
             success = false;
         }
     } else {
+        // TODO: Seems wierd that this would ever happen. Seems like a severe error.
         log_debug() << "Socket not accessible, has it been removed already?";
     }
 
