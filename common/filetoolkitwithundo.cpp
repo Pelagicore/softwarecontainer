@@ -38,8 +38,8 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
     // Clean up all created directories, files, and mount points
 
     while (!m_cleanupHandlers.empty()) {
-        CleanUpHandler *c = m_cleanupHandlers.top();
-        m_cleanupHandlers.pop();
+        CleanUpHandler *c = m_cleanupHandlers.back();
+        m_cleanupHandlers.pop_back();
 
         if (isError(c->clean())) {
             success = false;
@@ -82,7 +82,7 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
         return ReturnCode::FAILURE;
     }
 
-    m_cleanupHandlers.push(new DirectoryCleanUpHandler(path));
+    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(path));
     log_debug() << "Created directory " << path;
 
     return ReturnCode::SUCCESS;
@@ -97,7 +97,7 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
         return nullptr;
     }
 
-    m_cleanupHandlers.push(new DirectoryCleanUpHandler(templ));
+    m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(templ));
 
     return std::string(dir);
 }
@@ -134,7 +134,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
-        m_cleanupHandlers.push(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
     } else {
         log_error() << "Could not mount into container: src=" << src
                     << " , dst=" << dst << " err=" << strerror(errno);
@@ -184,10 +184,10 @@ ReturnCode FileToolkitWithUndo::overlayMount(
 
     if (mountRes == 0) {
         log_verbose() << "overlayMounted folder " << lower << " in " << dst;
-        m_cleanupHandlers.push(new MountCleanUpHandler(dst));
-        m_cleanupHandlers.push(new OverlaySyncCleanupHandler(upper, lower));
-        m_cleanupHandlers.push(new DirectoryCleanUpHandler(upper));
-        m_cleanupHandlers.push(new DirectoryCleanUpHandler(work));
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
+        m_cleanupHandlers.push_back(new OverlaySyncCleanupHandler(upper, lower));
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(upper));
+        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(work));
     } else {
         log_error() << "Could not mount into container: upper=" << upper
                     << ",lower=" << lower
@@ -226,10 +226,20 @@ ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
         return ReturnCode::FAILURE;
     }
 
-    m_cleanupHandlers.push(new MountCleanUpHandler(path));
+    m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
     log_debug() << "Created shared mount point at " << path;
 
     return ReturnCode::SUCCESS;
+}
+
+bool FileToolkitWithUndo::isPathExist(const std::string path)
+{
+    for (auto element : m_cleanupHandlers) {
+        if (static_cast<FileCleanUpHandler *>(element)->m_path == path) {
+               return true;
+        }
+    }
+    return false;
 }
 
 ReturnCode FileToolkitWithUndo::writeToFile(const std::string &path, const std::string &content)
@@ -238,7 +248,10 @@ ReturnCode FileToolkitWithUndo::writeToFile(const std::string &path, const std::
     if (isError(ret)) {
         return ret;
     }
-    m_cleanupHandlers.push(new FileCleanUpHandler(path));
+
+    if (!isPathExist(path)) {
+        m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
+    }
     log_debug() << "Successfully wrote to " << path;
     return ReturnCode::SUCCESS;
 }
@@ -252,7 +265,7 @@ ReturnCode FileToolkitWithUndo::createSymLink(
     createDirectory(parentPath(source));
 
     if (symlink(destination.c_str(), source.c_str()) == 0) {
-        m_cleanupHandlers.push(new FileCleanUpHandler(source));
+        m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
         log_debug() << "Successfully created symlink from " << source << " to " << destination;
     } else {
         log_error() << "Error creating symlink " << destination
