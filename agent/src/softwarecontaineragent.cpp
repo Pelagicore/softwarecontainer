@@ -297,6 +297,24 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
         return false;
     }
 
+    /*
+     * We want to always apply any default capabilities we have. If the container is in READY state,
+     * that means that its gateways have been configured. The only way to configure the gateways
+     * from the agent is through setCapabilities - which sets the default caps also.
+     *
+     * If it has not been set, then we use a call without arguments to setCapabilities to set it up,
+     * since we then should get only the default ones.
+     */
+    if (container->getContainerState() != ContainerState::READY) {
+        log_info() << "Container not configured yet, configuring with default capabilities, if any";
+        GatewayConfiguration gatewayConfigs = m_defaultConfigStore->configs();
+        if (!updateGatewayConfigs(containerID, gatewayConfigs)) {
+            log_error() << "Could not set default capabilities on container " << containerID;
+            pid = INVALID_PID;
+            return false;
+        }
+    }
+
     // Set up a CommandJob for this run in the container
     auto job = new CommandJob(*container, cmdLine);
     job->setOutputFile(outputFile);
@@ -447,8 +465,8 @@ bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
         return true;
     }
 
-    auto gatewayConfigs = m_defaultConfigStore->configs();
-    auto filteredConfigs = m_filteredConfigStore->configsByID(capabilities);
+    GatewayConfiguration gatewayConfigs = m_defaultConfigStore->configs();
+    GatewayConfiguration filteredConfigs = m_filteredConfigStore->configsByID(capabilities);
 
     // If we get an empty config the user passed a non existent cap name
     if (filteredConfigs.empty()) {
