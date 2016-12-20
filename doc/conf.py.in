@@ -36,7 +36,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinxcontrib.manpage',
     'sphinxcontrib.blockdiag',
-    'sphinxcontrib.seqdiag'
+    'sphinxcontrib.seqdiag',
+    'sphinxcontrib.actdiag'
 ]
 
 # Substitutions for common names. Key is replaced value in the text of all .rst # documents.
@@ -95,6 +96,12 @@ todo_include_todos = True
 
 # SVGs look much less blurry
 seqdiag_html_image_format = "SVG"
+seqdiag_antialias = True
+
+# -- Options for actdiag --------------------------------------------------
+actdiag_antialias = True
+actdiag_html_image_format = "SVG"
+
 
 
 # -- Options for HTML output ----------------------------------------------
