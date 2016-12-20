@@ -139,17 +139,17 @@ public:
     /**
      * @brief Set the associated container for this gateway
      */
-    void setContainer(std::shared_ptr<ContainerAbstractInterface> container);
+    virtual void setContainer(std::shared_ptr<ContainerAbstractInterface> container);
 
     /**
      * @brief Is the gateway configured or not?
      */
-    bool isConfigured();
+    virtual bool isConfigured();
 
     /**
      * @brief Is the gateway activated or not?
      */
-    bool isActivated();
+    virtual bool isActivated();
 
 protected:
     /**

@@ -43,14 +43,14 @@ public:
         ASSERT_EQ(json_array_size(systemConf), empty);
     }
 
-    void parse(const std::string &config, const ReturnCode &systemExpectedReturnCode, const ReturnCode &sessionExpectedReturnCode) {
+    void parse(const std::string &config, const ReturnCode systemExpectedReturnCode, const ReturnCode sessionExpectedReturnCode) {
         json_t *configJSON = convertToJSON(config);
 
-        ReturnCode systemBusParseResult = parser.parseDBusConfig(configJSON, DBusGateway::SYSTEM_CONFIG, systemConf);
-        ASSERT_EQ(systemExpectedReturnCode, systemBusParseResult);
+        ReturnCode systemBusParseResult = parser.parseDBusConfig(configJSON, DBusGatewayInstance::SYSTEM_CONFIG, systemConf);
+        ASSERT_TRUE(systemExpectedReturnCode == systemBusParseResult);
 
-        ReturnCode sessionBusParseResult = parser.parseDBusConfig(configJSON, DBusGateway::SESSION_CONFIG, sessionConf);
-        ASSERT_EQ(sessionExpectedReturnCode, sessionBusParseResult);
+        ReturnCode sessionBusParseResult = parser.parseDBusConfig(configJSON, DBusGatewayInstance::SESSION_CONFIG, sessionConf);
+        ASSERT_TRUE(sessionExpectedReturnCode == sessionBusParseResult);
     }
 };
 
@@ -60,7 +60,7 @@ public:
 TEST_F(DBusGatewayParserTest, TestNoSystemConf) {
     const std::string config =
         "{"
-            "\"" + std::string(DBusGateway::SESSION_CONFIG) + "\": [{}]"
+            "\"" + std::string(DBusGatewayInstance::SESSION_CONFIG) + "\": [{}]"
         "}";
     parse(config, ReturnCode::FAILURE, ReturnCode::SUCCESS);
 
@@ -74,7 +74,7 @@ TEST_F(DBusGatewayParserTest, TestNoSystemConf) {
 TEST_F(DBusGatewayParserTest, TestNoSessionConf) {
     const std::string config =
         "{"
-            "\"" + std::string(DBusGateway::SYSTEM_CONFIG) + "\": [{}]"
+            "\"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": [{}]"
         "}";
     parse(config, ReturnCode::SUCCESS, ReturnCode::FAILURE);
 
@@ -99,19 +99,19 @@ TEST_F(DBusGatewayParserTest, TestNoConfAtAll) {
 TEST_F(DBusGatewayParserTest, TestConfigsOfWrongType) {
     const std::string configObject =
         "{"
-            "  \"" + std::string(DBusGateway::SYSTEM_CONFIG) + "\": {}"
+            "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": {}"
         "}";
     TestWrongTypeFails(configObject);
 
     const std::string configString =
         "{"
-            "  \"" + std::string(DBusGateway::SYSTEM_CONFIG) + "\": \"string\""
+            "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": \"string\""
         "}";
     TestWrongTypeFails(configString);
 
     const std::string configBool =
         "{"
-            "  \"" + std::string(DBusGateway::SYSTEM_CONFIG) + "\": true"
+            "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": true"
         "}";
     TestWrongTypeFails(configBool);
 }
@@ -122,8 +122,8 @@ TEST_F(DBusGatewayParserTest, TestConfigsOfWrongType) {
 TEST_F(DBusGatewayParserTest, TestFullValidConfig) {
     const std::string config =
         "{"
-            "  \"" + std::string(DBusGateway::SYSTEM_CONFIG) + "\": [{}]"
-            ", \"" + std::string(DBusGateway::SESSION_CONFIG) + "\": [{}]"
+            "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": [{}]"
+            ", \"" + std::string(DBusGatewayInstance::SESSION_CONFIG) + "\": [{}]"
         "}";
 
     parse(config, ReturnCode::SUCCESS, ReturnCode::SUCCESS);

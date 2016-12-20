@@ -23,9 +23,10 @@ ReturnCode DBusGatewayParser::parseDBusConfig(const json_t *element,
                                               const char *key,
                                               json_t *config)
 {
+    log_debug() << "Parsing element for " << key;
     json_t *configExists = json_object_get(element, key);
-    if (configExists == nullptr) {
-        log_error() << key << " not found in given config";
+    if (nullptr == configExists) {
+        log_error() << key << " was not found in config.";
         return ReturnCode::FAILURE;
     }
 

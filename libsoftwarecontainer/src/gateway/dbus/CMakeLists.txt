@@ -17,6 +17,7 @@
 
 set(DBUS_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/dbusgateway.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dbusgatewayinstance.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dbusgatewayparser.cpp
     PARENT_SCOPE
 )

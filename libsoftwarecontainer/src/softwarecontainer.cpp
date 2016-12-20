@@ -135,8 +135,7 @@ ReturnCode SoftwareContainer::init()
 
 #ifdef ENABLE_DBUSGATEWAY
     std::string containerID = std::string(m_container->id());
-    addGateway(new DBusGateway( DBusGateway::SessionProxy, getGatewayDir(), containerID ));
-    addGateway(new DBusGateway( DBusGateway::SystemProxy,  getGatewayDir(), containerID ));
+    addGateway(new DBusGateway( getGatewayDir(), containerID ));
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
