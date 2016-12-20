@@ -70,13 +70,6 @@ bool SoftwareContainerAgentAdaptor::BindMount(
     return m_agent.bindMount(containerID, pathInHost, PathInContainer, readOnly);
 }
 
-bool SoftwareContainerAgentAdaptor::SetGatewayConfigs(
-    const int32_t &containerID,
-    const std::map<std::string, std::string> &configs)
-{
-    return m_agent.setGatewayConfigs(containerID, configs);
-}
-
 bool SoftwareContainerAgentAdaptor::SetCapabilities(
     const int32_t &containerID,
     const std::vector<std::string> &capabilities)

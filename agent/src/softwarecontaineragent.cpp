@@ -413,29 +413,6 @@ bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
     return true;
 }
 
-bool SoftwareContainerAgent::setGatewayConfigs(const ContainerID &containerID,
-                                               const std::map<std::string, std::string> &configs)
-{
-    profilefunction("setGatewayConfigs");
-    GatewayConfiguration parsedConfigs;
-
-    for (auto const &it : configs) {
-        json_error_t error;
-        std::string gwID = it.first;
-        std::string configStr = it.second;
-
-        json_t *jConfigs = json_loads(configStr.c_str(), 0, &error);
-        if (!jConfigs) {
-            log_error() << "Could not parse config while setting gateway config: " << error.text;
-            log_error() << configs;
-            return false;
-        }
-        parsedConfigs.append(gwID, jConfigs);
-        json_decref(jConfigs);
-    }
-    return updateGatewayConfigs(containerID, parsedConfigs);
-}
-
 bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID,
                                                   const GatewayConfiguration &configs)
 {
