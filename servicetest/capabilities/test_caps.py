@@ -19,10 +19,13 @@
 import pytest
 
 import os
+import time
 
+from testframework.testhelper import EnvironmentHelper
 from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
+from testframework import DefaultManifest
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -80,13 +83,34 @@ manifest = StandardManifest(TESTOUTPUT_DIR,
                             [test_cap, test_cap_dbus, test_cap_broken])
 
 
+""" Sample env gateway config, used for default capabilities """
+ENV_GW_CONFIG = [{
+    "name": "TEST_ENV_VAR",
+    "value": "TEST_ENV_VALUE"
+}]
+
+""" The default capability, just the env gateway config """
+default_cap = Capability("test.cap.default.sample",
+                         [
+                             { "id": "env", "config": ENV_GW_CONFIG }
+                         ])
+
+""" The default manifest contains only the default capability """
+default_manifest = DefaultManifest(TESTOUTPUT_DIR,
+                                   "default-caps.json",
+                                   [default_cap])
+
 def service_manifests():
     """ The agent fixture calls this function when it creates the service manifests
         that should be used with this test module. The agent fixture expects a list
         of StandardManifest and/or DefaultManifest objects.
     """
-    return [manifest]
+    return [manifest, default_manifest]
 
+# This function is used by the testframework 'testhelper' fixture to know where the
+# testhelper should be made available when running the tests
+def mounted_path_in_host():
+    return CURRENT_DIR
 
 @pytest.fixture
 def create_testoutput_dir(scope="module"):
@@ -100,11 +124,7 @@ def create_testoutput_dir(scope="module"):
         os.makedirs(TESTOUTPUT_DIR)
 
 
-""" TODO:
-            * Add tests for default caps
-"""
-
-@pytest.mark.usefixtures("dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
+@pytest.mark.usefixtures("testhelper", "dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
 class TestCaps(object):
     """ This suite tests that capabilities can be used with SoftwareContainer with
         expected results.
@@ -186,5 +206,32 @@ class TestCaps(object):
             caps = sc.list_capabilities()
             # All caps present in the service manifest(s) set up previously should be listed
             assert "test.cap" in caps and "test.cap.valid-dbus" in caps and "test.cap.broken-gw-config" in caps
+            # The default capabilities should not be visible in the list
+            assert "test.cap.default.sample" not in caps
+        finally:
+            sc.terminate()
+
+    def test_defaults_are_applied(self):
+        """ Test that running without first setting capabilities results in
+            the default capabilities being set.
+        """
+        sc = Container()
+        try:
+            sc.start(DATA)
+
+            # Start without setting any capabilities
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py --test-dir " +
+                              sc.get_bind_dir() + "/testoutput" +
+                              " --do-get-env-vars")
+
+            # Give the helper some time to run
+            time.sleep(0.25)
+
+            # Verify that the default caps were set.
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+            my_env_var = helper.env_var("TEST_ENV_VAR")
+            assert my_env_var == "TEST_ENV_VALUE"
         finally:
             sc.terminate()
