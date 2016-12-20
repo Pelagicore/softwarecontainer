@@ -231,18 +231,22 @@ Configure gateways
 
 For details about the gateway configurations, see :ref:`Gateways <gateways>`
 
-Once a container is created and before e.g. an application is launched in the container, gateway configurations
-can be set in order to configure what the application will have access to.
+Once a container is created and before e.g. an application is launched in the container, gateway
+configurations can be set in order to configure what the application will have access to. However,
+one does not set gateway configurations directly, they are grouped together into **capabilities**.
 
-Set gateway config::
+Note that this requires you to have service manifests with capabilities defined and pointed out for
+the ``softwarecontainer-agent``. See :ref:`service manifests <service-manifests>` for more info.
+
+Set capabilities::
 
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.SetGatewayConfigs \
+    --method com.pelagicore.SoftwareContainerAgent.SetCapabilities \
     0 \
-    '{"env": "[{\"name\": \"MY_VAR\", \"value\": \"1234\"},{\"name\": \"OTHER_VAR\", \"value\": \"5678\"}]"}'
+    "['com.acme.example','com.acme.sample']"
 
 Parameters:
  * ``containerID`` - an int with the id of the created container, as returned by the ``Create`` method.
- * ``configs`` - a string:string dictionary with gateway ID as key and json config as value.
+ * ``capabilities`` - a string array of capability names

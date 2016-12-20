@@ -198,16 +198,6 @@ public:
                    const std::string &pathInHost,
                    const std::string &pathInContainer,
                    bool readOnly);
-    /**
-     * @brief Set gateway configurations for the container
-     *
-     * @param containerID the container to use
-     * @param configs a mapping from gateway-ids to configuration strings to send to the container
-     *
-     * @return true on success, false otherwise
-     */
-    bool setGatewayConfigs(const ContainerID &containerID,
-                           const std::map<std::string, std::string> &configs);
 
     /**
      * @brief Set capabilities for the container

@@ -45,12 +45,6 @@
             <arg direction="out" type="b" name="success" />
         </method>
 
-        <method name="SetGatewayConfigs">
-            <arg direction="in" type="i" name="containerID" />
-            <arg direction="in" type="a{ss}" name="configs" />
-            <arg direction="out" type="b" name="success" />
-        </method>
-
         <method name="ListCapabilities">
             <arg direction="out" type="as" name="capabilities" />
         </method>

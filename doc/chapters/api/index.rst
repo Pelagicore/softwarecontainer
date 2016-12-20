@@ -129,23 +129,22 @@ map a configuration.
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
 
-SetGatewayConfigs
------------------
-Sets the configuration of a particular gateway. The gateway configuration
-contains settings as key/value pairs.
+Suspend
+-------
+Suspends all execution inside a given container.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :configs: ``map<string, string>`` A map of gateway IDs and their configurations.
 
 |
 
 :Return Value:
         :success: ``bool`` Whether or not the operation was successful.
 
-Suspend
--------
-Suspends all execution inside a given container.
+SetCapabilities
+---------------
+Applies the given list of capability names to the container. Capabilities are mapped to gateway
+configurations and applied to each gateway for which they map a configuration.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
