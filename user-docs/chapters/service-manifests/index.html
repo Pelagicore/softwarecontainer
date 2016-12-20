@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Service manifests &#8212; softwarecontainer 0.12.0-1124093 2016-12-19 documentation</title>
+    <title>Service manifests &#8212; softwarecontainer 0.13.0-dd78176 2016-12-20 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-1124093 2016-12-19',
+        VERSION:     '0.13.0-dd78176 2016-12-20',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-1124093 2016-12-19 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.13.0-dd78176 2016-12-20 documentation" href="../../index.html" />
     <link rel="next" title="Gateways" href="../gateways/00-index.html" />
     <link rel="prev" title="Configuration" href="../configuration/index.html" />
    
@@ -56,21 +56,26 @@ see <a class="reference internal" href="../integration-guidelines/index.html#int
 configurations. In other words, service manifests describe what
 exact gateway configurations are needed to configure the relevant
 gateways for a specific service in order to realize a capability.
-The service manifests contain the definitions of all the capabilities
-relevant for a service.</p>
+The service manifests typically contain the definitions of all the capabilities
+relevant for a service, although it is possible to split the definitions
+over multiple files if needed.</p>
 <p>For example, a platform might have a capability <cite>com.acme.SomeResource</cite>
 defined. This capability requires access to service <cite>A</cite>. Service <cite>A</cite>
 will then need to deploy a service manifest which contains all gateway
 configurations needed for the <cite>com.acme.SomeResource</cite> capability.</p>
 <p>A service manifest might also contain gateway configurations for more
-capabilities.</p>
-<p>More than one service might be needed to fulfill a capability, meaning that
-each relevant service would need to be integrated in the above mentioned way.</p>
+than one capability.</p>
+<p>More than one service might be needed to realize a capability, meaning that
+each relevant service would need to be integrated in the above mentioned way.
+For example, if the capability <cite>com.acme.SomeResource</cite> also requires access
+to service <cite>B</cite> as well as <cite>A</cite>, both the services needs to deploy service
+manifests and provide their respective gateway configurations needed to
+realize the capability.</p>
 </div>
 <div class="section" id="manifest-format">
 <h2>Manifest format<a class="headerlink" href="#manifest-format" title="Permalink to this headline">¶</a></h2>
 <p>A service manifest is a text file containing JSON. It is required to define
-a version set to &#8220;1&#8221;, and an array &#8220;capabilities&#8221; which contains a
+a version, and an array &#8220;capabilities&#8221; which contains a
 &#8220;name&#8221; key with the capability name as value, and a &#8220;gateways&#8221; key which
 contains an array of objects each defining a gateway configuration identified
 with a gateway ID.</p>
@@ -82,7 +87,7 @@ with a gateway ID.</p>
    <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[{</span>
        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
        <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
-           <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw1&quot;</span><span class="p">,</span>
+           <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
            <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
                <span class="s">&quot;config-part1&quot;</span><span class="p">:</span> <span class="p">[]</span>
            <span class="p">},</span> <span class="p">{</span>
@@ -93,14 +98,14 @@ with a gateway ID.</p>
                    <span class="s">&quot;config-element4&quot;</span><span class="p">:</span> <span class="s">&quot;config-element-optionB&quot;</span>
                <span class="p">}]</span>
            <span class="p">},</span> <span class="p">{</span>
-               <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw2&quot;</span><span class="p">,</span>
+               <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
                <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
            <span class="p">}]</span>
        <span class="p">}]</span>
    <span class="p">},</span> <span class="p">{</span>
        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.AnotherResource&quot;</span><span class="p">,</span>
        <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
-           <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dummy-gw1&quot;</span><span class="p">,</span>
+           <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
            <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
        <span class="p">}]</span>
    <span class="p">}]</span>
@@ -108,12 +113,12 @@ with a gateway ID.</p>
 </pre></div>
 </div>
 <p>In this manifest, there is one capability named <cite>com.acme.SomeResource</cite>
-which defines gateway configurations for the two gateways <cite>dummy-gw1</cite> and
-<cite>dummy-gw2</cite>. In this case the configuration for <cite>dummy-gw2</cite> is an empty
-(but valid) JSON. Exact content will depend on what gateways are involved.
-There is also a second capability named <cite>com.acme.AnotherResource</cite> with
+which defines gateway configurations for the two gateways <cite>example-gateway-id-1</cite> and
+<cite>example-gateway-id-2</cite>. In this case the configuration for <cite>example-gateway-id-2</cite> is an empty
+(but valid) JSON object. There is also a second capability named <cite>com.acme.AnotherResource</cite> with
 a gateway object with an empty array. The manifest also contains the required
 version element.</p>
+<p>The exact value of the &#8220;config&#8221; key, is described for each gateway, see <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
 </div>
 </div>
 </div>

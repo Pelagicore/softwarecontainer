@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Design &#8212; softwarecontainer 0.12.0-1124093 2016-12-19 documentation</title>
+    <title>Design &#8212; softwarecontainer 0.13.0-dd78176 2016-12-20 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-1124093 2016-12-19',
+        VERSION:     '0.13.0-dd78176 2016-12-20',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-1124093 2016-12-19 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.13.0-dd78176 2016-12-20 documentation" href="../../index.html" />
     <link rel="next" title="Configuration" href="../configuration/index.html" />
     <link rel="prev" title="API" href="../api/index.html" />
    
@@ -55,7 +55,7 @@ way, i.e. completely transparent to both applications and services.</p>
 <p>Each IPC is managed by a <em>gateway</em>. The IPC needs of each service is described
 in <em>service manifest</em> files, defining <em>capabilities</em> and mapping these to
 individual <em>gateway configurations</em>. This can be individual objects or
-interfaces on d-bus, networking filter rules, access to device nodes or
+interfaces on D-Bus, networking filter rules, access to device nodes or
 something completely different.</p>
 <p>Each application is then associated with a set of <em>capabilities</em>. This could
 be done through an <em>application manifest</em>, or any other method supported by
@@ -69,7 +69,7 @@ experience from.</p>
 <p>The <em>launcher</em> is responsible for providing SoftwareContainer with a list of
 <em>capabilities</em>, a mount point for the application payload and an entrypoint to
 start execution from.The SoftwareContainer does not concern itself with
-application packaging, deployment of manifest formats. All it does it
+application packaging, deployment of manifest formats. All it does is
 associate the given <em>capabilities</em> with <em>gateway configurations</em> to setup the
 sandbox with the appropriate IPC access to the surrounding world.</p>
 <div class="section" id="the-launcher">
@@ -108,8 +108,7 @@ show popup compared to permission to show high priority popups. This is
 generally added to the end of the name, e.g. <code class="docutils literal"><span class="pre">com.pelagicore.popups</span></code> and
 <code class="docutils literal"><span class="pre">com.pelagicore.popups.important</span></code>.</p>
 <p>The service manifests are typically placed in one JSON file per service, but
-can be split into one file per capability if needed. The files are placed in
-<code class="docutils literal"><span class="pre">/share/resource-access-manager/caps.d/</span></code>.</p>
+can be split into one file per capability if needed.</p>
 <p>For more detailed information about service manifests content and format
 see <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">Service manifests</span></a></p>
 </div>

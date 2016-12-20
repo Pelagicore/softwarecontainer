@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.12.0-1124093 2016-12-19 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.13.0-dd78176 2016-12-20 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0-1124093 2016-12-19',
+        VERSION:     '0.13.0-dd78176 2016-12-20',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="softwarecontainer 0.12.0-1124093 2016-12-19 documentation" href="../../index.html" />
+    <link rel="top" title="softwarecontainer 0.13.0-dd78176 2016-12-20 documentation" href="../../index.html" />
     <link rel="next" title="Troubleshooting" href="../troubleshooting/index.html" />
     <link rel="prev" title="Gateways" href="../gateways/00-index.html" />
    
@@ -50,8 +50,11 @@ into a platform. A brief summary of the general steps involved:</p>
 <ol class="arabic simple">
 <li>Setting up the various IPC mechanisms, that should be reachable from inside containers, on the host system.</li>
 <li>Writing service manifests for capabilities of the platform.</li>
-<li>Integrating a launcher that interact with the SoftwareContainerAgent.</li>
+<li>Integrating a launcher that interact with SoftwareContainer.</li>
 </ol>
+<p>Note that SoftwareContainer as a project is split into multiple sub-components, and while it is possible to
+use e.g. the container library directly, these guidelines assumes the integration point is the complete
+component.</p>
 <p>Below follows information about what SoftwareContainer assumes about the host system when handling different
 IPC mechanisms and examples of configuration and usage.</p>
 <div class="section" id="service-manifests">
@@ -59,13 +62,20 @@ IPC mechanisms and examples of configuration and usage.</p>
 <p>For details about format and content of service manifests, see <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">Service manifests</span></a>
 and <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
 <p>Service manifests should be installed in either <code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.d/</span></code> or
-<code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.default.d/</span></code> depending on if it should be applied by default
-or not. Each manifest are expected to be of type JSON, including the &#8220;json&#8221; file extension.</p>
-<p>Service Manifests are read and parsed at startup of the Agent. If two Service Manifests contain
+<code class="docutils literal"><span class="pre">/usr/local/etc/softwarecontainer//service-manifest.default.d/</span></code> depending on if the capabilities defined in the manifests
+should be applied by default or not. Each manifest is expected to be of type JSON, including the
+&#8220;json&#8221; file extension.</p>
+<p>Service manifests are read at startup of SoftwareContainer. If two service manifests contain
 capabilities with the same name the gateway configurations will be combined (without merging
 or removing duplicates), so when the capability&#8217;s gateway configurations are set all
-configurations from the manifests are included. For more information on how Gateway
-Configurations are handled, please refer to <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
+configurations from the manifests are included. For more information on how gateway
+configurations are handled, please refer to <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
+<p>A service manifest&#8217;s content is used when one or more capability is set by a call to <code class="docutils literal"><span class="pre">SetCapabilities</span></code>.
+The respective gateway configurations that are part of any service manifest that relates to the specified
+capabilities are then applied to the gateways. If any capability is missing, or if any of the gateway
+configurations are erroneous, it is treated as a fatal error by SoftwareContainer as it will mean
+the systems capabilities are not correctly defined and the environment of any applications would
+be in a bad state.</p>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example service manifest, with the capabilities for getting and setting temperature:</p>
@@ -134,8 +144,8 @@ Configurations are handled, please refer to <a class="reference internal" href="
 </div>
 <div class="section" id="network-setup">
 <h2>Network setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h2>
-<p>The network setup of software container is dependent on a network bridge being available on the
-host system, if compiled with support for the network gateway. By default, SoftwareContainer will
+<p>The network setup of SoftwareContainer is dependent on a network bridge being available on the
+host system, if compiled with support for the NetworkGateway. By default, SoftwareContainer will
 create such a bridge on the system if it is not already there. This can be changed, so that
 SoftwareContainer will simply fail with an error message if the bridge was not available.</p>
 <p>The selection of whether or not to create the bridge is a compile-time option given to CMake.
@@ -194,12 +204,12 @@ a launcher. For an overview of the general architecture involving a launcher and
 <p>The above actions are performed by interacting with the SoftwareContainerAgent <a class="reference internal" href="../api/index.html#api"><span class="std std-ref">D-Bus API</span></a>.</p>
 <div class="section" id="setting-up-a-home-directory-and-home">
 <h3>Setting up a home directory and HOME<a class="headerlink" href="#setting-up-a-home-directory-and-home" title="Permalink to this headline">¶</a></h3>
-<p>By calling BindMountFolderInContainer and passing a path on the host that will be mounted inside
-the container at the location specified as the <code class="docutils literal"><span class="pre">subPathInContainer</span></code> argument, a directory is
-made available to an application started later. The path as it looks inside the container is returned
-by the method.</p>
+<p>By calling <code class="docutils literal"><span class="pre">BindMount</span></code> and passing a path on the host that will be mounted inside
+the container at the location specified as the <code class="docutils literal"><span class="pre">pathInContainer</span></code> argument, a directory is
+made available to any application started in the container later.</p>
 <p>The path inside the container is intended to be set as the <code class="docutils literal"><span class="pre">HOME</span></code> environment variable inside the
-container. The variable is set when calling LaunchCommand with the appropriate <code class="docutils literal"><span class="pre">env</span></code> dictionary.</p>
+container. The variable is set when calling <code class="docutils literal"><span class="pre">Execute</span></code> with an appropriate dictionary passed as
+the  <code class="docutils literal"><span class="pre">env</span></code> argument.</p>
 </div>
 </div>
 </div>
