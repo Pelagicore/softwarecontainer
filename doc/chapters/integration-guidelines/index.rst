@@ -8,7 +8,11 @@ into a platform. A brief summary of the general steps involved:
 
 #. Setting up the various IPC mechanisms, that should be reachable from inside containers, on the host system.
 #. Writing service manifests for capabilities of the platform.
-#. Integrating a launcher that interact with the SoftwareContainerAgent.
+#. Integrating a launcher that interact with SoftwareContainer.
+
+Note that SoftwareContainer as a project is split into multiple sub-components, and while it is possible to
+use e.g. the container library directly, these guidelines assumes the integration point is the complete
+component.
 
 Below follows information about what SoftwareContainer assumes about the host system when handling different
 IPC mechanisms and examples of configuration and usage.
@@ -20,14 +24,22 @@ For details about format and content of service manifests, see :ref:`Service man
 and :ref:`Gateways <gateways>`.
 
 Service manifests should be installed in either |service-manifest-dir-code| or
-|default-service-manifest-dir-code| depending on if it should be applied by default
-or not. Each manifest are expected to be of type JSON, including the "json" file extension.
+|default-service-manifest-dir-code| depending on if the capabilities defined in the manifests
+should be applied by default or not. Each manifest is expected to be of type JSON, including the
+"json" file extension.
 
-Service Manifests are read and parsed at startup of the Agent. If two Service Manifests contain
+Service manifests are read at startup of SoftwareContainer. If two service manifests contain
 capabilities with the same name the gateway configurations will be combined (without merging
 or removing duplicates), so when the capability's gateway configurations are set all
-configurations from the manifests are included. For more information on how Gateway
-Configurations are handled, please refer to :ref:`Gateways <gateways>`.
+configurations from the manifests are included. For more information on how gateway
+configurations are handled, please refer to :ref:`Gateways <gateways>`.
+
+A service manifest's content is used when one or more capability is set by a call to ``SetCapabilities``.
+The respective gateway configurations that are part of any service manifest that relates to the specified
+capabilities are then applied to the gateways. If any capability is missing, or if any of the gateway
+configurations are erroneous, it is treated as a fatal error by SoftwareContainer as it will mean
+the systems capabilities are not correctly defined and the environment of any applications would
+be in a bad state.
 
 Example
 -------
@@ -97,8 +109,8 @@ Here is an example service manifest, with the capabilities for getting and setti
 Network setup
 =============
 
-The network setup of software container is dependent on a network bridge being available on the
-host system, if compiled with support for the network gateway. By default, SoftwareContainer will
+The network setup of SoftwareContainer is dependent on a network bridge being available on the
+host system, if compiled with support for the NetworkGateway. By default, SoftwareContainer will
 create such a bridge on the system if it is not already there. This can be changed, so that
 SoftwareContainer will simply fail with an error message if the bridge was not available.
 
@@ -163,10 +175,10 @@ The above actions are performed by interacting with the SoftwareContainerAgent :
 Setting up a home directory and HOME
 ------------------------------------
 
-By calling BindMountFolderInContainer and passing a path on the host that will be mounted inside
-the container at the location specified as the ``subPathInContainer`` argument, a directory is
-made available to an application started later. The path as it looks inside the container is returned
-by the method.
+By calling ``BindMount`` and passing a path on the host that will be mounted inside
+the container at the location specified as the ``pathInContainer`` argument, a directory is
+made available to any application started in the container later.
 
 The path inside the container is intended to be set as the ``HOME`` environment variable inside the
-container. The variable is set when calling LaunchCommand with the appropriate ``env`` dictionary.
+container. The variable is set when calling ``Execute`` with an appropriate dictionary passed as
+the  ``env`` argument.
