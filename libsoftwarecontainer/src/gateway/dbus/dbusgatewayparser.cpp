@@ -18,6 +18,7 @@
  */
 
 #include "dbusgatewayparser.h"
+#include "gatewayparsererror.h"
 
 ReturnCode DBusGatewayParser::parseDBusConfig(const json_t *element,
                                               const char *key,
@@ -26,20 +27,29 @@ ReturnCode DBusGatewayParser::parseDBusConfig(const json_t *element,
     log_debug() << "Parsing element for " << key;
     json_t *configExists = json_object_get(element, key);
     if (nullptr == configExists) {
+        // This is not a fatal error - not providing the key for one of the buses is OK.
         log_error() << key << " was not found in config.";
         return ReturnCode::FAILURE;
     }
 
     if (!json_is_array(configExists)) {
-        log_error() << "Value for " << key << " is not an array";
-        return ReturnCode::FAILURE;
+        throwWithLog(logging::StringBuilder() << "Value for " << key << " is not an array");
     }
 
     for (unsigned int i = 0; i < json_array_size(configExists); i++) {
         json_t *child = json_array_get(configExists, i);
-        // TODO: Error checking here, so that dbus-proxy can accept config
-        json_array_append(config, json_deep_copy(child));
+        if (!json_is_object(child)) {
+            throwWithLog("JSON array element is not an object!");
+        } else {
+            json_array_append(config, json_deep_copy(child));
+        }
     }
 
     return ReturnCode::SUCCESS;
+}
+
+void DBusGatewayParser::throwWithLog(std::string message)
+{
+    log_error() << message;
+    throw GatewayParserError(message);
 }

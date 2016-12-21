@@ -18,8 +18,8 @@
  * For further information see LICENSE
  */
 
-
 #include "softwarecontainer_test.h"
+
 #include "gateway/dbus/dbusgatewayinstance.h"
 #include "softwarecontainer-common.h"
 
@@ -37,21 +37,27 @@ public:
 
 };
 
-using::testing::_;
+using ::testing::_;
 
 class DBusGatewayInstanceTest : public SoftwareContainerGatewayTest
 {
 public:
+    MockDBusGatewayInstance *gw;
+    const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/";
+    const std::string m_containerName = "test";
 
     void SetUp() override
     {
         SoftwareContainerTest::SetUp();
     }
 
-    const std::string m_gatewayDir = "/tmp/dbusgateway-unit-test/";
-    const std::string m_containerName = "test";
+    void setupGateway(DBusGatewayInstance::ProxyType proxyType)
+    {
+        gw = new MockDBusGatewayInstance(proxyType, m_gatewayDir, m_containerName);
+        givenContainerIsSet(gw);
+    }
 
-    void testActivate(MockDBusGatewayInstance *gw, const std::string &config)
+    void testActivate(const std::string &config)
     {
         ::testing::DefaultValue<bool>::Set(true);
         {
@@ -59,6 +65,7 @@ public:
             EXPECT_CALL(*gw, startDBusProxy(_, _));
             EXPECT_CALL(*gw, testDBusConnection(_));
         }
+
         ASSERT_TRUE(isSuccess(gw->setConfig(config)));
         ASSERT_TRUE(isSuccess(gw->activate()));
     }
@@ -68,8 +75,7 @@ public:
  * Test that activate works with a proper full session config
  */
 TEST_F(DBusGatewayInstanceTest, ActivateSessionBus) {
-    MockDBusGatewayInstance gw(DBusGatewayInstance::ProxyType::SessionProxy, m_gatewayDir, m_containerName);
-    givenContainerIsSet(&gw);
+    setupGateway(DBusGatewayInstance::ProxyType::SessionProxy);
     const std::string config = "[{"
             "\"" + std::string(DBusGatewayInstance::SESSION_CONFIG) + "\": [{"
                "\"direction\": \"*\","
@@ -77,15 +83,14 @@ TEST_F(DBusGatewayInstanceTest, ActivateSessionBus) {
                "\"object-path\": \"*\","
                "\"method\": \"*\""
             "}]}]";
-    testActivate(&gw, config);
+    testActivate(config);
 }
 
 /*
  * Test that activate works with a proper full system config
  */
 TEST_F(DBusGatewayInstanceTest, ActivateSystemBus) {
-    MockDBusGatewayInstance gw(DBusGatewayInstance::ProxyType::SystemProxy, m_gatewayDir, m_containerName);
-    givenContainerIsSet(&gw);
+    setupGateway(DBusGatewayInstance::ProxyType::SystemProxy);
     const std::string config = "[{"
             "\"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": [{"
                "\"direction\": \"*\","
@@ -93,5 +98,5 @@ TEST_F(DBusGatewayInstanceTest, ActivateSystemBus) {
                "\"object-path\": \"*\","
                "\"method\": \"*\""
             "}]}]";
-    testActivate(&gw, config);
+    testActivate(config);
 }

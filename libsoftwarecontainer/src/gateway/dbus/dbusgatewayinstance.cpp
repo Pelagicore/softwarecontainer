@@ -152,16 +152,16 @@ bool DBusGatewayInstance::startDBusProxy(const std::vector<std::string> &command
 {
     // Spawn dbus-proxy with access to its stdin.
     try {
-        Glib::spawn_async_with_pipes( "."
-                                    , commandVec
-                                    , envVec
-                                    , Glib::SPAWN_STDOUT_TO_DEV_NULL // Redirect stdout
+        Glib::spawn_async_with_pipes(".",
+                                     commandVec,
+                                     envVec,
+                                     Glib::SPAWN_STDOUT_TO_DEV_NULL // Redirect stdout
                                         | Glib::SPAWN_STDERR_TO_DEV_NULL // Redirect stderr
                                         | Glib::SPAWN_SEARCH_PATH // Search $PATH
-                                        | Glib::SPAWN_DO_NOT_REAP_CHILD // Lets us do waitpid
-                                    , sigc::slot<void>() // child setup
-                                    , &m_pid
-                                    , &m_infp // stdin
+                                        | Glib::SPAWN_DO_NOT_REAP_CHILD, // Lets us do waitpid
+                                    sigc::slot<void>(), // child setup
+                                    &m_pid,
+                                    &m_infp // stdin
                                     );
     } catch (const Glib::Error &ex) {
         log_error() << "Failed to launch dbus-proxy";
@@ -190,7 +190,11 @@ bool DBusGatewayInstance::isSocketCreated() const
 bool DBusGatewayInstance::teardownGateway()
 {
     bool success = true;
-    json_decref(m_entireConfig);
+
+    if (nullptr != m_entireConfig) {
+        json_decref(m_entireConfig);
+        m_entireConfig = nullptr;
+    }
 
     if (m_pid != INVALID_PID) {
         log_debug() << "Killing dbus-proxy with pid " << m_pid;
@@ -208,7 +212,7 @@ bool DBusGatewayInstance::teardownGateway()
             success = false;
         }
     } else {
-        // TODO: Seems wierd that this would ever happen. Seems like a severe error.
+        // TODO: Seems weird that this would ever happen. Seems like a severe error.
         log_debug() << "Socket not accessible, has it been removed already?";
     }
 

@@ -17,18 +17,33 @@
  * For further information see LICENSE
  */
 
-#pragma once
+namespace softwarecontainer {
 
-#include "softwarecontainer-common.h"
-#include "jsonparser.h"
-
-class DBusGatewayParser
+class GatewayParserError : public std::exception
 {
-    LOG_DECLARE_CLASS_CONTEXT("DBGP", "D-Bus gateway parser");
-
 public:
-    ReturnCode parseDBusConfig(const json_t *element, const char *key, json_t *config);
+    GatewayParserError():
+        m_message(std::string("Gateway parser error"))
+    {
+    }
+
+    GatewayParserError(const std::string &message):
+        m_message(message)
+    {
+    }
+
+    ~GatewayParserError()
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
 
 private:
-    void throwWithLog(std::string message);
+    std::string m_message;
+
 };
+
+} // end namespace

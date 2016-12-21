@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,7 +17,6 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include <string>
@@ -26,7 +24,6 @@
 
 #include "containerabstractinterface.h"
 #include "jsonparser.h"
-
 
 namespace softwarecontainer {
 
@@ -55,8 +52,6 @@ public:
 private:
     std::string m_message;
 };
-}
-
 
 /**
  * @brief Gateway base class for SoftwareContainer
@@ -209,3 +204,5 @@ private:
     GatewayState m_state = GatewayState::CREATED;
 
 };
+
+} // end namespace

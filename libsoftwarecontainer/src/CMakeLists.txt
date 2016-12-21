@@ -15,6 +15,9 @@
 #
 # For further information see LICENSE
 
+include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gateway)
+
 # Enable or disable support for gateways compile-time.
 set(GATEWAY_SOURCES "")
 set(GATEWAY_DEFINITIONS "")
@@ -40,8 +43,6 @@ TARGET_LINK_LIBRARIES(softwarecontainer
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}
 )
-
-include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
 
 install(TARGETS softwarecontainer DESTINATION lib)
 set_target_properties(softwarecontainer PROPERTIES VERSION ${VERSION} SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
