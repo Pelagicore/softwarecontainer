@@ -36,6 +36,7 @@ set(SOFTWARECONTAINERAGENT_CORE_CLASSES
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefaults.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/config/mandatoryconfigs.cpp
 )
 
 add_executable(softwarecontainer-agent

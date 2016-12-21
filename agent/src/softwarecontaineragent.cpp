@@ -36,7 +36,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         //      but doesn't seem to work anyway, see bug
         m_shutdownContainers = !config.getBooleanValue(Config::SC_GROUP,
                                                        Config::KEEP_CONTAINERS_ALIVE_KEY);
-    } catch (softwarecontainer::ConfigError &error) {
+    } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
 
@@ -48,7 +48,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         shutdownTimeout = config.getIntegerValue(Config::SC_GROUP, Config::SHUTDOWN_TIMEOUT_KEY);
         containerRootDir = config.getStringValue(Config::SC_GROUP, Config::SHARED_MOUNTS_DIR_KEY);
         lxcConfigPath = config.getStringValue(Config::SC_GROUP, Config::LXC_CONFIG_PATH_KEY);
-    } catch (softwarecontainer::ConfigError &error) {
+    } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
 
@@ -77,7 +77,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
                                                    Config::SERVICE_MANIFEST_DIR_KEY);
         defaultServiceManifestDir = config.getStringValue(Config::SC_GROUP,
                                                           Config::DEFAULT_SERVICE_MANIFEST_DIR_KEY);
-    } catch (softwarecontainer::ConfigError &error) {
+    } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
 

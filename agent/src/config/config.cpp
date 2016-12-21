@@ -21,6 +21,8 @@
 #include "config.h"
 
 
+namespace softwarecontainer {
+
 // Illegal values used as initial command line option values to check if user
 // set them or not
 const std::string Config::SC_CONFIG_PATH_INITIAL_VALUE = "";
@@ -45,23 +47,86 @@ const std::string Config::SERVICE_MANIFEST_DIR_KEY = "service-manifest-dir";
 const std::string Config::DEFAULT_SERVICE_MANIFEST_DIR_KEY = "default-service-manifest-dir";
 
 
+// TODO: Remove this constructor if we actually always will want to specify mandatory and deps?
 Config::Config(std::unique_ptr<ConfigLoaderAbstractInterface> loader,
                std::unique_ptr<ConfigDefaults> defaults,
                const std::map<std::string, std::string> &stringOptions,
                const std::map<std::string, int> &intOptions,
                const std::map<std::string, bool> &boolOptions) :
+    m_loader(std::move(loader)),
     m_defaults(std::move(defaults)),
     m_stringOptions(stringOptions),
     m_intOptions(intOptions),
     m_boolOptions(boolOptions)
 {
-    try {
-        m_config = loader->loadConfig();
-    } catch (Glib::Error &error) {
-        throw softwarecontainer::ConfigError();
+    loadConfig();
+}
+
+Config::Config(std::unique_ptr<ConfigLoaderAbstractInterface> loader,
+               std::unique_ptr<ConfigDefaults> defaults,
+               MandatoryConfigs &mandatory,
+               std::vector<std::pair<std::string, std::vector<std::string>>> &dependencies,
+               const std::map<std::string, std::string> &stringOptions,
+               const std::map<std::string, int> &intOptions,
+               const std::map<std::string, bool> &boolOptions) :
+    m_loader(std::move(loader)),
+    m_defaults(std::move(defaults)),
+    m_stringOptions(stringOptions),
+    m_intOptions(intOptions),
+    m_boolOptions(boolOptions)
+{
+    loadConfig();
+
+    /* Checking for mandatory config group is only relevant for the main config source
+     */
+    for (std::string group : mandatory.groups()) {
+        log_debug() << "Checking for mandatory config group: \"" << group << "\"";
+        if (!m_config->has_group(group)) {
+            log_error() << "Missing mandatory config group: \"" + group + "\"";
+            throw ConfigMandatoryError("Missing mandatory config group: \"" + group + "\"");
+        }
+    }
+
+    /* Check that each mandatory config is present in one of the sources using the normal
+     * retrieval methods in order to preserve the priority order.
+     */
+    for (std::tuple<std::string, std::string, ConfigType> config : mandatory.configs()) {
+        std::string group = std::get<0>(config);
+        std::string key = std::get<1>(config);
+        ConfigType type = std::get<2>(config);
+
+        log_debug() << "Checking for presence of mandatory config: \"" << key << "\"";
+        /* TODO: The below only checks for presence, it should also add the values to something
+         *       that can be used for retrieval later. */
+        try {
+            switch (type) {
+                case ConfigType::String:
+                    getStringValue(group, key);
+                    break;
+                case ConfigType::Integer:
+                    getIntegerValue(group, key);
+                    break;
+                case ConfigType::Boolean:
+                    getBooleanValue(group, key);
+                    break;
+                default:
+                    break;
+            }
+        } catch (ConfigError &error) {
+            log_error() << "Missing mandatory config: \"" << key << "\"";
+            throw ConfigMandatoryError("Missing mandatory config: \"" + key + "\"");
+        }
     }
 }
 
+void Config::loadConfig()
+{
+    try {
+        m_config = m_loader->loadConfig();
+    } catch (Glib::Error &error) {
+        throw ConfigError();
+    }
+}
 
 std::string Config::getStringValue(const std::string &group, const std::string &key) const
 {
@@ -99,7 +164,7 @@ T Config::getValue(const std::string &group, const std::string &key, const std::
     if (!m_config->has_group(group)) {
         // Incorrect group is a configuration error, don't continue to fall back to default
         log_error() << "Incorrect config group: \"" << group << "\"";
-        throw softwarecontainer::ConfigError();
+        throw ConfigError();
     }
 
     if (m_config->has_key(group, key)) {
@@ -112,14 +177,14 @@ T Config::getValue(const std::string &group, const std::string &key, const std::
             return value;
         } catch (Glib::Error &error) {
             log_error() << "Could not parse string value: \"" << error.what() << "\"";
-            throw softwarecontainer::ConfigError();
+            throw ConfigError();
         }
     }
 
     // We should always have defaults set, but check just to be sure.
     if (!m_defaults) {
         log_error() << "No config defaults set, cannot continue";
-        throw softwarecontainer::ConfigError();
+        throw ConfigError();
     }
 
     // Value has not been set at all, fall back on default
@@ -131,8 +196,9 @@ T Config::getValue(const std::string &group, const std::string &key, const std::
                     << value << "\"";
     } catch (std::exception &error) {
         log_error() << "No config default found for config \"" << group << "::" << key << "\"";
-        throw softwarecontainer::ConfigError();
+        throw ConfigError();
     }
+
     return value;
 }
 
@@ -153,3 +219,5 @@ int Config::getGlibValue(const std::string &group, const std::string &key) const
 {
     return m_config->get_integer(Glib::ustring(group), Glib::ustring(key));
 }
+
+} // namespace softwarecontainer

@@ -21,8 +21,10 @@
 #include "softwarecontainer-common.h"
 #include "config/config.h"
 #include "config/fileconfigloader.h"
+#include "config/mandatoryconfigs.h"
 
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 
 #include <string>
 #include <glibmm.h>
@@ -56,62 +58,6 @@ public:
         return configData;
     }
 };
-
-
-/*
- * StringConfigLoaderTest suite
- *
- * NOTE: Tests the test stub...
- *
- * This suite does some basic tests for the StringConfigLoader used for testing
- * the Config class. The purpose is to support troubleshooting between the test
- * setup and the Config class which is tested in the other suite.
- */
-class StringConfigLoaderTest : public ::testing::Test
-{
-};
-
-/*
- * Test that a well formed config will not cause an exception to be thrown.
- */
-TEST_F(StringConfigLoaderTest, SuccessfulLoadDoesNotThrow) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n";
-
-    StringConfigLoader loader(configString);
-    ASSERT_NO_THROW(loader.loadConfig());
-}
-
-/*
- * Test that a broken config string will cause an exception to be thrown.
- */
-TEST_F(StringConfigLoaderTest, UnsuccessfulLoadThrows) {
-    // This config is broken, it's missing a bracket in the group
-    const std::string configString = "[SoftwareContainer\n"
-                                     "sc.foo=bar\n";
-
-    StringConfigLoader loader(configString);
-    ASSERT_THROW(loader.loadConfig(), Glib::KeyFileError);
-}
-
-/*
- * Test that a broken config string will cause an exception to be thrown, and that
- * the error code thrown is the correct one.
- */
-TEST_F(StringConfigLoaderTest, UnsuccessfulLoadThrowsExpectedErrorCode) {
-    // This config is broken, it's missing a bracket in the group
-    const std::string configString = "[SoftwareContainer\n"
-                                     "sc.foo=bar\n";
-
-    StringConfigLoader loader(configString);
-
-    try {
-        std::unique_ptr<Glib::KeyFile> config = loader.loadConfig();
-    } catch (Glib::KeyFileError &error) {
-        ASSERT_TRUE(error.code() == Glib::KeyFileError::PARSE);
-    }
-}
 
 
 /*
@@ -240,7 +186,7 @@ TEST_F(ConfigTest, IncorrectGroupThrows) {
 
     Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
-    ASSERT_THROW(config.getStringValue("DoesNotExist", "sc.foo"), softwarecontainer::ConfigError);
+    ASSERT_THROW(config.getStringValue("DoesNotExist", "sc.foo"), ConfigError);
 }
 
 /*
@@ -256,7 +202,7 @@ TEST_F(ConfigTest, IncorrectKeyThrowsForStringValue) {
 
     Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
-    ASSERT_THROW(config.getStringValue("SoftwareContainer", "does-not-exist"), softwarecontainer::ConfigError);
+    ASSERT_THROW(config.getStringValue("SoftwareContainer", "does-not-exist"), ConfigError);
 }
 
 /*
@@ -272,7 +218,7 @@ TEST_F(ConfigTest, IncorrectKeyThrowsForIntValue) {
 
     Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
-    ASSERT_THROW(config.getIntegerValue("SoftwareContainer", "does-not-exist"), softwarecontainer::ConfigError);
+    ASSERT_THROW(config.getIntegerValue("SoftwareContainer", "does-not-exist"), ConfigError);
 }
 
 /*
@@ -288,7 +234,7 @@ TEST_F(ConfigTest, IncorrectKeyThrowsForBoolValue) {
 
     Config config(std::move(loader), std::move(emptyDefaultConfig()));
 
-    ASSERT_THROW(config.getBooleanValue("SoftwareContainer", "does-not-exist"), softwarecontainer::ConfigError);
+    ASSERT_THROW(config.getBooleanValue("SoftwareContainer", "does-not-exist"), ConfigError);
 }
 
 /*
@@ -301,7 +247,7 @@ TEST_F(ConfigTest, UnsucessfulCreationThrows) {
 
     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
 
-    ASSERT_THROW(Config config(std::move(loader), std::move(emptyDefaultConfig())), softwarecontainer::ConfigError);
+    ASSERT_THROW(Config config(std::move(loader), std::move(emptyDefaultConfig())), ConfigError);
 }
 
 /*
@@ -420,6 +366,131 @@ TEST_F(ConfigTest, ExplicitBoolValuesTakesPrecedence) {
 }
 
 /*
+ * Test that Config throws an exception if a config dependency is not met
+ *
+ * TODO: Fix this when dependecies are implemented
+ */
+// TEST_F(ConfigTest, MissingDependencyThrows) {
+//     // Well formed config
+//     const std::string configString = "[SoftwareContainer]\n"
+//                                      "optional-config = 1\n";
+// 
+//     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+// 
+//     // Define what keys that are dependencies
+//     std::vector<std::string> dependencyKeys {"dependency-1", "dependency-2"};
+// 
+//     // Define the dependee config key
+//     std::string dependee = "my-config";
+// 
+//     // Associate the dependee to dependencies
+//     std::pair<std::string, std::vector<std::string>> dependencyAssociation(dependee, dependencyKeys);
+// 
+//     // Add the association between dependee and dependencies to a list
+//     std::vector<std::pair<std::string, std::vector<std::string>>> dependencies {dependencyAssociation};
+// 
+//     Config config(std::move(loader), std::move(emptyDefaultConfig()), dependencies);
+// 
+//     // We should get an exception if we ask for a config that have unmet dependencies
+//     ASSERT_THROW(config.getStringValue("SoftwareContainer", dependee),
+//                  ConfigDependencyError);
+// }
+
+/*
+ * Test that Config throws an exception if a mandatory config group is not found in
+ * the main config source. In this test it's only relevant to use the main config source
+ * since that is the only source where groups are used.
+ */
+TEST_F(ConfigTest, MissingMandatoryGroupThrows) {
+    // Well formed config without the mandatory config group (see below)
+    const std::string configString = "[OptionalGroup]\n"
+                                     "optional-config = 1\n";
+
+    // Now, the "main config" source will not provide the mandatory config group
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    // There are no dependencies between configs
+    std::vector<std::pair<std::string, std::vector<std::string>>> dependencies;
+
+    // Set up a mandatory group-key pair, the group will now be required to exist
+    MandatoryConfigs mandatory = MandatoryConfigs();
+    mandatory.addConfig("SoftwareContainer", "optional-config", ConfigType::Integer);
+
+    // Since the required 'SoftwareContainer' group is not present in any config source
+    // this should now throw an exception.
+    ASSERT_THROW(Config config(std::move(loader),
+                               std::move(emptyDefaultConfig()),
+                               mandatory,
+                               dependencies),
+                 ConfigMandatoryError);
+}
+
+/*
+ * Test that Config throws an exception if a mandatory config is not found in the
+ * main config file source, or in the command line options source.
+ */
+TEST_F(ConfigTest, MissingMandatoryConfigThrows) {
+    // Well formed config without the mandatory config (see below)
+    const std::string configString = "[OptionalGroup]\n"
+                                     "optional-config = 1\n";
+
+    // Now, the "main config" source will not provide the mandatory config
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    // There are no dependencies between configs
+    std::vector<std::pair<std::string, std::vector<std::string>>> dependencies;
+
+    // Set up a mandatory group-key pair, the config will now be required to exist
+    MandatoryConfigs mandatory = MandatoryConfigs();
+    mandatory.addConfig("OptionalGroup", "mandatory-config", ConfigType::Integer);
+
+    // Since the required 'mandatory-config' config is not present in any config source
+    // this should now throw an exception.
+    ASSERT_THROW(Config config(std::move(loader),
+                               std::move(emptyDefaultConfig()),
+                               mandatory,
+                               dependencies),
+                 ConfigMandatoryError);
+}
+
+/*
+ * Same as above but also passing non-empty command line options as config source as well
+ */
+TEST_F(ConfigTest, UsingCommandLineOptionsMissingMandatoryConfigThrows) {
+    // Well formed config without the mandatory config (see below)
+    const std::string configString = "[OptionalGroup]\n"
+                                     "optional-config = 1\n";
+
+    // Now, the "main config" source will not provide the mandatory config
+    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+
+    // Now, the command line options wil not provide the mandatory config either
+    std::map<std::string, int> intOptions;
+    intOptions.insert(std::pair<std::string, int>("another-optional-config", 2));
+
+    // There are no dependencies between configs
+    std::vector<std::pair<std::string, std::vector<std::string>>> dependencies;
+
+    // Set up a mandatory group-key pair, the config will now be required to exist
+    MandatoryConfigs mandatory = MandatoryConfigs();
+    mandatory.addConfig("OptionalGroup", "mandatory-config", ConfigType::Integer);
+
+    // Since the required 'mandatory-config' config is not present in any config source
+    // this should now throw an exception.
+    ASSERT_THROW(Config config(std::move(loader),
+                               std::move(emptyDefaultConfig()),
+                               mandatory,
+                               dependencies,
+                               std::map<std::string, std::string>(),
+                               intOptions,
+                               std::map<std::string, bool>()),
+                 ConfigMandatoryError);
+}
+
+
+// Tests for FileConfigLoader /////////////////////////////////////////////////////////////////////
+
+/*
  * Test that using the real FileConfigLoader and passing a path to a non-existent
  * config file results in the expected exception FileError.
  *
@@ -431,4 +502,63 @@ TEST_F(ConfigTest, LoadingMissingConfigFileThrows) {
     FileConfigLoader loader("non-existent-path");
 
     ASSERT_THROW(loader.loadConfig(), Glib::FileError);
+}
+
+
+// Tests for MandatoryConfigs /////////////////////////////////////////////////////////////////////
+
+/*
+ * Test that we get the expected group names after adding mandatory configs
+ */
+TEST_F(ConfigTest, ReturnsExpectedGroups) {
+    MandatoryConfigs mandatory = MandatoryConfigs();
+    mandatory.addConfig("MyGroup1", "my-config1", ConfigType::Integer);
+    mandatory.addConfig("MyGroup2", "my-config2", ConfigType::Integer);
+    std::vector<std::string> groups = mandatory.groups();
+
+    std::vector<std::string> expected {"MyGroup1", "MyGroup2"};
+
+    EXPECT_THAT(groups, ::testing::ContainerEq(expected));
+}
+
+/*
+ * Test that we get the expected group-key pairs after adding mandatory configs
+ */
+TEST_F(ConfigTest, ReturnsExpectedConfigs) {
+    MandatoryConfigs mandatory = MandatoryConfigs();
+    mandatory.addConfig("MyGroup1", "my-config1", ConfigType::Integer);
+    mandatory.addConfig("MyGroup2", "my-config2", ConfigType::Integer);
+    std::vector<std::tuple<std::string, std::string, ConfigType>> configs = mandatory.configs();
+
+    std::tuple<std::string, std::string, ConfigType> config1("MyGroup1",
+                                                             "my-config1",
+                                                             ConfigType::Integer);
+    std::tuple<std::string, std::string, ConfigType> config2("MyGroup2",
+                                                             "my-config2",
+                                                             ConfigType::Integer);
+    std::vector<std::tuple<std::string, std::string, ConfigType>> expected {config1, config2};
+
+    EXPECT_THAT(configs, ::testing::ContainerEq(expected));
+}
+
+/*
+ * Test that we get empty group values when nothing has been set
+ */
+TEST_F(ConfigTest, HandlesGroupWhenNothingIsSet) {
+    MandatoryConfigs mandatory = MandatoryConfigs();
+
+    std::vector<std::string> groups = mandatory.groups();
+
+    EXPECT_THAT(groups, ::testing::IsEmpty());
+}
+
+/*
+ * Test that we get empty configs when nothing has been set
+ */
+TEST_F(ConfigTest, HandlesConfigsWhenNothingIsSet) {
+    MandatoryConfigs mandatory = MandatoryConfigs();
+
+    std::vector<std::tuple<std::string, std::string, ConfigType>> configs = mandatory.configs();
+
+    EXPECT_THAT(configs, ::testing::IsEmpty());
 }

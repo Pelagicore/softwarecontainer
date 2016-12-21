@@ -5,9 +5,13 @@
 # Optional configs are commented out by default, but are set to the default
 # values that will be used by SoftwareContainer if nothing else is specified.
 # Any configs that are not commented out by default are mandatory and must
-# be present and set to a valid value.
+# be present and set to a valid value by the user.
 #
-# The group 'SoftwareContainer' must be present.
+# Config keys are unique to their respective group. Consequently, the same
+# config key can appear in different groups. It is an error to move a config
+# from its group.
+#
+# Config groups that are not commented out are mandatory.
 #
 
 [SoftwareContainer]
