@@ -178,7 +178,7 @@ else(${USE_SESSION_BUS})
     set(USE_SESSION_BUS_VALUE_STRING "false")
 endif()
 
-set(PRELOAD_COUNT 1)
+set(PRELOAD_COUNT 0)
 set(SHUTDOWN_TIMEOUT 1)
 set(SHARED_MOUNTS_DIR "/tmp/container/")
 set(LXC_CONFIG_PATH "${SYS_CONFIG_DIR}/softwarecontainer.conf")
