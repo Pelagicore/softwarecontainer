@@ -584,13 +584,11 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
 {
     // Create a file to mount to in gateways
     std::string tempFile = gatewaysDir() + "/" + std::string(basename(pathInContainer.c_str()));
-
-    if (isError(touch(tempFile))) {
-        log_error() << "Could not create file " << tempFile;
-        return ReturnCode::FAILURE;
-    }
-
     if (!pathInList(tempFile)) {
+        if (isError(touch(tempFile))) {
+            log_error() << "Could not create file " << tempFile;
+            return ReturnCode::FAILURE;
+        }
         m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
     }
 

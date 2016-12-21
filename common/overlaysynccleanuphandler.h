@@ -49,7 +49,7 @@ public:
      * this class.
      *
      * Since no directory removal operation occurs within OverlaySyncCleanupHandler, it is
-     * irrelevant when the code checks whether the overlaying directory is in the list or not since
+     * irrelevant when the code checks whether the directory is in the list or not since
      * the purpose of this function is to be used for cleaning path.
      *
      * @return an empty string
