@@ -19,6 +19,8 @@
 
 #include "gateway/dbus/dbusgatewayparser.h"
 #include "gateway/dbus/dbusgateway.h"
+#include "gateway/gatewayparsererror.h"
+
 #include "gateway_parser_common.h"
 
 class DBusGatewayParserTest : public GatewayParserCommon<std::string>
@@ -37,8 +39,12 @@ public:
         teardownAtEndOfTest(systemConf);
     }
 
-    void TestWrongTypeFails(const std::string config) {
-        parse(config, ReturnCode::FAILURE, ReturnCode::FAILURE);
+    void testWrongTypeFails(const std::string config) {
+        json_t *configJSON = convertToJSON(config);
+
+        // Only works with system config right now.
+        EXPECT_THROW(parser.parseDBusConfig(configJSON, DBusGatewayInstance::SYSTEM_CONFIG, systemConf), GatewayParserError);
+
         ASSERT_EQ(json_array_size(sessionConf), empty);
         ASSERT_EQ(json_array_size(systemConf), empty);
     }
@@ -101,19 +107,19 @@ TEST_F(DBusGatewayParserTest, TestConfigsOfWrongType) {
         "{"
             "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": {}"
         "}";
-    TestWrongTypeFails(configObject);
+    testWrongTypeFails(configObject);
 
     const std::string configString =
         "{"
             "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": \"string\""
         "}";
-    TestWrongTypeFails(configString);
+    testWrongTypeFails(configString);
 
     const std::string configBool =
         "{"
             "  \"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": true"
         "}";
-    TestWrongTypeFails(configBool);
+    testWrongTypeFails(configBool);
 }
 
 /*

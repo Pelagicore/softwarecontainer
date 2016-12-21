@@ -18,12 +18,12 @@
  */
 
 #include "dbusgateway.h"
+#include "gatewayparsererror.h"
 
 DBusGateway::DBusGateway(const std::string &gatewayDir, const std::string &name):
     Gateway(ID),
     sessionBus(DBusGatewayInstance::ProxyType::SessionProxy, gatewayDir, name),
     systemBus(DBusGatewayInstance::ProxyType::SystemProxy, gatewayDir, name)
-
 {
 }
 
@@ -33,36 +33,37 @@ DBusGateway::~DBusGateway()
 
 ReturnCode DBusGateway::setConfig(const std::string &config)
 {
-     log_debug() << "Setting config for dbus session bus";
-     ReturnCode sessionBusParseResult = sessionBus.setConfig(config);
+    try {
+        log_debug() << "Setting config for dbus session bus";
+        ReturnCode sessionBusParseResult = sessionBus.setConfig(config);
 
-     log_debug() << "Setting config for dbus system bus";
-     ReturnCode systemBusParseResult = systemBus.setConfig(config);
+        log_debug() << "Setting config for dbus system bus";
+        ReturnCode systemBusParseResult = systemBus.setConfig(config);
 
-     if (isError(sessionBusParseResult) && isError(systemBusParseResult)) {
-         log_error() << "Neither session nor  system bus could use the given config";
-         return ReturnCode::FAILURE;
-     }
+        if (isError(sessionBusParseResult) && isError(systemBusParseResult)) {
+            log_error() << "Neither session nor system bus could use the given config";
+            return ReturnCode::FAILURE;
+        }
+    } catch (GatewayParserError &err) {
+        log_error() << "Bad config in one of the gateway configurations";
+        return ReturnCode::FAILURE;
+    }
 
      return ReturnCode::SUCCESS;
 }
 
 ReturnCode DBusGateway::activate()
 {
-     ReturnCode sessionBusActivationResult;
+     ReturnCode sessionBusActivationResult = ReturnCode::FAILURE;
      if (sessionBus.isConfigured()) {
          log_debug() << "Activating dbus session bus";
          sessionBusActivationResult = sessionBus.activate();
-     } else {
-         sessionBusActivationResult = ReturnCode::FAILURE;
      }
 
-     ReturnCode systemBusActivationResult ;
+     ReturnCode systemBusActivationResult = ReturnCode::FAILURE;
      if (systemBus.isConfigured()) {
          log_debug() << "Activating dbus system bus";
          sessionBusActivationResult = systemBus.activate();
-     } else {
-         systemBusActivationResult = ReturnCode::FAILURE;
      }
 
      if (isError(sessionBusActivationResult) && isError(systemBusActivationResult)) {
