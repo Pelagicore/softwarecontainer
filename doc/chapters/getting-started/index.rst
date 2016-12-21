@@ -28,7 +28,7 @@ Below is an example of the major entities involved in a call to create a contain
 
     span_height = 5;
 
-    Launcher -> Agent [label = "CreateContainer (D-Bus call)", leftnote = "D-Bus side"]
+    Launcher -> Agent [label = "Create (D-Bus call)", leftnote = "D-Bus side"]
     Agent -> SoftwareContainer [label = "init()"];
 
     SoftwareContainer -> ContainerAbstractInterface [label = "initialize()"]
@@ -105,7 +105,7 @@ Using e.g. ``gdbus``, we can introspect the Agent D-Bus service API::
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent
 
-Next, we will start a new container so take note of the parameters of CreateContainer.
+Next, we will start a new container so take note of the parameters of Create.
 
 
 Start a container::
@@ -113,12 +113,12 @@ Start a container::
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.CreateContainer \
+    --method com.pelagicore.SoftwareContainerAgent.Create \
     '[{"enableWriteBuffer": false}]'
 
 The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
 
-The return value of CreateContainer is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.
+The return value of Create is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.
 
 
 Bind mount a directory inside the container::
@@ -126,14 +126,14 @@ Bind mount a directory inside the container::
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.BindMountFolderInContainer \
+    --method com.pelagicore.SoftwareContainerAgent.BindMount \
     0 \
     "/home/vagrant/softwarecontainer" \
     "/app" \
     false
 
 Parameters:
- * ``containerID`` - a int32 with the ID of the created container, as returned by the ``CreateContainer`` method.
+ * ``containerID`` - a int32 with the ID of the created container, as returned by the ``Create`` method.
  * ``pathInHost`` - a string with the host path of the directory to be bind mounted into the container. The host path must exist before running the command.
  * ``pathInContainer`` - a string representing the absolute mount path inside the container.
  * ``readOnly`` - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.
@@ -149,7 +149,7 @@ Launch something in the container::
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.LaunchCommand \
+    --method com.pelagicore.SoftwareContainerAgent.Execute \
     0 \
     0 \
     "touch hello" \
@@ -158,7 +158,7 @@ Launch something in the container::
     '{"": ""}'
 
 Parameters:
- * ``containerID`` - a int32 with the ID of the created container, as returned by the ``CreateContainer`` method.
+ * ``containerID`` - a int32 with the ID of the created container, as returned by the ``Create`` method.
  * ``userID`` - currently unused, use uint32 '0'.
  * ``commandLine`` - a string with the method to run at the method line insider the container.
  * ``workingDirectory`` - a string with a path to a directory which will be set as the working directory.
@@ -175,11 +175,11 @@ Suspend the container::
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.SuspendContainer \
+    --method com.pelagicore.SoftwareContainerAgent.Suspend \
     0
 
 This will suspend execution inside the container. The value passed as the `containerID` parameter
-should be the same value that was returned from the call to `CreateContainer`. It is not possible
+should be the same value that was returned from the call to `Create`. It is not possible
 to run LaunchCommand on a suspended container.
 
 Resume the container::
@@ -187,22 +187,43 @@ Resume the container::
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.ResumeContainer \
+    --method com.pelagicore.SoftwareContainerAgent.Resume \
     0
 
-
 This will resume the suspended container. The value passed as the `containerID` parameter
-should be the same value that was returned from the call to `CreateContainer`.
+should be the same value that was returned from the call to `Create`.
+
+List all available Capabilities::
+
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.ListCapabilities
+
+This will list all the capabilities that are available and possible to set on
+containers.
+
+Set Capabilities on a specific container::
+
+    gdbus call --system \
+    --dest com.pelagicore.SoftwareContainerAgent \
+    --object-path /com/pelagicore/SoftwareContainerAgent \
+    --method com.pelagicore.SoftwareContainerAgent.SetCapabilities \
+    0 \
+    "{'capability1', 'capability2'}"
+
+This will set the capabilities listed in the last argument to the container
+identified by the `containerID` parameter returned from the `Create` call.
 
 Shut down the container::
 
     gdbus call --system \
     --dest com.pelagicore.SoftwareContainerAgent \
     --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.ShutDownContainer \
+    --method com.pelagicore.SoftwareContainerAgent.Destroy \
     0
 
-The value passed as the `containerID` parameter should be the same value that was returned from the call to `CreateContainer`.
+The value passed as the `containerID` parameter should be the same value that was returned from the call to `Create`.
 
 
 Configure gateways
@@ -223,5 +244,5 @@ Set gateway config::
     '{"env": "[{\"name\": \"MY_VAR\", \"value\": \"1234\"},{\"name\": \"OTHER_VAR\", \"value\": \"5678\"}]"}'
 
 Parameters:
- * ``containerID`` - an int with the id of the created container, as returned by the ``CreateContainer`` method.
+ * ``containerID`` - an int with the id of the created container, as returned by the ``Create`` method.
  * ``configs`` - a string:string dictionary with gateway ID as key and json config as value.
