@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
    </div>
   </td>
  </tr>
@@ -88,36 +88,37 @@ $(document).ready(function(){initNavTree('mountcleanuphandler_8cpp_source.html',
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;mountcleanuphandler.h&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;MountCleanUpHandler::MountCleanUpHandler(<span class="keyword">const</span> std::string &amp;path)</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    m_path = path;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;ReturnCode MountCleanUpHandler::clean()</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">// Lazy unmount. Should be the equivalent of the &quot;umount -l&quot; command.</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (umount2(m_path.c_str(), MNT_DETACH) == 0) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Unmounted &quot;</span> &lt;&lt; m_path;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        log_warn() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t unmount &quot;</span> &lt;&lt; m_path &lt;&lt; <span class="stringliteral">&quot; . Error :&quot;</span> &lt;&lt; strerror(errno) &lt;&lt; <span class="stringliteral">&quot;. Trying to force umount&quot;</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">if</span> (umount2(m_path.c_str(), MNT_FORCE) != 0) {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            log_warn() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t force unmount &quot;</span> &lt;&lt; m_path &lt;&lt; <span class="stringliteral">&quot; . Error :&quot;</span> &lt;&lt; strerror(errno);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Managed to force unmount &quot;</span> &lt;&lt; m_path;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;sys/mount.h&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;MountCleanUpHandler::MountCleanUpHandler(<span class="keyword">const</span> std::string &amp;path)</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    m_path = path;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;ReturnCode MountCleanUpHandler::clean()</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">// Lazy unmount. Should be the equivalent of the &quot;umount -l&quot; command.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">if</span> (umount2(m_path.c_str(), MNT_DETACH) == 0) {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Unmounted &quot;</span> &lt;&lt; m_path;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        log_warn() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t unmount &quot;</span> &lt;&lt; m_path &lt;&lt; <span class="stringliteral">&quot; . Error :&quot;</span> &lt;&lt; strerror(errno) &lt;&lt; <span class="stringliteral">&quot;. Trying to force umount&quot;</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">if</span> (umount2(m_path.c_str(), MNT_FORCE) != 0) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            log_warn() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t force unmount &quot;</span> &lt;&lt; m_path &lt;&lt; <span class="stringliteral">&quot; . Error :&quot;</span> &lt;&lt; strerror(errno);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Managed to force unmount &quot;</span> &lt;&lt; m_path;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html">common</a></li><li class="navelem"><b>mountcleanuphandler.cpp</b></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:27 for softwarecontainer by
+    <li class="footer">Generated on Wed Dec 21 2016 07:33:26 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

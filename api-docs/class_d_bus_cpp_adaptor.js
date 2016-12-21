@@ -1,15 +1,15 @@
 var class_d_bus_cpp_adaptor =
 [
     [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html#ac4a65f258dbf3c3f99b735a18148452d", null ],
-    [ "LaunchCommand", "class_d_bus_cpp_adaptor.html#ae601d132e1e00bd55cd2425b8da52135", null ],
-    [ "ShutDownContainerWithTimeout", "class_d_bus_cpp_adaptor.html#a7b94211e73d0eaf05ba307671490a6f7", null ],
-    [ "ShutDownContainer", "class_d_bus_cpp_adaptor.html#a700d70d8a465c98e549636f3abb322f1", null ],
-    [ "BindMountFolderInContainer", "class_d_bus_cpp_adaptor.html#a80bd09c184c021eb5a030c32648b8696", null ],
-    [ "SetGatewayConfigs", "class_d_bus_cpp_adaptor.html#a7ada4edb25dc318aa4fca7f7f4a8090e", null ],
-    [ "SetCapabilities", "class_d_bus_cpp_adaptor.html#a093c05d4273ec737d7fb507b738cbb42", null ],
-    [ "CreateContainer", "class_d_bus_cpp_adaptor.html#ae6617117a62f1ab7cbe6a7dba9a66d0d", null ],
-    [ "SetContainerName", "class_d_bus_cpp_adaptor.html#a5bf8df0d7f52bd72ccd1ee509c2655e1", null ],
-    [ "Ping", "class_d_bus_cpp_adaptor.html#a53334077815ba56e6ff88da3fb981ab2", null ],
-    [ "WriteToStdIn", "class_d_bus_cpp_adaptor.html#a66bf9893fd8ef19677408f41b38e01da", null ],
+    [ "List", "class_d_bus_cpp_adaptor.html#a69d7ccc3e9fdfeeabf983dec14fb9fe1", null ],
+    [ "ListCapabilities", "class_d_bus_cpp_adaptor.html#aa457c46680c523015099b818da3ceebb", null ],
+    [ "Execute", "class_d_bus_cpp_adaptor.html#ad7bba247b013a6a9d3daf14d0a718dba", null ],
+    [ "Destroy", "class_d_bus_cpp_adaptor.html#af8aa5c6ac707d8a3c42fffa7930a15da", null ],
+    [ "BindMount", "class_d_bus_cpp_adaptor.html#a3c15985056b670742ad6ff2506299bfe", null ],
+    [ "Suspend", "class_d_bus_cpp_adaptor.html#a60f0569739bad5cbc6d64968c536d155", null ],
+    [ "Resume", "class_d_bus_cpp_adaptor.html#a94291009ce18ed77b4e8a7918cc00144", null ],
+    [ "SetGatewayConfigs", "class_d_bus_cpp_adaptor.html#a2476c033faf3ab905acf8d4dc9df0bd1", null ],
+    [ "SetCapabilities", "class_d_bus_cpp_adaptor.html#a5d2307853329da8535d28ced965c142b", null ],
+    [ "Create", "class_d_bus_cpp_adaptor.html#a57ff17f57113f7c9801f3b0f9f77194f", null ],
     [ "m_agent", "class_d_bus_cpp_adaptor.html#ac8035c9b301b8bf69a4fe906a36fe8a2", null ]
 ];

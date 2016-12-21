@@ -1,0 +1,5 @@
+<map id="softwarecontainer::SoftwareContainerAgent::shutdownContainer" name="softwarecontainer::SoftwareContainerAgent::shutdownContainer">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a98efa26c7cb180df7e0d689e52fe379b" title="Check whether the given container is valid and return a reference to the actual container. " alt="" coords="233,5,397,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a17a700813202c61461904bd4e25995f6" title="delete container by ID " alt="" coords="233,85,397,141"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4" title="Shutdown the container. " alt="" coords="217,165,412,206"/>
+</map>

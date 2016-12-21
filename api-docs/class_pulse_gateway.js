@@ -12,9 +12,9 @@ var class_pulse_gateway =
     [ "activateGateway", "class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985", null ],
     [ "teardownGateway", "class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4", null ],
     [ "id", "class_pulse_gateway.html#a01028fc541340b53b0330c03dafb6bfe", null ],
-    [ "setConfig", "class_pulse_gateway.html#a04d31b1ed232f5376c5cf79e30fa2593", null ],
-    [ "activate", "class_pulse_gateway.html#aac80886a35b80d8003051e6926b59937", null ],
-    [ "teardown", "class_pulse_gateway.html#a12bc56e21985047b61012932394b4512", null ],
+    [ "setConfig", "class_pulse_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd", null ],
+    [ "activate", "class_pulse_gateway.html#a3d23a057d7039df33dd5ed47302f0d58", null ],
+    [ "teardown", "class_pulse_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407", null ],
     [ "setContainer", "class_pulse_gateway.html#ab55d52ccd92881532688847a6c2c1cba", null ],
     [ "isConfigured", "class_pulse_gateway.html#a88ae41c7b14da49561d025bd99047e81", null ],
     [ "isActivated", "class_pulse_gateway.html#a78949f88080c66617f8b20048d706237", null ],
@@ -23,13 +23,5 @@ var class_pulse_gateway =
     [ "setEnvironmentVariable", "class_pulse_gateway.html#a828b2dfa811c7fcce82d34b502e65112", null ],
     [ "executeInContainer", "class_pulse_gateway.html#a77348e5ce86b82302764b10e3203b42c", null ],
     [ "executeInContainer", "class_pulse_gateway.html#a1654f704315b3c4a6c982f09e4aa287a", null ],
-    [ "read", "class_pulse_gateway.html#a7ea50df505b43684c4a1d82ca6cb6e82", null ],
-    [ "read", "class_pulse_gateway.html#aec2365e81204446fec184fe17e573405", null ],
-    [ "read", "class_pulse_gateway.html#a11e43ade1f694d939bfd566b64ddd460", null ],
-    [ "ID", "class_pulse_gateway.html#a5aa750d680c7c7d4e795da57ab943f6b", null ],
-    [ "ENABLED_FIELD", "class_pulse_gateway.html#af0a2a443c50865a1556f8ad971c4c9e1", null ],
-    [ "XDG_RUNTIME_DIR_VARIABLE_NAME", "class_pulse_gateway.html#ad4264741d566d2ee954cd7dccd5e58c1", null ],
-    [ "m_container", "class_pulse_gateway.html#af0ce46d7b8bf606129980aa0fd5324f4", null ],
-    [ "m_id", "class_pulse_gateway.html#a9c130210e82f993d64ee50764ddcc393", null ],
-    [ "m_state", "class_pulse_gateway.html#a54d282882210c55d9f60ba1ad338a56d", null ]
+    [ "ID", "class_pulse_gateway.html#a5aa750d680c7c7d4e795da57ab943f6b", null ]
 ];

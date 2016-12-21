@@ -1,4 +1,10 @@
 <map id="libsoftwarecontainer/src/gateway" name="libsoftwarecontainer/src/gateway">
-<area shape="rect" id="node1" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html" title="gateway" alt="" coords="27,52,101,100"/>
-<area shape="rect" id="clust1" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html" title="src" alt="" coords="16,16,112,111"/>
+<area shape="rect" id="node2" href="dir_646af10687434ab6c31bea5c882c000e.html" title="cgroups" alt="" coords="555,63,627,111"/>
+<area shape="rect" id="node3" href="dir_db4010e8f7409dcb486f91942cb8935a.html" title="dbus" alt="" coords="459,63,531,111"/>
+<area shape="rect" id="node4" href="dir_385e7606189d1fb5ca15ea16396c7241.html" title="devicenode" alt="" coords="347,63,435,111"/>
+<area shape="rect" id="node5" href="dir_0fa704ff3a6f29536320c0056049a312.html" title="environment" alt="" coords="229,63,323,111"/>
+<area shape="rect" id="node6" href="dir_fb9b4f6d7638029c403f9b6e00db042e.html" title="files" alt="" coords="133,63,205,111"/>
+<area shape="rect" id="node7" href="dir_9714d51461f33f26f35fbf1b742503d5.html" title="network" alt="" coords="37,63,109,111"/>
+<area shape="rect" id="clust2" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html" alt="" coords="27,52,733,121"/>
+<area shape="rect" id="clust1" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html" title="src" alt="" coords="16,16,744,132"/>
 </map>

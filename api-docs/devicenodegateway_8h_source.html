@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>softwarecontainer: libsoftwarecontainer/src/gateway/devicenodegateway.h Source File</title>
+<title>softwarecontainer: libsoftwarecontainer/src/gateway/devicenode/devicenodegateway.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.9.1-2ee6993 2016-11-03</span>
+   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
    </div>
   </td>
  </tr>
@@ -86,13 +86,13 @@ $(document).ready(function(){initNavTree('devicenodegateway_8h_source.html','');
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#ifndef DEVICENODEGATEWAY_H</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define DEVICENODEGATEWAY_H</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;jansson.h&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;jansson.h&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;softwarecontainer-common.h&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;gateway.h&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;gateway.h&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;devicenodelogic.h&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
 <div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="class_device_node_gateway.html">   40</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_device_node_gateway.html">DeviceNodeGateway</a> :</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span> <a class="code" href="class_gateway.html">Gateway</a></div>
@@ -115,32 +115,28 @@ $(document).ready(function(){initNavTree('devicenodegateway_8h_source.html','');
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">teardownGateway</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">struct </span>Device</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        std::string name;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        std::string major;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        std::string minor;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        std::string mode;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    };</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    std::vector&lt;DeviceNodeGateway::Device&gt; m_devList;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">bool</span> checkIsStrValid(std::string intStr, std::string name, std::string notSpecified);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;};</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* DEVICENODEGATEWAY_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="class_device_node_gateway_html_a626ac7de0fa9acc167d1b355cbb3d8ee"><div class="ttname"><a href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00076">devicenodegateway.cpp:76</a></div></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">     * @brief apply all setting of device node list</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">     * @return success or failure due to state of operation</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    ReturnCode applySettings(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="class_device_node_logic.html">DeviceNodeLogic</a> m_logic;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
+<div class="ttc" id="class_device_node_gateway_html_a626ac7de0fa9acc167d1b355cbb3d8ee"><div class="ttname"><a href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00045">devicenodegateway.cpp:45</a></div></div>
 <div class="ttc" id="class_device_node_gateway_html"><div class="ttname"><a href="class_device_node_gateway.html">DeviceNodeGateway</a></div><div class="ttdoc">This gateway is responsible for exposing device nodes in an LXC container. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8h_source.html#l00040">devicenodegateway.h:40</a></div></div>
-<div class="ttc" id="class_device_node_gateway_html_a942850c76d0ab429dec21661b53f7055"><div class="ttname"><a href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00130">devicenodegateway.cpp:130</a></div></div>
-<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00041">gateway.h:41</a></div></div>
+<div class="ttc" id="class_device_node_gateway_html_a942850c76d0ab429dec21661b53f7055"><div class="ttname"><a href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00051">devicenodegateway.cpp:51</a></div></div>
+<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00073">gateway.h:73</a></div></div>
 <div class="ttc" id="class_device_node_gateway_html_a2dd67af3fe7d8a0fcd26abde8c1e3e74"><div class="ttname"><a href="class_device_node_gateway.html#a2dd67af3fe7d8a0fcd26abde8c1e3e74">DeviceNodeGateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00032">devicenodegateway.cpp:32</a></div></div>
+<div class="ttc" id="class_device_node_logic_html"><div class="ttname"><a href="class_device_node_logic.html">DeviceNodeLogic</a></div><div class="ttdoc">This class is responsible for storing all device node configurations in a well-formed list...</div><div class="ttdef"><b>Definition:</b> <a href="devicenodelogic_8h_source.html#l00029">devicenodelogic.h:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>devicenodegateway.h</b></li>
-    <li class="footer">Generated on Thu Nov 3 2016 12:08:28 for softwarecontainer by
+    <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_385e7606189d1fb5ca15ea16396c7241.html">devicenode</a></li><li class="navelem"><b>devicenodegateway.h</b></li>
+    <li class="footer">Generated on Wed Dec 21 2016 07:33:27 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

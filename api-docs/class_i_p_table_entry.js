@@ -10,7 +10,9 @@ var class_i_p_table_entry =
     ] ],
     [ "IPTableEntry", "class_i_p_table_entry.html#ad81d3619f736ea15835ed0b6867224f7", null ],
     [ "applyRules", "class_i_p_table_entry.html#a01609d893e0bb7c6f955bc31e283a9e1", null ],
-    [ "m_priority", "class_i_p_table_entry.html#aad42f1ba9ed115eeddedbd739db46192", null ],
+    [ "interpretRule", "class_i_p_table_entry.html#ac090d9fee4b15b246d944d800ff0e12e", null ],
+    [ "interpretRuleWithProtocol", "class_i_p_table_entry.html#a9d28ee9552aa3716310840d7790bee95", null ],
+    [ "interpretPolicy", "class_i_p_table_entry.html#a6712bcba4d643a6c0ac74ff6fe5a3760", null ],
     [ "m_type", "class_i_p_table_entry.html#ab880e73c9951fea0eb3dee06a0030321", null ],
     [ "m_rules", "class_i_p_table_entry.html#a58226aa354fdf7acd2ff617cf3842e4e", null ],
     [ "m_defaultTarget", "class_i_p_table_entry.html#ab41e1f640012a210203a1c88d4b156f0", null ]

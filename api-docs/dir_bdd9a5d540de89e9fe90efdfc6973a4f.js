@@ -7,6 +7,8 @@ var dir_bdd9a5d540de89e9fe90efdfc6973a4f =
     [ "filecleanuphandler.h", "filecleanuphandler_8h_source.html", null ],
     [ "filetoolkitwithundo.cpp", "filetoolkitwithundo_8cpp_source.html", null ],
     [ "filetoolkitwithundo.h", "filetoolkitwithundo_8h_source.html", null ],
+    [ "gatewayconfig.cpp", "gatewayconfig_8cpp_source.html", null ],
+    [ "gatewayconfig.h", "gatewayconfig_8h_source.html", null ],
     [ "ivi-profiling.h", "ivi-profiling_8h_source.html", null ],
     [ "jsonparser.cpp", "jsonparser_8cpp_source.html", null ],
     [ "jsonparser.h", "jsonparser_8h_source.html", null ],
@@ -16,6 +18,8 @@ var dir_bdd9a5d540de89e9fe90efdfc6973a4f =
     [ "overlaysynccleanuphandler.h", "overlaysynccleanuphandler_8h_source.html", null ],
     [ "recursivecopy.cpp", "recursivecopy_8cpp_source.html", null ],
     [ "recursivecopy.h", "recursivecopy_8h_source.html", null ],
+    [ "signalconnectionshandler.cpp", "signalconnectionshandler_8cpp_source.html", null ],
+    [ "signalconnectionshandler.h", "signalconnectionshandler_8h_source.html", null ],
     [ "softwarecontainer-common.cpp", "softwarecontainer-common_8cpp_source.html", null ],
     [ "softwarecontainer-common.h", "softwarecontainer-common_8h_source.html", null ],
     [ "softwarecontainer-log.h", "softwarecontainer-log_8h_source.html", null ]

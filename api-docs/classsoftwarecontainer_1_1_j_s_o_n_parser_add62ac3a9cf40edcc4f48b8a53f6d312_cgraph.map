@@ -1,0 +1,4 @@
+<map id="softwarecontainer::JSONParser::readOptional" name="softwarecontainer::JSONParser::readOptional">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#afd27128a637a8f3f44223bf3442651b7" title="Checks if a given JSON object contains a certain key. " alt="" coords="231,5,379,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="238,71,371,112"/>
+</map>
