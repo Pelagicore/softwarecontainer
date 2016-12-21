@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <pulse/pulseaudio.h>
 #include "gateway.h"
 
 /**

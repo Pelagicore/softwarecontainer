@@ -18,8 +18,6 @@
  * For further information see LICENSE
  */
 
-
-#include <stdio.h>
 #include "pulsegateway.h"
 
 PulseGateway::PulseGateway() :
