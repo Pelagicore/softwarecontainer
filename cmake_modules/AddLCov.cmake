@@ -1,5 +1,5 @@
 # Macro for making it easy to use gcov/lcov
-macro(add_coverage testCommand testArgs)
+macro(add_coverage testCommand)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -O0")
     find_program(LCOV lcov)
     find_program(GENHTML genhtml)
@@ -35,7 +35,7 @@ macro(add_coverage testCommand testArgs)
             TARGET lcov
 
             # Run tests
-            COMMAND ${testCommand} ${testArgs}
+            COMMAND ${testCommand}
             # Capture coverage data after tests have run
             COMMAND ${LCOV} --capture --directory . --base-directory . --output-file ${COV_DIR}/testrun.info
             # Remove unwanted files from captured data
