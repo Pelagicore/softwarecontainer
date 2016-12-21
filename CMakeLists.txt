@@ -57,6 +57,7 @@ pkg_check_modules(DBusCpp       REQUIRED dbus-c++-glib-1>=0.9.0)
 pkg_check_modules(Glibmm        REQUIRED glibmm-2.4>=2.42.0)
 pkg_check_modules(LXC           REQUIRED lxc>=2.0.0)
 pkg_check_modules(Jansson       REQUIRED jansson>=2.6)
+pkg_check_modules(sigc          REQUIRED sigc++-2.0)
 
 # These are needed by all sub-projects
 add_definitions(${IVILogging_CFLAGS_OTHER})

@@ -44,7 +44,8 @@ add_library(softwarecontainercommon SHARED
 )
 
 target_link_libraries(softwarecontainercommon
-   ${Jansson_LIBRARIES})
+    ${Jansson_LIBRARIES}
+    ${sigc_LIBRARIES})
 
 install(FILES ${HEADERS} DESTINATION include/softwarecontainer)
 install(TARGETS softwarecontainercommon DESTINATION lib)
