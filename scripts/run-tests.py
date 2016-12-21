@@ -92,6 +92,7 @@ if len(sys.argv) > 1:
 testSuites = { }
 def runTestSuite(binary, name):
     outputFile = "{}_unittest_result.xml".format(name)
+    os.system("rm " + outputFile);
     command = "{} {} --gtest_output=xml:{}".format(binary, gtestFilter, outputFile)
     exitCode = os.system(command)
     testSuites[name] = exitCode

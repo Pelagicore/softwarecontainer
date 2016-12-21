@@ -65,7 +65,8 @@ node {
         }
 
         stage('UnitTest') {
-            runInVagrant(workspace, "cd softwarecontainer/build && sudo ./run-tests.py")
+            // We run it in this way to avoid getting (unreachable) paths
+            runInVagrant(workspace, "cd softwarecontainer && sudo ./build/run-tests.py")
         }
 
         stage('ServiceTest') {
@@ -73,7 +74,8 @@ node {
         }
 
         stage('Coverage') {
-            runInVagrant(workspace, "cd softwarecontainer/build && sudo make lcov")
+            // We run it in this way to avoid getting (unreachable) paths
+            runInVagrant(workspace, "cd softwarecontainer && sudo make -C build lcov")
         }
 
         stage('Examples') {
