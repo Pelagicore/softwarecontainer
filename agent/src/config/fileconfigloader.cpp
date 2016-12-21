@@ -31,11 +31,11 @@ std::unique_ptr<Glib::KeyFile> FileConfigLoader::loadConfig()
     } catch (Glib::FileError &error) {
         log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
         log_debug() << "Config file that failed to load: \"" << this->m_source << "\"";
-        throw error;
+        throw;
     } catch (Glib::KeyFileError &error) {
         log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
         log_debug() << "Config file that failed to load: \"" << this->m_source << "\"";
-        throw error;
+        throw;
     }
 
     return configData;

@@ -84,7 +84,8 @@ int main(int argc, char **argv)
     configOpt.set_long_name("config");
     configOpt.set_short_name('c');
     configOpt.set_arg_description("<path>");
-    configOpt.set_description("Path to SoftwareContainer configuration file, defaults to \"" + std::string(SC_CONFIG_FILE) + "\"");
+    configOpt.set_description("Path to SoftwareContainer configuration file,"
+                              " defaults to \"" + std::string(SC_CONFIG_FILE) + "\"");
 
     Glib::OptionEntry preloadOpt;
     preloadOpt.set_long_name("preload");
@@ -96,18 +97,21 @@ int main(int argc, char **argv)
     userOpt.set_long_name("user");
     userOpt.set_short_name('u');
     userOpt.set_arg_description("<uid>");
-    userOpt.set_description("Default user id to be used when starting processes in the container, defaults to 0");
+    userOpt.set_description("Default user id to be used when starting processes in the container,"
+                            " defaults to 0");
 
     Glib::OptionEntry keepContainersAliveOpt;
     keepContainersAliveOpt.set_long_name("keep-containers-alive");
     keepContainersAliveOpt.set_short_name('k');
-    keepContainersAliveOpt.set_description("Containers will not be shut down on exit. Useful for debugging");
+    keepContainersAliveOpt.set_description("Containers will not be shut down on exit."
+                                           " Useful for debugging");
 
     Glib::OptionEntry timeoutOpt;
     timeoutOpt.set_long_name("timeout");
     timeoutOpt.set_short_name('t');
     timeoutOpt.set_arg_description("<seconds>");
-    timeoutOpt.set_description("Timeout in seconds to wait for containers to shutdown, defaults to 1");
+    timeoutOpt.set_description("Timeout in seconds to wait for containers to shutdown,"
+                               " defaults to 1");
 
     Glib::OptionEntry serviceManifestDirOpt;
     serviceManifestDirOpt.set_long_name("manifest-dir");
@@ -223,12 +227,12 @@ int main(int argc, char **argv)
                                                         useSessionBus));
     }
 
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new FileConfigLoader(configFileLocation));
-    std::unique_ptr<ConfigDefaults> defaults(new ConfigDefaults);
-
-    Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
-
     try {
+        std::unique_ptr<ConfigLoaderAbstractInterface> loader(new FileConfigLoader(configFileLocation));
+        std::unique_ptr<ConfigDefaults> defaults(new ConfigDefaults);
+
+        Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
+
         static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/SoftwareContainerAgent";
         DBus::Connection connection = getBusConnection(useSessionBus);
         SoftwareContainerAgent agent(mainContext, config);
@@ -244,6 +248,9 @@ int main(int argc, char **argv)
 
         log_debug() << "Exiting softwarecontainer agent";
         return 0;
+    } catch (ConfigError &error) {
+        log_error() << "Could not load configuration";
+        return 1;
     } catch (ReturnCode failure) {
         log_error() << "Agent initialization failed";
         return 1;
