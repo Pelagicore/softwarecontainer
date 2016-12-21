@@ -31,9 +31,14 @@ public:
     ReturnCode clean() override;
 
     /**
-     * @brief this function is needed to query member name
+     * @brief queryName is needed to query member name yet its full functionality is not needed for
+     * this class.
      *
-     * @return a read-only m_path
+     * Since no directory removal operation occurs within MountCleanUpHandler, it is
+     * irrelevant when the code checks whether the directory is in the list or not since
+     * the purpose of this function is to be used for cleaning path.
+     *
+     * @return an empty string
      */
     const std::string queryName() override;
 

@@ -33,23 +33,6 @@ public:
     ~FileToolkitWithUndo();
 
     /**
-     * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
-     * @param path The directory path to be created.
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
-     */
-    ReturnCode createParentDirectory(const std::string &path);
-
-    /**
-     * @brief createDirectory Create a directory, and if successful append it
-     *  to a list of dirs to be deleted in the dtor. Since nestled dirs will
-     *  need to be deleted in reverse order to creation insert to the beginning
-     *  of the list.
-     * @param path Path of directory to be created
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
-     */
-    ReturnCode createDirectory(const std::string &path);
-
-    /**
      * @brief bindMount Bind mount a src directory to another position dst.
      * @param src Path to mount from
      * @param dst Path to mount to
@@ -62,6 +45,20 @@ public:
             const std::string &dst,
             bool readOnly,
             bool enableWriteBuffer=false);
+
+    ReturnCode writeToFile(const std::string &path, const std::string &content);
+
+    /**
+     * @brief tempDir Creates a temporary directory at templatePath.
+     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
+     *  is destroyed.
+     * @param templ a template Path used to create the path of the temporary directory, including
+     *  XXXXXX which will be replaced with a unique ID for the temporary directory
+     * @return A string path pointing to the newly creted temporary directory.
+     */
+    std::string tempDir(std::string templatePath);
+protected:
+    ReturnCode createSymLink(const std::string &source, const std::string &destination);
 
     /**
      * @brief overlayMount Mount a directory with an overlay on top of it. An overlay protects
@@ -99,32 +96,40 @@ public:
      */
     ReturnCode createSharedMountPoint(const std::string &path);
 
-    ReturnCode writeToFile(const std::string &path, const std::string &content);
-
-    ReturnCode createSymLink(const std::string &source, const std::string &destination);
-
     /**
-     * @brief tempDir Creates a temporary directory at templatePath.
-     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
-     *  is destroyed.
-     * @param templ a template Path used to create the path of the temporary directory, including
-     *  XXXXXX which will be replaced with a unique ID for the temporary directory
-     * @return A string path pointing to the newly creted temporary directory.
+     * @brief createDirectory Create a directory, and if successful append it
+     *  to a list of dirs to be deleted in the dtor. Since nestled dirs will
+     *  need to be deleted in reverse order to creation insert to the beginning
+     *  of the list.
+     * @param path Path of directory to be created
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
      */
-    std::string tempDir(std::string templatePath);
+    ReturnCode createDirectory(const std::string &path);
 
     /**
      * @brief checks whether given path is already added to clean up handlers or not
+     *
+     * This function will be called only before adding new CleanUpHandler for FileCleanUpHandler
+     * and DirectoryCleanUpHandler. The reason behind this, only indicated CleanUpHandlers are
+     * related with file/directory removal operations.
+     *
      * @param a string path name to check
      * @return true if the path is already exist, false otherwise
      */
     bool pathInList(const std::string path);
-protected:
+
     /**
      * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
      *  FileToolKitWithUndo that will be run from the destructor.
      */
     std::vector<CleanUpHandler *> m_cleanupHandlers;
+private :
+    /**
+     * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
+     * @param path The directory path to be created.
+     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     */
+    ReturnCode createParentDirectory(const std::string &path);
 };
 
 }

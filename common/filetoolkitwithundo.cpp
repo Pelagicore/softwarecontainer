@@ -138,9 +138,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::str
 
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
-        if (!pathInList(dst)) {
-            m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
-        }
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
     } else {
         log_error() << "Could not mount into container: src=" << src
                     << " , dst=" << dst << " err=" << strerror(errno);
@@ -190,13 +188,11 @@ ReturnCode FileToolkitWithUndo::overlayMount(
 
     if (mountRes == 0) {
         log_verbose() << "overlayMounted folder " << lower << " in " << dst;
-        if (!pathInList(dst)) {
-            m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
-        }
-        m_cleanupHandlers.push_back(new OverlaySyncCleanupHandler(upper, lower));
+        m_cleanupHandlers.push_back(new MountCleanUpHandler(dst));
         if (!pathInList(upper)) {
             m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(upper));
         }
+        m_cleanupHandlers.push_back(new OverlaySyncCleanupHandler(upper, lower));
         if (!pathInList(work)) {
             m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(work));
         }
@@ -238,9 +234,7 @@ ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
         return ReturnCode::FAILURE;
     }
 
-    if (!pathInList(path)) {
-        m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
-    }
+    m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
     log_debug() << "Created shared mount point at " << path;
 
     return ReturnCode::SUCCESS;
@@ -250,7 +244,7 @@ bool FileToolkitWithUndo::pathInList(const std::string path)
 {
     for (auto element : m_cleanupHandlers) {
         if (element->queryName() == path) {
-               return true;
+            return true;
         }
     }
     return false;
