@@ -16,9 +16,12 @@
 # For further information see LICENSE
 
 include(GNUInstallDirs)
+include(Configs)
+include(GenerateDBusCpp)
+generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
-install(DIRECTORY DESTINATION ${SERVICE_MANIFEST_DIR})
-install(DIRECTORY DESTINATION ${DEFAULT_SERVICE_MANIFEST_DIR})
+install(DIRECTORY DESTINATION ${SC_SERVICE_MANIFEST_DIR})
+install(DIRECTORY DESTINATION ${SC_DEFAULT_SERVICE_MANIFEST_DIR})
 
 include_directories(src)
 
@@ -36,8 +39,11 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/filteredconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/fileconfigloader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configdefaults.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/mandatoryconfigs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/commandlineconfigsource.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/mainconfigsource.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/defaultconfigsource.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configitem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configdefinition.cpp
     ${GENERATED_ADAPTOR_FILENAME}
 )
 
@@ -48,6 +54,9 @@ target_link_libraries(softwarecontainer-agent
 )
 
 install(TARGETS softwarecontainer-agent DESTINATION bin)
+
+# At this point, there should be no more definitions being added/changed so it's OK to set them
+set_all_deferred_config_definitions()
 
 # Configure and install the general config file
 configure_file(softwarecontainer-config.in softwarecontainer-config)

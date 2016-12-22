@@ -4,8 +4,13 @@
 #
 # Optional configs are commented out by default, but are set to the default
 # values that will be used by SoftwareContainer if nothing else is specified.
+#
 # Any configs that are not commented out by default are mandatory and must
-# be present and set to a valid value by the user.
+# be present and set to a valid value by the user. The exception to this is
+# configs that have been asked to be set during CMake configuration for
+# convenience purposes. Configs like that will be present in this file while
+# not strictly mandatory. This is to enable some development and testing
+# convenience.
 #
 # Config keys are unique to their respective group. Consequently, the same
 # config key can appear in different groups. It is an error to move a config
@@ -16,28 +21,38 @@
 
 [SoftwareContainer]
 # Set number of containers to preload on startup of SoftwareContainer
-# preload-count = @PRELOAD_COUNT@
+@SC_PRELOAD_COUNT_ACTIVATE@preload-count = @SC_PRELOAD_COUNT_CONFIG_FILE_VAR@
 
 # Set to 'true' to not shut down containers when SoftwareContainer exits
-# keep-containers-alive = @KEEP_CONTAINERS_ALIVE_VALUE_STRING@
+@SC_KEEP_CONTAINERS_ALIVE_ACTIVATE@keep-containers-alive = @SC_KEEP_CONTAINERS_ALIVE_CONFIG_FILE_VAR@
 
 # Set to 'true' to use the SessionBus
-# use-session-bus = @USE_SESSION_BUS_VALUE_STRING@
+@SC_USE_SESSION_BUS_ACTIVATE@use-session-bus = @SC_USE_SESSION_BUS_CONFIG_FILE_VAR@
 
 # Timeout in seconds before containers are forcefully shut down
-# shutdown-timeout = @SHUTDOWN_TIMEOUT@
+@SC_SHUTDOWN_TIMEOUT_ACTIVATE@shutdown-timeout = @SC_SHUTDOWN_TIMEOUT_CONFIG_FILE_VAR@
 
-# Location for all sharted host/container mounts
-# shared-mounts-dir = @SHARED_MOUNTS_DIR@
+# Location for all shared host/container mounts
+@SC_SHARED_MOUNTS_DIR_ACTIVATE@shared-mounts-dir = @SC_SHARED_MOUNTS_DIR_CONFIG_FILE_VAR@
 
 # Path to the LXC configuration used with liblxc
 # NOTE: This option is being deprecated
-# deprecated-lxc-config-path = @LXC_CONFIG_PATH@
+@SC_LXC_CONFIG_PATH_ACTIVATE@deprecated-lxc-config-path = @SC_LXC_CONFIG_PATH_CONFIG_FILE_VAR@
 
 # Path to where SoftwareContainer should read service manifests
-# service-manifest-dir = @SERVICE_MANIFEST_DIR@
+@SC_SERVICE_MANIFEST_DIR_ACTIVATE@service-manifest-dir = @SC_SERVICE_MANIFEST_DIR_CONFIG_FILE_VAR@
 
 # Path to where SoftwareContainer should read service manifests
 # that are to be automatically applied to containers by default,
 # e.g. when having "default capabilities" in the platform.
-# default-service-manifest-dir = @DEFAULT_SERVICE_MANIFEST_DIR@
+@SC_DEFAULT_SERVICE_MANIFEST_DIR_ACTIVATE@default-service-manifest-dir = @SC_DEFAULT_SERVICE_MANIFEST_DIR_CONFIG_FILE_VAR@
+
+# Set to 'true' if SoftwareContainer should create a network bridge
+@SC_CREATE_BRIDGE_ACTIVATE@create-bridge = @SC_CREATE_BRIDGE_CONFIG_FILE_VAR@
+
+# Name of network bridge
+@SC_BRIDGE_DEVICE_ACTIVATE@bridge-device = @SC_BRIDGE_DEVICE_CONFIG_FILE_VAR@
+
+@SC_BRIDGE_IP_ACTIVATE@bridge-ip = @SC_BRIDGE_IP_CONFIG_FILE_VAR@
+
+@SC_BRIDGE_NETMASK_BITS_ACTIVATE@bridge-netmask-bits = @SC_BRIDGE_NETMASK_BITS_CONFIG_FILE_VAR@

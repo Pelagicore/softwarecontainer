@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Pelagicore AB
+ * Copyright (C) 2016-2017 Pelagicore AB
  *
  * Permission to use, copy, modify, and/or distribute this software for
  * any purpose with or without fee is hereby granted, provided that the
@@ -19,26 +19,25 @@
 
 #pragma once
 
-#include "softwarecontainer-common.h"
+#include "configitem.h"
+
 
 namespace softwarecontainer {
 
-class ConfigDefaults
+/**
+ * @class ConfigSource
+ *
+ * @brief Base class for all config sources
+ */
+class ConfigSource
 {
-
-LOG_DECLARE_CLASS_CONTEXT("CFGD", "SoftwareContainer general config default values");
-
 public:
-    ConfigDefaults();
-    ~ConfigDefaults() {}
+    ConfigSource() {}
+    virtual ~ConfigSource() {}
 
-    template<typename T>
-    T getValue(const std::string &key) const;
-
-protected:
-    std::map<std::string, std::string> m_stringOptions;
-    std::map<std::string, int> m_intOptions;
-    std::map<std::string, bool> m_boolOptions;
+    virtual std::vector<StringConfig> stringConfigs() = 0;
+    virtual std::vector<IntConfig> intConfigs() = 0;
+    virtual std::vector<BoolConfig> boolConfigs() = 0;
 };
 
 } // namespace softwarecontainer

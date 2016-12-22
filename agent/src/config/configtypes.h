@@ -17,26 +17,52 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
-#include <glibmm.h>
-
-#include "softwarecontainer-common.h"
-#include "configloader.h"
 
 namespace softwarecontainer {
 
-class FileConfigLoader : public ConfigLoader
+/**
+ * @brief Represents the type of a config value
+ *
+ * This is used to specify the type of the a value when mandatory configs are
+ * defined. This information is later used to know how a key should be used to
+ * retrive a value, e.g. what type specific methods can be used.
+ */
+enum class ConfigType
 {
+    String,
+    Integer,
+    Boolean
+};
 
-LOG_DECLARE_CLASS_CONTEXT("CFGL", "SoftwareContainer general config loader");
 
+enum class ConfigSourceType
+{
+    Commandline,
+    Main,
+    Default
+};
+
+
+class ConfigTypes
+{
 public:
-    // Constructor just needs to init parent with the config source string
-    FileConfigLoader(const std::string &source) : ConfigLoader(source) {}
+    static std::string configSourceToString(const ConfigSourceType &type)
+    {
+        switch (type) {
+            case ConfigSourceType::Commandline:
+                return "Commandline options";
+            case ConfigSourceType::Main:
+                return "Main config file";
+            case ConfigSourceType::Default:
+                return "Default values";
+            default:
+                break;
+        }
 
-    std::unique_ptr<Glib::KeyFile> loadConfig() override;
+        return std::string();
+    }
 };
 
 } // namespace softwarecontainer

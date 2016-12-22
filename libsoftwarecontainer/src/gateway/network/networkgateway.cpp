@@ -234,16 +234,19 @@ ReturnCode NetworkGateway::down()
     return ReturnCode::SUCCESS;
 }
 
+/*
+ * TODO: Use value from the config instead of define here.
+ */
 ReturnCode NetworkGateway::isBridgeAvailable()
 {
     Netlink::LinkInfo iface;
-    if (isError(m_netlinkHost.findLink(BRIDGE_DEVICE, iface))) {
-        log_error() << "Could not find " << BRIDGE_DEVICE << " in the host";
+    if (isError(m_netlinkHost.findLink(SC_BRIDGE_DEVICE, iface))) {
+        log_error() << "Could not find " << SC_BRIDGE_DEVICE << " in the host";
     }
 
     std::vector<Netlink::AddressInfo> addresses;
     if (isError(m_netlinkHost.findAddresses(iface.first.ifi_index, addresses))) {
-        log_error() << "Could not fetch addresses for " << BRIDGE_DEVICE << " in the host";
+        log_error() << "Could not fetch addresses for " << SC_BRIDGE_DEVICE << " in the host";
     }
 
     return m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str());

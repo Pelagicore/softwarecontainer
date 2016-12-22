@@ -17,12 +17,19 @@
  * For further information see LICENSE
  */
 
+
 #include <glibmm/optioncontext.h>
 
 #include "config/config.h"
-#include "config/configdefaults.h"
-#include "config/configloaderabstractinterface.h"
+#include "config/configerror.h"
+#include "config/configloader.h"
 #include "config/fileconfigloader.h"
+#include "config/commandlineconfigsource.h"
+#include "config/mainconfigsource.h"
+#include "config/defaultconfigsource.h"
+#include "config/configsource.h"
+#include "config/configitem.h"
+#include "config/configdefinition.h"
 
 #include "softwarecontaineragentadaptor.h"
 
@@ -61,7 +68,7 @@ int main(int argc, char **argv)
     preloadOpt.set_short_name('p');
     preloadOpt.set_arg_description("<number>");
     preloadOpt.set_description("Number of containers to preload, "
-                               "defaults to " + std::to_string(PRELOAD_COUNT));
+                               "defaults to " + std::to_string(SC_PRELOAD_COUNT));
 
     Glib::OptionEntry userOpt;
     userOpt.set_long_name("user");
@@ -75,14 +82,14 @@ int main(int argc, char **argv)
     keepContainersAliveOpt.set_short_name('k');
     keepContainersAliveOpt.set_description("Containers will not be shut down on exit. Useful for "
                                            "debugging, defaults to "
-                                           + std::string(KEEP_CONTAINERS_ALIVE ? "true" : "false"));
+                                           + std::string(SC_KEEP_CONTAINERS_ALIVE ? "true" : "false"));
 
     Glib::OptionEntry timeoutOpt;
     timeoutOpt.set_long_name("timeout");
     timeoutOpt.set_short_name('t');
     timeoutOpt.set_arg_description("<seconds>");
     timeoutOpt.set_description("Timeout in seconds to wait for containers to shutdown,"
-                               " defaults to " + std::to_string(SHUTDOWN_TIMEOUT));
+                               " defaults to " + std::to_string(SC_SHUTDOWN_TIMEOUT));
 
     Glib::OptionEntry serviceManifestDirOpt;
     serviceManifestDirOpt.set_long_name("manifest-dir");
@@ -90,7 +97,7 @@ int main(int argc, char **argv)
     serviceManifestDirOpt.set_arg_description("<filepath>");
     serviceManifestDirOpt.set_description("Path to a file or directory where service manifest(s) "
                                           "exist, defaults to \""
-                                          + std::string(SERVICE_MANIFEST_DIR) + "\"");
+                                          + std::string(SC_SERVICE_MANIFEST_DIR) + "\"");
 
     Glib::OptionEntry defaultServiceManifestDirOpt;
     defaultServiceManifestDirOpt.set_long_name("default-manifest-dir");
@@ -98,26 +105,25 @@ int main(int argc, char **argv)
     defaultServiceManifestDirOpt.set_arg_description("<filepath>");
     defaultServiceManifestDirOpt.set_description("Path to a file or directory where default "
                                                  "service manifest(s) exist, defaults to \""
-                                                  + std::string(DEFAULT_SERVICE_MANIFEST_DIR) + "\"");
+                                                  + std::string(SC_DEFAULT_SERVICE_MANIFEST_DIR) + "\"");
 
     Glib::OptionEntry sessionBusOpt;
     sessionBusOpt.set_long_name("session-bus");
     sessionBusOpt.set_short_name('b');
     sessionBusOpt.set_description("Use the session bus instead of the system bus, "
-                                  "defaults to " + std::string(USE_SESSION_BUS ? "true" : "false"));
+                                  "defaults to " + std::string(SC_USE_SESSION_BUS ? "true" : "false"));
 
 
     /* Default values need to be somehting that should not be set explicitly
-     * by the user.
-     */
-    Glib::ustring configPath = Config::SC_CONFIG_PATH_INITIAL_VALUE;
-    int preloadCount = Config::PRELOAD_COUNT_INITIAL_VALUE;
+     * by the user. */
+    Glib::ustring configPath = ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE;
+    int preloadCount = ConfigDefinition::PRELOAD_COUNT_INITIAL_VALUE;
     int userID = 0;
-    bool keepContainersAlive = Config::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
-    int timeout = Config::SHUTDOWN_TIMEOUT_INITIAL_VALUE;
-    Glib::ustring serviceManifestDir = Config::SERVICE_MANIFEST_DIR_INITIAL_VALUE;
-    Glib::ustring defaultServiceManifestDir = Config::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
-    bool useSessionBus = Config::USE_SESSION_BUS_INITIAL_VALUE;
+    bool keepContainersAlive = ConfigDefinition::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
+    int timeout = ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE;
+    Glib::ustring serviceManifestDir = ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    Glib::ustring defaultServiceManifestDir = ConfigDefinition::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    bool useSessionBus = ConfigDefinition::USE_SESSION_BUS_INITIAL_VALUE;
 
     Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
     mainGroup.add_entry(configOpt, configPath);
@@ -153,59 +159,84 @@ int main(int argc, char **argv)
     Glib::RefPtr<Glib::MainContext> mainContext = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
 
-    // Config file set on command line should take precedence over default
+    // Config file set on commandline should take precedence over default
     std::string configFileLocation;
-    if (configPath != Config::SC_CONFIG_PATH_INITIAL_VALUE) {
+    if (configPath != ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE) {
         configFileLocation = std::string(configPath);
     } else {
-        configFileLocation = std::string(SC_CONFIG_FILE);
+        configFileLocation = std::string(SC_CONFIG_FILE /* defined by CMake*/);
     }
 
-    /* Put all configs explicitly set as command line options in maps so they
-     * can be passed to Config, and thus enable Config to prioritize these values
-     * over the static configuration.
+    /*
+     * Put all commandline options in lists to be passed to the commandline config source
      */
-    std::map<std::string, std::string> stringOptions;
-    if (serviceManifestDir != Config::SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
-        stringOptions.insert(std::pair<std::string, std::string>(Config::SERVICE_MANIFEST_DIR_KEY,
-                                                                 serviceManifestDir));
+    std::vector<StringConfig> stringConfigs = std::vector<StringConfig>();
+    if (serviceManifestDir != ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
+        StringConfig config(ConfigDefinition::SC_GROUP,
+                            ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY,
+                            serviceManifestDir);
+        stringConfigs.push_back(config);
     }
-    if (defaultServiceManifestDir != Config::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
-        stringOptions.insert(std::pair<std::string, std::string>(Config::DEFAULT_SERVICE_MANIFEST_DIR_KEY,
-                                                                 defaultServiceManifestDir));
-    }
-
-    std::map<std::string, int> intOptions;
-    if (preloadCount != Config::PRELOAD_COUNT_INITIAL_VALUE) {
-        intOptions.insert(std::pair<std::string, int>(Config::PRELOAD_COUNT_KEY,
-                                                      preloadCount));
-    }
-    if (timeout != Config::SHUTDOWN_TIMEOUT_INITIAL_VALUE) {
-        intOptions.insert(std::pair<std::string, int>(Config::SHUTDOWN_TIMEOUT_KEY,
-                                                      timeout));
+    if (defaultServiceManifestDir != ConfigDefinition::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
+        StringConfig config(ConfigDefinition::SC_GROUP,
+                            ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY,
+                            defaultServiceManifestDir);
+        stringConfigs.push_back(config);
     }
 
-    std::map<std::string, bool> boolOptions;
+    std::vector<IntConfig> intConfigs = std::vector<IntConfig>();
+    if (preloadCount != ConfigDefinition::PRELOAD_COUNT_INITIAL_VALUE) {
+        IntConfig config(ConfigDefinition::SC_GROUP,
+                         ConfigDefinition::SC_PRELOAD_COUNT_KEY,
+                         preloadCount);
+        intConfigs.push_back(config);
+    }
+    if (timeout != ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE) {
+        IntConfig config(ConfigDefinition::SC_GROUP,
+                         ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY,
+                         timeout);
+           intConfigs.push_back(config);
+    }
+
+    std::vector<BoolConfig> boolConfigs = std::vector<BoolConfig>();
     /* The bool options should be on/off flags so if they were set they are 'true'
-     * otherwise they are still the default 'false' set above.
-     */
+     * otherwise they are still the default 'false' set above. */
     if (keepContainersAlive == true) {
-        boolOptions.insert(std::pair<std::string, bool>(Config::KEEP_CONTAINERS_ALIVE_KEY,
-                                                        keepContainersAlive));
+        BoolConfig config(ConfigDefinition::SC_GROUP,
+                          ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,
+                          keepContainersAlive);
+        boolConfigs.push_back(config);
     }
     if (useSessionBus == true) {
-        boolOptions.insert(std::pair<std::string, bool>(Config::USE_SESSION_BUS_KEY,
-                                                        useSessionBus));
+        BoolConfig config(ConfigDefinition::SC_GROUP,
+                          ConfigDefinition::SC_USE_SESSION_BUS_KEY,
+                          useSessionBus);
+        boolConfigs.push_back(config);
     }
 
     try {
-        std::unique_ptr<ConfigLoaderAbstractInterface> loader(new FileConfigLoader(configFileLocation));
-        std::unique_ptr<ConfigDefaults> defaults(new ConfigDefaults);
+        // Create a config source representing the commandline options
+        std::unique_ptr<ConfigSource> cmdlineConfigs(new CommandlineConfigSource(stringConfigs,
+                                                                                 intConfigs,
+                                                                                 boolConfigs));
 
-        Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
+        // Create a config source representing the main config file
+        std::unique_ptr<ConfigLoader> loader(new FileConfigLoader(configFileLocation));
+        std::unique_ptr<ConfigSource> mainConfigs(new MainConfigSource(std::move(loader),
+                                                                       ConfigDefinition::typeMap()));
+
+        // Create a config source representing the default values
+        std::unique_ptr<ConfigSource> defaultConfigs(new DefaultConfigSource());
+
+        std::vector<std::unique_ptr<ConfigSource>> configSources;
+        configSources.push_back(std::move(cmdlineConfigs));
+        configSources.push_back(std::move(mainConfigs));
+        configSources.push_back(std::move(defaultConfigs));
+
+        Config config(std::move(configSources), ConfigDefinition::mandatory(), ConfigDependencies());
 
         ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config);
-        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor( new SoftwareContainerAgentAdaptor(agent, useSessionBus));
+        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor(new SoftwareContainerAgentAdaptor(agent, useSessionBus));
 
         // Register UNIX signal handler
         g_unix_signal_add(SIGINT, &signalHandler, &ml);
@@ -222,4 +253,3 @@ int main(int argc, char **argv)
         return 1;
     }
 }
-
