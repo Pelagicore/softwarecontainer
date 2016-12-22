@@ -37,7 +37,6 @@ public:
     std::vector<std::string> ListCapabilities() override;
 
     void Execute(const int32_t &containerID,
-                 const uint32_t &userID,
                  const std::string &commandLine,
                  const std::string &workingDirectory,
                  const std::string &outputFile,

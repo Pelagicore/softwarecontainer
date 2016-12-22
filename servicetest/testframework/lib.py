@@ -190,7 +190,6 @@ class Container():
             are set by this helper based on other configs and data passed from the user previously.
         """
         pid, success = self.__agent.Execute(self.__container_id,
-                                            0,
                                             "{}".format(binary),
                                             self.__bind_dir,
                                             stdout,
