@@ -23,7 +23,6 @@ std::vector<std::string> SoftwareContainerAgentAdaptor::ListCapabilities()
 
 void SoftwareContainerAgentAdaptor::Execute(
     const int32_t &containerID,
-    const uint32_t &userID,
     const std::string &commandLine,
     const std::string &workingDirectory,
     const std::string &outputFile,
@@ -33,7 +32,6 @@ void SoftwareContainerAgentAdaptor::Execute(
 {
     success = m_agent.execute(
         containerID,
-        userID,
         commandLine,
         workingDirectory,
         outputFile,

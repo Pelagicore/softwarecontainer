@@ -35,13 +35,11 @@ public:
     virtual ~CommandJob();
 
     ReturnCode setWorkingDirectory(const std::string &folder);
-    ReturnCode setUserID(uid_t userID);
     ReturnCode start();
     std::string toString() const;
 
 private:
     std::string m_command;
     std::string m_workingDirectory;
-    uid_t m_userID = ROOT_UID;
 };
 }

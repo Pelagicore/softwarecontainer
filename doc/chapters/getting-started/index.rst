@@ -151,7 +151,6 @@ Launch something in the container::
     --object-path /com/pelagicore/SoftwareContainerAgent \
     --method com.pelagicore.SoftwareContainerAgent.Execute \
     0 \
-    0 \
     "touch hello" \
     "/app" \
     "" \
@@ -159,7 +158,6 @@ Launch something in the container::
 
 Parameters:
  * ``containerID`` - a int32 with the ID of the created container, as returned by the ``Create`` method.
- * ``userID`` - currently unused, use uint32 '0'.
  * ``commandLine`` - a string with the method to run at the method line insider the container.
  * ``workingDirectory`` - a string with a path to a directory which will be set as the working directory.
  * ``outputFile`` - a string with a path to where stdout will be directed from within the container.

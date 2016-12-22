@@ -144,7 +144,6 @@ public:
      * @brief Launch the given command in a the given container
      *
      * @param containerID the id for the container
-     * @param userID the userID to use when running the command inside the container
      * @param cmdLine the command to run
      * @param workingDirectory the working directory to use when running
      * @param outputFile where to log any output
@@ -154,7 +153,6 @@ public:
      * @return true or false indicating whether or not the operation was successful.
      */
     bool execute(ContainerID containerID,
-                 uid_t userID,
                  const std::string &cmdLine,
                  const std::string &workingDirectory,
                  const std::string &outputFile,

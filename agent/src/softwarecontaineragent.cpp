@@ -281,7 +281,6 @@ bool SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&result)
 }
 
 bool SoftwareContainerAgent::execute(ContainerID containerID,
-                                     uid_t userID,
                                      const std::string &cmdLine,
                                      const std::string &workingDirectory,
                                      const std::string &outputFile,
@@ -318,7 +317,6 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
     // Set up a CommandJob for this run in the container
     auto job = new CommandJob(*container, cmdLine);
     job->setOutputFile(outputFile);
-    job->setUserID(userID);
     job->setEnvironmentVariables(env);
     job->setWorkingDirectory(workingDirectory);
 
@@ -404,7 +402,9 @@ bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
         return false;
     }
 
-    ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost, pathInContainer, readOnly);
+    ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost,
+                                                                              pathInContainer,
+                                                                              readOnly);
     if (isError(result)) {
         log_error() << "Unable to bind mount folder " << pathInHost << " to " << pathInContainer;
         return false;

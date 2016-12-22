@@ -75,7 +75,6 @@ Launches the specified application/code in the container.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :userID: ``uint32`` UID for command, currently unused, use ``0``.
         :commandLine: ``string`` the method to run in container.
         :workDirectory: ``string`` path to working directory.
         :outputFile: ``string`` output file to direct stdout.

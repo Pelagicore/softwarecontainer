@@ -35,16 +35,10 @@ ReturnCode CommandJob::setWorkingDirectory(const std::string &folder)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode CommandJob::setUserID(uid_t userID)
-{
-    m_userID = userID;
-    return ReturnCode::SUCCESS;
-}
-
 ReturnCode CommandJob::start()
 {
-    return m_sc.getContainer()->attach(m_command, &m_pid, m_env, m_userID,
-                m_workingDirectory, m_stdin[0], m_stdout[1], m_stderr[1]);
+    return m_sc.getContainer()->attach(m_command, &m_pid, m_env, m_workingDirectory,
+                                       m_stdin[0],m_stdout[1], m_stderr[1]);
 }
 
 std::string CommandJob::toString() const

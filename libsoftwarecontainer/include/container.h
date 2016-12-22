@@ -102,20 +102,21 @@ public:
      * @brief Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    ReturnCode attach(const std::string &commandLine, pid_t *pid, const EnvironmentVariables &variables, uid_t userID,
-            const std::string &workingDirectory = "/", int stdin = -1, int stdout = 1, int stderr = 2);
+    ReturnCode attach(const std::string &commandLine, pid_t *pid,
+                      const EnvironmentVariables &variables,
+                      const std::string &workingDirectory = "/",
+                      int stdin = -1, int stdout = 1, int stderr = 2);
 
     /**
      * @brief Start a process with the environment variables which have previously been set by the gateways
      */
-    ReturnCode attach(const std::string &commandLine, pid_t *pid, uid_t userID = ROOT_UID);
+    ReturnCode attach(const std::string &commandLine, pid_t *pid);
 
     ReturnCode setCgroupItem(std::string subsys, std::string value);
 
-    ReturnCode setUser(uid_t userID);
-
-    ReturnCode executeInContainer(ContainerFunction function, pid_t *pid, const EnvironmentVariables &variables = EnvironmentVariables(),
-                                  uid_t userID = ROOT_UID, int stdin = -1, int stdout = 1, int stderr = 2);
+    ReturnCode executeInContainer(ContainerFunction function, pid_t *pid,
+                                  const EnvironmentVariables &variables = EnvironmentVariables(),
+                                  int stdin = -1, int stdout = 1, int stderr = 2);
 
     ReturnCode executeInContainer(const std::string &cmd);
 
@@ -130,7 +131,9 @@ public:
      *
      * @return SUCCESS if everything worked as expected, FAILURE otherwise.
      */
-    ReturnCode bindMountFileInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
+    ReturnCode bindMountFileInContainer(const std::string &pathOnHost,
+                                        const std::string &pathInContainer,
+                                        bool readonly = true);
 
     /**
      * @brief Tries to bind mount a directory in the container
