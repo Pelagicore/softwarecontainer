@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -17,7 +18,9 @@
  * For further information see LICENSE
  */
 
+
 #include "fileconfigloader.h"
+
 
 namespace softwarecontainer {
 

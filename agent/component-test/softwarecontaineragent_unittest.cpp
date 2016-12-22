@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Pelagicore AB
+ * Copyright (C) 2016-2017 Pelagicore AB
  *
  * Permission to use, copy, modify, and/or distribute this software for
  * any purpose with or without fee is hereby granted, provided that the
@@ -19,7 +19,9 @@
 
 #include "softwarecontaineragent.h"
 #include "config/config.h"
-#include "config/configloaderabstractinterface.h"
+#include "config/configloader.h"
+#include "config/mainconfigsource.h"
+#include "config/configdefinition.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -32,14 +34,14 @@ using namespace softwarecontainer;
  * Loads a Glib::KeyFile config from a string, compared to the "real" loader which reads
  * from file.
  */
-class StringConfigLoader : public ConfigLoaderAbstractInterface
+class StringConfigLoader : public ConfigLoader
 {
 
 LOG_DECLARE_CLASS_CONTEXT("CFGL", "SoftwareContainer general config loader");
 
 public:
     // Constructor just needs to init parent with the config source string
-    StringConfigLoader(const std::string &source) : ConfigLoaderAbstractInterface(source) {}
+    StringConfigLoader(const std::string &source) : ConfigLoader(source) {}
 
     std::unique_ptr<Glib::KeyFile> loadConfig() override
     {
@@ -53,28 +55,6 @@ public:
 
         return configData;
     }
-};
-
-
-/*
- * Test stub - PreparedConfigDefaults
- *
- * Used for initializing a DefaultConfigs parent with values
- * to support testing.
- */
-class PreparedConfigDefaults : public ConfigDefaults
-{
-public:
-    PreparedConfigDefaults(std::map<std::string, std::string> stringOptions,
-                           std::map<std::string, int> intOptions,
-                           std::map<std::string, bool> boolOptions)
-    {
-        m_stringOptions = stringOptions;
-        m_intOptions = intOptions;
-        m_boolOptions = boolOptions;
-    }
-
-    ~PreparedConfigDefaults() {}
 };
 
 
@@ -98,20 +78,23 @@ public:
                                      "shared-mounts-dir = " + std::string(SHARED_MOUNTS_DIR_TESTING) + "\n"
                                      "deprecated-lxc-config-path = " + std::string(LXC_CONFIG_PATH_TESTING) + "\n"
                                      "service-manifest-dir = " + std::string(SERVICE_MANIFEST_DIR_TESTING) + "\n"
-                                     "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING);
+                                     "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING) + "\n"
+                                     "create-bridge = true\n"
+                                     "bridge-device = lxcbr0\n"
+                                     "bridge-ip = 10.0.3.1\n"
+                                     "bridge-netmask-bits = 24";
     const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
 
     void SetUp() override
     {
-        std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+        std::unique_ptr<ConfigLoader> loader(new StringConfigLoader(configString));
+        std::unique_ptr<ConfigSource> mainConfig(new MainConfigSource(std::move(loader),
+                                                                      ConfigDefinition::typeMap()));
 
-        // Empty defaults, can only be used if the test is never to fall back on default config values
-        std::unique_ptr<ConfigDefaults> defaults(
-            new PreparedConfigDefaults(std::map<std::string, std::string>(),
-                                       std::map<std::string, int>(),
-                                       std::map<std::string, bool>()));
+        std::vector<std::unique_ptr<ConfigSource>> configSources;
+        configSources.push_back(std::move(mainConfig));
 
-        Config config(std::move(loader), std::move(defaults));
+        Config config(std::move(configSources), ConfigDefinition::mandatory(), ConfigDependencies());
 
         try {
             sca = std::make_shared<SoftwareContainerAgent>(m_context, config);

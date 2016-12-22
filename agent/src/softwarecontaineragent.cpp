@@ -17,10 +17,14 @@
  * For further information see LICENSE
  */
 
-#include "softwarecontaineragent.h"
 #include <cstdint>
 
+#include "softwarecontaineragent.h"
+#include "config/configerror.h"
+#include "config/configdefinition.h"
+
 namespace softwarecontainer {
+
 
 SoftwareContainerAgent::SoftwareContainerAgent(
         Glib::RefPtr<Glib::MainContext> mainLoopContext,
@@ -31,12 +35,12 @@ SoftwareContainerAgent::SoftwareContainerAgent(
 
     // Get all configs for this objects members
     try {
-        m_preloadCount = config.getIntegerValue(Config::SC_GROUP,
-                                                Config::PRELOAD_COUNT_KEY);
+        m_preloadCount = config.getIntValue(ConfigDefinition::SC_GROUP,
+                                            ConfigDefinition::SC_PRELOAD_COUNT_KEY);
         //TODO: the inversion of the value here should be worked away,
         //      but doesn't seem to work anyway, see bug
-        m_shutdownContainers = !config.getBooleanValue(Config::SC_GROUP,
-                                                       Config::KEEP_CONTAINERS_ALIVE_KEY);
+        m_shutdownContainers = !config.getBoolValue(ConfigDefinition::SC_GROUP,
+                                                    ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY);
     } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -46,9 +50,12 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     std::string containerRootDir;
     std::string lxcConfigPath;
     try {
-        shutdownTimeout = config.getIntegerValue(Config::SC_GROUP, Config::SHUTDOWN_TIMEOUT_KEY);
-        containerRootDir = config.getStringValue(Config::SC_GROUP, Config::SHARED_MOUNTS_DIR_KEY);
-        lxcConfigPath = config.getStringValue(Config::SC_GROUP, Config::LXC_CONFIG_PATH_KEY);
+        shutdownTimeout = config.getIntValue(ConfigDefinition::SC_GROUP,
+                                             ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
+        containerRootDir = config.getStringValue(ConfigDefinition::SC_GROUP,
+                                                 ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);
+        lxcConfigPath = config.getStringValue(ConfigDefinition::SC_GROUP,
+                                              ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
     } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -74,10 +81,10 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     std::string serviceManifestDir;
     std::string defaultServiceManifestDir;
     try {
-        serviceManifestDir = config.getStringValue(Config::SC_GROUP,
-                                                   Config::SERVICE_MANIFEST_DIR_KEY);
-        defaultServiceManifestDir = config.getStringValue(Config::SC_GROUP,
-                                                          Config::DEFAULT_SERVICE_MANIFEST_DIR_KEY);
+        serviceManifestDir = config.getStringValue(ConfigDefinition::SC_GROUP,
+                                                   ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);
+        defaultServiceManifestDir = config.getStringValue(ConfigDefinition::SC_GROUP,
+                                                          ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
     } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }

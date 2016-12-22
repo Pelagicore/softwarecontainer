@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -17,32 +18,36 @@
  * For further information see LICENSE
  */
 
-#include "mandatoryconfigs.h"
+#pragma once
+
+#include "softwarecontainer-common.h"
+#include "configsource.h"
+
 
 namespace softwarecontainer {
 
-MandatoryConfigs::MandatoryConfigs():
-    m_configs(std::vector<std::tuple<std::string, std::string, ConfigType>>()),
-    m_groups(std::vector<std::string>())
+/**
+ * @class DefaultConfigSource
+ *
+ * @brief Represents the default config values
+ */
+class DefaultConfigSource : public ConfigSource
 {
-}
 
-void MandatoryConfigs::addConfig(const std::string &group, const std::string &key, ConfigType type)
-{
-    log_debug() << "Adding mandatory config \"" << key << "\" with group \"" << group << "\"";
-    m_groups.push_back(group);
-    std::tuple<std::string, std::string, ConfigType> config = std::make_tuple(group, key, type);
-    m_configs.push_back(config);
-}
+LOG_DECLARE_CLASS_CONTEXT("CFGD", "Default config source");
 
-std::vector<std::tuple<std::string, std::string, ConfigType>> MandatoryConfigs::configs()
-{
-    return m_configs;
-}
+public:
+    DefaultConfigSource();
+    ~DefaultConfigSource() {}
 
-std::vector<std::string> MandatoryConfigs::groups()
-{
-    return m_groups;
-}
+    std::vector<StringConfig> stringConfigs() override;
+    std::vector<IntConfig> intConfigs() override;
+    std::vector<BoolConfig> boolConfigs() override;
+
+private:
+    std::vector<StringConfig> m_stringConfigs;
+    std::vector<IntConfig> m_intConfigs;
+    std::vector<BoolConfig> m_boolConfigs;
+};
 
 } // namespace softwarecontainer

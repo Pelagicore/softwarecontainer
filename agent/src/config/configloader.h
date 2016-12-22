@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -17,7 +18,9 @@
  * For further information see LICENSE
  */
 
+
 #pragma once
+
 
 namespace softwarecontainer {
 
@@ -27,14 +30,14 @@ namespace softwarecontainer {
  * The concrete loader will either be a production loader that loads a config
  * from a file on the system, or a test loader that loads a config from a string.
  */
-class ConfigLoaderAbstractInterface
+class ConfigLoader
 {
 public:
     // Enforce inheriting classes to initialize config source member
-    ConfigLoaderAbstractInterface() = delete;
-    ConfigLoaderAbstractInterface(const std::string &source) : m_source(source) {}
+    ConfigLoader() = delete;
+    ConfigLoader(const std::string &source) : m_source(source) {}
 
-    virtual ~ConfigLoaderAbstractInterface() {}
+    virtual ~ConfigLoader() {}
 
     virtual std::unique_ptr<Glib::KeyFile> loadConfig() = 0;
 

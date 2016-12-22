@@ -1,5 +1,6 @@
+
 /*
- * Copyright (C) 2016 Pelagicore AB
+ * Copyright (C) 2016-2017 Pelagicore AB
  *
  * Permission to use, copy, modify, and/or distribute this software for
  * any purpose with or without fee is hereby granted, provided that the
@@ -18,15 +19,20 @@
  */
 
 #include "softwarecontainer-common.h"
+
 #include "config/config.h"
+#include "config/configerror.h"
 #include "config/fileconfigloader.h"
-#include "config/mandatoryconfigs.h"
+#include "config/configtypes.h"
+#include "config/configitem.h"
+#include "config/configsource.h"
+#include "config/mainconfigsource.h"
+#include "config/configloader.h"
+#include "config/configdefinition.h"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include <string>
-#include <glibmm.h>
 
 using namespace softwarecontainer;
 
@@ -36,14 +42,14 @@ using namespace softwarecontainer;
  * Loads a Glib::KeyFile config from a string, compared to the "real" loader which reads
  * from file.
  */
-class StringConfigLoader : public ConfigLoaderAbstractInterface
+class StringConfigLoader : public ConfigLoader
 {
 
-LOG_DECLARE_CLASS_CONTEXT("CFGL", "SoftwareContainer general config loader");
+LOG_DECLARE_CLASS_CONTEXT("CFGL", "SoftwareContainer main config loader");
 
 public:
     // Constructor just needs to init parent with the config source string
-    StringConfigLoader(const std::string &source) : ConfigLoaderAbstractInterface(source) {}
+    StringConfigLoader(const std::string &source) : ConfigLoader(source) {}
 
     std::unique_ptr<Glib::KeyFile> loadConfig() override
     {
@@ -52,7 +58,7 @@ public:
             configData->load_from_data(Glib::ustring(this->m_source), Glib::KEY_FILE_NONE);
         } catch (Glib::KeyFileError &error) {
             log_error() << "Could not load SoftwareContainer config: \"" << error.what() << "\"";
-            throw error;
+            throw;
         }
 
         return configData;
@@ -61,434 +67,490 @@ public:
 
 
 /*
- * Test stub - PreparedConfigDefaults
+ * This test stub is a config source that tests use for adding config items of any type
+ * and with any ConfigSourceType needed for the tests.
  *
- * Used for initializing a DefaultConfigs parent with values
- * to support testing.
+ * This allows one source to be setup in the tests while still providing config items
+ * with different source types set.
  */
-class PreparedConfigDefaults : public ConfigDefaults
+class StubbedConfigSource : public ConfigSource
 {
 public:
-    PreparedConfigDefaults(std::map<std::string, std::string> stringOptions,
-                           std::map<std::string, int> intOptions,
-                           std::map<std::string, bool> boolOptions)
+    StubbedConfigSource():
+        m_stringConfigs(std::vector<StringConfig>()),
+        m_intConfigs(std::vector<IntConfig>()),
+        m_boolConfigs(std::vector<BoolConfig>())
     {
-        m_stringOptions = stringOptions;
-        m_intOptions = intOptions;
-        m_boolOptions = boolOptions;
     }
 
-    ~PreparedConfigDefaults() {}
+    std::vector<StringConfig> stringConfigs() override
+    {
+        return m_stringConfigs;
+    }
+
+    std::vector<IntConfig> intConfigs() override
+    {
+        return m_intConfigs;
+    }
+
+    std::vector<BoolConfig> boolConfigs() override
+    {
+        return m_boolConfigs;
+    }
+
+    void addConfig(std::string group, std::string key, std::string value, ConfigSourceType source)
+    {
+        StringConfig config(group, key, value);
+        config.setSource(source);
+        m_stringConfigs.push_back(config);
+    }
+
+    void addConfig(std::string group, std::string key, int value, ConfigSourceType source)
+    {
+        IntConfig config(group, key, value);
+        config.setSource(source);
+        m_intConfigs.push_back(config);
+    }
+
+    void addConfig(std::string group, std::string key, bool value, ConfigSourceType source)
+    {
+        BoolConfig config(group, key, value);
+        config.setSource(source);
+        m_boolConfigs.push_back(config);
+    }
+
+private:
+    std::vector<StringConfig> m_stringConfigs;
+    std::vector<IntConfig> m_intConfigs;
+    std::vector<BoolConfig> m_boolConfigs;
 };
 
 
-/*
- * ConfigTest suite
- *
- * This suite tests the Config class. It uses a stubbed loader, the StringConfigLoader, to
- * provide the config source, and does asserts on the way Config parses the config provided.
- */
+
+// ConfigTest ////////////////////////////////////////////////////////////////////////////////////
+
 class ConfigTest : public ::testing::Test
 {
 public:
     /*
-     * Empty defaults, can only be used if the test is never to fall back on default config values
+     * Convenience method to allow calling child class method on base
+     * class pointer in the tests.
+     *
+     * Since Config takes a vector of unique_ptr<ConfigSource> we need to store
+     * the stubbed source as a pointer to that base class, but the tests need
+     * to call the child-only method to add config items. This is not how this
+     * is intended to be used in production code, it's just a pattern for the
+     * tests.
      */
-    std::unique_ptr<ConfigDefaults> emptyDefaultConfig()
+    StubbedConfigSource *cast(std::unique_ptr<ConfigSource> &base)
     {
-        return std::unique_ptr<ConfigDefaults>(
-            new PreparedConfigDefaults(std::map<std::string, std::string>(),
-                                       std::map<std::string, int>(),
-                                       std::map<std::string, bool>()));
+        return static_cast<StubbedConfigSource *>(base.get());
     }
 };
 
 
 /*
- * Test that default string values are used when nothing else is specified.
+ * Test that Config can be initialized with an empty config source, i.e. a source that
+ * returns empty lists of config items.
+ */
+TEST_F(ConfigTest, HandlesEmptySources) {
+    // Create a config source but don't add any config, it's now empty
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    // Everything is empty
+    ASSERT_NO_THROW(Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies()));
+}
+
+/*
+ * Test that Config returns the expected string value from a source
+ */
+TEST_F(ConfigTest, ReturnsExpecedStringValue) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-key1", std::string("myValue1"), ConfigSourceType::Main);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    ASSERT_EQ(config.getStringValue("MyGroup1", "my-key1"), "myValue1");
+}
+
+/*
+ * Test that Config returns the expected integer value from a source
+ */
+TEST_F(ConfigTest, ReturnsExpecedIntValue) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    ASSERT_EQ(config.getIntValue("MyGroup1", "my-int-key1"), 1);
+}
+
+/*
+ * Test that Config returns the expected boolean value from a source
+ */
+TEST_F(ConfigTest, ReturnsExpecedBoolValue) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-bool-key1", true, ConfigSourceType::Main);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    ASSERT_EQ(config.getBoolValue("MyGroup1", "my-bool-key1"), true);
+}
+
+/*
+ * Test that calling getters for non existing configs restults in the expected exception
  *
- * The loader will provide an empty config, in which case the Config class should fall back
- * on the defaults provided.
+ * This test is for strings.
  */
-TEST_F(ConfigTest, FallsBackOnDefaultStringValues) {
-    // Well formed config empty of values.
-    const std::string configString = "[SoftwareContainer]\n";
+TEST_F(ConfigTest, WrongGroupAndKeyThrowsForString) {
+    // Create a config source
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
 
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
 
-    std::map<std::string, std::string> stringOptions;
-    stringOptions.insert(std::pair<std::string, std::string>("sc.foo", "bar"));
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
 
-    std::unique_ptr<ConfigDefaults> defaults(
-        new PreparedConfigDefaults(stringOptions,
-                                   std::map<std::string, int>(),
-                                   std::map<std::string, bool>()));
-
-    Config config(std::move(loader), std::move(defaults));
-
-    ASSERT_EQ(config.getStringValue("SoftwareContainer", "sc.foo"), "bar");
+    ASSERT_THROW(config.getStringValue("WrongGroup", "wrong-key"), ConfigNotFoundError);
 }
 
 /*
- * Same as above but with integer values
- */
-TEST_F(ConfigTest, FallsBackOnDefaultIntegerValues) {
-    // Well formed config empty of values.
-    const std::string configString = "[SoftwareContainer]\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    std::map<std::string, int> intOptions;
-    intOptions.insert(std::pair<std::string, int>("sc.foo", 123));
-
-    std::unique_ptr<ConfigDefaults> defaults(
-        new PreparedConfigDefaults(std::map<std::string, std::string>(),
-                                   intOptions,
-                                   std::map<std::string, bool>()));
-
-    Config config(std::move(loader), std::move(defaults));
-
-    ASSERT_EQ(config.getIntegerValue("SoftwareContainer", "sc.foo"), 123);
-}
-
-/*
- * Same as above but with bool values
- */
-TEST_F(ConfigTest, FallsBackOnDefaultBooleanValues) {
-    // Well formed config empty of values.
-    const std::string configString = "[SoftwareContainer]\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    std::map<std::string, bool> boolOptions;
-    boolOptions.insert(std::pair<std::string, bool>("sc.foo", true));
-
-    std::unique_ptr<ConfigDefaults> defaults(
-        new PreparedConfigDefaults(std::map<std::string, std::string>(),
-                                   std::map<std::string, int>(),
-                                   boolOptions));
-
-    Config config(std::move(loader), std::move(defaults));
-
-    ASSERT_EQ(config.getBooleanValue("SoftwareContainer", "sc.foo"), true);
-}
-
-/*
- * Test that Config throws exception on wrong config group
- */
-TEST_F(ConfigTest, IncorrectGroupThrows) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_THROW(config.getStringValue("DoesNotExist", "sc.foo"), ConfigError);
-}
-
-/*
- * Test that Config throws exception on wrong key, when getting string value
- */
-TEST_F(ConfigTest, IncorrectKeyThrowsForStringValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_THROW(config.getStringValue("SoftwareContainer", "does-not-exist"), ConfigError);
-}
-
-/*
- * As above but for integer values
- */
-TEST_F(ConfigTest, IncorrectKeyThrowsForIntValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_THROW(config.getIntegerValue("SoftwareContainer", "does-not-exist"), ConfigError);
-}
-
-/*
- * As above but for bool values
- */
-TEST_F(ConfigTest, IncorrectKeyThrowsForBoolValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_THROW(config.getBooleanValue("SoftwareContainer", "does-not-exist"), ConfigError);
-}
-
-/*
- * Test that Config throws exception on badly formatted config
- */
-TEST_F(ConfigTest, UnsucessfulCreationThrows) {
-    // This config is broken, it's missing a bracket in the group
-    const std::string configString = "[SoftwareContainer\n"
-                                     "sc.foo=bar\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    ASSERT_THROW(Config config(std::move(loader), std::move(emptyDefaultConfig())), ConfigError);
-}
-
-/*
- * Test that Config contain expected string value.
- */
-TEST_F(ConfigTest, ContainExpectedStringValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_TRUE(config.getStringValue("SoftwareContainer", "sc.foo") == "bar");
-}
-
-/*
- * Test that Config contain expected integer value.
- */
-TEST_F(ConfigTest, ContainExpectedIntegerValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo=bar\n"
-                                     "sc.preload=2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_TRUE(config.getIntegerValue("SoftwareContainer", "sc.preload") == 2);
-}
-
-/*
- * Test that Config contain expected boolean value.
- */
-TEST_F(ConfigTest, ContainExpectedBooleanValue) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo = bar\n"
-                                     "shut-down-containers = true\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    Config config(std::move(loader), std::move(emptyDefaultConfig()));
-
-    ASSERT_TRUE(config.getBooleanValue("SoftwareContainer", "shut-down-containers") == true);
-}
-
-/*
- * Test that values passed explicitly takes precedence over values read
- * from config
- */
-TEST_F(ConfigTest, ExplicitStringValuesTakesPrecedence) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.foo = bar\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    std::map<std::string, std::string> stringOptions;
-    stringOptions.insert(std::pair<std::string, std::string>("sc.foo", "baz"));
-
-    Config config(std::move(loader),
-                  std::move(emptyDefaultConfig()),
-                  stringOptions,
-                  std::map<std::string, int>(),
-                  std::map<std::string, bool>());
-
-    ASSERT_TRUE(config.getStringValue("SoftwareContainer", "sc.foo") == "baz");
-}
-
-/*
- * As above but for integer values
- */
-TEST_F(ConfigTest, ExplicitIntegerValuesTakesPrecedence) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.preload = 2\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    std::map<std::string, int> intOptions;
-    intOptions.insert(std::pair<std::string, int>("sc.preload", 2));
-
-    Config config(std::move(loader),
-                  std::move(emptyDefaultConfig()),
-                  std::map<std::string, std::string>(),
-                  intOptions,
-                  std::map<std::string, bool>());
-
-    ASSERT_TRUE(config.getIntegerValue("SoftwareContainer", "sc.preload") == 2);
-}
-
-/*
- * As above but for integer values
- */
-TEST_F(ConfigTest, ExplicitBoolValuesTakesPrecedence) {
-    // Well formed config
-    const std::string configString = "[SoftwareContainer]\n"
-                                     "sc.shut-down-containers = true\n";
-
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-
-    std::map<std::string, bool> boolOptions;
-    boolOptions.insert(std::pair<std::string, bool>("sc.shut-down-containers", true));
-
-    Config config(std::move(loader),
-                  std::move(emptyDefaultConfig()),
-                  std::map<std::string, std::string>(),
-                  std::map<std::string, int>(),
-                  boolOptions);
-
-    ASSERT_TRUE(config.getBooleanValue("SoftwareContainer", "sc.shut-down-containers") == true);
-}
-
-/*
- * Test that Config throws an exception if a config dependency is not met
+ * Test that calling getters for non existing configs restults in the expected exception
  *
- * TODO: Fix this when dependecies are implemented
+ * This test is for integers.
  */
-// TEST_F(ConfigTest, MissingDependencyThrows) {
-//     // Well formed config
-//     const std::string configString = "[SoftwareContainer]\n"
-//                                      "optional-config = 1\n";
-// 
-//     std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
-// 
-//     // Define what keys that are dependencies
-//     std::vector<std::string> dependencyKeys {"dependency-1", "dependency-2"};
-// 
-//     // Define the dependee config key
-//     std::string dependee = "my-config";
-// 
-//     // Associate the dependee to dependencies
-//     std::pair<std::string, std::vector<std::string>> dependencyAssociation(dependee, dependencyKeys);
-// 
-//     // Add the association between dependee and dependencies to a list
-//     std::vector<std::pair<std::string, std::vector<std::string>>> dependencies {dependencyAssociation};
-// 
-//     Config config(std::move(loader), std::move(emptyDefaultConfig()), dependencies);
-// 
-//     // We should get an exception if we ask for a config that have unmet dependencies
-//     ASSERT_THROW(config.getStringValue("SoftwareContainer", dependee),
-//                  ConfigDependencyError);
-// }
+TEST_F(ConfigTest, WrongGroupAndKeyThrowsForInt) {
+    // Create a config source
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
 
-/*
- * Test that Config throws an exception if a mandatory config group is not found in
- * the main config source. In this test it's only relevant to use the main config source
- * since that is the only source where groups are used.
- */
-TEST_F(ConfigTest, MissingMandatoryGroupThrows) {
-    // Well formed config without the mandatory config group (see below)
-    const std::string configString = "[OptionalGroup]\n"
-                                     "optional-config = 1\n";
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
 
-    // Now, the "main config" source will not provide the mandatory config group
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
 
-    // There are no dependencies between configs
-    std::vector<std::pair<std::string, std::vector<std::string>>> dependencies;
-
-    // Set up a mandatory group-key pair, the group will now be required to exist
-    MandatoryConfigs mandatory = MandatoryConfigs();
-    mandatory.addConfig("SoftwareContainer", "optional-config", ConfigType::Integer);
-
-    // Since the required 'SoftwareContainer' group is not present in any config source
-    // this should now throw an exception.
-    ASSERT_THROW(Config config(std::move(loader),
-                               std::move(emptyDefaultConfig()),
-                               mandatory,
-                               dependencies),
-                 ConfigMandatoryError);
+    ASSERT_THROW(config.getIntValue("WrongGroup", "wrong-key"), ConfigNotFoundError);
 }
 
 /*
- * Test that Config throws an exception if a mandatory config is not found in the
- * main config file source, or in the command line options source.
+ * Test that calling getters for non existing configs restults in the expected exception
+ *
+ * This test is for booleans.
+ */
+TEST_F(ConfigTest, WrongGroupAndKeyThrowsForBool) {
+    // Create a config source
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    ASSERT_THROW(config.getBoolValue("WrongGroup", "wrong-key"), ConfigNotFoundError);
+}
+
+/*
+ * Test that calling getters with wrong group but correct key throws an exception.
+ * This should be treated in the same way as when using both wrong group and key.
+ *
+ * This test is only done for one type, it's unlikely that the behavior is different
+ * for different types given that the above tests for "both group and key wrong" is
+ * performed for all types.
+ */
+TEST_F(ConfigTest, WrongGroupThrows) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-key1", 1, ConfigSourceType::Main);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    ASSERT_THROW(config.getIntValue("WrongGroup", "my-key1"), ConfigNotFoundError);
+}
+
+/*
+ * Test that calling getters with wrong key but correct group throws an exception.
+ * This should be treated in the same way as when using both wrong group and key.
+ *
+ * This test is only done for one type, it's unlikely that the behavior is different
+ * for different types given that the above tests for "both group and key wrong" is
+ * performed for all types.
+ */
+TEST_F(ConfigTest, WrongKeyThrows) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-key1", 1, ConfigSourceType::Main);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    ASSERT_THROW(config.getIntValue("MyGroup1", "wrong-key1"), ConfigNotFoundError);
+}
+
+/*
+ * Test that Config returns the value from the most prioritized source
+ *
+ * Two different sources are set to Config. Each source contain the same group-key combo but
+ * with different values. The value from the most prioritized source is expected to be returned
+ * by Config.
+ *
+ * ConfigSourceType::MainConfig has higher prio than ConfigSourceType::Defaults, i.e. the
+ * value in the config provided by "StubbedMainConfig" should be used.
+ */
+TEST_F(ConfigTest, ExpectedSourcePrioTwoSources) {
+    // Create a config source and add config items to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-key1", std::string("myValue1"), ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-key1", std::string("myValue2"), ConfigSourceType::Default);
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 2, ConfigSourceType::Default);
+    cast(source)->addConfig("MyGroup1", "my-bool-key1", true, ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-bool-key1", false, ConfigSourceType::Default);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    // The values should be the ones from "Main" source since that takes precedence over
+    // "Default" source
+    ASSERT_EQ(config.getStringValue("MyGroup1", "my-key1"), "myValue1");
+    ASSERT_EQ(config.getIntValue("MyGroup1", "my-int-key1"), 1);
+    ASSERT_EQ(config.getBoolValue("MyGroup1", "my-bool-key1"), true);
+}
+
+/*
+ * Same as above but using command line source as well
+ */
+TEST_F(ConfigTest, ExpectedSourcePrioThreeSources) {
+    // Create a config source and add config items to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-key1", std::string("myValue1"), ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-key1", std::string("myValue2"), ConfigSourceType::Default);
+    cast(source)->addConfig("MyGroup1", "my-key1", std::string("myValue3"), ConfigSourceType::Commandline);
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 2, ConfigSourceType::Default);
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 3, ConfigSourceType::Commandline);
+    cast(source)->addConfig("MyGroup1", "my-bool-key1", true, ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-bool-key1", false, ConfigSourceType::Default);
+    cast(source)->addConfig("MyGroup1", "my-bool-key1", false, ConfigSourceType::Commandline);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    Config config(std::move(sources), MandatoryConfigs(), ConfigDependencies());
+
+    // The values should be the ones from "Commandline" source since that takes precedence over
+    // "Main", and "Default" sources
+    ASSERT_EQ(config.getStringValue("MyGroup1", "my-key1"), "myValue3");
+    ASSERT_EQ(config.getIntValue("MyGroup1", "my-int-key1"), 3);
+    ASSERT_EQ(config.getBoolValue("MyGroup1", "my-bool-key1"), false);
+}
+
+/*
+ * Test that a missing mandatory config throws an exception
  */
 TEST_F(ConfigTest, MissingMandatoryConfigThrows) {
-    // Well formed config without the mandatory config (see below)
-    const std::string configString = "[OptionalGroup]\n"
-                                     "optional-config = 1\n";
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
 
-    // Now, the "main config" source will not provide the mandatory config
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
 
-    // There are no dependencies between configs
-    std::vector<std::pair<std::string, std::vector<std::string>>> dependencies;
+    MandatoryConfigs mandatory {UniqueKey("MissingGroup", "missing-key")};
 
-    // Set up a mandatory group-key pair, the config will now be required to exist
-    MandatoryConfigs mandatory = MandatoryConfigs();
-    mandatory.addConfig("OptionalGroup", "mandatory-config", ConfigType::Integer);
-
-    // Since the required 'mandatory-config' config is not present in any config source
-    // this should now throw an exception.
-    ASSERT_THROW(Config config(std::move(loader),
-                               std::move(emptyDefaultConfig()),
-                               mandatory,
-                               dependencies),
-                 ConfigMandatoryError);
+    ASSERT_THROW(Config config(std::move(sources), mandatory, ConfigDependencies()), ConfigMandatoryError);
 }
 
 /*
- * Same as above but also passing non-empty command line options as config source as well
+ * Test that a present mandatory config does not throw an exception
  */
-TEST_F(ConfigTest, UsingCommandLineOptionsMissingMandatoryConfigThrows) {
-    // Well formed config without the mandatory config (see below)
-    const std::string configString = "[OptionalGroup]\n"
-                                     "optional-config = 1\n";
+TEST_F(ConfigTest, PresentMandatoryConfigDontThrow) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
 
-    // Now, the "main config" source will not provide the mandatory config
-    std::unique_ptr<ConfigLoaderAbstractInterface> loader(new StringConfigLoader(configString));
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
 
-    // Now, the command line options wil not provide the mandatory config either
-    std::map<std::string, int> intOptions;
-    intOptions.insert(std::pair<std::string, int>("another-optional-config", 2));
+    MandatoryConfigs mandatory {UniqueKey("MyGroup1", "my-int-key1")};
 
-    // There are no dependencies between configs
-    std::vector<std::pair<std::string, std::vector<std::string>>> dependencies;
+    ASSERT_NO_THROW(Config config(std::move(sources), mandatory, ConfigDependencies()));
+}
 
-    // Set up a mandatory group-key pair, the config will now be required to exist
-    MandatoryConfigs mandatory = MandatoryConfigs();
-    mandatory.addConfig("OptionalGroup", "mandatory-config", ConfigType::Integer);
+/*
+ * Test that a missing dependency throws an exception
+ */
+TEST_F(ConfigTest, MissingDependencyThrows) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
 
-    // Since the required 'mandatory-config' config is not present in any config source
-    // this should now throw an exception.
-    ASSERT_THROW(Config config(std::move(loader),
-                               std::move(emptyDefaultConfig()),
-                               mandatory,
-                               dependencies,
-                               std::map<std::string, std::string>(),
-                               intOptions,
-                               std::map<std::string, bool>()),
-                 ConfigMandatoryError);
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    // Create a dependency and associate it with a present config. Since the
+    // dependency config will not be present, an exception will be thrown
+    ConfigDependencies deps {{UniqueKey("MyGroup1", "my-int-key1"), {UniqueKey("MissingGroup", "missing-key")}}};
+
+    ASSERT_THROW(Config config(std::move(sources), MandatoryConfigs(), deps), ConfigDependencyError);
+}
+
+/*
+ * Test that a present dependency does not throw an exception
+ */
+TEST_F(ConfigTest, PresentDependencyDontThrow) {
+    // Create a config source and add a config item to it
+    std::unique_ptr<ConfigSource> source(new StubbedConfigSource());
+    cast(source)->addConfig("MyGroup1", "my-int-key1", 1, ConfigSourceType::Main);
+    cast(source)->addConfig("MyGroup1", "my-int-key2", 2, ConfigSourceType::Default);
+
+    // Put source in list so it can be passed to Config
+    std::vector<std::unique_ptr<ConfigSource>> sources;
+    sources.push_back(std::move(source));
+
+    // Create a dependency and associate it with a present config. Since the
+    // dependency config will be present, no exception needs to be thrown
+    ConfigDependencies deps {{UniqueKey("MyGroup1", "my-int-key1"), {UniqueKey("MyGroup1", "my-int-key2")}}};
+
+    ASSERT_NO_THROW(Config config(std::move(sources), MandatoryConfigs(), deps));
 }
 
 
-// Tests for FileConfigLoader /////////////////////////////////////////////////////////////////////
+
+// MainConfigSourceTest //////////////////////////////////////////////////////////////////////////
+
+class MainConfigSourceTest : public ::testing::Test
+{
+};
+
+
+/*
+ * Test that the expected config items are returned
+ */
+TEST_F(MainConfigSourceTest, ReturnsExpecedStringConfigs) {
+    // Well formed config
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "stringitem = mystring\n"
+                                     "intitem = 1\n"
+                                     "boolitem = true\n";
+
+    std::unique_ptr<ConfigLoader> loader(new StringConfigLoader(configString));
+
+    TypeMap typeMapping {{UniqueKey("SoftwareContainer", "stringitem"), ConfigType::String},
+                         {UniqueKey("SoftwareContainer", "intitem"), ConfigType::Integer},
+                         {UniqueKey("SoftwareContainer", "boolitem"), ConfigType::Boolean}};
+
+    MainConfigSource source(std::move(loader), typeMapping);
+
+    StringConfig expectedStringItem("SoftwareContainer", "stringitem", "mystring");
+    IntConfig expectedIntItem("SoftwareContainer", "intitem", 1);
+    BoolConfig expectedBoolItem("SoftwareContainer", "boolitem", true);
+
+    std::vector<StringConfig> stringConfigs = source.stringConfigs();
+    std::vector<IntConfig> intConfigs = source.intConfigs();
+    std::vector<BoolConfig> boolConfigs = source.boolConfigs();
+
+    ASSERT_EQ(stringConfigs.back().key(), expectedStringItem.key());
+    ASSERT_EQ(stringConfigs.back().group(), expectedStringItem.group());
+    ASSERT_EQ(stringConfigs.back().value(), expectedStringItem.value());
+
+    ASSERT_EQ(intConfigs.back().key(), expectedIntItem.key());
+    ASSERT_EQ(intConfigs.back().group(), expectedIntItem.group());
+    ASSERT_EQ(intConfigs.back().value(), expectedIntItem.value());
+
+    ASSERT_EQ(boolConfigs.back().key(), expectedBoolItem.key());
+    ASSERT_EQ(boolConfigs.back().group(), expectedBoolItem.group());
+    ASSERT_EQ(boolConfigs.back().value(), expectedBoolItem.value());
+}
+
+/*
+ * Test that a config file with a config item that is not part of the type mapping
+ * results in the expected exception
+ */
+TEST_F(MainConfigSourceTest, UnkownItemThrows) {
+    // Well formed config that contains an item that will not be part of the type mapping
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "sc.unknown=false\n";
+
+    std::unique_ptr<ConfigLoader> loader(new StringConfigLoader(configString));
+
+    // The type map now contains something that is not present in the config
+    TypeMap typeMapping {{UniqueKey("SoftwareContainer", "sc.foo"), ConfigType::Boolean}};
+
+    ASSERT_THROW(MainConfigSource(std::move(loader), typeMapping), ConfigUnknownError);
+}
+
+/*
+ * Test that a config file with badly formatted data throws an exception
+ */
+TEST_F(MainConfigSourceTest, BadlyFormattedConfigThrows) {
+    // Badly formatted config string (missing bracket in group)
+    const std::string configString = "[SoftwareContainer\n"
+                                     "sc.foo=false\n";
+
+    std::unique_ptr<ConfigLoader> loader(new StringConfigLoader(configString));
+
+    ASSERT_THROW(MainConfigSource(std::move(loader), TypeMap()), ConfigFileError);
+}
+
+/*
+ * Test that a config with an unexpected value type retults in the expected exception
+ */
+TEST_F(MainConfigSourceTest, UnexpectedValueTypeThrows) {
+    // Well formatted config string where the value is of an unexpected type, i.e.
+    // the "foo" key needs to be parsed as a string but will be added to the type mapping
+    // as an Integer type and thus, the parsing code path should result in an exception.
+    const std::string configString = "[SoftwareContainer]\n"
+                                     "foo = monkey\n";
+
+    std::unique_ptr<ConfigLoader> loader(new StringConfigLoader(configString));
+
+    TypeMap typeMapping {{UniqueKey("SoftwareContainer", "foo"), ConfigType::Integer}};
+
+    ASSERT_THROW(MainConfigSource(std::move(loader), typeMapping), ConfigFileError);
+}
+
+
+
+// FileConfigLoaderTest //////////////////////////////////////////////////////////////////////////
+
+class FileConfigLoaderTest : public ::testing::Test
+{
+};
 
 /*
  * Test that using the real FileConfigLoader and passing a path to a non-existent
@@ -498,67 +560,8 @@ TEST_F(ConfigTest, UsingCommandLineOptionsMissingMandatoryConfigThrows) {
  * exists but is not well formed, but that is not tested in the unit-tests becuase of the
  * dependency to having actual files.
  */
-TEST_F(ConfigTest, LoadingMissingConfigFileThrows) {
+TEST_F(FileConfigLoaderTest, LoadingMissingConfigFileThrows) {
     FileConfigLoader loader("non-existent-path");
 
     ASSERT_THROW(loader.loadConfig(), Glib::FileError);
-}
-
-
-// Tests for MandatoryConfigs /////////////////////////////////////////////////////////////////////
-
-/*
- * Test that we get the expected group names after adding mandatory configs
- */
-TEST_F(ConfigTest, ReturnsExpectedGroups) {
-    MandatoryConfigs mandatory = MandatoryConfigs();
-    mandatory.addConfig("MyGroup1", "my-config1", ConfigType::Integer);
-    mandatory.addConfig("MyGroup2", "my-config2", ConfigType::Integer);
-    std::vector<std::string> groups = mandatory.groups();
-
-    std::vector<std::string> expected {"MyGroup1", "MyGroup2"};
-
-    EXPECT_THAT(groups, ::testing::ContainerEq(expected));
-}
-
-/*
- * Test that we get the expected group-key pairs after adding mandatory configs
- */
-TEST_F(ConfigTest, ReturnsExpectedConfigs) {
-    MandatoryConfigs mandatory = MandatoryConfigs();
-    mandatory.addConfig("MyGroup1", "my-config1", ConfigType::Integer);
-    mandatory.addConfig("MyGroup2", "my-config2", ConfigType::Integer);
-    std::vector<std::tuple<std::string, std::string, ConfigType>> configs = mandatory.configs();
-
-    std::tuple<std::string, std::string, ConfigType> config1("MyGroup1",
-                                                             "my-config1",
-                                                             ConfigType::Integer);
-    std::tuple<std::string, std::string, ConfigType> config2("MyGroup2",
-                                                             "my-config2",
-                                                             ConfigType::Integer);
-    std::vector<std::tuple<std::string, std::string, ConfigType>> expected {config1, config2};
-
-    EXPECT_THAT(configs, ::testing::ContainerEq(expected));
-}
-
-/*
- * Test that we get empty group values when nothing has been set
- */
-TEST_F(ConfigTest, HandlesGroupWhenNothingIsSet) {
-    MandatoryConfigs mandatory = MandatoryConfigs();
-
-    std::vector<std::string> groups = mandatory.groups();
-
-    EXPECT_THAT(groups, ::testing::IsEmpty());
-}
-
-/*
- * Test that we get empty configs when nothing has been set
- */
-TEST_F(ConfigTest, HandlesConfigsWhenNothingIsSet) {
-    MandatoryConfigs mandatory = MandatoryConfigs();
-
-    std::vector<std::tuple<std::string, std::string, ConfigType>> configs = mandatory.configs();
-
-    EXPECT_THAT(configs, ::testing::IsEmpty());
 }

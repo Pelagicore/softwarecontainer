@@ -18,7 +18,7 @@
 # For further information see LICENSE
 
 # Check for the bridge, and if not found, don't output anything
-BRIDGE_AVAILABLE=$(brctl show | grep @BRIDGE_DEVICE@)
+BRIDGE_AVAILABLE=$(brctl show | grep @SC_BRIDGE_DEVICE@)
 if ! [ -n "$BRIDGE_AVAILABLE" ]; then
 @NOBRIDGE@
 fi

@@ -1,5 +1,5 @@
 
-# Copyright (C) 2016 Pelagicore AB
+# Copyright (C) 2016-2017 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
 # any purpose with or without fee is hereby granted, provided that the
@@ -28,11 +28,14 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake_mod
 include(GNUInstallDirs)
 include(FeatureSummary)
 
+# Include macros for config handling
+include(Configs)
+
 #
 # Set software version
 #
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 15)
+set(${PROJECT_NAME}_MINOR_VERSION 16)
 set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
@@ -152,57 +155,56 @@ if(ENABLE_ALL_DOC)
     set(ENABLE_USER_DOC ON)
 endif()
 
-#
-# Setup config default values, definitions, and configure files etc.
-#
-# These values are used to configure the general config file and are
-# picked up by the ConfigDefaults class to be used for default config
-# values.
-#
-
 SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/)
 add_feature_info("Config directory" TRUE "Configuration files will be installed in ${SYS_CONFIG_DIR}")
 
-# Since the general config file needs a lower case string as value
-# for the booleans, we need to set specific variables for these
-set(KEEP_CONTAINERS_ALIVE FALSE)
-if(${KEEP_CONTAINERS_ALIVE})
-    set(KEEP_CONTAINERS_ALIVE_VALUE_STRING "true")
-else(${KEEP_CONTAINERS_ALIVE})
-    set(KEEP_CONTAINERS_ALIVE_VALUE_STRING "false")
-endif()
 
-set(USE_SESSION_BUS FALSE)
-if(${USE_SESSION_BUS})
-    set(USE_SESSION_BUS_VALUE_STRING "true")
-else(${USE_SESSION_BUS})
-    set(USE_SESSION_BUS_VALUE_STRING "false")
-endif()
+#
+# Setup configs that goes into the main config file. Macros for configs are defined in Config.cmake
+#
 
-set(PRELOAD_COUNT 0)
-set(SHUTDOWN_TIMEOUT 1)
-set(SHARED_MOUNTS_DIR "/tmp/container/")
-set(LXC_CONFIG_PATH "${SYS_CONFIG_DIR}/softwarecontainer.conf")
-set(SERVICE_MANIFEST_DIR "${SYS_CONFIG_DIR}/service-manifest.d/")
-set(DEFAULT_SERVICE_MANIFEST_DIR "${SYS_CONFIG_DIR}/service-manifest.default.d/")
+# Used as prefix to config keys that belong to the SoftwareContainer group
+set(SC_CONFIG_GROUP "SC")
 
-# Export definitions for the ConfigDefaults class
-add_definitions(-DPRELOAD_COUNT=${PRELOAD_COUNT})
-add_definitions(-DKEEP_CONTAINERS_ALIVE=${KEEP_CONTAINERS_ALIVE})
-add_definitions(-DUSE_SESSION_BUS=${USE_SESSION_BUS})
-add_definitions(-DSHUTDOWN_TIMEOUT=${SHUTDOWN_TIMEOUT})
-add_definitions(-DSHARED_MOUNTS_DIR="${SHARED_MOUNTS_DIR}")
-add_definitions(-DLXC_CONFIG_PATH="${LXC_CONFIG_PATH}")
-add_definitions(-DSERVICE_MANIFEST_DIR="${SERVICE_MANIFEST_DIR}")
-add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR="${DEFAULT_SERVICE_MANIFEST_DIR}")
+add_boolean_config(${SC_CONFIG_GROUP} KEEP_CONTAINERS_ALIVE FALSE "false")
 
-# export_configs_needed_by_tests()
+add_boolean_config(${SC_CONFIG_GROUP} USE_SESSION_BUS FALSE "false")
+
+add_boolean_config(${SC_CONFIG_GROUP} CREATE_BRIDGE TRUE "true")
+
+add_integer_config(${SC_CONFIG_GROUP} PRELOAD_COUNT 0 0)
+
+add_integer_config(${SC_CONFIG_GROUP} SHUTDOWN_TIMEOUT 1 1)
+
+add_string_config(${SC_CONFIG_GROUP} SHARED_MOUNTS_DIR "/tmp/container/" "/tmp/container/")
+
+add_string_config(${SC_CONFIG_GROUP} LXC_CONFIG_PATH
+                  "${SYS_CONFIG_DIR}/softwarecontainer.conf"
+                  "${SYS_CONFIG_DIR}/softwarecontainer.conf")
+
+add_string_config(${SC_CONFIG_GROUP}
+                  SERVICE_MANIFEST_DIR
+                  "${SYS_CONFIG_DIR}/service-manifest.d/"
+                  "${SYS_CONFIG_DIR}/service-manifest.d/")
+
+add_string_config(${SC_CONFIG_GROUP}
+                  DEFAULT_SERVICE_MANIFEST_DIR
+                  "${SYS_CONFIG_DIR}/service-manifest.default.d/"
+                  "${SYS_CONFIG_DIR}/service-manifest.default.d/")
+
+add_string_config(${SC_CONFIG_GROUP} BRIDGE_DEVICE "lxcbr0" "lxcbr0")
+
+add_string_config(${SC_CONFIG_GROUP} BRIDGE_IP "10.0.3.1" "10.0.3.1")
+
+add_integer_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS 24 24)
+
+
 # NOTE: These definitons are only set because the "middle layer" tests currently need to create a Workspace
 #       with valid values, see the setup code of SoftwareContainerTest test class.
-add_definitions(-DSHARED_MOUNTS_DIR_TESTING="${SHARED_MOUNTS_DIR}")
-add_definitions(-DLXC_CONFIG_PATH_TESTING="${LXC_CONFIG_PATH}")
-add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SERVICE_MANIFEST_DIR}")
-add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${DEFAULT_SERVICE_MANIFEST_DIR}")
+add_definitions(-DSHARED_MOUNTS_DIR_TESTING="${SC_SHARED_MOUNTS_DIR}")
+add_definitions(-DLXC_CONFIG_PATH_TESTING="${SC_LXC_CONFIG_PATH}")
+add_definitions(-DSERVICE_MANIFEST_DIR_TESTING="${SC_SERVICE_MANIFEST_DIR}")
+add_definitions(-DDEFAULT_SERVICE_MANIFEST_DIR_TESTING="${SC_DEFAULT_SERVICE_MANIFEST_DIR}")
 
 # Set and define the path to the general config file, used by the agent
 # as default location if nothing else is set on command line when starting
@@ -227,7 +229,6 @@ endif()
 #
 # Set C++ compiler flags
 #
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wall -std=c++11 -pedantic -Wextra")
 if(ENABLE_PROFILING)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DPROFILING_ENABLED=1")
@@ -252,38 +253,51 @@ endif(ENABLE_COVERAGE)
 #
 # Network related options
 #
+if(ENABLE_NETWORKGATEWAY)
 
-if (ENABLE_NETWORKGATEWAY)
-
-    macro(set_default VAR VALUE)
+    macro(set_if_undefined VAR VALUE)
         if(NOT DEFINED ${VAR})
             set(${VAR} ${VALUE})
         endif()
     endmacro()
 
-    set_default(BRIDGE_DEVICE lxcbr0)
-    add_definitions(-DBRIDGE_DEVICE="${BRIDGE_DEVICE}")
-    add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${BRIDGE_DEVICE}")
+    # BRIDGE_DEVICE config is mandatory if we are configured for network
+    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_DEVICE)
+
+    # BRIDGE_IP is mandatory if we are configured for network
+    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_IP)
+
+    # BRIDGE_NETMASK_BITS is mandatory if we are configured for network
+    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS)
+
+    add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${SC_CONFIG_GROUP}_${BRIDGE_DEVICE}")
 
     #
     # Some settings for whether or not SC should create a bridge
     # if one is not found.
     #
-    if(CREATE_BRIDGE)
-        add_definitions(-DCREATE_BRIDGE=true)
 
-        set_default(BRIDGE_IP 10.0.3.1)
-        set_default(BRIDGE_NETADDR 10.0.3.0)
-        set_default(BRIDGE_NETADDR 10.0.3.0)
-        set_default(BRIDGE_NETMASK 255.255.255.0)
-        set_default(BRIDGE_NETMASK_BITS 24)
+    # TODO: When CREATE_BRIDGE is in the main config, it means we should not need to have it here
+    #       but until we have removed the use of the setup scripts, or reworked how that works,
+    #       we need it here for now.
+    if(CREATE_BRIDGE)
+        # We are configured to create the network bridge so the corresponding config should be
+        # made present in the main config
+        enable_config_in_file(${SC_CONFIG_GROUP} CREATE_BRIDGE "true")
+
+        set_if_undefined(BRIDGE_NETADDR 10.0.3.0)
+
+        set_if_undefined(BRIDGE_NETMASK 255.255.255.0)
 
         configure_file(scripts/setup_create_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh)
         file(READ ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh NOBRIDGE)
-
     else()
+        # We are configured to not create network bridge so the corresponding config should say so
+        # in the main config file.
+        enable_config_in_file(${SC_CONFIG_GROUP} CREATE_BRIDGE "false")
+
         configure_file(scripts/setup_exit_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/exit_nobridge.sh)
-        file(READ exit_nobridge.sh NOBRIDGE)
+        file(READ ${CMAKE_CURRENT_BINARY_DIR}/exit_nobridge.sh NOBRIDGE)
     endif()
 
     # Get the actual setup script
