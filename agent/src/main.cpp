@@ -91,7 +91,8 @@ int main(int argc, char **argv)
     preloadOpt.set_long_name("preload");
     preloadOpt.set_short_name('p');
     preloadOpt.set_arg_description("<number>");
-    preloadOpt.set_description("Number of containers to preload, defaults to 0");
+    preloadOpt.set_description("Number of containers to preload, "
+                               "defaults to " + std::to_string(PRELOAD_COUNT));
 
     Glib::OptionEntry userOpt;
     userOpt.set_long_name("user");
@@ -103,36 +104,38 @@ int main(int argc, char **argv)
     Glib::OptionEntry keepContainersAliveOpt;
     keepContainersAliveOpt.set_long_name("keep-containers-alive");
     keepContainersAliveOpt.set_short_name('k');
-    keepContainersAliveOpt.set_description("Containers will not be shut down on exit."
-                                           " Useful for debugging");
+    keepContainersAliveOpt.set_description("Containers will not be shut down on exit. Useful for "
+                                           "debugging, defaults to "
+                                           + std::string(KEEP_CONTAINERS_ALIVE ? "true" : "false"));
 
     Glib::OptionEntry timeoutOpt;
     timeoutOpt.set_long_name("timeout");
     timeoutOpt.set_short_name('t');
     timeoutOpt.set_arg_description("<seconds>");
     timeoutOpt.set_description("Timeout in seconds to wait for containers to shutdown,"
-                               " defaults to 1");
+                               " defaults to " + std::to_string(SHUTDOWN_TIMEOUT));
 
     Glib::OptionEntry serviceManifestDirOpt;
     serviceManifestDirOpt.set_long_name("manifest-dir");
     serviceManifestDirOpt.set_short_name('m');
     serviceManifestDirOpt.set_arg_description("<filepath>");
     serviceManifestDirOpt.set_description("Path to a file or directory where service manifest(s) "
-                                          "exist, defaults to " +
-                                          std::string(SERVICE_MANIFEST_DIR));
+                                          "exist, defaults to \""
+                                          + std::string(SERVICE_MANIFEST_DIR) + "\"");
 
     Glib::OptionEntry defaultServiceManifestDirOpt;
     defaultServiceManifestDirOpt.set_long_name("default-manifest-dir");
     defaultServiceManifestDirOpt.set_short_name('d');
     defaultServiceManifestDirOpt.set_arg_description("<filepath>");
     defaultServiceManifestDirOpt.set_description("Path to a file or directory where default "
-                                                 "service manifest(s) exist, defaults to " +
-                                                 std::string(DEFAULT_SERVICE_MANIFEST_DIR));
+                                                 "service manifest(s) exist, defaults to \""
+                                                  + std::string(DEFAULT_SERVICE_MANIFEST_DIR) + "\"");
 
     Glib::OptionEntry sessionBusOpt;
     sessionBusOpt.set_long_name("session-bus");
     sessionBusOpt.set_short_name('b');
-    sessionBusOpt.set_description("Use the session bus instead of the system bus");
+    sessionBusOpt.set_description("Use the session bus instead of the system bus, "
+                                  "defaults to " + std::string(USE_SESSION_BUS ? "true" : "false"));
 
 
     /* Default values need to be somehting that should not be set explicitly
