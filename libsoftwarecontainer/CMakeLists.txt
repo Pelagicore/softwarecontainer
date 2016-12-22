@@ -25,6 +25,7 @@ add_subdirectory(src)
 
 if(ENABLE_TEST)
     add_subdirectory(unit-test)
+    add_subdirectory(component-test)
 endif(ENABLE_TEST)
 
 # busybox is currently always needed on the host system at runtime

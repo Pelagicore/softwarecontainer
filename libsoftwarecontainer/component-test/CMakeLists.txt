@@ -13,32 +13,43 @@
 # ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
 # SOFTWARE.
 #
-# For further information see LICENSE
 
-include(AddGTestTest)
+include (AddGTestTest)
 
 set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
 add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
 
-set(CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES
+include_directories(
+    ${LIBSOFTWARECONTAINER_DIR}/src
+)
+
+set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainer
-    softwarecontainercommon
 )
 
-set(CONFIGSTORE_TEST_FILES
+set(GATEWAY_TEST_FILES "")
+macro(add_gateway_test GATEWAY_FLAG FILENAME)
+    if (${GATEWAY_FLAG})
+        LIST(APPEND GATEWAY_TEST_FILES ${FILENAME})
+    endif()
+endmacro()
+
+add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_unittest.cpp)
+add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
+add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
+add_gateway_test(ENABLE_FILEGATEWAY filegateway_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
+
+set(TEST_FILES
+    softwarecontainer_test.cpp
+    softwarecontainerlib_unittest.cpp
+    ${GATEWAY_TEST_FILES}
     main.cpp
-    configstore_unittest.cpp
-    config_unittest.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefaults.cpp
 )
 
-add_gtest_test(softwarecontaineragent-unit-test
-    "${CONFIGSTORE_TEST_FILES}"
-    "${CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES}"
+add_gtest_test(softwarecontainer-component-test
+    "${TEST_FILES}"
+    "${TEST_LIBRARY_DEPENDENCIES}"
 )

@@ -22,6 +22,8 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
+# cd to the directory of this script.
+cd "$(dirname "$0")"
 
 DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment networkgateway)
 

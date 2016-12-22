@@ -65,8 +65,12 @@ node {
         }
 
         stage('UnitTest') {
+            runInVagrant(workspace, "cd softwarecontainer && ./build/run-unit-tests.py")
+        }
+
+        stage('ComponentTest') {
             // We run it in this way to avoid getting (unreachable) paths
-            runInVagrant(workspace, "cd softwarecontainer && sudo ./build/run-tests.py")
+            runInVagrant(workspace, "cd softwarecontainer && sudo ./build/run-component-tests.py")
         }
 
         stage('ServiceTest') {
@@ -87,19 +91,20 @@ node {
             // Store the artifacts of the entire build
             archive "**/*"
 
-            // Save the coverage report
+            // Save the coverage report for unit tests
             publishHTML (target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: false,
                 keepAll: true,
-                reportDir: 'build/coverage',
+                reportDir: 'build/CoverageUnitTest',
                 reportFiles: 'index.html',
                 reportName: 'Coverage report'
             ])
 
-            // Store the test results and graph them
-            // TODO: There is an issue with the build directory ending up as (unreachable)
+            // Store the unit test results and graph them
             step([$class: 'JUnitResultArchiver', testResults: '**/*_unittest_result.xml'])
+            // Store the component test results and graph them
+            step([$class: 'JUnitResultArchiver', testResults: '**/*_componenttest_result.xml'])
             // Store the service test results and graph them
             step([$class: 'JUnitResultArchiver', testResults: '**/*_servicetest_result.xml'])
         }

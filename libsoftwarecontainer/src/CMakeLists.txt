@@ -36,7 +36,6 @@ add_library(softwarecontainer SHARED
 
 TARGET_LINK_LIBRARIES(softwarecontainer
     softwarecontainercommon
-    ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${LXC_LIBRARIES}
     ${Jansson_LIBRARIES}

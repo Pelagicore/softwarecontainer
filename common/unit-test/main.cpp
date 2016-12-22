@@ -28,7 +28,7 @@
 LOG_DEFINE_APP_IDS("PCON", "SoftwareContainer Unit Test");
 LOG_DECLARE_CONTEXT(SoftwareContainer_DefaultLogContext, "PCON", "Main context");
 
-int main(int argc, char * *argv)
+int main(int argc, char **argv)
 {
     bool logOutput = false;
     Glib::getenv("LOG_OUTPUT", logOutput);
