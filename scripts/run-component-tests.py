@@ -25,11 +25,15 @@
 import os
 import sys
 import stat
-import subprocess
+import shutil
 import tempfile
+import subprocess
 
 from distutils.spawn import find_executable
 from os.path import dirname
+
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+os.chdir(CURRENT_DIR)
 
 if "UID" in os.environ and os.environ["UID"] != 0:
     print "This script must be run as root"
@@ -48,7 +52,7 @@ def startProcess(binary, name):
 
 # Cleanup
 def cleanup():
-    for name,process in processes.items():
+    for name, process in processes.items():
         print "### Killing {} at pid {} ###".format(name, process.pid)
         process.terminate()
 
@@ -91,8 +95,10 @@ if len(sys.argv) > 1:
 
 testSuites = { }
 def runTestSuite(binary, name):
-    outputFile = "{}_unittest_result.xml".format(name)
-    os.system("rm " + outputFile);
+    outputFile = "{}_componenttest_result.xml".format(name)
+    if os.path.exists(outputFile):
+        os.remove(outputFile)
+
     command = "{} {} --gtest_output=xml:{}".format(binary, gtestFilter, outputFile)
     exitCode = os.system(command)
     testSuites[name] = exitCode
@@ -101,14 +107,14 @@ def runTestSuite(binary, name):
 # NOTE: Don't add spaces in the names, the names are used as parts of paths to save
 #       test results.
 #
-runTestSuite("./agent/unit-test/configstoretest", "ConfigStoreTest")
-runTestSuite("./common/unit-test/softwarecontainercommontest", "CommonTest")
 
-runTestSuite("./agent/unit-test/softwarecontaineragenttest", "AgentTest")
-runTestSuite("./libsoftwarecontainer/unit-test/softwarecontainerlibtest", "LibTest")
+# These are the component tests
+runTestSuite("./agent/component-test/softwarecontaineragent-component-test", "AgentComponentTest")
+runTestSuite("./libsoftwarecontainer/component-test/softwarecontainer-component-test", "LibComponentTest")
 
 cleanup()
 os.kill(int(os.environ["DBUS_SESSION_BUS_PID"]), 15)
+shutil.rmtree(xdg_path);
 
 retval = 0
 for name,exitCode in testSuites.items():

@@ -238,12 +238,13 @@ endif()
 if(ENABLE_TEST)
     include(AddGMock)
     add_gmock()
-    configure_file(scripts/run-tests.py run-tests.py COPYONLY)
+    configure_file(scripts/run-component-tests.py run-component-tests.py COPYONLY)
+    configure_file(scripts/run-unit-tests.py run-unit-tests.py COPYONLY)
 endif()
 
 if(ENABLE_COVERAGE)
     include(AddLCov)
-    add_coverage("${CMAKE_BINARY_DIR}/run-tests.py")
+    add_coverage("CoverageUnitTest" "${CMAKE_BINARY_DIR}/run-unit-tests.py")
 endif(ENABLE_COVERAGE)
 
 

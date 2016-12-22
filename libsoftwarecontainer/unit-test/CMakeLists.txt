@@ -18,14 +18,7 @@
 
 include (AddGTestTest)
 
-set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
-add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
-
 set(TEST_LIBRARY_DEPENDENCIES
-    ${DBusCpp_LIBRARIES}
-    ${Glibmm_LIBRARIES}
-    ${LXC_LIBRARIES}
-    ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainer
 )
@@ -41,38 +34,30 @@ macro(add_gateway_test GATEWAY_FLAG FILENAME)
     endif()
 endmacro()
 
-add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_unittest.cpp)
 add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsparser_unittest.cpp)
 
-add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
 add_gateway_test(ENABLE_DBUSGATEWAY dbusgatewayparser_unittest.cpp)
 
-add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
 add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodeparser_unittest.cpp)
 add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodelogic_unittest.cpp)
 
-add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
-add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)
-add_gateway_test(ENABLE_NETWORKGATEWAY iptableentry_unittest.cpp)
-add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayparser_unittest.cpp)
-
 add_gateway_test(ENABLE_ENVGATEWAY envgatewayparser_unittest.cpp)
 
-add_gateway_test(ENABLE_FILEGATEWAY filegateway_unittest.cpp)
 add_gateway_test(ENABLE_FILEGATEWAY filegatewayparser_unittest.cpp)
 add_gateway_test(ENABLE_FILEGATEWAY filegatewaysettingstore_unittest.cpp)
+
+add_gateway_test(ENABLE_NETWORKGATEWAY iptableentry_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayparser_unittest.cpp)
 
 add_gateway_test(ENABLE_PULSEGATEWAY pulsegateway_unittest.cpp)
 
 set(TEST_FILES
-    softwarecontainer_test.cpp
-    softwarecontainerlib_unittest.cpp
     gateway_unittest.cpp
     main.cpp
     ${GATEWAY_TEST_FILES}
 )
 
-add_gtest_test(softwarecontainerlibtest
+add_gtest_test(softwarecontainer-unit-test
     "${TEST_FILES}"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )

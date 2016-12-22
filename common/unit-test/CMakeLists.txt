@@ -19,7 +19,6 @@
 include(AddGTestTest)
 
 set(TEST_LIBRARY_DEPENDENCIES
-    ${DBusCpp_LIBRARIES}
     ${Glibmm_LIBRARIES}
     ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
@@ -32,7 +31,7 @@ set(TEST_FILES
     main.cpp
 )
 
-add_gtest_test(softwarecontainercommontest
+add_gtest_test(softwarecontainercommon-unit-test
     "${TEST_FILES}"
     "${TEST_LIBRARY_DEPENDENCIES}"
 )

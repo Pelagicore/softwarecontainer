@@ -19,40 +19,31 @@ include(GNUInstallDirs)
 include(GenerateDBusCpp)
 generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
-# This path is by the unit-test cmake list file
-set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-
 install(DIRECTORY DESTINATION ${SERVICE_MANIFEST_DIR})
 install(DIRECTORY DESTINATION ${DEFAULT_SERVICE_MANIFEST_DIR})
 
 include_directories(src)
 
-set(SOFTWARECONTAINERAGENT_CORE_CLASSES
-    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragentadaptor.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefaults.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/config/mandatoryconfigs.cpp
-)
-
+#
+# Build the softwarecontainer-agent binary
+#
 add_executable(softwarecontainer-agent
-    src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragentadaptor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/baseconfigstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/defaultconfigstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/filteredconfigstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/fileconfigloader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configdefaults.cpp
     ${GENERATED_ADAPTOR_FILENAME}
-    ${SOFTWARECONTAINERAGENT_CORE_CLASSES}
 )
 
 target_link_libraries(softwarecontainer-agent
     ${DBusCpp_LIBRARIES}
-    ${Glibmm_LIBRARIES}
-    ${LXC_LIBRARIES}
-    ${Jansson_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainer
-    softwarecontainercommon
 )
 
 install(TARGETS softwarecontainer-agent DESTINATION bin)
@@ -83,5 +74,7 @@ if (ENABLE_SYSTEMD)
 endif()
 
 if (ENABLE_TEST)
-   add_subdirectory(unit-test)
+    set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(unit-test)
+    add_subdirectory(component-test)
 endif()

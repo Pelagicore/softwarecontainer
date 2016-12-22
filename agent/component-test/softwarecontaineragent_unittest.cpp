@@ -18,18 +18,11 @@
  */
 
 #include "softwarecontaineragent.h"
-#include "capability/baseconfigstore.h"
-#include "capability/filteredconfigstore.h"
-#include "capability/defaultconfigstore.h"
 #include "config/config.h"
 #include "config/configloaderabstractinterface.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <unistd.h>
-#include <memory>
-#include <utility>
-
 
 /*
  * Test stub - StringConfigLoader

@@ -17,28 +17,27 @@
 
 include(AddGTestTest)
 
-set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
-add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
-
-set(CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES
+set(AGENT_TEST_LIBRARY_DEPENDENCIES
+    ${DBusCpp_LIBRARIES}
+    ${GLibmm_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainer
-    softwarecontainercommon
 )
 
-set(CONFIGSTORE_TEST_FILES
+set(SOFTWARECONTAINERAGENT_TEST_FILES
     main.cpp
-    configstore_unittest.cpp
-    config_unittest.cpp
+    softwarecontaineragent_unittest.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragentadaptor.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefaults.cpp
 )
 
-add_gtest_test(softwarecontaineragent-unit-test
-    "${CONFIGSTORE_TEST_FILES}"
-    "${CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES}"
+add_gtest_test(softwarecontaineragent-component-test
+    "${SOFTWARECONTAINERAGENT_TEST_FILES}"
+    "${AGENT_TEST_LIBRARY_DEPENDENCIES}"
 )
