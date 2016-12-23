@@ -36,6 +36,7 @@ set(CONFIGSTORE_TEST_FILES
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefaults.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/config/mandatoryconfigs.cpp
 )
 
 add_gtest_test(softwarecontaineragent-unit-test
