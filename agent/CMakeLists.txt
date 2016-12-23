@@ -37,6 +37,7 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/fileconfigloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configdefaults.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/mandatoryconfigs.cpp
     ${GENERATED_ADAPTOR_FILENAME}
 )
 
