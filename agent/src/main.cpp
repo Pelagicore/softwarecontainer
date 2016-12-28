@@ -44,39 +44,6 @@ int signalHandler(void *data) {
     return 0;
 }
 
-/*
- * Tries to register the agent on the given bus. If the system bus is given and fails,
- * this tries to register to the session bus instead.
- *
- * Throws a ReturnCode on failure
- */
-DBus::Connection getBusConnection(bool useSessionBus)
-{
-    static constexpr const char *AGENT_BUS_NAME = "com.pelagicore.SoftwareContainerAgent";
-    std::string busStr = useSessionBus ? "session" : "system";
-    try {
-        DBus::Connection bus = useSessionBus ? DBus::Connection::SessionBus()
-                                             : DBus::Connection::SystemBus();
-
-        // Check if the name is available or not
-        bool alreadyTaken = bus.has_name(AGENT_BUS_NAME);
-        if (alreadyTaken) {
-            log_error() << AGENT_BUS_NAME << " is already taken on the " << busStr << " bus.";
-            throw ReturnCode::FAILURE;
-        }
-
-        DBus::Connection connection(bus);
-        connection.request_name(AGENT_BUS_NAME);
-        log_debug() << "Registered " << AGENT_BUS_NAME << " on the " << busStr << " bus.";
-        return connection;
-
-    } catch (DBus::Error &err) {
-        log_warning() << "Could not register " << AGENT_BUS_NAME << " to the " << busStr << " bus";
-        throw ReturnCode::FAILURE;
-    }
-}
-
-
 int main(int argc, char **argv)
 {
     // Config file path default 'SC_CONFIG_FILE' shuld be set by the build system
@@ -178,12 +145,11 @@ int main(int argc, char **argv)
     profilepoint("softwareContainerStart");
     log_debug() << "Starting softwarecontainer agent";
 
+    Glib::init();
+    Gio::init();
+
     Glib::RefPtr<Glib::MainContext> mainContext = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> ml = Glib::MainLoop::create(mainContext);
-
-    DBus::Glib::BusDispatcher dbusDispatcher;
-    DBus::default_dispatcher = &dbusDispatcher;
-    dbusDispatcher.attach(mainContext->gobj());
 
     // Config file set on command line should take precedence over default
     std::string configFileLocation;
@@ -237,12 +203,8 @@ int main(int argc, char **argv)
         Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
 
         static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/SoftwareContainerAgent";
-        DBus::Connection connection = getBusConnection(useSessionBus);
-        SoftwareContainerAgent agent(mainContext, config);
-        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor =
-            std::unique_ptr<SoftwareContainerAgentAdaptor>(
-                new DBusCppAdaptor(connection, AGENT_OBJECT_PATH, agent)
-            );
+        ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config);
+        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor( new SoftwareContainerAgentAdaptor(agent, useSessionBus));
 
         // Register UNIX signal handler
         g_unix_signal_add(SIGINT, &signalHandler, &ml);

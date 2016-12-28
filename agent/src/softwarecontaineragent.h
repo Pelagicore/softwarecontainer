@@ -26,18 +26,8 @@
 #include <glib-unix.h>
 #include <glibmm.h>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-    #include <dbus-c++/dbus.h>
-    #include <dbus-c++/glib-integration.h>
-#pragma GCC diagnostic pop
-
 #include <ivi-profiling.h>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-    #include "SoftwareContainerAgent_dbuscpp_adaptor.h"
-#pragma GCC diagnostic pop
 
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"

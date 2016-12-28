@@ -53,8 +53,8 @@ endif(EXTRA_PKG_CONFIG_PATH)
 find_package(PkgConfig          REQUIRED)
 
 pkg_check_modules(IVILogging    REQUIRED ivi-logging>=1.3.0)
-pkg_check_modules(DBusCpp       REQUIRED dbus-c++-glib-1>=0.9.0)
 pkg_check_modules(Glibmm        REQUIRED glibmm-2.4>=2.42.0)
+pkg_check_modules(Giomm         REQUIRED giomm-2.4>=2.42.0)
 pkg_check_modules(LXC           REQUIRED lxc>=2.0.0)
 pkg_check_modules(Jansson       REQUIRED jansson>=2.6)
 
@@ -62,20 +62,20 @@ pkg_check_modules(Jansson       REQUIRED jansson>=2.6)
 add_definitions(${IVILogging_CFLAGS_OTHER})
 add_definitions(${Jansson_CFLAGS_OTHER})
 
-add_definitions(${DBusCpp_CFLAGS_OTHER})
 add_definitions(${Glibmm_CFLAGS_OTHER})
+add_definitions(${Giomm_CFLAGS_OTHER})
 add_definitions(${LXC_CFLAGS_OTHER})
 add_definitions(-DINSTALL_BINDIR="${CMAKE_INSTALL_FULL_BINDIR}")
 
 include_directories(${IVILogging_INCLUDE_DIRS})
-include_directories(${DBusCpp_INCLUDE_DIRS})
 include_directories(${Glibmm_INCLUDE_DIRS})
+include_directories(${Giomm_INCLUDE_DIRS})
 include_directories(${LXC_INCLUDE_DIRS})
 include_directories(${Jansson_INCLUDE_DIRS})
 
 link_directories(${IVILogging_LIBRARY_DIRS})
-link_directories(${DBusCpp_LIBRARY_DIRS})
 link_directories(${Glibmm_LIBRARY_DIRS})
+link_directories(${Giomm_LIBRARY_DIRS})
 link_directories(${LXC_LIBRARY_DIRS})
 link_directories(${Jansson_LIBRARY_DIRS})
 

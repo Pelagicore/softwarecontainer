@@ -19,6 +19,12 @@
 # Unset RPATH. This should not be needed for any example.
 set(CMAKE_INSTALL_RPATH "")
 
+pkg_check_modules(DBusCpp REQUIRED dbus-c++-glib-1>=0.9.0)
+
+add_definitions(${DBusCpp_CFLAGS_OTHER})
+include_directories(${DBusCpp_INCLUDE_DIRS})
+link_directories(${DBusCpp_LIBRARY_DIRS})
+
 add_subdirectory(simple)
 add_subdirectory(temperature)
 add_subdirectory(wayland)
