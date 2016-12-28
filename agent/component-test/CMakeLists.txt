@@ -18,7 +18,7 @@
 include(AddGTestTest)
 
 set(AGENT_TEST_LIBRARY_DEPENDENCIES
-    ${DBusCpp_LIBRARIES}
+    ${Giomm_LIBRARIES}
     ${GLibmm_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainer
@@ -27,6 +27,8 @@ set(AGENT_TEST_LIBRARY_DEPENDENCIES
 set(SOFTWARECONTAINERAGENT_TEST_FILES
     main.cpp
     softwarecontaineragent_unittest.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_common.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragentadaptor.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp

@@ -20,63 +20,49 @@
 #pragma once
 
 #include "softwarecontaineragent.h"
+#include "softwarecontaineragent_dbus_stub.h"
 
 namespace softwarecontainer {
 
 class SoftwareContainerAgentAdaptor :
-    public com::pelagicore::SoftwareContainerAgent_adaptor
+    public ::com::pelagicore::SoftwareContainerAgent
 {
     LOG_DECLARE_CLASS_CONTEXT("SCAA", "SoftwareContainerAgentAdaptor");
 
 public:
     virtual ~SoftwareContainerAgentAdaptor();
 
-    SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent);
+    SoftwareContainerAgentAdaptor(::softwarecontainer::SoftwareContainerAgent &agent, bool useSessionBus);
 
-    std::vector<int32_t> List() override;
-    std::vector<std::string> ListCapabilities() override;
+    void List(SoftwareContainerAgentMessageHelper msg) override;
+    void ListCapabilities(SoftwareContainerAgentMessageHelper msg) override;
 
-    void Execute(const int32_t &containerID,
-                 const std::string &commandLine,
-                 const std::string &workingDirectory,
-                 const std::string &outputFile,
-                 const std::map<std::string, std::string> &env,
-                 int32_t &pid,
-                 bool &success);
+    void Execute(const gint32 containerID,
+                 const std::string commandLine,
+                 const std::string workingDirectory,
+                 const std::string outputFile,
+                 const std::map<std::string, std::string> env,
+                 SoftwareContainerAgentMessageHelper msg) override;
 
-    bool Destroy(const int32_t &containerID) override;
+    void Destroy(const gint32 containerID, SoftwareContainerAgentMessageHelper msg) override;
 
-    bool BindMount(const int32_t &containerID,
-                   const std::string &pathInHost,
-                   const std::string &PathInContainer,
-                   const bool &readOnly) override;
+    void BindMount(const gint32 containerID,
+                   const std::string pathInHost,
+                   const std::string PathInContainer,
+                   const bool readOnly,
+                   SoftwareContainerAgentMessageHelper msg) override;
 
-    bool Suspend(const int32_t &containerID) override;
+    void Suspend(const gint32 containerID, SoftwareContainerAgentMessageHelper msg) override;
 
-    bool Resume(const int32_t &containerID) override;
+    void Resume(const gint32 containerID, SoftwareContainerAgentMessageHelper msg) override;
 
-    bool SetCapabilities(const int32_t &containerID,
-                         const std::vector<std::string> &capabilities) override;
+    void SetCapabilities(const gint32 containerID,
+                         const std::vector<std::string> capabilities,
+                         SoftwareContainerAgentMessageHelper msg) override;
 
-    void Create(const std::string &config, int32_t &containerID, bool &success) override;
+    void Create(const std::string config, SoftwareContainerAgentMessageHelper msg) override;
 
-    SoftwareContainerAgent &m_agent;
+    ::softwarecontainer::SoftwareContainerAgent &m_agent;
 
 };
 }
-
-
-// Utility class for DBus Adaptors
-class DBusCppAdaptor : public SoftwareContainerAgentAdaptor,
-                       public DBus::IntrospectableAdaptor,
-                       public DBus::ObjectAdaptor {
-public:
-    DBusCppAdaptor(DBus::Connection &connection,
-                   const std::string &objectPath,
-                   SoftwareContainerAgent &agent) :
-        SoftwareContainerAgentAdaptor(agent),
-        DBus::ObjectAdaptor(connection, objectPath)
-    {
-    }
-};
-

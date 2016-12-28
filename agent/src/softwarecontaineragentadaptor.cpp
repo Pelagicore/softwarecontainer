@@ -6,31 +6,38 @@ SoftwareContainerAgentAdaptor::~SoftwareContainerAgentAdaptor()
 {
 }
 
-SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(SoftwareContainerAgent &agent) :
-    m_agent(agent)
+SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(::softwarecontainer::SoftwareContainerAgent &agent, bool useSessionBus) :
+    com::pelagicore::SoftwareContainerAgent(), m_agent(agent)
 {
+    std::string agentBusName = "com.pelagicore.SoftwareContainerAgent";
+    Gio::DBus::BusType busType = useSessionBus ? Gio::DBus::BUS_TYPE_SESSION
+                                               : Gio::DBus::BUS_TYPE_SYSTEM;
+    connect(busType, agentBusName);
 }
 
-std::vector<int32_t> SoftwareContainerAgentAdaptor::List()
+void SoftwareContainerAgentAdaptor::List(SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.listContainers();
+    std::vector<int> list = m_agent.listContainers();
+    msg.ret(list);
 }
 
-std::vector<std::string> SoftwareContainerAgentAdaptor::ListCapabilities()
+void SoftwareContainerAgentAdaptor::ListCapabilities(SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.listCapabilities();
+    std::vector<std::string> stdStrVec = m_agent.listCapabilities();
+    std::vector<Glib::ustring> glibStrVec = SoftwareContainerAgentCommon::stdStringVecToGlibStringVec(stdStrVec);
+    msg.ret(glibStrVec);
 }
 
 void SoftwareContainerAgentAdaptor::Execute(
-    const int32_t &containerID,
-    const std::string &commandLine,
-    const std::string &workingDirectory,
-    const std::string &outputFile,
-    const std::map<std::string, std::string> &env,
-    int32_t &pid,
-    bool &success)
+    const gint32 containerID,
+    const std::string commandLine,
+    const std::string workingDirectory,
+    const std::string outputFile,
+    const std::map<std::string, std::string> env,
+    SoftwareContainerAgentMessageHelper msg)
 {
-    success = m_agent.execute(
+    pid_t pid;
+    bool success = m_agent.execute(
         containerID,
         commandLine,
         workingDirectory,
@@ -38,48 +45,57 @@ void SoftwareContainerAgentAdaptor::Execute(
         env,
         pid,
         [this, containerID](pid_t pid, int exitCode) {
-            ProcessStateChanged(containerID, pid, false, exitCode);
+            ProcessStateChanged_emitter(containerID, pid, false, exitCode);
             log_info() << "ProcessStateChanged " << pid << " code " << exitCode;
         }
     );
+    msg.ret(pid, success);
 }
 
-bool SoftwareContainerAgentAdaptor::Suspend(const int32_t &containerID)
+void SoftwareContainerAgentAdaptor::Suspend(const gint32 containerID, SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.suspendContainer(containerID);
+    bool success = m_agent.suspendContainer(containerID);
+    msg.ret(success);
 }
 
-bool SoftwareContainerAgentAdaptor::Resume(const int32_t &containerID)
+void SoftwareContainerAgentAdaptor::Resume(const gint32 containerID, SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.resumeContainer(containerID);
+    bool success = m_agent.resumeContainer(containerID);
+    msg.ret(success);
 }
 
-bool SoftwareContainerAgentAdaptor::Destroy(const int32_t &containerID)
+void SoftwareContainerAgentAdaptor::Destroy(const gint32 containerID, SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.shutdownContainer(containerID);
+    bool success = m_agent.shutdownContainer(containerID);
+    msg.ret(success);
 }
 
-bool SoftwareContainerAgentAdaptor::BindMount(
-    const int32_t &containerID,
-    const std::string &pathInHost,
-    const std::string &PathInContainer,
-    const bool &readOnly)
+void SoftwareContainerAgentAdaptor::BindMount(
+    const gint32 containerID,
+    const std::string pathInHost,
+    const std::string PathInContainer,
+    const bool readOnly,
+    SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.bindMount(containerID, pathInHost, PathInContainer, readOnly);
+    bool success = m_agent.bindMount(containerID, pathInHost, PathInContainer, readOnly);
+    msg.ret(success);
 }
 
-bool SoftwareContainerAgentAdaptor::SetCapabilities(
-    const int32_t &containerID,
-    const std::vector<std::string> &capabilities)
+void SoftwareContainerAgentAdaptor::SetCapabilities(
+    const gint32 containerID,
+    const std::vector<std::string> capabilities,
+    SoftwareContainerAgentMessageHelper msg)
 {
-    return m_agent.setCapabilities(containerID, capabilities);
+    bool success = m_agent.setCapabilities(containerID, capabilities);
+    msg.ret(success);
 }
 
-void SoftwareContainerAgentAdaptor::Create(const std::string &config,
-                                           int32_t &containerID,
-                                           bool &success)
+void SoftwareContainerAgentAdaptor::Create(const std::string config,
+                                           SoftwareContainerAgentMessageHelper msg)
 {
-    success = m_agent.createContainer(config, containerID);
+    gint32 containerID;
+    bool success = m_agent.createContainer(config, containerID);
+    msg.ret(containerID, success);
 }
 
 } // End namespace softwarecontainer

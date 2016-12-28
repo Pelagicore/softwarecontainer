@@ -16,8 +16,6 @@
 # For further information see LICENSE
 
 include(GNUInstallDirs)
-include(GenerateDBusCpp)
-generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
 install(DIRECTORY DESTINATION ${SERVICE_MANIFEST_DIR})
 install(DIRECTORY DESTINATION ${DEFAULT_SERVICE_MANIFEST_DIR})
@@ -29,6 +27,8 @@ include_directories(src)
 #
 add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent_dbus_common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragentadaptor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/baseconfigstore.cpp
@@ -42,7 +42,7 @@ add_executable(softwarecontainer-agent
 )
 
 target_link_libraries(softwarecontainer-agent
-    ${DBusCpp_LIBRARIES}
+    ${Giomm_LIBRARIES}
     ${IVILogging_LIBRARIES}
     softwarecontainer
 )
