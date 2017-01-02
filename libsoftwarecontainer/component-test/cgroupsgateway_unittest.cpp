@@ -40,11 +40,11 @@ public:
 /*
  * Test that activating the gateway, given a valid configuration, works.
  */
-TEST_F(CgroupsGatewayTest, TestActivateWithValidConf) {
+TEST_F(CgroupsGatewayTest, ActivateWithValidConf) {
     givenContainerIsSet(gw);
     const std::string config = "[{\
-                                    \"setting\": \"cpu.shares\",\
-                                    \"value\": \"256\"\
+                                    \"setting\": \"memory.limit_in_bytes\",\
+                                    \"value\": \"2000000\"\
                                 }]";
 
     ASSERT_TRUE(isSuccess(gw->setConfig(config)));
