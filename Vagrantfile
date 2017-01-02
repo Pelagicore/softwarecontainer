@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require './cookbook/system-config/vagrant-reload.rb'
+
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
     config.vm.provider "virtualbox" do |vb|
@@ -41,6 +43,10 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/deps/sphinx-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/pytest-and-dbus-testing-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/developer-tools.sh"
+
+    # Change grub to support cgroups memory if necessary
+    config.vm.provision "shell", path: "cookbook/system-config/grub-enable-cgroup-memory.sh"
+    config.vm.provision :reload
 
     # Add known hosts
     config.vm.provision "shell", privileged: false,
