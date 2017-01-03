@@ -202,7 +202,6 @@ class TestCaps(object):
         """
         sc = Container()
         try:
-            sc.start(DATA)
             caps = sc.list_capabilities()
             # All caps present in the service manifest(s) set up previously should be listed
             assert "test.cap" in caps and "test.cap.valid-dbus" in caps and "test.cap.broken-gw-config" in caps
