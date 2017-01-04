@@ -19,6 +19,8 @@
 
 #include "defaultconfigstore.h"
 
+namespace softwarecontainer {
+
 DefaultConfigStore::DefaultConfigStore(const std::string &path):BaseConfigStore(path)
 {
 }
@@ -36,3 +38,5 @@ GatewayConfiguration DefaultConfigStore::configs()
 
    return conf;
 }
+
+} // namespace softwarecontainer

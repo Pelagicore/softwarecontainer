@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,10 +17,11 @@
  * For further information see LICENSE
  */
 
-
 #include "gateway/network/iptableentry.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+
+using namespace softwarecontainer;
 
 class MockIPTableEntry :
     public IPTableEntry

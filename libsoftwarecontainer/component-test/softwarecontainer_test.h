@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -30,6 +29,8 @@
 
 #include "gateway.h"
 #include "softwarecontainer.h"
+
+using namespace softwarecontainer;
 
 class SoftwareContainerTest : public ::testing::Test
 {

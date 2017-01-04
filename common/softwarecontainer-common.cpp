@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -169,7 +168,5 @@ bool parseInt(const char *arg, int *result)
     return true;
 }
 
-} // end namespace
-
-
+} // namespace softwarecontainer
 

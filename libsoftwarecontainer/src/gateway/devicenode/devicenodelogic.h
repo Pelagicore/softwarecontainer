@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,8 +18,11 @@
  */
 
 #pragma once
+
 #include "softwarecontainer-common.h"
 #include "devicenodeparser.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief This class is responsible for storing all device node configurations
@@ -70,3 +72,5 @@ public:
 private:
     std::vector<DeviceNodeParser::Device> m_devList;
 };
+
+} // namespace softwarecontainer

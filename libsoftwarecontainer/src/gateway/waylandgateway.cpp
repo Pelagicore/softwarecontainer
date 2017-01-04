@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,10 +17,11 @@
  * For further information see LICENSE
  */
 
-
 #include <string>
 #include <unistd.h>
 #include "waylandgateway.h"
+
+namespace softwarecontainer {
 
 // These lines are needed in order to define the fields, which otherwise would
 // yield linker errors.
@@ -88,3 +88,5 @@ bool WaylandGateway::teardownGateway()
 {
     return true;
 }
+
+} // namespace softwarecontainer

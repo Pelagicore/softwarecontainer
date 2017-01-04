@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,10 +17,11 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include "gateway.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief The PulseAudio Gateway is used to provide access to the host system PulseAudio server.
@@ -66,3 +66,5 @@ private:
     */
     virtual ReturnCode enablePulseAudio();
 };
+
+} // namespace softwarecontainer

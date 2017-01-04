@@ -25,6 +25,8 @@
 #include <unistd.h>
 #include <libgen.h>
 
+using namespace softwarecontainer;
+
 struct testModes
 {
     int itemMode;

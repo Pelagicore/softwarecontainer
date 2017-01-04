@@ -65,4 +65,6 @@ public:
     ::softwarecontainer::SoftwareContainerAgent &m_agent;
 
 };
-}
+
+} // namespace softwarecontainer
+

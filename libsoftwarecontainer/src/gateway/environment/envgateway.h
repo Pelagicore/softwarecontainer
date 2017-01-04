@@ -17,9 +17,10 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 #include "gateway.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief Environment Gateway is used to define environment variables to the container
@@ -41,3 +42,5 @@ public:
 private:
     EnvironmentVariables m_variables;
 };
+
+} // namespace softwarecontainer

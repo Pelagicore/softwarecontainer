@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -22,6 +21,8 @@
 
 #include "recursivecopy.h"
 
+namespace softwarecontainer {
+
 OverlaySyncCleanupHandler::OverlaySyncCleanupHandler(std::string src, std::string dst)
 {
     m_src = src;
@@ -37,3 +38,5 @@ const std::string OverlaySyncCleanupHandler::queryName()
 {
     return "";
 }
+
+} // namespace softwarecontainer

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,12 +17,13 @@
  * For further information see LICENSE
  */
 
-
 #include <string>
 #include <unistd.h>
 
 #include "envgateway.h"
 #include "envgatewayparser.h"
+
+namespace softwarecontainer {
 
 EnvironmentGateway::EnvironmentGateway() :
     Gateway(ID)
@@ -69,3 +69,5 @@ bool EnvironmentGateway::teardownGateway()
 {
     return true;
 }
+
+} // namespace softwarecontainer

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -20,6 +19,8 @@
 
 #include "filecleanuphandler.h"
 
+namespace softwarecontainer {
+
 FileCleanUpHandler::FileCleanUpHandler(const std::string &path)
 {
     m_path = path;
@@ -40,3 +41,5 @@ const std::string FileCleanUpHandler::queryName()
 {
     return m_path;
 }
+
+} // namespace softwarecontainer

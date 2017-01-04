@@ -20,6 +20,8 @@
 #include "dbusgateway.h"
 #include "gatewayparsererror.h"
 
+namespace softwarecontainer {
+
 DBusGateway::DBusGateway(const std::string &gatewayDir, const std::string &name):
     Gateway(ID),
     sessionBus(DBusGatewayInstance::ProxyType::SessionProxy, gatewayDir, name),
@@ -114,3 +116,5 @@ bool DBusGateway::isActivated()
 {
     return sessionBus.isActivated() || systemBus.isActivated();
 }
+
+} // namespace softwarecontainer

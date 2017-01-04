@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,8 +17,9 @@
  * For further information see LICENSE
  */
 
-
 #include "filegateway.h"
+
+namespace softwarecontainer {
 
 FileGateway::FileGateway()
     : Gateway(ID)
@@ -80,3 +80,5 @@ bool FileGateway::teardownGateway()
 {
     return true;
 }
+
+} // namespace softwarecontainer

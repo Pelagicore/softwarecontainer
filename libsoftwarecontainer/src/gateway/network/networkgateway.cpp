@@ -17,12 +17,13 @@
  * For further information see LICENSE
  */
 
-
 #include <cstring>
 #include "ifaddrs.h"
 #include "unistd.h"
 #include "networkgateway.h"
 #include "networkgatewayparser.h"
+
+namespace softwarecontainer {
 
 NetworkGateway::NetworkGateway(const int32_t id,
                                const std::string gateway,
@@ -223,3 +224,5 @@ ReturnCode NetworkGateway::isBridgeAvailable()
 
     return m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str());
 }
+
+} // namespace softwarecontainer

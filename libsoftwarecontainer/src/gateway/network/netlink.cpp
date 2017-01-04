@@ -24,6 +24,8 @@
 #include <unistd.h> // getpid(), getpagesize()
 #include <string.h> // memcpy, memset etc
 
+namespace softwarecontainer {
+
 Netlink::Netlink()
 {
     m_sequenceNumber = 1;
@@ -559,3 +561,5 @@ void Netlink::clearCache()
 
     m_hasKernelDump = false;
 }
+
+} // namespace softwarecontainer

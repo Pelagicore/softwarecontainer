@@ -18,7 +18,9 @@
  */
 
 #pragma once
+
 #include "jobabstract.h"
+
 namespace softwarecontainer {
 
 /**
@@ -42,4 +44,5 @@ private:
     std::string m_command;
     std::string m_workingDirectory;
 };
-}
+
+} // namespace softwarecontainer

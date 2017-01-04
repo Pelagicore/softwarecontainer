@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -23,6 +22,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <unistd.h>
+
+using namespace softwarecontainer;
 
 class SoftwareContainerCommonTest: public ::testing::Test
 {

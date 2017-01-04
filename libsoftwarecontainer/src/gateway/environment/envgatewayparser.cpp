@@ -19,6 +19,8 @@
 
 #include "envgatewayparser.h"
 
+namespace softwarecontainer {
+
 ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
     const json_t *element,
     EnvironmentVariable &result,
@@ -92,3 +94,4 @@ ReturnCode EnvironmentGatewayParser::requireNonEmptyKeyValue(const json_t *eleme
     return ReturnCode::SUCCESS;
 }
 
+} // namespace softwarecontainer

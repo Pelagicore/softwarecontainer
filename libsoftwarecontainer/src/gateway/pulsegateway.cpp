@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,6 +18,8 @@
  */
 
 #include "pulsegateway.h"
+
+namespace softwarecontainer {
 
 PulseGateway::PulseGateway() :
     Gateway(ID),
@@ -85,3 +86,5 @@ bool PulseGateway::teardownGateway()
 {
     return true;
 }
+
+} // namespace softwarecontainer

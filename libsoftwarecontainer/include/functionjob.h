@@ -16,8 +16,11 @@
  *
  * For further information see LICENSE
  */
+
 #pragma once
+
 #include "jobabstract.h"
+
 namespace softwarecontainer {
 
 /**
@@ -40,4 +43,5 @@ public:
 private:
     std::function<int()> m_command;
 };
-}
+
+} // namespace softwarecontainer

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -23,6 +22,8 @@
 
 #include "gateway.h"
 
+namespace softwarecontainer {
+
 /**
  * @brief The cgroups gateway sets cgroups related settings for the container.
  */
@@ -44,3 +45,5 @@ public:
 private:
     std::map<std::string, std::string> m_settings;
 };
+
+} // namespace softwarecontainer

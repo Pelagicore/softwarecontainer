@@ -17,9 +17,10 @@
  * For further information see LICENSE
  */
 
-
 #include "gateway/environment/envgatewayparser.h"
 #include "gateway_parser_common.h"
+
+using namespace softwarecontainer;
 
 class EnvGatewayParserTest : public GatewayParserCommon<std::string>
 {

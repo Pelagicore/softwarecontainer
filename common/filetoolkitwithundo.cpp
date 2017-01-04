@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -286,4 +285,4 @@ ReturnCode FileToolkitWithUndo::createSymLink(
     return ReturnCode::SUCCESS;
 }
 
-}
+} // namespace softwarecontainer

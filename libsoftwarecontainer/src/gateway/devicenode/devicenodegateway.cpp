@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -23,6 +22,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+namespace softwarecontainer {
 
 DeviceNodeGateway::DeviceNodeGateway() :
     Gateway(ID)
@@ -103,3 +103,5 @@ ReturnCode DeviceNodeGateway::applySettings()
     }
     return ReturnCode::SUCCESS;
 }
+
+} // namespace softwarecontainer

@@ -19,6 +19,8 @@
 
 #include "functionjob.h"
 
+namespace softwarecontainer {
+
 FunctionJob::FunctionJob(
     SoftwareContainer &sc, std::function<int()> command): JobAbstract(sc)
 {
@@ -47,3 +49,5 @@ std::string FunctionJob::toString() const
                                     << " stdin:" << m_stdin[0]
                                     << " stdout:" << m_stdout[1];
 }
+
+} // namespace softwarecontainer

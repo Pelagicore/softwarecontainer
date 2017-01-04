@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,8 +18,9 @@
  */
 
 #include "mountcleanuphandler.h"
-
 #include <sys/mount.h>
+
+namespace softwarecontainer {
 
 MountCleanUpHandler::MountCleanUpHandler(const std::string &path)
 {
@@ -48,3 +48,5 @@ const std::string MountCleanUpHandler::queryName()
 {
     return "";
 }
+
+} // namespace softwarecontainer

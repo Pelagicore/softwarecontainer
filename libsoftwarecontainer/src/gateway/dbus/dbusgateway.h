@@ -22,6 +22,8 @@
 #include "gateway.h"
 #include "dbusgatewayinstance.h"
 
+namespace softwarecontainer {
+
 class DBusGateway : public Gateway
 {
     LOG_DECLARE_CLASS_CONTEXT("DBUS", "DBus gateway");
@@ -67,3 +69,5 @@ private:
     DBusGatewayInstance sessionBus;
     DBusGatewayInstance systemBus;
 };
+
+} // namespace softwarecontainer

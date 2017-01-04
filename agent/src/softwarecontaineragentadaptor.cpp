@@ -98,4 +98,4 @@ void SoftwareContainerAgentAdaptor::Create(const std::string config,
     msg.ret(containerID, success);
 }
 
-} // End namespace softwarecontainer
+} // namespace softwarecontainer

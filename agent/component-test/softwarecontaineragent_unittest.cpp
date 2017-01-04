@@ -24,6 +24,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using namespace softwarecontainer;
+
 /*
  * Test stub - StringConfigLoader
  *

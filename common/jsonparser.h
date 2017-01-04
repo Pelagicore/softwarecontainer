@@ -95,4 +95,4 @@ namespace softwarecontainer {
          */
         static bool hasKey(const json_t *element, const char *key);
     };
-}
+} // namespace softwarecontainer

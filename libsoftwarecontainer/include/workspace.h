@@ -62,4 +62,4 @@ public:
     unsigned int m_containerShutdownTimeout;
 };
 
-}
+} // namespace softwarecontainer

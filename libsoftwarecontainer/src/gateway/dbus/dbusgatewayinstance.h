@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -21,6 +20,8 @@
 #pragma once
 
 #include "gateway.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief DBus Gateway takes care of spawning and killing the DBus proxies.
@@ -122,3 +123,4 @@ private:
     virtual bool testDBusConnection(const std::string &config);
 };
 
+} // namespace softwarecontainer

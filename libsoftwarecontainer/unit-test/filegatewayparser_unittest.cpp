@@ -20,6 +20,8 @@
 #include "gateway/files/filegatewayparser.h"
 #include "gateway_parser_common.h"
 
+using namespace softwarecontainer;
+
 class FileGatewayParserTest : public GatewayParserCommon<std::string>
 {
 public:

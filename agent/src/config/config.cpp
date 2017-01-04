@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,7 +18,6 @@
  */
 
 #include "config.h"
-
 
 namespace softwarecontainer {
 

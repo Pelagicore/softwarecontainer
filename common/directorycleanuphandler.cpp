@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,6 +18,8 @@
  */
 
 #include "directorycleanuphandler.h"
+
+namespace softwarecontainer {
 
 DirectoryCleanUpHandler::DirectoryCleanUpHandler(const std::string &path)
 {
@@ -45,3 +46,5 @@ const std::string DirectoryCleanUpHandler::queryName()
 {
     return m_path;
 }
+
+} // namespace softwarecontainer

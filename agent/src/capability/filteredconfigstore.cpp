@@ -19,6 +19,8 @@
 
 #include "filteredconfigstore.h"
 
+namespace softwarecontainer {
+
 FilteredConfigStore::FilteredConfigStore(const std::string &path): BaseConfigStore(path)
 {
 }
@@ -58,3 +60,5 @@ GatewayConfiguration FilteredConfigStore::configByID(const std::string &capID) c
 
     return m_capMap.at(capID);
 }
+
+} // namespace softwarecontainer

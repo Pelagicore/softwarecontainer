@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -132,4 +131,4 @@ private :
     ReturnCode createParentDirectory(const std::string &path);
 };
 
-}
+} // namespace softwarecontainer

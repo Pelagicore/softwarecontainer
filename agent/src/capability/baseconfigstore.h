@@ -111,4 +111,5 @@ private:
     bool isJsonFile(const std::string &filename);
 
 };
-}
+
+} // namespace softwarecontainer

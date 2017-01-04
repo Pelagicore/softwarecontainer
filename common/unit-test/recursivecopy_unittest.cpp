@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -27,6 +26,7 @@
 #include <unistd.h>
 #include <fstream>
 
+using namespace softwarecontainer;
 
 class RecursiveCopyTest: public ::testing::Test
 {

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,8 +17,9 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
+
+namespace softwarecontainer {
 
 /*
  * Abstract interface to a concrete loader.
@@ -42,3 +42,5 @@ protected:
     // A string with the source of the config, e.g. a path or config string.
     std::string m_source;
 };
+
+} // namespace softwarecontainer

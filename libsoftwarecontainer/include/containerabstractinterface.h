@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -22,6 +21,8 @@
 #pragma once
 
 #include "softwarecontainer-common.h"
+
+namespace softwarecontainer {
 
 class ContainerAbstractInterface {
 
@@ -94,3 +95,5 @@ public:
                                           int stderr = 2) = 0;
 
 };
+
+} // namespace softwarecontainer

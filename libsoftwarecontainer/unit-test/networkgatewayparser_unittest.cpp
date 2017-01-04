@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -25,6 +24,8 @@
 #include "gateway_parser_common.h"
 
 #include <jansson.h>
+
+using namespace softwarecontainer;
 
 class NetworkGatewayParserTest : public GatewayParserCommon<std::string>
 {

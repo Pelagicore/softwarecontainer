@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -21,7 +20,6 @@
 #pragma once
 
 #include "softwarecontainer-common.h"
-
 
 namespace softwarecontainer {
 

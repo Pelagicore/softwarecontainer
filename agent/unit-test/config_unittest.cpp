@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -29,6 +28,7 @@
 #include <string>
 #include <glibmm.h>
 
+using namespace softwarecontainer;
 
 /*
  * Test stub - StringConfigLoader
