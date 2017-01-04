@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
+   &#160;<span id="projectnumber">0.15.0-f211cdc 2017-01-04</span>
    </div>
   </td>
  </tr>
@@ -89,46 +89,45 @@ $(document).ready(function(){initNavTree('pulsegateway_8h_source.html','');});
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;pulse/pulseaudio.h&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;gateway.h&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="class_pulse_gateway.html">   30</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_pulse_gateway.html">PulseGateway</a> :</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">public</span> <a class="code" href="class_gateway.html">Gateway</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;PULS&quot;</span>, <span class="stringliteral">&quot;Pulse gateway&quot;</span>);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME = <span class="stringliteral">&quot;PULSE_SERVER&quot;</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *SOCKET_FILE_NAME = <span class="stringliteral">&quot;pulse_socket&quot;</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *ID = <span class="stringliteral">&quot;pulseaudio&quot;</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="class_pulse_gateway.html">PulseGateway</a>();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    ~<a class="code" href="class_pulse_gateway.html">PulseGateway</a>();</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    ReturnCode <a class="code" href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">readConfigElement</a>(<span class="keyword">const</span> json_t *element) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985">activateGateway</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4">teardownGateway</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> m_enableAudio;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">virtual</span> ReturnCode enablePulseAudio();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;};</div>
-<div class="ttc" id="class_pulse_gateway_html_a844a0451090129a4e19459e26afc8eca"><div class="ttname"><a href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">PulseGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00035">pulsegateway.cpp:35</a></div></div>
-<div class="ttc" id="class_pulse_gateway_html_a2ffb6fc3e0d690830fa4612111a60985"><div class="ttname"><a href="class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985">PulseGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00075">pulsegateway.cpp:75</a></div></div>
-<div class="ttc" id="class_pulse_gateway_html_a42d74a1d568c9734c690f32bddfe48b4"><div class="ttname"><a href="class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4">PulseGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00086">pulsegateway.cpp:86</a></div></div>
-<div class="ttc" id="class_pulse_gateway_html"><div class="ttname"><a href="class_pulse_gateway.html">PulseGateway</a></div><div class="ttdoc">The PulseAudio Gateway is used to provide access to the host system PulseAudio server. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8h_source.html#l00030">pulsegateway.h:30</a></div></div>
-<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00073">gateway.h:73</a></div></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;gateway.h&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="class_pulse_gateway.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_pulse_gateway.html">PulseGateway</a> :</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;PULS&quot;</span>, <span class="stringliteral">&quot;Pulse gateway&quot;</span>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME = <span class="stringliteral">&quot;PULSE_SERVER&quot;</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *SOCKET_FILE_NAME = <span class="stringliteral">&quot;pulse_socket&quot;</span>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *ID = <span class="stringliteral">&quot;pulseaudio&quot;</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="class_pulse_gateway.html">PulseGateway</a>();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    ~<a class="code" href="class_pulse_gateway.html">PulseGateway</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    ReturnCode <a class="code" href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">readConfigElement</a>(<span class="keyword">const</span> json_t *element) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985">activateGateway</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4">teardownGateway</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">bool</span> m_enableAudio;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">virtual</span> ReturnCode enablePulseAudio();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
+<div class="ttc" id="class_pulse_gateway_html_a844a0451090129a4e19459e26afc8eca"><div class="ttname"><a href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">PulseGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00033">pulsegateway.cpp:33</a></div></div>
+<div class="ttc" id="class_pulse_gateway_html_a2ffb6fc3e0d690830fa4612111a60985"><div class="ttname"><a href="class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985">PulseGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00073">pulsegateway.cpp:73</a></div></div>
+<div class="ttc" id="class_pulse_gateway_html_a42d74a1d568c9734c690f32bddfe48b4"><div class="ttname"><a href="class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4">PulseGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00084">pulsegateway.cpp:84</a></div></div>
+<div class="ttc" id="class_pulse_gateway_html"><div class="ttname"><a href="class_pulse_gateway.html">PulseGateway</a></div><div class="ttdoc">The PulseAudio Gateway is used to provide access to the host system PulseAudio server. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8h_source.html#l00029">pulsegateway.h:29</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>pulsegateway.h</b></li>
-    <li class="footer">Generated on Wed Dec 21 2016 07:33:27 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 4 2017 08:40:36 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

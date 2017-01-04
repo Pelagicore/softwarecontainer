@@ -11,7 +11,7 @@ var hierarchy =
       [ "MountCleanUpHandler", "class_mount_clean_up_handler.html", null ],
       [ "OverlaySyncCleanupHandler", "class_overlay_sync_cleanup_handler.html", null ]
     ] ],
-    [ "Config", "class_config.html", null ],
+    [ "softwarecontainer::Config", "classsoftwarecontainer_1_1_config.html", null ],
     [ "ConfigDefaults", "class_config_defaults.html", null ],
     [ "ConfigLoaderAbstractInterface", "class_config_loader_abstract_interface.html", [
       [ "FileConfigLoader", "class_file_config_loader.html", null ]
@@ -25,8 +25,12 @@ var hierarchy =
     [ "DeviceNodeParser", "class_device_node_parser.html", null ],
     [ "EnvironmentGatewayParser", "class_environment_gateway_parser.html", null ],
     [ "exception", null, [
-      [ "softwarecontainer::ConfigError", "classsoftwarecontainer_1_1_config_error.html", null ],
-      [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ]
+      [ "softwarecontainer::ConfigError", "classsoftwarecontainer_1_1_config_error.html", [
+        [ "softwarecontainer::ConfigDependencyError", "classsoftwarecontainer_1_1_config_dependency_error.html", null ],
+        [ "softwarecontainer::ConfigMandatoryError", "classsoftwarecontainer_1_1_config_mandatory_error.html", null ]
+      ] ],
+      [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
+      [ "softwarecontainer::GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", null ]
     ] ],
     [ "FileGatewayParser", "class_file_gateway_parser.html", null ],
     [ "FileGatewaySettingStore", "class_file_gateway_setting_store.html", null ],
@@ -36,9 +40,10 @@ var hierarchy =
       [ "softwarecontainer::SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", null ],
       [ "softwarecontainer::Workspace", "classsoftwarecontainer_1_1_workspace.html", null ]
     ] ],
-    [ "Gateway", "class_gateway.html", [
+    [ "softwarecontainer::Gateway", "classsoftwarecontainer_1_1_gateway.html", [
       [ "CgroupsGateway", "class_cgroups_gateway.html", null ],
       [ "DBusGateway", "class_d_bus_gateway.html", null ],
+      [ "DBusGatewayInstance", "class_d_bus_gateway_instance.html", null ],
       [ "DeviceNodeGateway", "class_device_node_gateway.html", null ],
       [ "EnvironmentGateway", "class_environment_gateway.html", null ],
       [ "FileGateway", "class_file_gateway.html", null ],
@@ -56,6 +61,7 @@ var hierarchy =
       [ "softwarecontainer::FunctionJob", "classsoftwarecontainer_1_1_function_job.html", null ]
     ] ],
     [ "softwarecontainer::JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", null ],
+    [ "softwarecontainer::MandatoryConfigs", "classsoftwarecontainer_1_1_mandatory_configs.html", null ],
     [ "Netlink", "class_netlink.html", null ],
     [ "NetworkGatewayParser", "class_network_gateway_parser.html", null ],
     [ "ObjectAdaptor", null, [

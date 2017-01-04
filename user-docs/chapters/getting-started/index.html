@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.13.0-032399e 2016-12-21 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.15.0-f211cdc 2017-01-04 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.13.0-032399e 2016-12-21',
+        VERSION:     '0.15.0-f211cdc 2017-01-04',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -59,7 +59,7 @@ when integrating a launcher that e.g. launches apps from a UI, when it is not ap
 run the launcher with root privileges. In this case the launcher can use the Agent D-Bus API
 without being root while the Agent has been started with root privileges.</p>
 <p>Below is an example of the major entities involved in a call to create a container:</p>
-<div><svg height="627" viewBox="0 0 1024 627" width="1024" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+<div><svg height="614" viewBox="0 0 1024 614" width="1024" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs id="defs_block">
     <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
       <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
@@ -67,34 +67,34 @@ without being root while the Agent has been started with root privileges.</p>
   </defs>
   <title>blockdiag</title>
   <desc />
-  <rect fill="rgb(0,0,0)" height="538" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="84" />
-  <rect fill="rgb(0,0,0)" height="495" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="84" />
-  <rect fill="rgb(0,0,0)" height="420" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="114" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="144" />
-  <rect fill="rgb(0,0,0)" height="105" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="204" />
-  <rect fill="rgb(0,0,0)" height="120" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="354" />
-  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="895" y="234" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="895" y="399" />
-  <polygon fill="rgb(0,0,0)" points="31,77 107,77 115,85 115,92 31,92 31,77" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
-  <polygon fill="rgb(0,0,0)" points="915,227 997,227 1005,235 1005,242 915,242 915,227" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <rect fill="rgb(0,0,0)" height="538" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
+  <rect fill="rgb(0,0,0)" height="495" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="71" />
+  <rect fill="rgb(0,0,0)" height="420" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="101" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="131" />
+  <rect fill="rgb(0,0,0)" height="105" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="191" />
+  <rect fill="rgb(0,0,0)" height="120" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="341" />
+  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="895" y="221" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="895" y="386" />
+  <polygon fill="rgb(0,0,0)" points="31,64 107,64 115,72 115,79 31,79 31,64" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <polygon fill="rgb(0,0,0)" points="915,214 997,214 1005,222 1005,229 915,229 915,214" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="643" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="835" y="11" />
-  <path d="M 128 45 L 128 632" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="538" stroke="rgb(0,0,0)" width="8" x="124" y="78" />
-  <path d="M 320 45 L 320 632" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="495" stroke="rgb(0,0,0)" width="8" x="316" y="78" />
-  <path d="M 512 45 L 512 632" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="420" stroke="rgb(0,0,0)" width="8" x="508" y="108" />
-  <path d="M 704 45 L 704 632" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="138" />
-  <rect fill="moccasin" height="105" stroke="rgb(0,0,0)" width="8" x="700" y="198" />
-  <rect fill="moccasin" height="120" stroke="rgb(0,0,0)" width="8" x="700" y="348" />
-  <path d="M 896 45 L 896 632" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="892" y="228" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="892" y="393" />
+  <path d="M 128 45 L 128 619" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="538" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
+  <path d="M 320 45 L 320 619" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="495" stroke="rgb(0,0,0)" width="8" x="316" y="65" />
+  <path d="M 512 45 L 512 619" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="420" stroke="rgb(0,0,0)" width="8" x="508" y="95" />
+  <path d="M 704 45 L 704 619" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="125" />
+  <rect fill="moccasin" height="105" stroke="rgb(0,0,0)" width="8" x="700" y="185" />
+  <rect fill="moccasin" height="120" stroke="rgb(0,0,0)" width="8" x="700" y="335" />
+  <path d="M 896 45 L 896 619" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="892" y="215" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="892" y="380" />
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="5" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="128" y="31">Launcher</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="5" />
@@ -106,53 +106,53 @@ without being root while the Agent has been started with root privileges.</p>
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="704" y="37">rface</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="5" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="896" y="31">liblxc</text>
-  <path d="M 136 78 L 312 78" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="304,74 312,78 304,82" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(255,182,193)" points="28,71 104,71 112,79 112,86 28,86 28,71" stroke="rgb(0,0,0)" />
-  <path d="M 104 71 L 104 79" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 104 79 L 112 79" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="66" y="84">D-Bus side</text>
-  <path d="M 328 108 L 504 108" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,104 504,108 496,112" stroke="rgb(0,0,0)" />
-  <path d="M 520 138 L 696 138" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="688,134 696,138 688,142" stroke="rgb(0,0,0)" />
-  <path d="M 520 168 L 696 168" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="528,164 520,168 528,172" stroke="rgb(0,0,0)" />
-  <path d="M 520 198 L 696 198" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="688,194 696,198 688,202" stroke="rgb(0,0,0)" />
-  <path d="M 712 228 L 888 228" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="880,224 888,228 880,232" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(255,182,193)" points="912,221 994,221 1002,229 1002,236 912,236 912,221" stroke="rgb(0,0,0)" />
-  <path d="M 994 221 L 994 229" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 994 229 L 1002 229" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="953" y="234">system side</text>
-  <path d="M 712 243 L 888 243" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="720,239 712,243 720,247" stroke="rgb(0,0,0)" />
-  <path d="M 520 303 L 696 303" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="528,299 520,303 528,307" stroke="rgb(0,0,0)" />
-  <path d="M 520 348 L 696 348" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="688,344 696,348 688,352" stroke="rgb(0,0,0)" />
-  <path d="M 712 393 L 888 393" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="880,389 888,393 880,397" stroke="rgb(0,0,0)" />
-  <path d="M 712 423 L 888 423" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="720,419 712,423 720,427" stroke="rgb(0,0,0)" />
-  <path d="M 520 468 L 696 468" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="528,464 520,468 528,472" stroke="rgb(0,0,0)" />
-  <path d="M 328 528 L 504 528" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,524 328,528 336,532" stroke="rgb(0,0,0)" />
-  <path d="M 136 573 L 312 573" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="144,569 136,573 144,577" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="168" x="224" y="70">CreateContainer (D-Bus call)</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="350" y="106">init()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="560" y="136">initialize()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="666" y="166">ReturnCode</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="548" y="196">create()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="773" y="226">lxc_container_new()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="666" y="301">ReturnCode</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="545" y="346">start()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="758" y="391">multiple calls</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="526">ReturnCode</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="12" x="306" y="571">ID</text>
+  <path d="M 136 65 L 312 65" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,61 312,65 304,69" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="28,58 104,58 112,66 112,73 28,73 28,58" stroke="rgb(0,0,0)" />
+  <path d="M 104 58 L 104 66" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 104 66 L 112 66" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="66" y="71">D-Bus side</text>
+  <path d="M 328 95 L 504 95" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,91 504,95 496,99" stroke="rgb(0,0,0)" />
+  <path d="M 520 125 L 696 125" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,121 696,125 688,129" stroke="rgb(0,0,0)" />
+  <path d="M 520 155 L 696 155" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="528,151 520,155 528,159" stroke="rgb(0,0,0)" />
+  <path d="M 520 185 L 696 185" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,181 696,185 688,189" stroke="rgb(0,0,0)" />
+  <path d="M 712 215 L 888 215" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="880,211 888,215 880,219" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="912,208 994,208 1002,216 1002,223 912,223 912,208" stroke="rgb(0,0,0)" />
+  <path d="M 994 208 L 994 216" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 994 216 L 1002 216" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="953" y="221">system side</text>
+  <path d="M 712 230 L 888 230" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="720,226 712,230 720,234" stroke="rgb(0,0,0)" />
+  <path d="M 520 290 L 696 290" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="528,286 520,290 528,294" stroke="rgb(0,0,0)" />
+  <path d="M 520 335 L 696 335" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,331 696,335 688,339" stroke="rgb(0,0,0)" />
+  <path d="M 712 380 L 888 380" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="880,376 888,380 880,384" stroke="rgb(0,0,0)" />
+  <path d="M 712 410 L 888 410" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="720,406 712,410 720,414" stroke="rgb(0,0,0)" />
+  <path d="M 520 455 L 696 455" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="528,451 520,455 528,459" stroke="rgb(0,0,0)" />
+  <path d="M 328 515 L 504 515" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,511 328,515 336,519" stroke="rgb(0,0,0)" />
+  <path d="M 136 560 L 312 560" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,556 136,560 144,564" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="197" y="63">Create (D-Bus call)</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="350" y="93">init()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="560" y="123">initialize()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="666" y="153">ReturnCode</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="548" y="183">create()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="773" y="213">lxc_container_new()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="666" y="288">ReturnCode</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="545" y="333">start()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="758" y="378">multiple calls</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="513">ReturnCode</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="12" x="306" y="558">ID</text>
 </svg>
 </div>
 </div>
@@ -207,22 +207,22 @@ container.</p>
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span>
 </pre></div>
 </div>
-<p>Next, we will start a new container so take note of the parameters of CreateContainer.</p>
+<p>Next, we will start a new container so take note of the parameters of Create.</p>
 <p>Start a container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">CreateContainer</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Create</span> \
 <span class="s">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
 </pre></div>
 </div>
 <p>The JSON string passed as argument to the <code class="docutils literal"><span class="pre">config</span></code> parameter is documented in the Container config section.</p>
-<p>The return value of CreateContainer is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.</p>
+<p>The return value of Create is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.</p>
 <p>Bind mount a directory inside the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">BindMountFolderInContainer</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">BindMount</span> \
 <span class="mi">0</span> \
 <span class="s">&quot;/home/vagrant/softwarecontainer&quot;</span> \
 <span class="s">&quot;/app&quot;</span> \
@@ -232,7 +232,7 @@ container.</p>
 <dl class="docutils">
 <dt>Parameters:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">containerID</span></code> - a int32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
+<li><code class="docutils literal"><span class="pre">containerID</span></code> - a int32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">Create</span></code> method.</li>
 <li><code class="docutils literal"><span class="pre">pathInHost</span></code> - a string with the host path of the directory to be bind mounted into the container. The host path must exist before running the command.</li>
 <li><code class="docutils literal"><span class="pre">pathInContainer</span></code> - a string representing the absolute mount path inside the container.</li>
 <li><code class="docutils literal"><span class="pre">readOnly</span></code> - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.</li>
@@ -247,8 +247,7 @@ visible in the path <code class="docutils literal"><span class="pre">/app</span>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">LaunchCommand</span> \
-<span class="mi">0</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Execute</span> \
 <span class="mi">0</span> \
 <span class="s">&quot;touch hello&quot;</span> \
 <span class="s">&quot;/app&quot;</span> \
@@ -259,8 +258,7 @@ visible in the path <code class="docutils literal"><span class="pre">/app</span>
 <dl class="docutils">
 <dt>Parameters:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">containerID</span></code> - a int32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
-<li><code class="docutils literal"><span class="pre">userID</span></code> - currently unused, use uint32 &#8216;0&#8217;.</li>
+<li><code class="docutils literal"><span class="pre">containerID</span></code> - a int32 with the ID of the created container, as returned by the <code class="docutils literal"><span class="pre">Create</span></code> method.</li>
 <li><code class="docutils literal"><span class="pre">commandLine</span></code> - a string with the method to run at the method line insider the container.</li>
 <li><code class="docutils literal"><span class="pre">workingDirectory</span></code> - a string with a path to a directory which will be set as the working directory.</li>
 <li><code class="docutils literal"><span class="pre">outputFile</span></code> - a string with a path to where stdout will be directed from within the container.</li>
@@ -275,52 +273,75 @@ also be seen in the bind mounted location <code class="docutils literal"><span c
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SuspendContainer</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Suspend</span> \
 <span class="mi">0</span>
 </pre></div>
 </div>
 <p>This will suspend execution inside the container. The value passed as the <cite>containerID</cite> parameter
-should be the same value that was returned from the call to <cite>CreateContainer</cite>. It is not possible
+should be the same value that was returned from the call to <cite>Create</cite>. It is not possible
 to run LaunchCommand on a suspended container.</p>
 <p>Resume the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ResumeContainer</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Resume</span> \
 <span class="mi">0</span>
 </pre></div>
 </div>
 <p>This will resume the suspended container. The value passed as the <cite>containerID</cite> parameter
-should be the same value that was returned from the call to <cite>CreateContainer</cite>.</p>
+should be the same value that was returned from the call to <cite>Create</cite>.</p>
+<p>List all available Capabilities:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ListCapabilities</span>
+</pre></div>
+</div>
+<p>This will list all the capabilities that are available and possible to set on
+containers.</p>
+<p>Set Capabilities on a specific container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetCapabilities</span> \
+<span class="mi">0</span> \
+<span class="s">&quot;{&#39;capability1&#39;, &#39;capability2&#39;}&quot;</span>
+</pre></div>
+</div>
+<p>This will set the capabilities listed in the last argument to the container
+identified by the <cite>containerID</cite> parameter returned from the <cite>Create</cite> call.</p>
 <p>Shut down the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ShutDownContainer</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Destroy</span> \
 <span class="mi">0</span>
 </pre></div>
 </div>
-<p>The value passed as the <cite>containerID</cite> parameter should be the same value that was returned from the call to <cite>CreateContainer</cite>.</p>
+<p>The value passed as the <cite>containerID</cite> parameter should be the same value that was returned from the call to <cite>Create</cite>.</p>
 </div>
 <div class="section" id="configure-gateways">
 <h3>Configure gateways<a class="headerlink" href="#configure-gateways" title="Permalink to this headline">¶</a></h3>
 <p>For details about the gateway configurations, see <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a></p>
-<p>Once a container is created and before e.g. an application is launched in the container, gateway configurations
-can be set in order to configure what the application will have access to.</p>
-<p>Set gateway config:</p>
+<p>Once a container is created and before e.g. an application is launched in the container, gateway
+configurations can be set in order to configure what the application will have access to. However,
+one does not set gateway configurations directly, they are grouped together into <strong>capabilities</strong>.</p>
+<p>Note that this requires you to have service manifests with capabilities defined and pointed out for
+the <code class="docutils literal"><span class="pre">softwarecontainer-agent</span></code>. See <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">service manifests</span></a> for more info.</p>
+<p>Set capabilities:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
-<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetGatewayConfigs</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetCapabilities</span> \
 <span class="mi">0</span> \
-<span class="s">&#39;{&quot;env&quot;: &quot;[{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">MY_VAR</span><span class="se">\&quot;</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">value</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">1234</span><span class="se">\&quot;</span><span class="s">},{</span><span class="se">\&quot;</span><span class="s">name</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">OTHER_VAR</span><span class="se">\&quot;</span><span class="s">, </span><span class="se">\&quot;</span><span class="s">value</span><span class="se">\&quot;</span><span class="s">: </span><span class="se">\&quot;</span><span class="s">5678</span><span class="se">\&quot;</span><span class="s">}]&quot;}&#39;</span>
+<span class="s">&quot;[&#39;com.acme.example&#39;,&#39;com.acme.sample&#39;]&quot;</span>
 </pre></div>
 </div>
 <dl class="docutils">
 <dt>Parameters:</dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">containerID</span></code> - an int with the id of the created container, as returned by the <code class="docutils literal"><span class="pre">CreateContainer</span></code> method.</li>
-<li><code class="docutils literal"><span class="pre">configs</span></code> - a string:string dictionary with gateway ID as key and json config as value.</li>
+<li><code class="docutils literal"><span class="pre">containerID</span></code> - an int with the id of the created container, as returned by the <code class="docutils literal"><span class="pre">Create</span></code> method.</li>
+<li><code class="docutils literal"><span class="pre">capabilities</span></code> - a string array of capability names</li>
 </ul>
 </dd>
 </dl>

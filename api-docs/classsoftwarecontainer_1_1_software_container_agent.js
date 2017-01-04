@@ -9,12 +9,11 @@ var classsoftwarecontainer_1_1_software_container_agent =
     [ "readConfigElement", "classsoftwarecontainer_1_1_software_container_agent.html#aab15b844d7ed80339448a2005ea1cc9d", null ],
     [ "parseConfig", "classsoftwarecontainer_1_1_software_container_agent.html#a990e86f21dead80c727462618ecf0e91", null ],
     [ "createContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a3018d06a1e960bc30ba379d4d809fa06", null ],
-    [ "execute", "classsoftwarecontainer_1_1_software_container_agent.html#a9883cae19fad3942778b48e426b90629", null ],
+    [ "execute", "classsoftwarecontainer_1_1_software_container_agent.html#a0620bdae9b8ac003193c6bf2c7a1e538", null ],
     [ "shutdownContainer", "classsoftwarecontainer_1_1_software_container_agent.html#af1c5fb1bfd8b43e2b766ab385ac33342", null ],
     [ "suspendContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a70135e7829b531a1aa55983b708c5cd3", null ],
     [ "resumeContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a73f02d47572fa6c9a5fcb665d3287dbb", null ],
     [ "bindMount", "classsoftwarecontainer_1_1_software_container_agent.html#ad8494bb1e0254815ecbf50f9ccd3ac6d", null ],
-    [ "setGatewayConfigs", "classsoftwarecontainer_1_1_software_container_agent.html#a932a69583ff9cde14bd4749a9152ba9a", null ],
     [ "setCapabilities", "classsoftwarecontainer_1_1_software_container_agent.html#a99d58370ca9150d5e1fca70ff44d5007", null ],
     [ "getWorkspace", "classsoftwarecontainer_1_1_software_container_agent.html#abf4a978edc41a3e89132d1aa55dd4210", null ]
 ];

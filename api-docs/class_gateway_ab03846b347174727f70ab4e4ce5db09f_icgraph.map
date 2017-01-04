@@ -1,6 +1,0 @@
-<map id="Gateway::getContainer" name="Gateway::getContainer">
-<area shape="rect" id="node2" href="$class_gateway.html#a77348e5ce86b82302764b10e3203b42c" title="Execute the given command in the container. " alt="" coords="222,15,417,42"/>
-<area shape="rect" id="node4" href="$class_gateway.html#a828b2dfa811c7fcce82d34b502e65112" title="Set an environment variable in the associated container. " alt="" coords="209,67,429,94"/>
-<area shape="rect" id="node3" href="$class_network_gateway.html#ad19de4347291719074bde198fc61a94a" title="Implements Gateway::activateGateway. " alt="" coords="495,5,673,47"/>
-<area shape="rect" id="node5" href="$class_d_bus_gateway.html#ab974b6b05b985d64ba5609c64e8b13fb" title="Implements Gateway::activateGateway. " alt="" coords="477,71,691,98"/>
-</map>

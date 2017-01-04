@@ -1,5 +1,5 @@
 <map id="Container::create" name="Container::create">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="176,5,316,61"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="176,39,316,95"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="364,5,504,61"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a2e2789ba9649ed6abf7a1c3ab3025daa" title="createParentDirectory Recursively tries to create the directory pointed to by path. " alt="" coords="552,5,709,61"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="552,39,692,95"/>
 </map>

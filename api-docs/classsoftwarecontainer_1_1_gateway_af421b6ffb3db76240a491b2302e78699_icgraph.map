@@ -1,0 +1,8 @@
+<map id="softwarecontainer::Gateway::id" name="softwarecontainer::Gateway::id">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a3d23a057d7039df33dd5ed47302f0d58" title="Applies any configuration set by setConfig() " alt="" coords="189,5,323,47"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="187,71,325,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407" title="Restore system to the state prior to launching of gateway. " alt="" coords="189,136,323,177"/>
+<area shape="rect" id="node3" href="$class_d_bus_gateway.html#af46946bb52d1b9b6a2ec77df3df2e3e0" title="Activates both dbus session instances. " alt="" coords="378,13,539,39"/>
+<area shape="rect" id="node5" href="$class_d_bus_gateway.html#a6681393b7dd4d50dd58c2368934f5dfa" title="Sets config for both dbus session instances. " alt="" coords="373,78,544,105"/>
+<area shape="rect" id="node7" href="$class_d_bus_gateway.html#ab6ef6ea2b216e3a15bdd1ff3822283e9" title="Restore system to the state prior to launching of gateway. " alt="" coords="375,143,543,170"/>
+</map>

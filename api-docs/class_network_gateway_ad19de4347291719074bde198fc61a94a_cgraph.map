@@ -1,5 +1,5 @@
 <map id="NetworkGateway::activateGateway" name="NetworkGateway::activateGateway">
-<area shape="rect" id="node2" href="$class_gateway.html#a77348e5ce86b82302764b10e3203b42c" title="Execute the given command in the container. " alt="" coords="231,5,425,32"/>
-<area shape="rect" id="node4" href="$class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2" title="Check if the gateway has an associated container. " alt="" coords="473,56,632,83"/>
-<area shape="rect" id="node3" href="$class_gateway.html#ab03846b347174727f70ab4e4ce5db09f" title="Get a handle to the associated container. " alt="" coords="475,5,631,32"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a77348e5ce86b82302764b10e3203b42c" title="Execute the given command in the container. " alt="" coords="231,12,425,53"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2" title="Check if the gateway has an associated container. " alt="" coords="473,71,632,112"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f" title="Get a handle to the associated container. " alt="" coords="475,5,631,47"/>
 </map>

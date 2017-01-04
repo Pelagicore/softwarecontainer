@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
+   &#160;<span id="projectnumber">0.15.0-f211cdc 2017-01-04</span>
    </div>
   </td>
  </tr>
@@ -94,6 +94,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abb75c6aa8c2eaa507083ad3ba8ffd82d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb75c6aa8c2eaa507083ad3ba8ffd82d"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>clean</b> () override</td></tr>
 <tr class="separator:abb75c6aa8c2eaa507083ad3ba8ffd82d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81f34ab7bde48072b120c73dc806515b"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_directory_clean_up_handler.html#a81f34ab7bde48072b120c73dc806515b">queryName</a> () override</td></tr>
+<tr class="memdesc:a81f34ab7bde48072b120c73dc806515b"><td class="mdescLeft">&#160;</td><td class="mdescRight">this function is needed to query member name  <a href="#a81f34ab7bde48072b120c73dc806515b">More...</a><br /></td></tr>
+<tr class="separator:a81f34ab7bde48072b120c73dc806515b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
@@ -110,7 +113,41 @@ Protected Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="directorycleanuphandler_8h_source.html#l00025">25</a> of file <a class="el" href="directorycleanuphandler_8h_source.html">directorycleanuphandler.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a81f34ab7bde48072b120c73dc806515b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string DirectoryCleanUpHandler::queryName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>this function is needed to query member name </p>
+<dl class="section return"><dt>Returns</dt><dd>a read-only m_path </dd></dl>
+
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_clean_up_handler.html">softwarecontainer::CleanUpHandler</a>.</p>
+
+<p>Definition at line <a class="el" href="directorycleanuphandler_8cpp_source.html#l00044">44</a> of file <a class="el" href="directorycleanuphandler_8cpp_source.html">directorycleanuphandler.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">return</span> m_path;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>common/<a class="el" href="directorycleanuphandler_8h_source.html">directorycleanuphandler.h</a></li>
 <li>common/<a class="el" href="directorycleanuphandler_8cpp_source.html">directorycleanuphandler.cpp</a></li>
 </ul>
@@ -120,7 +157,7 @@ Protected Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_directory_clean_up_handler.html">DirectoryCleanUpHandler</a></li>
-    <li class="footer">Generated on Wed Dec 21 2016 07:33:27 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 4 2017 08:40:36 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
+   &#160;<span id="projectnumber">0.15.0-f211cdc 2017-01-04</span>
    </div>
   </td>
  </tr>
@@ -66,152 +66,149 @@ $(document).ready(function(){initNavTree('gateway_8h_source.html','');});
 <div class="title">gateway.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;exception&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;containerabstractinterface.h&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;jsonparser.h&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;exception&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;containerabstractinterface.h&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;jsonparser.h&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway_error.html">   33</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a> : <span class="keyword">public</span> std::exception</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>():</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        m_message(std::string(<span class="stringliteral">&quot;Gateway error.&quot;</span>))</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>(<span class="keyword">const</span> std::string &amp;message):</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        m_message(message)</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>()</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *what() <span class="keyword">const</span> <span class="keywordflow">throw</span>()</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">return</span> m_message.c_str();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    std::string m_message;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="class_gateway.html">   73</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_gateway.html">Gateway</a></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;{</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;GATE&quot;</span>, <span class="stringliteral">&quot;Gateway&quot;</span>);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">enum class</span> GatewayState : unsigned int {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        CREATED = 0,</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        CONFIGURED = 1,</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        ACTIVATED = 2,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    };</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <a class="code" href="class_gateway.html">Gateway</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">id</span>)</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        m_id = <a class="code" href="class_gateway.html#a01028fc541340b53b0330c03dafb6bfe">id</a>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        m_state = GatewayState::CREATED;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="class_gateway.html">Gateway</a>()</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_gateway.html#a01028fc541340b53b0330c03dafb6bfe">   98</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="class_gateway.html#a01028fc541340b53b0330c03dafb6bfe">id</a>()</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">return</span> m_id;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="class_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd">setConfig</a>(<span class="keyword">const</span> std::string &amp;config);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="class_gateway.html#a3d23a057d7039df33dd5ed47302f0d58">activate</a>();</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="class_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">teardown</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway_error.html">   30</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a> : <span class="keyword">public</span> std::exception</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>():</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        m_message(std::string(<span class="stringliteral">&quot;Gateway error.&quot;</span>))</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>(<span class="keyword">const</span> std::string &amp;message):</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        m_message(message)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>()</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *what() <span class="keyword">const</span> <span class="keywordflow">throw</span>()</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> m_message.c_str();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    std::string m_message;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;};</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html">   68</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;{</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;GATE&quot;</span>, <span class="stringliteral">&quot;Gateway&quot;</span>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">enum class</span> GatewayState : unsigned int {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        CREATED = 0,</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        CONFIGURED = 1,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        ACTIVATED = 2,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        m_id = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        m_state = GatewayState::CREATED;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a>()</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">   93</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>()</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> m_id;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd">setConfig</a>(<span class="keyword">const</span> std::string &amp;config);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a3d23a057d7039df33dd5ed47302f0d58">activate</a>();</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">teardown</a>();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ab55d52ccd92881532688847a6c2c1cba">setContainer</a>(std::shared_ptr&lt;ContainerAbstractInterface&gt; container);</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_gateway.html#ab55d52ccd92881532688847a6c2c1cba">setContainer</a>(std::shared_ptr&lt;ContainerAbstractInterface&gt; container);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a88ae41c7b14da49561d025bd99047e81">isConfigured</a>();</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_gateway.html#a88ae41c7b14da49561d025bd99047e81">isConfigured</a>();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a78949f88080c66617f8b20048d706237">isActivated</a>();</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_gateway.html#a78949f88080c66617f8b20048d706237">isActivated</a>();</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="class_gateway.html#a4413c4a754da11031de372bc0b278d92">readConfigElement</a>(<span class="keyword">const</span> json_t *element) = 0;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2">hasContainer</a>();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(<span class="keyword">const</span> json_t *element) = 0;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2">hasContainer</a>();</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>();</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>();</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">setEnvironmentVariable</a>(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value);</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    ReturnCode <a class="code" href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">setEnvironmentVariable</a>(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a77348e5ce86b82302764b10e3203b42c">executeInContainer</a>(<span class="keyword">const</span> std::string &amp;cmd);</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    ReturnCode <a class="code" href="class_gateway.html#a77348e5ce86b82302764b10e3203b42c">executeInContainer</a>(<span class="keyword">const</span> std::string &amp;cmd);</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
-<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="class_gateway.html#a76344502967c375fae0c5bc7f44d7e74">  195</a></span>&#160;    <span class="keyword">typedef</span> std::function&lt;int ()&gt; <a class="code" href="class_gateway.html#a76344502967c375fae0c5bc7f44d7e74">ContainerFunction</a>;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    ReturnCode <a class="code" href="class_gateway.html#a77348e5ce86b82302764b10e3203b42c">executeInContainer</a>(ContainerFunction func);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> activateGateway() = 0;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> teardownGateway() = 0;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keywordtype">void</span> setConfigRollback(std::string message, json_t *element);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; m_container;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *m_id = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    GatewayState m_state = GatewayState::CREATED;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;};</div>
-<div class="ttc" id="class_gateway_html_a88ae41c7b14da49561d025bd99047e81"><div class="ttname"><a href="class_gateway.html#a88ae41c7b14da49561d025bd99047e81">Gateway::isConfigured</a></div><div class="ttdeci">bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00130">gateway.cpp:130</a></div></div>
-<div class="ttc" id="class_gateway_html_ab55d52ccd92881532688847a6c2c1cba"><div class="ttname"><a href="class_gateway.html#ab55d52ccd92881532688847a6c2c1cba">Gateway::setContainer</a></div><div class="ttdeci">void setContainer(std::shared_ptr&lt; ContainerAbstractInterface &gt; container)</div><div class="ttdoc">Set the associated container for this gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00125">gateway.cpp:125</a></div></div>
-<div class="ttc" id="class_gateway_html_a01028fc541340b53b0330c03dafb6bfe"><div class="ttname"><a href="class_gateway.html#a01028fc541340b53b0330c03dafb6bfe">Gateway::id</a></div><div class="ttdeci">virtual const char * id()</div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00098">gateway.h:98</a></div></div>
-<div class="ttc" id="class_gateway_html_a828b2dfa811c7fcce82d34b502e65112"><div class="ttname"><a href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
-<div class="ttc" id="class_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
-<div class="ttc" id="class_gateway_html_a77348e5ce86b82302764b10e3203b42c"><div class="ttname"><a href="class_gateway.html#a77348e5ce86b82302764b10e3203b42c">Gateway::executeInContainer</a></div><div class="ttdeci">ReturnCode executeInContainer(const std::string &amp;cmd)</div><div class="ttdoc">Execute the given command in the container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00153">gateway.cpp:153</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_error.html">softwarecontainer::GatewayError</a></div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00033">gateway.h:33</a></div></div>
-<div class="ttc" id="class_gateway_html_a78949f88080c66617f8b20048d706237"><div class="ttname"><a href="class_gateway.html#a78949f88080c66617f8b20048d706237">Gateway::isActivated</a></div><div class="ttdeci">bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00135">gateway.cpp:135</a></div></div>
-<div class="ttc" id="class_gateway_html_ad66eea64014d7eb2927c1f576b3cf2b2"><div class="ttname"><a href="class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2">Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00114">gateway.cpp:114</a></div></div>
-<div class="ttc" id="class_gateway_html_adf9b62b6a7097bce5d2eeb8f34d1a407"><div class="ttname"><a href="class_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00098">gateway.cpp:98</a></div></div>
-<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00073">gateway.h:73</a></div></div>
-<div class="ttc" id="class_gateway_html_a4413c4a754da11031de372bc0b278d92"><div class="ttname"><a href="class_gateway.html#a4413c4a754da11031de372bc0b278d92">Gateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element)=0</div><div class="ttdoc">Gateway specific parsing of config elements. </div></div>
+<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a0971af3794daca430b2a43f309d65b79">  190</a></span>&#160;    <span class="keyword">typedef</span> std::function&lt;int ()&gt; <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a0971af3794daca430b2a43f309d65b79">ContainerFunction</a>;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a77348e5ce86b82302764b10e3203b42c">executeInContainer</a>(ContainerFunction func);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> activateGateway() = 0;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> teardownGateway() = 0;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keywordtype">void</span> setConfigRollback(std::string message, json_t *element);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; m_container;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *m_id = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    GatewayState m_state = GatewayState::CREATED;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;};</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;} <span class="comment">// end namespace</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a77348e5ce86b82302764b10e3203b42c"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a77348e5ce86b82302764b10e3203b42c">softwarecontainer::Gateway::executeInContainer</a></div><div class="ttdeci">ReturnCode executeInContainer(const std::string &amp;cmd)</div><div class="ttdoc">Execute the given command in the container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00153">gateway.cpp:153</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9f833c193f13516b4ae9e717f834e931"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element)=0</div><div class="ttdoc">Gateway specific parsing of config elements. </div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a828b2dfa811c7fcce82d34b502e65112"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a0971af3794daca430b2a43f309d65b79"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a0971af3794daca430b2a43f309d65b79">softwarecontainer::Gateway::ContainerFunction</a></div><div class="ttdeci">std::function&lt; int()&gt; ContainerFunction</div><div class="ttdoc">Execute a function in the container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00190">gateway.h:190</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ab55d52ccd92881532688847a6c2c1cba"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ab55d52ccd92881532688847a6c2c1cba">softwarecontainer::Gateway::setContainer</a></div><div class="ttdeci">virtual void setContainer(std::shared_ptr&lt; ContainerAbstractInterface &gt; container)</div><div class="ttdoc">Set the associated container for this gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00125">gateway.cpp:125</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_error.html">softwarecontainer::GatewayError</a></div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00030">gateway.h:30</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a2efaba5ff6bfb28015d073cdb8276fdd"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd">softwarecontainer::Gateway::setConfig</a></div><div class="ttdeci">virtual ReturnCode setConfig(const std::string &amp;config)</div><div class="ttdoc">Configure this gateway according to the supplied JSON configuration string. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00023">gateway.cpp:23</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a78949f88080c66617f8b20048d706237"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a78949f88080c66617f8b20048d706237">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00135">gateway.cpp:135</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad66eea64014d7eb2927c1f576b3cf2b2"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00114">gateway.cpp:114</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a88ae41c7b14da49561d025bd99047e81"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a88ae41c7b14da49561d025bd99047e81">softwarecontainer::Gateway::isConfigured</a></div><div class="ttdeci">virtual bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00130">gateway.cpp:130</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8h_source.html#l00031">baseconfigstore.h:31</a></div></div>
-<div class="ttc" id="class_gateway_html_a76344502967c375fae0c5bc7f44d7e74"><div class="ttname"><a href="class_gateway.html#a76344502967c375fae0c5bc7f44d7e74">Gateway::ContainerFunction</a></div><div class="ttdeci">std::function&lt; int()&gt; ContainerFunction</div><div class="ttdoc">Execute a function in the container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00195">gateway.h:195</a></div></div>
-<div class="ttc" id="class_gateway_html_a3d23a057d7039df33dd5ed47302f0d58"><div class="ttname"><a href="class_gateway.html#a3d23a057d7039df33dd5ed47302f0d58">Gateway::activate</a></div><div class="ttdeci">virtual ReturnCode activate()</div><div class="ttdoc">Applies any configuration set by setConfig() </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00073">gateway.cpp:73</a></div></div>
-<div class="ttc" id="class_gateway_html_a2efaba5ff6bfb28015d073cdb8276fdd"><div class="ttname"><a href="class_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd">Gateway::setConfig</a></div><div class="ttdeci">virtual ReturnCode setConfig(const std::string &amp;config)</div><div class="ttdoc">Configure this gateway according to the supplied JSON configuration string. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00023">gateway.cpp:23</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a3d23a057d7039df33dd5ed47302f0d58"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a3d23a057d7039df33dd5ed47302f0d58">softwarecontainer::Gateway::activate</a></div><div class="ttdeci">virtual ReturnCode activate()</div><div class="ttdoc">Applies any configuration set by setConfig() </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00073">gateway.cpp:73</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_adf9b62b6a7097bce5d2eeb8f34d1a407"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00098">gateway.cpp:98</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af421b6ffb3db76240a491b2302e78699"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">softwarecontainer::Gateway::id</a></div><div class="ttdeci">virtual const char * id()</div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00093">gateway.h:93</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><b>gateway.h</b></li>
-    <li class="footer">Generated on Wed Dec 21 2016 07:33:27 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 4 2017 08:40:36 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

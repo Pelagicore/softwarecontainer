@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
+   &#160;<span id="projectnumber">0.15.0-f211cdc 2017-01-04</span>
    </div>
   </td>
  </tr>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('waylandgateway_8cpp_source.html','');}
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;constexpr <span class="keyword">const</span> <span class="keywordtype">char</span> *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;WaylandGateway::WaylandGateway() :</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="class_gateway.html">Gateway</a>(ID),</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a>(ID),</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    m_enabled(false)</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>
@@ -140,14 +140,14 @@ $(document).ready(function(){initNavTree('waylandgateway_8cpp_source.html','');}
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    log_info() &lt;&lt; <span class="stringliteral">&quot;enabling Wayland gateway. Socket dir:&quot;</span> &lt;&lt; dir;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string pathOnHost = logging::StringBuilder() &lt;&lt; dir &lt;&lt; <span class="stringliteral">&quot;/&quot;</span> &lt;&lt; SOCKET_FILE_NAME;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::string pathInContainer = logging::StringBuilder() &lt;&lt; <span class="stringliteral">&quot;/gateways/&quot;</span> &lt;&lt; SOCKET_FILE_NAME;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    ReturnCode result = <a class="code" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;bindMountFileInContainer(pathOnHost, pathInContainer, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    ReturnCode result = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;bindMountFileInContainer(pathOnHost, pathInContainer, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not bind mount the wayland socket into the container&quot;</span>;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">setEnvironmentVariable</a>(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(pathInContainer));</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">setEnvironmentVariable</a>(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(pathInContainer));</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
@@ -157,16 +157,16 @@ $(document).ready(function(){initNavTree('waylandgateway_8cpp_source.html','');}
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
 <div class="ttc" id="class_wayland_gateway_html_aa5d2ff63631d237339cd7ec7b25f7517"><div class="ttname"><a href="class_wayland_gateway.html#aa5d2ff63631d237339cd7ec7b25f7517">WaylandGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element)</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="waylandgateway_8cpp_source.html#l00042">waylandgateway.cpp:42</a></div></div>
-<div class="ttc" id="class_gateway_html_a828b2dfa811c7fcce82d34b502e65112"><div class="ttname"><a href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
-<div class="ttc" id="class_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
-<div class="ttc" id="class_gateway_html"><div class="ttname"><a href="class_gateway.html">Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00073">gateway.h:73</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a828b2dfa811c7fcce82d34b502e65112"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>waylandgateway.cpp</b></li>
-    <li class="footer">Generated on Wed Dec 21 2016 07:33:27 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 4 2017 08:40:36 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

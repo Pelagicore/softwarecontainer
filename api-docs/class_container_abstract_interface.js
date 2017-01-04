@@ -15,15 +15,14 @@ var class_container_abstract_interface =
     [ "resume", "class_container_abstract_interface.html#a842bca3c44464f2812c38cf274cd2823", null ],
     [ "destroy", "class_container_abstract_interface.html#a7a1b05cd9f5d394b3ff9bcd0ddcbefe1", null ],
     [ "destroy", "class_container_abstract_interface.html#a0fc0817f7a04d7a2951b657169a30476", null ],
-    [ "setUser", "class_container_abstract_interface.html#ad28f2a8a420a4f90b093c339d9bf427d", null ],
     [ "mountDevice", "class_container_abstract_interface.html#a4fb9659eff84f2c21413eb5994320d87", null ],
     [ "createSymLink", "class_container_abstract_interface.html#a39d7376b1b410085ad224e73bd608692", null ],
     [ "bindMountFileInContainer", "class_container_abstract_interface.html#a90574f75e1a9ce108b158145a020b31f", null ],
     [ "bindMountFolderInContainer", "class_container_abstract_interface.html#a5b308a43773e7258e307870670420ed6", null ],
     [ "setEnvironmentVariable", "class_container_abstract_interface.html#a97748066052e4f705f661144ceb5c91c", null ],
     [ "setCgroupItem", "class_container_abstract_interface.html#a03566d594c218023e69f27f2c4a833bd", null ],
-    [ "attach", "class_container_abstract_interface.html#a5dc92e333e8cfe733922235c171e45cd", null ],
-    [ "attach", "class_container_abstract_interface.html#a8847be880f74de5e64d8091856d93e79", null ],
+    [ "attach", "class_container_abstract_interface.html#a752c0220aa8a498c6425d0c13b4c130a", null ],
+    [ "attach", "class_container_abstract_interface.html#af04f6209b7f20811a120bf91f6195b2c", null ],
     [ "executeInContainer", "class_container_abstract_interface.html#ab15a8de8bcd1e039585907f7ba0651b3", null ],
-    [ "executeInContainer", "class_container_abstract_interface.html#ac7db0db44d0fa62a5ce6fc0ba93d74c0", null ]
+    [ "executeInContainer", "class_container_abstract_interface.html#a9a8b0026039152a6a2fb27d37d73d7c5", null ]
 ];

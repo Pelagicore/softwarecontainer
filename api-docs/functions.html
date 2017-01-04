@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
+   &#160;<span id="projectnumber">0.15.0-f211cdc 2017-01-04</span>
    </div>
   </td>
  </tr>
@@ -74,6 +74,7 @@
       <li><a href="#index_n"><span>n</span></a></li>
       <li><a href="#index_o"><span>o</span></a></li>
       <li><a href="#index_p"><span>p</span></a></li>
+      <li><a href="#index_q"><span>q</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
       <li><a href="#index_t"><span>t</span></a></li>
@@ -101,13 +102,18 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>activate()
-: <a class="el" href="class_gateway.html#a3d23a057d7039df33dd5ed47302f0d58">Gateway</a>
+: <a class="el" href="class_d_bus_gateway.html#af46946bb52d1b9b6a2ec77df3df2e3e0">DBusGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a3d23a057d7039df33dd5ed47302f0d58">softwarecontainer::Gateway</a>
 </li>
 <li>activateGateway()
-: <a class="el" href="class_d_bus_gateway.html#ab974b6b05b985d64ba5609c64e8b13fb">DBusGateway</a>
+: <a class="el" href="class_d_bus_gateway.html#a6349114e3af36adfc61fb253bed07cdc">DBusGateway</a>
+, <a class="el" href="class_d_bus_gateway_instance.html#af0c68c68bda6b051a4f3feecb5749be4">DBusGatewayInstance</a>
 , <a class="el" href="class_device_node_gateway.html#a626ac7de0fa9acc167d1b355cbb3d8ee">DeviceNodeGateway</a>
 , <a class="el" href="class_network_gateway.html#ad19de4347291719074bde198fc61a94a">NetworkGateway</a>
 , <a class="el" href="class_pulse_gateway.html#a2ffb6fc3e0d690830fa4612111a60985">PulseGateway</a>
+</li>
+<li>addConfig()
+: <a class="el" href="classsoftwarecontainer_1_1_mandatory_configs.html#a0f5387f44c2f5973710721089f24e0e0">softwarecontainer::MandatoryConfigs</a>
 </li>
 <li>addConnection()
 : <a class="el" href="classsoftwarecontainer_1_1_signal_connections_handler.html#a9e72ea9a472729ed468db79648578675">softwarecontainer::SignalConnectionsHandler</a>
@@ -116,7 +122,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_i_p_table_entry.html#a01609d893e0bb7c6f955bc31e283a9e1">IPTableEntry</a>
 </li>
 <li>attach()
-: <a class="el" href="class_container.html#a5ef914e41ae8e324bbfc788f23465bb7">Container</a>
+: <a class="el" href="class_container.html#a5c1ff671a6701e4b0737298a03c01a04">Container</a>
 </li>
 </ul>
 
@@ -152,10 +158,13 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="class_overlay_sync_cleanup_handler.html#a65e86b29438617c079a6aadfe6a0ff5c">OverlaySyncCleanupHandler</a>
 </li>
 <li>Config()
-: <a class="el" href="class_config.html#a4dae22f9c93b1b38bde5dbbf0b573d8c">Config</a>
+: <a class="el" href="classsoftwarecontainer_1_1_config.html#a3295373fde01f6b10fe39bc4232100dc">softwarecontainer::Config</a>
 </li>
 <li>configByID()
 : <a class="el" href="classsoftwarecontainer_1_1_filtered_config_store.html#ac06cd67909be9f2b27096a1b16a8a4ef">softwarecontainer::FilteredConfigStore</a>
+</li>
+<li>configs()
+: <a class="el" href="classsoftwarecontainer_1_1_mandatory_configs.html#a3d9e8da6c8bf3c1f93a68a0aa79842ee">softwarecontainer::MandatoryConfigs</a>
 </li>
 <li>configsByID()
 : <a class="el" href="classsoftwarecontainer_1_1_filtered_config_store.html#aa10fd72ffade4db3c2994fdecbfaee2f">softwarecontainer::FilteredConfigStore</a>
@@ -164,7 +173,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_container.html#aa52128b40746a769f02a8df367e7af6e">Container</a>
 </li>
 <li>ContainerFunction
-: <a class="el" href="class_gateway.html#a76344502967c375fae0c5bc7f44d7e74">Gateway</a>
+: <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a0971af3794daca430b2a43f309d65b79">softwarecontainer::Gateway</a>
 </li>
 <li>copy()
 : <a class="el" href="class_recursive_copy.html#a0380f248366c2859b0ab39b155e13993">RecursiveCopy</a>
@@ -178,9 +187,6 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>createDirectory()
 : <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">softwarecontainer::FileToolkitWithUndo</a>
 </li>
-<li>createParentDirectory()
-: <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a2e2789ba9649ed6abf7a1c3ab3025daa">softwarecontainer::FileToolkitWithUndo</a>
-</li>
 <li>createSharedMountPoint()
 : <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab74e5ec0784b2aa597d54f28f44f7112">softwarecontainer::FileToolkitWithUndo</a>
 </li>
@@ -188,8 +194,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
-<li>DBusGateway()
-: <a class="el" href="class_d_bus_gateway.html#aee158c5953c85075587af556a2c42b8f">DBusGateway</a>
+<li>DBusGatewayInstance()
+: <a class="el" href="class_d_bus_gateway_instance.html#a78a3a0703fb26a0660baa55698faa861">DBusGatewayInstance</a>
 </li>
 <li>deleteContainer()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a17a700813202c61461904bd4e25995f6">softwarecontainer::SoftwareContainerAgent</a>
@@ -202,10 +208,10 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_e"></a>- e -</h3><ul>
 <li>execute()
-: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a9883cae19fad3942778b48e426b90629">softwarecontainer::SoftwareContainerAgent</a>
+: <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a0620bdae9b8ac003193c6bf2c7a1e538">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>executeInContainer()
-: <a class="el" href="class_gateway.html#a77348e5ce86b82302764b10e3203b42c">Gateway</a>
+: <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a77348e5ce86b82302764b10e3203b42c">softwarecontainer::Gateway</a>
 </li>
 </ul>
 
@@ -225,25 +231,28 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_g"></a>- g -</h3><ul>
 <li>getBooleanValue()
-: <a class="el" href="class_config.html#a3b95603309341064e1bd7aabdb36327f">Config</a>
+: <a class="el" href="classsoftwarecontainer_1_1_config.html#ab2aafca72117fbf3b673c811f2ff7b78">softwarecontainer::Config</a>
 </li>
 <li>getContainer()
-: <a class="el" href="class_gateway.html#ab03846b347174727f70ab4e4ce5db09f">Gateway</a>
+: <a class="el" href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">softwarecontainer::Gateway</a>
 </li>
 <li>getInstance()
 : <a class="el" href="class_recursive_copy.html#a956c056e88a6d69e4088053d285d6b21">RecursiveCopy</a>
 </li>
 <li>getIntegerValue()
-: <a class="el" href="class_config.html#acb364f2996addd16c2a30870cb2cd45c">Config</a>
+: <a class="el" href="classsoftwarecontainer_1_1_config.html#adb17ce7ca54895f2abcce97dc9a73354">softwarecontainer::Config</a>
 </li>
 <li>getKernelDump()
 : <a class="el" href="class_netlink.html#a1764702f3ed67ae491696c7632dea0cd">Netlink</a>
 </li>
 <li>getStringValue()
-: <a class="el" href="class_config.html#afd45185cd5d23060d0ef3fa095c620ec">Config</a>
+: <a class="el" href="classsoftwarecontainer_1_1_config.html#aa7f2e47598dbdc585d4e15257477493c">softwarecontainer::Config</a>
 </li>
 <li>getWorkspace()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#abf4a978edc41a3e89132d1aa55dd4210">softwarecontainer::SoftwareContainerAgent</a>
+</li>
+<li>groups()
+: <a class="el" href="classsoftwarecontainer_1_1_mandatory_configs.html#adf9425ca1a3e4ccba015b8065204e353">softwarecontainer::MandatoryConfigs</a>
 </li>
 </ul>
 
@@ -253,7 +262,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_netlink.html#a7f315e1dd78801c0d3bb2ee46ff179c7">Netlink</a>
 </li>
 <li>hasContainer()
-: <a class="el" href="class_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2">Gateway</a>
+: <a class="el" href="classsoftwarecontainer_1_1_gateway.html#ad66eea64014d7eb2927c1f576b3cf2b2">softwarecontainer::Gateway</a>
 </li>
 <li>hasKey()
 : <a class="el" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#afd27128a637a8f3f44223bf3442651b7">softwarecontainer::JSONParser</a>
@@ -263,7 +272,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_i"></a>- i -</h3><ul>
 <li>id()
-: <a class="el" href="class_gateway.html#a01028fc541340b53b0330c03dafb6bfe">Gateway</a>
+: <a class="el" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">softwarecontainer::Gateway</a>
 </li>
 <li>IDs()
 : <a class="el" href="classsoftwarecontainer_1_1_filtered_config_store.html#a4115e1baf28770459bdd0abf1f00569c">softwarecontainer::FilteredConfigStore</a>
@@ -281,10 +290,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_i_p_table_entry.html#a9d28ee9552aa3716310840d7790bee95">IPTableEntry</a>
 </li>
 <li>isActivated()
-: <a class="el" href="class_gateway.html#a78949f88080c66617f8b20048d706237">Gateway</a>
+: <a class="el" href="class_d_bus_gateway.html#ade3ebce4b88d1684aafd5fc27d94cbef">DBusGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a78949f88080c66617f8b20048d706237">softwarecontainer::Gateway</a>
 </li>
 <li>isConfigured()
-: <a class="el" href="class_gateway.html#a88ae41c7b14da49561d025bd99047e81">Gateway</a>
+: <a class="el" href="class_d_bus_gateway.html#a9d53d37dc2aec2e5d41554c25241e746">DBusGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a88ae41c7b14da49561d025bd99047e81">softwarecontainer::Gateway</a>
 </li>
 <li>isRunning()
 : <a class="el" href="classsoftwarecontainer_1_1_job_abstract.html#a6a545f0935300b47872b17057d2be1ed">softwarecontainer::JobAbstract</a>
@@ -310,7 +321,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_m"></a>- m -</h3><ul>
 <li>m_cleanupHandlers
-: <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab524086e24602393f43b75f79b50db59">softwarecontainer::FileToolkitWithUndo</a>
+: <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a415851aff0b78df32945ae503b6847df">softwarecontainer::FileToolkitWithUndo</a>
 </li>
 </ul>
 
@@ -339,8 +350,21 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>parseNetworkGatewayConfiguration()
 : <a class="el" href="class_network_gateway_parser.html#ad6e18790fde52761a094651adcfd2c36">NetworkGatewayParser</a>
 </li>
+<li>pathInList()
+: <a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875">softwarecontainer::FileToolkitWithUndo</a>
+</li>
 <li>preload()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container.html#a99978224d29f4d27d1801d02f44bfde6">softwarecontainer::SoftwareContainer</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_q"></a>- q -</h3><ul>
+<li>queryName()
+: <a class="el" href="class_directory_clean_up_handler.html#a81f34ab7bde48072b120c73dc806515b">DirectoryCleanUpHandler</a>
+, <a class="el" href="class_file_clean_up_handler.html#ab0cd5c7fff190303392332817a91afa9">FileCleanUpHandler</a>
+, <a class="el" href="class_mount_clean_up_handler.html#ae35542dff8ed5791cf63ef18a4ed58d2">MountCleanUpHandler</a>
+, <a class="el" href="class_overlay_sync_cleanup_handler.html#aff495b95287d03a0438c474c1e9334d8">OverlaySyncCleanupHandler</a>
 </li>
 </ul>
 
@@ -351,13 +375,14 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>readConfigElement()
 : <a class="el" href="class_cgroups_gateway.html#a6b77885877877af00df49b5aa539592d">CgroupsGateway</a>
-, <a class="el" href="class_d_bus_gateway.html#a26605d226d94efe726e85734dd01a713">DBusGateway</a>
+, <a class="el" href="class_d_bus_gateway.html#ae4490efcf9ef01003fba0188b28c28e6">DBusGateway</a>
+, <a class="el" href="class_d_bus_gateway_instance.html#af306cfef47134e3317029600cd86484e">DBusGatewayInstance</a>
 , <a class="el" href="class_device_node_gateway.html#a2dd67af3fe7d8a0fcd26abde8c1e3e74">DeviceNodeGateway</a>
 , <a class="el" href="class_environment_gateway.html#a6d276aa7c522c95276243f327f49abae">EnvironmentGateway</a>
 , <a class="el" href="class_file_gateway.html#a4b3a520a2cce350f9b143138fe47ae29">FileGateway</a>
-, <a class="el" href="class_gateway.html#a4413c4a754da11031de372bc0b278d92">Gateway</a>
 , <a class="el" href="class_network_gateway.html#a255e2b6c7d6b5b50fd2e096850c6f29c">NetworkGateway</a>
 , <a class="el" href="class_pulse_gateway.html#a844a0451090129a4e19459e26afc8eca">PulseGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway</a>
 , <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#aab15b844d7ed80339448a2005ea1cc9d">softwarecontainer::SoftwareContainerAgent</a>
 , <a class="el" href="class_wayland_gateway.html#aa5d2ff63631d237339cd7ec7b25f7517">WaylandGateway</a>
 </li>
@@ -378,20 +403,21 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a99d58370ca9150d5e1fca70ff44d5007">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>setConfig()
-: <a class="el" href="class_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd">Gateway</a>
+: <a class="el" href="class_d_bus_gateway.html#a6681393b7dd4d50dd58c2368934f5dfa">DBusGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd">softwarecontainer::Gateway</a>
 </li>
 <li>setContainer()
-: <a class="el" href="class_gateway.html#ab55d52ccd92881532688847a6c2c1cba">Gateway</a>
+: <a class="el" href="class_d_bus_gateway.html#af2cd68adda4993e4d8aba45726346a0a">DBusGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#ab55d52ccd92881532688847a6c2c1cba">softwarecontainer::Gateway</a>
 </li>
 <li>setDefaultGateway()
 : <a class="el" href="class_netlink.html#a549bc6adda3142682c868a25b2af9231">Netlink</a>
 </li>
 <li>setEnvironmentVariable()
-: <a class="el" href="class_gateway.html#a828b2dfa811c7fcce82d34b502e65112">Gateway</a>
+: <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">softwarecontainer::Gateway</a>
 </li>
 <li>setGatewayConfigs()
 : <a class="el" href="classsoftwarecontainer_1_1_software_container.html#a3721d6df411f8f24002eb08f0998ca07">softwarecontainer::SoftwareContainer</a>
-, <a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html#a932a69583ff9cde14bd4749a9152ba9a">softwarecontainer::SoftwareContainerAgent</a>
 </li>
 <li>setIP()
 : <a class="el" href="class_netlink.html#ad71afe1271bbc38578d0e85e7aef0118">Netlink</a>
@@ -429,10 +455,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">IPTableEntry</a>
 </li>
 <li>teardown()
-: <a class="el" href="class_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">Gateway</a>
+: <a class="el" href="class_d_bus_gateway.html#ab6ef6ea2b216e3a15bdd1ff3822283e9">DBusGateway</a>
+, <a class="el" href="classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">softwarecontainer::Gateway</a>
 </li>
 <li>teardownGateway()
-: <a class="el" href="class_d_bus_gateway.html#a5f9b7087aedef583e950d7853350731e">DBusGateway</a>
+: <a class="el" href="class_d_bus_gateway.html#a76249cf1723cd83fe49bddec6350bd0b">DBusGateway</a>
+, <a class="el" href="class_d_bus_gateway_instance.html#a8df8ae869be2c9fe9792d5a77a7748c0">DBusGatewayInstance</a>
 , <a class="el" href="class_device_node_gateway.html#a942850c76d0ab429dec21661b53f7055">DeviceNodeGateway</a>
 , <a class="el" href="class_network_gateway.html#a9382509c0b14e836b6e300488c046848">NetworkGateway</a>
 , <a class="el" href="class_pulse_gateway.html#a42d74a1d568c9734c690f32bddfe48b4">PulseGateway</a>
@@ -460,7 +488,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Dec 21 2016 07:33:28 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 4 2017 08:40:37 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

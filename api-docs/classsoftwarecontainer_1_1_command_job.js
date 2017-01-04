@@ -3,7 +3,6 @@ var classsoftwarecontainer_1_1_command_job =
     [ "CommandJob", "classsoftwarecontainer_1_1_command_job.html#a886cc389e6aed47adbd6f6c79b570e5d", null ],
     [ "~CommandJob", "classsoftwarecontainer_1_1_command_job.html#af5513787a25f81ff7dbc71f0844867bd", null ],
     [ "setWorkingDirectory", "classsoftwarecontainer_1_1_command_job.html#a4119eb719826f840b40956729320cd15", null ],
-    [ "setUserID", "classsoftwarecontainer_1_1_command_job.html#afb2688178f67859738fcff6c3025253e", null ],
     [ "start", "classsoftwarecontainer_1_1_command_job.html#a413dcd881f5d870c22ffb42e1b91c55e", null ],
     [ "toString", "classsoftwarecontainer_1_1_command_job.html#a7663b354c655ba3d0df6e085c70477ed", null ],
     [ "LOG_SET_CLASS_CONTEXT", "classsoftwarecontainer_1_1_command_job.html#a7af23fce920ba997efea5dac070c4cd3", null ],

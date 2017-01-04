@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.13.0-032399e 2016-12-21</span>
+   &#160;<span id="projectnumber">0.15.0-f211cdc 2017-01-04</span>
    </div>
   </td>
  </tr>
@@ -126,9 +126,6 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>destroy
 <tr class="memitem:a0fc0817f7a04d7a2951b657169a30476"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0fc0817f7a04d7a2951b657169a30476"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>destroy</b> (unsigned int timeout)=0</td></tr>
 <tr class="separator:a0fc0817f7a04d7a2951b657169a30476"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad28f2a8a420a4f90b093c339d9bf427d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad28f2a8a420a4f90b093c339d9bf427d"></a>
-virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>setUser</b> (uid_t userID)=0</td></tr>
-<tr class="separator:ad28f2a8a420a4f90b093c339d9bf427d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fb9659eff84f2c21413eb5994320d87"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4fb9659eff84f2c21413eb5994320d87"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>mountDevice</b> (const std::string &amp;pathInHost)=0</td></tr>
 <tr class="separator:a4fb9659eff84f2c21413eb5994320d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,18 +144,18 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvi
 <tr class="memitem:a03566d594c218023e69f27f2c4a833bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03566d594c218023e69f27f2c4a833bd"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>setCgroupItem</b> (std::string subsys, std::string value)=0</td></tr>
 <tr class="separator:a03566d594c218023e69f27f2c4a833bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dc92e333e8cfe733922235c171e45cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5dc92e333e8cfe733922235c171e45cd"></a>
-virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>attach</b> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, uid_t userID, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)=0</td></tr>
-<tr class="separator:a5dc92e333e8cfe733922235c171e45cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8847be880f74de5e64d8091856d93e79"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8847be880f74de5e64d8091856d93e79"></a>
-virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>attach</b> (const std::string &amp;commandLine, pid_t *pid, uid_t userID=ROOT_UID)=0</td></tr>
-<tr class="separator:a8847be880f74de5e64d8091856d93e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a752c0220aa8a498c6425d0c13b4c130a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a752c0220aa8a498c6425d0c13b4c130a"></a>
+virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>attach</b> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)=0</td></tr>
+<tr class="separator:a752c0220aa8a498c6425d0c13b4c130a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af04f6209b7f20811a120bf91f6195b2c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af04f6209b7f20811a120bf91f6195b2c"></a>
+virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>attach</b> (const std::string &amp;commandLine, pid_t *pid)=0</td></tr>
+<tr class="separator:af04f6209b7f20811a120bf91f6195b2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab15a8de8bcd1e039585907f7ba0651b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab15a8de8bcd1e039585907f7ba0651b3"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (const std::string &amp;cmdline)=0</td></tr>
 <tr class="separator:ab15a8de8bcd1e039585907f7ba0651b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7db0db44d0fa62a5ce6fc0ba93d74c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7db0db44d0fa62a5ce6fc0ba93d74c0"></a>
-virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (ContainerFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), uid_t userID=ROOT_UID, int stdin=-1, int stdout=-1, int stderr=2)=0</td></tr>
-<tr class="separator:ac7db0db44d0fa62a5ce6fc0ba93d74c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a8b0026039152a6a2fb27d37d73d7c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a8b0026039152a6a2fb27d37d73d7c5"></a>
+virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (ContainerFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=-1, int stderr=2)=0</td></tr>
+<tr class="separator:a9a8b0026039152a6a2fb27d37d73d7c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -281,7 +278,7 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_container_abstract_interface.html">ContainerAbstractInterface</a></li>
-    <li class="footer">Generated on Wed Dec 21 2016 07:33:27 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 4 2017 08:40:36 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

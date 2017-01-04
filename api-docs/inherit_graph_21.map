@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_p_profiler.html" title="PProfiler" alt="" coords="5,5,77,32"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_base_config_store.html" title="softwarecontainer::\lBaseConfigStore" alt="" coords="5,39,139,80"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_default_config_store.html" title="softwarecontainer::\lDefaultConfigStore" alt="" coords="187,5,321,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_filtered_config_store.html" title="softwarecontainer::\lFilteredConfigStore" alt="" coords="187,71,321,112"/>
 </map>

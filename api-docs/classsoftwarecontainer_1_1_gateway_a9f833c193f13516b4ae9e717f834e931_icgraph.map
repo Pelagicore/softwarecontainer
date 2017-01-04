@@ -1,0 +1,4 @@
+<map id="softwarecontainer::Gateway::readConfigElement" name="softwarecontainer::Gateway::readConfigElement">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="247,5,385,47"/>
+<area shape="rect" id="node3" href="$class_d_bus_gateway.html#a6681393b7dd4d50dd58c2368934f5dfa" title="Sets config for both dbus session instances. " alt="" coords="433,13,604,39"/>
+</map>

@@ -1,2 +1,4 @@
 <map id="softwarecontainer::ConfigError" name="softwarecontainer::ConfigError">
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_config_dependency_error.html" title="softwarecontainer::\lConfigDependencyError" alt="" coords="5,169,167,211"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_config_mandatory_error.html" title="softwarecontainer::\lConfigMandatoryError" alt="" coords="191,169,341,211"/>
 </map>

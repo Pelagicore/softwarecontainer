@@ -1,0 +1,5 @@
+<map id="DBusGateway::setConfig" name="DBusGateway::setConfig">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="224,39,363,80"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="441,5,574,47"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931" title="Gateway specific parsing of config elements. " alt="" coords="411,71,604,112"/>
+</map>

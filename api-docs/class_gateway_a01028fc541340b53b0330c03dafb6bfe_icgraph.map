@@ -1,5 +1,0 @@
-<map id="Gateway::id" name="Gateway::id">
-<area shape="rect" id="node2" href="$class_gateway.html#a3d23a057d7039df33dd5ed47302f0d58" title="Applies any configuration set by setConfig() " alt="" coords="151,5,279,32"/>
-<area shape="rect" id="node3" href="$class_gateway.html#a2efaba5ff6bfb28015d073cdb8276fdd" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="145,56,284,83"/>
-<area shape="rect" id="node4" href="$class_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407" title="Restore system to the state prior to launching of gateway. " alt="" coords="147,107,282,133"/>
-</map>

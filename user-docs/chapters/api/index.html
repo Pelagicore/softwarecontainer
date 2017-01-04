@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.13.0-032399e 2016-12-21 documentation</title>
+    <title>API &#8212; softwarecontainer 0.15.0-f211cdc 2017-01-04 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.13.0-032399e 2016-12-21',
+        VERSION:     '0.15.0-f211cdc 2017-01-04',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,11 +45,12 @@
             
   <div class="section" id="api">
 <span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<p>This chapter documents the D-Bus API for interacting with the SoftwareContainerAgent. This is
-mostly useful for integrators.</p>
+<p>This chapter documents the D-Bus API for interacting with the
+SoftwareContainerAgent. This is mostly useful for integrators.</p>
 <div class="section" id="d-bus-api">
 <span id="dbus-api"></span><h2>D-Bus API<a class="headerlink" href="#d-bus-api" title="Permalink to this headline">¶</a></h2>
-<p>D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API provides following object path and interface.</p>
+<p>D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API
+provides following object path and interface.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -62,22 +63,30 @@ mostly useful for integrators.</p>
 </table>
 <div class="section" id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<p>All methods that modify the state of the containers return a <code class="docutils literal"><span class="pre">success</span></code> variable along with the
-actual return value. This is to not have to rely on magic values. The two methods <code class="docutils literal"><span class="pre">List</span></code> and
-<code class="docutils literal"><span class="pre">ListCapabilities</span></code> are the only ones that doesn&#8217;t modify the state.</p>
+<p>All methods that modify the state of the containers return a <code class="docutils literal"><span class="pre">success</span></code>
+variable along with the actual return value. This is to not have to rely on
+magic values. The two methods <code class="docutils literal"><span class="pre">List</span></code> and <code class="docutils literal"><span class="pre">ListCapabilities</span></code> are the only
+ones that doesn&#8217;t modify the state.</p>
 </div>
-<div class="section" id="list">
-<h3>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
-<p>Returns a list of the current containers</p>
+<div class="section" id="bindmount">
+<h3>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h3>
+<p>Binds a directory on the host to the container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containers:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</td>
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> absolute path to the directory in the host.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the absolute path to the directory in container.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</td>
 </tr>
 </tbody>
 </table>
@@ -85,10 +94,9 @@ actual return value. This is to not have to rely on magic values. The two method
 </tr>
 </tbody>
 </table>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
-<div class="section" id="listcapabilities">
-<h3>ListCapabilities<a class="headerlink" href="#listcapabilities" title="Permalink to this headline">¶</a></h3>
-<p>Lists all capabilities that the user can apply.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -97,7 +105,7 @@ actual return value. This is to not have to rely on magic values. The two method
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> all available capability names</td>
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -152,6 +160,46 @@ actual return value. This is to not have to rely on magic values. The two method
 </tbody>
 </table>
 </div>
+<div class="section" id="destroy">
+<h3>Destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
+<p>Tears down all active gateways related to container and shuts down the
+container with all reserved sources.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="execute">
 <h3>Execute<a class="headerlink" href="#execute" title="Permalink to this headline">¶</a></h3>
 <p>Launches the specified application/code in the container.</p>
@@ -165,15 +213,13 @@ actual return value. This is to not have to rely on magic values. The two method
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">userID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> UID for command, currently unused, use <code class="docutils literal"><span class="pre">0</span></code>.</td>
+<tr class="field-even field"><th class="field-name">commandLine:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the method to run in container.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">commandLine:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the method to run in container.</td>
+<tr class="field-odd field"><th class="field-name">workDirectory:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to working directory.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">workDirectory:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to working directory.</td>
+<tr class="field-even field"><th class="field-name">outputFile:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> output file to direct stdout.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">outputFile:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> output file to direct stdout.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">env:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> environment variables and their values.</td>
+<tr class="field-odd field"><th class="field-name">env:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> environment variables and their values.</td>
 </tr>
 </tbody>
 </table>
@@ -203,9 +249,50 @@ actual return value. This is to not have to rely on magic values. The two method
 </tbody>
 </table>
 </div>
-<div class="section" id="destroy">
-<h3>Destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
-<p>Tears down all active gateways related to container and shuts down the container with all reserved sources.</p>
+<div class="section" id="list">
+<h3>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
+<p>Returns a list of the current containers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containers:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="listcapabilities">
+<h3>ListCapabilities<a class="headerlink" href="#listcapabilities" title="Permalink to this headline">¶</a></h3>
+<p>Lists all capabilities that the user can apply. Note that this does not include
+the default capabilities, which are not listable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> all available capability names</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="resume">
+<h3>Resume<a class="headerlink" href="#resume" title="Permalink to this headline">¶</a></h3>
+<p>Resumes a suspended container</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -215,6 +302,49 @@ actual return value. This is to not have to rely on magic values. The two method
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="setcapabilities">
+<h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
+<p>Applies the given list of capability names to the container. Capabilities are
+mapped to gateway configurations and applied to each gateway for which they
+map a configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> of capability names</td>
 </tr>
 </tbody>
 </table>
@@ -281,135 +411,8 @@ actual return value. This is to not have to rely on magic values. The two method
 </tbody>
 </table>
 </div>
-<div class="section" id="resume">
-<h3>Resume<a class="headerlink" href="#resume" title="Permalink to this headline">¶</a></h3>
-<p>Resumes a suspended container</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="bindmount">
-<h3>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h3>
-<p>Binds a directory on the host to the container.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> absolute path to the directory in the host.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the absolute path to the directory in container.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="setgatewayconfigs">
-<h3>SetGatewayConfigs<a class="headerlink" href="#setgatewayconfigs" title="Permalink to this headline">¶</a></h3>
-<p>Sets the configuration of a particular gateway. The gateway configuration contains settings as
-key/value pairs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">configs:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> A map of gateway IDs and their configurations.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="setcapabilities">
-<h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>SetCapabilities<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Applies the given list of capability names to the container. Capabilities are mapped to gateway
 configurations and applied to each gateway for which they map a configuration.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -421,8 +424,6 @@ configurations and applied to each gateway for which they map a configuration.</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> of capability names</td>
 </tr>
 </tbody>
 </table>
@@ -473,7 +474,8 @@ configurations and applied to each gateway for which they map a configuration.</
 </div>
 <div class="section" id="introspection">
 <h3>Introspection<a class="headerlink" href="#introspection" title="Permalink to this headline">¶</a></h3>
-<p>Using <code class="docutils literal"><span class="pre">org.freedesktop.DBus.Introspectable.Introspect</span></code> interface, methods of SoftwareContainerAgent D-Bus API can be observed.</p>
+<p>Using <code class="docutils literal"><span class="pre">org.freedesktop.DBus.Introspectable.Introspect</span></code> interface, methods of
+SoftwareContainerAgent D-Bus API can be observed.</p>
 </div>
 </div>
 </div>
@@ -489,16 +491,16 @@ configurations and applied to each gateway for which they map a configuration.</
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
 <li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#bindmount">BindMount</a></li>
+<li><a class="reference internal" href="#create">Create</a></li>
+<li><a class="reference internal" href="#destroy">Destroy</a></li>
+<li><a class="reference internal" href="#execute">Execute</a></li>
 <li><a class="reference internal" href="#list">List</a></li>
 <li><a class="reference internal" href="#listcapabilities">ListCapabilities</a></li>
-<li><a class="reference internal" href="#create">Create</a></li>
-<li><a class="reference internal" href="#execute">Execute</a></li>
-<li><a class="reference internal" href="#destroy">Destroy</a></li>
-<li><a class="reference internal" href="#suspend">Suspend</a></li>
 <li><a class="reference internal" href="#resume">Resume</a></li>
-<li><a class="reference internal" href="#bindmount">BindMount</a></li>
-<li><a class="reference internal" href="#setgatewayconfigs">SetGatewayConfigs</a></li>
 <li><a class="reference internal" href="#setcapabilities">SetCapabilities</a></li>
+<li><a class="reference internal" href="#suspend">Suspend</a></li>
+<li><a class="reference internal" href="#id2">SetCapabilities</a></li>
 <li><a class="reference internal" href="#signals">Signals</a></li>
 <li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a></li>
 <li><a class="reference internal" href="#introspection">Introspection</a></li>
