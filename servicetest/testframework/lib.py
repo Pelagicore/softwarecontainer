@@ -174,6 +174,12 @@ class Container():
         caps = self.__agent.ListCapabilities()
         return caps
 
+    def list_containers(self):
+        """ List all containers
+        """
+        containers = self.__agent.List()
+        return containers
+
     def set_capabilities(self, capabilities):
         """ Set capabilities by passsing a list of strings with capability IDs
         """
@@ -227,20 +233,20 @@ class Container():
             Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMount
             Container.READONLY - fourth argument to SoftwareContainerAgent::BindMount
         """
-        success = self.__create_container(data[Container.CONFIG])
+        container_id, success = self.__create_container(data[Container.CONFIG])
         if False == success:
             print "Failed to create container"
-            return False
+            return -1, False
 
         success = self.__bindmount(data[Container.HOST_PATH],
                                    data[Container.BIND_MOUNT_DIR],
                                    data[Container.READONLY])
         if success is False:
             print "Failed to bind mount into the container"
-            return False
+            return -1, False
         else:
             self.__bind_dir = data[Container.BIND_MOUNT_DIR]
-            return True
+            return container_id, True
 
 
     def suspend(self):
@@ -262,8 +268,7 @@ class Container():
 
     def __create_container(self, config):
         self.__container_id, success = self.__agent.Create(config)
-        return success
-
+        return self.__container_id, success
 
     def __bindmount(self, host_path, dirname, readonly):
         return self.__agent.BindMount(self.__container_id, host_path, dirname, readonly)

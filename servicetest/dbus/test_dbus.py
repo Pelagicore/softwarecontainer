@@ -126,7 +126,7 @@ class TestDBus(object):
         for x in range(0, 10):
             ca = Container()
             try:
-                success = ca.start(DATA)
+                _, success = ca.start(DATA)
                 assert success is True
                 result = ca.set_capabilities(["test.cap.gwconfig", "test.cap.wlconfig"])
                 assert result is True
@@ -146,7 +146,7 @@ class TestDBus(object):
             serv.start()
             ca = Container()
             try:
-                success = ca.start(DATA)
+                _, success = ca.start(DATA)
                 assert success is True
                 ca.set_capabilities(["test.cap.gwconfig"])
                 ca.launch_command('{}/dbusapp.py client'.format(ca.get_bind_dir()))
@@ -164,7 +164,7 @@ class TestDBus(object):
         try:
             serv = dbusapp.Server()
             serv.start()
-            success = ca.start(DATA)
+            _, success = ca.start(DATA)
             assert success is True
 
             ca.set_capabilities(["test.cap.gwconfig"])
