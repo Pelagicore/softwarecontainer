@@ -22,7 +22,12 @@
 
 namespace softwarecontainer {
 
-ReturnCode CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element, CGroupsPair &result)
+CGroupsParser::CGroupsParser()
+    : m_settings()
+{
+}
+
+ReturnCode CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
 {
     std::string settingKey;
     std::string settingValue;
@@ -37,9 +42,25 @@ ReturnCode CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element
         return ReturnCode::FAILURE;
     }
 
-    result.first = settingKey;
-    result.second = settingValue;
+    if ("memory.limit_in_bytes" == settingKey) {
+        if (m_settings.count(settingKey)) {
+            // if the new value is greater than old one set is as the value
+            if (std::stoi(m_settings[settingKey]) < std::stoi(settingValue)) {
+                m_settings[settingKey] = settingValue;
+            }
+        } else {
+            m_settings[settingKey] = settingValue;
+        }
+    } else {
+        log_warning() << settingKey << " is not supported by CGroups Gateway" ;
+        m_settings[settingKey] = settingValue;
+    }
+
     return ReturnCode::SUCCESS;
 }
 
+const std::map<std::string, std::string> &CGroupsParser::getSettings()
+{
+    return m_settings;
+}
 } // namespace softwarecontainer

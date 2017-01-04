@@ -21,6 +21,7 @@
 #pragma once
 
 #include "gateway.h"
+#include "cgroupsparser.h"
 
 namespace softwarecontainer {
 
@@ -43,7 +44,7 @@ public:
     bool teardownGateway() override;
 
 private:
-    std::map<std::string, std::string> m_settings;
+    CGroupsParser m_parser;
 };
 
 } // namespace softwarecontainer

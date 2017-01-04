@@ -29,10 +29,17 @@ class CGroupsParser
     LOG_DECLARE_CLASS_CONTEXT("CGPA", "CGroups Gateway Parser");
 
 public:
-    typedef std::pair< std::string, std::string > CGroupsPair;
+    CGroupsParser();
+    ReturnCode parseCGroupsGatewayConfiguration(const json_t *element);
 
-    ReturnCode parseCGroupsGatewayConfiguration(const json_t *element, CGroupsPair &result);
-
+    /*
+     * @brief Get the map of cgroup settings
+     *
+     * @return A list of cgroup settings ready to be applied
+     */
+    const std::map<std::string, std::string> &getSettings();
+private :
+    std::map<std::string, std::string> m_settings;
 };
 
 } // namespace softwarecontainer
