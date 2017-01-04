@@ -20,6 +20,8 @@
 #include "iptableentry.h"
 #include "gateway.h"
 
+namespace softwarecontainer {
+
 ReturnCode IPTableEntry::applyRules()
 {
     for (auto rule : m_rules) {
@@ -174,3 +176,5 @@ ReturnCode IPTableEntry::insertCommand(std::string command)
 
     return ReturnCode::SUCCESS;
 }
+
+} // namespace softwarecontainer

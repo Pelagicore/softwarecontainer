@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+namespace softwarecontainer {
+
 /**
  * @brief Handles various network operations over netlink
  *
@@ -303,3 +305,4 @@ class Netlink
         bool m_netlinkInitialized;
 };
 
+} // namespace softwarecontainer

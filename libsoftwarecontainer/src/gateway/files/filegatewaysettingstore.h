@@ -21,6 +21,8 @@
 
 #include "filegatewayparser.h"
 
+namespace softwarecontainer {
+
 class FileGatewaySettingStore
 {
     LOG_DECLARE_CLASS_CONTEXT("FGWR", "File Gateway Rule Engine");
@@ -56,3 +58,5 @@ private:
     // The internal storage of settings
     std::vector<FileGatewayParser::FileSetting> m_settings;
 };
+
+} // namespace softwarecontainer

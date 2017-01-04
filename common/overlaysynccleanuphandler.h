@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -21,6 +20,8 @@
 #pragma once
 
 #include <cleanuphandler.h>
+
+namespace softwarecontainer {
 
 /**
  * @brief The OverlaySyncCleanupHandler class is used to copy files on cleanup and can be added to the
@@ -60,3 +61,5 @@ private:
     std::string m_dst;
 
 };
+
+} // namespace softwarecontainer

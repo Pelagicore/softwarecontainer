@@ -17,7 +17,6 @@
  * For further information see LICENSE
  */
 
-
 #include <glibmm/optioncontext.h>
 
 #include "config/config.h"
@@ -27,12 +26,14 @@
 
 #include "softwarecontaineragentadaptor.h"
 
+namespace softwarecontainer {
 
 LOG_DEFINE_APP_IDS("SCAG", "SoftwareContainer agent");
+LOG_DECLARE_DEFAULT_CONTEXT(PAM_DefaultLogContext, "MAIN", "Main context");
 
-namespace softwarecontainer {
-    LOG_DECLARE_DEFAULT_CONTEXT(PAM_DefaultLogContext, "MAIN", "Main context");
-}
+} // namespace softwarecontainer
+
+using namespace softwarecontainer;
 
 /*
  * When we get signals that can be trapped, we want the main loop to be quitted.
@@ -43,6 +44,7 @@ int signalHandler(void *data) {
     (*ml)->quit();
     return 0;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -202,7 +204,6 @@ int main(int argc, char **argv)
 
         Config config(std::move(loader), std::move(defaults), stringOptions, intOptions, boolOptions);
 
-        static constexpr const char *AGENT_OBJECT_PATH = "/com/pelagicore/SoftwareContainerAgent";
         ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor( new SoftwareContainerAgentAdaptor(agent, useSessionBus));
 
@@ -221,3 +222,4 @@ int main(int argc, char **argv)
         return 1;
     }
 }
+

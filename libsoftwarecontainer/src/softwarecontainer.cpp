@@ -326,4 +326,4 @@ ObservableProperty<ContainerState> &SoftwareContainer::getContainerState()
     return m_containerState;
 }
 
-}
+} // namespace softwarecontainer

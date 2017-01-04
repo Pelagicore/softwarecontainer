@@ -17,9 +17,11 @@
  * For further information see LICENSE
  */
 #pragma once
+
 #include "softwarecontainer.h"
 
 namespace softwarecontainer {
+
 /**
  * Abstract class for jobs which get executed inside a container
  */
@@ -63,4 +65,5 @@ protected:
     int m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
     int m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
 };
-}
+
+} // namespace softwarecontainer

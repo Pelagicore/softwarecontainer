@@ -104,4 +104,4 @@ bool JSONParser::hasKey(const json_t *element, const char *key)
     return json_object_get(element, key) != NULL;
 }
 
-}
+} // namespace softwarecontainer

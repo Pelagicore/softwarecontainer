@@ -23,4 +23,4 @@
 
 namespace softwarecontainer {
     typedef logging::DefaultLogContext LogContext;
-}
+} // namespace softwarecontainer

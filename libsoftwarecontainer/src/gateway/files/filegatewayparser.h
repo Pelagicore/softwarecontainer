@@ -22,6 +22,8 @@
 #include "softwarecontainer-common.h"
 #include <jansson.h>
 
+namespace softwarecontainer {
+
 class FileGatewayParser
 {
     LOG_DECLARE_CLASS_CONTEXT("FILP", "File gateway parser");
@@ -41,3 +43,5 @@ public:
      */
     ReturnCode parseConfigElement(const json_t *element, FileSetting &setting);
 };
+
+} // namespace softwarecontainer

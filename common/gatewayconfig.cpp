@@ -19,6 +19,8 @@
 
 #include "gatewayconfig.h"
 
+namespace softwarecontainer {
+
 GatewayConfiguration::GatewayConfiguration()
 {
 }
@@ -89,3 +91,5 @@ bool GatewayConfiguration::empty()
 {
     return m_configMap.empty();
 }
+
+} // namespace softwarecontainer

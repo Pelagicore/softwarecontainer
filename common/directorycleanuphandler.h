@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -22,6 +21,8 @@
 
 #include <cleanuphandler.h>
 
+namespace softwarecontainer {
+
 class DirectoryCleanUpHandler :
     public CleanUpHandler
 {
@@ -39,3 +40,5 @@ public:
 
     std::string m_path;
 };
+
+} // namespace softwarecontainer

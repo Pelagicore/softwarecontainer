@@ -53,4 +53,5 @@ public:
     GatewayConfiguration configByID(const std::string &capID) const;
 
 };
-}
+
+} // namespace softwarecontainer

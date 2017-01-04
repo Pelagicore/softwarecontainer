@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -24,6 +23,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+
+namespace softwarecontainer {
 
 std::string dstRoot;
 std::string srcRoot;
@@ -90,3 +91,5 @@ ReturnCode RecursiveCopy::copy(std::string src, std::string dst)
 RecursiveCopy::RecursiveCopy() { }
 
 RecursiveCopy::~RecursiveCopy() { }
+
+} // namespace softwarecontainer

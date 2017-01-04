@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -29,6 +28,8 @@
 
 #include "softwarecontainer-common.h"
 #include "containerabstractinterface.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief The Container class is an abstraction of the specific containment technology used.
@@ -267,3 +268,4 @@ private:
     ContainerState m_state = ContainerState::DEFAULT;
 };
 
+} // namespace softwarecontainer

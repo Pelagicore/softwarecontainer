@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -24,6 +23,8 @@
 
 #include "ivi-logging-console.h"
 #include "softwarecontainer-common.h"
+
+using namespace softwarecontainer;
 
 LOG_DEFINE_APP_IDS("PCON", "SoftwareContainer Unit Test");
 LOG_DECLARE_CONTEXT(SoftwareContainer_DefaultLogContext, "PCON", "Main context");

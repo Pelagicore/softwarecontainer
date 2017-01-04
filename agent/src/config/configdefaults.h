@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -22,6 +21,7 @@
 
 #include "softwarecontainer-common.h"
 
+namespace softwarecontainer {
 
 class ConfigDefaults
 {
@@ -40,3 +40,5 @@ protected:
     std::map<std::string, int> m_intOptions;
     std::map<std::string, bool> m_boolOptions;
 };
+
+} // namespace softwarecontainer

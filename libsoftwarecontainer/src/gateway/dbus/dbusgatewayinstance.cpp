@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,9 +17,10 @@
  * For further information see LICENSE
  */
 
-
 #include "dbusgateway.h"
 #include "dbusgatewayparser.h"
+
+namespace softwarecontainer {
 
 DBusGatewayInstance::DBusGatewayInstance(ProxyType type
                        , const std::string &gatewayDir
@@ -226,4 +226,4 @@ std::string DBusGatewayInstance::socketName()
     return socket.substr(socket.rfind('/') + 1);
 }
 
-
+} // namespace softwarecontainer

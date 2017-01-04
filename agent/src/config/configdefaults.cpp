@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,10 +17,10 @@
  * For further information see LICENSE
  */
 
-
 #include "config/configdefaults.h"
 #include "config/config.h"
 
+namespace softwarecontainer {
 
 ConfigDefaults::ConfigDefaults():
     m_stringOptions(std::map<std::string, std::string>()),
@@ -61,3 +60,5 @@ bool ConfigDefaults::getValue(const std::string &key) const
 {
     return m_boolOptions.at(key);
 }
+
+} // namespace softwarecontainer

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -28,7 +27,6 @@
 #include "configloaderabstractinterface.h"
 #include "configdefaults.h"
 #include "mandatoryconfigs.h"
-
 
 namespace softwarecontainer {
 

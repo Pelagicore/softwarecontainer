@@ -22,6 +22,8 @@
 #include "softwarecontainer-common.h"
 #include "jsonparser.h"
 
+namespace softwarecontainer {
+
 class DBusGatewayParser
 {
     LOG_DECLARE_CLASS_CONTEXT("DBGP", "D-Bus gateway parser");
@@ -32,3 +34,5 @@ public:
 private:
     void throwWithLog(std::string message);
 };
+
+} // namespace softwarecontainer

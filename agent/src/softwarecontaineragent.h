@@ -258,4 +258,5 @@ private:
     std::shared_ptr<FilteredConfigStore> m_filteredConfigStore;
     std::shared_ptr<DefaultConfigStore>  m_defaultConfigStore;
 };
-}
+
+} // namespace softwarecontainer

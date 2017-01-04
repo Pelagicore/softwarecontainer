@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,9 +17,10 @@
  * For further information see LICENSE
  */
 
-
 #include "gateway/devicenode/devicenodeparser.h"
 #include "gateway_parser_common.h"
+
+using namespace softwarecontainer;
 
 class DeviceNodeParserTest : public GatewayParserCommon<std::string>
 {

@@ -21,6 +21,8 @@
 
 #include "softwarecontainer-common.h"
 
+namespace softwarecontainer {
+
 /**
  * @brief A rules entry for the treatment of packets.
  */
@@ -113,3 +115,4 @@ private:
     ReturnCode insertCommand(std::string command);
 };
 
+} // namespace softwarecontainer

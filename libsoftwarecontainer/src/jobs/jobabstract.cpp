@@ -19,6 +19,8 @@
 
 #include "jobabstract.h"
 
+namespace softwarecontainer {
+
 JobAbstract::JobAbstract(SoftwareContainer &sc) :
     m_sc(sc)
 {
@@ -94,3 +96,5 @@ void JobAbstract::setEnvironmentVariables(const EnvironmentVariables &env)
 {
     m_env = env;
 }
+
+} // namespace softwarecontainer

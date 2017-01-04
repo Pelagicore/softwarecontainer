@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -21,6 +20,7 @@
 #pragma once
 #include "softwarecontainer-common.h"
 
+namespace softwarecontainer {
 
 /**
  * @brief The RecursiveCopy class is a singleton class used to copy files recursively from a
@@ -62,3 +62,5 @@ private:
      */
     std::mutex m_copyLock;
 };
+
+} // namespace softwarecontainer

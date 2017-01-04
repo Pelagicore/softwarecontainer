@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,12 +17,13 @@
  * For further information see LICENSE
  */
 
-
 #include "jansson.h"
 
 #include "softwarecontainer-common.h"
 #include "cgroupsgateway.h"
 #include "cgroupsparser.h"
+
+namespace softwarecontainer {
 
 CgroupsGateway::CgroupsGateway()
     : Gateway(ID)
@@ -64,3 +64,5 @@ bool CgroupsGateway::teardownGateway()
 {
     return true;
 }
+
+} // namespace softwarecontainer

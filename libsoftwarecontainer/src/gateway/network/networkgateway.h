@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -24,6 +23,8 @@
 #include "jansson.h"
 #include "netlink.h"
 #include "iptableentry.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief Sets up and manages network access and routing to the container
@@ -131,3 +132,5 @@ private:
     int32_t m_containerID;
     Netlink m_netlinkHost;
 };
+
+} // namespace softwarecontainer

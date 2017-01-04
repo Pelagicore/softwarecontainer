@@ -19,6 +19,8 @@
 
 #include "commandjob.h"
 
+namespace softwarecontainer {
+
 CommandJob::CommandJob(
     SoftwareContainer &sc, const std::string &command): JobAbstract(sc)
 {
@@ -47,3 +49,5 @@ std::string CommandJob::toString() const
                                     << m_command << " stdin:" << m_stdin[0]
                                     << " stdout:" << m_stdout[1];
 }
+
+} // namespace softwarecontainer

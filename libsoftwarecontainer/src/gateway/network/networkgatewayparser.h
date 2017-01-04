@@ -23,6 +23,7 @@
 #include "iptableentry.h"
 #include "jsonparser.h"
 
+namespace softwarecontainer {
 
 class NetworkGatewayParser
 {
@@ -72,3 +73,5 @@ private :
     IPTableEntry::Target parseTarget(const std::string &str);
 
 };
+
+} // namespace softwarecontainer

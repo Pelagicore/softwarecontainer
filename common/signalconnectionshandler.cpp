@@ -32,4 +32,4 @@ SignalConnectionsHandler::~SignalConnectionsHandler()
     }
 }
 
-}
+} // namespace softwarecontainer

@@ -19,6 +19,7 @@
 
 #include "gateway.h"
 
+namespace softwarecontainer {
 
 ReturnCode Gateway::setConfig(const std::string &config)
 {
@@ -175,3 +176,5 @@ ReturnCode Gateway::executeInContainer(ContainerFunction func)
         return ReturnCode::FAILURE;
     }
 }
+
+} // namespace softwarecontainer

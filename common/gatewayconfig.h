@@ -23,6 +23,8 @@
 #include "jansson.h"
 #include "softwarecontainer-common.h"
 
+namespace softwarecontainer {
+
 class GatewayConfiguration {
     LOG_DECLARE_CLASS_CONTEXT("GWCF", "GatewayConfig");
 
@@ -41,3 +43,4 @@ private:
     std::map<std::string, json_t *> m_configMap;
 };
 
+} // namespace softwarecontainer

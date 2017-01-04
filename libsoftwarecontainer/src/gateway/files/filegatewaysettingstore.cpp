@@ -19,6 +19,8 @@
 
 #include "filegatewaysettingstore.h"
 
+namespace softwarecontainer {
+
 FileGatewaySettingStore::FileGatewaySettingStore()
     : m_settings({})
 {
@@ -51,3 +53,5 @@ const std::vector<FileGatewayParser::FileSetting> &FileGatewaySettingStore::getS
 {
     return m_settings;
 }
+
+} // namespace softwarecontainer

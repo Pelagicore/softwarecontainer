@@ -23,6 +23,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+using namespace softwarecontainer;
+
 class MockGateway : public Gateway
 {
 public:

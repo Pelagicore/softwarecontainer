@@ -23,6 +23,8 @@
 
 #include "gateway_parser_common.h"
 
+using namespace softwarecontainer;
+
 class DBusGatewayParserTest : public GatewayParserCommon<std::string>
 {
 

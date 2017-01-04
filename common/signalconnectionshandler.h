@@ -66,4 +66,4 @@ inline void addProcessListener(
     connections.addConnection(connection);
 }
 
-} // end namespace
+} // namespace softwarecontainer

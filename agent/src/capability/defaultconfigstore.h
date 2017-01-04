@@ -31,4 +31,5 @@ public:
 
     GatewayConfiguration configs();
 };
-}
+
+} // namespace softwarecontainer

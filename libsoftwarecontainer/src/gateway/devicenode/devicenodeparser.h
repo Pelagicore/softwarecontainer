@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -23,6 +22,8 @@
 #include "softwarecontainer-common.h"
 #include "jsonparser.h"
 
+namespace softwarecontainer {
+
 class DeviceNodeParser
 {
     LOG_DECLARE_CLASS_CONTEXT("DNGP", "Device node gateway parser");
@@ -42,3 +43,4 @@ private:
     bool checkBoolSet(const bool &value, std::string errorMessage);
 };
 
+} // namespace softwarecontainer

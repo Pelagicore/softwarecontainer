@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -41,6 +40,8 @@
 
 #include "container.h"
 #include "filecleanuphandler.h"
+
+namespace softwarecontainer {
 
 static constexpr const char *LXC_CONTAINERS_ROOT_CONFIG_ITEM = "lxc.lxcpath";
 
@@ -779,3 +780,5 @@ const std::string &Container::rootFS() const
 {
     return m_rootFSPath;
 }
+
+} // namespace softwarecontainer

@@ -46,4 +46,4 @@ private:
 
 };
 
-} // end namespace
+} // namespace softwarecontainer

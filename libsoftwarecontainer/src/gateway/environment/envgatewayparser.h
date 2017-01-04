@@ -22,6 +22,8 @@
 #include "softwarecontainer-common.h"
 #include "jsonparser.h"
 
+namespace softwarecontainer {
+
 class EnvironmentGatewayParser
 {
     LOG_DECLARE_CLASS_CONTEXT("ENVP", "Environment gateway parser");
@@ -36,3 +38,5 @@ private:
                                        const std::string key,
                                        std::string &result);
 };
+
+} // namespace softwarecontainer

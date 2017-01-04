@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -20,6 +19,7 @@
 
 #include "mandatoryconfigs.h"
 
+namespace softwarecontainer {
 
 MandatoryConfigs::MandatoryConfigs():
     m_configs(std::vector<std::tuple<std::string, std::string, ConfigType>>()),
@@ -44,3 +44,5 @@ std::vector<std::string> MandatoryConfigs::groups()
 {
     return m_groups;
 }
+
+} // namespace softwarecontainer

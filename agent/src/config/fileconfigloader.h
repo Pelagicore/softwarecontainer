@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,13 +17,14 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include <glibmm.h>
 
 #include "softwarecontainer-common.h"
 #include "configloaderabstractinterface.h"
+
+namespace softwarecontainer {
 
 class FileConfigLoader : public ConfigLoaderAbstractInterface
 {
@@ -37,3 +37,5 @@ public:
 
     std::unique_ptr<Glib::KeyFile> loadConfig() override;
 };
+
+} // namespace softwarecontainer

@@ -147,6 +147,4 @@ ReturnCode writeToFile(const std::string &path, const std::string &content);
 ReturnCode readFromFile(const std::string &path, std::string &content);
 bool parseInt(const char *args, int *result);
 
-}
-
-using namespace softwarecontainer;
+} // namespace softwarecontainer;

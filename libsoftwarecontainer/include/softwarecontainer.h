@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -122,4 +121,5 @@ private:
 
     bool m_initialized = false;
 };
-}
+
+} // namespace softwarecontainer

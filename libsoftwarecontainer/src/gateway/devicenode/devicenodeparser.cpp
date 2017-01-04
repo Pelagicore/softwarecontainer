@@ -19,6 +19,8 @@
 
 #include "devicenodeparser.h"
 
+namespace softwarecontainer {
+
 ReturnCode DeviceNodeParser::parseDeviceNodeGatewayConfiguration(const json_t *element,
                                                                  Device &result)
 {
@@ -54,3 +56,5 @@ bool DeviceNodeParser::checkBoolSet(const bool &value, std::string errorMessage)
 
     return true;
 }
+
+} // namespace softwarecontainer

@@ -26,6 +26,8 @@
 #include <unistd.h>
 #include <libgen.h>
 
+using namespace softwarecontainer;
+
 class ConfigStoreTest: public ::testing::Test
 {
 public:

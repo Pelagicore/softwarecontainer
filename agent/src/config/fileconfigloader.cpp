@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,9 +17,9 @@
  * For further information see LICENSE
  */
 
-
 #include "fileconfigloader.h"
 
+namespace softwarecontainer {
 
 std::unique_ptr<Glib::KeyFile> FileConfigLoader::loadConfig()
 {
@@ -40,3 +39,5 @@ std::unique_ptr<Glib::KeyFile> FileConfigLoader::loadConfig()
 
     return configData;
 }
+
+} // namespace softwarecontainer

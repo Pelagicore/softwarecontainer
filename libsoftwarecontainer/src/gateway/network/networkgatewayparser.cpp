@@ -18,6 +18,8 @@
  */
 #include "networkgatewayparser.h"
 
+namespace softwarecontainer {
+
 ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &e)
 {
     std::string chain;
@@ -179,3 +181,5 @@ ReturnCode NetworkGatewayParser::parseProtocol(const json_t *element,
     }
     return ReturnCode::SUCCESS;
 }
+
+} // namespace softwarecontainer

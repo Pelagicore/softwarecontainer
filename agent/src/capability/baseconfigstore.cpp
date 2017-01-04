@@ -19,6 +19,8 @@
 
 #include "baseconfigstore.h"
 
+namespace softwarecontainer {
+
 BaseConfigStore::BaseConfigStore(const std::string &inputPath)
 {
     ReturnCode retval = ReturnCode::SUCCESS;
@@ -220,3 +222,5 @@ bool BaseConfigStore::isJsonFile(const std::string &filename) {
     }
     return filename.substr(filename.size()-5) == ".json";
 }
+
+} // namespace softwarecontainer

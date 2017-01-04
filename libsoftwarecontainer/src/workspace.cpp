@@ -19,6 +19,8 @@
 
 #include "workspace.h"
 
+namespace softwarecontainer {
+
 Workspace::Workspace()
 {
     // Make sure path ends in '/' since it might not always be checked
@@ -74,3 +76,5 @@ ReturnCode Workspace::checkWorkspace()
 
     return ReturnCode::SUCCESS;
 }
+
+} // namespace softwarecontainer

@@ -20,6 +20,7 @@
 #include "softwarecontaineragent.h"
 #include <cstdint>
 
+namespace softwarecontainer {
 
 SoftwareContainerAgent::SoftwareContainerAgent(
         Glib::RefPtr<Glib::MainContext> mainLoopContext,
@@ -467,3 +468,5 @@ std::shared_ptr<Workspace> SoftwareContainerAgent::getWorkspace()
 {
     return m_softwarecontainerWorkspace;
 }
+
+} // namespace softwarecontainer

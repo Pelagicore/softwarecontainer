@@ -20,6 +20,8 @@
 #include "gateway/cgroups/cgroupsparser.h"
 #include "gateway_parser_common.h"
 
+using namespace softwarecontainer;
+
 class CGroupsParserTest : public GatewayParserCommon<std::string>
 {
 public:

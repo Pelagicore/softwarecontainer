@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -25,6 +24,8 @@
 #include "softwarecontainer-common.h"
 #include "gateway.h"
 #include "devicenodelogic.h"
+
+namespace softwarecontainer {
 
 /**
  * @brief This gateway is responsible for exposing device nodes in an LXC container.
@@ -78,3 +79,5 @@ private:
 
     DeviceNodeLogic m_logic;
 };
+
+} // namespace softwarecontainer

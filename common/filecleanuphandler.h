@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -21,6 +20,8 @@
 #pragma once
 
 #include <cleanuphandler.h>
+
+namespace softwarecontainer {
 
 /**
  * @brief The FileCleanUpHandler class is a subclass of CleanUpHandler that deletes a file. It is
@@ -54,3 +55,5 @@ public:
 
     std::string m_path;
 };
+
+} // namespace softwarecontainer

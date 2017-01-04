@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -19,6 +18,8 @@
  */
 
 #include "devicenodelogic.h"
+
+namespace softwarecontainer {
 
 std::vector<DeviceNodeParser::Device>::iterator
 DeviceNodeLogic::findDeviceByName(const std::string name)
@@ -74,3 +75,4 @@ int DeviceNodeLogic::calculateDeviceMode(const int storedMode, const int applied
     return mode;
 }
 
+} // namespace softwarecontainer

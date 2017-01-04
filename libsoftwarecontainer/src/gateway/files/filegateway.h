@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,7 +17,6 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include <string>
@@ -27,6 +25,8 @@
 #include "gateway.h"
 #include "filegatewayparser.h"
 #include "filegatewaysettingstore.h"
+
+namespace softwarecontainer {
 
 /**
  * This gateway lets you map files (including socket files) or folders
@@ -51,3 +51,5 @@ private:
 
     FileGatewaySettingStore m_store;
 };
+
+} // namespace softwarecontainer

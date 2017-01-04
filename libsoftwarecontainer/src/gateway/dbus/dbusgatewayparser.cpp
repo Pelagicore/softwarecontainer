@@ -20,6 +20,8 @@
 #include "dbusgatewayparser.h"
 #include "gatewayparsererror.h"
 
+namespace softwarecontainer {
+
 ReturnCode DBusGatewayParser::parseDBusConfig(const json_t *element,
                                               const char *key,
                                               json_t *config)
@@ -53,3 +55,5 @@ void DBusGatewayParser::throwWithLog(std::string message)
     log_error() << message;
     throw GatewayParserError(message);
 }
+
+} // namespace softwarecontainer

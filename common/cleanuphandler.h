@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -37,4 +36,4 @@ public:
     virtual const std::string queryName() = 0;
 };
 
-}
+} // namespace softwarecontainer

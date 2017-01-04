@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2016 Pelagicore AB
  *
@@ -18,10 +17,11 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include "gateway.h"
+
+namespace softwarecontainer {
 
 class WaylandGateway :
     public Gateway
@@ -44,3 +44,5 @@ public:
 private:
     bool m_enabled;
 };
+
+} // namespace softwarecontainer

@@ -20,6 +20,8 @@
 #include "filegatewayparser.h"
 #include "jsonparser.h"
 
+namespace softwarecontainer {
+
 ReturnCode FileGatewayParser::parseConfigElement(const json_t *element, FileSetting &setting)
 {
     if (!JSONParser::read(element, "path-host", setting.pathInHost)) {
@@ -49,3 +51,5 @@ ReturnCode FileGatewayParser::parseConfigElement(const json_t *element, FileSett
 
     return ReturnCode::SUCCESS;
 }
+
+} // namespace softwarecontainer
