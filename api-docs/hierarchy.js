@@ -52,9 +52,6 @@ var hierarchy =
       [ "WaylandGateway", "class_wayland_gateway.html", null ]
     ] ],
     [ "GatewayConfiguration", "class_gateway_configuration.html", null ],
-    [ "IntrospectableAdaptor", null, [
-      [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
-    ] ],
     [ "IPTableEntry", "class_i_p_table_entry.html", null ],
     [ "softwarecontainer::JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html", [
       [ "softwarecontainer::CommandJob", "classsoftwarecontainer_1_1_command_job.html", null ],
@@ -64,9 +61,6 @@ var hierarchy =
     [ "softwarecontainer::MandatoryConfigs", "classsoftwarecontainer_1_1_mandatory_configs.html", null ],
     [ "Netlink", "class_netlink.html", null ],
     [ "NetworkGatewayParser", "class_network_gateway_parser.html", null ],
-    [ "ObjectAdaptor", null, [
-      [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
-    ] ],
     [ "ObservableProperty< Type >", "class_observable_property.html", [
       [ "ObservableWritableProperty< Type >", "class_observable_writable_property.html", null ]
     ] ],
@@ -79,9 +73,9 @@ var hierarchy =
     [ "IPTableEntry::Rule", "struct_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
     [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
-    [ "SoftwareContainerAgent_adaptor", null, [
-      [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", [
-        [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", null ]
-      ] ]
-    ] ]
+    [ "com::pelagicore::SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", [
+      [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
+    ] ],
+    [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
+    [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ]
 ];

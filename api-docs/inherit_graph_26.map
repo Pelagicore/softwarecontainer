@@ -1,12 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. " alt="" coords="5,201,139,242"/>
-<area shape="rect" id="node2" href="$class_cgroups_gateway.html" title="The cgroups gateway sets cgroups related settings for the container. " alt="" coords="204,5,327,32"/>
-<area shape="rect" id="node3" href="$class_d_bus_gateway.html" title="DBusGateway" alt="" coords="212,56,319,83"/>
-<area shape="rect" id="node4" href="$class_d_bus_gateway_instance.html" title="DBus Gateway takes care of spawning and killing the DBus proxies. " alt="" coords="187,107,344,133"/>
-<area shape="rect" id="node5" href="$class_device_node_gateway.html" title="This gateway is responsible for exposing device nodes in an LXC container. " alt="" coords="192,157,339,184"/>
-<area shape="rect" id="node6" href="$class_environment_gateway.html" title="Environment Gateway is used to define environment variables to the container. " alt="" coords="192,208,339,235"/>
-<area shape="rect" id="node7" href="$class_file_gateway.html" title="This gateway lets you map files (including socket files) or folders from the host into the container&#39;..." alt="" coords="218,259,313,285"/>
-<area shape="rect" id="node8" href="$class_network_gateway.html" title="Sets up and manages network access and routing to the container. " alt="" coords="204,309,327,336"/>
-<area shape="rect" id="node9" href="$class_pulse_gateway.html" title="The PulseAudio Gateway is used to provide access to the host system PulseAudio server. " alt="" coords="212,360,319,387"/>
-<area shape="rect" id="node10" href="$class_wayland_gateway.html" title="WaylandGateway" alt="" coords="203,411,328,437"/>
+<area shape="rect" id="node1" href="$class_container_abstract_interface.html" title="ContainerAbstractInterface" alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node2" href="$class_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="259,5,338,32"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="25,57,165,98"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="232,57,365,98"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. " alt="" coords="232,122,365,163"/>
 </map>

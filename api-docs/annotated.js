@@ -1,5 +1,10 @@
 var annotated =
 [
+    [ "com", null, [
+      [ "pelagicore", null, [
+        [ "SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", "classcom_1_1pelagicore_1_1_software_container_agent" ]
+      ] ]
+    ] ],
     [ "softwarecontainer", null, [
       [ "BaseConfigStore", "classsoftwarecontainer_1_1_base_config_store.html", "classsoftwarecontainer_1_1_base_config_store" ],
       [ "CleanUpHandler", "classsoftwarecontainer_1_1_clean_up_handler.html", "classsoftwarecontainer_1_1_clean_up_handler" ],
@@ -30,7 +35,6 @@ var annotated =
     [ "ConfigLoaderAbstractInterface", "class_config_loader_abstract_interface.html", "class_config_loader_abstract_interface" ],
     [ "Container", "class_container.html", "class_container" ],
     [ "ContainerAbstractInterface", "class_container_abstract_interface.html", "class_container_abstract_interface" ],
-    [ "DBusCppAdaptor", "class_d_bus_cpp_adaptor.html", "class_d_bus_cpp_adaptor" ],
     [ "DBusGateway", "class_d_bus_gateway.html", "class_d_bus_gateway" ],
     [ "DBusGatewayInstance", "class_d_bus_gateway_instance.html", "class_d_bus_gateway_instance" ],
     [ "DBusGatewayParser", "class_d_bus_gateway_parser.html", "class_d_bus_gateway_parser" ],
@@ -57,5 +61,7 @@ var annotated =
     [ "PProfiler", "class_p_profiler.html", "class_p_profiler" ],
     [ "PulseGateway", "class_pulse_gateway.html", "class_pulse_gateway" ],
     [ "RecursiveCopy", "class_recursive_copy.html", "class_recursive_copy" ],
+    [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", "class_software_container_agent_common" ],
+    [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", "class_software_container_agent_message_helper" ],
     [ "WaylandGateway", "class_wayland_gateway.html", "class_wayland_gateway" ]
 ];
