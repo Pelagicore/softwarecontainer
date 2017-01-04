@@ -25,7 +25,7 @@ fi
 # cd to the directory of this script.
 cd "$(dirname "$0")"
 
-DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment networkgateway)
+DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment networkgateway queries)
 
 # We want to exit with bad status in case some test fail. Mostly so that any
 # CI system will notice that not everything was good.
