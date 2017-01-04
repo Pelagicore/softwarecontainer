@@ -21,34 +21,30 @@
 
 #include "softwarecontainer-common.h"
 #include "cgroupsgateway.h"
-#include "cgroupsparser.h"
 
 namespace softwarecontainer {
 
 CgroupsGateway::CgroupsGateway()
     : Gateway(ID)
-    , m_settings({})
+    , m_parser()
 {
 }
 
 ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
 {
-    CGroupsParser::CGroupsPair pair;
-    CGroupsParser parser;
-
-    if (isError(parser.parseCGroupsGatewayConfiguration(element, pair))) {
+    if (isError(m_parser.parseCGroupsGatewayConfiguration(element))) {
         log_error() << "Could not parse CGroups configuration element";
         return ReturnCode::FAILURE;
     }
 
-    m_settings.insert(pair);
     return ReturnCode::SUCCESS;
 }
 
 bool CgroupsGateway::activateGateway()
 {
     ReturnCode success = ReturnCode::FAILURE;
-    for (auto& setting: m_settings) {
+    auto cgroupSettings = m_parser.getSettings();
+    for (auto& setting: cgroupSettings) {
         success = getContainer()->setCgroupItem(setting.first, setting.second);
         if (success != ReturnCode::SUCCESS) {
             log_error() << "Error activating Cgroups Gateway, could not set cgroup item "

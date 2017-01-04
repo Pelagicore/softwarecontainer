@@ -26,7 +26,6 @@ class CGroupsParserTest : public GatewayParserCommon<std::string>
 {
 public:
     CGroupsParser parser;
-    CGroupsParser::CGroupsPair result;
 
     std::string config;
 
@@ -43,9 +42,8 @@ public:
 typedef CGroupsParserTest CGroupsNegativeTest;
 TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
     json_t *configJSON = convertToJSON(config);
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseCGroupsGatewayConfiguration(configJSON, result));
-    ASSERT_TRUE(result.first.empty());
-    ASSERT_TRUE(result.second.empty());
+    ASSERT_EQ(ReturnCode::FAILURE, parser.parseCGroupsGatewayConfiguration(configJSON));
+    ASSERT_TRUE(parser.getSettings().empty());
 }
 
 /*
@@ -55,9 +53,8 @@ TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
 typedef CGroupsParserTest CGroupsPositiveTest;
 TEST_P(CGroupsPositiveTest, SuccessWhenConfigIsGood) {
     json_t *configJSON = convertToJSON(config);
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(configJSON, result));
-    ASSERT_FALSE(result.first.empty());
-    ASSERT_FALSE(result.second.empty());
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(configJSON));
+    ASSERT_FALSE(parser.getSettings().empty());
 }
 
 /*
@@ -93,3 +90,67 @@ INSTANTIATE_TEST_CASE_P(TestGoodConfigs, CGroupsPositiveTest, ::testing::Values(
         \"setting\": \"test\"\
      }"
 ));
+
+struct testWhitelist
+{
+    std::string key;
+    std::string firstConfig;
+    std::string nextConfig;
+    std::string expectedValue;
+};
+
+class CGroupsParserWhitelistTests : public GatewayParserCommon<testWhitelist>
+{
+public:
+    CGroupsParser parser;
+    testWhitelist testparams;
+
+    void SetUp() override
+    {
+        testparams = GetParam();
+    }
+};
+
+/*
+ * This data is fed to the DeviceMode tests
+ */
+INSTANTIATE_TEST_CASE_P(CGroupsWhitelistParameters, CGroupsParserWhitelistTests, ::testing::Values(
+        testWhitelist{
+            "memory.limit_in_bytes",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"20\"}",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"10000\"}",
+            "10000"
+        },
+        testWhitelist{
+            "memory.limit_in_bytes",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"500\"}",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"10\"}",
+            "500"
+        },
+        testWhitelist{
+            "cpu.shares",
+            "{\"setting\": \"cpu.shares\", \"value\": \"500\"}",
+            "{\"setting\": \"cpu.shares\", \"value\": \"10\"}",
+            "10"
+        },
+        testWhitelist{
+            "cpu.shares",
+            "{\"setting\": \"cpu.shares\", \"value\": \"10\"}",
+            "{\"setting\": \"cpu.shares\", \"value\": \"500\"}",
+            "500"
+        }
+));
+
+/*
+ * Verify whitelisting with seperate keys
+ */
+TEST_P(CGroupsParserWhitelistTests, WithRelevantKeys) {
+    json_t *firstConfig = convertToJSON(testparams.firstConfig);
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(firstConfig));
+
+    json_t *nextConfig = convertToJSON(testparams.nextConfig);
+    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(nextConfig));
+
+    auto settings = parser.getSettings();
+    ASSERT_EQ(settings[testparams.key], testparams.expectedValue);
+}
