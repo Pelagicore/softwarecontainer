@@ -72,12 +72,12 @@ INSTANTIATE_TEST_CASE_P(TestBadConfigs, CGroupsNegativeTest, ::testing::Values(
 
     // No value
     "{\
-       \"setting\": \"cpu.shares\"\
+       \"setting\": \"memory.limit_in_bytes\"\
     }",
 
     // Value is wrong type
     "{\
-       \"setting\": \"cpu.shares\",\
+       \"setting\": \"memory.limit_in_bytes\",\
        \"value\": [\"a\", \"b\"]\
      }"
 ));
@@ -128,15 +128,15 @@ INSTANTIATE_TEST_CASE_P(CGroupsWhitelistParameters, CGroupsParserWhitelistTests,
             "500"
         },
         testWhitelist{
-            "cpu.shares",
-            "{\"setting\": \"cpu.shares\", \"value\": \"500\"}",
-            "{\"setting\": \"cpu.shares\", \"value\": \"10\"}",
+            "unsupported.parameter",
+            "{\"setting\": \"unsupported.parameter\", \"value\": \"500\"}",
+            "{\"setting\": \"unsupported.parameter\", \"value\": \"10\"}",
             "10"
         },
         testWhitelist{
-            "cpu.shares",
-            "{\"setting\": \"cpu.shares\", \"value\": \"10\"}",
-            "{\"setting\": \"cpu.shares\", \"value\": \"500\"}",
+            "unsupported.parameter",
+            "{\"setting\": \"unsupported.parameter\", \"value\": \"10\"}",
+            "{\"setting\": \"unsupported.parameter\", \"value\": \"500\"}",
             "500"
         }
 ));
