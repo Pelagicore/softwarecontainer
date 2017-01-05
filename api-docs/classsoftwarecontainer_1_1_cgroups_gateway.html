@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-547d6f3 2017-01-05</span>
+   &#160;<span id="projectnumber">0.15.0-824ae80 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -167,7 +167,7 @@ ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContai
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The cgroups gateway sets cgroups related settings for the container. </p>
 
-<p>Definition at line <a class="el" href="cgroupsgateway_8h_source.html#l00031">31</a> of file <a class="el" href="cgroupsgateway_8h_source.html">cgroupsgateway.h</a>.</p>
+<p>Definition at line <a class="el" href="cgroupsgateway_8h_source.html#l00032">32</a> of file <a class="el" href="cgroupsgateway_8h_source.html">cgroupsgateway.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a0971af3794daca430b2a43f309d65b79"></a>
 <div class="memitem">
@@ -228,19 +228,15 @@ ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContai
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway</a>.</p>
 
-<p>Definition at line <a class="el" href="cgroupsgateway_8cpp_source.html#l00034">34</a> of file <a class="el" href="cgroupsgateway_8cpp_source.html">cgroupsgateway.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    CGroupsParser::CGroupsPair pair;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    CGroupsParser parser;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (isError(parser.parseCGroupsGatewayConfiguration(element, pair))) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse CGroups configuration element&quot;</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    m_settings.insert(pair);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
+<p>Definition at line <a class="el" href="cgroupsgateway_8cpp_source.html#l00033">33</a> of file <a class="el" href="cgroupsgateway_8cpp_source.html">cgroupsgateway.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">if</span> (isError(m_parser.parseCGroupsGatewayConfiguration(element))) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse CGroups configuration element&quot;</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -891,7 +887,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_cgroups_gateway.html">CgroupsGateway</a></li>
-    <li class="footer">Generated on Thu Jan 5 2017 09:33:26 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 09:52:45 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

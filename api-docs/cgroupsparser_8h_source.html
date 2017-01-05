@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-547d6f3 2017-01-05</span>
+   &#160;<span id="projectnumber">0.15.0-824ae80 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -97,13 +97,20 @@ $(document).ready(function(){initNavTree('cgroupsparser_8h_source.html','');});
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;CGPA&quot;</span>, <span class="stringliteral">&quot;CGroups Gateway Parser&quot;</span>);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">typedef</span> std::pair&lt; std::string, std::string &gt; CGroupsPair;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    ReturnCode parseCGroupsGatewayConfiguration(<span class="keyword">const</span> json_t *element, CGroupsPair &amp;result);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;};</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_c_groups_parser.html">CGroupsParser</a>();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    ReturnCode parseCGroupsGatewayConfiguration(<span class="keyword">const</span> json_t *element);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">     * @brief Get the map of cgroup settings</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">     * @return A list of cgroup settings ready to be applied</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;getSettings();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">private</span> :</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    std::map&lt;std::string, std::string&gt; m_settings;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_c_groups_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_c_groups_parser.html">softwarecontainer::CGroupsParser</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsparser_8h_source.html#l00027">cgroupsparser.h:27</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -112,7 +119,7 @@ $(document).ready(function(){initNavTree('cgroupsparser_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_646af10687434ab6c31bea5c882c000e.html">cgroups</a></li><li class="navelem"><b>cgroupsparser.h</b></li>
-    <li class="footer">Generated on Thu Jan 5 2017 09:33:26 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 09:52:45 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

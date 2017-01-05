@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CGroups gateway &#8212; softwarecontainer 0.15.0-547d6f3 2017-01-05 documentation</title>
+    <title>CGroups gateway &#8212; softwarecontainer 0.15.0-824ae80 2017-01-05 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.15.0-547d6f3 2017-01-05',
+        VERSION:     '0.15.0-824ae80 2017-01-05',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -55,6 +55,17 @@ is a string in the format &lt;cgroup subsystem&gt;.&lt;setting&gt; and the <code
 with the value to apply.</p>
 <p>No syntax or other checks for correctness is performed on the key/value pairs,
 see the <cite>lxc.container.conf</cite> man page for more details about valid settings.</p>
+<p>Before appying the configuration it is advised to check if the cgroup option is enabled in
+the system&#8217;s kernel. Following command will list available cgroup options:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">cgroup</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="whitelisting">
+<h2>Whitelisting<a class="headerlink" href="#whitelisting" title="Permalink to this headline">¶</a></h2>
+<p>This gateway has a whitelisting policy only when the setting is memory.limit_in_bytes. If the
+gateway is configured multiple times whith the memory.limit_in_bytes setting, the bigger value
+will be set. For all other settings the last value will be set.</p>
 </div>
 <div class="section" id="example-configurations">
 <h2>Example configurations<a class="headerlink" href="#example-configurations" title="Permalink to this headline">¶</a></h2>
@@ -62,17 +73,18 @@ see the <cite>lxc.container.conf</cite> man page for more details about valid se
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
         <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.limit_in_bytes&quot;</span><span class="p">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;128M&quot;</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;12000&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;cpu.shares&quot;</span><span class="p">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p">:</span>  <span class="s">&quot;256&quot;</span>
+        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.limit_in_bytes&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;500&quot;</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 <p>The root object is an array of setting key/value pair objects. Each key/value pair
-must have the <code class="docutils literal"><span class="pre">setting</span></code> and <code class="docutils literal"><span class="pre">value</span></code> defined.</p>
+must have the <code class="docutils literal"><span class="pre">setting</span></code> and <code class="docutils literal"><span class="pre">value</span></code> defined. In the example above value of memory.limit_in_bytes
+will be set to 12000 due to whitelisting policy mentioned above.</p>
 </div>
 </div>
 
@@ -87,6 +99,7 @@ must have the <code class="docutils literal"><span class="pre">setting</span></c
 <li><a class="reference internal" href="#">CGroups gateway</a><ul>
 <li><a class="reference internal" href="#id">ID</a></li>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#whitelisting">Whitelisting</a></li>
 <li><a class="reference internal" href="#example-configurations">Example configurations</a></li>
 </ul>
 </li>
