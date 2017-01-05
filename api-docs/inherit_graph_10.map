@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$struct_file_gateway_parser_1_1_file_setting.html" title="FileGatewayParser::\lFileSetting" alt="" coords="5,5,147,47"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_config_loader_abstract_interface.html" title="softwarecontainer::\lConfigLoaderAbstractInterface" alt="" coords="5,5,204,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_config_loader.html" title="softwarecontainer::\lFileConfigLoader" alt="" coords="252,5,385,47"/>
 </map>

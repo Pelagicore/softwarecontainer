@@ -1,4 +1,0 @@
-<map id="softwarecontainer::Gateway::isActivated" name="softwarecontainer::Gateway::isActivated">
-<area shape="rect" id="node2" href="$class_d_bus_gateway.html#ade3ebce4b88d1684aafd5fc27d94cbef" title="Is the gateway activated or not? " alt="" coords="200,5,380,32"/>
-<area shape="rect" id="node3" href="$class_d_bus_gateway.html#ab6ef6ea2b216e3a15bdd1ff3822283e9" title="Restore system to the state prior to launching of gateway. " alt="" coords="206,56,374,83"/>
-</map>

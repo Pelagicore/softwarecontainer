@@ -1,0 +1,7 @@
+<map id="softwarecontainer::SoftwareContainerAgent::checkContainer" name="softwarecontainer::SoftwareContainerAgent::checkContainer">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce" title="Bind mount a folder into the container. " alt="" coords="217,5,381,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b" title="Launch the given command in a the given container. " alt="" coords="217,85,381,141"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333" title="resumes execution of a container " alt="" coords="217,165,381,221"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86" title="shuts down a container " alt="" coords="217,245,381,301"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24" title="suspends execution of a container " alt="" coords="217,325,381,381"/>
+</map>

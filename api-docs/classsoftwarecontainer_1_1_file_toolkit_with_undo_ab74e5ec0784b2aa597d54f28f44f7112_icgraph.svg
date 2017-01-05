@@ -18,9 +18,10 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="class_container.html#a0665ab6bbf3018c8cf478d3a0ee7f956" target="_top" xlink:title="Setup the container for preloading. ">
-<polygon fill="white" stroke="black" points="166,-11.5 166,-30.5 266,-30.5 266,-11.5 166,-11.5"/>
-<text text-anchor="middle" x="216" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for preloading. ">
+<polygon fill="white" stroke="black" points="166,-6 166,-36 266,-36 266,-6 166,-6"/>
+<text text-anchor="start" x="174" y="-24" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="216" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
 </a>
 </g>
 </g>

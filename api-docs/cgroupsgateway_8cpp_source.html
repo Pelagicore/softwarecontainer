@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -66,43 +66,43 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="title">cgroupsgateway.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;jansson.h&quot;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;jansson.h&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;softwarecontainer-common.h&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;cgroupsgateway.h&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;cgroupsparser.h&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;softwarecontainer-common.h&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;cgroupsgateway.h&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;cgroupsparser.h&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;CgroupsGateway::CgroupsGateway()</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    : <a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a>(ID)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    : Gateway(ID)</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    , m_settings({})</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;}</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="class_cgroups_gateway.html#a6b77885877877af00df49b5aa539592d">   34</a></span>&#160;ReturnCode <a class="code" href="class_cgroups_gateway.html#a6b77885877877af00df49b5aa539592d">CgroupsGateway::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_cgroups_gateway.html#a2333bb26b5768b956410183490483e95">   34</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_cgroups_gateway.html#a2333bb26b5768b956410183490483e95">CgroupsGateway::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    CGroupsParser::CGroupsPair pair;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="class_c_groups_parser.html">CGroupsParser</a> parser;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_c_groups_parser.html">CGroupsParser</a> parser;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (isError(parser.parseCGroupsGatewayConfiguration(element, pair))) {</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse CGroups configuration element&quot;</span>;</div>
@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    ReturnCode success = ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; setting: m_settings) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        success = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">getContainer</a>()-&gt;setCgroupItem(setting.first, setting.second);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        success = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;setCgroupItem(setting.first, setting.second);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">if</span> (success != ReturnCode::SUCCESS) {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Error activating Cgroups Gateway, could not set cgroup item &quot;</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                        &lt;&lt; setting.first &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; setting.second;</div>
@@ -132,17 +132,19 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;{</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ab03846b347174727f70ab4e4ce5db09f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ab03846b347174727f70ab4e4ce5db09f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
-<div class="ttc" id="class_c_groups_parser_html"><div class="ttname"><a href="class_c_groups_parser.html">CGroupsParser</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsparser_8h_source.html#l00007">cgroupsparser.h:7</a></div></div>
-<div class="ttc" id="class_cgroups_gateway_html_a6b77885877877af00df49b5aa539592d"><div class="ttname"><a href="class_cgroups_gateway.html#a6b77885877877af00df49b5aa539592d">CgroupsGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8cpp_source.html#l00034">cgroupsgateway.cpp:34</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_html_a2333bb26b5768b956410183490483e95"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway.html#a2333bb26b5768b956410183490483e95">softwarecontainer::CgroupsGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8cpp_source.html#l00034">cgroupsgateway.cpp:34</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00120">gateway.cpp:120</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_c_groups_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_c_groups_parser.html">softwarecontainer::CGroupsParser</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsparser_8h_source.html#l00027">cgroupsparser.h:27</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_646af10687434ab6c31bea5c882c000e.html">cgroups</a></li><li class="navelem"><b>cgroupsgateway.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:10 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:06 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

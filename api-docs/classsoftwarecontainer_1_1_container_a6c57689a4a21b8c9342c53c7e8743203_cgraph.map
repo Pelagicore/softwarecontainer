@@ -1,0 +1,5 @@
+<map id="softwarecontainer::Container::create" name="softwarecontainer::Container::create">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="187,39,327,95"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="375,5,515,61"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="563,39,703,95"/>
+</map>

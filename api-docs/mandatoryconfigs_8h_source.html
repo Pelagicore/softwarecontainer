@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -66,71 +66,69 @@ $(document).ready(function(){initNavTree('mandatoryconfigs_8h_source.html','');}
 <div class="title">mandatoryconfigs.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;softwarecontainer-common.h&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;softwarecontainer-common.h&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">// Forward declared to avoid circular include with config.h</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">enum class</span> ConfigType;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_mandatory_configs.html">   32</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// Forward declared to avoid circular include with config.h</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">enum class</span> ConfigType;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_mandatory_configs.html">   30</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;CFGM&quot;</span>, <span class="stringliteral">&quot;SoftwareContainer general config mandatory values&quot;</span>);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;CFGM&quot;</span>, <span class="stringliteral">&quot;SoftwareContainer general config mandatory values&quot;</span>);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a>() {}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a>() {}</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html#a0f5387f44c2f5973710721089f24e0e0">addConfig</a>(<span class="keyword">const</span> std::string &amp;group, <span class="keyword">const</span> std::string &amp;key, ConfigType type);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    std::vector&lt;std::tuple&lt;std::string, std::string, ConfigType&gt;&gt; <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html#a3d9e8da6c8bf3c1f93a68a0aa79842ee">configs</a>();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html#adf9425ca1a3e4ccba015b8065204e353">groups</a>();</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    std::vector&lt;std::tuple&lt;std::string, std::string, ConfigType&gt;&gt; m_configs;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::vector&lt;std::string&gt; m_groups;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html_a3d9e8da6c8bf3c1f93a68a0aa79842ee"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html#a3d9e8da6c8bf3c1f93a68a0aa79842ee">softwarecontainer::MandatoryConfigs::configs</a></div><div class="ttdeci">std::vector&lt; std::tuple&lt; std::string, std::string, ConfigType &gt; &gt; configs()</div><div class="ttdoc">Get all mandatory configs as group and key. </div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8cpp_source.html#l00038">mandatoryconfigs.cpp:38</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html_a0f5387f44c2f5973710721089f24e0e0"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html#a0f5387f44c2f5973710721089f24e0e0">softwarecontainer::MandatoryConfigs::addConfig</a></div><div class="ttdeci">void addConfig(const std::string &amp;group, const std::string &amp;key, ConfigType type)</div><div class="ttdoc">Adds a mandatory config key with associated group. </div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8cpp_source.html#l00030">mandatoryconfigs.cpp:30</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html_adf9425ca1a3e4ccba015b8065204e353"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html#adf9425ca1a3e4ccba015b8065204e353">softwarecontainer::MandatoryConfigs::groups</a></div><div class="ttdeci">std::vector&lt; std::string &gt; groups()</div><div class="ttdoc">Get all mandatory config groups. </div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8cpp_source.html#l00043">mandatoryconfigs.cpp:43</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8h_source.html#l00031">baseconfigstore.h:31</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html">softwarecontainer::MandatoryConfigs</a></div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8h_source.html#l00032">mandatoryconfigs.h:32</a></div></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html#a0bd80cd3e5bebdaf63f450818f93e477">addConfig</a>(<span class="keyword">const</span> std::string &amp;group, <span class="keyword">const</span> std::string &amp;key, ConfigType type);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::vector&lt;std::tuple&lt;std::string, std::string, ConfigType&gt;&gt; <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html#af14aaf1a2c24eef0b29ddc103ff77b4e">configs</a>();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="classsoftwarecontainer_1_1_mandatory_configs.html#a6526af35c6306d2d342f3a5091ce92fe">groups</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    std::vector&lt;std::tuple&lt;std::string, std::string, ConfigType&gt;&gt; m_configs;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    std::vector&lt;std::string&gt; m_groups;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;};</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html_a6526af35c6306d2d342f3a5091ce92fe"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html#a6526af35c6306d2d342f3a5091ce92fe">softwarecontainer::MandatoryConfigs::groups</a></div><div class="ttdeci">std::vector&lt; std::string &gt; groups()</div><div class="ttdoc">Get all mandatory config groups. </div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8cpp_source.html#l00043">mandatoryconfigs.cpp:43</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html_a0bd80cd3e5bebdaf63f450818f93e477"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html#a0bd80cd3e5bebdaf63f450818f93e477">softwarecontainer::MandatoryConfigs::addConfig</a></div><div class="ttdeci">void addConfig(const std::string &amp;group, const std::string &amp;key, ConfigType type)</div><div class="ttdoc">Adds a mandatory config key with associated group. </div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8cpp_source.html#l00030">mandatoryconfigs.cpp:30</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html_af14aaf1a2c24eef0b29ddc103ff77b4e"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html#af14aaf1a2c24eef0b29ddc103ff77b4e">softwarecontainer::MandatoryConfigs::configs</a></div><div class="ttdeci">std::vector&lt; std::tuple&lt; std::string, std::string, ConfigType &gt; &gt; configs()</div><div class="ttdoc">Get all mandatory configs as group and key. </div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8cpp_source.html#l00038">mandatoryconfigs.cpp:38</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_mandatory_configs_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_mandatory_configs.html">softwarecontainer::MandatoryConfigs</a></div><div class="ttdef"><b>Definition:</b> <a href="mandatoryconfigs_8h_source.html#l00030">mandatoryconfigs.h:30</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><a class="el" href="dir_91f28cb6b1af0be1ff9e84931ad37c4b.html">config</a></li><li class="navelem"><b>mandatoryconfigs.h</b></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:10 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:06 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

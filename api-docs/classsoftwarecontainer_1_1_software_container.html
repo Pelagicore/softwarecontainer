@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -123,7 +123,7 @@ ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td
 <tr class="separator:a1f43e70e787d3b56baf1d6e863282820"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88d21d398c782cd7715b8f17307a14b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88d21d398c782cd7715b8f17307a14b2"></a>
 std::shared_ptr<br class="typebreak" />
-&lt; <a class="el" href="class_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainer</b> ()</td></tr>
+&lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainer</b> ()</td></tr>
 <tr class="separator:a88d21d398c782cd7715b8f17307a14b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3ca1f534473dc59131be8553b088de8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3ca1f534473dc59131be8553b088de8"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getContainerDir</b> ()</td></tr>
@@ -135,7 +135,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getGatewayDir<
 <a class="el" href="class_observable_property.html">ObservableProperty</a><br class="typebreak" />
 &lt; ContainerState &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainerState</b> ()</td></tr>
 <tr class="separator:a25cb629242d33c12d2f3468bbd34964a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3721d6df411f8f24002eb08f0998ca07"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a3721d6df411f8f24002eb08f0998ca07">setGatewayConfigs</a> (const <a class="el" href="class_gateway_configuration.html">GatewayConfiguration</a> &amp;configs)</td></tr>
+<tr class="memitem:a3721d6df411f8f24002eb08f0998ca07"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a3721d6df411f8f24002eb08f0998ca07">setGatewayConfigs</a> (const <a class="el" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;configs)</td></tr>
 <tr class="memdesc:a3721d6df411f8f24002eb08f0998ca07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gateway configurations and activates the configured gateway.  <a href="#a3721d6df411f8f24002eb08f0998ca07">More...</a><br /></td></tr>
 <tr class="separator:a3721d6df411f8f24002eb08f0998ca07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -177,7 +177,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00041">41</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00040">40</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a84a34e91e09b30a2f62b25e0b3926a6d"></a>
 <div class="memitem">
@@ -219,7 +219,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00254">254</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00343">softwarecontainer::SoftwareContainerAgent::shutdownContainer()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00344">softwarecontainer::SoftwareContainerAgent::shutdownContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;{</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_workspace-&gt;m_containerShutdownTimeout);</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;}</div>
@@ -285,7 +285,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">ReturnCode softwarecontainer::SoftwareContainer::setGatewayConfigs </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_gateway_configuration.html">GatewayConfiguration</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;&#160;</td>
           <td class="paramname"><em>configs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -326,7 +326,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:11 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:07 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

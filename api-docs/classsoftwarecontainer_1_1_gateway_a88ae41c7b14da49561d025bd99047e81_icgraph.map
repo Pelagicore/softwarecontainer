@@ -1,4 +1,0 @@
-<map id="softwarecontainer::Gateway::isConfigured" name="softwarecontainer::Gateway::isConfigured">
-<area shape="rect" id="node2" href="$class_d_bus_gateway.html#af46946bb52d1b9b6a2ec77df3df2e3e0" title="Activates both dbus session instances. " alt="" coords="221,5,383,32"/>
-<area shape="rect" id="node3" href="$class_d_bus_gateway.html#a9d53d37dc2aec2e5d41554c25241e746" title="Is the gateway configured or not? " alt="" coords="208,56,396,83"/>
-</map>

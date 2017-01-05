@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -94,103 +94,107 @@ $(document).ready(function(){initNavTree('netlink_8h_source.html','');});
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_netlink.html">   35</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_netlink.html">Netlink</a></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;rtattr, void*&gt; AttributeInfo;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">typedef</span> std::vector&lt;AttributeInfo&gt; AttributeList;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;ifinfomsg, AttributeList&gt; LinkInfo;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;ifaddrmsg, AttributeList&gt; AddressInfo;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;rtmsg, AttributeList&gt; RouteInfo;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="class_netlink.html#aca72209683b0e8ec83cf1c808561eb69">Netlink</a>();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="class_netlink.html#ad833ed199b0f68eaee0ba2b527fdd5f8">~Netlink</a>();</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#a1764702f3ed67ae491696c7632dea0cd">getKernelDump</a>();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keyword">virtual</span> ReturnCode <a class="code" href="class_netlink.html#af2756a7ed673d086466f75d57de09fdf">checkKernelDump</a>();</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#a549bc6adda3142682c868a25b2af9231">setDefaultGateway</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *gatewayAddress);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#a543fb0107278eb2bf932cfa52a615f7a">linkUp</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> ifaceIndex);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#aed6f3c913fe88c0648b91252419f7846">linkDown</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> ifaceIndex);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#ad71afe1271bbc38578d0e85e7aef0118">setIP</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> ifaceIndex, <span class="keyword">const</span> in_addr ip, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> netmask);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#a2d30154efaa239d181651a953720f916">findLink</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *ifaceName, LinkInfo &amp;linkInfo);</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#ad4bf08fab49ab14314e4925ecedd8cb6">findAddresses</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> interfaceIndex, std::vector&lt;AddressInfo&gt; &amp;result);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        ReturnCode <a class="code" href="class_netlink.html#a7f315e1dd78801c0d3bb2ee46ff179c7">hasAddress</a>(<span class="keyword">const</span> std::vector&lt;AddressInfo&gt; &amp;haystack, <span class="keyword">const</span> <span class="keywordtype">int</span> addressFamily, <span class="keyword">const</span> <span class="keywordtype">char</span> *needle);</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        ReturnCode setupNetlink();</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">void</span> clearCache();</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> msgtype, <span class="keyword">typename</span> InfoType&gt;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            ReturnCode saveMessage(<span class="keyword">const</span> <span class="keyword">struct</span> nlmsghdr &amp;header, std::vector&lt;InfoType&gt; &amp;result);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> msgtype&gt;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            ReturnCode getAttributes(<span class="keyword">const</span> <span class="keyword">struct</span> nlmsghdr &amp;header, AttributeList &amp;result);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;<span class="keyword">struct </span>netlink_request {</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            nlmsghdr hdr;</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            payload pay;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keywordtype">char</span> attr[2048];</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        };</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            netlink_request&lt;payload&gt; createMessage(<span class="keyword">const</span> <span class="keywordtype">int</span> type, <span class="keyword">const</span> <span class="keywordtype">int</span> flags);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            ReturnCode addAttribute(netlink_request&lt;payload&gt; &amp;req, <span class="keyword">const</span> <span class="keywordtype">int</span> type, <span class="keyword">const</span> <span class="keywordtype">size_t</span> length, <span class="keyword">const</span> <span class="keywordtype">void</span> *data);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            ReturnCode sendMessage(netlink_request&lt;payload&gt; &amp;request);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="keywordtype">int</span> readMessage();</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keywordtype">void</span> freeAttributes(AttributeList &amp;attrList);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="comment">// Netlink communication variables</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <span class="keyword">struct </span>sockaddr_nl m_local;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keyword">struct </span>sockaddr_nl m_kernel;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keywordtype">int</span> m_fd;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        pid_t m_pid;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_sequenceNumber;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="comment">// The local cache of links, addresses and routes</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        std::vector&lt; LinkInfo &gt; m_links;</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        std::vector&lt; AddressInfo &gt; m_addresses;</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        std::vector&lt; RouteInfo &gt; m_routes;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="comment">// Status flags</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="keywordtype">bool</span> m_hasKernelDump;</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordtype">bool</span> m_netlinkInitialized;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;};</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
-<div class="ttc" id="class_netlink_html_aed6f3c913fe88c0648b91252419f7846"><div class="ttname"><a href="class_netlink.html#aed6f3c913fe88c0648b91252419f7846">Netlink::linkDown</a></div><div class="ttdeci">ReturnCode linkDown(const int ifaceIndex)</div><div class="ttdoc">Bring a given interface down. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00258">netlink.cpp:258</a></div></div>
-<div class="ttc" id="class_netlink_html_a2d30154efaa239d181651a953720f916"><div class="ttname"><a href="class_netlink.html#a2d30154efaa239d181651a953720f916">Netlink::findLink</a></div><div class="ttdeci">ReturnCode findLink(const char *ifaceName, LinkInfo &amp;linkInfo)</div><div class="ttdoc">Check that the device given is a network bridge. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00286">netlink.cpp:286</a></div></div>
-<div class="ttc" id="class_netlink_html"><div class="ttname"><a href="class_netlink.html">Netlink</a></div><div class="ttdoc">Handles various network operations over netlink. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8h_source.html#l00035">netlink.h:35</a></div></div>
-<div class="ttc" id="class_netlink_html_ad71afe1271bbc38578d0e85e7aef0118"><div class="ttname"><a href="class_netlink.html#ad71afe1271bbc38578d0e85e7aef0118">Netlink::setIP</a></div><div class="ttdeci">ReturnCode setIP(const int ifaceIndex, const in_addr ip, const unsigned char netmask)</div><div class="ttdoc">Sets an IP address for a network link. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00220">netlink.cpp:220</a></div></div>
-<div class="ttc" id="class_netlink_html_ad833ed199b0f68eaee0ba2b527fdd5f8"><div class="ttname"><a href="class_netlink.html#ad833ed199b0f68eaee0ba2b527fdd5f8">Netlink::~Netlink</a></div><div class="ttdeci">virtual ~Netlink()</div><div class="ttdoc">release all resources held by the Netlink object </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00042">netlink.cpp:42</a></div></div>
-<div class="ttc" id="class_netlink_html_aca72209683b0e8ec83cf1c808561eb69"><div class="ttname"><a href="class_netlink.html#aca72209683b0e8ec83cf1c808561eb69">Netlink::Netlink</a></div><div class="ttdeci">Netlink()</div><div class="ttdoc">Construct a new Netlink object. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00027">netlink.cpp:27</a></div></div>
-<div class="ttc" id="class_netlink_html_a549bc6adda3142682c868a25b2af9231"><div class="ttname"><a href="class_netlink.html#a549bc6adda3142682c868a25b2af9231">Netlink::setDefaultGateway</a></div><div class="ttdeci">ReturnCode setDefaultGateway(const char *gatewayAddress)</div><div class="ttdoc">Sets an ip address as the default gateway. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00172">netlink.cpp:172</a></div></div>
-<div class="ttc" id="class_netlink_html_a1764702f3ed67ae491696c7632dea0cd"><div class="ttname"><a href="class_netlink.html#a1764702f3ed67ae491696c7632dea0cd">Netlink::getKernelDump</a></div><div class="ttdeci">ReturnCode getKernelDump()</div><div class="ttdoc">get a dump of all links, addresses and routes from the kernel. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00452">netlink.cpp:452</a></div></div>
-<div class="ttc" id="class_netlink_html_ad4bf08fab49ab14314e4925ecedd8cb6"><div class="ttname"><a href="class_netlink.html#ad4bf08fab49ab14314e4925ecedd8cb6">Netlink::findAddresses</a></div><div class="ttdeci">ReturnCode findAddresses(const unsigned int interfaceIndex, std::vector&lt; AddressInfo &gt; &amp;result)</div><div class="ttdoc">Get all addresses associated with the given interface index. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00311">netlink.cpp:311</a></div></div>
-<div class="ttc" id="class_netlink_html_a543fb0107278eb2bf932cfa52a615f7a"><div class="ttname"><a href="class_netlink.html#a543fb0107278eb2bf932cfa52a615f7a">Netlink::linkUp</a></div><div class="ttdeci">ReturnCode linkUp(const int ifaceIndex)</div><div class="ttdoc">Bring the given interface up. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00191">netlink.cpp:191</a></div></div>
-<div class="ttc" id="class_netlink_html_a7f315e1dd78801c0d3bb2ee46ff179c7"><div class="ttname"><a href="class_netlink.html#a7f315e1dd78801c0d3bb2ee46ff179c7">Netlink::hasAddress</a></div><div class="ttdeci">ReturnCode hasAddress(const std::vector&lt; AddressInfo &gt; &amp;haystack, const int addressFamily, const char *needle)</div><div class="ttdoc">checks if an address is present in the given list </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00328">netlink.cpp:328</a></div></div>
-<div class="ttc" id="class_netlink_html_af2756a7ed673d086466f75d57de09fdf"><div class="ttname"><a href="class_netlink.html#af2756a7ed673d086466f75d57de09fdf">Netlink::checkKernelDump</a></div><div class="ttdeci">virtual ReturnCode checkKernelDump()</div><div class="ttdoc">check for a kernel dump, and if not present, try to get one </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00478">netlink.cpp:478</a></div></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_netlink.html">   37</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_netlink.html">Netlink</a></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;rtattr, void*&gt; AttributeInfo;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">typedef</span> std::vector&lt;AttributeInfo&gt; AttributeList;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;ifinfomsg, AttributeList&gt; LinkInfo;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;ifaddrmsg, AttributeList&gt; AddressInfo;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">typedef</span> std::pair&lt;rtmsg, AttributeList&gt; RouteInfo;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_netlink.html#a2a6160a9363a9660c82276342dcaf477">Netlink</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classsoftwarecontainer_1_1_netlink.html#ac6063d31d0e002d19d39f3377edadb22">~Netlink</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#a1756adb8382b2ed3c1518567862139c1">getKernelDump</a>();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#acf303ede6bab6850147376b9a0d3ea7b">checkKernelDump</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#a856e870b774b085ef74772b1d11d0394">setDefaultGateway</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *gatewayAddress);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#abaaa3af391069f8b624edd0c066eb958">linkUp</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> ifaceIndex);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#ab6cfc59121b64f8cf5a89b706b77826b">linkDown</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> ifaceIndex);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#a53e313aa155f065c1d1ef6a4e20ccede">setIP</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> ifaceIndex, <span class="keyword">const</span> in_addr ip, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> netmask);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#a07b353cd40aeffd94d9fb03d9cdd1119">findLink</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *ifaceName, LinkInfo &amp;linkInfo);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#aec31c67231b12f8a1702054e13029cbb">findAddresses</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> interfaceIndex, std::vector&lt;AddressInfo&gt; &amp;result);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        ReturnCode <a class="code" href="classsoftwarecontainer_1_1_netlink.html#a1e58d510cfab3a87eb2dc3faa1e2b14a">hasAddress</a>(<span class="keyword">const</span> std::vector&lt;AddressInfo&gt; &amp;haystack, <span class="keyword">const</span> <span class="keywordtype">int</span> addressFamily, <span class="keyword">const</span> <span class="keywordtype">char</span> *needle);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        ReturnCode setupNetlink();</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">void</span> clearCache();</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> msgtype, <span class="keyword">typename</span> InfoType&gt;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            ReturnCode saveMessage(<span class="keyword">const</span> <span class="keyword">struct</span> nlmsghdr &amp;header, std::vector&lt;InfoType&gt; &amp;result);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> msgtype&gt;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            ReturnCode getAttributes(<span class="keyword">const</span> <span class="keyword">struct</span> nlmsghdr &amp;header, AttributeList &amp;result);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;<span class="keyword">struct </span>netlink_request {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            nlmsghdr hdr;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            payload pay;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            <span class="keywordtype">char</span> attr[2048];</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        };</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            netlink_request&lt;payload&gt; createMessage(<span class="keyword">const</span> <span class="keywordtype">int</span> type, <span class="keyword">const</span> <span class="keywordtype">int</span> flags);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            ReturnCode addAttribute(netlink_request&lt;payload&gt; &amp;req, <span class="keyword">const</span> <span class="keywordtype">int</span> type, <span class="keyword">const</span> <span class="keywordtype">size_t</span> length, <span class="keyword">const</span> <span class="keywordtype">void</span> *data);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> payload&gt;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            ReturnCode sendMessage(netlink_request&lt;payload&gt; &amp;request);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordtype">int</span> readMessage();</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordtype">void</span> freeAttributes(AttributeList &amp;attrList);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="comment">// Netlink communication variables</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keyword">struct </span>sockaddr_nl m_local;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keyword">struct </span>sockaddr_nl m_kernel;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="keywordtype">int</span> m_fd;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        pid_t m_pid;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_sequenceNumber;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="comment">// The local cache of links, addresses and routes</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        std::vector&lt; LinkInfo &gt; m_links;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        std::vector&lt; AddressInfo &gt; m_addresses;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        std::vector&lt; RouteInfo &gt; m_routes;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="comment">// Status flags</span></div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keywordtype">bool</span> m_hasKernelDump;</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordtype">bool</span> m_netlinkInitialized;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;};</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_a07b353cd40aeffd94d9fb03d9cdd1119"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#a07b353cd40aeffd94d9fb03d9cdd1119">softwarecontainer::Netlink::findLink</a></div><div class="ttdeci">ReturnCode findLink(const char *ifaceName, LinkInfo &amp;linkInfo)</div><div class="ttdoc">Check that the device given is a network bridge. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00288">netlink.cpp:288</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_a2a6160a9363a9660c82276342dcaf477"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#a2a6160a9363a9660c82276342dcaf477">softwarecontainer::Netlink::Netlink</a></div><div class="ttdeci">Netlink()</div><div class="ttdoc">Construct a new Netlink object. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00029">netlink.cpp:29</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_aec31c67231b12f8a1702054e13029cbb"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#aec31c67231b12f8a1702054e13029cbb">softwarecontainer::Netlink::findAddresses</a></div><div class="ttdeci">ReturnCode findAddresses(const unsigned int interfaceIndex, std::vector&lt; AddressInfo &gt; &amp;result)</div><div class="ttdoc">Get all addresses associated with the given interface index. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00313">netlink.cpp:313</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_a53e313aa155f065c1d1ef6a4e20ccede"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#a53e313aa155f065c1d1ef6a4e20ccede">softwarecontainer::Netlink::setIP</a></div><div class="ttdeci">ReturnCode setIP(const int ifaceIndex, const in_addr ip, const unsigned char netmask)</div><div class="ttdoc">Sets an IP address for a network link. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00222">netlink.cpp:222</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_abaaa3af391069f8b624edd0c066eb958"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#abaaa3af391069f8b624edd0c066eb958">softwarecontainer::Netlink::linkUp</a></div><div class="ttdeci">ReturnCode linkUp(const int ifaceIndex)</div><div class="ttdoc">Bring the given interface up. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00193">netlink.cpp:193</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_ac6063d31d0e002d19d39f3377edadb22"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#ac6063d31d0e002d19d39f3377edadb22">softwarecontainer::Netlink::~Netlink</a></div><div class="ttdeci">virtual ~Netlink()</div><div class="ttdoc">release all resources held by the Netlink object </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00044">netlink.cpp:44</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_acf303ede6bab6850147376b9a0d3ea7b"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#acf303ede6bab6850147376b9a0d3ea7b">softwarecontainer::Netlink::checkKernelDump</a></div><div class="ttdeci">virtual ReturnCode checkKernelDump()</div><div class="ttdoc">check for a kernel dump, and if not present, try to get one </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00480">netlink.cpp:480</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_ab6cfc59121b64f8cf5a89b706b77826b"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#ab6cfc59121b64f8cf5a89b706b77826b">softwarecontainer::Netlink::linkDown</a></div><div class="ttdeci">ReturnCode linkDown(const int ifaceIndex)</div><div class="ttdoc">Bring a given interface down. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00260">netlink.cpp:260</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_a856e870b774b085ef74772b1d11d0394"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#a856e870b774b085ef74772b1d11d0394">softwarecontainer::Netlink::setDefaultGateway</a></div><div class="ttdeci">ReturnCode setDefaultGateway(const char *gatewayAddress)</div><div class="ttdoc">Sets an ip address as the default gateway. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00174">netlink.cpp:174</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html">softwarecontainer::Netlink</a></div><div class="ttdoc">Handles various network operations over netlink. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8h_source.html#l00037">netlink.h:37</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_a1e58d510cfab3a87eb2dc3faa1e2b14a"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#a1e58d510cfab3a87eb2dc3faa1e2b14a">softwarecontainer::Netlink::hasAddress</a></div><div class="ttdeci">ReturnCode hasAddress(const std::vector&lt; AddressInfo &gt; &amp;haystack, const int addressFamily, const char *needle)</div><div class="ttdoc">checks if an address is present in the given list </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00330">netlink.cpp:330</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_a1756adb8382b2ed3c1518567862139c1"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#a1756adb8382b2ed3c1518567862139c1">softwarecontainer::Netlink::getKernelDump</a></div><div class="ttdeci">ReturnCode getKernelDump()</div><div class="ttdoc">get a dump of all links, addresses and routes from the kernel. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00454">netlink.cpp:454</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><b>netlink.h</b></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:10 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:06 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

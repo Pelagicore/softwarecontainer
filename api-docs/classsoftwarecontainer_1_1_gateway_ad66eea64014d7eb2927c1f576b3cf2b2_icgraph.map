@@ -1,8 +1,0 @@
-<map id="softwarecontainer::Gateway::hasContainer" name="softwarecontainer::Gateway::hasContainer">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a3d23a057d7039df33dd5ed47302f0d58" title="Applies any configuration set by setConfig() " alt="" coords="255,5,389,47"/>
-<area shape="rect" id="node4" href="$class_network_gateway.html#ad19de4347291719074bde198fc61a94a" title="Implements Gateway::activateGateway. " alt="" coords="480,93,657,135"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#a77348e5ce86b82302764b10e3203b42c" title="Execute the given command in the container. " alt="" coords="225,123,419,164"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112" title="Set an environment variable in the associated container. " alt="" coords="212,188,432,229"/>
-<area shape="rect" id="node3" href="$class_d_bus_gateway.html#af46946bb52d1b9b6a2ec77df3df2e3e0" title="Activates both dbus session instances. " alt="" coords="488,13,649,39"/>
-<area shape="rect" id="node7" href="$class_d_bus_gateway_instance.html#af0c68c68bda6b051a4f3feecb5749be4" title="Implements Gateway::activateGateway. " alt="" coords="490,188,647,229"/>
-</map>

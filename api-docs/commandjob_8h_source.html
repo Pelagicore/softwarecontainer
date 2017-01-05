@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -86,39 +86,42 @@ $(document).ready(function(){initNavTree('commandjob_8h_source.html','');});
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;jobabstract.h&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;jobabstract.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_command_job.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a> :</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">public</span> <a class="code" href="classsoftwarecontainer_1_1_job_abstract.html">JobAbstract</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> UNASSIGNED_STREAM = -1;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a>(<a class="code" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> &amp;sc, <span class="keyword">const</span> std::string &amp;command);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a>();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    ReturnCode setWorkingDirectory(<span class="keyword">const</span> std::string &amp;folder);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    ReturnCode start();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    std::string toString() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    std::string m_command;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    std::string m_workingDirectory;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html">softwarecontainer::JobAbstract</a></div><div class="ttdoc">Abstract class for jobs which get executed inside a container. </div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8h_source.html#l00026">jobabstract.h:26</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html">softwarecontainer::SoftwareContainer</a></div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8h_source.html#l00041">softwarecontainer.h:41</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_command_job_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_command_job.html">softwarecontainer::CommandJob</a></div><div class="ttdoc">Use this class to execute a command line in a SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="commandjob_8h_source.html#l00027">commandjob.h:27</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8h_source.html#l00031">baseconfigstore.h:31</a></div></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_command_job.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a> :</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span> <a class="code" href="classsoftwarecontainer_1_1_job_abstract.html">JobAbstract</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> UNASSIGNED_STREAM = -1;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a>(<a class="code" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> &amp;sc, <span class="keyword">const</span> std::string &amp;command);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    ReturnCode setWorkingDirectory(<span class="keyword">const</span> std::string &amp;folder);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    ReturnCode start();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    std::string toString() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::string m_command;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::string m_workingDirectory;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html">softwarecontainer::JobAbstract</a></div><div class="ttdoc">Abstract class for jobs which get executed inside a container. </div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8h_source.html#l00028">jobabstract.h:28</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html">softwarecontainer::SoftwareContainer</a></div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8h_source.html#l00040">softwarecontainer.h:40</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_command_job_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_command_job.html">softwarecontainer::CommandJob</a></div><div class="ttdoc">Use this class to execute a command line in a SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="commandjob_8h_source.html#l00029">commandjob.h:29</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><b>commandjob.h</b></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:10 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:06 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

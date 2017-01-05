@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -66,31 +66,31 @@ $(document).ready(function(){initNavTree('dbusgatewayinstance_8cpp_source.html',
 <div class="title">dbusgatewayinstance.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;dbusgateway.h&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;dbusgatewayparser.h&quot;</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * Copyright (C) 2016 Pelagicore AB</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> * Permission to use, copy, modify, and/or distribute this software for</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * any purpose with or without fee is hereby granted, provided that the</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * above copyright notice and this permission notice appear in all copies.</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * SOFTWARE.</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * For further information see LICENSE</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;dbusgateway.h&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;dbusgatewayparser.h&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="class_d_bus_gateway_instance.html#a78a3a0703fb26a0660baa55698faa861">   25</a></span>&#160;<a class="code" href="class_d_bus_gateway_instance.html#a78a3a0703fb26a0660baa55698faa861">DBusGatewayInstance::DBusGatewayInstance</a>(ProxyType type</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a2cacd0bc0ee3ae9e28fb70304969a2a4">   25</a></span>&#160;<a class="code" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a2cacd0bc0ee3ae9e28fb70304969a2a4">DBusGatewayInstance::DBusGatewayInstance</a>(ProxyType type</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                       , <span class="keyword">const</span> std::string &amp;gatewayDir</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                       , <span class="keyword">const</span> std::string &amp;name)</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    : <a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a>(ID)</div>
@@ -125,14 +125,14 @@ $(document).ready(function(){initNavTree('dbusgatewayinstance_8cpp_source.html',
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;DBusGatewayInstance::~DBusGatewayInstance()</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a78949f88080c66617f8b20048d706237">isActivated</a>()) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">teardown</a>();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">isActivated</a>()) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">teardown</a>();</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="class_d_bus_gateway_instance.html#af306cfef47134e3317029600cd86484e">   65</a></span>&#160;ReturnCode <a class="code" href="class_d_bus_gateway_instance.html#af306cfef47134e3317029600cd86484e">DBusGatewayInstance::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a4cf958746ad9911ebb99b9eeb8392060">   65</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a4cf958746ad9911ebb99b9eeb8392060">DBusGatewayInstance::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;{</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="class_d_bus_gateway_parser.html">DBusGatewayParser</a> parser;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_d_bus_gateway_parser.html">DBusGatewayParser</a> parser;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// TODO: This should really be done with exceptions instead and json_t* as return type.</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">if</span> (isError(parser.parseDBusConfig(element, typeStr, m_busConfig))) {</div>
@@ -143,14 +143,14 @@ $(document).ready(function(){initNavTree('dbusgatewayinstance_8cpp_source.html',
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="class_d_bus_gateway_instance.html#af0c68c68bda6b051a4f3feecb5749be4">   78</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_d_bus_gateway_instance.html#af0c68c68bda6b051a4f3feecb5749be4">DBusGatewayInstance::activateGateway</a>()</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129">   78</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129">DBusGatewayInstance::activateGateway</a>()</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="comment">// set DBUS_{SESSION,SYSTEM}_BUS_ADDRESS env variable</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    std::string variable = std::string(<span class="stringliteral">&quot;DBUS_&quot;</span>)</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                         + (m_type == SessionProxy ? <span class="stringliteral">&quot;SESSION&quot;</span> : <span class="stringliteral">&quot;SYSTEM&quot;</span>)</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                         + std::string(<span class="stringliteral">&quot;_BUS_ADDRESS&quot;</span>);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    std::string value = <span class="stringliteral">&quot;unix:path=/gateways/&quot;</span> + socketName();</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">setEnvironmentVariable</a>(variable, value);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">setEnvironmentVariable</a>(variable, value);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    std::vector&lt;std::string&gt; commandVec = { <span class="stringliteral">&quot;dbus-proxy&quot;</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                          , m_socket</div>
@@ -255,7 +255,7 @@ $(document).ready(function(){initNavTree('dbusgatewayinstance_8cpp_source.html',
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;}</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
-<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="class_d_bus_gateway_instance.html#a8df8ae869be2c9fe9792d5a77a7748c0">  190</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_d_bus_gateway_instance.html#a8df8ae869be2c9fe9792d5a77a7748c0">DBusGatewayInstance::teardownGateway</a>()</div>
+<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a469a933d45b981e8572e6dc5767f2565">  190</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a469a933d45b981e8572e6dc5767f2565">DBusGatewayInstance::teardownGateway</a>()</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;{</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordtype">bool</span> success = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;</div>
@@ -294,23 +294,24 @@ $(document).ready(function(){initNavTree('dbusgatewayinstance_8cpp_source.html',
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="keywordflow">return</span> socket.substr(socket.rfind(<span class="charliteral">&#39;/&#39;</span>) + 1);</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;}</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;</div>
-<div class="ttc" id="class_d_bus_gateway_parser_html"><div class="ttname"><a href="class_d_bus_gateway_parser.html">DBusGatewayParser</a></div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayparser_8h_source.html#l00025">dbusgatewayparser.h:25</a></div></div>
-<div class="ttc" id="class_d_bus_gateway_instance_html_a8df8ae869be2c9fe9792d5a77a7748c0"><div class="ttname"><a href="class_d_bus_gateway_instance.html#a8df8ae869be2c9fe9792d5a77a7748c0">DBusGatewayInstance::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00190">dbusgatewayinstance.cpp:190</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a828b2dfa811c7fcce82d34b502e65112"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a828b2dfa811c7fcce82d34b502e65112">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
-<div class="ttc" id="class_d_bus_gateway_instance_html_a78a3a0703fb26a0660baa55698faa861"><div class="ttname"><a href="class_d_bus_gateway_instance.html#a78a3a0703fb26a0660baa55698faa861">DBusGatewayInstance::DBusGatewayInstance</a></div><div class="ttdeci">DBusGatewayInstance(ProxyType type, const std::string &amp;gatewayDir, const std::string &amp;name)</div><div class="ttdoc">Spawn the proxy and use the supplied path for the socket. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00025">dbusgatewayinstance.cpp:25</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a78949f88080c66617f8b20048d706237"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a78949f88080c66617f8b20048d706237">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00135">gateway.cpp:135</a></div></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad7679d3dce9fe0e239f3614d6ee667c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00136">gateway.cpp:136</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_d_bus_gateway_instance_html_a469a933d45b981e8572e6dc5767f2565"><div class="ttname"><a href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a469a933d45b981e8572e6dc5767f2565">softwarecontainer::DBusGatewayInstance::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00190">dbusgatewayinstance.cpp:190</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_d_bus_gateway_instance_html_a4cf958746ad9911ebb99b9eeb8392060"><div class="ttname"><a href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a4cf958746ad9911ebb99b9eeb8392060">softwarecontainer::DBusGatewayInstance::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00065">dbusgatewayinstance.cpp:65</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
-<div class="ttc" id="class_d_bus_gateway_instance_html_af0c68c68bda6b051a4f3feecb5749be4"><div class="ttname"><a href="class_d_bus_gateway_instance.html#af0c68c68bda6b051a4f3feecb5749be4">DBusGatewayInstance::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway()</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00078">dbusgatewayinstance.cpp:78</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_adf9b62b6a7097bce5d2eeb8f34d1a407"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00098">gateway.cpp:98</a></div></div>
-<div class="ttc" id="class_d_bus_gateway_instance_html_af306cfef47134e3317029600cd86484e"><div class="ttname"><a href="class_d_bus_gateway_instance.html#af306cfef47134e3317029600cd86484e">DBusGatewayInstance::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00065">dbusgatewayinstance.cpp:65</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_d_bus_gateway_instance_html_a2cacd0bc0ee3ae9e28fb70304969a2a4"><div class="ttname"><a href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a2cacd0bc0ee3ae9e28fb70304969a2a4">softwarecontainer::DBusGatewayInstance::DBusGatewayInstance</a></div><div class="ttdeci">DBusGatewayInstance(ProxyType type, const std::string &amp;gatewayDir, const std::string &amp;name)</div><div class="ttdoc">Spawn the proxy and use the supplied path for the socket. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00025">dbusgatewayinstance.cpp:25</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a20f57ddde85b938d67104625e774a714"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00141">gateway.cpp:141</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_d_bus_gateway_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_d_bus_gateway_parser.html">softwarecontainer::DBusGatewayParser</a></div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayparser_8h_source.html#l00027">dbusgatewayparser.h:27</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_d_bus_gateway_instance_html_a8dc149286b57b259c95d53c130b9a129"><div class="ttname"><a href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129">softwarecontainer::DBusGatewayInstance::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway()</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="dbusgatewayinstance_8cpp_source.html#l00078">dbusgatewayinstance.cpp:78</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9c01eb992bc9c094f98776b8154e932a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_db4010e8f7409dcb486f91942cb8935a.html">dbus</a></li><li class="navelem"><b>dbusgatewayinstance.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:10 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:06 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

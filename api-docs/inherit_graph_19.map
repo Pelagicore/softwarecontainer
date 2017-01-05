@@ -1,4 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_observable_property.html" title="ObservableProperty\l\&lt; Type \&gt;" alt="" coords="5,5,143,47"/>
-<area shape="rect" id="node2" href="$class_observable_writable_property.html" title="ObservableWritableProperty\l\&lt; Type \&gt;" alt="" coords="191,5,376,47"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_container_abstract_interface.html" title="softwarecontainer::\lContainerAbstractInterface" alt="" coords="5,5,184,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="232,5,365,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="25,71,165,112"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="232,71,365,112"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. " alt="" coords="232,136,365,177"/>
 </map>

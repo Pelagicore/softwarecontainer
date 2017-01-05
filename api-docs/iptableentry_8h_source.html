@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ab62805 2017-01-04</span>
+   &#160;<span id="projectnumber">0.15.0-645c8c7 2017-01-05</span>
    </div>
   </td>
  </tr>
@@ -89,70 +89,74 @@ $(document).ready(function(){initNavTree('iptableentry_8h_source.html','');});
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;softwarecontainer-common.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="class_i_p_table_entry.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_i_p_table_entry.html">IPTableEntry</a></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;IPTE&quot;</span>, <span class="stringliteral">&quot;IPTable Entry&quot;</span>);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="class_i_p_table_entry.html">IPTableEntry</a>() : m_type{<span class="stringliteral">&quot;&quot;</span>}, m_defaultTarget{DROP} {};</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="struct_i_p_table_entry_1_1port_filter.html">   35</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_i_p_table_entry_1_1port_filter.html">portFilter</a> {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="struct_i_p_table_entry_1_1port_filter.html">portFilter</a>(<span class="keywordtype">bool</span> _any=0, <span class="keywordtype">bool</span> _multiport=0, std::string _ports=<span class="stringliteral">&quot;&quot;</span>) :</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            any(_any),</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            multiport(_multiport),</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            ports(_ports)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            {};</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">bool</span> any;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">bool</span> multiport;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        std::string ports;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    };</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">   49</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">Target</a></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        INVALID_TARGET,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        ACCEPT,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        DROP,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        REJECT</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    };</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="struct_i_p_table_entry_1_1_rule.html">   60</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="struct_i_p_table_entry_1_1_rule.html">Rule</a></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        std::string host;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        std::vector&lt;std::string&gt; protocols;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="struct_i_p_table_entry_1_1port_filter.html">portFilter</a>  ports;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">Target</a> target;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    };</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    ReturnCode <a class="code" href="class_i_p_table_entry.html#a01609d893e0bb7c6f955bc31e283a9e1">applyRules</a>();</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    std::string <a class="code" href="class_i_p_table_entry.html#ac090d9fee4b15b246d944d800ff0e12e">interpretRule</a>(<a class="code" href="struct_i_p_table_entry_1_1_rule.html">Rule</a> rule);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::string <a class="code" href="class_i_p_table_entry.html#a9d28ee9552aa3716310840d7790bee95">interpretRuleWithProtocol</a>(<a class="code" href="struct_i_p_table_entry_1_1_rule.html">Rule</a> rule, <span class="keyword">const</span> std::string &amp;protocol);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    std::string <a class="code" href="class_i_p_table_entry.html#a6712bcba4d643a6c0ac74ff6fe5a3760">interpretPolicy</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::string m_type;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::vector&lt;Rule&gt; m_rules;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">Target</a> m_defaultTarget;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    std::string convertTarget (<a class="code" href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">Target</a>&amp; t);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    ReturnCode insertCommand(std::string command);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="ttc" id="struct_i_p_table_entry_1_1port_filter_html"><div class="ttname"><a href="struct_i_p_table_entry_1_1port_filter.html">IPTableEntry::portFilter</a></div><div class="ttdoc">container for port filtering options. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00035">iptableentry.h:35</a></div></div>
-<div class="ttc" id="class_i_p_table_entry_html_a9d28ee9552aa3716310840d7790bee95"><div class="ttname"><a href="class_i_p_table_entry.html#a9d28ee9552aa3716310840d7790bee95">IPTableEntry::interpretRuleWithProtocol</a></div><div class="ttdeci">std::string interpretRuleWithProtocol(Rule rule, const std::string &amp;protocol)</div><div class="ttdoc">Interprets a rule with protocol information to iptables applicable string. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00065">iptableentry.cpp:65</a></div></div>
-<div class="ttc" id="class_i_p_table_entry_html_a6712bcba4d643a6c0ac74ff6fe5a3760"><div class="ttname"><a href="class_i_p_table_entry.html#a6712bcba4d643a6c0ac74ff6fe5a3760">IPTableEntry::interpretPolicy</a></div><div class="ttdeci">std::string interpretPolicy(void)</div><div class="ttdoc">This function Interprets defaultTarget rule to iptables applicable policy string. ...</div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00145">iptableentry.cpp:145</a></div></div>
-<div class="ttc" id="class_i_p_table_entry_html_ac090d9fee4b15b246d944d800ff0e12e"><div class="ttname"><a href="class_i_p_table_entry.html#ac090d9fee4b15b246d944d800ff0e12e">IPTableEntry::interpretRule</a></div><div class="ttdeci">std::string interpretRule(Rule rule)</div><div class="ttdoc">Interprets a rule to iptables applicable string. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00106">iptableentry.cpp:106</a></div></div>
-<div class="ttc" id="class_i_p_table_entry_html_a01609d893e0bb7c6f955bc31e283a9e1"><div class="ttname"><a href="class_i_p_table_entry.html#a01609d893e0bb7c6f955bc31e283a9e1">IPTableEntry::applyRules</a></div><div class="ttdeci">ReturnCode applyRules()</div><div class="ttdoc">Applies all rules to iptables. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00023">iptableentry.cpp:23</a></div></div>
-<div class="ttc" id="class_i_p_table_entry_html_ad664714d0ab3c9cc8e17854a65200156"><div class="ttname"><a href="class_i_p_table_entry.html#ad664714d0ab3c9cc8e17854a65200156">IPTableEntry::Target</a></div><div class="ttdeci">Target</div><div class="ttdoc">Targets for Rules. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00049">iptableentry.h:49</a></div></div>
-<div class="ttc" id="struct_i_p_table_entry_1_1_rule_html"><div class="ttname"><a href="struct_i_p_table_entry_1_1_rule.html">IPTableEntry::Rule</a></div><div class="ttdoc">Definition of a &#39;Rule&#39; used to handle network traffic. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00060">iptableentry.h:60</a></div></div>
-<div class="ttc" id="class_i_p_table_entry_html"><div class="ttname"><a href="class_i_p_table_entry.html">IPTableEntry</a></div><div class="ttdoc">A rules entry for the treatment of packets. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00027">iptableentry.h:27</a></div></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_i_p_table_entry.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html">IPTableEntry</a></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    LOG_DECLARE_CLASS_CONTEXT(<span class="stringliteral">&quot;IPTE&quot;</span>, <span class="stringliteral">&quot;IPTable Entry&quot;</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html">IPTableEntry</a>() : m_type{<span class="stringliteral">&quot;&quot;</span>}, m_defaultTarget{DROP} {};</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html">   37</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html">portFilter</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html">portFilter</a>(<span class="keywordtype">bool</span> _any=0, <span class="keywordtype">bool</span> _multiport=0, std::string _ports=<span class="stringliteral">&quot;&quot;</span>) :</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            any(_any),</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            multiport(_multiport),</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            ports(_ports)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            {};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">bool</span> any;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">bool</span> multiport;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        std::string ports;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05">   51</a></span>&#160;    <span class="keyword">enum</span> <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05">Target</a></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        INVALID_TARGET,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        ACCEPT,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        DROP,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        REJECT</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    };</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">   62</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">Rule</a></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        std::string host;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::vector&lt;std::string&gt; protocols;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html">portFilter</a>  ports;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05">Target</a> target;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    };</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    ReturnCode <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#a32434517552a206584064f605f73061a">applyRules</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    std::string <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ab0f0fc042ec433a7f851dbb03fd0e517">interpretRule</a>(<a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">Rule</a> rule);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    std::string <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#a8a98b36e83fbc40450e51e08ca80ab91">interpretRuleWithProtocol</a>(<a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">Rule</a> rule, <span class="keyword">const</span> std::string &amp;protocol);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::string <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#a90fcc24383229ea1fb0eca580e2858ea">interpretPolicy</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    std::string m_type;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::vector&lt;Rule&gt; m_rules;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05">Target</a> m_defaultTarget;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::string convertTarget (<a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05">Target</a>&amp; t);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    ReturnCode insertCommand(std::string command);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;};</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule_html"><div class="ttname"><a href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">softwarecontainer::IPTableEntry::Rule</a></div><div class="ttdoc">Definition of a &#39;Rule&#39; used to handle network traffic. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00062">iptableentry.h:62</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html_ad1935dff17a3762860df620883b90e05"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05">softwarecontainer::IPTableEntry::Target</a></div><div class="ttdeci">Target</div><div class="ttdoc">Targets for Rules. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00051">iptableentry.h:51</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html_a8a98b36e83fbc40450e51e08ca80ab91"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html#a8a98b36e83fbc40450e51e08ca80ab91">softwarecontainer::IPTableEntry::interpretRuleWithProtocol</a></div><div class="ttdeci">std::string interpretRuleWithProtocol(Rule rule, const std::string &amp;protocol)</div><div class="ttdoc">Interprets a rule with protocol information to iptables applicable string. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00067">iptableentry.cpp:67</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html_ab0f0fc042ec433a7f851dbb03fd0e517"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html#ab0f0fc042ec433a7f851dbb03fd0e517">softwarecontainer::IPTableEntry::interpretRule</a></div><div class="ttdeci">std::string interpretRule(Rule rule)</div><div class="ttdoc">Interprets a rule to iptables applicable string. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00108">iptableentry.cpp:108</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html_a32434517552a206584064f605f73061a"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html#a32434517552a206584064f605f73061a">softwarecontainer::IPTableEntry::applyRules</a></div><div class="ttdeci">ReturnCode applyRules()</div><div class="ttdoc">Applies all rules to iptables. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00025">iptableentry.cpp:25</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html_a90fcc24383229ea1fb0eca580e2858ea"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html#a90fcc24383229ea1fb0eca580e2858ea">softwarecontainer::IPTableEntry::interpretPolicy</a></div><div class="ttdeci">std::string interpretPolicy(void)</div><div class="ttdoc">This function Interprets defaultTarget rule to iptables applicable policy string. ...</div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8cpp_source.html#l00147">iptableentry.cpp:147</a></div></div>
+<div class="ttc" id="structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter_html"><div class="ttname"><a href="structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html">softwarecontainer::IPTableEntry::portFilter</a></div><div class="ttdoc">container for port filtering options. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00037">iptableentry.h:37</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html">softwarecontainer::IPTableEntry</a></div><div class="ttdoc">A rules entry for the treatment of packets. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00029">iptableentry.h:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_9714d51461f33f26f35fbf1b742503d5.html">network</a></li><li class="navelem"><b>iptableentry.h</b></li>
-    <li class="footer">Generated on Wed Jan 4 2017 14:57:10 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 5 2017 08:08:07 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,5 +1,0 @@
-<map id="DBusGateway::teardown" name="DBusGateway::teardown">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a78949f88080c66617f8b20048d706237" title="Is the gateway activated or not? " alt="" coords="221,5,368,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#adf9b62b6a7097bce5d2eeb8f34d1a407" title="Restore system to the state prior to launching of gateway. " alt="" coords="227,71,362,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="416,71,549,112"/>
-</map>
