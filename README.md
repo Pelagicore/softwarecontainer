@@ -12,15 +12,19 @@ Each container is configured using gateways, where each gateway has a scope of
 influence (network, dbus, files, pulseaudio, for example). The gateways get a
 configuration snippet from the Launcher which they will enforce.
 
-The SoftwareContainer is composed of the following components:
-* a libsoftwarecontainer library containing the interfacing code to LXC and
-  the gateway code.
-* softwarecontainer-agent, the binary daemon implementing the
-  libsoftwarecontainer library and running the SoftwareContainer services.
-
 SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer.
 The documentation is avaliable at https://pelagicore.github.io/softwarecontainer/.
 Pelagicore maintainer: Tobias Olausson <tobias.olausson@pelagicore.com>.
+
+## Sub-components
+SoftwareContainer is composed of the following components:
+* a `libsoftwarecontainer` library containing the interfacing code to LXC and
+  the gateway code. This library handles one container and all the operations
+  on it.
+* `softwarecontainer-agent`, a D-Bus service that handles multiple instances of
+  `libsoftwarecontainer`, so that one can handle several containers from a common entrypoint.
+* a `common` library that contains code shared between `libsoftwarecontainer` and the
+  `softwarecontainer-agent`, such as utility functions etc.
 
 # Dependencies
 
