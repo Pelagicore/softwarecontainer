@@ -18,10 +18,22 @@ with the value to apply.
 No syntax or other checks for correctness is performed on the key/value pairs,
 see the `lxc.container.conf` man page for more details about valid settings.
 
-Before appying the configuration it is advised to check if the cgroup option is enabled in
-the system's kernel. Following command will list available cgroup options::
+Kernel Options
+--------------
+To be able to limit memory usage with cgroups, ``CONFIG_CGROUPS``, ``CONFIG_MEMCG`` and
+``CONFIG_MEMCG_SWAP`` should be enabled. Before appying the configuration it is
+advised to check if the cgroup option is enabled with swapaccount=1 feauture in the system's
+kernel. The Following command will list available cgroup options::
 
 	cat /proc/1/cgroup
+
+Limiting Memory
+---------------
+To be able to limit memory, ``memory.limit_in_bytes`` should be set to desired value with gateway
+configuration options. The operating system also uses swap memory which means if limiting rss and swap
+memories is the desired action then ``memory.memsw.limit_in_bytes`` setting should also be specified
+in gateway configuration. Note that value of ``memory.memsw.limit_in_bytes`` indicates rss + swap
+memory, thus it cannot be less than ``memory.limit_in_bytes``.
 
 Whitelisting
 ------------
@@ -38,15 +50,19 @@ Example gateway config::
     [
         {
             "setting": "memory.limit_in_bytes",
-            "value": "12000"
+            "value": "12000000"
         },
         {
             "setting": "memory.limit_in_bytes",
-            "value": "500"
+            "value": "5000"
+        },
+        {
+            "setting": "memory.memsw.limit_in_bytes",
+            "value": "12000000"
         }
     ]
 
 The root object is an array of setting key/value pair objects. Each key/value pair
 must have the ``setting`` and ``value`` defined. In the example above value of memory.limit_in_bytes
-will be set to 12000 due to whitelisting policy mentioned above.
+will be set to 12000000 due to whitelisting policy mentioned above.
 
