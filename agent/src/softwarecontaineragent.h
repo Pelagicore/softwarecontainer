@@ -50,7 +50,7 @@ static constexpr ContainerID INVALID_CONTAINER_ID = -1;
 class SoftwareContainerAgent
 {
     LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
-    typedef std::unique_ptr<SoftwareContainer> SoftwareContainerPtr;
+    typedef std::shared_ptr<SoftwareContainer> SoftwareContainerPtr;
 
 public:
     /**
@@ -95,9 +95,9 @@ public:
      * @brief Fetches a pointer to a SoftwareContainer matching an ID.
      *
      * @param containerID the ID for the container
-     * @return Pointer to the matched container if there is such a container. Otherwise return nullptr.
+     * @return Pointer to the matched container if there is such a container. Otherwise return empty pointer.
      */
-    SoftwareContainer* getContainer(ContainerID containerID);
+    SoftwareContainerPtr getContainer(ContainerID containerID);
 
     /**
      * @brief Tries to read a config in json format for a container
