@@ -132,7 +132,7 @@ TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id) != nullptr);
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
@@ -142,7 +142,7 @@ TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
     ASSERT_TRUE(success);
     sca->deleteContainer(id);
 
-    ASSERT_FALSE(sca->checkContainer(id, container));
+    ASSERT_FALSE(sca->getContainer(id) != nullptr);
 }
 
 /*
@@ -204,7 +204,7 @@ TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
 
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id) != nullptr);
 
     ASSERT_FALSE(sca->resumeContainer(id));
 }
@@ -215,7 +215,7 @@ TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id) != nullptr);
 
     ASSERT_TRUE(sca->suspendContainer(id));
 
@@ -230,7 +230,7 @@ TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id) != nullptr);
 
     ASSERT_TRUE(sca->suspendContainer(id));
 
@@ -243,7 +243,7 @@ TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id));
 
     ASSERT_TRUE(sca->suspendContainer(id));
 
@@ -258,7 +258,7 @@ TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id) != nullptr);
 
     ASSERT_TRUE(sca->suspendContainer(id));
 
@@ -275,7 +275,7 @@ TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->checkContainer(id, container));
+    ASSERT_TRUE(sca->getContainer(id) != nullptr);
 
     ASSERT_TRUE(sca->suspendContainer(id));
 
