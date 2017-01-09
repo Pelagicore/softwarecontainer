@@ -77,15 +77,6 @@ class Helper(object):
         """
         self._base_path = file_base_path
 
-    @abc.abstractmethod
-    def write_result(self, data):
-        """ Write data to file.
-
-            What this method actually does is specific for each inheriting class,
-            which should all implement this method.
-        """
-        return
-
 
 class NetworkHelper(Helper):
     """ Helper for network related things.
@@ -96,7 +87,7 @@ class NetworkHelper(Helper):
     def __init__(self, file_base_path):
         Helper.__init__(self, file_base_path)
 
-    #### Below methods are executed inside container
+    # Below methods are executed inside container
     def write_result(self, data):
         with open(self._base_path + "/ping_result", "w") as fh:
             fh.write(str(data))
@@ -105,12 +96,12 @@ class NetworkHelper(Helper):
     def ping(self, host):
         LOG("pings" + host)
         is_pingable = os.system("ping -c1 " + host)
-        return is_pingable;
+        return is_pingable
 
     def ifconfig(self, file_name):
         os.system("ip -4 addr show eth0 | grep inet | awk '{print $2}' >> " + file_name)
 
-    #### Below methods are executed on the host (in the tests)
+    # Below methods are executed on the host (in the tests)
     def compare_ips(self, file1, file2):
         ip1 = None
         ip2 = None
@@ -118,7 +109,7 @@ class NetworkHelper(Helper):
             ip1 = fh.readline()
         with open(self._base_path + "/" + file2, "r") as fh:
             ip2 = fh.readline()
-        return (ip1==ip2)
+        return (ip1 == ip2)
 
     def ping_result(self):
         is_pingable = False
@@ -126,7 +117,7 @@ class NetworkHelper(Helper):
         with open(self._base_path + "/ping_result", "r") as fh:
             file_content = fh.readline()
         is_pingable = (file_content == "0")
-        return is_pingable;
+        return is_pingable
 
     def remove_file(self):
         try:
@@ -149,7 +140,7 @@ class EnvironmentHelper(Helper):
     def __init__(self, file_base_path):
         Helper.__init__(self, file_base_path)
 
-    #### Below methods are executed inside container
+    # Below methods are executed inside container
     def write_result(self, data):
         LOG("Will dump env vars to disk")
         with open(self._base_path + "/" + self.__file_name(), "w") as fh:
@@ -160,12 +151,12 @@ class EnvironmentHelper(Helper):
         all_vars = os.environ
         return all_vars
 
-    #### Below methods are executed on the host (in the tests)
+    # Below methods are executed on the host (in the tests)
     def env_var(self, name):
         all_vars = self.__all_env_vars(self._base_path)
         return all_vars[name]
 
-    #### Private methods - helpers etc.
+    # Private methods - helpers etc.
     def __all_env_vars(self, base_path):
         all_vars = dict()
         with open(base_path + "/" + self.__file_name(), "r") as fh:
@@ -180,10 +171,47 @@ class EnvironmentHelper(Helper):
         return EnvironmentHelper.ENV_VARS_FILE_NAME
 
 
+class CGroupHelper(Helper):
+    """ Helper for examining Cgroups Gateway inside the container
+    """
+    def __init__(self, file_base_path):
+        Helper.__init__(self, file_base_path)
+
+    # Below methods are executed inside container
+    def allocate(self, size):
+        """ The main purpose of this function is to allocate memory till it reaches
+            maximum allowed threshold and eventully end up OOM Killer to kill process.
+        """
+        buffer = ""
+        step = size / 10
+        while (size > len(buffer)):
+            try:
+                buffer = buffer + ('a' * step)
+            except:
+                return False
+            os.system("echo " + str(len(buffer)) + " > cgroup_result")
+
+        return True
+
+    # Below methods are executed on the host (in the tests)
+    def remove_file(self):
+        try:
+            os.remove(self._base_path + "/cgroup_result")
+        except:
+            LOG("There is no file to remove")
+
+    def result(self):
+        file_content = None
+        with open("cgroup_result", "r") as fh:
+            file_content = fh.readline()
+        return int(file_content)
+
+
 GET_ENV_VARS_OPTION = "get_env_vars"
 TEST_DIR_OPTION = "test_dir"
 DO_PING_OPTION = "do_ping"
 DO_IFCONFIG_OPTION = "do_ifconfig"
+DO_ALLOCATE_OPTION = "do_allocate"
 
 if __name__ == "__main__":
     """ When the program is called from command line it is running inside
@@ -192,8 +220,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    get_env_vars_help_message = \
-    """ A path to a file in which to store environment information.
+    get_env_vars_help_message = """ A path to a file in which to store environment information.
         This file is intended to be used by the helper when reading
         data for asserting values.
     """
@@ -203,8 +230,7 @@ if __name__ == "__main__":
                         default=None,
                         help=get_env_vars_help_message)
 
-    test_dir_help_message = \
-    """ A path to a file in which to store the result of action
+    test_dir_help_message = """ A path to a file in which to store the result of action
         from inside the container. Either "--do-ping" or "--do_ifconfig"
         action is required to be used in combination to this.
     """
@@ -216,8 +242,7 @@ if __name__ == "__main__":
                         metavar="path",
                         help=test_dir_help_message)
 
-    do_ping_help_message = \
-    """ A host name to ping
+    do_ping_help_message = """ A host name to ping
     """
     parser.add_argument("--do-ping",
                         nargs=1,
@@ -227,8 +252,7 @@ if __name__ == "__main__":
                         metavar="hostname",
                         help=do_ping_help_message)
 
-    do_ifconfig_help_message = \
-    """ A path to a file in which to store ip address of the container
+    do_ifconfig_help_message = """ A path to a file in which to store ip address of the container
     """
     parser.add_argument("--do-ifconfig",
                         nargs=1,
@@ -237,6 +261,16 @@ if __name__ == "__main__":
                         default=None,
                         metavar="path",
                         help=do_ifconfig_help_message)
+
+    do_allocate_help_message = """ desired size to allocated in container
+    """
+    parser.add_argument("--do-allocate",
+                        nargs=1,
+                        action="store",
+                        dest=DO_ALLOCATE_OPTION,
+                        default=None,
+                        metavar="size",
+                        help=do_allocate_help_message)
 
     args = parser.parse_args()
 
@@ -249,8 +283,8 @@ if __name__ == "__main__":
             * do_ping
             * do_ifconfig
             * get_env_vars
+            * do_allocate
         """
-
         parsed_value = getattr(args, DO_PING_OPTION)
         if parsed_value is not None:
             # Extract the actual host string
@@ -266,7 +300,7 @@ if __name__ == "__main__":
             # Extract the actual path string
             if_fname = parsed_value.pop()
             h = NetworkHelper(test_file_base_path)
-            #get ip address of container
+            # get ip address of container
             h.ifconfig(if_fname)
 
         parsed_value = getattr(args, GET_ENV_VARS_OPTION)
@@ -276,3 +310,12 @@ if __name__ == "__main__":
             env_vars = h.get_env_vars()
             # Dump the information for the helper to read back later in the tests
             h.write_result(env_vars)
+
+        parsed_value = getattr(args, DO_ALLOCATE_OPTION)
+        if parsed_value is not None:
+            # Extract the requested size to allocate
+            allocation_size = parsed_value.pop()
+            h = CGroupHelper(test_file_base_path)
+            # allocate the memory
+            success = h.allocate(long(allocation_size))
+            LOG("Is allocation successful : " + str(success))
