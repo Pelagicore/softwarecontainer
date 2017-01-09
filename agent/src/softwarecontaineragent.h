@@ -92,12 +92,12 @@ public:
     bool deleteContainer(ContainerID containerID);
 
     /**
-     * @brief Check whether the given container is valid and return a reference to the actual container
+     * @brief Fetches a pointer to a SoftwareContainer matching an ID.
      *
      * @param containerID the ID for the container
-     * @param container a pointer to a container object (out parameter)
+     * @return Pointer to the matched container if there is such a container. Otherwise return nullptr.
      */
-    bool checkContainer(ContainerID containerID, SoftwareContainer * &container);
+    SoftwareContainer* getContainer(ContainerID containerID);
 
     /**
      * @brief Tries to read a config in json format for a container
