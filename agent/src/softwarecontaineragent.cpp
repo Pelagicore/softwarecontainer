@@ -141,14 +141,14 @@ bool SoftwareContainerAgent::deleteContainer(ContainerID containerID)
     return true;
 }
 
-SoftwareContainer* SoftwareContainerAgent::getContainer(ContainerID containerID)
+SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::getContainer(ContainerID containerID)
 {
     if (!isIdValid(containerID)) {
         log_error() << "Invalid container ID " << containerID;
         return nullptr;
     }
 
-    return m_containers[containerID].get();
+    return m_containers[containerID];
 }
 
 ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
@@ -289,8 +289,8 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
                                      std::function<void (pid_t, int)> listener)
 {
     profilefunction("executeFunction");
-    SoftwareContainer *container = getContainer(containerID);
-    if (container == nullptr) {
+    SoftwareContainerPtr container = getContainer(containerID);
+    if (!container) {
         log_error() << "Invalid container ID " << containerID;
         pid = INVALID_PID;
         return false;
@@ -348,8 +348,8 @@ bool SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
         return false;
     }
 
-    SoftwareContainer *container = getContainer(containerID);
-    if (container == nullptr) {
+    SoftwareContainerPtr container = getContainer(containerID);
+    if (!container) {
         log_error() << "Invalid container ID " << containerID;
         return false;
     }
@@ -370,8 +370,8 @@ bool SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
 
 bool SoftwareContainerAgent::suspendContainer(ContainerID containerID)
 {
-    SoftwareContainer *container = getContainer(containerID);
-    if (container == nullptr) {
+    SoftwareContainerPtr container = getContainer(containerID);
+    if (!container) {
         log_error() << "Can't suspend container " << containerID;
         return false;
     }
@@ -381,8 +381,8 @@ bool SoftwareContainerAgent::suspendContainer(ContainerID containerID)
 
 bool SoftwareContainerAgent::resumeContainer(ContainerID containerID)
 {
-    SoftwareContainer *container = getContainer(containerID);
-    if (container == nullptr) {
+    SoftwareContainerPtr container = getContainer(containerID);
+    if (!container) {
         log_error() << "Can't resume container " << containerID;
         return false;
     }
@@ -396,8 +396,8 @@ bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
                                        bool readOnly)
 {
     profilefunction("bindMountFunction");
-    SoftwareContainer *container = getContainer(containerID);
-    if (container == nullptr) {
+    SoftwareContainerPtr container = getContainer(containerID);
+    if (!container) {
         log_error() << "Invalid container ID " << containerID;
         return false;
     }
@@ -417,8 +417,8 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
                                                   const GatewayConfiguration &configs)
 {
     profilefunction("updateGatewayConfigs");
-    SoftwareContainer *container = getContainer(containerID);
-    if (container == nullptr) {
+    SoftwareContainerPtr container = getContainer(containerID);
+    if (!container) {
         log_error() << "Could not update gateway configuration. Container ("
                     << std::to_string(containerID)
                     << ") does not exist";
