@@ -17,8 +17,8 @@
  * For further information see LICENSE
  */
 
-#include "dbusgateway.h"
-#include "gatewayparsererror.h"
+#include "gateway/dbus/dbusgateway.h"
+#include "gateway/gatewayparsererror.h"
 
 namespace softwarecontainer {
 

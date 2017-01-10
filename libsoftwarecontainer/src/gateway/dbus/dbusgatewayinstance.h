@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "gateway.h"
+#include "gateway/gateway.h"
 
 namespace softwarecontainer {
 

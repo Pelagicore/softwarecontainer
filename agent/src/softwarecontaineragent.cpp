@@ -404,9 +404,9 @@ bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
         return false;
     }
 
-    ReturnCode result = container->getContainer()->bindMountInContainer(pathInHost,
-                                                                        pathInContainer,
-                                                                        readOnly);
+    ReturnCode result = container->bindMount(pathInHost,
+                                             pathInContainer,
+                                             readOnly);
     if (isError(result)) {
         log_error() << "Unable to bind mount " << pathInHost << " to " << pathInContainer;
         return false;

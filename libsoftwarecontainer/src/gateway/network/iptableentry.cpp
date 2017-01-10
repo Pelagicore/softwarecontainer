@@ -18,7 +18,7 @@
  */
 
 #include "iptableentry.h"
-#include "gateway.h"
+#include "gateway/gateway.h"
 
 namespace softwarecontainer {
 

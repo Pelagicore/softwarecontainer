@@ -22,8 +22,8 @@
 class ContainerAbstractInterface;
 namespace softwarecontainer {
 
-FunctionJob::FunctionJob(ContainerInterfacePtr containerInterface,
-                         std::function<int()> command): JobAbstract(containerInterface)
+FunctionJob::FunctionJob(ExecutablePtr executable,
+                         std::function<int()> command): JobAbstract(executable)
 {
     m_command = command;
 }
@@ -34,12 +34,12 @@ FunctionJob::~FunctionJob()
 
 ReturnCode FunctionJob::start()
 {
-    return m_containerInterface->executeInContainer(m_command,
-                                                    &m_pid,
-                                                    m_env,
-                                                    m_stdin[0],
-                                                    m_stdout[1],
-                                                    m_stderr[1]);
+    return m_executable->execute(m_command,
+                                 &m_pid,
+                                 m_env,
+                                 m_stdin[0],
+                                 m_stdout[1],
+                                 m_stderr[1]);
 }
 
 void FunctionJob::setEnvironmentVariable(

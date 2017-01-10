@@ -21,14 +21,14 @@
 #pragma once
 
 #include "softwarecontainer-common.h"
+#include "executable.h"
 
 namespace softwarecontainer {
 
-class ContainerAbstractInterface {
+class ContainerAbstractInterface : public Executable
+{
 
 public:
-    // A function to be executed in the container
-    typedef std::function<int ()> ContainerFunction;
 
     virtual ~ContainerAbstractInterface() {};
     virtual const char *id() const = 0;
@@ -70,20 +70,6 @@ public:
 
     virtual ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value) = 0;
     virtual ReturnCode setCgroupItem(std::string subsys, std::string value) = 0;
-
-    virtual ReturnCode attach(const std::string &commandLine, pid_t *pid,
-                              const EnvironmentVariables &variables,
-                              const std::string &workingDirectory = "/",
-                              int stdin = -1, int stdout = 1, int stderr = 2) = 0;
-    virtual ReturnCode attach(const std::string &commandLine, pid_t *pid) = 0;
-
-    virtual ReturnCode executeInContainer(const std::string &cmdline) = 0;
-    virtual ReturnCode executeInContainer(ContainerFunction function, pid_t *pid,
-                                          const EnvironmentVariables &variables = EnvironmentVariables(),
-                                          int stdin = -1,
-                                          int stdout = -1,
-                                          int stderr = 2) = 0;
-
 };
 
 } // namespace softwarecontainer

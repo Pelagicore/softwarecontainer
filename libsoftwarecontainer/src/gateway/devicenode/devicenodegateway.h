@@ -22,7 +22,7 @@
 #include "jansson.h"
 
 #include "softwarecontainer-common.h"
-#include "gateway.h"
+#include "gateway/gateway.h"
 #include "devicenodelogic.h"
 
 namespace softwarecontainer {

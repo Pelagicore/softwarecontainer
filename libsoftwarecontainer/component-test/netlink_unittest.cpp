@@ -20,7 +20,7 @@
 #include "softwarecontainer_test.h"
 #include "functionjob.h"
 #include <softwarecontainer-common.h>
-#include <netlink.h>
+#include "gateway/network/netlink.h"
 
 #include <linux/if_arp.h>
 

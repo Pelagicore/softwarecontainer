@@ -20,10 +20,8 @@
 
 set(HEADERS
     softwarecontainer.h
-    container.h
-    containerabstractinterface.h
+    executable.h
     workspace.h
-    gateway.h
     observableproperty.h
 )
 

@@ -27,7 +27,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "gateway.h"
+#include "gateway/gateway.h"
 #include "softwarecontainer.h"
 
 using namespace softwarecontainer;

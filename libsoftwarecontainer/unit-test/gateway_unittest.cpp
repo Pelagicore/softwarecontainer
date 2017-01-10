@@ -18,7 +18,7 @@
  */
 
 #include "softwarecontainer-common.h"
-#include "gateway.h"
+#include "gateway/gateway.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"

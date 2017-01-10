@@ -19,6 +19,8 @@
 
 
 #include "softwarecontainer.h"
+#include "gateway/gateway.h"
+#include "container.h"
 
 #ifdef ENABLE_PULSEGATEWAY
 #include "gateway/pulsegateway.h"
@@ -336,6 +338,11 @@ std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::strin
 {
     auto containerInterface = getContainer();
     return std::make_shared<CommandJob>(containerInterface, command);
+}
+
+ReturnCode SoftwareContainer::bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly)
+{
+    return getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly);
 }
 
 } // namespace softwarecontainer
