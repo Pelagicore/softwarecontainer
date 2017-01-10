@@ -21,7 +21,7 @@
 
 namespace softwarecontainer {
 
-CommandJob::CommandJob(ContainerInterfacePtr &containerInterface,
+CommandJob::CommandJob(ContainerInterfacePtr containerInterface,
                        const std::string &command): JobAbstract(containerInterface)
 {
     m_command = command;

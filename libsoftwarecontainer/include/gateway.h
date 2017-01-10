@@ -179,17 +179,6 @@ protected:
      */
     ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value);
 
-    /**
-     * @brief Execute the given command in the container
-     */
-    ReturnCode executeInContainer(const std::string &cmd);
-
-    /**
-     * @brief Execute a function in the container
-     */
-    typedef std::function<int ()> ContainerFunction;
-    ReturnCode executeInContainer(ContainerFunction func);
-
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;
 

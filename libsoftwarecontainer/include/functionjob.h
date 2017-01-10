@@ -34,7 +34,7 @@ class FunctionJob :
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    FunctionJob(ContainerInterfacePtr &containerInterface, std::function<int()> fun);
+    FunctionJob(ContainerInterfacePtr containerInterface, std::function<int()> fun);
     virtual ~FunctionJob();
 
     ReturnCode start();

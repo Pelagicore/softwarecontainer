@@ -177,4 +177,9 @@ ReturnCode IPTableEntry::insertCommand(std::string command)
     return ReturnCode::SUCCESS;
 }
 
+std::string IPTableEntry::toString()
+{
+    return "IPTableEntry type: " + m_type;
+}
+
 } // namespace softwarecontainer
