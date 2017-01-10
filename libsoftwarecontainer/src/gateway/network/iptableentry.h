@@ -97,6 +97,12 @@ public:
      */
     std::string interpretPolicy(void);
 
+
+    /**
+     * @brief Creates a string with infromation about the entry
+     */
+    std::string toString();
+
     std::string m_type;
     std::vector<Rule> m_rules;
     Target m_defaultTarget;

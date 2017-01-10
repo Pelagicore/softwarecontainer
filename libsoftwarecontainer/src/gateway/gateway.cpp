@@ -119,6 +119,11 @@ bool Gateway::hasContainer()
 
 std::shared_ptr<ContainerAbstractInterface> Gateway::getContainer()
 {
+    if (!hasContainer()) {
+        log_error() << "A gateway is asking for a container reference before it has been assigned one.";
+        return std::shared_ptr<ContainerAbstractInterface>();
+    }
+
     std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
     return ptrCopy;
 }
@@ -144,35 +149,6 @@ ReturnCode Gateway::setEnvironmentVariable(const std::string &variable, const st
         return getContainer()->setEnvironmentVariable(variable, value);
     } else {
         log_error() << "Can't set environment variable on gateway without container";
-        return ReturnCode::FAILURE;
-    }
-}
-
-/**
- * @brief Execute the given command in the container
- */
-ReturnCode Gateway::executeInContainer(const std::string &cmd)
-{
-    if (hasContainer()) {
-        return getContainer()->executeInContainer(cmd);
-    } else {
-        log_error() << "Can't execute in container from gateway without container";
-        return ReturnCode::FAILURE;
-    }
-}
-
-ReturnCode Gateway::executeInContainer(ContainerFunction func)
-{
-    if (hasContainer()) {
-        pid_t pid;
-        ReturnCode ret = getContainer()->executeInContainer(func, &pid);
-        if (isSuccess(ret)) {
-            waitpid(pid, 0, 0);
-        }
-
-        return ret;
-    } else {
-        log_error() << "Can't execute in container from gateway without container";
         return ReturnCode::FAILURE;
     }
 }

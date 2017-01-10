@@ -22,7 +22,7 @@
 class ContainerAbstractInterface;
 namespace softwarecontainer {
 
-FunctionJob::FunctionJob(ContainerInterfacePtr &containerInterface,
+FunctionJob::FunctionJob(ContainerInterfacePtr containerInterface,
                          std::function<int()> command): JobAbstract(containerInterface)
 {
     m_command = command;
