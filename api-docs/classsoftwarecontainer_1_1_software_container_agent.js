@@ -5,7 +5,7 @@ var classsoftwarecontainer_1_1_software_container_agent =
     [ "listContainers", "classsoftwarecontainer_1_1_software_container_agent.html#a87e2217b1539db92e21a816f075aa4bd", null ],
     [ "listCapabilities", "classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654", null ],
     [ "deleteContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a66b745cd67c87b48a71b368edffaef83", null ],
-    [ "checkContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a0619227bbd69246e07ca573ed6af20f1", null ],
+    [ "getContainer", "classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814", null ],
     [ "readConfigElement", "classsoftwarecontainer_1_1_software_container_agent.html#a01b902dd215af783c7863d267758e91e", null ],
     [ "parseConfig", "classsoftwarecontainer_1_1_software_container_agent.html#a963368abdad10b1401baec80a7abb327", null ],
     [ "createContainer", "classsoftwarecontainer_1_1_software_container_agent.html#adedc44d2112a0467bdddf68c19f37667", null ],

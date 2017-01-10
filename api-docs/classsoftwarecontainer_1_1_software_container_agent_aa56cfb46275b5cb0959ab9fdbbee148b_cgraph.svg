@@ -18,11 +18,11 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a0619227bbd69246e07ca573ed6af20f1" target="_top" xlink:title="Check whether the given container is valid and return a reference to the actual container. ">
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814" target="_top" xlink:title="Fetches a pointer to a SoftwareContainer matching an ID. ">
 <polygon fill="white" stroke="black" points="159,-0.5 159,-41.5 282,-41.5 282,-0.5 159,-0.5"/>
 <text text-anchor="start" x="167" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="167" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
-<text text-anchor="middle" x="220.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::checkContainer</text>
+<text text-anchor="middle" x="220.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::getContainer</text>
 </a>
 </g>
 </g>
