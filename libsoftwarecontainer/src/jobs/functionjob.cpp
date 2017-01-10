@@ -19,10 +19,11 @@
 
 #include "functionjob.h"
 
+class ContainerAbstractInterface;
 namespace softwarecontainer {
 
-FunctionJob::FunctionJob(
-    SoftwareContainer &sc, std::function<int()> command): JobAbstract(sc)
+FunctionJob::FunctionJob(ContainerInterfacePtr &containerInterface,
+                         std::function<int()> command): JobAbstract(containerInterface)
 {
     m_command = command;
 }
@@ -33,8 +34,12 @@ FunctionJob::~FunctionJob()
 
 ReturnCode FunctionJob::start()
 {
-    return m_sc.getContainer()->executeInContainer(
-        m_command, &m_pid, m_env, m_stdin[0], m_stdout[1], m_stderr[1]);
+    return m_containerInterface->executeInContainer(m_command,
+                                                    &m_pid,
+                                                    m_env,
+                                                    m_stdin[0],
+                                                    m_stdout[1],
+                                                    m_stderr[1]);
 }
 
 void FunctionJob::setEnvironmentVariable(

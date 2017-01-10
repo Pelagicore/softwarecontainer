@@ -35,6 +35,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "functionjob.h"
+#include "commandjob.h"
+
 namespace softwarecontainer {
 
 class SoftwareContainer :
@@ -90,6 +93,10 @@ public:
     ReturnCode init();
 
     std::shared_ptr<ContainerAbstractInterface> getContainer();
+
+    std::shared_ptr<FunctionJob> createFunctionJob(const std::function<int()> fun);
+    std::shared_ptr<CommandJob> createCommandJob(const std::string &command);
+
     std::string getContainerDir();
     std::string getGatewayDir();
 

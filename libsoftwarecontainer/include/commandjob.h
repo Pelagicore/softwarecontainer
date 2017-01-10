@@ -33,7 +33,7 @@ class CommandJob :
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    CommandJob(SoftwareContainer &sc, const std::string &command);
+    CommandJob(ContainerInterfacePtr &containerInterface, const std::string &command);
     virtual ~CommandJob();
 
     ReturnCode setWorkingDirectory(const std::string &folder);

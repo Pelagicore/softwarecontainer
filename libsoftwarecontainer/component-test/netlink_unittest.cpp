@@ -59,7 +59,7 @@ TEST_F(NetlinkTest, DumpOK) {
 TEST_F(NetlinkTest, LinkUpDown) {
 
     // Bring the link up (fail if it is already up)
-    FunctionJob jobLinkUp(*sc, [this] () {
+    auto jobLinkUp = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         // Get eth0 status
@@ -81,11 +81,11 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         return SUCCESS;
     });
-    jobLinkUp.start();
-    ASSERT_TRUE(jobLinkUp.wait() == SUCCESS);
+    jobLinkUp->start();
+    ASSERT_TRUE(jobLinkUp->wait() == SUCCESS);
 
     // Check that the link is up
-    FunctionJob jobCheckLinkUp(*sc, [this] () {
+    auto jobCheckLinkUp = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         // Check that link was up
@@ -101,11 +101,11 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         return SUCCESS;
     });
-    jobCheckLinkUp.start();
-    ASSERT_TRUE(jobCheckLinkUp.wait() == SUCCESS);
+    jobCheckLinkUp->start();
+    ASSERT_TRUE(jobCheckLinkUp->wait() == SUCCESS);
 
     // Bring the link down
-    FunctionJob jobLinkDown(*sc, [this] () {
+    auto jobLinkDown = sc->createFunctionJob([this] () {
         Netlink netlink;
          // Get eth0 status
         Netlink::LinkInfo linkUp;
@@ -126,11 +126,11 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         return SUCCESS;
     });
-    jobLinkDown.start();
-    ASSERT_TRUE(jobLinkDown.wait() == SUCCESS);
+    jobLinkDown->start();
+    ASSERT_TRUE(jobLinkDown->wait() == SUCCESS);
 
     // Check that the link is actually down
-    FunctionJob jobCheckLinkDown(*sc, [this] () {
+    auto jobCheckLinkDown = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         // Check that link was up
@@ -146,15 +146,15 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         return SUCCESS;
     });
-    jobCheckLinkDown.start();
-    ASSERT_TRUE(jobCheckLinkDown.wait() == SUCCESS);
+    jobCheckLinkDown->start();
+    ASSERT_TRUE(jobCheckLinkDown->wait() == SUCCESS);
 }
 
 /*
  * Make sure setting an IP address succeeds
  */
 TEST_F(NetlinkTest, SetIP) {
-    FunctionJob checkIPNotSet(*sc, [this] () {
+    auto checkIPNotSet = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         // Get link index
@@ -177,10 +177,10 @@ TEST_F(NetlinkTest, SetIP) {
 
         return SUCCESS;
     });
-    checkIPNotSet.start();
-    ASSERT_TRUE(checkIPNotSet.wait() == SUCCESS);
+    checkIPNotSet->start();
+    ASSERT_TRUE(checkIPNotSet->wait() == SUCCESS);
 
-    FunctionJob jobSetIP(*sc, [this] () {
+    auto jobSetIP = sc->createFunctionJob([this] () {
         Netlink netlink;
         Netlink::LinkInfo link;
         if (isError(netlink.findLink(IFACE, link))) {
@@ -199,10 +199,10 @@ TEST_F(NetlinkTest, SetIP) {
 
         return SUCCESS;
     });
-    jobSetIP.start();
-    ASSERT_TRUE(jobSetIP.wait() == SUCCESS);
+    jobSetIP->start();
+    ASSERT_TRUE(jobSetIP->wait() == SUCCESS);
 
-    FunctionJob checkIPSet(*sc, [this] () {
+    auto checkIPSet = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         // Get link index
@@ -224,8 +224,8 @@ TEST_F(NetlinkTest, SetIP) {
 
         return SUCCESS;
     });
-    checkIPSet.start();
-    ASSERT_TRUE(checkIPSet.wait() == SUCCESS);
+    checkIPSet->start();
+    ASSERT_TRUE(checkIPSet->wait() == SUCCESS);
 }
 
 /*
@@ -234,7 +234,7 @@ TEST_F(NetlinkTest, SetIP) {
  */
 TEST_F(NetlinkTest, SetGatewayWithoutUp) {
     // Set the gateway
-    FunctionJob jobSetGateway(*sc, [this] () {
+    auto jobSetGateway = sc->createFunctionJob([this] () {
         Netlink netlink;
         if (isError(netlink.setDefaultGateway(GWADDR))) {
             return ERROR;
@@ -242,10 +242,10 @@ TEST_F(NetlinkTest, SetGatewayWithoutUp) {
             return SUCCESS;
         }
     });
-    jobSetGateway.start();
+    jobSetGateway->start();
     // We can't set default gateway if the address it points to is
     // not in the network of any link = bring eth0 up first
-    ASSERT_TRUE(jobSetGateway.wait() == ERROR);
+    ASSERT_TRUE(jobSetGateway->wait() == ERROR);
 }
 
 /*
@@ -253,7 +253,7 @@ TEST_F(NetlinkTest, SetGatewayWithoutUp) {
  */
 TEST_F(NetlinkTest, SetGatewayWithUp) {
     // Bring the link up (fail if it is already up)
-    FunctionJob jobLinkUp(*sc, [this] () {
+    auto jobLinkUp = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         // Get eth0 status
@@ -275,10 +275,10 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
 
         return SUCCESS;
     });
-    jobLinkUp.start();
-    ASSERT_TRUE(jobLinkUp.wait() == SUCCESS);
+    jobLinkUp->start();
+    ASSERT_TRUE(jobLinkUp->wait() == SUCCESS);
 
-    FunctionJob jobSetIP(*sc, [this] () {
+    auto jobSetIP = sc->createFunctionJob([this] () {
         Netlink netlink;
         Netlink::LinkInfo link;
         if (isError(netlink.findLink(IFACE, link))) {
@@ -297,19 +297,19 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
 
         return SUCCESS;
     });
-    jobSetIP.start();
-    ASSERT_TRUE(jobSetIP.wait() == SUCCESS);
+    jobSetIP->start();
+    ASSERT_TRUE(jobSetIP->wait() == SUCCESS);
 
     // Set the gateway
-    FunctionJob jobSetGateway(*sc, [this] () {
+    auto jobSetGateway = sc->createFunctionJob([this] () {
         Netlink netlink;
         if (isError(netlink.setDefaultGateway(GWADDR))) {
             return ERROR;
         }
         return SUCCESS;
     });
-    jobSetGateway.start();
-    ASSERT_TRUE(jobSetGateway.wait() == SUCCESS);
+    jobSetGateway->start();
+    ASSERT_TRUE(jobSetGateway->wait() == SUCCESS);
 }
 
 /*
@@ -444,7 +444,7 @@ TEST_F(NetlinkTest, HasAddress) {
  * interface, and then making sure that hasAddress succeeds for each of those.
  */
 TEST_F(NetlinkTest, FindAddresses) {
-    FunctionJob jobFindAddresses(*sc, [this] () {
+    auto jobFindAddresses = sc->createFunctionJob([this] () {
         Netlink netlink;
 
         Netlink::LinkInfo link;
@@ -492,6 +492,6 @@ TEST_F(NetlinkTest, FindAddresses) {
 
         return SUCCESS;
     });
-    jobFindAddresses.start();
-    ASSERT_TRUE(jobFindAddresses.wait() == SUCCESS);
+    jobFindAddresses->start();
+    ASSERT_TRUE(jobFindAddresses->wait() == SUCCESS);
 }

@@ -198,7 +198,7 @@ public:
      * @param capabilities the capabilities
      *
      * @return true on success, false otherwise
-     */
+    */
     bool setCapabilities(const ContainerID &containerID,
                          const std::vector<std::string> &capabilities);
 
@@ -231,7 +231,7 @@ private:
     // Pre-loads container until the we have as many as configured
     bool triggerPreload();
     // Find a job given a pid
-    bool checkJob(pid_t pid, CommandJob * &result);
+    std::shared_ptr<CommandJob> getJob(pid_t pid);
     // Check if a given containerID is valid
     inline bool isIdValid (ContainerID containerID);
     // Return a suitable container id
@@ -247,7 +247,7 @@ private:
     // That is why it is a std::queue and not a std::map
     std::queue<std::pair<ContainerID, SoftwareContainerPtr>> m_preloadedContainers;
     // List of running jobs
-    std::vector<CommandJob *> m_jobs;
+    std::map<pid_t, std::shared_ptr<CommandJob>> m_jobs;
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;

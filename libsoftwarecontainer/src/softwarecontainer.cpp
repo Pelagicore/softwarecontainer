@@ -326,4 +326,16 @@ ObservableProperty<ContainerState> &SoftwareContainer::getContainerState()
     return m_containerState;
 }
 
+std::shared_ptr<FunctionJob> SoftwareContainer::createFunctionJob(const std::function<int()> fun)
+{
+    auto containerInterface = getContainer();
+    return std::make_shared<FunctionJob>(containerInterface, fun);
+}
+
+std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::string &command)
+{
+    auto containerInterface = getContainer();
+    return std::make_shared<CommandJob>(containerInterface, command);
+}
+
 } // namespace softwarecontainer
