@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-7959d3f 2017-01-10</span>
+   &#160;<span id="projectnumber">0.15.0-d16ae46 2017-01-10</span>
    </div>
   </td>
  </tr>
@@ -232,7 +232,7 @@ $(document).ready(function(){initNavTree('softwarecontainer_8cpp_source.html',''
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    m_gateways.push_back(std::move(std::unique_ptr&lt;Gateway&gt;(gateway)));</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container.html#a3721d6df411f8f24002eb08f0998ca07">  167</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_software_container.html#a3721d6df411f8f24002eb08f0998ca07">SoftwareContainer::setGatewayConfigs</a>(<span class="keyword">const</span> <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;gwConfig)</div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container.html#ac20c6d0cd340297ed80ae5684d9d64d3">  167</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ac20c6d0cd340297ed80ae5684d9d64d3">SoftwareContainer::startGateways</a>(<span class="keyword">const</span> <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;gwConfig)</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;{</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    ReturnCode result = ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
@@ -399,8 +399,8 @@ $(document).ready(function(){initNavTree('softwarecontainer_8cpp_source.html',''
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00254">softwarecontainer.cpp:254</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a99978224d29f4d27d1801d02f44bfde6"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a99978224d29f4d27d1801d02f44bfde6">softwarecontainer::SoftwareContainer::preload</a></div><div class="ttdeci">ReturnCode preload()</div><div class="ttdoc">Preload the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00078">softwarecontainer.cpp:78</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a84a34e91e09b30a2f62b25e0b3926a6d"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d">softwarecontainer::SoftwareContainer::setMainLoopContext</a></div><div class="ttdeci">void setMainLoopContext(Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext)</div><div class="ttdoc">Set the main loop. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00073">softwarecontainer.cpp:73</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a3721d6df411f8f24002eb08f0998ca07"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a3721d6df411f8f24002eb08f0998ca07">softwarecontainer::SoftwareContainer::setGatewayConfigs</a></div><div class="ttdeci">ReturnCode setGatewayConfigs(const GatewayConfiguration &amp;configs)</div><div class="ttdoc">Set the gateway configurations and activates the configured gateway. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00167">softwarecontainer.cpp:167</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_configuration_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_configuration.html">softwarecontainer::GatewayConfiguration</a></div><div class="ttdef"><b>Definition:</b> <a href="gatewayconfig_8h_source.html#l00028">gatewayconfig.h:28</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ac20c6d0cd340297ed80ae5684d9d64d3"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ac20c6d0cd340297ed80ae5684d9d64d3">softwarecontainer::SoftwareContainer::startGateways</a></div><div class="ttdeci">ReturnCode startGateways(const GatewayConfiguration &amp;configs)</div><div class="ttdoc">Starts the Gateways by setting the gateway configurations and activating the configured gateway...</div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00167">softwarecontainer.cpp:167</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -408,7 +408,7 @@ $(document).ready(function(){initNavTree('softwarecontainer_8cpp_source.html',''
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><b>softwarecontainer.cpp</b></li>
-    <li class="footer">Generated on Tue Jan 10 2017 09:57:33 for softwarecontainer by
+    <li class="footer">Generated on Tue Jan 10 2017 11:57:33 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

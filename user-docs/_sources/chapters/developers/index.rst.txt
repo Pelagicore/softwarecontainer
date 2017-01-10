@@ -147,7 +147,7 @@ Below diagram show the major events during the configuration and activation sequ
     span_height = 5;
 
 
-    Agent -> SoftwareContainer [label = "setGatewayConfigs()"]
+    Agent -> SoftwareContainer [label = "startGateways()"]
 
     SoftwareContainer -> Gateway [label = "id()"]
     SoftwareContainer <-- Gateway [label = "ID"]
