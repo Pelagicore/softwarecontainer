@@ -17,12 +17,15 @@
  * For further information see LICENSE
  */
 
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include "jobabstract.h"
 
 namespace softwarecontainer {
 
-JobAbstract::JobAbstract(SoftwareContainer &sc) :
-    m_sc(sc)
+JobAbstract::JobAbstract(ContainerInterfacePtr &containerInterface) :
+    m_containerInterface(containerInterface)
 {
 }
 

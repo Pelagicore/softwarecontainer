@@ -73,7 +73,7 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
     startGateways(config);
     json_decref(configJson);
 
-    FunctionJob jobTrue(getSc(), [] (){
+    auto jobTrue = getSc().createFunctionJob([] (){
         bool ERROR = 1;
         bool SUCCESS = 0;
 
@@ -95,12 +95,12 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
         return SUCCESS;
 
     });
-    jobTrue.start();
-    ASSERT_EQ(jobTrue.wait(), 0);
+    jobTrue->start();
+    ASSERT_EQ(jobTrue->wait(), 0);
 
-    CommandJob westonJob(getSc(),"/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
-    westonJob.start();
-    ASSERT_EQ(westonJob.wait(), 0);
+    auto westonJob = getSc().createCommandJob("/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
+    westonJob->start();
+    ASSERT_EQ(westonJob->wait(), 0);
 
 }
 
@@ -134,14 +134,14 @@ TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
 }
 
 TEST_F(SoftwareContainerApp, EnvVarsSet) {
-    FunctionJob job(getSc(), [&] () {
+    auto job = getSc().createFunctionJob([&] () {
         bool hasTestVar = false;
         Glib::getenv("TESTVAR", hasTestVar);
         return hasTestVar ? 0 : 1;
     });
-    job.setEnvironmentVariable("TESTVAR","YES");
-    job.start();
-    ASSERT_EQ(job.wait(), 0);
+    job->setEnvironmentVariable("TESTVAR","YES");
+    job->start();
+    ASSERT_EQ(job->wait(), 0);
 }
 
 static constexpr int EXISTENT = 1;
@@ -151,11 +151,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     // Make sure /tmp exists in both host and container
     ASSERT_TRUE(isDirectory("/tmp"));
-    FunctionJob job0(getSc(), [&] () {
+    auto job0 = getSc().createFunctionJob([&] () {
         return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
     });
-    job0.start();
-    ASSERT_EQ(job0.wait(), EXISTENT);
+    job0->start();
+    ASSERT_EQ(job0->wait(), EXISTENT);
 
     // Create a temporary file, and verify that we could indeed create it.
     char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
@@ -165,11 +165,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     // They will be mapped to these files, which should not yet exist
     std::string containerPath1 = "/tmp/testFile1";
-    FunctionJob jobMounted(getSc(), [&] () {
+    auto jobMounted = getSc().createFunctionJob([&] () {
         return isFile(containerPath1) ? EXISTENT : NON_EXISTENT;
     });
-    jobMounted.start();
-    ASSERT_EQ(jobMounted.wait(), NON_EXISTENT);
+    jobMounted->start();
+    ASSERT_EQ(jobMounted->wait(), NON_EXISTENT);
 
     // Let's configure the env gateway
     GatewayConfiguration config;
@@ -188,8 +188,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     startGateways(config);
     json_decref(configJson);
 
-    jobMounted.start();
-    ASSERT_EQ(jobMounted.wait(), EXISTENT);
+    jobMounted->start();
+    ASSERT_EQ(jobMounted->wait(), EXISTENT);
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
@@ -197,22 +197,22 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     writeToFile(tempFilename1, testData);
 
     // Test if we can read the data back into a variable
-    FunctionJob jobReadData(getSc(), [&] () {
+    auto jobReadData = getSc().createFunctionJob([&] () {
         std::string readBack;
         readFromFile(containerPath1, readBack);
         return readBack == testData ? 0 : 1;
     });
-    jobReadData.start();
-    ASSERT_EQ(jobReadData.wait(), 0);
+    jobReadData->start();
+    ASSERT_EQ(jobReadData->wait(), 0);
 
     // Make sure we can't write to the file
     std::string badData = "This data should never be read";
-    FunctionJob jobWriteDataRO(getSc(), [&] () {
+    auto jobWriteDataRO = getSc().createFunctionJob([&] () {
         writeToFile(containerPath1, badData);
         return 0;
     });
-    jobWriteDataRO.start();
-    jobWriteDataRO.wait();
+    jobWriteDataRO->start();
+    jobWriteDataRO->wait();
 
     std::string readBack = "";
     readFromFile(tempFilename1, readBack);
@@ -225,11 +225,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     // Make sure /tmp exists in both host and container
     ASSERT_TRUE(isDirectory("/tmp"));
-    FunctionJob job0(getSc(), [&] () {
+    auto job0 = getSc().createFunctionJob([&] () {
         return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
     });
-    job0.start();
-    ASSERT_EQ(job0.wait(), EXISTENT);
+    job0->start();
+    ASSERT_EQ(job0->wait(), EXISTENT);
 
     // Create one temporary file, and verify that we indeed could create it.
     char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
@@ -239,11 +239,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
 
     // They will be mapped to these files
     std::string containerPath1 = "/tmp/testFile1";
-    FunctionJob jobMounted(getSc(), [&] () {
+    auto jobMounted = getSc().createFunctionJob([&] () {
         return isFile(containerPath1) ? EXISTENT : NON_EXISTENT;
     });
-    jobMounted.start();
-    ASSERT_EQ(jobMounted.wait(), NON_EXISTENT);
+    jobMounted->start();
+    ASSERT_EQ(jobMounted->wait(), NON_EXISTENT);
 
     GatewayConfiguration config;
     std::string configStr =
@@ -261,8 +261,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     startGateways(config);
     json_decref(configJson);
 
-    jobMounted.start();
-    ASSERT_EQ(jobMounted.wait(), EXISTENT);
+    jobMounted->start();
+    ASSERT_EQ(jobMounted->wait(), EXISTENT);
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
@@ -270,22 +270,22 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     writeToFile(tempFilename1, testData);
 
     // Test if we can read the data back into a variable
-    FunctionJob jobReadData(getSc(), [&] () {
+    auto jobReadData = getSc().createFunctionJob([&] () {
         std::string readBack;
         readFromFile(containerPath1, readBack);
         return readBack == testData ? 0 : 1;
     });
-    jobReadData.start();
-    ASSERT_EQ(jobReadData.wait(), 0);
+    jobReadData->start();
+    ASSERT_EQ(jobReadData->wait(), 0);
 
     // Make sure we can write to the file
     std::string newData = "This data should have been written";
-    FunctionJob jobWriteData(getSc(), [&] () {
+    auto jobWriteData = getSc().createFunctionJob([&] () {
         writeToFile(containerPath1, newData);
         return 0;
     });
-    jobWriteData.start();
-    jobWriteData.wait();
+    jobWriteData->start();
+    jobWriteData->wait();
 
     std::string readBack = "";
     readFromFile(tempFilename1, readBack);
@@ -310,19 +310,19 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     write(fileDescriptor, content, sizeof(content));
     close(fileDescriptor);
 
-    FunctionJob job1(getSc(), [&] () {
+    auto job1 = getSc().createFunctionJob([&] () {
         return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
     });
-    job1.start();
-    ASSERT_EQ(job1.wait(), NON_EXISTENT);
+    job1->start();
+    ASSERT_EQ(job1->wait(), NON_EXISTENT);
 
     ASSERT_TRUE(isSuccess(bindMountInContainer(tempFilename, tempFilename, true)));
 
-    FunctionJob job2(getSc(), [&] () {
+    auto job2 = getSc().createFunctionJob([&] () {
         return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
     });
-    job2.start();
-    ASSERT_EQ(job2.wait(), EXISTENT);
+    job2->start();
+    ASSERT_EQ(job2->wait(), EXISTENT);
 
 }
 
@@ -342,27 +342,27 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
     close(fileDescriptor);
 
     // Make sure that the file is not already in the container
-    FunctionJob job(getSc(), [&] () {
+    auto job = getSc().createFunctionJob([&] () {
         return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
     });
-    job.start();
-    ASSERT_EQ(job.wait(), NON_EXISTENT);
+    job->start();
+    ASSERT_EQ(job->wait(), NON_EXISTENT);
 
     // Bind mount the file
     ASSERT_TRUE(isSuccess(bindMountInContainer(tempFilename, tempFilename, true)));
 
     // Check that the file is now in the container
 
-    job.start();
-    ASSERT_EQ(job.wait(), EXISTENT);
+    job->start();
+    ASSERT_EQ(job->wait(), EXISTENT);
 
     // Try to bind mount again. This should fail!
     ASSERT_TRUE(isError(bindMountInContainer(tempFilename, tempFilename, true)));
 
     // Check that the file is still in the container
 
-    job.start();
-    ASSERT_EQ(job.wait(), EXISTENT);
+    job->start();
+    ASSERT_EQ(job->wait(), EXISTENT);
 
 }
 
@@ -389,19 +389,19 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     mkdtemp(tempDirname);
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    FunctionJob job1(getSc(), [&] () {
+    auto job1 = getSc().createFunctionJob([&] () {
         return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
     });
-    job1.start();
-    ASSERT_EQ(job1.wait(), NON_EXISTENT);
+    job1->start();
+    ASSERT_EQ(job1->wait(), NON_EXISTENT);
 
     ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, tempDirname, false)));
 
-    FunctionJob job2(getSc(), [&] () {
+    auto job2 = getSc().createFunctionJob([&] () {
         return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
     });
-    job2.start();
-    ASSERT_EQ(job2.wait(), EXISTENT);
+    job2->start();
+    ASSERT_EQ(job2->wait(), EXISTENT);
 
     // Write some data to a file inside the directory
     char *tempFilename = strcat(tempDirname, "/bluhuXXXXXX");
@@ -411,12 +411,12 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     close(fileDescriptor);
     ASSERT_TRUE(isFile(tempFilename));
 
-    FunctionJob job3(getSc(), [&] () {
+    auto job3 = getSc().createFunctionJob([&] () {
                 std::string td(tempDirname);
                 return isFile(td) ? EXISTENT : NON_EXISTENT;
             });
-    job3.start();
-    ASSERT_EQ(job3.wait(), EXISTENT);
+    job3->start();
+    ASSERT_EQ(job3->wait(), EXISTENT);
 }
 
 #include <stdlib.h>
@@ -436,7 +436,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
     strcpy(tmp, tempDirname);
     char *tempUnixSocket = strcat(tmp, "/socket");
 
-    FunctionJob job1(getSc(), [&] () {
+    auto job1 = getSc().createFunctionJob([&] () {
 
                 int fd, fd2, done, n;
                 char str[100];
@@ -510,8 +510,8 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
     }
     else //Parent process
     {
-        job1.start();
-        ASSERT_EQ(job1.wait(), EXISTENT);
+        job1->start();
+        ASSERT_EQ(job1->wait(), EXISTENT);
     }
 }
 
@@ -563,44 +563,44 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     ASSERT_TRUE(isSuccess(bindMountInContainer(soundFile, soundFile, true)));
 
     // Make sure the file is there
-    FunctionJob job1(getSc(), [&] () {
+    auto job1 = getSc().createFunctionJob([&] () {
         return isFile(soundFile) ? EXISTENT : NON_EXISTENT;
     });
-    job1.start();
-    ASSERT_EQ(job1.wait(), EXISTENT);
+    job1->start();
+    ASSERT_EQ(job1->wait(), EXISTENT);
 
-    CommandJob job2(getSc(), "/usr/bin/paplay " + soundFile);
-    job2.start();
-    ASSERT_TRUE(job2.isRunning());
-    ASSERT_EQ(job2.wait(), 0);
+    auto job2 = getSc().createCommandJob("/usr/bin/paplay " + soundFile);
+    job2->start();
+    ASSERT_TRUE(job2->isRunning());
+    ASSERT_EQ(job2->wait(), 0);
 }
 
 
 TEST_F(SoftwareContainerApp, TestStdin) {
-    CommandJob job(getSc(), "/bin/cat");
-    job.captureStdin();
-    job.captureStdout();
-    job.start();
-    ASSERT_TRUE(job.isRunning());
+    auto job = getSc().createCommandJob("/bin/cat");
+    job->captureStdin();
+    job->captureStdout();
+    job->start();
+    ASSERT_TRUE(job->isRunning());
 
     const char outputBytes[] = "test string";
     char inputBytes[sizeof(outputBytes)] = {};
 
-    unsigned int writtenBytesCount = write(job.stdin(), outputBytes, sizeof(outputBytes));
+    unsigned int writtenBytesCount = write(job->stdin(), outputBytes, sizeof(outputBytes));
     ASSERT_EQ(writtenBytesCount, sizeof(outputBytes));
 
-    unsigned int readBytesCount = read(job.stdout(), inputBytes, sizeof(inputBytes));
+    unsigned int readBytesCount = read(job->stdout(), inputBytes, sizeof(inputBytes));
     ASSERT_EQ(readBytesCount, sizeof(outputBytes));
 
     SignalConnectionsHandler connections;
-    addProcessListener(connections, job.pid(), [&] (
+    addProcessListener(connections, job->pid(), [&] (
                 int pid, int exitCode) {
-                log_debug() << "Finished process:" << job.toString();
+                log_debug() << "Finished process:" << job->toString();
                 log_debug() << "Pid was " << pid << ", exitCode was " << exitCode;
                 exit();
             }, getMainContext());
 
-    kill(job.pid(), SIGTERM);
+    kill(job->pid(), SIGTERM);
 
     run();
 }
@@ -610,13 +610,13 @@ TEST_F(SoftwareContainerApp, TestStdin) {
  * We do not enable the network gateway so we expect the ping to fail
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
-    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
-    job.start();
-    ASSERT_NE(job.wait(), 0);
+    auto job = getSc().createCommandJob("/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
+    job->start();
+    ASSERT_NE(job->wait(), 0);
 
-    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
-    job2.start();
-    ASSERT_NE(job2.wait(), 0);
+    auto job2 = getSc().createCommandJob("/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
+    job2->start();
+    ASSERT_NE(job2->wait(), 0);
 }
 
 /**
@@ -635,13 +635,13 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     config.append(NetworkGateway::ID, configJson);
     startGateways(config);
 
-    CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
-    job.start();
-    ASSERT_NE(job.wait(), 0);
+    auto job = getSc().createCommandJob("/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
+    job->start();
+    ASSERT_NE(job->wait(), 0);
 
-    CommandJob job2(getSc(), "/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
-    job2.start();
-    ASSERT_NE(job2.wait(), 0);
+    auto job2 = getSc().createCommandJob("/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
+    job2->start();
+    ASSERT_NE(job2->wait(), 0);
 }
 
 /**
@@ -672,21 +672,21 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
     startGateways(config);
     json_decref(configJson);
 
-    CommandJob job(getSc(), "/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
-    job.start();
-    ASSERT_EQ(job.wait(), 0);
+    auto job = getSc().createCommandJob("/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
+    job->start();
+    ASSERT_EQ(job->wait(), 0);
 }
 
 
 TEST_F(SoftwareContainerApp, TestJobReturnCode) {
 
-    CommandJob jobTrue(getSc(), "/bin/true");
-    jobTrue.start();
-    ASSERT_EQ(jobTrue.wait(), 0);
+    auto jobTrue = getSc().createCommandJob("/bin/true");
+    jobTrue->start();
+    ASSERT_EQ(jobTrue->wait(), 0);
 
-    CommandJob jobFalse(getSc(), "/bin/false");
-    jobFalse.start();
-    ASSERT_NE(jobFalse.wait(), 0);
+    auto jobFalse = getSc().createCommandJob("/bin/false");
+    jobFalse->start();
+    ASSERT_NE(jobFalse->wait(), 0);
 }
 
 /**
@@ -716,19 +716,17 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
     json_decref(configJson);
 
     {
-        CommandJob jobTrue(
-                getSc(),
+        auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --system --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue.start();
-        ASSERT_EQ(jobTrue.wait(), 0);
+        jobTrue->start();
+        ASSERT_EQ(jobTrue->wait(), 0);
     }
 
     {
-        CommandJob jobTrue(
-                getSc(),
+        auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue.start();
-        ASSERT_EQ(jobTrue.wait(), 0);
+        jobTrue->start();
+        ASSERT_EQ(jobTrue->wait(), 0);
     }
 }
 
@@ -758,11 +756,10 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
     json_decref(configJson);
 
     for(int i=0; i<2000; i++) {
-        CommandJob jobTrue(
-                getSc(),
+        auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue.start();
-        ASSERT_EQ(jobTrue.wait(), 0);
+        jobTrue->start();
+        ASSERT_EQ(jobTrue->wait(), 0);
     }
 }
 
@@ -772,22 +769,20 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
 TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
     {
-        CommandJob jobTrue(
-                getSc(),
+        auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue.start();
+        jobTrue->start();
 
-        ASSERT_NE(jobTrue.wait(), 0);
+        ASSERT_NE(jobTrue->wait(), 0);
     }
 
     {
-        CommandJob jobTrue(
-                getSc(),
+        auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue.start();
+        jobTrue->start();
 
         // We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
-        ASSERT_NE(jobTrue.wait(), 0);
+        ASSERT_NE(jobTrue->wait(), 0);
     }
 
 }

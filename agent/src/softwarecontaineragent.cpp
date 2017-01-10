@@ -267,17 +267,15 @@ std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareCon
     return std::make_pair(availableID, std::move(container));
 }
 
-bool SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&result)
+std::shared_ptr<CommandJob> SoftwareContainerAgent::getJob(pid_t pid)
 {
-    for (auto &job : m_jobs) {
-        if (job->pid() == pid) {
-            result = job;
-            return true;
-        }
+    if (m_jobs.count(pid) == 0) {
+        log_debug() << "Unknown PID: " << pid;
+        return std::shared_ptr<CommandJob>();
     }
 
-    log_warning() << "Unknown PID: " << pid;
-    return false;
+    return m_jobs.at(pid);
+
 }
 
 bool SoftwareContainerAgent::execute(ContainerID containerID,
@@ -315,7 +313,7 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
     }
 
     // Set up a CommandJob for this run in the container
-    auto job = new CommandJob(*container, cmdLine);
+    auto job = container->createCommandJob(cmdLine);
     job->setOutputFile(outputFile);
     job->setEnvironmentVariables(env);
     job->setWorkingDirectory(workingDirectory);
@@ -327,16 +325,20 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
         return false;
     }
 
+    pid = job->pid();
     // If things went well, do what we need when it exits
     addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {
         listener(pid, exitCode);
     }, m_mainLoopContext);
 
+    if (m_jobs.count(pid) > 0) {
+        log_warning() << pid << " is already in use by another process: " << m_jobs[pid]->toString() << ". Assuming that the old process is dead and overriding it.";
+    }
+
     // Save the job
-    m_jobs.push_back(job);
+    m_jobs[pid] = job;
     profilepoint("executeEnd");
 
-    pid = job->pid();
     return true;
 }
 

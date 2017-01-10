@@ -18,8 +18,10 @@
  */
 #pragma once
 
-#include "softwarecontainer.h"
+#include "softwarecontainer-common.h"
+#include "containerabstractinterface.h"
 
+class ContainerAbstractInterface;
 namespace softwarecontainer {
 
 /**
@@ -28,12 +30,13 @@ namespace softwarecontainer {
 class JobAbstract
 {
 protected:
-    LOG_SET_CLASS_CONTEXT(SoftwareContainer::getDefaultContext());
+    LOG_DECLARE_CLASS_CONTEXT("JOAB", "JobAbstract");
+    typedef std::shared_ptr<ContainerAbstractInterface> ContainerInterfacePtr;
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    JobAbstract(SoftwareContainer &sc);
+    JobAbstract(std::shared_ptr<ContainerAbstractInterface> &container);
     virtual ~JobAbstract();
 
     void captureStdin();
@@ -59,7 +62,9 @@ public:
 
 protected:
     EnvironmentVariables m_env;
-    SoftwareContainer &m_sc;
+
+    ContainerInterfacePtr m_containerInterface;
+
     pid_t m_pid = 0;
     int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
     int m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};

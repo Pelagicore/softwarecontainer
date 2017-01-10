@@ -21,6 +21,7 @@
 
 #include "jobabstract.h"
 
+class ContainerAbstractInterface;
 namespace softwarecontainer {
 
 /**
@@ -33,7 +34,7 @@ class FunctionJob :
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    FunctionJob(SoftwareContainer &sc, std::function<int()> command);
+    FunctionJob(ContainerInterfacePtr &containerInterface, std::function<int()> fun);
     virtual ~FunctionJob();
 
     ReturnCode start();
