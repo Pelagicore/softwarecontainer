@@ -37,9 +37,9 @@ class SoftwareContainerApp : public SoftwareContainerTest
 
 public:
 
-    void setGatewayConfigs(const GatewayConfiguration &config)
+    void startGateways(const GatewayConfiguration &config)
     {
-        getSc().setGatewayConfigs(config);
+        getSc().startGateways(config);
     }
 
     Glib::RefPtr<Glib::MainContext> getMainContext()
@@ -65,7 +65,7 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
 
     configJson = json_loads(configStrFalse.c_str(), 0, &error);
     config.append(WaylandGateway::ID ,configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     FunctionJob jobTrue(getSc(), [] (){
@@ -234,7 +234,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(FileGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     jobMounted.start();
@@ -307,7 +307,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(FileGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     jobMounted.start();
@@ -613,7 +613,7 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(PulseGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     // We need access to the test file, so we bind mount it
@@ -693,7 +693,7 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(NetworkGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
 
     CommandJob job(getSc(), "/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
     job.start();
@@ -729,7 +729,7 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(NetworkGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     CommandJob job(getSc(), "/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
@@ -772,7 +772,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(DBusGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     {
@@ -814,7 +814,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
     json_t *configJson = json_loads(configStr.c_str(), 0, &error);
     ASSERT_FALSE(configJson == nullptr);
     config.append(DBusGateway::ID, configJson);
-    setGatewayConfigs(config);
+    startGateways(config);
     json_decref(configJson);
 
     for(int i=0; i<2000; i++) {

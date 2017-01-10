@@ -164,7 +164,7 @@ void SoftwareContainer::addGateway(Gateway *gateway)
     m_gateways.push_back(std::move(std::unique_ptr<Gateway>(gateway)));
 }
 
-ReturnCode SoftwareContainer::setGatewayConfigs(const GatewayConfiguration &gwConfig)
+ReturnCode SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig)
 {
     ReturnCode result = ReturnCode::SUCCESS;
 
