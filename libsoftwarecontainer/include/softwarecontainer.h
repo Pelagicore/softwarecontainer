@@ -22,13 +22,12 @@
 
 #include "observableproperty.h"
 #include "workspace.h"
-#include "gateway.h"
-#include "container.h"
 #include "gatewayconfig.h"
 #include "signalconnectionshandler.h"
 
 #include <glibmm.h>
 
+#include <vector>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <fcntl.h>
@@ -38,7 +37,10 @@
 #include "functionjob.h"
 #include "commandjob.h"
 
+
 namespace softwarecontainer {
+class Gateway;
+class ContainerAbstractInterface;
 
 class SoftwareContainer :
     private FileToolkitWithUndo
@@ -81,9 +83,9 @@ public:
      */
     ReturnCode resume();
 
-    bool isInitialized() const;
-
     void addGateway(Gateway *gateway);
+
+    bool isInitialized() const;
 
     /**
      * @brief Preload the container.
@@ -96,6 +98,8 @@ public:
 
     std::shared_ptr<FunctionJob> createFunctionJob(const std::function<int()> fun);
     std::shared_ptr<CommandJob> createCommandJob(const std::string &command);
+
+    ReturnCode bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
 
     std::string getContainerDir();
     std::string getGatewayDir();
@@ -122,6 +126,7 @@ private:
 
     std::shared_ptr<ContainerAbstractInterface> m_container;
     pid_t m_pcPid = INVALID_PID;
+
     std::vector<std::unique_ptr<Gateway>> m_gateways;
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;

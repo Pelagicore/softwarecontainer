@@ -24,8 +24,8 @@
 
 namespace softwarecontainer {
 
-JobAbstract::JobAbstract(ContainerInterfacePtr &containerInterface) :
-    m_containerInterface(containerInterface)
+JobAbstract::JobAbstract(ExecutablePtr &executable) :
+    m_executable(executable)
 {
 }
 

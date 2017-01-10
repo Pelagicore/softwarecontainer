@@ -16,7 +16,7 @@
 # For further information see LICENSE
 
 include_directories(${LIBSOFTWARECONTAINER_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gateway)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Enable or disable support for gateways compile-time.
 set(GATEWAY_SOURCES "")

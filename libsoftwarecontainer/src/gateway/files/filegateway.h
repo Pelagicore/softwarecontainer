@@ -22,7 +22,7 @@
 #include <string>
 #include <unistd.h>
 
-#include "gateway.h"
+#include "gateway/gateway.h"
 #include "filegatewayparser.h"
 #include "filegatewaysettingstore.h"
 

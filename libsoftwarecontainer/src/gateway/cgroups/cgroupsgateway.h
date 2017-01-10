@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "gateway.h"
+#include "gateway/gateway.h"
 #include "cgroupsparser.h"
 
 namespace softwarecontainer {

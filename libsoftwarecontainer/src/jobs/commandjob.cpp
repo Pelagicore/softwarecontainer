@@ -21,8 +21,8 @@
 
 namespace softwarecontainer {
 
-CommandJob::CommandJob(ContainerInterfacePtr containerInterface,
-                       const std::string &command): JobAbstract(containerInterface)
+CommandJob::CommandJob(ExecutablePtr executable,
+                       const std::string &command): JobAbstract(executable)
 {
     m_command = command;
 }
@@ -39,13 +39,13 @@ ReturnCode CommandJob::setWorkingDirectory(const std::string &folder)
 
 ReturnCode CommandJob::start()
 {
-    return m_containerInterface->attach(m_command,
-                                        &m_pid,
-                                        m_env,
-                                        m_workingDirectory,
-                                        m_stdin[0],
-                                        m_stdout[1],
-                                        m_stderr[1]);
+    return m_executable->execute(m_command,
+                                 &m_pid,
+                                 m_env,
+                                 m_workingDirectory,
+                                 m_stdin[0],
+                                 m_stdout[1],
+                                 m_stderr[1]);
 }
 
 std::string CommandJob::toString() const

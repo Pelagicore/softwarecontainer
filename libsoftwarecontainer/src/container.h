@@ -99,27 +99,28 @@ public:
      */
     ReturnCode start(pid_t *pid);
 
-    /**
-     * @brief Start a process from the given command line, with an environment consisting of the variables previously set by the gateways,
-     * plus the ones passed as parameters here.
-     */
-    ReturnCode attach(const std::string &commandLine, pid_t *pid,
-                      const EnvironmentVariables &variables,
-                      const std::string &workingDirectory = "/",
-                      int stdin = -1, int stdout = 1, int stderr = 2);
-
-    /**
-     * @brief Start a process with the environment variables which have previously been set by the gateways
-     */
-    ReturnCode attach(const std::string &commandLine, pid_t *pid);
-
     ReturnCode setCgroupItem(std::string subsys, std::string value);
 
-    ReturnCode executeInContainer(ContainerFunction function, pid_t *pid,
-                                  const EnvironmentVariables &variables = EnvironmentVariables(),
-                                  int stdin = -1, int stdout = 1, int stderr = 2);
+    /**
+     * @brief Start a process from the given command line, with an environment consisting of the
+     * variables previously set by the gateways,
+     * plus the ones passed as parameters here.
+     */
+    ReturnCode execute(const std::string &commandLine,
+                       pid_t *pid,
+                       const EnvironmentVariables &variables,
+                       const std::string &workingDirectory = "/",
+                       int stdin = -1,
+                       int stdout = 1,
+                       int stderr = 2);
 
-    ReturnCode executeInContainer(const std::string &cmd);
+    ReturnCode execute(ExecFunction function,
+                       pid_t *pid,
+                       const EnvironmentVariables &variables = EnvironmentVariables(),
+                       int stdin = -1,
+                       int stdout = 1,
+                       int stderr = 2);
+
 
     /**
      * @brief Tries to bind mount a path from host to container

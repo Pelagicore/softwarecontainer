@@ -17,10 +17,11 @@
  * For further information see LICENSE
  */
 
-#include "devicenodegateway.h"
-
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#include "gateway/devicenode/devicenodegateway.h"
+#include "functionjob.h"
 
 namespace softwarecontainer {
 
@@ -67,8 +68,7 @@ ReturnCode DeviceNodeGateway::applySettings()
         if (dev.major != -1) {
 
             // mknod dev.name c dev.major dev.minor
-            pid_t pid = INVALID_PID;
-            getContainer()->executeInContainer([&] () {
+            FunctionJob job(getContainer(), [&] () {
                 auto err =  mknod(dev.name.c_str(), S_IFCHR | dev.mode,
                              makedev(dev.major, dev.minor));
                 if (err) {
@@ -76,9 +76,11 @@ ReturnCode DeviceNodeGateway::applySettings()
                                    " error: " << err << " - " << strerror(errno);
                 }
                 return err;
-            }, &pid);
+            });
 
-            if (waitForProcessTermination(pid) != 0) {
+            job.start();
+
+            if (job.wait() != 0) {
                 log_error() << "Failed to create device " << dev.name;
                 return ReturnCode::FAILURE;
             }
@@ -88,12 +90,12 @@ ReturnCode DeviceNodeGateway::applySettings()
             getContainer()->mountDevice(dev.name);
 
             if (dev.mode != -1) {
-                pid_t pid = INVALID_PID;
-                getContainer()->executeInContainer([&] () {
+                FunctionJob job(getContainer(), [&] () {
                     return chmod(dev.name.c_str(), dev.mode);
-                }, &pid);
+                });
+                job.start();
 
-                if (waitForProcessTermination(pid) != 0) {
+                if (job.wait() != 0) {
                     log_error() << "Could not 'chmod " << dev.mode
                                 << "' the mounted device " << dev.name;
                     return ReturnCode::FAILURE;

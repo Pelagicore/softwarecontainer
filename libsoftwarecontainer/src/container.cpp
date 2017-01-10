@@ -292,16 +292,22 @@ ReturnCode Container::start(pid_t *pid)
 
 int Container::executeInContainerEntryFunction(void *param)
 {
-    ContainerFunction *function = (ContainerFunction *) param;
+    ExecFunction *function = (ExecFunction *) param;
     return (*function)();
 }
 
-ReturnCode Container::executeInContainer(ContainerFunction function,
-                                         pid_t *pid,
-                                         const EnvironmentVariables &variables,
-                                         int stdin,
-                                         int stdout,
-                                         int stderr)
+ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
+{
+    bool success = m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
+    return bool2ReturnCode(success);
+}
+
+ReturnCode Container::execute(ExecFunction function,
+                              pid_t *pid,
+                              const EnvironmentVariables &variables,
+                              int stdin,
+                              int stdout,
+                              int stderr)
 {
     if (pid == nullptr) {
         log_error() << "Supplied pid argument is nullptr";
@@ -374,22 +380,10 @@ ReturnCode Container::executeInContainer(ContainerFunction function,
     }
 }
 
-
-ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
-{
-    bool success = m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
-    return bool2ReturnCode(success);
-}
-
-ReturnCode Container::attach(const std::string &commandLine, pid_t *pid)
-{
-    return attach(commandLine, pid, m_gatewayEnvironmentVariables);
-}
-
-ReturnCode Container::attach(const std::string &commandLine, pid_t *pid,
-                             const EnvironmentVariables &variables,
-                             const std::string &workingDirectory,
-                             int stdin, int stdout, int stderr)
+ReturnCode Container::execute(const std::string &commandLine, pid_t *pid,
+                              const EnvironmentVariables &variables,
+                              const std::string &workingDirectory,
+                              int stdin, int stdout, int stderr)
 {
     if (isError(ensureContainerRunning())) {
         log_error() << "Container is not running or in bad state, can't attach";
@@ -415,7 +409,7 @@ ReturnCode Container::attach(const std::string &commandLine, pid_t *pid,
     // We need a null terminated array
     args.push_back(nullptr);
 
-    ReturnCode result = executeInContainer([&] () {
+    ReturnCode result = execute([&] () {
                 if (workingDirectory.length() != 0) {
                     auto ret = chdir(workingDirectory.c_str());
                     if (ret != 0) {
@@ -559,7 +553,7 @@ ReturnCode Container::bindMountDirectoryInContainer(const std::string &pathInHos
 
     // Check that the target is not already mounted
     pid_t pid = INVALID_PID;
-    ReturnCode checkIfAlreadyMountpoint = executeInContainer([pathInContainer] () {
+    ReturnCode checkIfAlreadyMountpoint = execute([pathInContainer] () {
 
         FILE *mountsfile = setmntent("/proc/mounts", "r");
         struct mntent *mounts;
@@ -619,7 +613,7 @@ ReturnCode Container::bindMountCore(const std::string &pathInHost,
     // Move the mount in the container
     if (tempDirInContainer.compare(pathInContainer) != 0) {
         pid_t pid = INVALID_PID;
-        ReturnCode mountMoveRes = executeInContainer([tempDirInContainer, pathInContainer] () {
+        ReturnCode mountMoveRes = execute([tempDirInContainer, pathInContainer] () {
             unsigned long flags = MS_MOVE;
             if (isDirectory(tempDirInContainer)) {
                 int ret = mkdir(pathInContainer.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
@@ -662,7 +656,7 @@ ReturnCode Container::remountReadOnlyInContainer(const std::string &path)
 {
     pid_t pid = INVALID_PID;
 
-    ReturnCode ret = executeInContainer([path] () {
+    ReturnCode ret = execute([path] () {
         unsigned long flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
         return mount(path.c_str(), path.c_str(), "", flags, nullptr);
     }, &pid);
@@ -685,33 +679,6 @@ ReturnCode Container::mountDevice(const std::string &pathInHost)
     log_debug() << "Mounting device in container : " << pathInHost;
     bool returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
     return bool2ReturnCode(returnCode);
-}
-
-ReturnCode Container::executeInContainer(const std::string &cmd)
-{
-    if (isError(ensureContainerRunning())) {
-        log_error() << "Container is not running or in bad state, can't execute in container";
-        return ReturnCode::FAILURE;
-    }
-
-    pid_t pid = INVALID_PID;
-    ReturnCode result = executeInContainer([this, cmd]() {
-                //log_info() << "Executing system command in container : " << cmd;
-                const int result = execl("/bin/sh", "sh", "-c", cmd.c_str(), 0);
-                return result;
-            }, &pid, m_gatewayEnvironmentVariables);
-
-    if (isSuccess(result)) {
-        const int commandResponse = waitForProcessTermination(pid);
-        if (commandResponse != 0) {
-            log_debug() << "Exectution of command " << cmd << " in container failed";
-            return ReturnCode::FAILURE;
-        }
-    } else {
-        return ReturnCode::FAILURE;
-    }
-
-    return ReturnCode::SUCCESS;
 }
 
 ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::string &val)

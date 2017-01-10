@@ -19,9 +19,8 @@
 #pragma once
 
 #include "softwarecontainer-common.h"
-#include "containerabstractinterface.h"
+#include "executable.h"
 
-class ContainerAbstractInterface;
 namespace softwarecontainer {
 
 /**
@@ -31,12 +30,12 @@ class JobAbstract
 {
 protected:
     LOG_DECLARE_CLASS_CONTEXT("JOAB", "JobAbstract");
-    typedef std::shared_ptr<ContainerAbstractInterface> ContainerInterfacePtr;
+    typedef std::shared_ptr<Executable> ExecutablePtr;
 
 public:
     static constexpr int UNASSIGNED_STREAM = -1;
 
-    JobAbstract(std::shared_ptr<ContainerAbstractInterface> &container);
+    JobAbstract(ExecutablePtr &executable);
     virtual ~JobAbstract();
 
     void captureStdin();
@@ -63,7 +62,7 @@ public:
 protected:
     EnvironmentVariables m_env;
 
-    ContainerInterfacePtr m_containerInterface;
+    ExecutablePtr m_executable;
 
     pid_t m_pid = 0;
     int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};
