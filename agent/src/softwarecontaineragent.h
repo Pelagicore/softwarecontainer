@@ -192,7 +192,7 @@ public:
      *
      * Capabilities are a mapping from a string to a set of gateway configurations. Capabilities
      * are translated into gateway configurations and then sent the same way as with
-     * setGatewayConfigs
+     * startGateways
      *
      * @param containerID the container to use
      * @param capabilities the capabilities

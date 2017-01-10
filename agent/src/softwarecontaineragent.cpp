@@ -425,7 +425,7 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
         return false;
     }
 
-    ReturnCode result = container->setGatewayConfigs(configs);
+    ReturnCode result = container->startGateways(configs);
     return isSuccess(result);
 }
 

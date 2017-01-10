@@ -96,11 +96,12 @@ public:
     ObservableProperty<ContainerState> &getContainerState();
 
     /**
-     * @brief Set the gateway configurations and activates the configured gateway
+     * @brief Starts the Gateways by setting the gateway configurations
+     * and activating the configured gateway
      *
      * @return ReturnCode::FAILURE if configuration or activation failed
      */
-    ReturnCode setGatewayConfigs(const GatewayConfiguration &configs);
+    ReturnCode startGateways(const GatewayConfiguration &configs);
 
 private:
     ReturnCode configureGateways(const GatewayConfiguration &gwConfig);
