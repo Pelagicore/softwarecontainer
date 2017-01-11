@@ -311,7 +311,7 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     job1.start();
     ASSERT_EQ(job1.wait(), NON_EXISTENT);
 
-    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(tempFilename, tempFilename, true);
+    ReturnCode result = getSc().getContainer()->bindMountInContainer(tempFilename, tempFilename, true);
     ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getSc(), [&] () {
@@ -345,7 +345,7 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
     ASSERT_EQ(job.wait(), NON_EXISTENT);
 
     // Bind mount the file
-    ReturnCode result1 = getSc().getContainer()->bindMountFileInContainer(tempFilename, tempFilename, true);
+    ReturnCode result1 = getSc().getContainer()->bindMountInContainer(tempFilename, tempFilename, true);
     ASSERT_TRUE(isSuccess(result1));
 
     // Check that the file is now in the container
@@ -354,7 +354,7 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
     ASSERT_EQ(job.wait(), EXISTENT);
 
     // Try to bind mount again. This should fail!
-    ReturnCode result2 = getSc().getContainer()->bindMountFileInContainer(tempFilename, tempFilename, true);
+    ReturnCode result2 = getSc().getContainer()->bindMountInContainer(tempFilename, tempFilename, true);
     ASSERT_TRUE(isError(result2));
 
     // Check that the file is still in the container
@@ -373,10 +373,10 @@ TEST_F(SoftwareContainerApp, TestMountingOverRoot) {
     mkdtemp(tempDirname);
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    ReturnCode result1 = getSc().getContainer()->bindMountFolderInContainer(tempDirname, "/", false);
+    ReturnCode result1 = getSc().getContainer()->bindMountInContainer(tempDirname, "/", false);
     ASSERT_TRUE(isError(result1));
 
-    ReturnCode result2 = getSc().getContainer()->bindMountFolderInContainer(tempDirname, "/lib", false);
+    ReturnCode result2 = getSc().getContainer()->bindMountInContainer(tempDirname, "/lib", false);
     ASSERT_TRUE(isError(result2));
 }
 
@@ -396,7 +396,7 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     job1.start();
     ASSERT_EQ(job1.wait(), NON_EXISTENT);
 
-    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, tempDirname, false);
+    ReturnCode result = getSc().getContainer()->bindMountInContainer(tempDirname, tempDirname, false);
     ASSERT_TRUE(isSuccess(result));
 
     FunctionJob job2(getSc(), [&] () {
@@ -433,7 +433,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    ReturnCode result = getSc().getContainer()->bindMountFolderInContainer(tempDirname, tempDirname, false);
+    ReturnCode result = getSc().getContainer()->bindMountInContainer(tempDirname, tempDirname, false);
     ASSERT_TRUE(isSuccess(result));
 
     char *tmp = new char[strlen(tempDirname) + 8];
@@ -565,7 +565,7 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     // We need access to the test file, so we bind mount it
     std::string soundFile = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
 
-    ReturnCode result = getSc().getContainer()->bindMountFileInContainer(soundFile, soundFile, true);
+    ReturnCode result = getSc().getContainer()->bindMountInContainer(soundFile, soundFile, true);
     ASSERT_TRUE(isSuccess(result));
 
     // Make sure the file is there

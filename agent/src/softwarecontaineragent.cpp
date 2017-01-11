@@ -402,11 +402,11 @@ bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
         return false;
     }
 
-    ReturnCode result = container->getContainer()->bindMountFolderInContainer(pathInHost,
-                                                                              pathInContainer,
-                                                                              readOnly);
+    ReturnCode result = container->getContainer()->bindMountInContainer(pathInHost,
+                                                                        pathInContainer,
+                                                                        readOnly);
     if (isError(result)) {
-        log_error() << "Unable to bind mount folder " << pathInHost << " to " << pathInContainer;
+        log_error() << "Unable to bind mount " << pathInHost << " to " << pathInContainer;
         return false;
     }
 

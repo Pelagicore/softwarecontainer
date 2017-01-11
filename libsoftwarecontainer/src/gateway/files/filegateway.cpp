@@ -58,21 +58,13 @@ bool FileGateway::bindMount(const FileGatewayParser::FileSetting &setting)
 {
     std::shared_ptr<ContainerAbstractInterface> con = getContainer();
 
-    if (isDirectory(setting.pathInHost)) {
-        if (isError(con->bindMountFolderInContainer(setting.pathInHost, 
-                                                    setting.pathInContainer,
-                                                    setting.readOnly))) {
-            log_error() << "Could not bind mount folder into container";
-            return false;
-        }
-    } else {
-        if (isError(con->bindMountFileInContainer(setting.pathInHost,
-                                                  setting.pathInContainer,
-                                                  setting.readOnly))) {
-            log_error() << "Could not bind mount file into container";
-            return false;
-        }
+    if (isError(con->bindMountInContainer(setting.pathInHost,
+                                          setting.pathInContainer,
+                                          setting.readOnly))) {
+        log_error() << "Could not bind mount " << setting.pathInHost << " into container";
+        return false;
     }
+
     return true;
 }
 

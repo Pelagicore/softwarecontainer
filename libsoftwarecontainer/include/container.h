@@ -122,32 +122,21 @@ public:
     ReturnCode executeInContainer(const std::string &cmd);
 
     /**
-     * @brief Tries to bind mount a file in the container
+     * @brief Tries to bind mount a path from host to container
      *
-     * This will not create parent directories if they are not already present.
+     * If the destination path is a directory, any missing parent paths will be created. If the
+     * destination path is a file, this is not the case.
      *
-     * @param pathOnHost The path to the file that shall be bind mounted on the host system.
-     * @param pathInContainer Where to mount the file in the container.
+     * @param pathInHost The path on the host that shall be bind mounted into the container
+     * @param pathInContainer Where to mount the path in the container.
      * @param readonly Sets if the mount should be read only or read write
      *
-     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
+     * @return SUCCESS if everything worked as expected, FAILURE otherwise
      */
-    ReturnCode bindMountFileInContainer(const std::string &pathOnHost,
-                                        const std::string &pathInContainer,
-                                        bool readonly = true);
+    ReturnCode bindMountInContainer(const std::string &pathInHost,
+                                    const std::string &pathInContainer,
+                                    bool readOnly = true);
 
-    /**
-     * @brief Tries to bind mount a directory in the container
-     *
-     * Will create missing parent directories.
-     *
-     * @param pathOnHost The path to the directory that shall be bind mounted on the host system.
-     * @param pathInContainer Where to mount the file in the container.
-     * @param readonly Sets if the mount should be read only or read write
-     *
-     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
-     */
-    ReturnCode bindMountFolderInContainer(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
 
     ReturnCode mountDevice(const std::string &pathInHost);
 
@@ -219,7 +208,37 @@ public:
 private:
     static int executeInContainerEntryFunction(void *param);
 
-    ReturnCode bindMountCore(const std::string &pathOnHost,
+    /**
+     * @brief Tries to bind mount a file in the container
+     *
+     * This will not create parent directories if they are not already present.
+     *
+     * @param pathInHost The path to the file that shall be bind mounted on the host system.
+     * @param pathInContainer Where to mount the file in the container.
+     * @param readonly Sets if the mount should be read only or read write
+     *
+     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
+     */
+    ReturnCode bindMountFileInContainer(const std::string &pathInHost,
+                                        const std::string &pathInContainer,
+                                        bool readonly = true);
+
+    /**
+     * @brief Tries to bind mount a directory in the container
+     *
+     * Will create missing parent directories.
+     *
+     * @param pathInHost The path to the directory that shall be bind mounted on the host system.
+     * @param pathInContainer Where to mount the file in the container.
+     * @param readonly Sets if the mount should be read only or read write
+     *
+     * @return SUCCESS if everything worked as expected,FAILURE otherwise.
+     */
+    ReturnCode bindMountDirectoryInContainer(const std::string &pathInHost,
+                                             const std::string &pathInContainer,
+                                             bool readonly = true);
+
+    ReturnCode bindMountCore(const std::string &pathInHost,
                              const std::string &pathInContainer,
                              const std::string &tempDir,
                              bool readonly);
