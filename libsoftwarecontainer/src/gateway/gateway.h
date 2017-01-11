@@ -171,6 +171,8 @@ protected:
 
     /**
      * @brief Get a handle to the associated container
+     *
+     * @throws GatewayError If called before setContainer() has been called.
      */
     std::shared_ptr<ContainerAbstractInterface> getContainer();
 
