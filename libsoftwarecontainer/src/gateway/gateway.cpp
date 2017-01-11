@@ -120,8 +120,7 @@ bool Gateway::hasContainer()
 std::shared_ptr<ContainerAbstractInterface> Gateway::getContainer()
 {
     if (!hasContainer()) {
-        log_error() << "A gateway is asking for a container reference before it has been assigned one.";
-        return std::shared_ptr<ContainerAbstractInterface>();
+        throw GatewayError("Attempting to get container reference before any container has been assigned.");
     }
 
     std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
