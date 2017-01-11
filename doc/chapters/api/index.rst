@@ -26,12 +26,13 @@ ones that doesn't modify the state.
 
 BindMount
 ---------
-Binds a directory on the host to the container.
+Binds a path on the host to the container. For directories, any missing parent
+directories in the container will be created, but not for files.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
-        :pathInHost: ``string`` absolute path to the directory in the host.
-        :pathInContainer: ``string`` the absolute path to the directory in container.
+        :pathInHost: ``string`` absolute path in the host.
+        :pathInContainer: ``string`` the absolute path to mount to in the container.
         :readOnly: ``bool`` indicates whether the directory is read-only or not.
 
 |
