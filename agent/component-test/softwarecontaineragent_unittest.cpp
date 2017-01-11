@@ -128,7 +128,6 @@ public:
 };
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -136,7 +135,6 @@ TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -199,7 +197,6 @@ TEST_F(SoftwareContainerAgentTest, ThawInvalidContainer) {
 
 // Thaw a container that has not been frozen
 TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -211,7 +208,6 @@ TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
 
 // Freeze a container and try to resume it twice
 TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -226,7 +222,6 @@ TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
 
 // Freeze an already frozen container
 TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -239,7 +234,6 @@ TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
 
 // Freeze an already frozen container, and then resume it
 TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -254,7 +248,6 @@ TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
 
 // Double suspend and then double resume
 TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
@@ -271,7 +264,6 @@ TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
 
 // Make sure you can still shutdown a frozen container
 TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
-    SoftwareContainer *container;
     ContainerID id;
     bool success = sca->createContainer(valid_config, id);
     ASSERT_TRUE(success);
