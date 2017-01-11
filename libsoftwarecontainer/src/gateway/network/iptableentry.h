@@ -99,7 +99,7 @@ public:
 
 
     /**
-     * @brief Creates a string with infromation about the entry
+     * @brief Creates a string with information about the entry
      */
     std::string toString();
 
