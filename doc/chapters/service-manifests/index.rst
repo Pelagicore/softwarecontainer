@@ -46,45 +46,87 @@ a version, and an array "capabilities" which contains a
 contains an array of objects each defining a gateway configuration identified
 with a gateway ID.
 
-Examples
---------
+Example
+-------
 
-Below is an example of a simple service manifest::
+This section describes a full service manifest, and then goes through each part
+separately in more detail.
+
+Full manifest
+^^^^^^^^^^^^^
+
+Below is an example of a service manifest::
 
  {
     "version": "1",
-    "capabilities": [{
-        "name": "com.acme.SomeResource",
-        "gateways": [{
-            "id": "example-gateway-id-1",
-            "config": [{
-                "config-part1": []
-            }, {
-                "config-part2": [{
-                    "config-element1": "on",
-                    "config-element2": "off",
-                    "config-element3": "config-element-optionA",
-                    "config-element4": "config-element-optionB"
-                }]
-            }, {
-                "id": "example-gateway-id-1",
-                "config": []
-            }]
-        }]
-    }, {
-        "name": "com.acme.AnotherResource",
-        "gateways": [{
-            "id": "example-gateway-id-1",
-            "config": []
-        }]
-    }]
+    "capabilities": [
+        {
+            "name": "com.acme.SomeResource",
+            "gateways": [
+                {
+                    "id": "example-gateway-id-1",
+                    "config": [
+                        {
+                            "config-part1": []
+                        },
+                        {
+                            "config-part2": [
+                                {
+                                    "config-element1": "on",
+                                    "config-element2": "off",
+                                    "config-element3": "optionA",
+                                    "config-element4": "optionB"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "example-gateway-id-2",
+                    "config": []
+                }
+            ]
+        },
+        {
+            "name": "com.acme.AnotherResource",
+            "gateways": [
+                {
+                    "id": "example-gateway-id-1",
+                    "config": []
+                }
+            ]
+        }
+    ]
  }
 
-In this manifest, there is one capability named `com.acme.SomeResource`
-which defines gateway configurations for the two gateways `example-gateway-id-1` and
-`example-gateway-id-2`. In this case the configuration for `example-gateway-id-2` is an empty
-(but valid) JSON object. There is also a second capability named `com.acme.AnotherResource` with
-a gateway object with an empty array. The manifest also contains the required
-version element.
 
-The exact value of the "config" key, is described for each gateway, see :ref:`Gateways <gateways>`.
+Breakdown into parts
+^^^^^^^^^^^^^^^^^^^^
+
+In the above manifest, there is a list of `capabilities` objects defined by the ``capabilities`` key::
+
+ "capabilities": [
+     ...
+ ]
+
+Each `capability` object has the keys ``name`` and ``gateways``::
+
+ {
+     "name": "com.acme.SomeResource",
+     "gateways": [
+         ...
+     ]
+ }
+
+Where the ``name`` key has the capability name as value, and the ``gateways`` key has a list of objects
+associating gateway IDs with gateway configs::
+
+ {
+     "id": "example-gateway-id-1",
+     "config": [
+         ...
+     ]
+ }
+
+Where the ``config`` key contains gateway configuration. The exact value of the ``config`` key,
+is described for each gateway, see :ref:`Gateways <gateways>`.
