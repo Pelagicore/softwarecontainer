@@ -516,8 +516,26 @@ ReturnCode Container::destroy(unsigned int timeout)
     return ReturnCode::SUCCESS;
 }
 
+ReturnCode Container::bindMountInContainer(const std::string &pathInHost,
+                                           const std::string &pathInContainer,
+                                           bool readOnly)
+{
+    if (!existsInFileSystem(pathInHost)) {
+        log_error() << "Path on host does not exist: " << pathInHost;
+        return ReturnCode::FAILURE;
+    }
 
-ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
+    if (isDirectory(pathInHost)) {
+        log_debug() << "Path on host is directory, mounting properly given that";
+        return bindMountDirectoryInContainer(pathInHost, pathInContainer, readOnly);
+    } else {
+        // This goes for sockets, fifos etc as well.
+        log_debug() << "Path on host is not a directory, mounting assuming it behaves like a file";
+        return bindMountFileInContainer(pathInHost, pathInContainer, readOnly);
+    }
+}
+
+ReturnCode Container::bindMountFileInContainer(const std::string &pathInHost,
                                                const std::string &pathInContainer,
                                                bool readonly)
 {
@@ -531,10 +549,10 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathOnHost,
         m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
     }
 
-    return bindMountCore(pathOnHost, pathInContainer, tempFile, readonly);
+    return bindMountCore(pathInHost, pathInContainer, tempFile, readonly);
 }
 
-ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
+ReturnCode Container::bindMountDirectoryInContainer(const std::string &pathInHost,
                                                  const std::string &pathInContainer,
                                                  bool readonly)
 {
@@ -568,11 +586,11 @@ ReturnCode Container::bindMountFolderInContainer(const std::string &pathOnHost,
         return ReturnCode::FAILURE;
     }
 
-    return bindMountCore(pathOnHost, pathInContainer, tempDir, readonly);
+    return bindMountCore(pathInHost, pathInContainer, tempDir, readonly);
 
 }
 
-ReturnCode Container::bindMountCore(const std::string &pathOnHost,
+ReturnCode Container::bindMountCore(const std::string &pathInHost,
                                     const std::string &pathInContainer,
                                     const std::string &tempDir,
                                     bool readonly)
@@ -588,16 +606,16 @@ ReturnCode Container::bindMountCore(const std::string &pathOnHost,
     }
 
     // Bind mount to gateways
-    if (isError(bindMount(pathOnHost, tempDir, readonly, m_enableWriteBuffer))) {
-        log_error() << "Could not bind mount " << pathOnHost << " to " << tempDir;
+    if (isError(bindMount(pathInHost, tempDir, readonly, m_enableWriteBuffer))) {
+        log_error() << "Could not bind mount " << pathInHost << " to " << tempDir;
         return ReturnCode::FAILURE;
     }
 
     std::string tempDirInContainer = gatewaysDirInContainer() + "/" +
                                      std::string(basename(pathInContainer.c_str()));
 
-    log_error() << "tempDirInContainer: " << tempDirInContainer
-                << " pathInContainer " << pathInContainer;
+    log_debug() << "tempDirInContainer: " << tempDirInContainer
+                << " pathInContainer: " << pathInContainer;
     // Move the mount in the container
     if (tempDirInContainer.compare(pathInContainer) != 0) {
         pid_t pid = INVALID_PID;
@@ -611,12 +629,11 @@ ReturnCode Container::bindMountCore(const std::string &pathOnHost,
                             strerror(errno));
                     return ret;
                 }
-            } else {
-                if (isError(touch(pathInContainer.c_str()))) {
-                    printf("Error while creating file: %s", pathInContainer.c_str());
-                    return -1;
-                }
+            } else if (isError(touch(pathInContainer.c_str()))) {
+                printf("Error while creating file: %s", pathInContainer.c_str());
+                return -1;
             }
+
             int ret = mount(tempDirInContainer.c_str(), pathInContainer.c_str(), nullptr, flags, nullptr);
             if (ret != 0) {
                 printf("Error while mount move: %s\n", strerror(errno));
