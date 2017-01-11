@@ -211,3 +211,80 @@ TEST_F(SoftwareContainerCommonTest, PipeIsOnlyPipe) {
     ASSERT_FALSE(isDirectory(pipeStr));
     ASSERT_FALSE(isSocket(pipeStr));
 }
+
+/*
+ * Test that writing to a file and then reading
+ * from it gives back the written data.
+ */
+TEST_F(SoftwareContainerCommonTest, ReadBackWrittenFile) {
+    bool createDir = false;
+    bool shouldUnlink = false;
+    std::string fileName = getTempPath(createDir, shouldUnlink);
+
+    std::string testData = "testData";
+    std::string readBack;
+
+    ASSERT_EQ(writeToFile(fileName, testData), ReturnCode::SUCCESS);
+    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_EQ(testData, readBack);
+}
+
+/*
+ * Test that reading from an nonexisting file won't work, but that
+ * writing to a nonexisting file will create it.
+ */
+TEST_F(SoftwareContainerCommonTest, ReadWriteUnexistingFile) {
+    bool createDir = false;
+    bool shouldUnlink = true;
+    std::string fileName = getTempPath(createDir, shouldUnlink);
+
+    std::string testData = "testData";
+    std::string readBack;
+
+    ASSERT_FALSE(existsInFileSystem(fileName));
+    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::FAILURE);
+
+    ASSERT_FALSE(existsInFileSystem(fileName));
+    ASSERT_EQ(writeToFile(fileName, testData), ReturnCode::SUCCESS);
+    ASSERT_TRUE(existsInFileSystem(fileName));
+}
+
+/*
+ * Test that touching a file will create it, but leave it empty
+ */
+TEST_F(SoftwareContainerCommonTest, TouchCreatesFiles) {
+    bool createDir = false;
+    bool shouldUnlink = true;
+    std::string fileName = getTempPath(createDir, shouldUnlink);
+
+    ASSERT_FALSE(existsInFileSystem(fileName));
+    ASSERT_EQ(touch(fileName), ReturnCode::SUCCESS);
+    ASSERT_TRUE(existsInFileSystem(fileName));
+
+    std::string readBack;
+    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_EQ(readBack, "");
+}
+
+/*
+ * Test that touching a file won't modify its content, if it already
+ * existed.
+ */
+TEST_F(SoftwareContainerCommonTest, TouchDoesntModifyFiles) {
+    bool createDir = false;
+    bool shouldUnlink = true;
+    std::string fileName = getTempPath(createDir, shouldUnlink);
+
+    std::string testData = "testData";
+    std::string readBack;
+
+    ASSERT_EQ(writeToFile(fileName, testData), ReturnCode::SUCCESS);
+    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_EQ(testData, readBack);
+
+    ASSERT_EQ(touch(fileName), ReturnCode::SUCCESS);
+
+    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_EQ(testData, readBack);
+
+}
