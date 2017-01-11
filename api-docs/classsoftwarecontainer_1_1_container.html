@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-069c4e7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
    </div>
   </td>
  </tr>
@@ -124,12 +124,9 @@ ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContai
 <tr class="memitem:a23c513e100e2698074af30886afa8be6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23c513e100e2698074af30886afa8be6"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (const std::string &amp;cmd)</td></tr>
 <tr class="separator:a23c513e100e2698074af30886afa8be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbcb43e7e5d321326a91857f5328da7e"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#abbcb43e7e5d321326a91857f5328da7e">bindMountFileInContainer</a> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)</td></tr>
-<tr class="memdesc:abbcb43e7e5d321326a91857f5328da7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a file in the container.  <a href="#abbcb43e7e5d321326a91857f5328da7e">More...</a><br /></td></tr>
-<tr class="separator:abbcb43e7e5d321326a91857f5328da7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad5106f2602758d80aafebdd34a7b0f9"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#aad5106f2602758d80aafebdd34a7b0f9">bindMountFolderInContainer</a> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)</td></tr>
-<tr class="memdesc:aad5106f2602758d80aafebdd34a7b0f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a directory in the container.  <a href="#aad5106f2602758d80aafebdd34a7b0f9">More...</a><br /></td></tr>
-<tr class="separator:aad5106f2602758d80aafebdd34a7b0f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4784a2955ddf87a9f0a58720d7ca918c"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c">bindMountInContainer</a> (const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)</td></tr>
+<tr class="memdesc:a4784a2955ddf87a9f0a58720d7ca918c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a path from host to container.  <a href="#a4784a2955ddf87a9f0a58720d7ca918c">More...</a><br /></td></tr>
+<tr class="separator:a4784a2955ddf87a9f0a58720d7ca918c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e9c554bba33a65aea63a35c10f0407e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e9c554bba33a65aea63a35c10f0407e"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>mountDevice</b> (const std::string &amp;pathInHost)</td></tr>
 <tr class="separator:a4e9c554bba33a65aea63a35c10f0407e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -652,7 +649,7 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="abbcb43e7e5d321326a91857f5328da7e"></a>
+<a class="anchor" id="a4784a2955ddf87a9f0a58720d7ca918c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -660,10 +657,10 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Container::bindMountFileInContainer </td>
+          <td class="memname">ReturnCode softwarecontainer::Container::bindMountInContainer </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathOnHost</em>, </td>
+          <td class="paramname"><em>pathInHost</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -675,7 +672,7 @@ Here is the call graph for this function:</div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>readonly</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>readOnly</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -690,149 +687,37 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Tries to bind mount a file in the container. </p>
-<p>This will not create parent directories if they are not already present.</p>
+<p>Tries to bind mount a path from host to container. </p>
+<p>If the destination path is a directory, any missing parent paths will be created. If the destination path is a file, this is not the case.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pathOnHost</td><td>The path to the file that shall be bind mounted on the host system. </td></tr>
-    <tr><td class="paramname">pathInContainer</td><td>Where to mount the file in the container. </td></tr>
+    <tr><td class="paramname">pathInHost</td><td>The path on the host that shall be bind mounted into the container </td></tr>
+    <tr><td class="paramname">pathInContainer</td><td>Where to mount the path in the container. </td></tr>
     <tr><td class="paramname">readonly</td><td>Sets if the mount should be read only or read write</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise </dd></dl>
 
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#aa25e6c5b989658a8df8aed7a8bb54c65">softwarecontainer::ContainerAbstractInterface</a>.</p>
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00520">520</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>References <a class="el" href="filetoolkitwithundo_8h_source.html#l00124">softwarecontainer::FileToolkitWithUndo::m_cleanupHandlers</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00242">softwarecontainer::FileToolkitWithUndo::pathInList()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;{</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    <span class="comment">// Create a file to mount to in gateways</span></div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    std::string tempFile = gatewaysDir() + <span class="stringliteral">&quot;/&quot;</span> + std::string(basename(pathInContainer.c_str()));</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875">pathInList</a>(tempFile)) {</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <span class="keywordflow">if</span> (isError(touch(tempFile))) {</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not create file &quot;</span> &lt;&lt; tempFile;</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        }</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a415851aff0b78df32945ae503b6847df">m_cleanupHandlers</a>.push_back(<span class="keyword">new</span> FileCleanUpHandler(tempFile));</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    }</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    <span class="keywordflow">return</span> bindMountCore(pathOnHost, pathInContainer, tempFile, readonly);</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_a44a19890b72a635b3134cb2a07fc0875"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875">softwarecontainer::FileToolkitWithUndo::pathInList</a></div><div class="ttdeci">bool pathInList(const std::string path)</div><div class="ttdoc">checks whether given path is already added to clean up handlers or not </div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00242">filetoolkitwithundo.cpp:242</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_a415851aff0b78df32945ae503b6847df"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a415851aff0b78df32945ae503b6847df">softwarecontainer::FileToolkitWithUndo::m_cleanupHandlers</a></div><div class="ttdeci">std::vector&lt; CleanUpHandler * &gt; m_cleanupHandlers</div><div class="ttdoc">m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the FileToolKitWithUndo th...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8h_source.html#l00124">filetoolkitwithundo.h:124</a></div></div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00519">519</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;{</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    <span class="keywordflow">if</span> (!existsInFileSystem(pathInHost)) {</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Path on host does not exist: &quot;</span> &lt;&lt; pathInHost;</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    }</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    <span class="keywordflow">if</span> (isDirectory(pathInHost)) {</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Path on host is directory, mounting properly given that&quot;</span>;</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        <span class="keywordflow">return</span> bindMountDirectoryInContainer(pathInHost, pathInContainer, readOnly);</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        <span class="comment">// This goes for sockets, fifos etc as well.</span></div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Path on host is not a directory, mounting assuming it behaves like a file&quot;</span>;</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        <span class="keywordflow">return</span> bindMountFileInContainer(pathInHost, pathInContainer, readOnly);</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    }</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_abbcb43e7e5d321326a91857f5328da7e_cgraph.svg" width="378" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="aad5106f2602758d80aafebdd34a7b0f9"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ReturnCode softwarecontainer::Container::bindMountFolderInContainer </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathOnHost</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathInContainer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>readonly</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tries to bind mount a directory in the container. </p>
-<p>Will create missing parent directories.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pathOnHost</td><td>The path to the directory that shall be bind mounted on the host system. </td></tr>
-    <tr><td class="paramname">pathInContainer</td><td>Where to mount the file in the container. </td></tr>
-    <tr><td class="paramname">readonly</td><td>Sets if the mount should be read only or read write</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise. </dd></dl>
-
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#aa29449e13706c6883a6a84fe67453b75">softwarecontainer::ContainerAbstractInterface</a>.</p>
-
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00537">537</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>References <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00092">softwarecontainer::FileToolkitWithUndo::tempDir()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;{</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;    <span class="comment">// Check that the target is not already mounted</span></div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;    pid_t pid = INVALID_PID;</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;    ReturnCode checkIfAlreadyMountpoint = executeInContainer([pathInContainer] () {</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        FILE *mountsfile = setmntent(<span class="stringliteral">&quot;/proc/mounts&quot;</span>, <span class="stringliteral">&quot;r&quot;</span>);</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        <span class="keyword">struct </span>mntent *mounts;</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        <span class="keywordflow">while</span> ((mounts = getmntent(mountsfile)) != <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;            std::string mountDir(mounts-&gt;mnt_dir);</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;            <span class="keywordflow">if</span> ((mountDir).compare(pathInContainer) == 0) {</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;                <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;            }</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        }</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;    }, &amp;pid);</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;    <span class="keywordflow">if</span> (isError(checkIfAlreadyMountpoint) || waitForProcessTermination(pid) != 0) {</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;        log_error() &lt;&lt; pathInContainer &lt;&lt; <span class="stringliteral">&quot; is already mounted to.&quot;</span>;</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;    }</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;    <span class="comment">// Create a directory to mount to in gateways</span></div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;    std::string <a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">tempDir</a> = gatewaysDir() + <span class="stringliteral">&quot;/&quot;</span> + std::string(basename(pathInContainer.c_str()));</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Creating folder : &quot;</span> &lt;&lt; <a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">tempDir</a>;</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;    <span class="keywordflow">if</span> (isError(<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">createDirectory</a>(tempDir))) {</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not create folder &quot;</span> &lt;&lt; <a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">tempDir</a>;</div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;    }</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;    <span class="keywordflow">return</span> bindMountCore(pathOnHost, pathInContainer, tempDir, readonly);</div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_aff5073fb683649d6753baae354d202b9"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">softwarecontainer::FileToolkitWithUndo::createDirectory</a></div><div class="ttdeci">ReturnCode createDirectory(const std::string &amp;path)</div><div class="ttdoc">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00068">filetoolkitwithundo.cpp:68</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_a649391903bf1a0eec92c829713117a74"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">softwarecontainer::FileToolkitWithUndo::tempDir</a></div><div class="ttdeci">std::string tempDir(std::string templatePath)</div><div class="ttdoc">tempDir Creates a temporary directory at templatePath. </div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00092">filetoolkitwithundo.cpp:92</a></div></div>
-</div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_aad5106f2602758d80aafebdd34a7b0f9_cgraph.svg" width="570" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <a class="anchor" id="a8046973c568f3bd0bcc037af01630638"></a>
@@ -1017,7 +902,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_container.html">Container</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 14:11:48 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 11 2017 16:59:59 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

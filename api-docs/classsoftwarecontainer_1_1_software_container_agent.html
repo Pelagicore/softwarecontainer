@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-069c4e7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
    </div>
   </td>
  </tr>
@@ -962,11 +962,11 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    }</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    ReturnCode result = container-&gt;getContainer()-&gt;bindMountFolderInContainer(pathInHost,</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;                                                                              pathInContainer,</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                                                                              readOnly);</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    ReturnCode result = container-&gt;getContainer()-&gt;bindMountInContainer(pathInHost,</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;                                                                        pathInContainer,</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                                                                        readOnly);</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to bind mount folder &quot;</span> &lt;&lt; pathInHost &lt;&lt; <span class="stringliteral">&quot; to &quot;</span> &lt;&lt; pathInContainer;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to bind mount &quot;</span> &lt;&lt; pathInHost &lt;&lt; <span class="stringliteral">&quot; to &quot;</span> &lt;&lt; pathInContainer;</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    }</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;</div>
@@ -1081,7 +1081,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html">SoftwareContainerAgent</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 14:11:49 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 11 2017 17:00:00 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

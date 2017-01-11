@@ -1,8 +1,7 @@
 <map id="softwarecontainer::FileToolkitWithUndo::createDirectory" name="softwarecontainer::FileToolkitWithUndo::createDirectory">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container.html#aad5106f2602758d80aafebdd34a7b0f9" title="Tries to bind mount a directory in the container. " alt="" coords="201,5,383,61"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114" title="Check if the workspace is present and create it if needed. " alt="" coords="193,85,391,126"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" title="Setup the container for preloading. " alt="" coords="225,150,359,191"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="222,215,362,271"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_workspace.html#a4cca8749e6f3bd90452511ede207f5e5" title="Creates a workspace. " alt="" coords="439,85,601,126"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="453,222,587,263"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114" title="Check if the workspace is present and create it if needed. " alt="" coords="193,5,391,47"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" title="Setup the container for preloading. " alt="" coords="225,71,359,112"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="222,135,362,191"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_workspace.html#a4cca8749e6f3bd90452511ede207f5e5" title="Creates a workspace. " alt="" coords="439,5,601,47"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="453,143,587,184"/>
 </map>

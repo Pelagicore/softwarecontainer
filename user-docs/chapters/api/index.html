@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.15.0-069c4e7 2017-01-11 documentation</title>
+    <title>API &#8212; softwarecontainer 0.15.0-0d47ef7 2017-01-11 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.15.0-069c4e7 2017-01-11',
+        VERSION:     '0.15.0-0d47ef7 2017-01-11',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -70,7 +70,8 @@ ones that doesn&#8217;t modify the state.</p>
 </div>
 <div class="section" id="bindmount">
 <h3>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h3>
-<p>Binds a directory on the host to the container.</p>
+<p>Binds a path on the host to the container. For directories, any missing parent
+directories in the container will be created, but not for files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -81,10 +82,10 @@ ones that doesn&#8217;t modify the state.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> absolute path to the directory in the host.</td>
+<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> absolute path in the host.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the absolute path to the directory in container.</td>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the absolute path to mount to in the container.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</td>
 </tr>

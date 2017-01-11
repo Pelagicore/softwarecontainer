@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-069c4e7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
    </div>
   </td>
  </tr>
@@ -138,9 +138,9 @@ $(document).ready(function(){initNavTree('waylandgateway_8cpp_source.html','');}
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    log_info() &lt;&lt; <span class="stringliteral">&quot;enabling Wayland gateway. Socket dir:&quot;</span> &lt;&lt; dir;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string pathOnHost = logging::StringBuilder() &lt;&lt; dir &lt;&lt; <span class="stringliteral">&quot;/&quot;</span> &lt;&lt; SOCKET_FILE_NAME;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string pathInHost = logging::StringBuilder() &lt;&lt; dir &lt;&lt; <span class="stringliteral">&quot;/&quot;</span> &lt;&lt; SOCKET_FILE_NAME;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::string pathInContainer = logging::StringBuilder() &lt;&lt; <span class="stringliteral">&quot;/gateways/&quot;</span> &lt;&lt; SOCKET_FILE_NAME;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    ReturnCode result = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;bindMountFileInContainer(pathOnHost, pathInContainer, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    ReturnCode result = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;bindMountInContainer(pathInHost, pathInContainer, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not bind mount the wayland socket into the container&quot;</span>;</div>
@@ -169,7 +169,7 @@ $(document).ready(function(){initNavTree('waylandgateway_8cpp_source.html','');}
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>waylandgateway.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 11 2017 14:11:48 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 11 2017 16:59:59 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

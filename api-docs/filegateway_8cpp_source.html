@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-069c4e7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
    </div>
   </td>
  </tr>
@@ -126,30 +126,22 @@ $(document).ready(function(){initNavTree('filegateway_8cpp_source.html','');});
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;{</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; con = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>();</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">if</span> (isDirectory(setting.pathInHost)) {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">if</span> (isError(con-&gt;bindMountFolderInContainer(setting.pathInHost, </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                                    setting.pathInContainer,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                                                    setting.readOnly))) {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not bind mount folder into container&quot;</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">if</span> (isError(con-&gt;bindMountFileInContainer(setting.pathInHost,</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                                                  setting.pathInContainer,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                                                  setting.readOnly))) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not bind mount file into container&quot;</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keywordtype">bool</span> FileGateway::teardownGateway()</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;{</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">if</span> (isError(con-&gt;bindMountInContainer(setting.pathInHost,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                                          setting.pathInContainer,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                          setting.readOnly))) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not bind mount &quot;</span> &lt;&lt; setting.pathInHost &lt;&lt; <span class="stringliteral">&quot; into container&quot;</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keywordtype">bool</span> FileGateway::teardownGateway()</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;{</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_gateway_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_gateway_parser.html">softwarecontainer::FileGatewayParser</a></div><div class="ttdef"><b>Definition:</b> <a href="filegatewayparser_8h_source.html#l00027">filegatewayparser.h:27</a></div></div>
 <div class="ttc" id="structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting_html"><div class="ttname"><a href="structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html">softwarecontainer::FileGatewayParser::FileSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="filegatewayparser_8h_source.html#l00031">filegatewayparser.h:31</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00120">gateway.cpp:120</a></div></div>
@@ -161,7 +153,7 @@ $(document).ready(function(){initNavTree('filegateway_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_fb9b4f6d7638029c403f9b6e00db042e.html">files</a></li><li class="navelem"><b>filegateway.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 11 2017 14:11:48 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 11 2017 16:59:59 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

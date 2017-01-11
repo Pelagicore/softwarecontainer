@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-069c4e7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
    </div>
   </td>
  </tr>
@@ -132,12 +132,9 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>mountDe
 <tr class="memitem:a6351387332850d42452153cccbb46cd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6351387332850d42452153cccbb46cd8"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>createSymLink</b> (const std::string &amp;source, const std::string &amp;destination)=0</td></tr>
 <tr class="separator:a6351387332850d42452153cccbb46cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa25e6c5b989658a8df8aed7a8bb54c65"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#aa25e6c5b989658a8df8aed7a8bb54c65">bindMountFileInContainer</a> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)=0</td></tr>
-<tr class="memdesc:aa25e6c5b989658a8df8aed7a8bb54c65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a file in the container.  <a href="#aa25e6c5b989658a8df8aed7a8bb54c65">More...</a><br /></td></tr>
-<tr class="separator:aa25e6c5b989658a8df8aed7a8bb54c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa29449e13706c6883a6a84fe67453b75"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#aa29449e13706c6883a6a84fe67453b75">bindMountFolderInContainer</a> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)=0</td></tr>
-<tr class="memdesc:aa29449e13706c6883a6a84fe67453b75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a directory in the container.  <a href="#aa29449e13706c6883a6a84fe67453b75">More...</a><br /></td></tr>
-<tr class="separator:aa29449e13706c6883a6a84fe67453b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a205a540c45ce7e386f122113578abe79"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">bindMountInContainer</a> (const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)=0</td></tr>
+<tr class="memdesc:a205a540c45ce7e386f122113578abe79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a path from host to container.  <a href="#a205a540c45ce7e386f122113578abe79">More...</a><br /></td></tr>
+<tr class="separator:a205a540c45ce7e386f122113578abe79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeac77c7484cb5c58dbc5dcfdcbcb0005"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeac77c7484cb5c58dbc5dcfdcbcb0005"></a>
 virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironmentVariable</b> (const std::string &amp;variable, const std::string &amp;value)=0</td></tr>
 <tr class="separator:aeac77c7484cb5c58dbc5dcfdcbcb0005"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,7 +158,7 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 <div class="textblock">
 <p>Definition at line <a class="el" href="containerabstractinterface_8h_source.html#l00027">27</a> of file <a class="el" href="containerabstractinterface_8h_source.html">containerabstractinterface.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa25e6c5b989658a8df8aed7a8bb54c65"></a>
+<a class="anchor" id="a205a540c45ce7e386f122113578abe79"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -169,10 +166,10 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual ReturnCode softwarecontainer::ContainerAbstractInterface::bindMountFileInContainer </td>
+          <td class="memname">virtual ReturnCode softwarecontainer::ContainerAbstractInterface::bindMountInContainer </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathOnHost</em>, </td>
+          <td class="paramname"><em>pathInHost</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -184,7 +181,7 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>readonly</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>readOnly</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -199,73 +196,19 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 </table>
 </div><div class="memdoc">
 
-<p>Tries to bind mount a file in the container. </p>
-<p>This will not create parent directories if they are not already present.</p>
+<p>Tries to bind mount a path from host to container. </p>
+<p>If the destination path is a directory, any missing parent paths will be created. If the destination path is a file, this is not the case.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pathOnHost</td><td>The path to the file that shall be bind mounted on the host system. </td></tr>
-    <tr><td class="paramname">pathInContainer</td><td>Where to mount the file in the container. </td></tr>
+    <tr><td class="paramname">pathInHost</td><td>The path on the host that shall be bind mounted into the container </td></tr>
+    <tr><td class="paramname">pathInContainer</td><td>Where to mount the path in the container. </td></tr>
     <tr><td class="paramname">readonly</td><td>Sets if the mount should be read only or read write</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise </dd></dl>
 
-<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#abbcb43e7e5d321326a91857f5328da7e">softwarecontainer::Container</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa29449e13706c6883a6a84fe67453b75"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual ReturnCode softwarecontainer::ContainerAbstractInterface::bindMountFolderInContainer </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathOnHost</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pathInContainer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>readonly</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Tries to bind mount a directory in the container. </p>
-<p>Will create missing parent directories.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pathOnHost</td><td>The path to the directory that shall be bind mounted on the host system. </td></tr>
-    <tr><td class="paramname">pathInContainer</td><td>Where to mount the file in the container. </td></tr>
-    <tr><td class="paramname">readonly</td><td>Sets if the mount should be read only or read write</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise. </dd></dl>
-
-<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#aad5106f2602758d80aafebdd34a7b0f9">softwarecontainer::Container</a>.</p>
+<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c">softwarecontainer::Container</a>.</p>
 
 </div>
 </div>
@@ -278,7 +221,7 @@ virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>execute
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 14:11:48 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 11 2017 16:59:59 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
