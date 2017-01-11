@@ -126,60 +126,6 @@ TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
 
     ASSERT_TRUE(isSuccess(s1.init()));
     ASSERT_TRUE(isError(s2.init()));
-
-}
-
-/*
- * Tests the convenience functions in common.cpp
- */
-TEST_F(SoftwareContainerApp, CommonFunctions) {
-
-    ASSERT_TRUE(isDirectory("/tmp"));
-
-    // Create a temp file and check so it is a file
-    char tempFilename[] = "/tmp/blablaXXXXXX";
-    int fileDescriptor = mkstemp(tempFilename);
-    close(fileDescriptor);
-    ASSERT_TRUE(isFile(tempFilename));
-    ASSERT_FALSE(isDirectory(tempFilename));
-    ASSERT_FALSE(isSocket(tempFilename));
-
-    // Let's use the same file and test the read/write functions
-    std::string testData = "testData";
-    std::string readBack;
-    writeToFile(tempFilename, testData);
-    readFromFile(tempFilename, readBack);
-    ASSERT_EQ(testData, readBack);
-
-    // And remove the file
-    ASSERT_EQ(unlink(tempFilename), 0);
-
-    // New temp file
-    fileDescriptor = mkstemp(tempFilename);
-    close(fileDescriptor);
-
-    // Create a socket
-    int sock = socket (PF_LOCAL, SOCK_DGRAM, 0);
-    struct sockaddr_un addr;
-    strcpy(addr.sun_path, tempFilename);
-    addr.sun_family = AF_UNIX;
-    bind(sock, (struct sockaddr *) &addr, strlen(addr.sun_path) + sizeof (addr.sun_family));
-
-    ASSERT_TRUE(isSocket(tempFilename));
-    ASSERT_FALSE(isFile(tempFilename));
-    ASSERT_FALSE(isDirectory(tempFilename));
-
-    const char unexistingFile[] = "/run/user/10jhgj00/X11-dgfdgdagisplay";
-    ASSERT_FALSE(isSocket(unexistingFile));
-    ASSERT_FALSE(isFile(unexistingFile));
-    ASSERT_FALSE(isDirectory(unexistingFile));
-
-    // Reading from a nonexixsting file should fail
-    ReturnCode c1 = readFromFile(unexistingFile, readBack);
-    ASSERT_EQ(c1, ReturnCode::FAILURE);
-
-    ReturnCode c2 = writeToFile(unexistingFile, testData);
-    ASSERT_EQ(c2, ReturnCode::FAILURE);
 }
 
 TEST_F(SoftwareContainerApp, EnvVarsSet) {
