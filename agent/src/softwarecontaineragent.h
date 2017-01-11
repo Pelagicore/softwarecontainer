@@ -246,8 +246,6 @@ private:
     // Push and pop are the only operations that is applied to this collection
     // That is why it is a std::queue and not a std::map
     std::queue<std::pair<ContainerID, SoftwareContainerPtr>> m_preloadedContainers;
-    // List of running jobs
-    std::map<pid_t, std::shared_ptr<CommandJob>> m_jobs;
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
