@@ -31,6 +31,7 @@
 
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
+#include "softwarecontainererror.h"
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
 #include "config/config.h"
@@ -46,6 +47,66 @@
 namespace softwarecontainer {
 
 static constexpr ContainerID INVALID_CONTAINER_ID = -1;
+
+class SoftwareContainerAgentError : public SoftwareContainerError
+{
+public:
+    SoftwareContainerAgentError():
+        m_message("SoftwareContainer error")
+    {
+    }
+
+    SoftwareContainerAgentError(const std::string &message):
+        m_message(message)
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+
+protected:
+    std::string m_message;
+};
+
+class PreloadError : public SoftwareContainerAgentError
+{
+public:
+    PreloadError():
+        SoftwareContainerAgentError("Software Container error - Failed to preload container")
+    {
+    }
+
+    PreloadError(const std::string &message):
+        SoftwareContainerAgentError(message)
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+};
+
+class WorkspaceError : public SoftwareContainerAgentError
+{
+public:
+    WorkspaceError():
+        SoftwareContainerAgentError("Software Container error - Failed to set up workspace")
+    {
+    }
+
+    WorkspaceError(const std::string &message):
+        SoftwareContainerAgentError(message)
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+};
 
 class SoftwareContainerAgent
 {

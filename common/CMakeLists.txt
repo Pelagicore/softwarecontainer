@@ -19,6 +19,7 @@
 set(HEADERS
     softwarecontainer-common.h
     softwarecontainer-log.h
+    softwarecontainererror.h
     jsonparser.h
     cleanuphandler.h
     overlaysynccleanuphandler.h
