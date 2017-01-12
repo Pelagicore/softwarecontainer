@@ -26,8 +26,8 @@ ones that doesn't modify the state.
 
 BindMount
 ---------
-Binds a path on the host to the container. For directories, any missing parent
-directories in the container will be created, but not for files.
+Binds a path on the host to the container. Any missing parent directories in
+the path will be created.
 
 :Parameters:
         :containerID: ``int32`` The ID obtained by CreateContainer method.
