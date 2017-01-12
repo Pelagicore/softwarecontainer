@@ -55,8 +55,7 @@ public:
     /**
      * @brief Tries to bind mount a path from host to container
      *
-     * If the destination path is a directory, any missing parent paths will be created. If the
-     * destination path is a file, this is not the case.
+     * Any missing parent paths will be created.
      *
      * @param pathInHost The path on the host that shall be bind mounted into the container
      * @param pathInContainer Where to mount the path in the container.

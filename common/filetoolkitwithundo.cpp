@@ -105,7 +105,10 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
     return std::string(dir);
 }
 
-ReturnCode FileToolkitWithUndo::bindMount(const std::string &src, const std::string &dst, bool readOnly, bool enableWriteBuffer)
+ReturnCode FileToolkitWithUndo::bindMount(const std::string &src,
+                                          const std::string &dst,
+                                          bool readOnly,
+                                          bool enableWriteBuffer)
 {
     unsigned long flags = MS_BIND;
     std::string fstype;

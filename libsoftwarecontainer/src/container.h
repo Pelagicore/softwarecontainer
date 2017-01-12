@@ -125,8 +125,7 @@ public:
     /**
      * @brief Tries to bind mount a path from host to container
      *
-     * If the destination path is a directory, any missing parent paths will be created. If the
-     * destination path is a file, this is not the case.
+     * Any missing parent paths will be created.
      *
      * @param pathInHost The path on the host that shall be bind mounted into the container
      * @param pathInContainer Where to mount the path in the container.
@@ -212,7 +211,7 @@ private:
     /**
      * @brief Tries to bind mount a file in the container
      *
-     * This will not create parent directories if they are not already present.
+     * Any missing parent paths will be created.
      *
      * @param pathInHost The path to the file that shall be bind mounted on the host system.
      * @param pathInContainer Where to mount the file in the container.
@@ -222,12 +221,13 @@ private:
      */
     ReturnCode bindMountFileInContainer(const std::string &pathInHost,
                                         const std::string &pathInContainer,
+                                        const std::string &tempFile,
                                         bool readonly = true);
 
     /**
      * @brief Tries to bind mount a directory in the container
      *
-     * Will create missing parent directories.
+     * Any missing parent paths will be created.
      *
      * @param pathInHost The path to the directory that shall be bind mounted on the host system.
      * @param pathInContainer Where to mount the file in the container.
@@ -237,6 +237,7 @@ private:
      */
     ReturnCode bindMountDirectoryInContainer(const std::string &pathInHost,
                                              const std::string &pathInContainer,
+                                             const std::string &tempDir,
                                              bool readonly = true);
 
     ReturnCode bindMountCore(const std::string &pathInHost,

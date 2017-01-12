@@ -68,5 +68,3 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
     ASSERT_TRUE(isSuccess(gw->setConfig(config)));
     ASSERT_TRUE(isSuccess(gw->activate()));
 }
-
-
