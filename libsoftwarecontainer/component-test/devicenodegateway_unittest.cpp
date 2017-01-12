@@ -34,6 +34,7 @@ public:
     }
 
     const std::string NEW_DEVICE = "/tmp/thenewfile";
+    const std::string NEW_DEEP_DEVICE = "/tmp/devices/thenewfile";
     const std::string PRESENT_DEVICE = "/tmp/random";
 };
 
@@ -45,6 +46,12 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
     const std::string config = "[\
                                   {\
                                     \"name\":  \"" + NEW_DEVICE + "\",\
+                                    \"major\": 4,\
+                                    \"minor\": 32,\
+                                    \"mode\":  644\
+                                  },\
+                                  {\
+                                    \"name\":  \"" + NEW_DEEP_DEVICE + "\",\
                                     \"major\": 4,\
                                     \"minor\": 32,\
                                     \"mode\":  644\

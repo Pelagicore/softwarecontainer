@@ -45,7 +45,6 @@ public:
             bool readOnly,
             bool enableWriteBuffer=false);
 
-    ReturnCode writeToFile(const std::string &path, const std::string &content);
 
     /**
      * @brief tempDir Creates a temporary directory at templatePath.
@@ -58,6 +57,18 @@ public:
     std::string tempDir(std::string templatePath);
 protected:
     ReturnCode createSymLink(const std::string &source, const std::string &destination);
+
+    /*
+     * @brief Writes to a file (and optionally create it)
+     */
+    ReturnCode writeToFile(const std::string &path, const std::string &content);
+
+    /*
+     * @brief Creates a file cleanup handler for a specific file.
+     *
+     * This is useful if one creates a file in some other way and want it deleted later.
+     */
+    void watchFile(const std::string &path);
 
     /**
      * @brief overlayMount Mount a directory with an overlay on top of it. An overlay protects

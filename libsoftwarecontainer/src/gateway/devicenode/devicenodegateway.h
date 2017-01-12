@@ -22,6 +22,7 @@
 #include "jansson.h"
 
 #include "softwarecontainer-common.h"
+#include "filetoolkitwithundo.h"
 #include "gateway/gateway.h"
 #include "devicenodelogic.h"
 
@@ -39,7 +40,8 @@ namespace softwarecontainer {
 *
  */
 class DeviceNodeGateway :
-    public Gateway
+    public Gateway,
+    public FileToolkitWithUndo
 {
     LOG_DECLARE_CLASS_CONTEXT("DNG", "Device node gateway");
 
