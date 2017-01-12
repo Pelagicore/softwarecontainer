@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-b7078ee 2017-01-12</span>
    </div>
   </td>
  </tr>
@@ -109,12 +109,12 @@ ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>suspend</b> ()<
 <tr class="memitem:a9975f8b2714301b79b2e290adc252bef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9975f8b2714301b79b2e290adc252bef"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>resume</b> ()</td></tr>
 <tr class="separator:a9975f8b2714301b79b2e290adc252bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1654b3ad40de803aaf440c8ea66092d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1654b3ad40de803aaf440c8ea66092d"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInitialized</b> () const </td></tr>
-<tr class="separator:ad1654b3ad40de803aaf440c8ea66092d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9483d1d07e84b77820498eba3e7b284"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9483d1d07e84b77820498eba3e7b284"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addGateway</b> (<a class="el" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a> *gateway)</td></tr>
 <tr class="separator:ac9483d1d07e84b77820498eba3e7b284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1654b3ad40de803aaf440c8ea66092d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1654b3ad40de803aaf440c8ea66092d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInitialized</b> () const </td></tr>
+<tr class="separator:ad1654b3ad40de803aaf440c8ea66092d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99978224d29f4d27d1801d02f44bfde6"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a99978224d29f4d27d1801d02f44bfde6">preload</a> ()</td></tr>
 <tr class="memdesc:a99978224d29f4d27d1801d02f44bfde6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Preload the container.  <a href="#a99978224d29f4d27d1801d02f44bfde6">More...</a><br /></td></tr>
 <tr class="separator:a99978224d29f4d27d1801d02f44bfde6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,6 +125,15 @@ ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td
 std::shared_ptr<br class="typebreak" />
 &lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainer</b> ()</td></tr>
 <tr class="separator:a88d21d398c782cd7715b8f17307a14b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47be9e4b2c49aedf67cd23404c9d4eee"></a>
+std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_function_job.html">FunctionJob</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createFunctionJob</b> (const std::function&lt; int()&gt; fun)</td></tr>
+<tr class="separator:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a911b62ba4d9307275f59698d2ae69467"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a911b62ba4d9307275f59698d2ae69467"></a>
+std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createCommandJob</b> (const std::string &amp;command)</td></tr>
+<tr class="separator:a911b62ba4d9307275f59698d2ae69467"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe11b13492ae3abde2ca4f8e001a8a6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe11b13492ae3abde2ca4f8e001a8a6d"></a>
+ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>bindMount</b> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)</td></tr>
+<tr class="separator:afe11b13492ae3abde2ca4f8e001a8a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3ca1f534473dc59131be8553b088de8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3ca1f534473dc59131be8553b088de8"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getContainerDir</b> ()</td></tr>
 <tr class="separator:ac3ca1f534473dc59131be8553b088de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,7 +186,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00040">40</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00045">45</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a84a34e91e09b30a2f62b25e0b3926a6d"></a>
 <div class="memitem">
@@ -195,10 +204,10 @@ Private Attributes</h2></td></tr>
 
 <p>Set the main loop. </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00073">73</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;{</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    m_mainLoopContext = mainLoopContext;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00075">75</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;{</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    m_mainLoopContext = mainLoopContext;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -217,11 +226,11 @@ Private Attributes</h2></td></tr>
 
 <p>Shutdown the container. </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00254">254</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;{</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_workspace-&gt;m_containerShutdownTimeout);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00254">softwarecontainer.cpp:254</a></div></div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00256">256</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;{</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_workspace-&gt;m_containerShutdownTimeout);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00256">softwarecontainer.cpp:256</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -241,30 +250,30 @@ Private Attributes</h2></td></tr>
 <p>Preload the container. </p>
 <p>That method can be called before setting the main loop context </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00078">78</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Initializing container&quot;</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">if</span> (isError(m_container-&gt;initialize())) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not setup container for preloading&quot;</span>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Creating container&quot;</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">if</span> (isError(m_container-&gt;create())) {</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Starting container&quot;</span>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    ReturnCode result = m_container-&gt;start(&amp;m_pcPid);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not start the container during preload&quot;</span>;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Started container with PID &quot;</span> &lt;&lt; m_pcPid;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    m_containerState.setValueNotify(ContainerState::PRELOADED);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00080">80</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;{</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Initializing container&quot;</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">if</span> (isError(m_container-&gt;initialize())) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not setup container for preloading&quot;</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Creating container&quot;</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">if</span> (isError(m_container-&gt;create())) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Starting container&quot;</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    ReturnCode result = m_container-&gt;start(&amp;m_pcPid);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not start the container during preload&quot;</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Started container with PID &quot;</span> &lt;&lt; m_pcPid;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    m_containerState.setValueNotify(ContainerState::PRELOADED);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -285,24 +294,24 @@ Private Attributes</h2></td></tr>
 <p>Starts the Gateways by setting the gateway configurations and activating the configured gateway. </p>
 <dl class="section return"><dt>Returns</dt><dd>ReturnCode::FAILURE if configuration or activation failed </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00167">167</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;{</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    ReturnCode result = ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    result = configureGateways(gwConfig);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    result = activateGateways();</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    }</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00169">169</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;{</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    ReturnCode result = ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    result = configureGateways(gwConfig);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    result = activateGateways();</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    }</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;}</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -316,7 +325,7 @@ Private Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 17:00:00 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 12 2017 10:14:12 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

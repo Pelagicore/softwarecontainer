@@ -1,8 +1,9 @@
 var classsoftwarecontainer_1_1_job_abstract =
 [
-    [ "JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html#aa0ee4985103b346a7c01edcb6a518a3c", null ],
+    [ "ExecutablePtr", "classsoftwarecontainer_1_1_job_abstract.html#a0daa6514d5c7dae9b5144a07e244888a", null ],
+    [ "JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html#a21a50d8424eff7ebc3ae412025b68d5b", null ],
     [ "~JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html#a6244cac4aa1f5998ca183b57c44f92e0", null ],
-    [ "LOG_SET_CLASS_CONTEXT", "classsoftwarecontainer_1_1_job_abstract.html#a7af23fce920ba997efea5dac070c4cd3", null ],
+    [ "LOG_DECLARE_CLASS_CONTEXT", "classsoftwarecontainer_1_1_job_abstract.html#a67360c874b9bedf8416b83cbb5d9d405", null ],
     [ "captureStdin", "classsoftwarecontainer_1_1_job_abstract.html#add2456a628f8664447ac149c9f87853f", null ],
     [ "setOutputFile", "classsoftwarecontainer_1_1_job_abstract.html#a47e68f466b84cddb6af09c759eb2c09c", null ],
     [ "captureStdout", "classsoftwarecontainer_1_1_job_abstract.html#afd82c2314c8860ed0a49592bb5e4b214", null ],
@@ -17,7 +18,7 @@ var classsoftwarecontainer_1_1_job_abstract =
     [ "setEnvironmentVariables", "classsoftwarecontainer_1_1_job_abstract.html#a53aeb5c8a8a225118c4067b53b74cb2c", null ],
     [ "UNASSIGNED_STREAM", "classsoftwarecontainer_1_1_job_abstract.html#a2385541069353226a54b619d23f53bee", null ],
     [ "m_env", "classsoftwarecontainer_1_1_job_abstract.html#a637d523d1d496747676e736e48f7e87f", null ],
-    [ "m_sc", "classsoftwarecontainer_1_1_job_abstract.html#a3d4602fb90eafa6cc6e53d37ef5ec219", null ],
+    [ "m_executable", "classsoftwarecontainer_1_1_job_abstract.html#a07ea32ea55c47f7047af25115750c11e", null ],
     [ "m_pid", "classsoftwarecontainer_1_1_job_abstract.html#a8d237048c03313216541ccb4d0b82222", null ],
     [ "m_stdin", "classsoftwarecontainer_1_1_job_abstract.html#a4189e1fb09c89c1d31496a17cd26b692", null ],
     [ "m_stdout", "classsoftwarecontainer_1_1_job_abstract.html#a2951f5261af1c11b5902222a780c1867", null ],

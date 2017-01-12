@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-b7078ee 2017-01-12</span>
    </div>
   </td>
  </tr>
@@ -68,6 +68,7 @@ $(document).ready(function(){initNavTree('classsoftwarecontainer_1_1_function_jo
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
@@ -88,15 +89,15 @@ Inheritance diagram for softwarecontainer::FunctionJob:</div>
 <div class="dynheader">
 Collaboration diagram for softwarecontainer::FunctionJob:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_function_job__coll__graph.svg" width="151" height="338"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_function_job__coll__graph.svg" width="144" height="142"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a227e58705bd041ea3d6e19b3048ca556"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a227e58705bd041ea3d6e19b3048ca556"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FunctionJob</b> (<a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> &amp;sc, std::function&lt; int()&gt; command)</td></tr>
-<tr class="separator:a227e58705bd041ea3d6e19b3048ca556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacfb6ea1ffdf044a4155881bf8ecd379"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aacfb6ea1ffdf044a4155881bf8ecd379"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>FunctionJob</b> (ExecutablePtr executable, std::function&lt; int()&gt; fun)</td></tr>
+<tr class="separator:aacfb6ea1ffdf044a4155881bf8ecd379"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ddb7ac9f727f790f7ba16c33941dcc7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ddb7ac9f727f790f7ba16c33941dcc7"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()</td></tr>
 <tr class="separator:a9ddb7ac9f727f790f7ba16c33941dcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,20 +147,27 @@ Static Public Attributes</h2></td></tr>
 static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>UNASSIGNED_STREAM</b></td></tr>
 <tr class="separator:ae3ffdeff9b13d81b23119e33b59e84c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a0daa6514d5c7dae9b5144a07e244888a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0daa6514d5c7dae9b5144a07e244888a"></a>
+typedef std::shared_ptr<br class="typebreak" />
+&lt; <a class="el" href="classsoftwarecontainer_1_1_executable.html">Executable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ExecutablePtr</b></td></tr>
+<tr class="separator:a0daa6514d5c7dae9b5144a07e244888a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a7af23fce920ba997efea5dac070c4cd3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7af23fce920ba997efea5dac070c4cd3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_SET_CLASS_CONTEXT</b> (SoftwareContainer::getDefaultContext())</td></tr>
-<tr class="separator:a7af23fce920ba997efea5dac070c4cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67360c874b9bedf8416b83cbb5d9d405"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a67360c874b9bedf8416b83cbb5d9d405"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_DECLARE_CLASS_CONTEXT</b> (&quot;JOAB&quot;,&quot;<a class="el" href="classsoftwarecontainer_1_1_job_abstract.html">JobAbstract</a>&quot;)</td></tr>
+<tr class="separator:a67360c874b9bedf8416b83cbb5d9d405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a637d523d1d496747676e736e48f7e87f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a637d523d1d496747676e736e48f7e87f"></a>
 EnvironmentVariables&#160;</td><td class="memItemRight" valign="bottom"><b>m_env</b></td></tr>
 <tr class="separator:a637d523d1d496747676e736e48f7e87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d4602fb90eafa6cc6e53d37ef5ec219"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3d4602fb90eafa6cc6e53d37ef5ec219"></a>
-<a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>m_sc</b></td></tr>
-<tr class="separator:a3d4602fb90eafa6cc6e53d37ef5ec219"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07ea32ea55c47f7047af25115750c11e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07ea32ea55c47f7047af25115750c11e"></a>
+ExecutablePtr&#160;</td><td class="memItemRight" valign="bottom"><b>m_executable</b></td></tr>
+<tr class="separator:a07ea32ea55c47f7047af25115750c11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d237048c03313216541ccb4d0b82222"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d237048c03313216541ccb4d0b82222"></a>
 pid_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_pid</b></td></tr>
 <tr class="separator:a8d237048c03313216541ccb4d0b82222"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,7 +184,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Run a C++ function lambda inside a <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a>. </p>
 
-<p>Definition at line <a class="el" href="functionjob_8h_source.html#l00029">29</a> of file <a class="el" href="functionjob_8h_source.html">functionjob.h</a>.</p>
+<p>Definition at line <a class="el" href="functionjob_8h_source.html#l00030">30</a> of file <a class="el" href="functionjob_8h_source.html">functionjob.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a8bf30c2a1724092804a6bb01cf969b22"></a>
 <div class="memitem">
@@ -201,11 +209,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 
 <p>That method always returns true as soon as the start() method has been called, even if the command fails to start, since we don't know if the exec() occurring after the fork into the container actually succeeds... </p>
 
-<p>Definition at line <a class="el" href="jobabstract_8cpp_source.html#l00084">84</a> of file <a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="comment">// TODO : find a way to test whether the exec() which occurs in the container succeeded</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">return</span> (m_pid != 0);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
+<p>Definition at line <a class="el" href="jobabstract_8cpp_source.html#l00087">87</a> of file <a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;{</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">// TODO : find a way to test whether the exec() which occurs in the container succeeded</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> (m_pid != 0);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -219,7 +227,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_function_job.html">FunctionJob</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 17:00:00 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 12 2017 10:14:12 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

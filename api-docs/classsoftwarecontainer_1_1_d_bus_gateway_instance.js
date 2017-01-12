@@ -1,6 +1,5 @@
 var classsoftwarecontainer_1_1_d_bus_gateway_instance =
 [
-    [ "ContainerFunction", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a0971af3794daca430b2a43f309d65b79", null ],
     [ "ProxyType", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#af89743e7caa513f52e4d9b1e78399fac", [
       [ "SessionProxy", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#af89743e7caa513f52e4d9b1e78399facaeb802cc7518f27167115748fc89c70a3", null ],
       [ "SystemProxy", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#af89743e7caa513f52e4d9b1e78399faca81d46b5fce41d75169262c29e44191b1", null ]
@@ -25,8 +24,6 @@ var classsoftwarecontainer_1_1_d_bus_gateway_instance =
     [ "hasContainer", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a5e1b860ea7c1ed7b69d2e5dd7021a527", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a20f57ddde85b938d67104625e774a714", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#ae352621efe21b022c5829068e9019c44", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#acf09c5645de4a9338febeb5879e4ed70", null ],
     [ "ID", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#ac30731fb9530640caee9be496d0507d6", null ],
     [ "SESSION_CONFIG", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#adeb944b7a709c330cb8f726d9d48aa1a", null ],
     [ "SYSTEM_CONFIG", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a279458ec9bb098a9322958ee2364eb48", null ]

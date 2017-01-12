@@ -9,7 +9,6 @@ var NAVTREE =
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ]
       ] ]
     ] ],
@@ -22,9 +21,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classsoftwarecontainer_1_1_d_bus_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f",
-"classsoftwarecontainer_1_1_i_p_table_entry.html#ad1935dff17a3762860df620883b90e05ac5afe592b1d4b2d14a955f44f843c103",
-"dir_7729c337850573dc74d1ac4f90fc9ea2.html"
+"classsoftwarecontainer_1_1_d_bus_gateway.html#adf07cd001c50159267d4a1f1c3e683dea5e19e4f4c52af8b10f36af4b717266be",
+"classsoftwarecontainer_1_1_job_abstract.html#a4189e1fb09c89c1d31496a17cd26b692",
+"filegatewayparser_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

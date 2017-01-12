@@ -1,6 +1,5 @@
 var classsoftwarecontainer_1_1_cgroups_gateway =
 [
-    [ "ContainerFunction", "classsoftwarecontainer_1_1_cgroups_gateway.html#a0971af3794daca430b2a43f309d65b79", null ],
     [ "GatewayState", "classsoftwarecontainer_1_1_cgroups_gateway.html#adf07cd001c50159267d4a1f1c3e683de", [
       [ "CREATED", "classsoftwarecontainer_1_1_cgroups_gateway.html#adf07cd001c50159267d4a1f1c3e683dea98690bf632c29c17c9e4c5a64069903c", null ],
       [ "CONFIGURED", "classsoftwarecontainer_1_1_cgroups_gateway.html#adf07cd001c50159267d4a1f1c3e683dea5e19e4f4c52af8b10f36af4b717266be", null ],
@@ -21,7 +20,5 @@ var classsoftwarecontainer_1_1_cgroups_gateway =
     [ "hasContainer", "classsoftwarecontainer_1_1_cgroups_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_cgroups_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_cgroups_gateway.html#a20f57ddde85b938d67104625e774a714", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_cgroups_gateway.html#ae352621efe21b022c5829068e9019c44", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_cgroups_gateway.html#acf09c5645de4a9338febeb5879e4ed70", null ],
     [ "ID", "classsoftwarecontainer_1_1_cgroups_gateway.html#aa8b1d465b58c20b710e2a9729874902e", null ]
 ];

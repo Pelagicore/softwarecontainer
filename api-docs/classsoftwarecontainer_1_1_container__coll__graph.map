@@ -1,4 +1,5 @@
 <map id="softwarecontainer::Container" name="softwarecontainer::Container">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="25,5,165,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container_abstract_interface.html" title="softwarecontainer::\lContainerAbstractInterface" alt="" coords="5,71,184,112"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="206,5,346,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container_abstract_interface.html" title="softwarecontainer::\lContainerAbstractInterface" alt="" coords="187,71,365,112"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_executable.html" title="softwarecontainer::\lExecutable" alt="" coords="5,71,139,112"/>
 </map>

@@ -7,6 +7,7 @@ var dir_615a625f06d0029b31ecf0aaf0ab070e =
     [ "files", "dir_fb9b4f6d7638029c403f9b6e00db042e.html", "dir_fb9b4f6d7638029c403f9b6e00db042e" ],
     [ "network", "dir_9714d51461f33f26f35fbf1b742503d5.html", "dir_9714d51461f33f26f35fbf1b742503d5" ],
     [ "gateway.cpp", "gateway_8cpp_source.html", null ],
+    [ "gateway.h", "gateway_8h_source.html", null ],
     [ "gatewayparsererror.h", "gatewayparsererror_8h_source.html", null ],
     [ "pulsegateway.cpp", "pulsegateway_8cpp_source.html", null ],
     [ "pulsegateway.h", "pulsegateway_8h_source.html", null ],

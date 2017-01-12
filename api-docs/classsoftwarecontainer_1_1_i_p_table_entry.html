@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-b7078ee 2017-01-12</span>
    </div>
   </td>
  </tr>
@@ -113,6 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a90fcc24383229ea1fb0eca580e2858ea"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_i_p_table_entry.html#a90fcc24383229ea1fb0eca580e2858ea">interpretPolicy</a> (void)</td></tr>
 <tr class="memdesc:a90fcc24383229ea1fb0eca580e2858ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function Interprets defaultTarget rule to iptables applicable policy string.  <a href="#a90fcc24383229ea1fb0eca580e2858ea">More...</a><br /></td></tr>
 <tr class="separator:a90fcc24383229ea1fb0eca580e2858ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3a99d2ea3ea88de5c24d4c9e61b5235"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_i_p_table_entry.html#ac3a99d2ea3ea88de5c24d4c9e61b5235">toString</a> ()</td></tr>
+<tr class="memdesc:ac3a99d2ea3ea88de5c24d4c9e61b5235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a string with information about the entry.  <a href="#ac3a99d2ea3ea88de5c24d4c9e61b5235">More...</a><br /></td></tr>
+<tr class="separator:ac3a99d2ea3ea88de5c24d4c9e61b5235"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
@@ -403,6 +406,28 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a class="anchor" id="ac3a99d2ea3ea88de5c24d4c9e61b5235"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string softwarecontainer::IPTableEntry::toString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a string with information about the entry. </p>
+
+<p>Definition at line <a class="el" href="iptableentry_8cpp_source.html#l00180">180</a> of file <a class="el" href="iptableentry_8cpp_source.html">iptableentry.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;{</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;IPTableEntry type: &quot;</span> + m_type;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>libsoftwarecontainer/src/gateway/network/<a class="el" href="iptableentry_8h_source.html">iptableentry.h</a></li>
 <li>libsoftwarecontainer/src/gateway/network/<a class="el" href="iptableentry_8cpp_source.html">iptableentry.cpp</a></li>
@@ -413,7 +438,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_i_p_table_entry.html">IPTableEntry</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 17:00:00 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 12 2017 10:14:12 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

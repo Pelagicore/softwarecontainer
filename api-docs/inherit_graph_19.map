@@ -1,7 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_container_abstract_interface.html" title="softwarecontainer::\lContainerAbstractInterface" alt="" coords="5,5,184,47"/>
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="232,5,365,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="25,71,165,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="232,71,365,112"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. " alt="" coords="232,136,365,177"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_executable.html" title="softwarecontainer::\lExecutable" alt="" coords="5,5,139,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container_abstract_interface.html" title="softwarecontainer::\lContainerAbstractInterface" alt="" coords="187,5,365,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="413,5,547,47"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="206,71,346,112"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="413,71,547,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. " alt="" coords="413,136,547,177"/>
 </map>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-b7078ee 2017-01-12</span>
    </div>
   </td>
  </tr>
@@ -82,21 +82,21 @@ $(document).ready(function(){initNavTree('classsoftwarecontainer_1_1_container.h
 <div class="dynheader">
 Inheritance diagram for softwarecontainer::Container:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container__inherit__graph.svg" width="371" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container__inherit__graph.svg" width="552" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for softwarecontainer::Container:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container__coll__graph.svg" width="371" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container__coll__graph.svg" width="552" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a87c9bdb93955f0166a8e4610e44e61aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87c9bdb93955f0166a8e4610e44e61aa"></a>
-typedef std::function&lt; int()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ContainerFunction</b></td></tr>
-<tr class="separator:a87c9bdb93955f0166a8e4610e44e61aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af145d04ea2e9904c64d2cf64afccb50e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af145d04ea2e9904c64d2cf64afccb50e"></a>
+typedef std::function&lt; int()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ExecFunction</b></td></tr>
+<tr class="separator:af145d04ea2e9904c64d2cf64afccb50e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -109,21 +109,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a33340235226849d1f178e2f1d7efabe2"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a33340235226849d1f178e2f1d7efabe2">start</a> (pid_t *pid)</td></tr>
 <tr class="memdesc:a33340235226849d1f178e2f1d7efabe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the container.  <a href="#a33340235226849d1f178e2f1d7efabe2">More...</a><br /></td></tr>
 <tr class="separator:a33340235226849d1f178e2f1d7efabe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5293d1bf9c4d15c01bef8a31f48a1afa"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a5293d1bf9c4d15c01bef8a31f48a1afa">attach</a> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</td></tr>
-<tr class="memdesc:a5293d1bf9c4d15c01bef8a31f48a1afa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a process from the given command line, with an environment consisting of the variables previously set by the gateways, plus the ones passed as parameters here.  <a href="#a5293d1bf9c4d15c01bef8a31f48a1afa">More...</a><br /></td></tr>
-<tr class="separator:a5293d1bf9c4d15c01bef8a31f48a1afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8642ee20c457f1b91bd6a21f74d24faf"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a8642ee20c457f1b91bd6a21f74d24faf">attach</a> (const std::string &amp;commandLine, pid_t *pid)</td></tr>
-<tr class="memdesc:a8642ee20c457f1b91bd6a21f74d24faf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a process with the environment variables which have previously been set by the gateways.  <a href="#a8642ee20c457f1b91bd6a21f74d24faf">More...</a><br /></td></tr>
-<tr class="separator:a8642ee20c457f1b91bd6a21f74d24faf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa001314049bd479b599618c85b3e711f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa001314049bd479b599618c85b3e711f"></a>
 ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>setCgroupItem</b> (std::string subsys, std::string value)</td></tr>
 <tr class="separator:aa001314049bd479b599618c85b3e711f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7972c92f256a07cc87f8cfaf5fe3500d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7972c92f256a07cc87f8cfaf5fe3500d"></a>
-ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (ContainerFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=1, int stderr=2)</td></tr>
-<tr class="separator:a7972c92f256a07cc87f8cfaf5fe3500d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23c513e100e2698074af30886afa8be6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23c513e100e2698074af30886afa8be6"></a>
-ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><b>executeInContainer</b> (const std::string &amp;cmd)</td></tr>
-<tr class="separator:a23c513e100e2698074af30886afa8be6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83a367840850c0bfb6da2587f2b246de"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">execute</a> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</td></tr>
+<tr class="memdesc:a83a367840850c0bfb6da2587f2b246de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a process from the given command line, with an environment consisting of the variables previously set by the gateways, plus the ones passed as parameters here.  <a href="#a83a367840850c0bfb6da2587f2b246de">More...</a><br /></td></tr>
+<tr class="separator:a83a367840850c0bfb6da2587f2b246de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaff4ed1ad7fbbe7e34b047fd9e80fdb7"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#aaff4ed1ad7fbbe7e34b047fd9e80fdb7">execute</a> (ExecFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=1, int stderr=2)</td></tr>
+<tr class="memdesc:aaff4ed1ad7fbbe7e34b047fd9e80fdb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a commandline.  <a href="#aaff4ed1ad7fbbe7e34b047fd9e80fdb7">More...</a><br /></td></tr>
+<tr class="separator:aaff4ed1ad7fbbe7e34b047fd9e80fdb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4784a2955ddf87a9f0a58720d7ca918c"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c">bindMountInContainer</a> (const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)</td></tr>
 <tr class="memdesc:a4784a2955ddf87a9f0a58720d7ca918c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a path from host to container.  <a href="#a4784a2955ddf87a9f0a58720d7ca918c">More...</a><br /></td></tr>
 <tr class="separator:a4784a2955ddf87a9f0a58720d7ca918c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -473,7 +467,7 @@ Here is the call graph for this function:</div>
 </div><!-- fragment -->
 </div>
 </div>
-<a class="anchor" id="a5293d1bf9c4d15c01bef8a31f48a1afa"></a>
+<a class="anchor" id="a83a367840850c0bfb6da2587f2b246de"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -481,7 +475,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Container::attach </td>
+          <td class="memname">ReturnCode softwarecontainer::Container::execute </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>commandLine</em>, </td>
@@ -537,65 +531,56 @@ Here is the call graph for this function:</div>
 
 <p>Start a process from the given command line, with an environment consisting of the variables previously set by the gateways, plus the ones passed as parameters here. </p>
 
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_executable.html#a24bd4798807cfd758cb0cde5662c0ca9">softwarecontainer::Executable</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00389">389</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>Referenced by <a class="el" href="container_8cpp_source.html#l00384">attach()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;{</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="keywordflow">if</span> (isError(ensureContainerRunning())) {</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t attach&quot;</span>;</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    }</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    }</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Attach &quot;</span> &lt;&lt; commandLine ;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    std::vector&lt;std::string&gt; executeCommandVec = Glib::shell_parse_argv(commandLine);</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    std::vector&lt;char *&gt; args;</div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00383">383</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;{</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keywordflow">if</span> (isError(ensureContainerRunning())) {</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t attach&quot;</span>;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    }</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    }</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Attach &quot;</span> &lt;&lt; commandLine ;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    std::vector&lt;std::string&gt; executeCommandVec = Glib::shell_parse_argv(commandLine);</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    std::vector&lt;char *&gt; args;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; executeCommandVec.size(); i++) {</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        executeCommandVec[i].c_str(); <span class="comment">// ensure the string is null-terminated. not sure thas is required.</span></div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keyword">auto</span> s = &amp;executeCommandVec[i][0];</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        args.push_back(s);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    }</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; executeCommandVec.size(); i++) {</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        executeCommandVec[i].c_str(); <span class="comment">// ensure the string is null-terminated. not sure thas is required.</span></div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        <span class="keyword">auto</span> s = &amp;executeCommandVec[i][0];</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        args.push_back(s);</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    }</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="comment">// We need a null terminated array</span></div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    args.push_back(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    ReturnCode result = executeInContainer([&amp;] () {</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;                <span class="keywordflow">if</span> (workingDirectory.length() != 0) {</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;                    <span class="keyword">auto</span> ret = chdir(workingDirectory.c_str());</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;                    <span class="keywordflow">if</span> (ret != 0) {</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;                        log_error() &lt;&lt; <span class="stringliteral">&quot;Error when changing current directory : &quot;</span> &lt;&lt; strerror(errno);</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                    }</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;                }</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                execvp(args[0], args.data());</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            }, pid, variables, stdin, stdout, stderr);</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not execute in container&quot;</span>;</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    }</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;}</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="comment">// We need a null terminated array</span></div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    args.push_back(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    ReturnCode result = <a class="code" href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">execute</a>([&amp;] () {</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;                <span class="keywordflow">if</span> (workingDirectory.length() != 0) {</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;                    <span class="keyword">auto</span> ret = chdir(workingDirectory.c_str());</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;                    <span class="keywordflow">if</span> (ret != 0) {</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;                        log_error() &lt;&lt; <span class="stringliteral">&quot;Error when changing current directory : &quot;</span> &lt;&lt; strerror(errno);</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                    }</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;                }</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;                execvp(args[0], args.data());</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;                <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            }, pid, variables, stdin, stdout, stderr);</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not execute in container&quot;</span>;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    }</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a83a367840850c0bfb6da2587f2b246de"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">softwarecontainer::Container::execute</a></div><div class="ttdeci">ReturnCode execute(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00383">container.cpp:383</a></div></div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a5293d1bf9c4d15c01bef8a31f48a1afa_icgraph.svg" width="326" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="a8642ee20c457f1b91bd6a21f74d24faf"></a>
+<a class="anchor" id="aaff4ed1ad7fbbe7e34b047fd9e80fdb7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -603,16 +588,40 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Container::attach </td>
+          <td class="memname">ReturnCode softwarecontainer::Container::execute </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>commandLine</em>, </td>
+          <td class="paramtype">ExecFunction&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">pid_t *&#160;</td>
-          <td class="paramname"><em>pid</em>&#160;</td>
+          <td class="paramname"><em>pid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const EnvironmentVariables &amp;&#160;</td>
+          <td class="paramname"><em>variables</em> = <code>EnvironmentVariables()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stdin</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stdout</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stderr</em> = <code>2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -627,26 +636,83 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Start a process with the environment variables which have previously been set by the gateways. </p>
+<p>Executes a commandline. </p>
 
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_executable.html#ac804538b1fe087ee7ddc65520acb1ae9">softwarecontainer::Executable</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00384">384</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>References <a class="el" href="container_8cpp_source.html#l00389">attach()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;{</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#a5293d1bf9c4d15c01bef8a31f48a1afa">attach</a>(commandLine, pid, m_gatewayEnvironmentVariables);</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a5293d1bf9c4d15c01bef8a31f48a1afa"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a5293d1bf9c4d15c01bef8a31f48a1afa">softwarecontainer::Container::attach</a></div><div class="ttdeci">ReturnCode attach(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00389">container.cpp:389</a></div></div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00305">305</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;{</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    }</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keywordflow">if</span> (isError(ensureContainerRunning())) {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t execute&quot;</span>;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    }</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    options.stdin_fd = stdin;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    options.stdout_fd = stdout;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    options.stderr_fd = stderr;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    options.uid = ROOT_UID;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    options.gid = ROOT_UID;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="comment">// List of vars to use when executing the function</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    EnvironmentVariables actualVariables = variables;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="comment">// Add the variables set by gateways, variables passed with the &#39;variables&#39; argument</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="comment">// will take precedence over previously set variables.</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;var : m_gatewayEnvironmentVariables) {</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <span class="keywordflow">if</span> (variables.count(var.first) != 0) {</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            <span class="keywordflow">if</span> (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                <span class="comment">// Inform user that GW config will be overridden, it might be unintentionally done</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                log_info() &lt;&lt; <span class="stringliteral">&quot;Variable \&quot;&quot;</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                           &lt;&lt; var.first</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                           &lt;&lt; <span class="stringliteral">&quot;\&quot; set by gateway will be overwritten with the value: \&quot;&quot;</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                           &lt;&lt; variables.at(var.first)</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                           &lt;&lt; <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            actualVariables[var.first] = variables.at(var.first);</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="comment">// The variable was not set again, just keep the original value set by GW</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            actualVariables[var.first] = var.second;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        }</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    }</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="comment">// prepare array of env variable strings to be set when launching the process in the container</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    std::vector&lt;std::string&gt; strings;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;var : actualVariables) {</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        strings.push_back(var.first + <span class="stringliteral">&quot;=&quot;</span> + var.second);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    }</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> stringCount = strings.size() + 1;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> **envVariablesArray = <span class="keyword">new</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* [stringCount];</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; strings.size(); i++) {</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        envVariablesArray[i] = strings[i].c_str();</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    }</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    envVariablesArray[strings.size()] = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    options.extra_env_vars = (<span class="keywordtype">char</span> * *) envVariablesArray;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Starting function in container &quot;</span></div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                &lt;&lt; toString() &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot; Env variables : &quot;</span> &lt;&lt; strings;</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keywordtype">int</span> attach_res = m_container-&gt;attach(m_container,</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                                         &amp;Container::executeInContainerEntryFunction,</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                                         &amp;<span class="keyword">function</span>, &amp;options, pid);</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keyword">delete</span> envVariablesArray;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="keywordflow">if</span> (attach_res == 0) {</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot; Attached PID: &quot;</span> &lt;&lt; *pid;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    } <span class="keywordflow">else</span>  {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Attach call to LXC container failed: &quot;</span> &lt;&lt; std::string(strerror(errno));</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    }</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a8642ee20c457f1b91bd6a21f74d24faf_cgraph.svg" width="326" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <a class="anchor" id="a4784a2955ddf87a9f0a58720d7ca918c"></a>
@@ -701,22 +767,22 @@ Here is the call graph for this function:</div>
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00519">519</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;{</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    <span class="keywordflow">if</span> (!existsInFileSystem(pathInHost)) {</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Path on host does not exist: &quot;</span> &lt;&lt; pathInHost;</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    }</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    <span class="keywordflow">if</span> (isDirectory(pathInHost)) {</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Path on host is directory, mounting properly given that&quot;</span>;</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        <span class="keywordflow">return</span> bindMountDirectoryInContainer(pathInHost, pathInContainer, readOnly);</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        <span class="comment">// This goes for sockets, fifos etc as well.</span></div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Path on host is not a directory, mounting assuming it behaves like a file&quot;</span>;</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        <span class="keywordflow">return</span> bindMountFileInContainer(pathInHost, pathInContainer, readOnly);</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    }</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;}</div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00513">513</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;{</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;    <span class="keywordflow">if</span> (!existsInFileSystem(pathInHost)) {</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Path on host does not exist: &quot;</span> &lt;&lt; pathInHost;</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;    }</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;    <span class="keywordflow">if</span> (isDirectory(pathInHost)) {</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Path on host is directory, mounting properly given that&quot;</span>;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        <span class="keywordflow">return</span> bindMountDirectoryInContainer(pathInHost, pathInContainer, readOnly);</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;        <span class="comment">// This goes for sockets, fifos etc as well.</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Path on host is not a directory, mounting assuming it behaves like a file&quot;</span>;</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        <span class="keywordflow">return</span> bindMountFileInContainer(pathInHost, pathInContainer, readOnly);</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;    }</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -745,11 +811,11 @@ Here is the call graph for this function:</div>
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00489">489</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;{</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">destroy</a>(m_shutdownTimeout);</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8046973c568f3bd0bcc037af01630638"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">softwarecontainer::Container::destroy</a></div><div class="ttdeci">ReturnCode destroy()</div><div class="ttdoc">Calls shutdown, and then destroys the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00489">container.cpp:489</a></div></div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00483">483</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;{</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">destroy</a>(m_shutdownTimeout);</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8046973c568f3bd0bcc037af01630638"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">softwarecontainer::Container::destroy</a></div><div class="ttdeci">ReturnCode destroy()</div><div class="ttdoc">Calls shutdown, and then destroys the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00483">container.cpp:483</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -778,11 +844,11 @@ Here is the call graph for this function:</div>
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00456">456</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;{</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">shutdown</a>(m_shutdownTimeout);</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_aecaa29e4e21f90c2acd1f7840d20581b"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">softwarecontainer::Container::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Calls shutdown on the lxc container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00456">container.cpp:456</a></div></div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00450">450</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;{</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">shutdown</a>(m_shutdownTimeout);</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_aecaa29e4e21f90c2acd1f7840d20581b"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">softwarecontainer::Container::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Calls shutdown on the lxc container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00450">container.cpp:450</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -811,25 +877,25 @@ Here is the call graph for this function:</div>
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00436">436</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;{</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    ReturnCode ret = ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keywordflow">if</span> (m_state &gt;= ContainerState::STARTED) {</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Stopping the container&quot;</span>;</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordflow">if</span> (m_container-&gt;stop(m_container)) {</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;            log_debug() &lt;&lt; <span class="stringliteral">&quot;Container stopped, waiting for stop state&quot;</span>;</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            waitForState(LXCContainerState::STOPPED);</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to stop container&quot;</span>;</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;            ret = ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;        }</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t stop container that has not been started&quot;</span>;</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        ret = ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    }</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    <span class="keywordflow">return</span> ret;</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;}</div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00430">430</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;{</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    ReturnCode ret = ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keywordflow">if</span> (m_state &gt;= ContainerState::STARTED) {</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Stopping the container&quot;</span>;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        <span class="keywordflow">if</span> (m_container-&gt;stop(m_container)) {</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;            log_debug() &lt;&lt; <span class="stringliteral">&quot;Container stopped, waiting for stop state&quot;</span>;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;            waitForState(LXCContainerState::STOPPED);</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to stop container&quot;</span>;</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;            ret = ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        }</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t stop container that has not been started&quot;</span>;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        ret = ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    }</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -893,7 +959,7 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>libsoftwarecontainer/include/<a class="el" href="container_8h_source.html">container.h</a></li>
+<li>libsoftwarecontainer/src/<a class="el" href="container_8h_source.html">container.h</a></li>
 <li>libsoftwarecontainer/src/<a class="el" href="container_8cpp_source.html">container.cpp</a></li>
 </ul>
 </div><!-- contents -->
@@ -902,7 +968,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_container.html">Container</a></li>
-    <li class="footer">Generated on Wed Jan 11 2017 16:59:59 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 12 2017 10:14:11 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

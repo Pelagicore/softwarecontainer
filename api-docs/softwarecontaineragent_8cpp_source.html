@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-0d47ef7 2017-01-11</span>
+   &#160;<span id="projectnumber">0.15.0-b7078ee 2017-01-12</span>
    </div>
   </td>
  </tr>
@@ -335,225 +335,209 @@ $(document).ready(function(){initNavTree('softwarecontaineragent_8cpp_source.htm
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keywordflow">return</span> std::make_pair(availableID, std::move(container));</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;}</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgent::checkJob(pid_t pid, CommandJob *&amp;result)</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;{</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;job : m_jobs) {</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordflow">if</span> (job-&gt;pid() == pid) {</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            result = job;</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        }</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    }</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    log_warning() &lt;&lt; <span class="stringliteral">&quot;Unknown PID: &quot;</span> &lt;&lt; pid;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;}</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
-<div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b">  283</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b">SoftwareContainerAgent::execute</a>(ContainerID containerID,</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                                     <span class="keyword">const</span> std::string &amp;cmdLine,</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                                     <span class="keyword">const</span> std::string &amp;workingDirectory,</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                                     <span class="keyword">const</span> std::string &amp;outputFile,</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                                     <span class="keyword">const</span> EnvironmentVariables &amp;env,</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                                     int32_t &amp;pid,</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                                     std::function&lt;<span class="keywordtype">void</span> (pid_t, <span class="keywordtype">int</span>)&gt; listener)</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;{</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    profilefunction(<span class="stringliteral">&quot;executeFunction&quot;</span>);</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Invalid container ID &quot;</span> &lt;&lt; containerID;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        pid = INVALID_PID;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    }</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment">     * We want to always apply any default capabilities we have. If the container is in READY state,</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="comment">     * that means that its gateways have been configured. The only way to configure the gateways</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="comment">     * from the agent is through setCapabilities - which sets the default caps also.</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="comment">     * If it has not been set, then we use a call without arguments to setCapabilities to set it up,</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">     * since we then should get only the default ones.</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keywordflow">if</span> (container-&gt;getContainerState() != ContainerState::READY) {</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Container not configured yet, configuring with default capabilities, if any&quot;</span>;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not set default capabilities on container &quot;</span> &lt;&lt; containerID;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            pid = INVALID_PID;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        }</div>
+<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b">  270</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b">SoftwareContainerAgent::execute</a>(ContainerID containerID,</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                                     <span class="keyword">const</span> std::string &amp;cmdLine,</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                                     <span class="keyword">const</span> std::string &amp;workingDirectory,</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                                     <span class="keyword">const</span> std::string &amp;outputFile,</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                                     <span class="keyword">const</span> EnvironmentVariables &amp;env,</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                                     int32_t &amp;pid,</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                                     std::function&lt;<span class="keywordtype">void</span> (pid_t, <span class="keywordtype">int</span>)&gt; listener)</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;{</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    profilefunction(<span class="stringliteral">&quot;executeFunction&quot;</span>);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Invalid container ID &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        pid = INVALID_PID;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    }</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">     * We want to always apply any default capabilities we have. If the container is in READY state,</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="comment">     * that means that its gateways have been configured. The only way to configure the gateways</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="comment">     * from the agent is through setCapabilities - which sets the default caps also.</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="comment">     * If it has not been set, then we use a call without arguments to setCapabilities to set it up,</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="comment">     * since we then should get only the default ones.</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordflow">if</span> (container-&gt;getContainerState() != ContainerState::READY) {</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Container not configured yet, configuring with default capabilities, if any&quot;</span>;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not set default capabilities on container &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            pid = INVALID_PID;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        }</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    }</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="comment">// Set up a CommandJob for this run in the container</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <span class="keyword">auto</span> job = container-&gt;createCommandJob(cmdLine);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    job-&gt;setOutputFile(outputFile);</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    job-&gt;setEnvironmentVariables(env);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    job-&gt;setWorkingDirectory(workingDirectory);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="comment">// Start it</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordflow">if</span> (isError(job-&gt;start())) {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not start job&quot;</span>;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        pid = INVALID_PID;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    }</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="comment">// Set up a CommandJob for this run in the container</span></div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">auto</span> job = <span class="keyword">new</span> <a class="code" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a>(*container, cmdLine);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    job-&gt;setOutputFile(outputFile);</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    job-&gt;setEnvironmentVariables(env);</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    job-&gt;setWorkingDirectory(workingDirectory);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    pid = job-&gt;pid();</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="comment">// If things went well, do what we need when it exits</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    addProcessListener(m_connections, job-&gt;pid(), [listener](pid_t pid, <span class="keywordtype">int</span> exitCode) {</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        listener(pid, exitCode);</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    }, m_mainLoopContext);</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="comment">// Start it</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordflow">if</span> (isError(job-&gt;start())) {</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not start job&quot;</span>;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        pid = INVALID_PID;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    }</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="comment">// If things went well, do what we need when it exits</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    addProcessListener(m_connections, job-&gt;pid(), [listener](pid_t pid, <span class="keywordtype">int</span> exitCode) {</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        listener(pid, exitCode);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    }, m_mainLoopContext);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="comment">// Save the job</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    m_jobs.push_back(job);</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    profilepoint(<span class="stringliteral">&quot;executeEnd&quot;</span>);</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    pid = job-&gt;pid();</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;}</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;</div>
-<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86">  343</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86">SoftwareContainerAgent::shutdownContainer</a>(ContainerID containerID)</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;{</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    profilefunction(<span class="stringliteral">&quot;shutdownContainerFunction&quot;</span>);</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="keywordflow">if</span> (!m_shutdownContainers) {</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Not shutting down containers, so not shutting down &quot;</span> &lt;&lt; containerID;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    }</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Invalid container ID &quot;</span> &lt;&lt; containerID;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    }</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keywordtype">int</span> timeout = m_softwarecontainerWorkspace-&gt;m_containerShutdownTimeout;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="keywordflow">if</span> (isError(container-&gt;shutdown(timeout))) {</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not shut down the container&quot;</span>;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    }</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a66b745cd67c87b48a71b368edffaef83">deleteContainer</a>(containerID)) {</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not delete the container&quot;</span>;</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;}</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;</div>
-<div class="line"><a name="l00371"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24">  371</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24">SoftwareContainerAgent::suspendContainer</a>(ContainerID containerID)</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;{</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t suspend container &quot;</span> &lt;&lt; containerID;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    }</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="keywordflow">return</span> isSuccess(container-&gt;suspend());</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;}</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;</div>
-<div class="line"><a name="l00382"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333">  382</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333">SoftwareContainerAgent::resumeContainer</a>(ContainerID containerID)</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;{</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    profilepoint(<span class="stringliteral">&quot;executeEnd&quot;</span>);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
+<div class="line"><a name="l00328"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86">  328</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86">SoftwareContainerAgent::shutdownContainer</a>(ContainerID containerID)</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;{</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    profilefunction(<span class="stringliteral">&quot;shutdownContainerFunction&quot;</span>);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordflow">if</span> (!m_shutdownContainers) {</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Not shutting down containers, so not shutting down &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Invalid container ID &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    }</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordtype">int</span> timeout = m_softwarecontainerWorkspace-&gt;m_containerShutdownTimeout;</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="keywordflow">if</span> (isError(container-&gt;shutdown(timeout))) {</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not shut down the container&quot;</span>;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    }</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a66b745cd67c87b48a71b368edffaef83">deleteContainer</a>(containerID)) {</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not delete the container&quot;</span>;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    }</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;}</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
+<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24">  356</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24">SoftwareContainerAgent::suspendContainer</a>(ContainerID containerID)</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;{</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t suspend container &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    }</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="keywordflow">return</span> isSuccess(container-&gt;suspend());</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;}</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;</div>
+<div class="line"><a name="l00367"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333">  367</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333">SoftwareContainerAgent::resumeContainer</a>(ContainerID containerID)</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;{</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t resume container &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    }</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="keywordflow">return</span> isSuccess(container-&gt;resume());</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;}</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
+<div class="line"><a name="l00378"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce">  378</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce">SoftwareContainerAgent::bindMount</a>(<span class="keyword">const</span> ContainerID containerID,</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                                       <span class="keyword">const</span> std::string &amp;pathInHost,</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                                       <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                                       <span class="keywordtype">bool</span> readOnly)</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;{</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    profilefunction(<span class="stringliteral">&quot;bindMountFunction&quot;</span>);</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t resume container &quot;</span> &lt;&lt; containerID;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Invalid container ID &quot;</span> &lt;&lt; containerID;</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    }</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordflow">return</span> isSuccess(container-&gt;resume());</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;}</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
-<div class="line"><a name="l00393"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce">  393</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce">SoftwareContainerAgent::bindMount</a>(<span class="keyword">const</span> ContainerID containerID,</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;                                       <span class="keyword">const</span> std::string &amp;pathInHost,</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;                                       <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;                                       <span class="keywordtype">bool</span> readOnly)</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;{</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    profilefunction(<span class="stringliteral">&quot;bindMountFunction&quot;</span>);</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Invalid container ID &quot;</span> &lt;&lt; containerID;</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    }</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    ReturnCode result = container-&gt;getContainer()-&gt;bindMountInContainer(pathInHost,</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;                                                                        pathInContainer,</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                                                                        readOnly);</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to bind mount &quot;</span> &lt;&lt; pathInHost &lt;&lt; <span class="stringliteral">&quot; to &quot;</span> &lt;&lt; pathInContainer;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    ReturnCode result = container-&gt;bindMount(pathInHost,</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;                                             pathInContainer,</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;                                             readOnly);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordflow">if</span> (isError(result)) {</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to bind mount &quot;</span> &lt;&lt; pathInHost &lt;&lt; <span class="stringliteral">&quot; to &quot;</span> &lt;&lt; pathInContainer;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    }</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;}</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgent::updateGatewayConfigs(<span class="keyword">const</span> ContainerID &amp;containerID,</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                                                  <span class="keyword">const</span> <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;configs)</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;{</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    profilefunction(<span class="stringliteral">&quot;updateGatewayConfigs&quot;</span>);</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not update gateway configuration. Container (&quot;</span></div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                    &lt;&lt; std::to_string(containerID)</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;                    &lt;&lt; <span class="stringliteral">&quot;) does not exist&quot;</span>;</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    }</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;}</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="keywordtype">bool</span> SoftwareContainerAgent::updateGatewayConfigs(<span class="keyword">const</span> ContainerID &amp;containerID,</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                                                  <span class="keyword">const</span> <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;configs)</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    ReturnCode result = container-&gt;startGateways(configs);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keywordflow">return</span> isSuccess(result);</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;}</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;</div>
+<div class="line"><a name="l00417"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654">  417</a></span>&#160;std::vector&lt;std::string&gt; <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654">SoftwareContainerAgent::listCapabilities</a>()</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;{</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    profilefunction(<span class="stringliteral">&quot;updateGatewayConfigs&quot;</span>);</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordflow">if</span> (!container) {</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not update gateway configuration. Container (&quot;</span></div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                    &lt;&lt; std::to_string(containerID)</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;                    &lt;&lt; <span class="stringliteral">&quot;) does not exist&quot;</span>;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    }</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    ReturnCode result = container-&gt;startGateways(configs);</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="keywordflow">return</span> isSuccess(result);</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;}</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;</div>
-<div class="line"><a name="l00432"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654">  432</a></span>&#160;std::vector&lt;std::string&gt; <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654">SoftwareContainerAgent::listCapabilities</a>()</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;{</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keywordflow">return</span> m_filteredConfigStore-&gt;IDs();</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;}</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;</div>
-<div class="line"><a name="l00437"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#a73440dfba6dfaaab1c11190513d4d65e">  437</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a73440dfba6dfaaab1c11190513d4d65e">SoftwareContainerAgent::setCapabilities</a>(<span class="keyword">const</span> ContainerID &amp;containerID,</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;                                             <span class="keyword">const</span> std::vector&lt;std::string&gt; &amp;capabilities)</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;{</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <span class="keywordflow">if</span> (capabilities.empty()) {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Got empty list of capabilities&quot;</span>;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    }</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> filteredConfigs = m_filteredConfigStore-&gt;configsByID(capabilities);</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="comment">// If we get an empty config the user passed a non existent cap name</span></div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    <span class="keywordflow">if</span> (filteredConfigs.empty()) {</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;One or more capabilities were not found&quot;</span>;</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    }</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    gatewayConfigs.append(filteredConfigs);</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordflow">return</span> m_filteredConfigStore-&gt;IDs();</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;}</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;</div>
+<div class="line"><a name="l00422"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#a73440dfba6dfaaab1c11190513d4d65e">  422</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a73440dfba6dfaaab1c11190513d4d65e">SoftwareContainerAgent::setCapabilities</a>(<span class="keyword">const</span> ContainerID &amp;containerID,</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                                             <span class="keyword">const</span> std::vector&lt;std::string&gt; &amp;capabilities)</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;{</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="keywordflow">if</span> (capabilities.empty()) {</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Got empty list of capabilities&quot;</span>;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    }</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> filteredConfigs = m_filteredConfigStore-&gt;configsByID(capabilities);</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="comment">// If we get an empty config the user passed a non existent cap name</span></div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keywordflow">if</span> (filteredConfigs.empty()) {</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;One or more capabilities were not found&quot;</span>;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    }</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    gatewayConfigs.append(filteredConfigs);</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    <span class="comment">// Update container gateway configuration</span></div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not set gateway configuration for capability&quot;</span>;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    }</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;}</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;</div>
+<div class="line"><a name="l00451"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#ab6a03013678107248afc0d2788ba7942">  451</a></span>&#160;std::shared_ptr&lt;Workspace&gt; <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ab6a03013678107248afc0d2788ba7942">SoftwareContainerAgent::getWorkspace</a>()</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;{</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    <span class="keywordflow">return</span> m_softwarecontainerWorkspace;</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;}</div>
 <div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;    <span class="comment">// Update container gateway configuration</span></div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not set gateway configuration for capability&quot;</span>;</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    }</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;}</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;</div>
-<div class="line"><a name="l00466"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_agent.html#ab6a03013678107248afc0d2788ba7942">  466</a></span>&#160;std::shared_ptr&lt;Workspace&gt; <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ab6a03013678107248afc0d2788ba7942">SoftwareContainerAgent::getWorkspace</a>()</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;{</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    <span class="keywordflow">return</span> m_softwarecontainerWorkspace;</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;}</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_abb3ac782dd520cfaa1b61f7ddf090dce"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce">softwarecontainer::SoftwareContainerAgent::bindMount</a></div><div class="ttdeci">bool bindMount(const ContainerID containerID, const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly)</div><div class="ttdoc">Bind mount a folder into the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00393">softwarecontaineragent.cpp:393</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ab6a03013678107248afc0d2788ba7942"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ab6a03013678107248afc0d2788ba7942">softwarecontainer::SoftwareContainerAgent::getWorkspace</a></div><div class="ttdeci">std::shared_ptr&lt; Workspace &gt; getWorkspace()</div><div class="ttdoc">get a pointer to the workspace used TODO: This is only used for testing </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00466">softwarecontaineragent.cpp:466</a></div></div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_abb3ac782dd520cfaa1b61f7ddf090dce"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce">softwarecontainer::SoftwareContainerAgent::bindMount</a></div><div class="ttdeci">bool bindMount(const ContainerID containerID, const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly)</div><div class="ttdoc">Bind mount a folder into the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00378">softwarecontaineragent.cpp:378</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ab6a03013678107248afc0d2788ba7942"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ab6a03013678107248afc0d2788ba7942">softwarecontainer::SoftwareContainerAgent::getWorkspace</a></div><div class="ttdeci">std::shared_ptr&lt; Workspace &gt; getWorkspace()</div><div class="ttdoc">get a pointer to the workspace used TODO: This is only used for testing </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00451">softwarecontaineragent.cpp:451</a></div></div>
 <div class="ttc" id="softwarecontaineragent_8h_html"><div class="ttname"><a href="softwarecontaineragent_8h.html">softwarecontaineragent.h</a></div><div class="ttdoc">Contains the softwarecontainer::SoftwareContainerAgent class. </div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a4dd0cf44da28cf8781e6c29c5d09eb86"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86">softwarecontainer::SoftwareContainerAgent::shutdownContainer</a></div><div class="ttdeci">bool shutdownContainer(ContainerID containerID)</div><div class="ttdoc">shuts down a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00343">softwarecontaineragent.cpp:343</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a4dd0cf44da28cf8781e6c29c5d09eb86"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86">softwarecontainer::SoftwareContainerAgent::shutdownContainer</a></div><div class="ttdeci">bool shutdownContainer(ContainerID containerID)</div><div class="ttdoc">shuts down a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00328">softwarecontaineragent.cpp:328</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_config_html_adb17ce7ca54895f2abcce97dc9a73354"><div class="ttname"><a href="classsoftwarecontainer_1_1_config.html#adb17ce7ca54895f2abcce97dc9a73354">softwarecontainer::Config::getIntegerValue</a></div><div class="ttdeci">int getIntegerValue(const std::string &amp;group, const std::string &amp;key) const </div><div class="ttdoc">getIntegerValue Get a config value of type integer </div><div class="ttdef"><b>Definition:</b> <a href="config_8cpp_source.html#l00134">config.cpp:134</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a87e2217b1539db92e21a816f075aa4bd"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a87e2217b1539db92e21a816f075aa4bd">softwarecontainer::SoftwareContainerAgent::listContainers</a></div><div class="ttdeci">std::vector&lt; ContainerID &gt; listContainers()</div><div class="ttdoc">get a list of all containers </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00122">softwarecontaineragent.cpp:122</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_aa56cfb46275b5cb0959ab9fdbbee148b"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b">softwarecontainer::SoftwareContainerAgent::execute</a></div><div class="ttdeci">bool execute(ContainerID containerID, const std::string &amp;cmdLine, const std::string &amp;workingDirectory, const std::string &amp;outputFile, const EnvironmentVariables &amp;env, int32_t &amp;pid, std::function&lt; void(pid_t, int)&gt; listener)</div><div class="ttdoc">Launch the given command in a the given container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00283">softwarecontaineragent.cpp:283</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_aa9f97277f85c0abc20fc87eb4e285d24"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24">softwarecontainer::SoftwareContainerAgent::suspendContainer</a></div><div class="ttdeci">bool suspendContainer(ContainerID containerID)</div><div class="ttdoc">suspends execution of a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00371">softwarecontaineragent.cpp:371</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a0468131b581790fd41b1dd8e077f8654"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654">softwarecontainer::SoftwareContainerAgent::listCapabilities</a></div><div class="ttdeci">std::vector&lt; std::string &gt; listCapabilities()</div><div class="ttdoc">List all capabilities that the user can set. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00432">softwarecontaineragent.cpp:432</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_aa56cfb46275b5cb0959ab9fdbbee148b"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b">softwarecontainer::SoftwareContainerAgent::execute</a></div><div class="ttdeci">bool execute(ContainerID containerID, const std::string &amp;cmdLine, const std::string &amp;workingDirectory, const std::string &amp;outputFile, const EnvironmentVariables &amp;env, int32_t &amp;pid, std::function&lt; void(pid_t, int)&gt; listener)</div><div class="ttdoc">Launch the given command in a the given container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00270">softwarecontaineragent.cpp:270</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_aa9f97277f85c0abc20fc87eb4e285d24"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24">softwarecontainer::SoftwareContainerAgent::suspendContainer</a></div><div class="ttdeci">bool suspendContainer(ContainerID containerID)</div><div class="ttdoc">suspends execution of a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00356">softwarecontaineragent.cpp:356</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a0468131b581790fd41b1dd8e077f8654"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a0468131b581790fd41b1dd8e077f8654">softwarecontainer::SoftwareContainerAgent::listCapabilities</a></div><div class="ttdeci">std::vector&lt; std::string &gt; listCapabilities()</div><div class="ttdoc">List all capabilities that the user can set. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00417">softwarecontaineragent.cpp:417</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_adedc44d2112a0467bdddf68c19f37667"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#adedc44d2112a0467bdddf68c19f37667">softwarecontainer::SoftwareContainerAgent::createContainer</a></div><div class="ttdeci">bool createContainer(const std::string &amp;config, ContainerID &amp;containerID)</div><div class="ttdoc">Create a new container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00224">softwarecontaineragent.cpp:224</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ac4015d7ba7850424994fe561c5dbe333"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333">softwarecontainer::SoftwareContainerAgent::resumeContainer</a></div><div class="ttdeci">bool resumeContainer(ContainerID containerID)</div><div class="ttdoc">resumes execution of a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00382">softwarecontaineragent.cpp:382</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a73440dfba6dfaaab1c11190513d4d65e"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a73440dfba6dfaaab1c11190513d4d65e">softwarecontainer::SoftwareContainerAgent::setCapabilities</a></div><div class="ttdeci">bool setCapabilities(const ContainerID &amp;containerID, const std::vector&lt; std::string &gt; &amp;capabilities)</div><div class="ttdoc">Set capabilities for the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00437">softwarecontaineragent.cpp:437</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ac4015d7ba7850424994fe561c5dbe333"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333">softwarecontainer::SoftwareContainerAgent::resumeContainer</a></div><div class="ttdeci">bool resumeContainer(ContainerID containerID)</div><div class="ttdoc">resumes execution of a container </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00367">softwarecontaineragent.cpp:367</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a73440dfba6dfaaab1c11190513d4d65e"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a73440dfba6dfaaab1c11190513d4d65e">softwarecontainer::SoftwareContainerAgent::setCapabilities</a></div><div class="ttdeci">bool setCapabilities(const ContainerID &amp;containerID, const std::vector&lt; std::string &gt; &amp;capabilities)</div><div class="ttdoc">Set capabilities for the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00422">softwarecontaineragent.cpp:422</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_config_html_aa7f2e47598dbdc585d4e15257477493c"><div class="ttname"><a href="classsoftwarecontainer_1_1_config.html#aa7f2e47598dbdc585d4e15257477493c">softwarecontainer::Config::getStringValue</a></div><div class="ttdeci">std::string getStringValue(const std::string &amp;group, const std::string &amp;key) const </div><div class="ttdoc">getStringValue Get a config value of type string </div><div class="ttdef"><b>Definition:</b> <a href="config_8cpp_source.html#l00129">config.cpp:129</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_config_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_config_error.html">softwarecontainer::ConfigError</a></div><div class="ttdef"><b>Definition:</b> <a href="config_8h_source.html#l00033">config.h:33</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_configuration_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_configuration.html">softwarecontainer::GatewayConfiguration</a></div><div class="ttdef"><b>Definition:</b> <a href="gatewayconfig_8h_source.html#l00028">gatewayconfig.h:28</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00144">softwarecontaineragent.cpp:144</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_command_job_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_command_job.html">softwarecontainer::CommandJob</a></div><div class="ttdoc">Use this class to execute a command line in a SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="commandjob_8h_source.html#l00029">commandjob.h:29</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00051">jsonparser.cpp:51</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_accd6bd43a175d6b59be24c1172b5de5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#accd6bd43a175d6b59be24c1172b5de5f">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent</a></div><div class="ttdeci">SoftwareContainerAgent(Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext, const Config &amp;config)</div><div class="ttdoc">creates a new agent object and runs some initialization </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00025">softwarecontaineragent.cpp:25</a></div></div>
@@ -568,7 +552,7 @@ $(document).ready(function(){initNavTree('softwarecontaineragent_8cpp_source.htm
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><b>softwarecontaineragent.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 11 2017 16:59:59 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 12 2017 10:14:11 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

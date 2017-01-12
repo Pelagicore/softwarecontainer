@@ -1,6 +1,6 @@
 var classsoftwarecontainer_1_1_container_abstract_interface =
 [
-    [ "ContainerFunction", "classsoftwarecontainer_1_1_container_abstract_interface.html#a87c9bdb93955f0166a8e4610e44e61aa", null ],
+    [ "ExecFunction", "classsoftwarecontainer_1_1_container_abstract_interface.html#af145d04ea2e9904c64d2cf64afccb50e", null ],
     [ "~ContainerAbstractInterface", "classsoftwarecontainer_1_1_container_abstract_interface.html#a037dfff54eb28cb530bd760d3ea035b6", null ],
     [ "id", "classsoftwarecontainer_1_1_container_abstract_interface.html#a9e339c879b618f605ad223ed96e2a923", null ],
     [ "rootFS", "classsoftwarecontainer_1_1_container_abstract_interface.html#a83dde1d1c1f6fa59298fdf518922bd03", null ],
@@ -20,8 +20,6 @@ var classsoftwarecontainer_1_1_container_abstract_interface =
     [ "bindMountInContainer", "classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_container_abstract_interface.html#aeac77c7484cb5c58dbc5dcfdcbcb0005", null ],
     [ "setCgroupItem", "classsoftwarecontainer_1_1_container_abstract_interface.html#a4751e4f978344d2b37440b62dc5b2dd9", null ],
-    [ "attach", "classsoftwarecontainer_1_1_container_abstract_interface.html#a547ba980d9806e16bf8f17aa318a7df6", null ],
-    [ "attach", "classsoftwarecontainer_1_1_container_abstract_interface.html#a1bfa1ee233de0a758cedd6fe27e46384", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_container_abstract_interface.html#a268dfea7e8c377f73a0d737ad5f5bcc9", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_container_abstract_interface.html#acd745575bbe02b9451258aa75992cce4", null ]
+    [ "execute", "classsoftwarecontainer_1_1_container_abstract_interface.html#ac804538b1fe087ee7ddc65520acb1ae9", null ],
+    [ "execute", "classsoftwarecontainer_1_1_container_abstract_interface.html#a24bd4798807cfd758cb0cde5662c0ca9", null ]
 ];

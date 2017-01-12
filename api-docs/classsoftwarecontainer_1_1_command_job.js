@@ -1,11 +1,12 @@
 var classsoftwarecontainer_1_1_command_job =
 [
-    [ "CommandJob", "classsoftwarecontainer_1_1_command_job.html#a314e4a56652b5b5e0de9c58b43516b69", null ],
+    [ "ExecutablePtr", "classsoftwarecontainer_1_1_command_job.html#a0daa6514d5c7dae9b5144a07e244888a", null ],
+    [ "CommandJob", "classsoftwarecontainer_1_1_command_job.html#a2cfeeb89850c932751a8f1d84ecf4323", null ],
     [ "~CommandJob", "classsoftwarecontainer_1_1_command_job.html#aa0652d0578318fbefbeabedb089abd46", null ],
     [ "setWorkingDirectory", "classsoftwarecontainer_1_1_command_job.html#aa2d34fd448b06ea3aa67d72ffa249b68", null ],
     [ "start", "classsoftwarecontainer_1_1_command_job.html#ac9ba280767a871ef47c6a7fb5497e8f2", null ],
     [ "toString", "classsoftwarecontainer_1_1_command_job.html#a2e85e8f5c75ed4c4ae305f0ebaebef39", null ],
-    [ "LOG_SET_CLASS_CONTEXT", "classsoftwarecontainer_1_1_command_job.html#a7af23fce920ba997efea5dac070c4cd3", null ],
+    [ "LOG_DECLARE_CLASS_CONTEXT", "classsoftwarecontainer_1_1_command_job.html#a67360c874b9bedf8416b83cbb5d9d405", null ],
     [ "captureStdin", "classsoftwarecontainer_1_1_command_job.html#add2456a628f8664447ac149c9f87853f", null ],
     [ "setOutputFile", "classsoftwarecontainer_1_1_command_job.html#a47e68f466b84cddb6af09c759eb2c09c", null ],
     [ "captureStdout", "classsoftwarecontainer_1_1_command_job.html#afd82c2314c8860ed0a49592bb5e4b214", null ],
@@ -20,7 +21,7 @@ var classsoftwarecontainer_1_1_command_job =
     [ "setEnvironmentVariables", "classsoftwarecontainer_1_1_command_job.html#a53aeb5c8a8a225118c4067b53b74cb2c", null ],
     [ "UNASSIGNED_STREAM", "classsoftwarecontainer_1_1_command_job.html#a7849138f8e2f724b52d6eac1bb749068", null ],
     [ "m_env", "classsoftwarecontainer_1_1_command_job.html#a637d523d1d496747676e736e48f7e87f", null ],
-    [ "m_sc", "classsoftwarecontainer_1_1_command_job.html#a3d4602fb90eafa6cc6e53d37ef5ec219", null ],
+    [ "m_executable", "classsoftwarecontainer_1_1_command_job.html#a07ea32ea55c47f7047af25115750c11e", null ],
     [ "m_pid", "classsoftwarecontainer_1_1_command_job.html#a8d237048c03313216541ccb4d0b82222", null ],
     [ "m_stdin", "classsoftwarecontainer_1_1_command_job.html#a4189e1fb09c89c1d31496a17cd26b692", null ],
     [ "m_stdout", "classsoftwarecontainer_1_1_command_job.html#a2951f5261af1c11b5902222a780c1867", null ],

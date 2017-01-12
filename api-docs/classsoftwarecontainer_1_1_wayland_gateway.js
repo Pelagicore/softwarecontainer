@@ -1,6 +1,5 @@
 var classsoftwarecontainer_1_1_wayland_gateway =
 [
-    [ "ContainerFunction", "classsoftwarecontainer_1_1_wayland_gateway.html#a0971af3794daca430b2a43f309d65b79", null ],
     [ "GatewayState", "classsoftwarecontainer_1_1_wayland_gateway.html#adf07cd001c50159267d4a1f1c3e683de", [
       [ "CREATED", "classsoftwarecontainer_1_1_wayland_gateway.html#adf07cd001c50159267d4a1f1c3e683dea98690bf632c29c17c9e4c5a64069903c", null ],
       [ "CONFIGURED", "classsoftwarecontainer_1_1_wayland_gateway.html#adf07cd001c50159267d4a1f1c3e683dea5e19e4f4c52af8b10f36af4b717266be", null ],
@@ -21,8 +20,6 @@ var classsoftwarecontainer_1_1_wayland_gateway =
     [ "hasContainer", "classsoftwarecontainer_1_1_wayland_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_wayland_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_wayland_gateway.html#a20f57ddde85b938d67104625e774a714", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_wayland_gateway.html#ae352621efe21b022c5829068e9019c44", null ],
-    [ "executeInContainer", "classsoftwarecontainer_1_1_wayland_gateway.html#acf09c5645de4a9338febeb5879e4ed70", null ],
     [ "ID", "classsoftwarecontainer_1_1_wayland_gateway.html#a83f9616485b9605c6fdba9f435241650", null ],
     [ "WAYLAND_RUNTIME_DIR_VARIABLE_NAME", "classsoftwarecontainer_1_1_wayland_gateway.html#a406dafd98de750355940134193c1edcf", null ],
     [ "SOCKET_FILE_NAME", "classsoftwarecontainer_1_1_wayland_gateway.html#af8998b0aa988d5145cf179bd78fc4a24", null ],
