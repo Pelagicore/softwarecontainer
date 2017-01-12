@@ -19,6 +19,7 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <libgen.h>
 
 #include "gateway/devicenode/devicenodegateway.h"
 #include "functionjob.h"
@@ -65,12 +66,21 @@ ReturnCode DeviceNodeGateway::applySettings()
     for (auto &dev : devlist) {
         log_info() << "Mapping device " << dev.name;
 
+        std::string devicePathInContainerOnHost = getContainer()->rootFS() + dev.name;
+        std::string deviceParent = dirname(strdup(devicePathInContainerOnHost.c_str()));
+
+        if (!isDirectory(deviceParent) && isError(createDirectory(deviceParent))) {
+            log_error() << "Could not create parent directory for device " << deviceParent;
+            return ReturnCode::FAILURE;
+        }
+
         if (dev.major != -1) {
 
             // mknod dev.name c dev.major dev.minor
             FunctionJob job(getContainer(), [&] () {
-                auto err =  mknod(dev.name.c_str(), S_IFCHR | dev.mode,
-                             makedev(dev.major, dev.minor));
+                auto err = mknod(dev.name.c_str(),
+                                 S_IFCHR | dev.mode,
+                                 makedev(dev.major, dev.minor));
                 if (err) {
                     log_error() << "Err happened while trying to run mknod in container" <<
                                    " error: " << err << " - " << strerror(errno);
@@ -83,6 +93,8 @@ ReturnCode DeviceNodeGateway::applySettings()
             if (job.wait() != 0) {
                 log_error() << "Failed to create device " << dev.name;
                 return ReturnCode::FAILURE;
+            } else {
+                watchFile(devicePathInContainerOnHost);
             }
         } else {
             // No major & minor numbers specified => simply map the device from
