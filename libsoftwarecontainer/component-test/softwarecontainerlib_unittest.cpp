@@ -389,6 +389,15 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
 
     job1->start();
     ASSERT_EQ(job1->wait(), EXISTENT);
+    //
+    // Test that an unexisting path is created when you mount to it
+    const char *longUnexistingPath = "/var/apa/bepa/cepa";
+    ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, longUnexistingPath, false)));
+    auto job2 = getSc().createFunctionJob([&] () {
+        return isDirectory(longUnexistingPath) ? EXISTENT : NON_EXISTENT;
+    });
+    job2->start();
+    ASSERT_EQ(job2->wait(), EXISTENT);
 
     // Write some data to a file inside the directory
     char *tempFilename = strcat(tempDirname, "/bluhuXXXXXX");
@@ -404,14 +413,6 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     job3->start();
     ASSERT_EQ(job3->wait(), EXISTENT);
 
-    // Test that an unexisting path is created when you mount to it
-    const char *longUnexistingPath = "/var/apa/bepa/cepa";
-    ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, longUnexistingPath, false)));
-    auto job2 = getSc().createFunctionJob([&] () {
-        return isDirectory(longUnexistingPath) ? EXISTENT : NON_EXISTENT;
-    });
-    job2->start();
-    ASSERT_EQ(job2->wait(), EXISTENT);
 }
 
 #include <stdlib.h>
