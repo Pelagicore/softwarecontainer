@@ -54,6 +54,7 @@ var hierarchy =
     [ "softwarecontainer::FileGatewayParser::FileSetting", "structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html", null ],
     [ "softwarecontainer::FileToolkitWithUndo", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html", [
       [ "softwarecontainer::Container", "classsoftwarecontainer_1_1_container.html", null ],
+      [ "softwarecontainer::DeviceNodeGateway", "classsoftwarecontainer_1_1_device_node_gateway.html", null ],
       [ "softwarecontainer::SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", null ],
       [ "softwarecontainer::Workspace", "classsoftwarecontainer_1_1_workspace.html", null ]
     ] ],

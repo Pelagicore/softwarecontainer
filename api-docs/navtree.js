@@ -30,8 +30,8 @@ var NAVTREEINDEX =
 [
 ".html",
 "classsoftwarecontainer_1_1_container.html#ae4b25d96c1284606561d8911d8cf377b",
-"classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb",
-"classsoftwarecontainer_1_1_wayland_gateway.html#adf07cd001c50159267d4a1f1c3e683dea5e19e4f4c52af8b10f36af4b717266be"
+"classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a",
+"classsoftwarecontainer_1_1_wayland_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -20,5 +20,16 @@ var classsoftwarecontainer_1_1_device_node_gateway =
     [ "hasContainer", "classsoftwarecontainer_1_1_device_node_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_device_node_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_device_node_gateway.html#a20f57ddde85b938d67104625e774a714", null ],
-    [ "ID", "classsoftwarecontainer_1_1_device_node_gateway.html#adb1e0556c37262a3fc944421bdbb59b5", null ]
+    [ "bindMount", "classsoftwarecontainer_1_1_device_node_gateway.html#a33c6fa5ecfb8e370ae8bb6aedf568336", null ],
+    [ "tempDir", "classsoftwarecontainer_1_1_device_node_gateway.html#a649391903bf1a0eec92c829713117a74", null ],
+    [ "createSymLink", "classsoftwarecontainer_1_1_device_node_gateway.html#af74ae05ce4e96543be65cc533cb0bef3", null ],
+    [ "writeToFile", "classsoftwarecontainer_1_1_device_node_gateway.html#a465268b278d7aa59bb87f77f5ff6b3b4", null ],
+    [ "markFileForDeletion", "classsoftwarecontainer_1_1_device_node_gateway.html#ac7252747de3ba727e34bc4211733f90a", null ],
+    [ "overlayMount", "classsoftwarecontainer_1_1_device_node_gateway.html#ab46eccba563b861f100d9ce7fa9ca4d6", null ],
+    [ "syncOverlayMount", "classsoftwarecontainer_1_1_device_node_gateway.html#a011797b9d1387882a5b013d0c97ccbfd", null ],
+    [ "createSharedMountPoint", "classsoftwarecontainer_1_1_device_node_gateway.html#ab74e5ec0784b2aa597d54f28f44f7112", null ],
+    [ "createDirectory", "classsoftwarecontainer_1_1_device_node_gateway.html#aff5073fb683649d6753baae354d202b9", null ],
+    [ "pathInList", "classsoftwarecontainer_1_1_device_node_gateway.html#a44a19890b72a635b3134cb2a07fc0875", null ],
+    [ "ID", "classsoftwarecontainer_1_1_device_node_gateway.html#adb1e0556c37262a3fc944421bdbb59b5", null ],
+    [ "m_cleanupHandlers", "classsoftwarecontainer_1_1_device_node_gateway.html#a415851aff0b78df32945ae503b6847df", null ]
 ];
