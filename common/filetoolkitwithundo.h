@@ -68,7 +68,7 @@ protected:
      *
      * This is useful if one creates a file in some other way and want it deleted later.
      */
-    void watchFile(const std::string &path);
+    void markFileForDeletion(const std::string &path);
 
     /**
      * @brief overlayMount Mount a directory with an overlay on top of it. An overlay protects

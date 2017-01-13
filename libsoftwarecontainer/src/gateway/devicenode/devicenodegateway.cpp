@@ -69,21 +69,36 @@ ReturnCode DeviceNodeGateway::applySettings()
         std::string devicePathInContainerOnHost = getContainer()->rootFS() + dev.name;
         std::string deviceParent = dirname(strdup(devicePathInContainerOnHost.c_str()));
 
+        // Already existing files can't be converted into directories
+        if (existsInFileSystem(deviceParent) && !isDirectory(deviceParent)) {
+            log_error() << "Parent path of " << dev.name << " already exist and is not a directory";
+            return ReturnCode::FAILURE;
+        }
+
+        // If the parent directory does not already exist, we create it.
         if (!isDirectory(deviceParent) && isError(createDirectory(deviceParent))) {
             log_error() << "Could not create parent directory for device " << deviceParent;
             return ReturnCode::FAILURE;
         }
 
         if (dev.major != -1) {
+            log_error() << "Device path for container on host: " << devicePathInContainerOnHost;
+            if (existsInFileSystem(devicePathInContainerOnHost)) {
+                log_error() << "The device " << dev.name << " already exists";
+                return ReturnCode::FAILURE;
+            }
 
             // mknod dev.name c dev.major dev.minor
             FunctionJob job(getContainer(), [&] () {
-                auto err = mknod(dev.name.c_str(),
-                                 S_IFCHR | dev.mode,
-                                 makedev(dev.major, dev.minor));
-                if (err) {
-                    log_error() << "Err happened while trying to run mknod in container" <<
-                                   " error: " << err << " - " << strerror(errno);
+                if (existsInFileSystem(dev.name)) {
+                    log_error() << "Device already exists";
+                    return -1;
+                }
+
+                int err = mknod(dev.name.c_str(), S_IFCHR | dev.mode, makedev(dev.major, dev.minor));
+                if (err != 0) {
+                    log_error() << "Error happened while trying to run mknod " << dev.name
+                                << " in container: " << err << " - " << strerror(errno);
                 }
                 return err;
             });
@@ -94,7 +109,8 @@ ReturnCode DeviceNodeGateway::applySettings()
                 log_error() << "Failed to create device " << dev.name;
                 return ReturnCode::FAILURE;
             } else {
-                watchFile(devicePathInContainerOnHost);
+                // Make sure the path gets deleted when we destroy this object
+                markFileForDeletion(devicePathInContainerOnHost);
             }
         } else {
             // No major & minor numbers specified => simply map the device from
