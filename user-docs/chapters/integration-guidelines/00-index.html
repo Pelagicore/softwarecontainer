@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.15.0-b7078ee 2017-01-12 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.15.0-2faede7 2017-01-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.15.0-b7078ee 2017-01-12',
+        VERSION:     '0.15.0-2faede7 2017-01-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -152,7 +152,9 @@ SoftwareContainer will simply fail with an error message if the bridge was not a
 Please see the README for more information about how to set the various CMake options.</p>
 <p>For each container a virtual ethernet device will be set up and be bridged to the above mentioned
 network bridge on the host system. The virtual ethernet device is then mapped to an ethernet device
-inside of the container (usually eth0).</p>
+inside of the container, configured to be eth0. The LXC template also copies <code class="docutils literal"><span class="pre">/etc/resolv.conf</span></code>
+from the host into the container, if it is available in the host. That means the same name servers
+will be used in the container as on the host.</p>
 <p>In order to configure what traffic is allowed the NetworkGateway is used. The NetworkGateway
 converts the configuration it receives into iptables rules which are set for the network device
 inside of the container. See <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a> for more information.</p>

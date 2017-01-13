@@ -11,7 +11,9 @@ Please see the README for more information about how to set the various CMake op
 
 For each container a virtual ethernet device will be set up and be bridged to the above mentioned
 network bridge on the host system. The virtual ethernet device is then mapped to an ethernet device
-inside of the container (usually eth0).
+inside of the container, configured to be eth0. The LXC template also copies ``/etc/resolv.conf``
+from the host into the container, if it is available in the host. That means the same name servers
+will be used in the container as on the host.
 
 In order to configure what traffic is allowed the NetworkGateway is used. The NetworkGateway
 converts the configuration it receives into iptables rules which are set for the network device
