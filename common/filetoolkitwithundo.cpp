@@ -266,7 +266,7 @@ ReturnCode FileToolkitWithUndo::writeToFile(const std::string &path, const std::
     return ReturnCode::SUCCESS;
 }
 
-void FileToolkitWithUndo::watchFile(const std::string &path)
+void FileToolkitWithUndo::markFileForDeletion(const std::string &path)
 {
     if (!pathInList(path)) {
         m_cleanupHandlers.push_back(new FileCleanUpHandler(path));

@@ -35,7 +35,7 @@ public:
 
     const std::string NEW_DEVICE = "/tmp/thenewfile";
     const std::string NEW_DEEP_DEVICE = "/tmp/devices/thenewfile";
-    const std::string PRESENT_DEVICE = "/tmp/random";
+    const std::string PRESENT_DEVICE = "/dev/random";
 };
 
 /*
@@ -70,3 +70,22 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
     ASSERT_TRUE(isSuccess(gw->activate()));
 }
 
+/*
+ * Make sure we can't re-create or overwrite a device that already exists in the container
+ */
+TEST_F(DeviceNodeGatewayTest, TestOverwriteDeviceFails) {
+    givenContainerIsSet(gw);
+    const std::string config = "[\
+                                  {\
+                                    \"name\": \"" + PRESENT_DEVICE + "\",\
+                                    \"mode\":  \"645\",\
+                                    \"major\": 2,\
+                                    \"minor\": 75,\
+                                    \"mode\":  644\
+                                  }\
+                                ]";
+
+    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    ASSERT_FALSE(isSuccess(gw->activate()));
+
+}
