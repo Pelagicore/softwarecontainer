@@ -182,7 +182,7 @@ We use [semantic versioning](http://semver.org), but we have yet to release
 a first stable 1.0.0 version, so for now, all bets are off.
 
 # License and Copyright
-Copyright (c) 2016 Pelagicore AB
+Copyright (C) 2016-2017 Pelagicore AB
 
 The source code included here is licensed under the LGPL 2.1. Please
 see the "LICENSE" file for more information. Text documents are
