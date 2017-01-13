@@ -1,7 +1,0 @@
-<map id="softwarecontainer::Config::Config" name="softwarecontainer::Config::Config">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_mandatory_configs.html#af14aaf1a2c24eef0b29ddc103ff77b4e" title="Get all mandatory configs as group and key. " alt="" coords="187,5,365,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_config.html#ab2aafca72117fbf3b673c811f2ff7b78" title="getBooleanValue Get a config value of type boolean " alt="" coords="193,71,359,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_config.html#adb17ce7ca54895f2abcce97dc9a73354" title="getIntegerValue Get a config value of type integer " alt="" coords="197,136,355,177"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_config.html#aa7f2e47598dbdc585d4e15257477493c" title="getStringValue Get a config value of type string " alt="" coords="199,201,353,243"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_mandatory_configs.html#a6526af35c6306d2d342f3a5091ce92fe" title="Get all mandatory config groups. " alt="" coords="189,267,363,308"/>
-</map>

@@ -1,0 +1,5 @@
+<map id="softwarecontainer::ConfigItem" name="softwarecontainer::ConfigItem">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_bool_config.html" title="Represents a config item of type bool. " alt="" coords="187,5,320,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_int_config.html" title="Represents a config item of type int. " alt="" coords="187,71,320,112"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_string_config.html" title="Represents a config item of type string. " alt="" coords="187,136,320,177"/>
+</map>

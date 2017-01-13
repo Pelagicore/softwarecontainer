@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -87,20 +88,20 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;baseconfigstore.h&quot;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="namespacesoftwarecontainer.html">   22</a></span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;BaseConfigStore::BaseConfigStore(<span class="keyword">const</span> std::string &amp;inputPath)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    ReturnCode retval = ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> retval = ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordflow">if</span> (inputPath.empty()) {</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="comment">//File path is empty, this is ok</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">if</span> (isDirectory(inputPath)) {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">isDirectory</a>(inputPath)) {</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        retval = readCapsFromDir(inputPath);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (isFile(inputPath)) {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a3a71c6d06c86e4f62e7f2b6d7c926f66">isFile</a>(inputPath)) {</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        retval = readCapsFromFile(inputPath);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="comment">//Could not find a matching clause</span></div>
@@ -108,7 +109,7 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        retval = ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> (isError(retval)) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(retval)) {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
@@ -117,13 +118,13 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;ReturnCode BaseConfigStore::readCapsFromDir(<span class="keyword">const</span> std::string &amp;dirPath)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> BaseConfigStore::readCapsFromDir(<span class="keyword">const</span> std::string &amp;dirPath)</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;{</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">if</span> (dirPath.compare(<span class="stringliteral">&quot;/&quot;</span>) == 0) {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Searching for configuration files from root dir not allowed&quot;</span>;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    }</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">if</span> (isDirectoryEmpty(dirPath)) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#acaa3372166baaae42d0d55577b99308e">isDirectoryEmpty</a>(dirPath)) {</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Path to configuration files is empty: &quot;</span> &lt;&lt; dirPath;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
@@ -138,7 +139,7 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">for</span> (std::string file : files) {</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        std::string filePath = dirPath + file;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> (isError(readCapsFromFile(filePath))) {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(readCapsFromFile(filePath))) {</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            log_warning() &lt;&lt; <span class="stringliteral">&quot;Could not parse a file in directory: &quot;</span> &lt;&lt; filePath;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
@@ -147,7 +148,7 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;ReturnCode BaseConfigStore::readCapsFromFile(<span class="keyword">const</span> std::string &amp;filePath)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> BaseConfigStore::readCapsFromFile(<span class="keyword">const</span> std::string &amp;filePath)</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;{</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">if</span> (!isJsonFile(filePath)) {</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;File is not a json file: &quot;</span> &lt;&lt; filePath;</div>
@@ -182,7 +183,7 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordflow">return</span> parseCapabilities(capabilities);</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;ReturnCode BaseConfigStore::parseCapabilities(json_t *capabilities)</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> BaseConfigStore::parseCapabilities(json_t *capabilities)</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;{</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">size_t</span> i;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    json_t *capability;</div>
@@ -213,15 +214,15 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Found capability \&quot;&quot;</span> &lt;&lt; capName &lt;&lt; <span class="stringliteral">&quot;\&quot;, parsing gateways...&quot;</span>;</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        ReturnCode parseGatewayResult = parseGatewayConfigs(capName, gateways);</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordflow">if</span> (isError(parseGatewayResult)) {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> parseGatewayResult = parseGatewayConfigs(capName, gateways);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(parseGatewayResult)) {</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        }</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;}</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;ReturnCode BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;{</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keywordflow">if</span> (m_capMap.count(capName) &gt; 0) {</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Capability &quot;</span> &lt;&lt; capName &lt;&lt; <span class="stringliteral">&quot; already loaded.&quot;</span>;</div>
@@ -231,7 +232,7 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">size_t</span> i;</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    json_t *gateway;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    GatewayConfiguration gwConf;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> gwConf;</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    json_array_foreach(gateways, i, gateway) {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordflow">if</span> (!json_is_object(gateway)) {</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Gateway is not a json object&quot;</span>;</div>
@@ -292,7 +293,13 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;}</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_acaa3372166baaae42d0d55577b99308e"><div class="ttname"><a href="namespacesoftwarecontainer.html#acaa3372166baaae42d0d55577b99308e">softwarecontainer::isDirectoryEmpty</a></div><div class="ttdeci">bool isDirectoryEmpty(const std::string &amp;path)</div><div class="ttdoc">isDirectoryEmpty Check if path is empty </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8cpp_source.html#l00051">softwarecontainer-common.cpp:51</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a44f64c34c09d1ffdb18428b41f0d9e91"><div class="ttname"><a href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">softwarecontainer::isDirectory</a></div><div class="ttdeci">bool isDirectory(const std::string &amp;path)</div><div class="ttdoc">isDirectory Check if path is a directory </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8cpp_source.html#l00046">softwarecontainer-common.cpp:46</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_configuration_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_configuration.html">softwarecontainer::GatewayConfiguration</a></div><div class="ttdef"><b>Definition:</b> <a href="gatewayconfig_8h_source.html#l00028">gatewayconfig.h:28</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a3a71c6d06c86e4f62e7f2b6d7c926f66"><div class="ttname"><a href="namespacesoftwarecontainer.html#a3a71c6d06c86e4f62e7f2b6d7c926f66">softwarecontainer::isFile</a></div><div class="ttdeci">bool isFile(const std::string &amp;path)</div><div class="ttdoc">isFile Check if path is a file </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8cpp_source.html#l00073">softwarecontainer-common.cpp:73</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00051">jsonparser.cpp:51</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -300,7 +307,7 @@ $(document).ready(function(){initNavTree('baseconfigstore_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><a class="el" href="dir_1e0d3fca9063d50ad596a6c51f9cebb4.html">capability</a></li><li class="navelem"><b>baseconfigstore.cpp</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

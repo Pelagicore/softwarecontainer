@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -103,35 +104,36 @@ $(document).ready(function(){initNavTree('containerabstractinterface_8h_source.h
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> std::string &amp;rootFS() <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">virtual</span> std::string toString() = 0;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">virtual</span> ReturnCode initialize() = 0;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">virtual</span> ReturnCode create() = 0;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> ReturnCode start(pid_t *pid) = 0;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">virtual</span> ReturnCode stop() = 0;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> initialize() = 0;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> create() = 0;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> start(pid_t *pid) = 0;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> stop() = 0;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> ReturnCode shutdown() = 0;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">virtual</span> ReturnCode shutdown(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timeout) = 0;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> shutdown() = 0;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> shutdown(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timeout) = 0;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">virtual</span> ReturnCode suspend() = 0;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">virtual</span> ReturnCode resume() = 0;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> suspend() = 0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> resume() = 0;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">virtual</span> ReturnCode destroy() = 0;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> ReturnCode destroy(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timeout) = 0;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> destroy() = 0;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> destroy(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> timeout) = 0;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">virtual</span> ReturnCode mountDevice(<span class="keyword">const</span> std::string &amp;pathInHost) = 0;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">virtual</span> ReturnCode createSymLink(<span class="keyword">const</span> std::string &amp;source, <span class="keyword">const</span> std::string &amp;destination) = 0;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> mountDevice(<span class="keyword">const</span> std::string &amp;pathInHost) = 0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> createSymLink(<span class="keyword">const</span> std::string &amp;source, <span class="keyword">const</span> std::string &amp;destination) = 0;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">bindMountInContainer</a>(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">bindMountInContainer</a>(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                            <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                            <span class="keywordtype">bool</span> readOnly = <span class="keyword">true</span>) = 0;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">virtual</span> ReturnCode setEnvironmentVariable(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value) = 0;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">virtual</span> ReturnCode setCgroupItem(std::string subsys, std::string value) = 0;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> setEnvironmentVariable(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value) = 0;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> setCgroupItem(std::string subsys, std::string value) = 0;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_executable_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_executable.html">softwarecontainer::Executable</a></div><div class="ttdef"><b>Definition:</b> <a href="executable_8h_source.html#l00027">executable.h:27</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_container_abstract_interface_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="containerabstractinterface_8h_source.html#l00028">containerabstractinterface.h:28</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_container_abstract_interface_html_a205a540c45ce7e386f122113578abe79"><div class="ttname"><a href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">softwarecontainer::ContainerAbstractInterface::bindMountInContainer</a></div><div class="ttdeci">virtual ReturnCode bindMountInContainer(const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)=0</div><div class="ttdoc">Tries to bind mount a path from host to container. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -139,7 +141,7 @@ $(document).ready(function(){initNavTree('containerabstractinterface_8h_source.h
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><b>containerabstractinterface.h</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

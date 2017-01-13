@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -105,7 +106,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a307fe479b7000a83582fab008d20e3e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a307fe479b7000a83582fab008d20e3e4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>NetworkGateway</b> (const int32_t <a class="el" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>, const std::string gateway, const uint8_t maskBits)</td></tr>
 <tr class="separator:a307fe479b7000a83582fab008d20e3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad67674d2ce8d329188446e71c14e3a88"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html#ad67674d2ce8d329188446e71c14e3a88">readConfigElement</a> (const json_t *element) override</td></tr>
+<tr class="memitem:ad67674d2ce8d329188446e71c14e3a88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html#ad67674d2ce8d329188446e71c14e3a88">readConfigElement</a> (const json_t *element) override</td></tr>
 <tr class="memdesc:ad67674d2ce8d329188446e71c14e3a88"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. ">Gateway</a> specific parsing of config elements.  <a href="#ad67674d2ce8d329188446e71c14e3a88">More...</a><br /></td></tr>
 <tr class="separator:ad67674d2ce8d329188446e71c14e3a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a08792ecd43b1694222ca286514ee21"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21">activateGateway</a> () override</td></tr>
@@ -116,13 +117,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adf3c1eff6621486ea81748e23cc9cbbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af421b6ffb3db76240a491b2302e78699"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a> ()</td></tr>
 <tr class="separator:af421b6ffb3db76240a491b2302e78699"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a889e0f0ec4060e203972eefe9221f81a"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">setConfig</a> (const std::string &amp;config)</td></tr>
+<tr class="memitem:a889e0f0ec4060e203972eefe9221f81a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">setConfig</a> (const std::string &amp;config)</td></tr>
 <tr class="memdesc:a889e0f0ec4060e203972eefe9221f81a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure this gateway according to the supplied JSON configuration string.  <a href="#a889e0f0ec4060e203972eefe9221f81a">More...</a><br /></td></tr>
 <tr class="separator:a889e0f0ec4060e203972eefe9221f81a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa62fd6a17abb2762b8d62cc85c7750c7"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">activate</a> ()</td></tr>
+<tr class="memitem:aa62fd6a17abb2762b8d62cc85c7750c7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">activate</a> ()</td></tr>
 <tr class="memdesc:aa62fd6a17abb2762b8d62cc85c7750c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies any configuration set by <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a" title="Configure this gateway according to the supplied JSON configuration string. ">setConfig()</a>  <a href="#aa62fd6a17abb2762b8d62cc85c7750c7">More...</a><br /></td></tr>
 <tr class="separator:aa62fd6a17abb2762b8d62cc85c7750c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c01eb992bc9c094f98776b8154e932a"><td class="memItemLeft" align="right" valign="top">virtual ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">teardown</a> ()</td></tr>
+<tr class="memitem:a9c01eb992bc9c094f98776b8154e932a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">teardown</a> ()</td></tr>
 <tr class="memdesc:a9c01eb992bc9c094f98776b8154e932a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore system to the state prior to launching of gateway.  <a href="#a9c01eb992bc9c094f98776b8154e932a">More...</a><br /></td></tr>
 <tr class="separator:a9c01eb992bc9c094f98776b8154e932a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2779e1333424281c1826794c1db82cb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb">setContainer</a> (std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt; container)</td></tr>
@@ -150,7 +151,7 @@ Protected Member Functions</h2></td></tr>
 &lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a> ()</td></tr>
 <tr class="memdesc:a6f0a60c9f29ea869916f7524085b3e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a handle to the associated container.  <a href="#a6f0a60c9f29ea869916f7524085b3e5f">More...</a><br /></td></tr>
 <tr class="separator:a6f0a60c9f29ea869916f7524085b3e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20f57ddde85b938d67104625e774a714"><td class="memItemLeft" align="right" valign="top">ReturnCode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">setEnvironmentVariable</a> (const std::string &amp;variable, const std::string &amp;value)</td></tr>
+<tr class="memitem:a20f57ddde85b938d67104625e774a714"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">setEnvironmentVariable</a> (const std::string &amp;variable, const std::string &amp;value)</td></tr>
 <tr class="memdesc:a20f57ddde85b938d67104625e774a714"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set an environment variable in the associated container.  <a href="#a20f57ddde85b938d67104625e774a714">More...</a><br /></td></tr>
 <tr class="separator:a20f57ddde85b938d67104625e774a714"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -168,7 +169,7 @@ Protected Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::NetworkGateway::readConfigElement </td>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::NetworkGateway::readConfigElement </td>
           <td>(</td>
           <td class="paramtype">const json_t *&#160;</td>
           <td class="paramname"><em>element</em></td><td>)</td>
@@ -196,23 +197,25 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="networkgateway_8cpp_source.html#l00054">54</a> of file <a class="el" href="networkgateway_8cpp_source.html">networkgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>.</p>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00082">softwarecontainer::isSuccess()</a>, and <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;{</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    IPTableEntry e;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    NetworkGatewayParser configParser;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    ReturnCode returnValue = configParser.parseNetworkGatewayConfiguration(element, e);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> returnValue = configParser.parseNetworkGatewayConfiguration(element, e);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (isSuccess(returnValue)) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(returnValue)) {</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        m_entries.push_back(e);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">return</span> returnValue;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a7e308629b69d1bcc3bc5e8ceac9b5a2a"><div class="ttname"><a href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">softwarecontainer::isSuccess</a></div><div class="ttdeci">bool isSuccess(ReturnCode code)</div><div class="ttdoc">isSuccess Check if ReturnCode indicates Success or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00082">softwarecontainer-common.h:82</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_network_gateway_ad67674d2ce8d329188446e71c14e3a88_cgraph.svg" width="675" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_network_gateway_ad67674d2ce8d329188446e71c14e3a88_cgraph.svg" width="675" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -246,7 +249,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="networkgateway_8cpp_source.html#l00070">70</a> of file <a class="el" href="networkgateway_8cpp_source.html">networkgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00120">softwarecontainer::Gateway::getContainer()</a>, and <a class="el" href="gateway_8cpp_source.html#l00115">softwarecontainer::Gateway::hasContainer()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00120">softwarecontainer::Gateway::getContainer()</a>, <a class="el" href="gateway_8cpp_source.html#l00115">softwarecontainer::Gateway::hasContainer()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00082">softwarecontainer::isSuccess()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;{</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;activate was called on an EnvironmentGateway which has no associated container&quot;</span>;</div>
@@ -259,12 +262,12 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;No gateway. Network access will be disabled&quot;</span>;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">if</span> (isError(isBridgeAvailable())) {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(isBridgeAvailable())) {</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Bridge not available, expected gateway to be &quot;</span> &lt;&lt; m_gateway;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (isError(generateIP())) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(generateIP())) {</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
@@ -272,7 +275,7 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> entry : m_entries) {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        FunctionJob job (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>(), [&amp;] () {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">if</span> (isSuccess(entry.applyRules())) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(entry.applyRules())) {</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            }  <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <span class="keywordflow">return</span> 1;</div>
@@ -287,15 +290,17 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    }</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">return</span> isSuccess(returnValue);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(returnValue);</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00115">gateway.cpp:115</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a7e308629b69d1bcc3bc5e8ceac9b5a2a"><div class="ttname"><a href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">softwarecontainer::isSuccess</a></div><div class="ttdeci">bool isSuccess(ReturnCode code)</div><div class="ttdoc">isSuccess Check if ReturnCode indicates Success or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00082">softwarecontainer-common.h:82</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00120">gateway.cpp:120</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_network_gateway_a8a08792ecd43b1694222ca286514ee21_cgraph.svg" width="651" height="82"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_network_gateway_a8a08792ecd43b1694222ca286514ee21_cgraph.svg" width="651" height="220"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -381,7 +386,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Gateway::setConfig </td>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Gateway::setConfig </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>config</em></td><td>)</td>
@@ -414,7 +419,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00024">24</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8h_source.html#l00093">softwarecontainer::Gateway::id()</a>, and <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement()</a>.</p>
+<p>References <a class="el" href="gateway_8h_source.html#l00093">softwarecontainer::Gateway::id()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>, and <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement()</a>.</p>
 
 <p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
@@ -449,7 +454,7 @@ Here is the caller graph for this function:</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (isError(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(element))) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(element))) {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            setConfigRollback(<span class="stringliteral">&quot;Could not read config element&quot;</span>,root);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
@@ -459,13 +464,14 @@ Here is the caller graph for this function:</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    m_state = GatewayState::CONFIGURED;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9f833c193f13516b4ae9e717f834e931"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element)=0</div><div class="ttdoc">Gateway specific parsing of config elements. </div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af421b6ffb3db76240a491b2302e78699"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">softwarecontainer::Gateway::id</a></div><div class="ttdeci">virtual const char * id()</div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00093">gateway.h:93</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_a889e0f0ec4060e203972eefe9221f81a_cgraph.svg" width="391" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_a889e0f0ec4060e203972eefe9221f81a_cgraph.svg" width="391" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -488,7 +494,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Gateway::activate </td>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Gateway::activate </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -570,7 +576,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Gateway::teardown </td>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Gateway::teardown </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -874,7 +880,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ReturnCode softwarecontainer::Gateway::setEnvironmentVariable </td>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Gateway::setEnvironmentVariable </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>variable</em>, </td>
@@ -943,8 +949,8 @@ Here is the caller graph for this function:</div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html">NetworkGateway</a></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:28 for softwarecontainer by
+    <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html">NetworkGateway</a></li>
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:47 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,3 +1,4 @@
 <map id="softwarecontainer::Netlink::Netlink" name="softwarecontainer::Netlink::Netlink">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_netlink.html#a1756adb8382b2ed3c1518567862139c1" title="get a dump of all links, addresses and routes from the kernel. " alt="" coords="187,5,348,47"/>
+<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="396,35,529,76"/>
 </map>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -96,7 +97,7 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        m_containerRootDir += <span class="stringliteral">&quot;/&quot;</span>;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (isError(<a class="code" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">checkWorkspace</a>())) {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">checkWorkspace</a>())) {</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
@@ -105,14 +106,14 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">   40</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">Workspace::checkWorkspace</a>()</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">   40</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">Workspace::checkWorkspace</a>()</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (!isDirectory(m_containerRootDir)) {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">isDirectory</a>(m_containerRootDir)) {</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Container root &quot;</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                    &lt;&lt; m_containerRootDir</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                    &lt;&lt; <span class="stringliteral">&quot; does not exist, trying to create&quot;</span>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">if</span>(isError(<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">createDirectory</a>(m_containerRootDir))) {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">createDirectory</a>(m_containerRootDir))) {</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            log_debug() &lt;&lt; <span class="stringliteral">&quot;Failed to create container root directory&quot;</span>;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        }</div>
@@ -146,17 +147,20 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_aff5073fb683649d6753baae354d202b9"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">softwarecontainer::FileToolkitWithUndo::createDirectory</a></div><div class="ttdeci">ReturnCode createDirectory(const std::string &amp;path)</div><div class="ttdoc">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00068">filetoolkitwithundo.cpp:68</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_workspace_html_af9be59382096de97cfab692bc5c89114"><div class="ttname"><a href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">softwarecontainer::Workspace::checkWorkspace</a></div><div class="ttdeci">ReturnCode checkWorkspace()</div><div class="ttdoc">Check if the workspace is present and create it if needed. </div><div class="ttdef"><b>Definition:</b> <a href="workspace_8cpp_source.html#l00040">workspace.cpp:40</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_workspace_html_a4cca8749e6f3bd90452511ede207f5e5"><div class="ttname"><a href="classsoftwarecontainer_1_1_workspace.html#a4cca8749e6f3bd90452511ede207f5e5">softwarecontainer::Workspace::Workspace</a></div><div class="ttdeci">Workspace()</div><div class="ttdoc">Creates a workspace. </div><div class="ttdef"><b>Definition:</b> <a href="workspace_8cpp_source.html#l00024">workspace.cpp:24</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a44f64c34c09d1ffdb18428b41f0d9e91"><div class="ttname"><a href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">softwarecontainer::isDirectory</a></div><div class="ttdeci">bool isDirectory(const std::string &amp;path)</div><div class="ttdoc">isDirectory Check if path is a directory </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8cpp_source.html#l00046">softwarecontainer-common.cpp:46</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><b>workspace.cpp</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

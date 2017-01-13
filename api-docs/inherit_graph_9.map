@@ -1,7 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_config_error.html" title="softwarecontainer::\lConfigError" alt="" coords="135,37,269,79"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway_error.html" title="softwarecontainer::\lGatewayError" alt="" coords="135,103,269,144"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_gateway_parser_error.html" title="softwarecontainer::\lGatewayParserError" alt="" coords="132,168,272,209"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_config_error.html" title="softwarecontainer::\lConfigError" alt="" coords="135,169,269,211"/>
+<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_gateway_error.html" title="softwarecontainer::\lGatewayError" alt="" coords="135,235,269,276"/>
+<area shape="rect" id="node10" href="$classsoftwarecontainer_1_1_gateway_parser_error.html" title="softwarecontainer::\lGatewayParserError" alt="" coords="132,300,272,341"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_config_dependency_error.html" title="softwarecontainer::\lConfigDependencyError" alt="" coords="320,5,481,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_config_mandatory_error.html" title="softwarecontainer::\lConfigMandatoryError" alt="" coords="326,71,475,112"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_config_file_error.html" title="An error occured in a Glib operation. " alt="" coords="334,71,467,112"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_config_internal_error.html" title="An error occured which is an internal error in the config code. " alt="" coords="334,136,467,177"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_config_mandatory_error.html" title="softwarecontainer::\lConfigMandatoryError" alt="" coords="326,201,475,243"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. " alt="" coords="328,267,473,308"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_config_unknown_error.html" title="A config is found which is not defined in ConfigDefinition. " alt="" coords="329,332,472,373"/>
 </map>

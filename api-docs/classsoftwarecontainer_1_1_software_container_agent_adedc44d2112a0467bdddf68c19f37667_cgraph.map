@@ -1,5 +1,6 @@
 <map id="softwarecontainer::SoftwareContainerAgent::createContainer" name="softwarecontainer::SoftwareContainerAgent::createContainer">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a963368abdad10b1401baec80a7abb327" title="Parse config needed for starting up the container in a correct manner. " alt="" coords="217,5,381,61"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a01b902dd215af783c7863d267758e91e" title="Tries to read a config in json format for a container. " alt="" coords="429,5,593,61"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="641,13,775,54"/>
+<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="445,5,578,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a963368abdad10b1401baec80a7abb327" title="Parse config needed for starting up the container in a correct manner. " alt="" coords="217,63,381,119"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#a01b902dd215af783c7863d267758e91e" title="Tries to read a config in json format for a container. " alt="" coords="429,70,593,126"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="641,77,775,119"/>
 </map>

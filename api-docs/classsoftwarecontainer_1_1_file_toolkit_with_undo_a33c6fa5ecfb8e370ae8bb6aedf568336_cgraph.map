@@ -1,4 +1,5 @@
 <map id="softwarecontainer::FileToolkitWithUndo::bindMount" name="softwarecontainer::FileToolkitWithUndo::bindMount">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74" title="tempDir Creates a temporary directory at templatePath. " alt="" coords="193,5,333,61"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="381,5,521,61"/>
+<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#ae8835f968ab1d43b4a395b0097490734" title="existsInFileSystem Check if path exists " alt="" coords="196,5,331,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74" title="tempDir Creates a temporary directory at templatePath. " alt="" coords="193,70,333,126"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="381,70,521,126"/>
 </map>

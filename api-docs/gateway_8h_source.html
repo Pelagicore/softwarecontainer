@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -147,11 +148,11 @@ $(document).ready(function(){initNavTree('gateway_8h_source.html','');});
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> m_id;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">setConfig</a>(<span class="keyword">const</span> std::string &amp;config);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">setConfig</a>(<span class="keyword">const</span> std::string &amp;config);</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">activate</a>();</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">activate</a>();</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">teardown</a>();</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">teardown</a>();</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb">setContainer</a>(std::shared_ptr&lt;ContainerAbstractInterface&gt; container);</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
@@ -160,13 +161,13 @@ $(document).ready(function(){initNavTree('gateway_8h_source.html','');});
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">isActivated</a>();</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(<span class="keyword">const</span> json_t *element) = 0;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(<span class="keyword">const</span> json_t *element) = 0;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>();</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>();</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">setEnvironmentVariable</a>(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value);</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">setEnvironmentVariable</a>(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value);</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> activateGateway() = 0;</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> teardownGateway() = 0;</div>
@@ -189,9 +190,10 @@ $(document).ready(function(){initNavTree('gateway_8h_source.html','');});
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_error.html">softwarecontainer::GatewayError</a></div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00030">gateway.h:30</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_aa62fd6a17abb2762b8d62cc85c7750c7"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">softwarecontainer::Gateway::activate</a></div><div class="ttdeci">virtual ReturnCode activate()</div><div class="ttdoc">Applies any configuration set by setConfig() </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00074">gateway.cpp:74</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00120">gateway.cpp:120</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a20f57ddde85b938d67104625e774a714"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00145">gateway.cpp:145</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a889e0f0ec4060e203972eefe9221f81a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">softwarecontainer::Gateway::setConfig</a></div><div class="ttdeci">virtual ReturnCode setConfig(const std::string &amp;config)</div><div class="ttdoc">Configure this gateway according to the supplied JSON configuration string. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00024">gateway.cpp:24</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af421b6ffb3db76240a491b2302e78699"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">softwarecontainer::Gateway::id</a></div><div class="ttdeci">virtual const char * id()</div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00093">gateway.h:93</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9c01eb992bc9c094f98776b8154e932a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
@@ -201,7 +203,7 @@ $(document).ready(function(){initNavTree('gateway_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>gateway.h</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -66,240 +67,70 @@ $(document).ready(function(){initNavTree('classsoftwarecontainer_1_1_config.html
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">softwarecontainer::Config Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Represents the <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> main config.  
+<p>Represents the configuration of <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> (the component)  
  <a href="classsoftwarecontainer_1_1_config.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="config_8h_source.html">config.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3295373fde01f6b10fe39bc4232100dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#a3295373fde01f6b10fe39bc4232100dc">Config</a> (std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_loader_abstract_interface.html">ConfigLoaderAbstractInterface</a> &gt; loader, std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_defaults.html">ConfigDefaults</a> &gt; defaults, const std::map&lt; std::string, std::string &gt; &amp;stringOptions=std::map&lt; std::string, std::string &gt;(), const std::map&lt; std::string, int &gt; &amp;intOptions=std::map&lt; std::string, int &gt;(), const std::map&lt; std::string, bool &gt; &amp;boolOptions=std::map&lt; std::string, bool &gt;())</td></tr>
-<tr class="memdesc:a3295373fde01f6b10fe39bc4232100dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a3295373fde01f6b10fe39bc4232100dc">More...</a><br /></td></tr>
-<tr class="separator:a3295373fde01f6b10fe39bc4232100dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab29be3ef62031785b579172cd4c16f23"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#ab29be3ef62031785b579172cd4c16f23">Config</a> (std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_loader_abstract_interface.html">ConfigLoaderAbstractInterface</a> &gt; loader, std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_defaults.html">ConfigDefaults</a> &gt; defaults, <a class="el" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a> &amp;mandatory, std::vector&lt; std::pair&lt; std::string, std::vector&lt; std::string &gt;&gt;&gt; &amp;dependencies, const std::map&lt; std::string, std::string &gt; &amp;stringOptions=std::map&lt; std::string, std::string &gt;(), const std::map&lt; std::string, int &gt; &amp;intOptions=std::map&lt; std::string, int &gt;(), const std::map&lt; std::string, bool &gt; &amp;boolOptions=std::map&lt; std::string, bool &gt;())</td></tr>
-<tr class="memdesc:ab29be3ef62031785b579172cd4c16f23"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO: Find a way to reuse parts of above comment.  <a href="#ab29be3ef62031785b579172cd4c16f23">More...</a><br /></td></tr>
-<tr class="separator:ab29be3ef62031785b579172cd4c16f23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab42ae116ce9fb0d7ae62709547cc0802"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#ab42ae116ce9fb0d7ae62709547cc0802">Config</a> (std::vector&lt; std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_source.html">ConfigSource</a> &gt;&gt; sources, MandatoryConfigs mandatory, ConfigDependencies dependencies)</td></tr>
+<tr class="memdesc:ab42ae116ce9fb0d7ae62709547cc0802"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor - retrieves all configs from the available sources.  <a href="#ab42ae116ce9fb0d7ae62709547cc0802">More...</a><br /></td></tr>
+<tr class="separator:ab42ae116ce9fb0d7ae62709547cc0802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7f2e47598dbdc585d4e15257477493c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#aa7f2e47598dbdc585d4e15257477493c">getStringValue</a> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
 <tr class="memdesc:aa7f2e47598dbdc585d4e15257477493c"><td class="mdescLeft">&#160;</td><td class="mdescRight">getStringValue Get a config value of type string  <a href="#aa7f2e47598dbdc585d4e15257477493c">More...</a><br /></td></tr>
 <tr class="separator:aa7f2e47598dbdc585d4e15257477493c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb17ce7ca54895f2abcce97dc9a73354"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#adb17ce7ca54895f2abcce97dc9a73354">getIntegerValue</a> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
-<tr class="memdesc:adb17ce7ca54895f2abcce97dc9a73354"><td class="mdescLeft">&#160;</td><td class="mdescRight">getIntegerValue Get a config value of type integer  <a href="#adb17ce7ca54895f2abcce97dc9a73354">More...</a><br /></td></tr>
-<tr class="separator:adb17ce7ca54895f2abcce97dc9a73354"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2aafca72117fbf3b673c811f2ff7b78"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#ab2aafca72117fbf3b673c811f2ff7b78">getBooleanValue</a> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
-<tr class="memdesc:ab2aafca72117fbf3b673c811f2ff7b78"><td class="mdescLeft">&#160;</td><td class="mdescRight">getBooleanValue Get a config value of type boolean  <a href="#ab2aafca72117fbf3b673c811f2ff7b78">More...</a><br /></td></tr>
-<tr class="separator:ab2aafca72117fbf3b673c811f2ff7b78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8857c43a07dcaa610f70f6f2f218758"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab8857c43a07dcaa610f70f6f2f218758"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:ab8857c43a07dcaa610f70f6f2f218758"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getGlibValue</b> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
-<tr class="separator:ab8857c43a07dcaa610f70f6f2f218758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80866d60e0e0f3f2def4d58decdcde8c"><td class="memTemplParams" colspan="2"><a class="anchor" id="a80866d60e0e0f3f2def4d58decdcde8c"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a80866d60e0e0f3f2def4d58decdcde8c"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getGlibValue</b> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
-<tr class="separator:a80866d60e0e0f3f2def4d58decdcde8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38cf5c8d69ec485450cb4c2ed69af833"><td class="memTemplParams" colspan="2"><a class="anchor" id="a38cf5c8d69ec485450cb4c2ed69af833"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a38cf5c8d69ec485450cb4c2ed69af833"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getGlibValue</b> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
-<tr class="separator:a38cf5c8d69ec485450cb4c2ed69af833"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a9f6700a1ee011b664d21100dc74da7f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f6700a1ee011b664d21100dc74da7f4"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>SC_CONFIG_PATH_INITIAL_VALUE</b></td></tr>
-<tr class="separator:a9f6700a1ee011b664d21100dc74da7f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cd65a34502d2eb172d506b7a3b64fe6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6cd65a34502d2eb172d506b7a3b64fe6"></a>
-static const int&#160;</td><td class="memItemRight" valign="bottom"><b>PRELOAD_COUNT_INITIAL_VALUE</b></td></tr>
-<tr class="separator:a6cd65a34502d2eb172d506b7a3b64fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcfe079aaff977a5f256bfaeb1050ff4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcfe079aaff977a5f256bfaeb1050ff4"></a>
-static const bool&#160;</td><td class="memItemRight" valign="bottom"><b>KEEP_CONTAINERS_ALIVE_INITIAL_VALUE</b></td></tr>
-<tr class="separator:afcfe079aaff977a5f256bfaeb1050ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1983bf96ab600069d39e79af1077fbc7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1983bf96ab600069d39e79af1077fbc7"></a>
-static const int&#160;</td><td class="memItemRight" valign="bottom"><b>SHUTDOWN_TIMEOUT_INITIAL_VALUE</b></td></tr>
-<tr class="separator:a1983bf96ab600069d39e79af1077fbc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0fbf7c4bedfa7a1d3132c343dfea832"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0fbf7c4bedfa7a1d3132c343dfea832"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>SERVICE_MANIFEST_DIR_INITIAL_VALUE</b></td></tr>
-<tr class="separator:ad0fbf7c4bedfa7a1d3132c343dfea832"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaae34d1e7cb48cbb276a3be5da70a42c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaae34d1e7cb48cbb276a3be5da70a42c"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE</b></td></tr>
-<tr class="separator:aaae34d1e7cb48cbb276a3be5da70a42c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0c2dd5a9860f942100bb2507e549ca3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0c2dd5a9860f942100bb2507e549ca3"></a>
-static const bool&#160;</td><td class="memItemRight" valign="bottom"><b>USE_SESSION_BUS_INITIAL_VALUE</b></td></tr>
-<tr class="separator:ac0c2dd5a9860f942100bb2507e549ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab042f17b4b9acdcc804eb9efe718b00b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab042f17b4b9acdcc804eb9efe718b00b"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>SC_GROUP</b></td></tr>
-<tr class="separator:ab042f17b4b9acdcc804eb9efe718b00b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8fa3b02ed76102c77e557db0d5fb22a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8fa3b02ed76102c77e557db0d5fb22a"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>PRELOAD_COUNT_KEY</b></td></tr>
-<tr class="separator:ad8fa3b02ed76102c77e557db0d5fb22a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9b389d1bd131cac300e37dedc92d185"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae9b389d1bd131cac300e37dedc92d185"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>KEEP_CONTAINERS_ALIVE_KEY</b></td></tr>
-<tr class="separator:ae9b389d1bd131cac300e37dedc92d185"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5963b77ba4e52777f865ab89585de62d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5963b77ba4e52777f865ab89585de62d"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>USE_SESSION_BUS_KEY</b></td></tr>
-<tr class="separator:a5963b77ba4e52777f865ab89585de62d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a629a0eabd3021bc84ee50c3c63a32455"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a629a0eabd3021bc84ee50c3c63a32455"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>SHUTDOWN_TIMEOUT_KEY</b></td></tr>
-<tr class="separator:a629a0eabd3021bc84ee50c3c63a32455"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71070343c12ce44936e751d300e6f6fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71070343c12ce44936e751d300e6f6fa"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>SHARED_MOUNTS_DIR_KEY</b></td></tr>
-<tr class="separator:a71070343c12ce44936e751d300e6f6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e2b1ee5d75551e1cff03210aaa2d8a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e2b1ee5d75551e1cff03210aaa2d8a7"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>LXC_CONFIG_PATH_KEY</b></td></tr>
-<tr class="separator:a4e2b1ee5d75551e1cff03210aaa2d8a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88496f841d8056d050e23b2965c6e121"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88496f841d8056d050e23b2965c6e121"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>SERVICE_MANIFEST_DIR_KEY</b></td></tr>
-<tr class="separator:a88496f841d8056d050e23b2965c6e121"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa111ce71f4e77000c63709aca42a6542"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa111ce71f4e77000c63709aca42a6542"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_SERVICE_MANIFEST_DIR_KEY</b></td></tr>
-<tr class="separator:aa111ce71f4e77000c63709aca42a6542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a95daa6a9318611f35dff757d3fd98"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#a76a95daa6a9318611f35dff757d3fd98">getIntValue</a> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
+<tr class="memdesc:a76a95daa6a9318611f35dff757d3fd98"><td class="mdescLeft">&#160;</td><td class="mdescRight">getIntValue Get a config value of type int  <a href="#a76a95daa6a9318611f35dff757d3fd98">More...</a><br /></td></tr>
+<tr class="separator:a76a95daa6a9318611f35dff757d3fd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4124e2115ae8de964d4c69a6626c4b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_config.html#ad4124e2115ae8de964d4c69a6626c4b8">getBoolValue</a> (const std::string &amp;group, const std::string &amp;key) const </td></tr>
+<tr class="memdesc:ad4124e2115ae8de964d4c69a6626c4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">getBoolValue Get a config value of type bool  <a href="#ad4124e2115ae8de964d4c69a6626c4b8">More...</a><br /></td></tr>
+<tr class="separator:ad4124e2115ae8de964d4c69a6626c4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Represents the <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> main config. </p>
-<p>A 'config' is a key-value pair, a 'config source' is somewhere that these key-value pairs are defined.</p>
+<div class="textblock"><p>Represents the configuration of <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> (the component) </p>
+<p><a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a> gathers all config items present from config sources, and provides the values for these configs when asked. <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a> handles logic for what is to be considered mandatory or optional, and dependencies between configs.</p>
+<p><a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a> reads all config items from the sources on creation, and stores them for retrieval when users of <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a> asks for a config value.</p>
+<p><a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a> item uniqueness is based on the combination of config group and config key. Therefore, it is OK to have the same key in multiple groups, but a key must be unique within a group.</p>
+<p>Some configs are optional and some are mandatory. A config can become mandatory if some other specified config depends on it. E.g. if an optional config in the main config file is uncommented and thus used, it might mean that other configs are mandatory as a consequence.</p>
+<p>It is an error if a mandatory config can not be found or if one or more dependencies to a config can not be found.</p>
 <p>There are three different config sources:</p><ul>
 <li>Command line options</li>
 <li>Main config file</li>
 <li>Defaults</li>
 </ul>
-<p>Some configs are optional and some are mandatory. A config can become mandatory if some other specified config depends on it. E.g. if an optional config in the main config file is uncommented and thus used, it might mean that other configs are mandatory as a consequence. A mandatory config must always be present in the command line options or in the main config file.</p>
-<p>In the main config file, there are also 'confgig groups' which some might be mandatory and others not. Groups does not exist in the other config sources.</p>
-<p>NOTE: It is an error if a mandatory config is not found in any config source when <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the SoftwareContainer main config. ">Config</a> is initialized.</p>
-<p>NOTE: It is en error if a dependency to a config is not found in any config source when <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the SoftwareContainer main config. ">Config</a> is initialized.</p>
-<p>NOTE: It is an error if a mandatory config group is not found in the main config file when <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the SoftwareContainer main config. ">Config</a> is initialized.</p>
-<p><a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the SoftwareContainer main config. ">Config</a> sources have an order of priority: 1 - Command line options 2 - Main config file 3 - Defaults</p>
-<p>The config sources as considered in the above order, i.e. first command line options etc. As soon as a config is found in a source, the value is returned and less prioritized sources are ignored.</p>
-<p>NOTE: It is an error if a config is requested and not found in any source. </p>
+<p>The config sources as considered in the above order, i.e. first command line options, then the main config file etc. If a config was retrieved from more than one source, i.e. duplicates, only the value of the highest prioritized source will be returned, and the other(s) ignored.</p>
+<p>It is an error if a config requested by the user of <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a> is not found, even if the config is optional. </p>
 
-<p>Definition at line <a class="el" href="config_8h_source.html#l00152">152</a> of file <a class="el" href="config_8h_source.html">config.h</a>.</p>
+<p>Definition at line <a class="el" href="config_8h_source.html#l00067">67</a> of file <a class="el" href="config_8h_source.html">config.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a3295373fde01f6b10fe39bc4232100dc"></a>
+<a class="anchor" id="ab42ae116ce9fb0d7ae62709547cc0802"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">softwarecontainer::Config::Config </td>
           <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_loader_abstract_interface.html">ConfigLoaderAbstractInterface</a> &gt;&#160;</td>
-          <td class="paramname"><em>loader</em>, </td>
+          <td class="paramtype">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_source.html">ConfigSource</a> &gt;&gt;&#160;</td>
+          <td class="paramname"><em>sources</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_defaults.html">ConfigDefaults</a> &gt;&#160;</td>
-          <td class="paramname"><em>defaults</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::map&lt; std::string, std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>stringOptions</em> = <code>std::map&lt;std::string,&#160;std::string&gt;()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::map&lt; std::string, int &gt; &amp;&#160;</td>
-          <td class="paramname"><em>intOptions</em> = <code>std::map&lt;std::string,&#160;int&gt;()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::map&lt; std::string, bool &gt; &amp;&#160;</td>
-          <td class="paramname"><em>boolOptions</em> = <code>std::map&lt;std::string,&#160;bool&gt;()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<p>The optional params takes any potential explicitly set configs, e.g. read as command line options. These values will take precedence over any existing values with the same key in the static configuration.</p>
-<p>If no configs are found among the explicit set configs or in the config file provided by the loader, the default values will be used as a last resort.</p>
-<p>If no explicit configs are to be used, this Constructor can be called by passing only the 'loader' and 'defaults' arguments. Otherwise all parameters needs to be passed.</p>
-<p>It is an error to not provide default configuration values. Not finding values in any of the other sources, i.e. explicit or config file, will not cause an error unless there are problems parsing.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">loader</td><td>An interface to a loader which provides the underlying config to this class </td></tr>
-    <tr><td class="paramname">defaults</td><td>An interface to default configs </td></tr>
-    <tr><td class="paramname">stringOptions</td><td>A string:string map with config keys and corresponding values </td></tr>
-    <tr><td class="paramname">intOptions</td><td>A string:int map with config keys and corresponding values </td></tr>
-    <tr><td class="paramname">boolOptions</td><td>A string:bool map with config keys and corresponding values</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_error.html">ConfigError</a></td><td>On error </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="config_8cpp_source.html#l00049">49</a> of file <a class="el" href="config_8cpp_source.html">config.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                                           :</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    m_loader(std::move(loader)),</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    m_defaults(std::move(defaults)),</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    m_stringOptions(stringOptions),</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    m_intOptions(intOptions),</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    m_boolOptions(boolOptions)</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    loadConfig();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a class="anchor" id="ab29be3ef62031785b579172cd4c16f23"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">softwarecontainer::Config::Config </td>
-          <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_loader_abstract_interface.html">ConfigLoaderAbstractInterface</a> &gt;&#160;</td>
-          <td class="paramname"><em>loader</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_config_defaults.html">ConfigDefaults</a> &gt;&#160;</td>
-          <td class="paramname"><em>defaults</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a> &amp;&#160;</td>
+          <td class="paramtype">MandatoryConfigs&#160;</td>
           <td class="paramname"><em>mandatory</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, std::vector&lt; std::string &gt;&gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>dependencies</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::map&lt; std::string, std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>stringOptions</em> = <code>std::map&lt;std::string,&#160;std::string&gt;()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::map&lt; std::string, int &gt; &amp;&#160;</td>
-          <td class="paramname"><em>intOptions</em> = <code>std::map&lt;std::string,&#160;int&gt;()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::map&lt; std::string, bool &gt; &amp;&#160;</td>
-          <td class="paramname"><em>boolOptions</em> = <code>std::map&lt;std::string,&#160;bool&gt;()</code>&#160;</td>
+          <td class="paramtype">ConfigDependencies&#160;</td>
+          <td class="paramname"><em>dependencies</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -309,80 +140,49 @@ static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>D
       </table>
 </div><div class="memdoc">
 
-<p>TODO: Find a way to reuse parts of above comment. </p>
+<p>Constructor - retrieves all configs from the available sources. </p>
+<p>This constructor retrieves all <a class="el" href="classsoftwarecontainer_1_1_config_item.html" title="Base class for all config item types. ">ConfigItem</a> objects from the available config sources, and keeps them for later access by users of <a class="el" href="classsoftwarecontainer_1_1_config.html" title="Represents the configuration of SoftwareContainer (the component) ">Config</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mandatory</td><td>A reference to a <a class="el" href="classsoftwarecontainer_1_1_mandatory_configs.html">MandatoryConfigs</a> object that specifies what configs will be considered mandatory. </td></tr>
-    <tr><td class="paramname">dependencies</td><td>A list of dependee keys mapping to lists of dependency keys </td></tr>
+    <tr><td class="paramname">sources</td><td>A list of config sources implementing the <a class="el" href="classsoftwarecontainer_1_1_config_source.html" title="Base class for all config sources. ">ConfigSource</a> interface </td></tr>
+    <tr><td class="paramname">mandatory</td><td>Configs that are to be considered mandatory </td></tr>
+    <tr><td class="paramname">dependencies</td><td>Dependee configs and their respective dependencies</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_mandatory_error.html">ConfigMandatoryError</a></td><td>If any mandatory config is missing, i.e. it is not returned by any config source.</td></tr>
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_dependency_error.html">ConfigDependencyError</a></td><td>If one of more dependencies are not met, i.e. there is a config present that has dependencies and all of those dependencies could not be found. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="config_8cpp_source.html#l00063">63</a> of file <a class="el" href="config_8cpp_source.html">config.cpp</a>.</p>
-
-<p>References <a class="el" href="mandatoryconfigs_8cpp_source.html#l00038">softwarecontainer::MandatoryConfigs::configs()</a>, <a class="el" href="config_8cpp_source.html#l00139">getBooleanValue()</a>, <a class="el" href="config_8cpp_source.html#l00134">getIntegerValue()</a>, <a class="el" href="config_8cpp_source.html#l00129">getStringValue()</a>, and <a class="el" href="mandatoryconfigs_8cpp_source.html#l00043">softwarecontainer::MandatoryConfigs::groups()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                                           :</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    m_loader(std::move(loader)),</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    m_defaults(std::move(defaults)),</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    m_stringOptions(stringOptions),</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    m_intOptions(intOptions),</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    m_boolOptions(boolOptions)</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    loadConfig();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">/* Checking for mandatory config group is only relevant for the main config source</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordflow">for</span> (std::string group : mandatory.groups()) {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Checking for mandatory config group: \&quot;&quot;</span> &lt;&lt; group &lt;&lt; <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">if</span> (!m_config-&gt;has_group(group)) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Missing mandatory config group: \&quot;&quot;</span> + group + <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">throw</span> ConfigMandatoryError(<span class="stringliteral">&quot;Missing mandatory config group: \&quot;&quot;</span> + group + <span class="stringliteral">&quot;\&quot;&quot;</span>);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">/* Check that each mandatory config is present in one of the sources using the normal</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">     * retrieval methods in order to preserve the priority order.</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">for</span> (std::tuple&lt;std::string, std::string, ConfigType&gt; config : mandatory.configs()) {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        std::string group = std::get&lt;0&gt;(config);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        std::string key = std::get&lt;1&gt;(config);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        ConfigType type = std::get&lt;2&gt;(config);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Checking for presence of mandatory config: \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="comment">/* TODO: The below only checks for presence, it should also add the values to something</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment">         *       that can be used for retrieval later. */</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">switch</span> (type) {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keywordflow">case</span> ConfigType::String:</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                    <a class="code" href="classsoftwarecontainer_1_1_config.html#aa7f2e47598dbdc585d4e15257477493c">getStringValue</a>(group, key);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                <span class="keywordflow">case</span> ConfigType::Integer:</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    <a class="code" href="classsoftwarecontainer_1_1_config.html#adb17ce7ca54895f2abcce97dc9a73354">getIntegerValue</a>(group, key);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <span class="keywordflow">case</span> ConfigType::Boolean:</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                    <a class="code" href="classsoftwarecontainer_1_1_config.html#ab2aafca72117fbf3b673c811f2ff7b78">getBooleanValue</a>(group, key);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        } <span class="keywordflow">catch</span> (ConfigError &amp;error) {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Missing mandatory config: \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordflow">throw</span> ConfigMandatoryError(<span class="stringliteral">&quot;Missing mandatory config: \&quot;&quot;</span> + key + <span class="stringliteral">&quot;\&quot;&quot;</span>);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        }</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    }</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_config_html_adb17ce7ca54895f2abcce97dc9a73354"><div class="ttname"><a href="classsoftwarecontainer_1_1_config.html#adb17ce7ca54895f2abcce97dc9a73354">softwarecontainer::Config::getIntegerValue</a></div><div class="ttdeci">int getIntegerValue(const std::string &amp;group, const std::string &amp;key) const </div><div class="ttdoc">getIntegerValue Get a config value of type integer </div><div class="ttdef"><b>Definition:</b> <a href="config_8cpp_source.html#l00134">config.cpp:134</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_config_html_aa7f2e47598dbdc585d4e15257477493c"><div class="ttname"><a href="classsoftwarecontainer_1_1_config.html#aa7f2e47598dbdc585d4e15257477493c">softwarecontainer::Config::getStringValue</a></div><div class="ttdeci">std::string getStringValue(const std::string &amp;group, const std::string &amp;key) const </div><div class="ttdoc">getStringValue Get a config value of type string </div><div class="ttdef"><b>Definition:</b> <a href="config_8cpp_source.html#l00129">config.cpp:129</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_config_html_ab2aafca72117fbf3b673c811f2ff7b78"><div class="ttname"><a href="classsoftwarecontainer_1_1_config.html#ab2aafca72117fbf3b673c811f2ff7b78">softwarecontainer::Config::getBooleanValue</a></div><div class="ttdeci">bool getBooleanValue(const std::string &amp;group, const std::string &amp;key) const </div><div class="ttdoc">getBooleanValue Get a config value of type boolean </div><div class="ttdef"><b>Definition:</b> <a href="config_8cpp_source.html#l00139">config.cpp:139</a></div></div>
+<p>Definition at line <a class="el" href="config_8cpp_source.html#l00029">29</a> of file <a class="el" href="config_8cpp_source.html">config.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                                               :</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    m_sources(std::move(sources)),</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    m_mandatory(mandatory),</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    m_dependencies(dependencies),</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    m_stringConfigs(std::vector&lt;StringConfig&gt;()),</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    m_intConfigs(std::vector&lt;IntConfig&gt;()),</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    m_boolConfigs(std::vector&lt;BoolConfig&gt;()),</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    m_allConfigs(std::vector&lt;UniqueKey&gt;())</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">     * The order of the calls below is important since some methods modifies members that are</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">     * needed in subsequent method calls.</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// Read all ConfigItems from all sources and store them</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    readConfigsFromSources();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="comment">// If any ConfigItem has one or more dependencies which are not present, it is a fatal error</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    assertDependencies();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// If any group-key combo is mandatory and not present, it is a fatal error</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    assertAllMandatoryPresent();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_ab29be3ef62031785b579172cd4c16f23_cgraph.svg" width="371" height="314"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -418,31 +218,37 @@ Here is the call graph for this function:</div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A string with the config value </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A string with the config value</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. ">ConfigNotFoundError</a></td><td>If the config identified with 'group' and 'key' couldn't be found </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Definition at line <a class="el" href="config_8cpp_source.html#l00129">129</a> of file <a class="el" href="config_8cpp_source.html">config.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config_8cpp_source.html#l00063">Config()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00025">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00029">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;{</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">return</span> getValue&lt;std::string&gt;(group, key, m_stringOptions);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">return</span> getConfig(group, key, m_stringConfigs).value();</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_aa7f2e47598dbdc585d4e15257477493c_icgraph.svg" width="384" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_aa7f2e47598dbdc585d4e15257477493c_icgraph.svg" width="384" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="adb17ce7ca54895f2abcce97dc9a73354"></a>
+<a class="anchor" id="a76a95daa6a9318611f35dff757d3fd98"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int softwarecontainer::Config::getIntegerValue </td>
+          <td class="memname">int softwarecontainer::Config::getIntValue </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>group</em>, </td>
@@ -461,7 +267,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>getIntegerValue Get a config value of type integer </p>
+<p>getIntValue Get a config value of type int </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">group</td><td>The name of the config group the value belongs to </td></tr>
@@ -469,31 +275,37 @@ Here is the caller graph for this function:</div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An int with the config value </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An int with the config value</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. ">ConfigNotFoundError</a></td><td>If the config identified with 'group' and 'key' couldn't be found </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Definition at line <a class="el" href="config_8cpp_source.html#l00134">134</a> of file <a class="el" href="config_8cpp_source.html">config.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config_8cpp_source.html#l00063">Config()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00025">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00029">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;{</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keywordflow">return</span> getValue&lt;int&gt;(group, key, m_intOptions);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keywordflow">return</span> getConfig(group, key, m_intConfigs).value();</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_adb17ce7ca54895f2abcce97dc9a73354_icgraph.svg" width="390" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_a76a95daa6a9318611f35dff757d3fd98_icgraph.svg" width="366" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="ab2aafca72117fbf3b673c811f2ff7b78"></a>
+<a class="anchor" id="ad4124e2115ae8de964d4c69a6626c4b8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool softwarecontainer::Config::getBooleanValue </td>
+          <td class="memname">bool softwarecontainer::Config::getBoolValue </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>group</em>, </td>
@@ -512,7 +324,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>getBooleanValue Get a config value of type boolean </p>
+<p>getBoolValue Get a config value of type bool </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">group</td><td>The name of the config group the value belongs to </td></tr>
@@ -520,20 +332,25 @@ Here is the caller graph for this function:</div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A bool with the config value </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A bool with the config value</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. ">ConfigNotFoundError</a></td><td>If the config identified with 'group' and 'key' couldn't be found </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Definition at line <a class="el" href="config_8cpp_source.html#l00139">139</a> of file <a class="el" href="config_8cpp_source.html">config.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="config_8cpp_source.html#l00063">Config()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00025">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00029">softwarecontainer::SoftwareContainerAgent::SoftwareContainerAgent()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;{</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordflow">return</span> getValue&lt;bool&gt;(group, key, m_boolOptions);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;}</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordflow">return</span> getConfig(group, key, m_boolConfigs).value();</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_ab2aafca72117fbf3b673c811f2ff7b78_icgraph.svg" width="398" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_config_ad4124e2115ae8de964d4c69a6626c4b8_icgraph.svg" width="376" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -549,8 +366,8 @@ Here is the caller graph for this function:</div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>softwarecontainer</b></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_config.html">Config</a></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_config.html">Config</a></li>
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

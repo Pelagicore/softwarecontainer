@@ -12,10 +12,21 @@ var hierarchy =
       [ "softwarecontainer::OverlaySyncCleanupHandler", "classsoftwarecontainer_1_1_overlay_sync_cleanup_handler.html", null ]
     ] ],
     [ "softwarecontainer::Config", "classsoftwarecontainer_1_1_config.html", null ],
-    [ "softwarecontainer::ConfigDefaults", "classsoftwarecontainer_1_1_config_defaults.html", null ],
-    [ "softwarecontainer::ConfigLoaderAbstractInterface", "classsoftwarecontainer_1_1_config_loader_abstract_interface.html", [
+    [ "softwarecontainer::ConfigDefinition", "classsoftwarecontainer_1_1_config_definition.html", null ],
+    [ "softwarecontainer::ConfigItem", "classsoftwarecontainer_1_1_config_item.html", [
+      [ "softwarecontainer::BoolConfig", "classsoftwarecontainer_1_1_bool_config.html", null ],
+      [ "softwarecontainer::IntConfig", "classsoftwarecontainer_1_1_int_config.html", null ],
+      [ "softwarecontainer::StringConfig", "classsoftwarecontainer_1_1_string_config.html", null ]
+    ] ],
+    [ "softwarecontainer::ConfigLoader", "classsoftwarecontainer_1_1_config_loader.html", [
       [ "softwarecontainer::FileConfigLoader", "classsoftwarecontainer_1_1_file_config_loader.html", null ]
     ] ],
+    [ "softwarecontainer::ConfigSource", "classsoftwarecontainer_1_1_config_source.html", [
+      [ "softwarecontainer::CommandlineConfigSource", "classsoftwarecontainer_1_1_commandline_config_source.html", null ],
+      [ "softwarecontainer::DefaultConfigSource", "classsoftwarecontainer_1_1_default_config_source.html", null ],
+      [ "softwarecontainer::MainConfigSource", "classsoftwarecontainer_1_1_main_config_source.html", null ]
+    ] ],
+    [ "softwarecontainer::ConfigTypes", "classsoftwarecontainer_1_1_config_types.html", null ],
     [ "softwarecontainer::DBusGatewayParser", "classsoftwarecontainer_1_1_d_bus_gateway_parser.html", null ],
     [ "softwarecontainer::DeviceNodeParser::Device", "structsoftwarecontainer_1_1_device_node_parser_1_1_device.html", null ],
     [ "softwarecontainer::DeviceNodeLogic", "classsoftwarecontainer_1_1_device_node_logic.html", null ],
@@ -24,7 +35,11 @@ var hierarchy =
     [ "exception", null, [
       [ "softwarecontainer::ConfigError", "classsoftwarecontainer_1_1_config_error.html", [
         [ "softwarecontainer::ConfigDependencyError", "classsoftwarecontainer_1_1_config_dependency_error.html", null ],
-        [ "softwarecontainer::ConfigMandatoryError", "classsoftwarecontainer_1_1_config_mandatory_error.html", null ]
+        [ "softwarecontainer::ConfigFileError", "classsoftwarecontainer_1_1_config_file_error.html", null ],
+        [ "softwarecontainer::ConfigInternalError", "classsoftwarecontainer_1_1_config_internal_error.html", null ],
+        [ "softwarecontainer::ConfigMandatoryError", "classsoftwarecontainer_1_1_config_mandatory_error.html", null ],
+        [ "softwarecontainer::ConfigNotFoundError", "classsoftwarecontainer_1_1_config_not_found_error.html", null ],
+        [ "softwarecontainer::ConfigUnknownError", "classsoftwarecontainer_1_1_config_unknown_error.html", null ]
       ] ],
       [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
       [ "softwarecontainer::GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", null ]
@@ -60,7 +75,6 @@ var hierarchy =
       [ "softwarecontainer::FunctionJob", "classsoftwarecontainer_1_1_function_job.html", null ]
     ] ],
     [ "softwarecontainer::JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", null ],
-    [ "softwarecontainer::MandatoryConfigs", "classsoftwarecontainer_1_1_mandatory_configs.html", null ],
     [ "softwarecontainer::Netlink", "classsoftwarecontainer_1_1_netlink.html", null ],
     [ "softwarecontainer::NetworkGatewayParser", "classsoftwarecontainer_1_1_network_gateway_parser.html", null ],
     [ "ObservableProperty< Type >", "class_observable_property.html", [
@@ -74,10 +88,10 @@ var hierarchy =
     [ "softwarecontainer::RecursiveCopy", "classsoftwarecontainer_1_1_recursive_copy.html", null ],
     [ "softwarecontainer::IPTableEntry::Rule", "structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
+    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "com::pelagicore::SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
     ] ],
-    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
     [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ]
 ];

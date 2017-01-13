@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -109,7 +110,7 @@ $(document).ready(function(){initNavTree('devicenodegateway_8h_source.html','');
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">virtual</span> ReturnCode <a class="code" href="classsoftwarecontainer_1_1_device_node_gateway.html#a0734b6ab0ccd33f80c3139962a55f114">readConfigElement</a>(<span class="keyword">const</span> json_t *element) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_device_node_gateway.html#a0734b6ab0ccd33f80c3139962a55f114">readConfigElement</a>(<span class="keyword">const</span> json_t *element) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_device_node_gateway.html#a9e912027cad4fff3ed4d9a9581f45227">activateGateway</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
@@ -121,7 +122,7 @@ $(document).ready(function(){initNavTree('devicenodegateway_8h_source.html','');
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">     * @return success or failure due to state of operation</span></div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    ReturnCode applySettings(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> applySettings(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_device_node_logic.html">DeviceNodeLogic</a> m_logic;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div>
@@ -131,7 +132,8 @@ $(document).ready(function(){initNavTree('devicenodegateway_8h_source.html','');
 <div class="ttc" id="classsoftwarecontainer_1_1_device_node_gateway_html_ac5ed878e6ad4bc97bfecd3862d367b0e"><div class="ttname"><a href="classsoftwarecontainer_1_1_device_node_gateway.html#ac5ed878e6ad4bc97bfecd3862d367b0e">softwarecontainer::DeviceNodeGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00052">devicenodegateway.cpp:52</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_device_node_gateway_html_a0734b6ab0ccd33f80c3139962a55f114"><div class="ttname"><a href="classsoftwarecontainer_1_1_device_node_gateway.html#a0734b6ab0ccd33f80c3139962a55f114">softwarecontainer::DeviceNodeGateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8cpp_source.html#l00033">devicenodegateway.cpp:33</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_device_node_logic_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_device_node_logic.html">softwarecontainer::DeviceNodeLogic</a></div><div class="ttdoc">This class is responsible for storing all device node configurations in a well-formed list...</div><div class="ttdef"><b>Definition:</b> <a href="devicenodelogic_8h_source.html#l00031">devicenodelogic.h:31</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_device_node_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_device_node_gateway.html">softwarecontainer::DeviceNodeGateway</a></div><div class="ttdoc">This gateway is responsible for exposing device nodes in an LXC container. </div><div class="ttdef"><b>Definition:</b> <a href="devicenodegateway_8h_source.html#l00041">devicenodegateway.h:41</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -140,7 +142,7 @@ $(document).ready(function(){initNavTree('devicenodegateway_8h_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_385e7606189d1fb5ca15ea16396c7241.html">devicenode</a></li><li class="navelem"><b>devicenodegateway.h</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

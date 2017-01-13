@@ -1,3 +1,5 @@
 <map id="softwarecontainer::SoftwareContainerAgent::resumeContainer" name="softwarecontainer::SoftwareContainerAgent::resumeContainer">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814" title="Fetches a pointer to a SoftwareContainer matching an ID. " alt="" coords="217,5,381,61"/>
+<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a" title="isSuccess Check if ReturnCode indicates Success or not " alt="" coords="233,85,366,126"/>
+<area shape="rect" id="node4" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="429,85,563,126"/>
 </map>

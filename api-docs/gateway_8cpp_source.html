@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -89,7 +90,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">   24</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">Gateway::setConfig</a>(<span class="keyword">const</span> std::string &amp;config)</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">   24</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">Gateway::setConfig</a>(<span class="keyword">const</span> std::string &amp;config)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordflow">if</span> (m_state == GatewayState::ACTIVATED) {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can not configure a gateway that is already activated: &quot;</span> &lt;&lt; <a class="code" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>();</div>
@@ -122,7 +123,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (isError(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(element))) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">readConfigElement</a>(element))) {</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            setConfigRollback(<span class="stringliteral">&quot;Could not read config element&quot;</span>,root);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
@@ -139,7 +140,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    json_decref(element);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">   74</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">Gateway::activate</a>() {</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">   74</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">Gateway::activate</a>() {</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">if</span> (m_state == GatewayState::ACTIVATED) {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Activate was called on a gateway which was already activated: &quot;</span> &lt;&lt; <a class="code" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>();</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">throw</span> <a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>(<span class="stringliteral">&quot;Gateway already activated&quot;</span>);</div>
@@ -164,7 +165,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">   99</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">Gateway::teardown</a>() {</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">   99</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">Gateway::teardown</a>() {</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">if</span> (m_state != GatewayState::ACTIVATED) {</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Teardown called on non-activated gateway: &quot;</span> &lt;&lt; <a class="code" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>();</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">throw</span> <a class="code" href="classsoftwarecontainer_1_1_gateway_error.html">GatewayError</a>(<span class="stringliteral">&quot;Gateway not previosly activated&quot;</span>);</div>
@@ -210,7 +211,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">return</span> m_state &gt;= GatewayState::ACTIVATED;</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;}</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">  145</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">Gateway::setEnvironmentVariable</a>(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value)</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">  145</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">Gateway::setEnvironmentVariable</a>(<span class="keyword">const</span> std::string &amp;variable, <span class="keyword">const</span> std::string &amp;value)</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;{</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;setEnvironmentVariable(variable, value);</div>
@@ -221,6 +222,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad7679d3dce9fe0e239f3614d6ee667c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00115">gateway.cpp:115</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9f833c193f13516b4ae9e717f834e931"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element)=0</div><div class="ttdoc">Gateway specific parsing of config elements. </div></div>
@@ -228,9 +230,10 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af61045649376dc8972d236465aa2f8eb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">softwarecontainer::Gateway::isConfigured</a></div><div class="ttdeci">virtual bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00135">gateway.cpp:135</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway_error.html">softwarecontainer::GatewayError</a></div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00030">gateway.h:30</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_aa62fd6a17abb2762b8d62cc85c7750c7"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">softwarecontainer::Gateway::activate</a></div><div class="ttdeci">virtual ReturnCode activate()</div><div class="ttdoc">Applies any configuration set by setConfig() </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00074">gateway.cpp:74</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00120">gateway.cpp:120</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a20f57ddde85b938d67104625e774a714"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00145">gateway.cpp:145</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a889e0f0ec4060e203972eefe9221f81a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">softwarecontainer::Gateway::setConfig</a></div><div class="ttdeci">virtual ReturnCode setConfig(const std::string &amp;config)</div><div class="ttdoc">Configure this gateway according to the supplied JSON configuration string. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00024">gateway.cpp:24</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af421b6ffb3db76240a491b2302e78699"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">softwarecontainer::Gateway::id</a></div><div class="ttdeci">virtual const char * id()</div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00093">gateway.h:93</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9c01eb992bc9c094f98776b8154e932a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
@@ -240,7 +243,7 @@ $(document).ready(function(){initNavTree('gateway_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>gateway.cpp</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

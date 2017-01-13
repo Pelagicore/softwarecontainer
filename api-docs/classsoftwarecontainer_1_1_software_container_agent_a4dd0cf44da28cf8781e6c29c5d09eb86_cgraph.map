@@ -1,4 +1,5 @@
 <map id="softwarecontainer::SoftwareContainerAgent::shutdownContainer" name="softwarecontainer::SoftwareContainerAgent::shutdownContainer">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a66b745cd67c87b48a71b368edffaef83" title="delete container by ID " alt="" coords="217,5,381,61"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814" title="Fetches a pointer to a SoftwareContainer matching an ID. " alt="" coords="217,85,381,141"/>
+<area shape="rect" id="node4" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="233,165,366,206"/>
 </map>

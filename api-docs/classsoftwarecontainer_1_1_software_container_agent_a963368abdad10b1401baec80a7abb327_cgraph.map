@@ -1,4 +1,5 @@
 <map id="softwarecontainer::SoftwareContainerAgent::parseConfig" name="softwarecontainer::SoftwareContainerAgent::parseConfig">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_agent.html#a01b902dd215af783c7863d267758e91e" title="Tries to read a config in json format for a container. " alt="" coords="217,5,381,61"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="429,13,563,54"/>
+<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="233,5,366,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container_agent.html#a01b902dd215af783c7863d267758e91e" title="Tries to read a config in json format for a container. " alt="" coords="217,70,381,126"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="429,77,563,119"/>
 </map>

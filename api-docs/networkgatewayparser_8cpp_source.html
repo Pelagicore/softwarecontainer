@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.15.0-ccb5b0c 2017-01-13</span>
+   &#160;<span id="projectnumber">0.16.0-ebaa711 2017-01-13</span>
    </div>
   </td>
  </tr>
@@ -37,6 +37,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -88,7 +89,7 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4">   23</a></span>&#160;ReturnCode <a class="code" href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4">NetworkGatewayParser::parseNetworkGatewayConfiguration</a>(<span class="keyword">const</span> json_t *element, <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html">IPTableEntry</a> &amp;e)</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4">   23</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4">NetworkGatewayParser::parseNetworkGatewayConfiguration</a>(<span class="keyword">const</span> json_t *element, <a class="code" href="classsoftwarecontainer_1_1_i_p_table_entry.html">IPTableEntry</a> &amp;e)</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    std::string chain;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;direction&quot;</span>, chain)) {</div>
@@ -123,7 +124,7 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    json_t *val;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    json_array_foreach(rules, ix, val) {</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (json_is_object(val)) {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">if</span> (isError(parseRule(val, e.m_rules))) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(parseRule(val, e.m_rules))) {</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse rule config&quot;</span>;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            }</div>
@@ -137,7 +138,7 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;ReturnCode NetworkGatewayParser::parseRule(<span class="keyword">const</span> json_t *element, std::vector&lt;IPTableEntry::Rule&gt; &amp;rules)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> NetworkGatewayParser::parseRule(<span class="keyword">const</span> json_t *element, std::vector&lt;IPTableEntry::Rule&gt; &amp;rules)</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">IPTableEntry::Rule</a> r;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
@@ -164,7 +165,7 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;ReturnCode NetworkGatewayParser::parsePort(<span class="keyword">const</span> json_t *element, IPTableEntry::portFilter &amp;ports)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> NetworkGatewayParser::parsePort(<span class="keyword">const</span> json_t *element, IPTableEntry::portFilter &amp;ports)</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;{</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">// Port formatted as single integer means there is only one port</span></div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">if</span> (json_is_integer(element)) {</div>
@@ -214,7 +215,7 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    }</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;}</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;ReturnCode NetworkGatewayParser::parseProtocol(<span class="keyword">const</span> json_t *element,</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> NetworkGatewayParser::parseProtocol(<span class="keyword">const</span> json_t *element,</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                                               std::vector&lt;std::string&gt; &amp;proto)</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;{</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="comment">// Single Protocol</span></div>
@@ -251,9 +252,11 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;}</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_network_gateway_parser_html_a3139a32ac1978488b7a7f9e8474ecea4"><div class="ttname"><a href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration</a></div><div class="ttdeci">ReturnCode parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &amp;e)</div><div class="ttdoc">Parses NetworkGateway configuration into IPTableEntry. </div><div class="ttdef"><b>Definition:</b> <a href="networkgatewayparser_8cpp_source.html#l00023">networkgatewayparser.cpp:23</a></div></div>
 <div class="ttc" id="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule_html"><div class="ttname"><a href="structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html">softwarecontainer::IPTableEntry::Rule</a></div><div class="ttdoc">Definition of a &#39;Rule&#39; used to handle network traffic. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00062">iptableentry.h:62</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: TODO: Complete this. </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00051">jsonparser.cpp:51</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_i_p_table_entry_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_table_entry.html">softwarecontainer::IPTableEntry</a></div><div class="ttdoc">A rules entry for the treatment of packets. </div><div class="ttdef"><b>Definition:</b> <a href="iptableentry_8h_source.html#l00029">iptableentry.h:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -262,7 +265,7 @@ $(document).ready(function(){initNavTree('networkgatewayparser_8cpp_source.html'
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_9714d51461f33f26f35fbf1b742503d5.html">network</a></li><li class="navelem"><b>networkgatewayparser.cpp</b></li>
-    <li class="footer">Generated on Fri Jan 13 2017 12:37:27 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 13 2017 16:02:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
