@@ -526,11 +526,12 @@ ReturnCode Container::bindMountInContainer(const std::string &pathInHost,
     std::string tempPath = gatewaysDir() + "/" + parentPath;
 
     if (isDirectory(pathInHost)) {
-        log_debug() << "Path on host is directory, mounting properly given that";
+        log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
         return bindMountDirectoryInContainer(pathInHost, pathInContainer, tempPath, readOnly);
     } else {
         // This goes for sockets, fifos etc as well.
-        log_debug() << "Path on host is not a directory, mounting assuming it behaves like a file";
+        log_debug() << "Path on host (" << pathInHost << ") is not a directory, "
+                    << "mounting assuming it behaves like a file";
         return bindMountFileInContainer(pathInHost, pathInContainer, tempPath, readOnly);
     }
 }
