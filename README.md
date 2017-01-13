@@ -177,6 +177,10 @@ See servicetest/README.md for more details about these tests.
 All the examples can also be build and tested against the current codebase by
 running run-tests.sh from the examples/ directory.
 
+# Versioning
+We use [semantic versioning](http://semver.org), but we have yet to release
+a first stable 1.0.0 version, so for now, all bets are off.
+
 # License and Copyright
 Copyright (c) 2016 Pelagicore AB
 
