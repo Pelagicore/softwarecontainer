@@ -29,14 +29,15 @@ namespace softwarecontainer {
 
 SoftwareContainerAgent::SoftwareContainerAgent(
         Glib::RefPtr<Glib::MainContext> mainLoopContext,
-        const Config &config):
-    m_mainLoopContext(mainLoopContext)
+        std::shared_ptr<Config> config):
+    m_mainLoopContext(mainLoopContext),
+    m_config(config)
 {
     m_containerIdPool.push_back(0);
 
     // Get all configs for this objects members
     try {
-        m_preloadCount = config.getIntValue(ConfigDefinition::SC_GROUP,
+        m_preloadCount = config->getIntValue(ConfigDefinition::SC_GROUP,
                                             ConfigDefinition::SC_PRELOAD_COUNT_KEY);
 
     } catch (ConfigError &error) {
@@ -48,12 +49,12 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     std::string containerRootDir;
     std::string lxcConfigPath;
     try {
-        shutdownTimeout = config.getIntValue(ConfigDefinition::SC_GROUP,
-                                             ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
-        containerRootDir = config.getStringValue(ConfigDefinition::SC_GROUP,
-                                                 ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);
-        lxcConfigPath = config.getStringValue(ConfigDefinition::SC_GROUP,
-                                              ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
+        shutdownTimeout = m_config->getIntValue(ConfigDefinition::SC_GROUP,
+                                                ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
+        containerRootDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                    ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);
+        lxcConfigPath = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                 ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
     } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -79,10 +80,10 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     std::string serviceManifestDir;
     std::string defaultServiceManifestDir;
     try {
-        serviceManifestDir = config.getStringValue(ConfigDefinition::SC_GROUP,
-                                                   ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);
-        defaultServiceManifestDir = config.getStringValue(ConfigDefinition::SC_GROUP,
-                                                          ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
+        serviceManifestDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                      ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);
+        defaultServiceManifestDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                             ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
     } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -240,8 +241,17 @@ ContainerID SoftwareContainerAgent::findSuitableId()
 
 SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwareContainer(const ContainerID containerID)
 {
+    std::string bridgeIp = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                    ConfigDefinition::SC_BRIDGE_IP_KEY);
+    int netmaskBits = m_config->getIntValue(ConfigDefinition::SC_GROUP,
+                                            ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY);
+
     log_debug() << "Created container with ID :" << containerID;
-    auto container = SoftwareContainerPtr(new SoftwareContainer(m_softwarecontainerWorkspace, containerID));
+
+    auto container = SoftwareContainerPtr(new SoftwareContainer(m_softwarecontainerWorkspace,
+                                                                containerID,
+                                                                bridgeIp,
+                                                                netmaskBits));
     return container;
 }
 

@@ -65,7 +65,7 @@ public:
      *
      * @throws ReturnCode::FAILURE if initialization of the agent fails
      */
-    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, const Config &config);
+    SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, std::shared_ptr<Config> config);
 
     ~SoftwareContainerAgent();
 
@@ -259,6 +259,8 @@ private:
 
     std::shared_ptr<FilteredConfigStore> m_filteredConfigStore;
     std::shared_ptr<DefaultConfigStore>  m_defaultConfigStore;
+
+    std::shared_ptr<Config> m_config;
 };
 
 } // namespace softwarecontainer

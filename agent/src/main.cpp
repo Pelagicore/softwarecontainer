@@ -233,7 +233,9 @@ int main(int argc, char **argv)
         configSources.push_back(std::move(mainConfigs));
         configSources.push_back(std::move(defaultConfigs));
 
-        Config config(std::move(configSources), ConfigDefinition::mandatory(), ConfigDependencies());
+        std::shared_ptr<Config> config = std::make_shared<Config>(std::move(configSources),
+                                                                  ConfigDefinition::mandatory(),
+                                                                  ConfigDependencies());
 
         ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor(new SoftwareContainerAgentAdaptor(agent, useSessionBus));

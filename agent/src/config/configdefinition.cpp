@@ -22,13 +22,14 @@
 
 
 /**
- * 
  * Developers guide to adding a config item:
- * TODO: Complete this
+ *
  *   * Add a definition of the string used as key
+ *
  *   * If the config will be possible to set with a command line option, also add
  *     an "intial value" set to something which is possible to use for testing if
  *     the user set it, i.e. an "impossible" value.
+ *
  *   * Add an entry for the config to the CONFIGS data
  */
 
@@ -73,8 +74,6 @@ const std::string ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY = "bridge-netmask
 
 
 /*
- * TODO: Document this fully
- *
  * Used to create a mapping between group-key pairs and a type, as well as defining what configs
  * are mandatory.
  *

@@ -83,7 +83,7 @@ public:
                                      "create-bridge = true\n"
                                      "bridge-device = lxcbr0\n"
                                      "bridge-ip = 10.0.3.1\n"
-                                     "bridge-netmask-bits = 24";
+                                     "bridge-netmask-bits = 16";
     const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
 
     void SetUp() override
@@ -95,7 +95,9 @@ public:
         std::vector<std::unique_ptr<ConfigSource>> configSources;
         configSources.push_back(std::move(mainConfig));
 
-        Config config(std::move(configSources), ConfigDefinition::mandatory(), ConfigDependencies());
+        std::shared_ptr<Config> config = std::make_shared<Config>(std::move(configSources),
+                                                                  ConfigDefinition::mandatory(),
+                                                                  ConfigDependencies());
 
         try {
             sca = std::make_shared<SoftwareContainerAgent>(m_context, config);
