@@ -46,7 +46,7 @@ NetworkGateway::NetworkGateway(const int32_t id,
     }
 
     // value of m_netmask interprets maskBits to a mask integer to calculate range.
-    m_netmask = (1L<<(32-maskBits));
+    m_netmask = (1L << (32 - maskBits)) - 1;
 }
 
 NetworkGateway::~NetworkGateway() { }
