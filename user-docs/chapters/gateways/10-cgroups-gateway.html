@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CGroups gateway &#8212; softwarecontainer 0.16.0-7fae361 2017-01-16 documentation</title>
+    <title>CGroups gateway &#8212; softwarecontainer 0.16.0-558e82a 2017-01-16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.16.0-7fae361 2017-01-16',
+        VERSION:     '0.16.0-558e82a 2017-01-16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -55,11 +55,24 @@ is a string in the format &lt;cgroup subsystem&gt;.&lt;setting&gt; and the <code
 with the value to apply.</p>
 <p>No syntax or other checks for correctness is performed on the key/value pairs,
 see the <cite>lxc.container.conf</cite> man page for more details about valid settings.</p>
-<p>Before appying the configuration it is advised to check if the cgroup option is enabled in
-the system&#8217;s kernel. Following command will list available cgroup options:</p>
+</div>
+<div class="section" id="kernel-options">
+<h2>Kernel Options<a class="headerlink" href="#kernel-options" title="Permalink to this headline">¶</a></h2>
+<p>To be able to limit memory usage with cgroups, <code class="docutils literal"><span class="pre">CONFIG_CGROUPS</span></code>, <code class="docutils literal"><span class="pre">CONFIG_MEMCG</span></code> and
+<code class="docutils literal"><span class="pre">CONFIG_MEMCG_SWAP</span></code> should be enabled. Before appying the configuration it is
+advised to check if the cgroup option is enabled with swapaccount=1 feauture in the system&#8217;s
+kernel. The Following command will list available cgroup options:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">cgroup</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="limiting-memory">
+<h2>Limiting Memory<a class="headerlink" href="#limiting-memory" title="Permalink to this headline">¶</a></h2>
+<p>To be able to limit memory, <code class="docutils literal"><span class="pre">memory.limit_in_bytes</span></code> should be set to desired value with gateway
+configuration options. The operating system also uses swap memory which means if limiting rss and swap
+memories is the desired action then <code class="docutils literal"><span class="pre">memory.memsw.limit_in_bytes</span></code> setting should also be specified
+in gateway configuration. Note that value of <code class="docutils literal"><span class="pre">memory.memsw.limit_in_bytes</span></code> indicates rss + swap
+memory, thus it cannot be less than <code class="docutils literal"><span class="pre">memory.limit_in_bytes</span></code>.</p>
 </div>
 <div class="section" id="whitelisting">
 <h2>Whitelisting<a class="headerlink" href="#whitelisting" title="Permalink to this headline">¶</a></h2>
@@ -73,18 +86,22 @@ will be set. For all other settings the last value will be set.</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="p">[</span>
     <span class="p">{</span>
         <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.limit_in_bytes&quot;</span><span class="p">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;12000&quot;</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;12000000&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.limit_in_bytes&quot;</span><span class="p">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;500&quot;</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;5000&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;memory.memsw.limit_in_bytes&quot;</span><span class="p">,</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;12000000&quot;</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 <p>The root object is an array of setting key/value pair objects. Each key/value pair
 must have the <code class="docutils literal"><span class="pre">setting</span></code> and <code class="docutils literal"><span class="pre">value</span></code> defined. In the example above value of memory.limit_in_bytes
-will be set to 12000 due to whitelisting policy mentioned above.</p>
+will be set to 12000000 due to whitelisting policy mentioned above.</p>
 </div>
 </div>
 
@@ -99,6 +116,8 @@ will be set to 12000 due to whitelisting policy mentioned above.</p>
 <li><a class="reference internal" href="#">CGroups gateway</a><ul>
 <li><a class="reference internal" href="#id">ID</a></li>
 <li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#kernel-options">Kernel Options</a></li>
+<li><a class="reference internal" href="#limiting-memory">Limiting Memory</a></li>
 <li><a class="reference internal" href="#whitelisting">Whitelisting</a></li>
 <li><a class="reference internal" href="#example-configurations">Example configurations</a></li>
 </ul>
