@@ -44,6 +44,11 @@ class NetworkGateway :
 public:
     static constexpr const char *ID = "network";
 
+    /**
+     * @brief Creates a network gateway
+     *
+     * @throws SoftwareContainerError if there is an error during initialization.
+     */
     NetworkGateway(const int32_t id,
                    const std::string gateway,
                    const uint8_t maskBits);

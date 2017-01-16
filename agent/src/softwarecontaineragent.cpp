@@ -36,51 +36,33 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     m_containerIdPool.push_back(0);
 
     // Get all configs for the workspace
-    int shutdownTimeout;
-    std::string containerRootDir;
-    std::string lxcConfigPath;
-    try {
-        shutdownTimeout = m_config->getIntValue(ConfigDefinition::SC_GROUP,
-                                                ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
-        containerRootDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
-                                                    ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);
-        lxcConfigPath = m_config->getStringValue(ConfigDefinition::SC_GROUP,
-                                                 ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
-    } catch (ConfigError &error) {
-        throw ReturnCode::FAILURE;
-    }
+    int shutdownTimeout =
+        m_config->getIntValue(ConfigDefinition::SC_GROUP,
+                              ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
+    std::string containerRootDir =
+        m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                 ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);
+    std::string lxcConfigPath =
+        m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                 ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
 
     // Create and set all values on workspace
-    try {
-        m_softwarecontainerWorkspace = std::make_shared<Workspace>();
-        m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
-        m_softwarecontainerWorkspace->m_containerRootDir = containerRootDir;
-        m_softwarecontainerWorkspace->m_containerConfigPath = lxcConfigPath;
-        m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
-    } catch (ReturnCode err) {
-        log_error() << "Failed to set up workspace";
-        throw ReturnCode::FAILURE;
-    }
+    m_softwarecontainerWorkspace = std::make_shared<Workspace>();
+    m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
+    m_softwarecontainerWorkspace->m_containerRootDir = containerRootDir;
+    m_softwarecontainerWorkspace->m_containerConfigPath = lxcConfigPath;
+    m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
 
     // Get all configs for the config stores
-    std::string serviceManifestDir;
-    std::string defaultServiceManifestDir;
-    try {
-        serviceManifestDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
-                                                      ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);
-        defaultServiceManifestDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
-                                                             ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
-    } catch (ConfigError &error) {
-        throw ReturnCode::FAILURE;
-    }
+    std::string serviceManifestDir =
+        m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                 ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);
+    std::string defaultServiceManifestDir =
+        m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                 ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
+    m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
+    m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
 
-    try {
-        m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
-        m_defaultConfigStore = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
-    } catch (ReturnCode err) {
-        log_error() << "Failed to initialize ConfigStore";
-        throw ReturnCode::FAILURE;
-    }
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()

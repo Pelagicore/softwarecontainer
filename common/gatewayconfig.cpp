@@ -28,7 +28,7 @@ GatewayConfiguration::GatewayConfiguration()
 GatewayConfiguration::GatewayConfiguration(const GatewayConfiguration &gwConf)
 {
     if (isError(append(gwConf))) {
-        throw ReturnCode::FAILURE;
+        throw SoftwareContainerError("Failed to create GatewayConfiguration");
     }
 }
 

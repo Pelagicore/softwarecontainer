@@ -35,6 +35,7 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/baseconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/defaultconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/filteredconfigstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/configstoreerror.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/fileconfigloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/commandlineconfigsource.cpp

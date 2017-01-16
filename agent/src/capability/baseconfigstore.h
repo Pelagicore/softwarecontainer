@@ -25,6 +25,7 @@
 #pragma once
 #include "softwarecontainer-common.h"
 #include "gatewayconfig.h"
+#include "configstoreerror.h"
 
 #include <jsonparser.h>
 
@@ -40,7 +41,11 @@ public:
      * (of file type json) in the input path, and stores the Capabilities'
      * Gateway configurations.
      *
-     * @throws ReturnCode::FAILURE if parsing of the json file(s) fails
+     * @throws ServiceManifestPathError if the path to the json file(s) is incorrectly formatted
+     * or if the path is not allowed
+     * @throws ServiceManifestParseError if parsing of the json file(s) fails
+     * @throws CapabilityParseError if parsing of one or more Capabilities or Gateway
+     * Configurations in a file is unsuccessful
      */
     BaseConfigStore(const std::string &filePath);
 
@@ -57,11 +62,10 @@ private:
      * If a capability with the same name already exists in the storage
      * the gateways will be appended to the previously stored gatway list.
      *
-     * @return ReturnCode::SUCCESS if successful
-     * @return ReturnCode::FAILURE if parsing of directory or files is unsuccessful
+     * @throws ServiceManifestPathError if the path to the Service Manifest(s) is not allowed
      *
      */
-    virtual ReturnCode readCapsFromDir(const std::string &dirPath);
+    virtual void readCapsFromDir(const std::string &dirPath);
 
     /**
      * @brief Reads a Service Manifest file, of type json, and adds the
@@ -69,29 +73,28 @@ private:
      * If a capability with the same name already exists in the storage
      * the gateways will be appended to the previously stored gatway list.
      *
-     * @return ReturnCode::SUCCESS if successful
-     * @return ReturnCode::FAILURE if parsing of file is unsuccessful
+     * @throws ServiceManifestParseError if parsing of the file is unsuccessful
+     * @throws CapabilityParseError if parsing of one or more Capabilities in file
+     * is unsuccessful
      *
      */
-    virtual ReturnCode readCapsFromFile(const std::string &filePath);
+    virtual void readCapsFromFile(const std::string &filePath);
 
     /**
      * @brief Parse a JSON object, which should be a JSON array, of capabilities
      * and saves them in the internal storage.
      *
-     * @return ReturnCode::SUCCESS if successful
-     * @return ReturnCode::FAILURE if parsing of files is unsuccessful
+     * @throws CapabilityParseError if parsing of Capabilites is unsuccessful
      */
-    ReturnCode parseCapabilities(json_t *capabilities);
+    void parseCapabilities(json_t *capabilities);
 
     /**
      * @brief Parse a JSON object, which should be a JSON array, of gateway configurations
      * and saves them in the internal storage.
      *
-     * @return ReturnCode::SUCCESS if successful
-     * @return ReturnCode::FAILURE if parsing of gateway configurations is unsuccessful
+     * @throws CapabilityParseError if parsing of gateway configurations is unsuccessful
      */
-    ReturnCode parseGatewayConfigs(std::string capName, json_t *gateways);
+    void parseGatewayConfigs(std::string capName, json_t *gateways);
 
     /**
      * @brief Iterates through the files in a directory and finds all json files.

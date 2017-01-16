@@ -21,6 +21,7 @@
 #pragma once
 
 #include "filetoolkitwithundo.h"
+#include "softwarecontainererror.h"
 
 namespace softwarecontainer {
 
@@ -37,7 +38,7 @@ public:
     /**
      * @brief Creates a workspace.
      *
-     * @throws ReturnCode::FAILURE if there is an error during the setup.
+     * @throws SoftwareContainerError if there is an error during the setup.
      *
      * @param enableWriteBuffer Enable writebuffers on mountpoints
      * @param containerRootDir The path at which the container resides in the host system

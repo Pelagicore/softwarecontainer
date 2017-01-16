@@ -31,6 +31,7 @@
 
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
+#include "softwarecontainererror.h"
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
 #include "config/config.h"
@@ -46,6 +47,35 @@
 namespace softwarecontainer {
 
 static constexpr ContainerID INVALID_CONTAINER_ID = -1;
+
+/**
+ * @brief An error occured in SoftwareContainerAgent
+ *
+ * This exception should be used if an internal error occurs in the
+ * SoftwareContainerAgent.
+ *
+ */
+class SoftwareContainerAgentError : public SoftwareContainerError
+{
+public:
+    SoftwareContainerAgentError():
+        m_message("SoftwareContainer error")
+    {
+    }
+
+    SoftwareContainerAgentError(const std::string &message):
+        m_message(message)
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+
+protected:
+    std::string m_message;
+};
 
 class SoftwareContainerAgent
 {
@@ -63,7 +93,9 @@ public:
      * @param mainLoopContext A Glib::MainContext
      * @param config A general SoftwareContainer config
      *
-     * @throws ReturnCode::FAILURE if initialization of the agent fails
+     * @throws SoftwareContainerAgentError if initialization of the agent fails because of
+     * the Workspace initialization or Preloading
+     * @throws ConfigStoreError if initialization of ConfigStore fails
      */
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, std::shared_ptr<Config> config);
 
@@ -143,7 +175,7 @@ public:
      * @param outputFile where to log any output
      * @param env any environment variables to pass to the command
      * @param listener a function that runs when the process exits
-     * @return process id which belongs to given command
+     * @return process id of the given command
      */
     pid_t execute(ContainerID containerID,
                  const std::string &cmdLine,

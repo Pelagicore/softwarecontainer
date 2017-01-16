@@ -23,25 +23,19 @@ namespace softwarecontainer {
 
 BaseConfigStore::BaseConfigStore(const std::string &inputPath)
 {
-    ReturnCode retval = ReturnCode::SUCCESS;
-
     if (inputPath.empty()) {
         //File path is empty, this is ok
         return;
     }
 
     if (isDirectory(inputPath)) {
-        retval = readCapsFromDir(inputPath);
+        readCapsFromDir(inputPath);
     } else if (isFile(inputPath)) {
-        retval = readCapsFromFile(inputPath);
+        readCapsFromFile(inputPath);
     } else {
-        //Could not find a matching clause
-        log_error() << "\"" << inputPath << "\"" << " does not exist";
-        retval = ReturnCode::FAILURE;
-    }
-
-    if (isError(retval)) {
-        throw ReturnCode::FAILURE;
+        std::string errorMessage = "Path to service manifest does not exist: \"" + inputPath + "\"";
+        log_error() << errorMessage;
+        throw ServiceManifestPathError(errorMessage);
     }
 }
 
@@ -49,147 +43,157 @@ BaseConfigStore::~BaseConfigStore()
 {
 }
 
-ReturnCode BaseConfigStore::readCapsFromDir(const std::string &dirPath)
+void BaseConfigStore::readCapsFromDir(const std::string &dirPath)
 {
+    std::string errorMessage;
+
     if (dirPath.compare("/") == 0) {
-        log_warning() << "Searching for configuration files from root dir not allowed";
-        return ReturnCode::FAILURE;
+        errorMessage = "Searching for configuration files from root dir not allowed";
+        log_error() << errorMessage;
+        throw ServiceManifestPathError(errorMessage);
     }
     if (isDirectoryEmpty(dirPath)) {
         log_warning() << "Path to configuration files is empty: " << dirPath;
-        return ReturnCode::SUCCESS;
+        return;
     }
 
     std::vector<std::string> files = fileList(dirPath);
 
     if (files.empty()) {
         log_info() << "No configuration files found: " << dirPath;
-        return ReturnCode::SUCCESS;
+        return;
     }
 
     for (std::string file : files) {
         std::string filePath = dirPath + file;
 
-        if (isError(readCapsFromFile(filePath))) {
-            log_warning() << "Could not parse a file in directory: " << filePath;
-            return ReturnCode::FAILURE;
-        }
+        readCapsFromFile(filePath);
     }
-
-    return ReturnCode::SUCCESS;
 }
 
-ReturnCode BaseConfigStore::readCapsFromFile(const std::string &filePath)
+void BaseConfigStore::readCapsFromFile(const std::string &filePath)
 {
+    std::string errorMessage;
+
     if (!isJsonFile(filePath)) {
-        log_debug() << "File is not a json file: " << filePath;
-        return ReturnCode::FAILURE;
+        errorMessage = "File is not a json file: " + filePath;
+        log_debug() << errorMessage;
+        throw ServiceManifestParseError(errorMessage);
     }
 
     json_error_t error;
     json_t *fileroot = json_load_file(filePath.c_str(), 0, &error);
 
     if (nullptr == fileroot) {
-        log_error() << "Could not parse Service Manifest: "
-                    << filePath << ":" << error.line <<" : " << error.text;
-        return ReturnCode::FAILURE;
+        errorMessage = "Could not parse Service Manifest: "
+            + filePath + ":" + std::to_string(error.line) + " : " + std::string(error.text);
+        log_error() << errorMessage;
+        throw ServiceManifestParseError(errorMessage);
     } else if (!json_is_object(fileroot)) {
-        log_error() << "Configuration is not a json object: \n"
-                    << filePath << ":" << error.line <<" : " << error.text;
-        return ReturnCode::FAILURE;
+        errorMessage = "Configuration is not a json object: "
+            + filePath + ":" + std::to_string(error.line) + " : " + std::string(error.text);
+        log_error() << errorMessage;
+        throw ServiceManifestParseError(errorMessage);
     }
 
     json_t *capabilities = json_object_get(fileroot, "capabilities");
     if (nullptr == capabilities) {
-        log_error() << "Could not parse Capabilities";
-        return ReturnCode::FAILURE;
+        errorMessage = "Could not parse Capabilities in file: " + filePath;
+        log_error() << errorMessage;
+        throw CapabilityParseError(errorMessage);
     }
     if (!json_is_array(capabilities)) {
-        log_error() << "Capabilities is not an array";
-        return ReturnCode::FAILURE;
+        errorMessage = "Capabilities is not an array, in file: " + filePath;
+        log_error() << errorMessage;
+        throw CapabilityParseError(errorMessage);
     }
 
     // Can't use json_decref on fileroot, it removes objects too early
-
-    return parseCapabilities(capabilities);
+    parseCapabilities(capabilities);
 }
 
-ReturnCode BaseConfigStore::parseCapabilities(json_t *capabilities)
+void BaseConfigStore::parseCapabilities(json_t *capabilities)
 {
     size_t i;
     json_t *capability;
+    std::string errorMessage;
 
     log_debug() << "Size of capabilities is " << std::to_string(json_array_size(capabilities));
 
     json_array_foreach(capabilities, i, capability) {
         if (!json_is_object(capability)) {
-            log_error() << "Capability is not a json object";
-            return ReturnCode::FAILURE;
+            errorMessage = "Capability is not a json object";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
 
         std::string capName;
         if (!JSONParser::read(capability, "name", capName)) {
-            log_error() << "Could not read Capability name";
-            return ReturnCode::FAILURE;
+            errorMessage = "Could not read Capability name";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
 
         json_t *gateways = json_object_get(capability, "gateways");
         if (nullptr == gateways) {
-            log_error() << "Could not read Gateways";
-            return ReturnCode::FAILURE;
+            errorMessage = "Could not read Gateways";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
         if (!json_is_array(gateways)) {
-            log_error() << "Gateways is not an array";
-            return ReturnCode::FAILURE;
+            errorMessage = "Gateways is not an array";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
 
         log_debug() << "Found capability \"" << capName << "\", parsing gateways...";
 
-        ReturnCode parseGatewayResult = parseGatewayConfigs(capName, gateways);
-        if (isError(parseGatewayResult)) {
-            return ReturnCode::FAILURE;
-        }
+        parseGatewayConfigs(capName, gateways);
     }
-    return ReturnCode::SUCCESS;
 }
 
-ReturnCode BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)
+void BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)
 {
     if (m_capMap.count(capName) > 0) {
         log_debug() << "Capability " << capName << " already loaded.";
-        return ReturnCode::SUCCESS;
+        return;
     }
 
     size_t i;
     json_t *gateway;
+    std::string errorMessage;
 
     GatewayConfiguration gwConf;
     json_array_foreach(gateways, i, gateway) {
         if (!json_is_object(gateway)) {
-            log_error() << "Gateway is not a json object";
-            return ReturnCode::FAILURE;
+            errorMessage = "The \"gateway\" key in the Service Manifest is not a json object";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
 
         std::string gwID;
         if (!JSONParser::read(gateway, "id", gwID)) {
-            log_error() << "Could not read Gateway ID";
-            return ReturnCode::FAILURE;
+            errorMessage = "Could not read the ID of the \"gateway\""
+                " object in the Service Manifest";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
 
         json_t *confs = json_object_get(gateway, "config");
         if (nullptr == confs) {
-            log_error() << "Could not read Gateway Config";
-            return ReturnCode::FAILURE;
+            errorMessage = "Could not read the \"gateway\" object's configuration element "
+                "(" + gwID+ ")";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
         if (!json_is_array(confs)) {
-            log_error() << "Gateway Config is not an array";
-            return ReturnCode::FAILURE;
+            errorMessage = "The \"gateway\" object's configuration is not an array (" + gwID+ ")";
+            log_error() << errorMessage;
+            throw CapabilityParseError(errorMessage);
         }
         gwConf.append(gwID, confs);
     }
     m_capMap[capName] = gwConf;
-
-    return ReturnCode::SUCCESS;
 }
 
 std::vector<std::string> BaseConfigStore::fileList(const std::string &dirPath)
