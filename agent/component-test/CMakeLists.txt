@@ -26,7 +26,7 @@ set(AGENT_TEST_LIBRARY_DEPENDENCIES
 
 set(SOFTWARECONTAINERAGENT_TEST_FILES
     main.cpp
-    softwarecontaineragent_unittest.cpp
+    softwarecontaineragent_componenttest.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_common.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
