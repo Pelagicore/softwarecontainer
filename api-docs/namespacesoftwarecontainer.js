@@ -62,6 +62,7 @@ var namespacesoftwarecontainer =
     [ "SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", "classsoftwarecontainer_1_1_software_container" ],
     [ "SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", "classsoftwarecontainer_1_1_software_container_agent" ],
     [ "SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", "classsoftwarecontainer_1_1_software_container_agent_adaptor" ],
+    [ "SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", "classsoftwarecontainer_1_1_software_container_error" ],
     [ "StringConfig", "classsoftwarecontainer_1_1_string_config.html", "classsoftwarecontainer_1_1_string_config" ],
     [ "WaylandGateway", "classsoftwarecontainer_1_1_wayland_gateway.html", "classsoftwarecontainer_1_1_wayland_gateway" ],
     [ "Workspace", "classsoftwarecontainer_1_1_workspace.html", "classsoftwarecontainer_1_1_workspace" ]

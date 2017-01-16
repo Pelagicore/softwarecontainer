@@ -22,5 +22,6 @@ var dir_bdd9a5d540de89e9fe90efdfc6973a4f =
     [ "signalconnectionshandler.h", "signalconnectionshandler_8h_source.html", null ],
     [ "softwarecontainer-common.cpp", "softwarecontainer-common_8cpp_source.html", null ],
     [ "softwarecontainer-common.h", "softwarecontainer-common_8h_source.html", null ],
-    [ "softwarecontainer-log.h", "softwarecontainer-log_8h_source.html", null ]
+    [ "softwarecontainer-log.h", "softwarecontainer-log_8h_source.html", null ],
+    [ "softwarecontainererror.h", "softwarecontainererror_8h_source.html", null ]
 ];
