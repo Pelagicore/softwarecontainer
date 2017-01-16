@@ -18,6 +18,7 @@
  */
 
 #include "cgroupsparser.h"
+#include "cgroupsgateway.h"
 #include "jsonparser.h"
 
 namespace softwarecontainer {
@@ -27,25 +28,79 @@ CGroupsParser::CGroupsParser()
 {
 }
 
-ReturnCode CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
+std::string CGroupsParser::convertToBytes(const std::string settingValue, const int multiply)
+{
+    char *end;
+    long long limit_in_bytes = std::strtoll(settingValue.c_str(), &end, 10);
+    if (limit_in_bytes ==  std::numeric_limits<long long>::max() ||
+        limit_in_bytes ==  std::numeric_limits<long long>::min()) {
+        if (errno == ERANGE) {
+            std::string errMessage = settingValue + " is out of range";
+            log_error() << errMessage;
+            throw LimitRangeError(errMessage);
+        }
+    }
+
+    if (limit_in_bytes > llrint(std::numeric_limits<long long>::max() / multiply)) {
+        std::string errMessage = settingValue + " * " + std::to_string(multiply) + " is out of range";
+        log_error() << errMessage;
+        throw LimitRangeError(errMessage);
+    }
+
+    limit_in_bytes *= multiply;
+    return std::to_string(limit_in_bytes);
+}
+
+std::string CGroupsParser::suffixCorrection(const std::string settingValue)
+{
+    auto suffix = settingValue.back();
+    std::string removeUnit = settingValue;
+    removeUnit.pop_back();
+
+    if (std::isdigit(suffix)) {
+        //the value is digit already no need to do anything
+        return settingValue;
+    } else if ('K' == suffix || 'k' == suffix) {
+        //the value is Kilobyte unit convert it to byte
+        int KB = 1024;
+        return convertToBytes(removeUnit, KB);
+    } else if ('M' == suffix || 'm' == suffix) {
+        //the value is Megabyte unit convert it to byte
+        int MB = 1024 * 1024;
+        return convertToBytes(removeUnit, MB);
+    } else if ('G' == suffix || 'g' == suffix) {
+        //the value is Gigabyte unit convert it to byte
+        int GB = 1024 * 1024 * 1024;
+        return convertToBytes(removeUnit, GB);
+    }
+    std::string errMessage = "Bad suffix on setting value " + settingValue;
+    log_error() << errMessage;
+    throw BadSuffixError(errMessage);
+}
+
+void CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
 {
     std::string settingKey;
     std::string settingValue;
 
     if (!JSONParser::read(element, "setting", settingKey)) {
-        log_error() << "Key \"setting\" either not a string or not in json configuration";
-        return ReturnCode::FAILURE;
+        std::string errMessage = "Key \"setting\" either not a string or not in json configuration";
+        log_error() << errMessage;
+        throw JSonError(errMessage);
     }
 
     if (!JSONParser::read(element, "value", settingValue)) {
-        log_error() << "Key \"value\" either not a string or not in json configuration";
-        return ReturnCode::FAILURE;
+        std::string errMessage = "Key \"value\" either not a string or not in json configuration";
+        log_error() << errMessage;
+        throw JSonError(errMessage);
     }
 
-    if ("memory.limit_in_bytes" == settingKey) {
+    if (("memory.limit_in_bytes" == settingKey) || ("memory.memsw.limit_in_bytes" == settingKey)) {
+        settingValue = suffixCorrection(settingValue);
+
         if (m_settings.count(settingKey)) {
             // if the new value is greater than old one set is as the value
-            if (std::stoi(m_settings[settingKey]) < std::stoi(settingValue)) {
+            if (std::stoll(m_settings[settingKey]) < std::stoll(settingValue)) {
                 m_settings[settingKey] = settingValue;
             }
         } else {
@@ -55,8 +110,6 @@ ReturnCode CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element
         log_warning() << settingKey << " is not supported by CGroups Gateway" ;
         m_settings[settingKey] = settingValue;
     }
-
-    return ReturnCode::SUCCESS;
 }
 
 const std::map<std::string, std::string> &CGroupsParser::getSettings()

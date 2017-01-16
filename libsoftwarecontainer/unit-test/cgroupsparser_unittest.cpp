@@ -18,6 +18,7 @@
  */
 
 #include "gateway/cgroups/cgroupsparser.h"
+#include "gateway/cgroups/cgroupsgateway.h"
 #include "gateway_parser_common.h"
 
 using namespace softwarecontainer;
@@ -42,7 +43,7 @@ public:
 typedef CGroupsParserTest CGroupsNegativeTest;
 TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
     json_t *configJSON = convertToJSON(config);
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseCGroupsGatewayConfiguration(configJSON));
+    EXPECT_THROW(parser.parseCGroupsGatewayConfiguration(configJSON), JSonError);
     ASSERT_TRUE(parser.getSettings().empty());
 }
 
@@ -53,7 +54,7 @@ TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
 typedef CGroupsParserTest CGroupsPositiveTest;
 TEST_P(CGroupsPositiveTest, SuccessWhenConfigIsGood) {
     json_t *configJSON = convertToJSON(config);
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(configJSON));
+    EXPECT_NO_THROW(parser.parseCGroupsGatewayConfiguration(configJSON));
     ASSERT_FALSE(parser.getSettings().empty());
 }
 
@@ -128,6 +129,68 @@ INSTANTIATE_TEST_CASE_P(CGroupsWhitelistParameters, CGroupsParserWhitelistTests,
             "500"
         },
         testWhitelist{
+            "memory.limit_in_bytes",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"20K\"}",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"100K\"}",
+            "102400"
+        },
+        testWhitelist{
+            "memory.limit_in_bytes",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"100K\"}",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"1M\"}",
+            "1048576"
+        },
+
+        testWhitelist{
+            "memory.limit_in_bytes",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"1G\"}",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"10g\"}",
+            "10737418240"
+        },
+        testWhitelist{
+            "memory.limit_in_bytes",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"127m\"}",
+            "{\"setting\": \"memory.limit_in_bytes\", \"value\": \"12g\"}",
+            "12884901888"
+        },
+        testWhitelist{
+            "memory.memsw.limit_in_bytes",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"20\"}",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"10000\"}",
+            "10000"
+        },
+        testWhitelist{
+            "memory.memsw.limit_in_bytes",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"500\"}",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"10\"}",
+            "500"
+        },
+        testWhitelist{
+            "memory.memsw.limit_in_bytes",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"20K\"}",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"100K\"}",
+            "102400"
+        },
+        testWhitelist{
+            "memory.memsw.limit_in_bytes",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"100K\"}",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"1M\"}",
+            "1048576"
+        },
+
+        testWhitelist{
+            "memory.memsw.limit_in_bytes",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"1G\"}",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"10g\"}",
+            "10737418240"
+        },
+        testWhitelist{
+            "memory.memsw.limit_in_bytes",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"127m\"}",
+            "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"12g\"}",
+            "12884901888"
+        },
+        testWhitelist{
             "unsupported.parameter",
             "{\"setting\": \"unsupported.parameter\", \"value\": \"500\"}",
             "{\"setting\": \"unsupported.parameter\", \"value\": \"10\"}",
@@ -146,10 +209,10 @@ INSTANTIATE_TEST_CASE_P(CGroupsWhitelistParameters, CGroupsParserWhitelistTests,
  */
 TEST_P(CGroupsParserWhitelistTests, WithRelevantKeys) {
     json_t *firstConfig = convertToJSON(testparams.firstConfig);
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(firstConfig));
+    EXPECT_NO_THROW(parser.parseCGroupsGatewayConfiguration(firstConfig));
 
     json_t *nextConfig = convertToJSON(testparams.nextConfig);
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseCGroupsGatewayConfiguration(nextConfig));
+    EXPECT_NO_THROW(parser.parseCGroupsGatewayConfiguration(nextConfig));
 
     auto settings = parser.getSettings();
     ASSERT_EQ(settings[testparams.key], testparams.expectedValue);

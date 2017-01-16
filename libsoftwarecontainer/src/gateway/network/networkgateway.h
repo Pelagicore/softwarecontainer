@@ -150,7 +150,7 @@ class IPAllocationError : public NetworkGatewayError
 {
 public:
     IPAllocationError():
-        NetworkGatewayError("An error is occured when trying to generate IP address")
+        NetworkGatewayError("An error is occurred when trying to generate IP address")
     {
     }
 

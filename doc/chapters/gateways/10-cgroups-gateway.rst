@@ -35,12 +35,16 @@ memories is the desired action then ``memory.memsw.limit_in_bytes`` setting shou
 in gateway configuration. Note that value of ``memory.memsw.limit_in_bytes`` indicates rss + swap
 memory, thus it cannot be less than ``memory.limit_in_bytes``.
 
+Also note that the one can use a suffix (k, K, m, M, g or G) to indicate values in kilo,
+mega or gigabytes when setting ``memory.limit_in_bytes`` or ``memory.memsw.limit_in_bytes``.
+
 Whitelisting
 ------------
 
-This gateway has a whitelisting policy only when the setting is memory.limit_in_bytes. If the
-gateway is configured multiple times whith the memory.limit_in_bytes setting, the bigger value
-will be set. For all other settings the last value will be set.
+This gateway has a whitelisting policy only when the setting is either ``memory.limit_in_bytes` or
+``memory.memsw.limit_in_bytes``. If the gateway is configured multiple times whith either one of
+``memory.limit_in_bytes`` setting or ``memory.memsw.limit_in_byte``, the bigger value will be set.
+For all other settings the last value will be set.
 
 Example configurations
 ----------------------
