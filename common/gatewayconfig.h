@@ -22,6 +22,7 @@
 #include <map>
 #include "jansson.h"
 #include "softwarecontainer-common.h"
+#include "softwarecontainererror.h"
 
 namespace softwarecontainer {
 
@@ -29,8 +30,15 @@ class GatewayConfiguration {
     LOG_DECLARE_CLASS_CONTEXT("GWCF", "GatewayConfig");
 
 public:
+    /**
+     * @brief Creates a new GatewayConfiguration object
+     *
+     * @throws SoftwareContainerError if initialization fails.
+     */
     GatewayConfiguration();
+
     GatewayConfiguration(const GatewayConfiguration &gwConf);
+
     ~GatewayConfiguration();
 
     ReturnCode append(const std::string &id, json_t *conf);

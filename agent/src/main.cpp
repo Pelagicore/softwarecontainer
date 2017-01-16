@@ -242,11 +242,8 @@ int main(int argc, char **argv)
 
         log_debug() << "Exiting softwarecontainer agent";
         return 0;
-    } catch (ConfigError &error) {
-        log_error() << "Could not load configuration";
-        return 1;
-    } catch (ReturnCode failure) {
-        log_error() << "Agent initialization failed";
+    } catch (SoftwareContainerError &error) {
+        log_error() << std::string(error.what());
         return 1;
     }
 }

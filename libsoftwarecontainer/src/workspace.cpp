@@ -29,7 +29,7 @@ Workspace::Workspace()
     }
 
     if (isError(checkWorkspace())) {
-        throw ReturnCode::FAILURE;
+        throw SoftwareContainerError("Failed to initialize Workspace");
     }
 }
 

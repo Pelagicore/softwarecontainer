@@ -73,14 +73,14 @@ TEST_F(ConfigStoreTest, constructorFileOk2) {
  * should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilFile) {
-    ASSERT_THROW(BaseConfigStore(testDataDir + evilManifest), ReturnCode);
+    ASSERT_THROW(BaseConfigStore(testDataDir + evilManifest), CapabilityParseError);
 }
 
 /* Constructing a BaseConfigStore with a directory path,
  * that contains a file that can't be parsed results in an exception.
  */
 TEST_F(ConfigStoreTest, constructorDir) {
-    ASSERT_THROW(BaseConfigStore(testDataDir + ""), ReturnCode);
+    ASSERT_THROW(BaseConfigStore(testDataDir + ""), CapabilityParseError);
 }
 
 /* Constructing a FilteredConfigStore with a directory path,
@@ -96,14 +96,14 @@ TEST_F(ConfigStoreTest, constructorDir2) {
  * when the directory does not exist, should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilDir) {
-    ASSERT_THROW(BaseConfigStore("/home/tester"), ReturnCode);
+    ASSERT_THROW(BaseConfigStore("/home/tester"), ConfigStoreError);
 }
 
 /* Constructing a FilteredConfigStore with a directory path,
  * when the directory is "/", should throw an exception of type ReturnCode.
  */
 TEST_F(ConfigStoreTest, constructorEvilDir2) {
-    ASSERT_THROW(FilteredConfigStore("/"), ReturnCode);
+    ASSERT_THROW(FilteredConfigStore("/"), ServiceManifestPathError);
 }
 
 /* Reading gateway configurations from a Service Manifest file
