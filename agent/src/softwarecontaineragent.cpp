@@ -22,6 +22,7 @@
 #include "softwarecontaineragent.h"
 #include "config/configerror.h"
 #include "config/configdefinition.h"
+#include "softwarecontainererror.h"
 
 namespace softwarecontainer {
 
@@ -119,94 +120,113 @@ bool SoftwareContainerAgent::triggerPreload()
     return true;
 }
 
-inline bool SoftwareContainerAgent::isIdValid(ContainerID containerID)
+void SoftwareContainerAgent::assertContainerExists(ContainerID containerID)
 {
-    return (containerID < INT32_MAX)
-        && (containerID >= 0)
-        && (1 == m_containers.count(containerID));
+    if (containerID >= INT32_MAX) {
+        std::string errorMessage("Invalid Container ID: "
+                                + std::to_string(containerID)
+                                + ". ID can not be greater than INT32");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
+    }
+    
+    if (containerID < 0) {
+        std::string errorMessage("Invalid Container ID: "
+                                + std::to_string(containerID)
+                                + ". ID can not be negative");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
+    }
+    if (1 > m_containers.count(containerID)) {
+        std::string errorMessage("Invalid Container ID: "
+                                + std::to_string(containerID)
+                                + ". No container matching that ID exists.");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
+    }
 }
 
 std::vector<ContainerID> SoftwareContainerAgent::listContainers()
 {
-    std::vector<ContainerID> containers;
+    std::vector<ContainerID> containerIDs;
     for (auto &cont : m_containers) {
-        containers.push_back(cont.first);
+        containerIDs.push_back(cont.first);
     }
 
-    return containers;
+    return containerIDs;
 }
 
-bool SoftwareContainerAgent::deleteContainer(ContainerID containerID)
+void SoftwareContainerAgent::deleteContainer(ContainerID containerID)
 {
-    if (!isIdValid(containerID)) {
-        log_error() << "Invalid container ID " << containerID;
-        return false;
-    }
+    assertContainerExists(containerID);
 
     m_containers.erase(containerID);
     m_containerIdPool.push_back(containerID);
-    return true;
 }
 
 SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::getContainer(ContainerID containerID)
 {
-    if (!isIdValid(containerID)) {
-        log_error() << "Invalid container ID " << containerID;
-        return nullptr;
-    }
-
+    assertContainerExists(containerID);
     return m_containers[containerID];
 }
 
-ReturnCode SoftwareContainerAgent::readConfigElement(const json_t *element)
+void SoftwareContainerAgent::readConfigElement(const json_t *element)
 {
+    if (!json_is_object(element)) {
+        std::string errorMessage("Configure entry is not an object");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
+    }
+
     bool wo = false;
     if(!JSONParser::read(element, "enableWriteBuffer", wo)) {
-        log_debug() << "enableWriteBuffer not found";
+        std::string errorMessage("Could not parse config due to: 'enableWriteBuffer' not found.");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     m_softwarecontainerWorkspace->m_enableWriteBuffer = wo;
-    return ReturnCode::SUCCESS;
 }
 
-bool SoftwareContainerAgent::parseConfig(const std::string &config)
+void SoftwareContainerAgent::parseConfig(const std::string &config)
 {
     if (config.size() == 0) {
-        log_warning() << "No configuration interpreted";
-        return false;
+        std::string errorMessage("Empty JSON config strings are not supported.");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     json_error_t error;
     json_t *root = json_loads(config.c_str(), 0, &error);
 
     if (!root) {
-        log_error() << "Could not parse config: " << error.text;
-        log_error() << config;
-        return false;
+        std::string errorMessage("Could not parse config: "
+                                + std::string(error.text)
+                                + config);
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     if (!json_is_array(root)) {
-        log_error() << "Root JSON element is not an array";
-        return false;
+        std::string errorMessage("Root JSON element is not an array");
+        log_error() << errorMessage;
+        json_decref(root);
+        throw SoftwareContainerError(errorMessage);
     }
 
     size_t index;
     json_t *element;
-    json_array_foreach(root, index, element) {
-        if (!json_is_object(element)) {
-            log_error() << "json configuration is not an object";
-            return false;
-        }
 
-        if (isError(readConfigElement(element))) {
-            log_error() << "Could not read config element";
-            return false;
+    try {
+        json_array_foreach(root, index, element) {
+            readConfigElement(element);
         }
+    } catch (SoftwareContainerError &err) {
+        json_decref(root);
+        throw;
     }
 
     json_decref(root);
-
-    return true;
 }
 
 ContainerID SoftwareContainerAgent::findSuitableId()
@@ -228,24 +248,28 @@ SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwar
     return container;
 }
 
-bool SoftwareContainerAgent::createContainer(const std::string &config, ContainerID &containerID)
+ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 {
     profilepoint("createContainerStart");
     profilefunction("createContainerFunction");
 
-    if (!parseConfig(config)) {
-        log_error() << "The provided config could not be successfully parsed";
-        containerID = INVALID_CONTAINER_ID;
-        return false;
+    try {
+        parseConfig(config);
+    } catch (SoftwareContainerError &err) {
+        std::string errorMessage("The provided config could not be successfully parsed:" + std::string(err.what()));
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     std::pair<ContainerID, SoftwareContainerPtr> pair = std::move(getContainerPair());
     pair.second->setMainLoopContext(m_mainLoopContext);
 
+    ContainerID containerID = pair.first;
+
     if (isError(pair.second->init())) {
-        log_error() << "Could not init the container";
-        containerID = INVALID_CONTAINER_ID;
-        return false;
+        std::string errorMessage("Could not init the container" + std::to_string(containerID));
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     // TODO: Would be nice if this could be done async.
@@ -255,8 +279,7 @@ bool SoftwareContainerAgent::createContainer(const std::string &config, Containe
 
     m_containers.insert(std::move(pair));
 
-    containerID = pair.first;
-    return true;
+    return containerID;
 }
 
 std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareContainerAgent::getContainerPair()
@@ -274,20 +297,19 @@ std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareCon
     return std::make_pair(availableID, std::move(container));
 }
 
-bool SoftwareContainerAgent::execute(ContainerID containerID,
+pid_t SoftwareContainerAgent::execute(ContainerID containerID,
                                      const std::string &cmdLine,
                                      const std::string &workingDirectory,
                                      const std::string &outputFile,
                                      const EnvironmentVariables &env,
-                                     int32_t &pid,
                                      std::function<void (pid_t, int)> listener)
 {
     profilefunction("executeFunction");
     SoftwareContainerPtr container = getContainer(containerID);
     if (!container) {
-        log_error() << "Invalid container ID " << containerID;
-        pid = INVALID_PID;
-        return false;
+        std::string errorMessage("Invalid container ID" + std::to_string(containerID));
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     /*
@@ -302,9 +324,9 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
         log_info() << "Container not configured yet, configuring with default capabilities, if any";
         GatewayConfiguration gatewayConfigs = m_defaultConfigStore->configs();
         if (!updateGatewayConfigs(containerID, gatewayConfigs)) {
-            log_error() << "Could not set default capabilities on container " << containerID;
-            pid = INVALID_PID;
-            return false;
+            std::string errorMessage("Could not set default capabilities on container " + std::to_string(containerID));
+            log_error() << errorMessage;
+            throw SoftwareContainerError(errorMessage);
         }
     }
 
@@ -316,12 +338,11 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
 
     // Start it
     if (isError(job->start())) {
-        log_error() << "Could not start job";
-        pid = INVALID_PID;
-        return false;
+        std::string errorMessage("Could not start job");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
-    pid = job->pid();
     // If things went well, do what we need when it exits
     addProcessListener(m_connections, job->pid(), [listener](pid_t pid, int exitCode) {
         listener(pid, exitCode);
@@ -329,80 +350,69 @@ bool SoftwareContainerAgent::execute(ContainerID containerID,
 
     profilepoint("executeEnd");
 
-    return true;
+    return job->pid();
 }
 
-bool SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
+void SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
 {
     profilefunction("shutdownContainerFunction");
     if (!m_shutdownContainers) {
-        log_info() << "Not shutting down containers, so not shutting down " << containerID;
-        return false;
+        std::string errorMessage("Not shutting down containers, so not shutting down ID: " + std::to_string(containerID));
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     SoftwareContainerPtr container = getContainer(containerID);
     if (!container) {
-        log_error() << "Invalid container ID " << containerID;
-        return false;
+        std::string errorMessage("Invalid container ID " + std::to_string(containerID));
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     int timeout = m_softwarecontainerWorkspace->m_containerShutdownTimeout;
     if (isError(container->shutdown(timeout))) {
-        log_error() << "Could not shut down the container";
-        return false;
+        std::string errorMessage("Could not shut down the container");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
-    if (!deleteContainer(containerID)) {
-        log_error() << "Could not delete the container";
-        return false;
+    try {
+        deleteContainer(containerID);
+    } catch (SoftwareContainerError &err) {
+        std::string errorMessage("Could not delete the container" + std::string(err.what()));
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
-
-    return true;
 }
 
-bool SoftwareContainerAgent::suspendContainer(ContainerID containerID)
+void SoftwareContainerAgent::suspendContainer(ContainerID containerID)
 {
     SoftwareContainerPtr container = getContainer(containerID);
-    if (!container) {
-        log_error() << "Can't suspend container " << containerID;
-        return false;
-    }
-
-    return isSuccess(container->suspend());
+    container->suspend();
 }
 
-bool SoftwareContainerAgent::resumeContainer(ContainerID containerID)
+void SoftwareContainerAgent::resumeContainer(ContainerID containerID)
 {
     SoftwareContainerPtr container = getContainer(containerID);
-    if (!container) {
-        log_error() << "Can't resume container " << containerID;
-        return false;
-    }
-
-    return isSuccess(container->resume());
+    container->resume();
 }
 
-bool SoftwareContainerAgent::bindMount(const ContainerID containerID,
+void SoftwareContainerAgent::bindMount(const ContainerID containerID,
                                        const std::string &pathInHost,
                                        const std::string &pathInContainer,
                                        bool readOnly)
 {
     profilefunction("bindMountFunction");
     SoftwareContainerPtr container = getContainer(containerID);
-    if (!container) {
-        log_error() << "Invalid container ID " << containerID;
-        return false;
-    }
 
     ReturnCode result = container->bindMount(pathInHost,
                                              pathInContainer,
                                              readOnly);
     if (isError(result)) {
-        log_error() << "Unable to bind mount " << pathInHost << " to " << pathInContainer;
-        return false;
+        std::string errorMessage("Unable to bind mount " + pathInHost + " to " + pathInContainer);
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
-
-    return true;
 }
 
 bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID,
@@ -410,12 +420,6 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
 {
     profilefunction("updateGatewayConfigs");
     SoftwareContainerPtr container = getContainer(containerID);
-    if (!container) {
-        log_error() << "Could not update gateway configuration. Container ("
-                    << std::to_string(containerID)
-                    << ") does not exist";
-        return false;
-    }
 
     ReturnCode result = container->startGateways(configs);
     return isSuccess(result);
@@ -426,12 +430,12 @@ std::vector<std::string> SoftwareContainerAgent::listCapabilities()
     return m_filteredConfigStore->IDs();
 }
 
-bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
+void SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
                                              const std::vector<std::string> &capabilities)
 {
     if (capabilities.empty()) {
         log_warning() << "Got empty list of capabilities";
-        return true;
+        return;
     }
 
     GatewayConfiguration gatewayConfigs = m_defaultConfigStore->configs();
@@ -439,19 +443,19 @@ bool SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
 
     // If we get an empty config the user passed a non existent cap name
     if (filteredConfigs.empty()) {
-        log_debug() << "One or more capabilities were not found";
-        return false;
+        std::string errorMessage("One or more capabilities were not found");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
     gatewayConfigs.append(filteredConfigs);
 
     // Update container gateway configuration
     if (!updateGatewayConfigs(containerID, gatewayConfigs)) {
-        log_error() << "Could not set gateway configuration for capability";
-        return false;
+        std::string errorMessage("Could not set gateway configuration for capability");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
-
-    return true;
 }
 
 

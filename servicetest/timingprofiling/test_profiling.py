@@ -114,7 +114,7 @@ def run_test(num_starts=3):
             container.start(container_data)
 
             # A minimal gateway config so the gateway can be configured and enabled.
-            container.set_capabilities("test.cap.profiling")
+            container.set_capabilities(["test.cap.profiling"])
 
             container.launch_command("/gateways/app/simple")
             apps.append(container)

@@ -30,6 +30,7 @@ from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
 
+from dbus.exceptions import DBusException
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
@@ -94,11 +95,8 @@ class TestContainerQueries(object):
         sc1 = Container()
         sc2 = Container()
         try:
-            container_id_1, success_1 = sc1.start(DATA)
-            container_id_2, success_2 = sc2.start(DATA)
-
-            assert success_1 == True
-            assert success_2 == True
+            container_id_1 = sc1.start(DATA)
+            container_id_2 = sc2.start(DATA)
 
             containers = sc1.list_containers()
             # Both containers should be listed and contain the ID:s of two containers
@@ -121,11 +119,8 @@ class TestContainerQueries(object):
             containers = sc1.list_containers()
             assert len(containers) == 0
 
-            container_id_1, success_1 = sc1.start(DATA)
-            container_id_2, success_2 = sc2.start(DATA)
-
-            assert success_1 == True
-            assert success_2 == True
+            container_id_1 = sc1.start(DATA)
+            container_id_2 = sc2.start(DATA)
 
             # Both containers should be listed and contain the ID:s of two containers
             containers = sc1.list_containers()
@@ -134,13 +129,16 @@ class TestContainerQueries(object):
 
             # Remove one of the containers and verify that it is not still in the list
             # Start a third container at the same time and verify that it is in the list
-            container_id_3, success_3 = sc3.start(DATA)
+            container_id_3 = sc3.start(DATA)
             sc1.terminate()
             containers = sc1.list_containers()
             assert len(containers) == 2
             assert containers.count(container_id_2) == 1 and containers.count(container_id_3) == 1
             assert not containers.count(container_id_1) == 1
         finally:
-            sc1.terminate() # In case it didn't get terminated properly
+            try:
+                sc1.terminate() # In case it didn't get terminated properly
+            except (DBusException):
+                pass
             sc2.terminate()
             sc3.terminate()

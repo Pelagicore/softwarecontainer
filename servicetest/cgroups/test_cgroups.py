@@ -26,6 +26,7 @@ from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
 
+from dbus.exceptions import DBusException
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
@@ -125,8 +126,9 @@ class TestCGroupGateway(object):
             sc = Container()
             sc.start(DATA)
 
-            result = sc.set_capabilities(["test.cap.small.threshold"])
-            assert result is False
+            with pytest.raises(DBusException):
+               sc.set_capabilities(["test.cap.small.threshold"])
+
         finally:
             sc.terminate()
 
@@ -138,20 +140,20 @@ class TestCGroupGateway(object):
             sc = Container()
             sc.start(DATA)
 
-            result = sc.set_capabilities(["test.cap.memory.share"])
-            assert result is True
+            sc.set_capabilities(["test.cap.memory.share"])
 
             memory_limitation = 1024 * 1024 * 1024
-            _, result = sc.launch_command("python " +
-                                           sc.get_bind_dir() +
-                                           "/testhelper.py" +
-                                           " --test-dir " +
-                                           sc.get_bind_dir() +
-                                           " --do-allocate " +
-                                           str(memory_limitation))
-            assert result is True
+            sc.launch_command("python " +
+                              sc.get_bind_dir() +
+                              "/testhelper.py" +
+                              " --test-dir " +
+                              sc.get_bind_dir() +
+                              " --do-allocate " +
+                              str(memory_limitation))
+
             # wait 5 seconds for previous operation to end
             time.sleep(5)
+
             helper = CGroupHelper(CURRENT_DIR)
             allocation_return = helper.result()
             assert allocation_return < memory_limitation
@@ -165,10 +167,9 @@ class TestCGroupGateway(object):
         """
         try:
             sc = Container()
-            cid, _ = sc.start(DATA)
+            cid = sc.start(DATA)
             containerID = "SC-" + str(cid)
-            result = sc.set_capabilities(["test.cap.memory.whitelist"])
-            assert result is True
+            sc.set_capabilities(["test.cap.memory.whitelist"])
             most_permissive_value = 200000
             with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.limit_in_bytes", "r") as fh:
                 limit_in_bytes = int(fh.read())

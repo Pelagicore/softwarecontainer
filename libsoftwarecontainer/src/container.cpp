@@ -43,6 +43,8 @@
 
 #include <libgen.h>
 
+#include "softwarecontainererror.h"
+
 namespace softwarecontainer {
 
 static constexpr const char *LXC_CONTAINERS_ROOT_CONFIG_ITEM = "lxc.lxcpath";
@@ -737,13 +739,14 @@ ReturnCode Container::suspend()
     log_debug() << "Suspending container";
     bool retval = m_container->freeze(m_container);
 
-    if (retval) {
-        m_state = ContainerState::FROZEN;
-        return ReturnCode::SUCCESS;
+    if (!retval) {
+        std::string errorMessage("Could not suspend the container.");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
-    log_error() << "Could not suspend the container";
-    return ReturnCode::FAILURE;
+    m_state = ContainerState::FROZEN;
+    return ReturnCode::SUCCESS;
 }
 
 ReturnCode Container::resume()
@@ -756,13 +759,14 @@ ReturnCode Container::resume()
     log_debug() << "Resuming container";
     bool retval = m_container->unfreeze(m_container);
 
-    if (retval) {
-        m_state = ContainerState::STARTED;
-        return ReturnCode::SUCCESS;
+    if (!retval) {
+        std::string errorMessage("Could not resume the container.");
+        log_error() << errorMessage;
+        throw SoftwareContainerError(errorMessage);
     }
 
-    log_error() << "Could not resume container";
-    return ReturnCode::FAILURE;
+    m_state = ContainerState::STARTED;
+    return ReturnCode::SUCCESS;
 }
 
 const char *Container::id() const

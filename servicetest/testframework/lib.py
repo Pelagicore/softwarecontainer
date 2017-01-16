@@ -195,12 +195,12 @@ class Container():
             environment dictionary are optional. The other arguments required by the D-Bus method
             are set by this helper based on other configs and data passed from the user previously.
         """
-        pid, success = self.__agent.Execute(self.__container_id,
-                                            "{}".format(binary),
-                                            self.__bind_dir,
-                                            stdout,
-                                            env)
-        return pid, (success == dbus.Boolean(True))
+        pid = self.__agent.Execute(self.__container_id,
+                                   "{}".format(binary),
+                                   self.__bind_dir,
+                                   stdout,
+                                   env)
+        return pid
 
 
     def get_bind_dir(self):
@@ -233,42 +233,32 @@ class Container():
             Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMount
             Container.READONLY - fourth argument to SoftwareContainerAgent::BindMount
         """
-        container_id, success = self.__create_container(data[Container.CONFIG])
-        if False == success:
-            print "Failed to create container"
-            return -1, False
+        container_id = self.__create_container(data[Container.CONFIG])
 
-        success = self.__bindmount(data[Container.HOST_PATH],
-                                   data[Container.BIND_MOUNT_DIR],
-                                   data[Container.READONLY])
-        if success is False:
-            print "Failed to bind mount into the container"
-            return -1, False
-        else:
-            self.__bind_dir = data[Container.BIND_MOUNT_DIR]
-            return container_id, True
+        self.__bindmount(data[Container.HOST_PATH],
+                         data[Container.BIND_MOUNT_DIR],
+                         data[Container.READONLY])
+        self.__bind_dir = data[Container.BIND_MOUNT_DIR]
+        return container_id
 
 
     def suspend(self):
         if self.__container_id is not None:
             result = self.__agent.Suspend(self.__container_id)
-            return True if result == dbus.Boolean(True) else False
 
     def resume(self):
         if self.__container_id is not None:
             result = self.__agent.Resume(self.__container_id)
-            return True if result == dbus.Boolean(True) else False
 
     def terminate(self):
         """ Perform teardown of container created by call to 'start'
         """
         if self.__container_id is not None:
             result = self.__agent.Destroy(self.__container_id)
-            return True if result == dbus.Boolean(True) else False
 
     def __create_container(self, config):
-        self.__container_id, success = self.__agent.Create(config)
-        return self.__container_id, success
+        self.__container_id = self.__agent.Create(config)
+        return self.__container_id
 
     def __bindmount(self, host_path, dirname, readonly):
         return self.__agent.BindMount(self.__container_id, host_path, dirname, readonly)

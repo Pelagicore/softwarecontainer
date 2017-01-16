@@ -1,4 +1,5 @@
 #include "softwarecontaineragent_dbus_stub.h"
+#include "softwarecontainererror.h"
 
 Glib::ustring interfaceXml0 = R"XML_DELIMITER(
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -11,7 +12,6 @@ Glib::ustring interfaceXml0 = R"XML_DELIMITER(
         <method name="Create">
             <arg direction="in" type="s" name="config" />
             <arg direction="out" type="i" name="containerID" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="Execute">
@@ -21,22 +21,18 @@ Glib::ustring interfaceXml0 = R"XML_DELIMITER(
             <arg direction="in" type="s" name="outputFile" />
             <arg direction="in" type="a{ss}" name="env" />
             <arg direction="out" type="i" name="pid" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="Suspend">
             <arg direction="in" type="i" name="containerID" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="Resume">
             <arg direction="in" type="i" name="containerID" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="Destroy">
             <arg direction="in" type="i" name="containerID" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="BindMount">
@@ -44,7 +40,6 @@ Glib::ustring interfaceXml0 = R"XML_DELIMITER(
             <arg direction="in" type="s" name="pathInHost" />
             <arg direction="in" type="s" name="pathInContainer" />
             <arg direction="in" type="b" name="readOnly" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <method name="ListCapabilities">
@@ -54,7 +49,6 @@ Glib::ustring interfaceXml0 = R"XML_DELIMITER(
         <method name="SetCapabilities">
             <arg direction="in" type="i" name="containerID" />
             <arg direction="in" type="as" name="capabilities" />
-            <arg direction="out" type="b" name="success" />
         </method>
 
         <signal name="ProcessStateChanged">
@@ -99,134 +93,139 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                    const Glib::VariantContainerBase& parameters,
                    const Glib::RefPtr<Gio::DBus::MethodInvocation>& invocation)
 {
+    try {
+        if (method_name.compare("List") == 0) {
+            List(
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("Create") == 0) {
+            Glib::Variant<Glib::ustring > base_config;
+            parameters.get_child(base_config, 0);
+            Glib::ustring p_config;
+            p_config = base_config.get();
 
-    if (method_name.compare("List") == 0) {
-        List(
-            SoftwareContainerAgentMessageHelper(invocation));
+            Create(
+                Glib::ustring(p_config),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("Execute") == 0) {
+            Glib::Variant<gint32 > base_containerID;
+            parameters.get_child(base_containerID, 0);
+            gint32 p_containerID;
+            p_containerID = base_containerID.get();
+
+            Glib::Variant<Glib::ustring > base_commandLine;
+            parameters.get_child(base_commandLine, 1);
+            Glib::ustring p_commandLine;
+            p_commandLine = base_commandLine.get();
+
+            Glib::Variant<Glib::ustring > base_workingDirectory;
+            parameters.get_child(base_workingDirectory, 2);
+            Glib::ustring p_workingDirectory;
+            p_workingDirectory = base_workingDirectory.get();
+
+            Glib::Variant<Glib::ustring > base_outputFile;
+            parameters.get_child(base_outputFile, 3);
+            Glib::ustring p_outputFile;
+            p_outputFile = base_outputFile.get();
+
+            Glib::Variant<std::map<Glib::ustring, Glib::ustring> > base_env;
+            parameters.get_child(base_env, 4);
+            std::map<Glib::ustring, Glib::ustring> p_env;
+            p_env = base_env.get();
+
+            Execute(
+                (p_containerID),
+                Glib::ustring(p_commandLine),
+                Glib::ustring(p_workingDirectory),
+                Glib::ustring(p_outputFile),
+                SoftwareContainerAgentCommon::glibStringMapToStdStringMap(p_env),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("Suspend") == 0) {
+            Glib::Variant<gint32 > base_containerID;
+            parameters.get_child(base_containerID, 0);
+            gint32 p_containerID;
+            p_containerID = base_containerID.get();
+
+            Suspend(
+                (p_containerID),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("Resume") == 0) {
+            Glib::Variant<gint32 > base_containerID;
+            parameters.get_child(base_containerID, 0);
+            gint32 p_containerID;
+            p_containerID = base_containerID.get();
+
+            Resume(
+                (p_containerID),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("Destroy") == 0) {
+            Glib::Variant<gint32 > base_containerID;
+            parameters.get_child(base_containerID, 0);
+            gint32 p_containerID;
+            p_containerID = base_containerID.get();
+
+            Destroy(
+                (p_containerID),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("BindMount") == 0) {
+            Glib::Variant<gint32 > base_containerID;
+            parameters.get_child(base_containerID, 0);
+            gint32 p_containerID;
+            p_containerID = base_containerID.get();
+
+            Glib::Variant<Glib::ustring > base_pathInHost;
+            parameters.get_child(base_pathInHost, 1);
+            Glib::ustring p_pathInHost;
+            p_pathInHost = base_pathInHost.get();
+
+            Glib::Variant<Glib::ustring > base_pathInContainer;
+            parameters.get_child(base_pathInContainer, 2);
+            Glib::ustring p_pathInContainer;
+            p_pathInContainer = base_pathInContainer.get();
+
+            Glib::Variant<bool > base_readOnly;
+            parameters.get_child(base_readOnly, 3);
+            bool p_readOnly;
+            p_readOnly = base_readOnly.get();
+
+            BindMount(
+                (p_containerID),
+                Glib::ustring(p_pathInHost),
+                Glib::ustring(p_pathInContainer),
+                (p_readOnly),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("ListCapabilities") == 0) {
+            ListCapabilities(
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+        if (method_name.compare("SetCapabilities") == 0) {
+            Glib::Variant<gint32 > base_containerID;
+            parameters.get_child(base_containerID, 0);
+            gint32 p_containerID;
+            p_containerID = base_containerID.get();
+
+            Glib::Variant<std::vector<Glib::ustring> > base_capabilities;
+            parameters.get_child(base_capabilities, 1);
+            std::vector<Glib::ustring> p_capabilities;
+            p_capabilities = base_capabilities.get();
+
+            SetCapabilities(
+                (p_containerID),
+                SoftwareContainerAgentCommon::glibStringVecToStdStringVec(p_capabilities),
+                SoftwareContainerAgentMessageHelper(invocation));
+        }
+    } catch (softwarecontainer::SoftwareContainerError &err) {
+        SoftwareContainerAgentMessageHelper msg(invocation);
+        std::string errorMessage(err.what());
+        msg.returnError(errorMessage);
     }
-    if (method_name.compare("Create") == 0) {
-        Glib::Variant<Glib::ustring > base_config;
-        parameters.get_child(base_config, 0);
-        Glib::ustring p_config;
-        p_config = base_config.get();
-
-        Create(
-            Glib::ustring(p_config),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("Execute") == 0) {
-        Glib::Variant<gint32 > base_containerID;
-        parameters.get_child(base_containerID, 0);
-        gint32 p_containerID;
-        p_containerID = base_containerID.get();
-
-        Glib::Variant<Glib::ustring > base_commandLine;
-        parameters.get_child(base_commandLine, 1);
-        Glib::ustring p_commandLine;
-        p_commandLine = base_commandLine.get();
-
-        Glib::Variant<Glib::ustring > base_workingDirectory;
-        parameters.get_child(base_workingDirectory, 2);
-        Glib::ustring p_workingDirectory;
-        p_workingDirectory = base_workingDirectory.get();
-
-        Glib::Variant<Glib::ustring > base_outputFile;
-        parameters.get_child(base_outputFile, 3);
-        Glib::ustring p_outputFile;
-        p_outputFile = base_outputFile.get();
-
-        Glib::Variant<std::map<Glib::ustring, Glib::ustring> > base_env;
-        parameters.get_child(base_env, 4);
-        std::map<Glib::ustring, Glib::ustring> p_env;
-        p_env = base_env.get();
-
-        Execute(
-            (p_containerID),
-            Glib::ustring(p_commandLine),
-            Glib::ustring(p_workingDirectory),
-            Glib::ustring(p_outputFile),
-            SoftwareContainerAgentCommon::glibStringMapToStdStringMap(p_env),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("Suspend") == 0) {
-        Glib::Variant<gint32 > base_containerID;
-        parameters.get_child(base_containerID, 0);
-        gint32 p_containerID;
-        p_containerID = base_containerID.get();
-
-        Suspend(
-            (p_containerID),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("Resume") == 0) {
-        Glib::Variant<gint32 > base_containerID;
-        parameters.get_child(base_containerID, 0);
-        gint32 p_containerID;
-        p_containerID = base_containerID.get();
-
-        Resume(
-            (p_containerID),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("Destroy") == 0) {
-        Glib::Variant<gint32 > base_containerID;
-        parameters.get_child(base_containerID, 0);
-        gint32 p_containerID;
-        p_containerID = base_containerID.get();
-
-        Destroy(
-            (p_containerID),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("BindMount") == 0) {
-        Glib::Variant<gint32 > base_containerID;
-        parameters.get_child(base_containerID, 0);
-        gint32 p_containerID;
-        p_containerID = base_containerID.get();
-
-        Glib::Variant<Glib::ustring > base_pathInHost;
-        parameters.get_child(base_pathInHost, 1);
-        Glib::ustring p_pathInHost;
-        p_pathInHost = base_pathInHost.get();
-
-        Glib::Variant<Glib::ustring > base_pathInContainer;
-        parameters.get_child(base_pathInContainer, 2);
-        Glib::ustring p_pathInContainer;
-        p_pathInContainer = base_pathInContainer.get();
-
-        Glib::Variant<bool > base_readOnly;
-        parameters.get_child(base_readOnly, 3);
-        bool p_readOnly;
-        p_readOnly = base_readOnly.get();
-
-        BindMount(
-            (p_containerID),
-            Glib::ustring(p_pathInHost),
-            Glib::ustring(p_pathInContainer),
-            (p_readOnly),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("ListCapabilities") == 0) {
-        ListCapabilities(
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    if (method_name.compare("SetCapabilities") == 0) {
-        Glib::Variant<gint32 > base_containerID;
-        parameters.get_child(base_containerID, 0);
-        gint32 p_containerID;
-        p_containerID = base_containerID.get();
-
-        Glib::Variant<std::vector<Glib::ustring> > base_capabilities;
-        parameters.get_child(base_capabilities, 1);
-        std::vector<Glib::ustring> p_capabilities;
-        p_capabilities = base_capabilities.get();
-
-        SetCapabilities(
-            (p_containerID),
-            SoftwareContainerAgentCommon::glibStringVecToStdStringVec(p_capabilities),
-            SoftwareContainerAgentMessageHelper(invocation));
-    }
-    }
+}
 
 void com::pelagicore::SoftwareContainerAgent::on_interface_get_property(Glib::VariantBase& property,
                       const Glib::RefPtr<Gio::DBus::Connection>& connection,

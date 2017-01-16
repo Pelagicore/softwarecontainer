@@ -83,19 +83,22 @@ public:
      * returns all capability names that can be used through setCapabilities.
      *
      * @return a list of capabilities
+     * @throws SoftwareContainerError if not possible to create.
      */
     std::vector<std::string> listCapabilities();
 
     /**
      * @brief delete container by ID
+     * @throws SoftwareContainerError on failure.
      */
-    bool deleteContainer(ContainerID containerID);
+    void deleteContainer(ContainerID containerID);
 
     /**
      * @brief Fetches a pointer to a SoftwareContainer matching an ID.
      *
      * @param containerID the ID for the container
-     * @return Pointer to the matched container if there is such a container. Otherwise return empty pointer.
+     * @return Pointer to the matched container if there is such a container.
+     * @throws SoftwareContainerError on failure.
      */
     SoftwareContainerPtr getContainer(ContainerID containerID);
 
@@ -106,9 +109,9 @@ public:
      * are not gateway specific. These options will be read by this function
      *
      * @param element a config snippet in json format
-     * @return ReturnCode::SUCCESS
+     * @throws SoftwareContainerError on failure.
      */
-    ReturnCode readConfigElement(const json_t *element);
+    void readConfigElement(const json_t *element);
 
     /**
      * @brief Parse config needed for starting up the container in a correct manner.
@@ -118,7 +121,7 @@ public:
      *
      * @param config a configuration string
      */
-    bool parseConfig(const std::string &config);
+    void parseConfig(const std::string &config);
 
     /**
      * @brief Create a new container
@@ -126,9 +129,10 @@ public:
      * @param config container-wide configuration string
      * @param a reference to ContainerID
      *
-     * @return If the container is successfully created true otherwise false
+     * @return ContainerID for the newly created container
+     * @throws SoftwareContainerError if not possible to create.
      */
-    bool createContainer(const std::string &config, ContainerID &containerID);
+    ContainerID createContainer(const std::string &config);
 
     /**
      * @brief Launch the given command in a the given container
@@ -138,38 +142,39 @@ public:
      * @param workingDirectory the working directory to use when running
      * @param outputFile where to log any output
      * @param env any environment variables to pass to the command
-     * @param pid process id which belongs to given command
      * @param listener a function that runs when the process exits
-     * @return true or false indicating whether or not the operation was successful.
+     * @return process id which belongs to given command
      */
-    bool execute(ContainerID containerID,
+    pid_t execute(ContainerID containerID,
                  const std::string &cmdLine,
                  const std::string &workingDirectory,
                  const std::string &outputFile,
                  const EnvironmentVariables &env,
-                 int32_t &pid,
                  std::function<void (pid_t, int)> listener);
 
     /**
      * @brief shuts down a container
      *
      * @param containerID the container to shut down
+     * @throws SoftwareContainerError on failure.
      */
-    bool shutdownContainer(ContainerID containerID);
+    void shutdownContainer(ContainerID containerID);
 
     /**
      * @brief suspends execution of a container
      *
      * @param containerID the container to suspend
+     * @throws SoftwareContainerError on failure.
      */
-    bool suspendContainer(ContainerID containerID);
+    void suspendContainer(ContainerID containerID);
 
     /**
      * @brief resumes execution of a container
      *
      * @param containerID the container to resume
+     * @throws SoftwareContainerError on failure.
      */
-    bool resumeContainer(ContainerID containerID);
+    void resumeContainer(ContainerID containerID);
 
     /**
      * @brief Bind mount a folder into the container
@@ -180,9 +185,9 @@ public:
      * @param readOnly whether or not to mount read-only
      * @param reference to the full path of the mounted folder in the container
      *
-     * @return true or false indicating whether or not the operation was successful.
+     * @throws SoftwareContainerError on failure.
      */
-    bool bindMount(const ContainerID containerID,
+    void bindMount(const ContainerID containerID,
                    const std::string &pathInHost,
                    const std::string &pathInContainer,
                    bool readOnly);
@@ -197,9 +202,9 @@ public:
      * @param containerID the container to use
      * @param capabilities the capabilities
      *
-     * @return true on success, false otherwise
+     * @throws SoftwareContainerError on failure.
     */
-    bool setCapabilities(const ContainerID &containerID,
+    void setCapabilities(const ContainerID &containerID,
                          const std::vector<std::string> &capabilities);
 
     /**
@@ -233,7 +238,7 @@ private:
     // Find a job given a pid
     std::shared_ptr<CommandJob> getJob(pid_t pid);
     // Check if a given containerID is valid
-    inline bool isIdValid (ContainerID containerID);
+    void assertContainerExists(ContainerID containerID);
     // Return a suitable container id
     ContainerID findSuitableId();
 
