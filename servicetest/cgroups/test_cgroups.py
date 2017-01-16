@@ -64,8 +64,10 @@ CONFIG_TEST_MEMORY_SHARE = [
 ]
 
 CONFIG_TEST_WHITELISTING = [
-    {"setting": "memory.limit_in_bytes", "value": "200000"},
-    {"setting": "memory.limit_in_bytes", "value": "100"}
+    {"setting": "memory.limit_in_bytes", "value": "2K"},
+    {"setting": "memory.limit_in_bytes", "value": "1M"},
+    {"setting": "memory.memsw.limit_in_bytes", "value": "10M"},
+    {"setting": "memory.memsw.limit_in_bytes", "value": "100K"}    
 ]
 
 test_cap_0 = Capability("test.cap.small.threshold",
@@ -170,10 +172,15 @@ class TestCGroupGateway(object):
             cid = sc.start(DATA)
             containerID = "SC-" + str(cid)
             sc.set_capabilities(["test.cap.memory.whitelist"])
-            most_permissive_value = 200000
+            most_permissive_value = 1024 * 1024
             with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.limit_in_bytes", "r") as fh:
                 limit_in_bytes = int(fh.read())
-
-            assert limit_in_bytes >= most_permissive_value
+                
+            assert limit_in_bytes == most_permissive_value
+            most_permissive_value = 10 * 1024 * 1024
+            with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.memsw.limit_in_bytes", "r") as fh:
+                memsw_limit = int(fh.read())
+                
+            assert memsw_limit == most_permissive_value
         finally:
             sc.terminate()

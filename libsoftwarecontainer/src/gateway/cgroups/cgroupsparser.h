@@ -19,8 +19,9 @@
 
 #pragma once
 
-#include "softwarecontainer-common.h"
 #include <jansson.h>
+
+#include "softwarecontainer-common.h"
 
 namespace softwarecontainer {
 
@@ -30,7 +31,12 @@ class CGroupsParser
 
 public:
     CGroupsParser();
-    ReturnCode parseCGroupsGatewayConfiguration(const json_t *element);
+    /*
+     * @brief Parse given configuration element to the settings
+     *
+     * @param element : represents configuration element
+     */
+    void parseCGroupsGatewayConfiguration(const json_t *element);
 
     /*
      * @brief Get the map of cgroup settings
@@ -40,6 +46,25 @@ public:
     const std::map<std::string, std::string> &getSettings();
 private :
     std::map<std::string, std::string> m_settings;
+
+    /*
+     * @brief Regulate the setting value due to its multiplier
+     *
+     * @param settingValue : decimal value without unit information
+     * @param multiply     : multiplication value either KB, MB or GB
+     *
+     * @return A string to regulated final value
+     */
+    std::string convertToBytes(const std::string settingValue, const int multiply);
+
+    /*
+     * @brief Converts the setting value to bytes
+     *
+     * @param settingValue : value to be applied to a setting
+     *
+     * @return A string to a value in bytes
+     */
+    std::string suffixCorrection(const std::string settingValue);
 };
 
 } // namespace softwarecontainer

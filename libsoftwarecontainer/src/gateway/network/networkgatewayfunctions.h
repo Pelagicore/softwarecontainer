@@ -46,7 +46,7 @@ public:
      *
      * @param netmask    : representation available bits
      * @param gatewayIP  : representation of the gateway IP
-     * @param cnrainerID : representation of the containerID
+     * @param containerID: representation of the containerID
      *
      * @return uint32_t indicates assigned IP address
      */

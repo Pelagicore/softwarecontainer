@@ -32,7 +32,9 @@ CgroupsGateway::CgroupsGateway()
 
 ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
 {
-    if (isError(m_parser.parseCGroupsGatewayConfiguration(element))) {
+    try {
+        m_parser.parseCGroupsGatewayConfiguration(element);
+    } catch (CgroupsGatewayError &e) {
         log_error() << "Could not parse CGroups configuration element";
         return ReturnCode::FAILURE;
     }
