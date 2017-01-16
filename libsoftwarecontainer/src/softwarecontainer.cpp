@@ -56,9 +56,14 @@
 
 namespace softwarecontainer {
 
-SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace, const ContainerID id) :
+SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace,
+                                     const ContainerID id,
+                                     std::string bridgeIp,
+                                     int netmaskBits) :
     m_workspace(workspace),
     m_containerID(id),
+    m_bridgeIp(bridgeIp),
+    m_netmaskBits(netmaskBits),
     m_container(new Container("SC-" + std::to_string(id),
                               m_workspace->m_containerConfigPath,
                               m_workspace->m_containerRootDir,
@@ -119,7 +124,7 @@ ReturnCode SoftwareContainer::init()
 
 #ifdef ENABLE_NETWORKGATEWAY
     try {
-        addGateway(new NetworkGateway(m_containerID, "10.0.3.1", 16));
+        addGateway(new NetworkGateway(m_containerID, m_bridgeIp, m_netmaskBits));
     } catch (ReturnCode failure) {
         log_error() << "Given netmask is not appropriate for creating ip address."
                     << "It should be an unsigned value between 1 and 31";

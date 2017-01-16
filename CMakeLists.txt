@@ -270,7 +270,7 @@ if(ENABLE_NETWORKGATEWAY)
     # BRIDGE_NETMASK_BITS is mandatory if we are configured for network
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS)
 
-    add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${SC_CONFIG_GROUP}_${BRIDGE_DEVICE}")
+    add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${${SC_CONFIG_GROUP}_BRIDGE_DEVICE}")
 
     #
     # Some settings for whether or not SC should create a bridge
