@@ -61,14 +61,16 @@ public:
 
 class SoftwareContainerAgentTest: public ::testing::Test
 {
+
+LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
+
 public:
-    LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
-    SoftwareContainerAgentTest() { }
+    SoftwareContainerAgentTest() {}
+
     std::shared_ptr<SoftwareContainerAgent> sca;
+
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-    int m_preloadCount = 0;
-    bool m_shutdownContainers = true;
-    int m_shutdownTimeout = 1;
+
     std::shared_ptr<Workspace> workspace;
 
     // Define minimal required config values
@@ -83,7 +85,8 @@ public:
                                      "create-bridge = true\n"
                                      "bridge-device = lxcbr0\n"
                                      "bridge-ip = 10.0.3.1\n"
-                                     "bridge-netmask-bits = 16";
+                                     "bridge-netmask-bits = 24";
+
     const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
 
     void SetUp() override
