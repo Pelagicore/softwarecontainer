@@ -70,11 +70,9 @@ class TestSuspend(object):
             sc = Container()
             sc.start(DATA)
 
-            suspended = sc.suspend()
-            assert suspended is True
+            sc.suspend()
 
-            resumed = sc.resume()
-            assert resumed is True
+            sc.resume()
 
         finally:
             sc.terminate()
@@ -87,17 +85,13 @@ class TestSuspend(object):
             sc = Container()
             sc.start(DATA)
 
-            suspended = sc.suspend()
-            assert suspended is True
+            sc.suspend()
 
-            _, success = sc.launch_command("true")
-            assert success is False
+            with pytest.raises(Exception) as e:
+                sc.launch_command("true")
 
-            resumed = sc.resume()
-            assert resumed is True
-
-            _, success = sc.launch_command("true")
-            assert success is True
+            sc.resume()
+            sc.launch_command("true")
 
         finally:
             sc.terminate()
@@ -113,20 +107,15 @@ class TestSuspend(object):
             sc = Container()
             sc.start(DATA)
 
-            _, success = sc.launch_command("yes", stdout=filename)
-            assert success is True
+            sc.launch_command("yes", stdout=filename)
 
             assert isFileGrowing(filename)
 
             # Suspend the container
-            suspended = sc.suspend()
-            assert suspended is True
-
+            sc.suspend()
             assert not isFileGrowing(filename)
 
-            resumed = sc.resume()
-            assert resumed is True
-
+            sc.resume()
             assert isFileGrowing(filename)
 
         finally:

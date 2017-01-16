@@ -28,6 +28,7 @@ from testframework import Capability
 from testframework import StandardManifest
 from testframework import Container
 
+from dbus.exceptions import DBusException
 
 ##### Useful globals #####
 
@@ -254,9 +255,9 @@ class TestEnvironment(object):
         try:
             sc.start(DATA)
 
-            result = sc.set_capabilities(["environment.test.cap.1"])
+            with pytest.raises(DBusException):
+               sc.set_capabilities(["environment.test.cap.1"])
 
-            assert result is False
         finally:
             sc.terminate()
 

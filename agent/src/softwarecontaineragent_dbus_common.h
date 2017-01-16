@@ -63,8 +63,14 @@ public:
         return m_message;
     }
 
+void returnValue()
+{
+    Glib::VariantContainerBase empty;
+    m_message->return_value(empty);
+}
+
 template <typename T0>
-void ret(T0 p0)
+void returnValue(T0 p0)
 {
     std::vector<Glib::VariantBase> vlist;
     vlist.push_back(Glib::Variant<T0>::create(p0));
@@ -73,7 +79,7 @@ void ret(T0 p0)
 }
 
 template <typename T0,typename T1>
-void ret(T0 p0, T1 p1)
+void returnValue(T0 p0, T1 p1)
 {
     std::vector<Glib::VariantBase> vlist;
     vlist.push_back(Glib::Variant<T0>::create(p0));
@@ -82,7 +88,11 @@ void ret(T0 p0, T1 p1)
     m_message->return_value(Glib::Variant<Glib::VariantBase>::create_tuple(vlist));
 }
 
-
+void returnError(const std::string &errorMessage)
+{
+    Gio::DBus::Error error(Gio::DBus::Error::FAILED, errorMessage);
+    m_message->return_error(error);
+}
 
 private:
     Glib::RefPtr<Gio::DBus::MethodInvocation> m_message;

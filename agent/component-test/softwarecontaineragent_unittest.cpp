@@ -18,6 +18,7 @@
  */
 
 #include "softwarecontaineragent.h"
+#include "softwarecontainererror.h"
 #include "config/config.h"
 #include "config/configloader.h"
 #include "config/mainconfigsource.h"
@@ -111,19 +112,15 @@ public:
 };
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->getContainer(id) != nullptr);
+    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW(sca->getContainer(id));
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
+    ContainerID id = sca->createContainer(valid_config);
     sca->deleteContainer(id);
 
-    ASSERT_FALSE(sca->getContainer(id) != nullptr);
+    ASSERT_THROW(sca->getContainer(id), SoftwareContainerError);
 }
 
 /*
@@ -140,119 +137,106 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
  */
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
-    ASSERT_TRUE(sca->parseConfig("[{\"enableWriteBuffer\": true}]"));
+    ASSERT_NO_THROW(sca->parseConfig("[{\"enableWriteBuffer\": true}]"));
     ASSERT_TRUE(workspace->m_enableWriteBuffer);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNice2) {
-    ASSERT_TRUE(sca->parseConfig("[{\"enableWriteBuffer\": false}]"));
+    ASSERT_NO_THROW(sca->parseConfig("[{\"enableWriteBuffer\": false}]"));
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigNoConfig) {
-    ASSERT_FALSE(sca->parseConfig(""));
+    ASSERT_THROW(sca->parseConfig(""), SoftwareContainerError);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigBadConfig) {
-    ASSERT_FALSE(sca->parseConfig("gobfmsrfe"));
+    ASSERT_THROW(sca->parseConfig("gobfmsrfe"), SoftwareContainerError);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig) {
-    // This actually parses and should be true. but wrong parameter name
-    ASSERT_TRUE(sca->parseConfig("[{\"enableWritebuffer\": true}]"));
+    ASSERT_THROW(sca->parseConfig("[{\"WRONG_PARAM_NAME\": true}]"), SoftwareContainerError);
     ASSERT_FALSE(workspace->m_enableWriteBuffer);
 }
 
 TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig2) {
     // This actually parses and should be true
-    ASSERT_TRUE(sca->parseConfig("[{\"enableWriteBuffer\": false}]"));
+    ASSERT_NO_THROW(sca->parseConfig("[{\"enableWriteBuffer\": false}]"));
     ASSERT_FALSE(workspace->m_enableWriteBuffer);
 }
 
 // Freeze an invalid container
 TEST_F(SoftwareContainerAgentTest, FreezeInvalidContainer) {
-    ASSERT_FALSE(sca->suspendContainer(0));
+    ASSERT_THROW(sca->suspendContainer(0), SoftwareContainerError);
 }
 
 // Thaw an invalid container
 TEST_F(SoftwareContainerAgentTest, ThawInvalidContainer) {
-    ASSERT_FALSE(sca->resumeContainer(0));
+    ASSERT_THROW(sca->resumeContainer(0), SoftwareContainerError);
 }
 
 // Thaw a container that has not been frozen
 TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
+    ContainerID id = sca->createContainer(valid_config);
 
-    ASSERT_TRUE(sca->getContainer(id) != nullptr);
+    ASSERT_NO_THROW(sca->getContainer(id));
 
-    ASSERT_FALSE(sca->resumeContainer(id));
+    ASSERT_NO_THROW(sca->resumeContainer(id));
 }
 
 // Freeze a container and try to resume it twice
 TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->getContainer(id) != nullptr);
+    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW(sca->getContainer(id));
 
-    ASSERT_TRUE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_TRUE(sca->resumeContainer(id));
+    ASSERT_NO_THROW(sca->resumeContainer(id));
 
-    ASSERT_FALSE(sca->resumeContainer(id));
+    ASSERT_NO_THROW(sca->resumeContainer(id));
 }
 
 // Freeze an already frozen container
 TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->getContainer(id) != nullptr);
+    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW(sca->getContainer(id));
 
-    ASSERT_TRUE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_FALSE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 }
 
 // Freeze an already frozen container, and then resume it
 TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->getContainer(id));
+    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW(sca->getContainer(id));
 
-    ASSERT_TRUE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_FALSE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_TRUE(sca->resumeContainer(id));
+    ASSERT_NO_THROW(sca->resumeContainer(id));
 }
 
 // Double suspend and then double resume
 TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->getContainer(id) != nullptr);
+    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW(sca->getContainer(id));
 
-    ASSERT_TRUE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_FALSE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_TRUE(sca->resumeContainer(id));
+    ASSERT_NO_THROW(sca->resumeContainer(id));
 
-    ASSERT_FALSE(sca->resumeContainer(id));
+    ASSERT_NO_THROW(sca->resumeContainer(id));
 }
 
 // Make sure you can still shutdown a frozen container
 TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
-    ContainerID id;
-    bool success = sca->createContainer(valid_config, id);
-    ASSERT_TRUE(success);
-    ASSERT_TRUE(sca->getContainer(id) != nullptr);
+    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW(sca->getContainer(id));
 
-    ASSERT_TRUE(sca->suspendContainer(id));
+    ASSERT_NO_THROW(sca->suspendContainer(id));
 
-    ASSERT_TRUE(sca->shutdownContainer(id));
+    ASSERT_NO_THROW(sca->shutdownContainer(id));
 }

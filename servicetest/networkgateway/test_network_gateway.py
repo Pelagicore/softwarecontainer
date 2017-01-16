@@ -26,6 +26,7 @@ from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
 
+from dbus.exceptions import DBusException
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
@@ -180,7 +181,8 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            sc.set_capabilities(["test.cap.empty"])
+            with pytest.raises(DBusException):
+                sc.set_capabilities(["test.cap.empty"])
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +

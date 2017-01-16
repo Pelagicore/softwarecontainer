@@ -27,6 +27,8 @@ from testframework import Capability
 from testframework import StandardManifest
 from testframework import DefaultManifest
 
+from dbus.exceptions import DBusException
+
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
@@ -144,8 +146,7 @@ class TestCaps(object):
         sc = Container()
         try:
             sc.start(DATA)
-            caps_set = sc.set_capabilities([])
-            assert caps_set is True
+            sc.set_capabilities([])
 
         finally:
             sc.terminate()
@@ -156,8 +157,8 @@ class TestCaps(object):
         sc = Container()
         try:
             sc.start(DATA)
-            caps_set = sc.set_capabilities(["test.cap.valid-dbus"])
-            assert caps_set is True
+            sc.set_capabilities(["test.cap.valid-dbus"])
+
         finally:
             sc.terminate()
 
@@ -167,8 +168,9 @@ class TestCaps(object):
         sc = Container()
         try:
             sc.start(DATA)
-            caps_set = sc.set_capabilities(["does.not.exist"])
-            assert caps_set is False
+            with pytest.raises(DBusException) as err:
+                sc.set_capabilities(["does.not.exist"])
+
         finally:
             sc.terminate()
 
@@ -180,8 +182,9 @@ class TestCaps(object):
         sc = Container()
         try:
             sc.start(DATA)
-            caps_set = sc.set_capabilities(["test.cap"])
-            assert caps_set is False
+            with pytest.raises(DBusException) as err:
+               sc.set_capabilities(["test.cap"])
+
         finally:
             sc.terminate()
 
@@ -192,8 +195,9 @@ class TestCaps(object):
         sc = Container()
         try:
             sc.start(DATA)
-            caps_set = sc.set_capabilities(["test.cap.broken-gw-config"])
-            assert caps_set is False
+            with pytest.raises(DBusException) as err:
+               sc.set_capabilities(["test.cap.broken-gw-config"])
+
         finally:
             sc.terminate()
 
