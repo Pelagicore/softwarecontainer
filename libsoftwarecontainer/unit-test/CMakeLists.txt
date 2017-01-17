@@ -48,6 +48,7 @@ add_gateway_test(ENABLE_FILEGATEWAY filegatewaysettingstore_unittest.cpp)
 
 add_gateway_test(ENABLE_NETWORKGATEWAY iptableentry_unittest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayparser_unittest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayfunctions_unittest.cpp)
 
 add_gateway_test(ENABLE_PULSEGATEWAY pulsegateway_unittest.cpp)
 

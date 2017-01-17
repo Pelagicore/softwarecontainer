@@ -23,6 +23,8 @@
 #include "jansson.h"
 #include "netlink.h"
 #include "iptableentry.h"
+#include "softwarecontainererror.h"
+#include "networkgatewayfunctions.h"
 
 namespace softwarecontainer {
 
@@ -60,19 +62,6 @@ public:
      */
     bool teardownGateway() override;
 private:
-    /**
-     * @brief Generate IP address for the container
-     *
-     * Retrieves an IP from DHCP.
-     *
-     * Note that a file on the system acts as a placeholder for the DHCP server.
-     * The file keeps track of the highest used IP address.
-     *
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE otherwise
-     */
-    ReturnCode generateIP();
-
     /**
      * @brief Set route to default gateway
      *
@@ -131,6 +120,44 @@ private:
 
     int32_t m_containerID;
     Netlink m_netlinkHost;
+
+    NetworkGatewayFunctions m_functions;
+};
+
+class NetworkGatewayError : public SoftwareContainerError
+{
+public:
+    NetworkGatewayError():
+        m_message("NetworkGateway exception")
+    {
+    }
+
+    NetworkGatewayError(const std::string &message):
+        m_message(message)
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+
+protected:
+    std::string m_message;
+};
+
+class IPAllocationError : public NetworkGatewayError
+{
+public:
+    IPAllocationError():
+        NetworkGatewayError("An error is occured when trying to generate IP address")
+    {
+    }
+
+    IPAllocationError(const std::string &message):
+        NetworkGatewayError(message)
+    {
+    }
 };
 
 } // namespace softwarecontainer

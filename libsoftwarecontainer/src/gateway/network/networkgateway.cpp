@@ -30,23 +30,11 @@ NetworkGateway::NetworkGateway(const int32_t id,
                                const std::string gateway,
                                const uint8_t maskBits) :
     Gateway(ID),
+    m_netmask(maskBits),
     m_gateway(gateway),
     m_interfaceInitialized(false),
     m_containerID(id)
 {
-    /*
-     * Netmask are used for determining range of ip adress assignment. maskBits represent bit-count
-     * for creating ip range starting from least significant bit of m_gateway. Since an ipv4 address
-     * consist of 32 bits, maskBits shall not be greater than 32. And since bit 0 and bit 31 cannot
-     * give a range but a single exact value, those will not be accepted as a maskBits.
-     */
-    if (maskBits > 31 || maskBits < 1) {
-        log_error() << "inappropriate netmask : " << maskBits;
-        throw ReturnCode::FAILURE;
-    }
-
-    // value of m_netmask interprets maskBits to a mask integer to calculate range.
-    m_netmask = (1L<<(32-maskBits));
 }
 
 NetworkGateway::~NetworkGateway() { }
@@ -63,9 +51,6 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 
     return returnValue;
 }
-
-
-
 
 bool NetworkGateway::activateGateway()
 {
@@ -85,7 +70,10 @@ bool NetworkGateway::activateGateway()
         return false;
     }
 
-    if (isError(generateIP())) {
+    try {
+        m_ip.s_addr = m_functions.generateIP(m_netmask, m_gateway, m_containerID);
+    } catch (IPAllocationError &error) {
+        log_error() << error.what();
         return false;
     }
 
@@ -114,35 +102,6 @@ bool NetworkGateway::activateGateway()
 bool NetworkGateway::teardownGateway()
 {
     return true;
-}
-
-ReturnCode NetworkGateway::generateIP()
-{
-    log_debug() << "Generating ip-address";
-    // IP generation is designed for Ipv4 in case of transition to IPv6 it should be revised
-    uint32_t internetAddress;
-    if ( 1 != inet_pton(AF_INET, m_gateway.c_str(), &internetAddress)) {
-        log_error() << m_gateway << " does not represent a valid network address";
-        return ReturnCode::FAILURE;
-    }
-
-    internetAddress = ntohl(internetAddress);
-
-    if ((internetAddress | m_netmask) < (internetAddress + m_containerID + 1)) {
-        log_error() << "There are no suitable ip address for this container.";
-        return ReturnCode::FAILURE;
-    }
-
-    internetAddress += (m_containerID + 1);
-    internetAddress = htonl(internetAddress);
-    m_ip.s_addr = internetAddress;
-
-    // convert ip to human readable form just for debug
-    char convertionTmp[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &internetAddress, convertionTmp, INET_ADDRSTRLEN);
-    log_debug() << "IP set to " << convertionTmp;
-
-    return ReturnCode::SUCCESS;
 }
 
 ReturnCode NetworkGateway::setDefaultGateway()
