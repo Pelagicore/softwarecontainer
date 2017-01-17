@@ -17,6 +17,7 @@
 
 set(NETWORK_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/networkgateway.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/networkgatewayfunctions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/networkgatewayparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/iptableentry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/netlink.cpp
