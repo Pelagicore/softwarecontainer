@@ -24,14 +24,15 @@ require './cookbook/system-config/vagrant-reload.rb'
 
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
+
+    # Common names for network adapters
+    config.vm.network "public_network", bridge: [ "eth0", "eth1", "em1" ]
+
     config.vm.provider "virtualbox" do |vb|
         vb.customize [ "guestproperty", "set", :id,
                        "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
         if ENV['VAGRANT_RAM'] then
             vb.memory = ENV['VAGRANT_RAM'].to_i * 1024
-        end
-        if ENV['VAGRANT_CPUS'] then
-            vb.cpus = ENV['VAGRANT_CPUS'].to_i
         end
     end
 
@@ -48,12 +49,11 @@ Vagrant.configure(2) do |config|
             path: "cookbook/system-config/apt-cacher.sh"
     end
 
-    # Select the best apt mirror for our debian release
-    config.vm.provision "shell",
-        args: ["jessie"],
-        path: "cookbook/system-config/select-apt-mirror.sh"
+    # Make sure we have a fresh list from the package server
+    config.vm.provision "shell", inline: "apt-get update"
 
     # Install build dependencies
+    config.vm.provision "shell", path: "cookbook/system-config/setup-ccache-and-icecc.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/softwarecontainer-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
