@@ -255,7 +255,6 @@ private:
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
-    bool m_shutdownContainers = true;
     std::vector<ContainerID> m_containerIdPool;
 
     std::shared_ptr<FilteredConfigStore> m_filteredConfigStore;

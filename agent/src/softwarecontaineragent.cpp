@@ -38,10 +38,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     try {
         m_preloadCount = config.getIntValue(ConfigDefinition::SC_GROUP,
                                             ConfigDefinition::SC_PRELOAD_COUNT_KEY);
-        //TODO: the inversion of the value here should be worked away,
-        //      but doesn't seem to work anyway, see bug
-        m_shutdownContainers = !config.getBoolValue(ConfigDefinition::SC_GROUP,
-                                                    ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY);
+
     } catch (ConfigError &error) {
         throw ReturnCode::FAILURE;
     }
@@ -306,11 +303,6 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
 {
     profilefunction("executeFunction");
     SoftwareContainerPtr container = getContainer(containerID);
-    if (!container) {
-        std::string errorMessage("Invalid container ID" + std::to_string(containerID));
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
 
     /*
      * We want to always apply any default capabilities we have. If the container is in READY state,
@@ -356,18 +348,8 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
 void SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
 {
     profilefunction("shutdownContainerFunction");
-    if (!m_shutdownContainers) {
-        std::string errorMessage("Not shutting down containers, so not shutting down ID: " + std::to_string(containerID));
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
 
     SoftwareContainerPtr container = getContainer(containerID);
-    if (!container) {
-        std::string errorMessage("Invalid container ID " + std::to_string(containerID));
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
 
     int timeout = m_softwarecontainerWorkspace->m_containerShutdownTimeout;
     if (isError(container->shutdown(timeout))) {
