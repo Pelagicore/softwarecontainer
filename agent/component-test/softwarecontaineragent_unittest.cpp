@@ -112,13 +112,18 @@ public:
 };
 
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
-    ContainerID id = sca->createContainer(valid_config);
-    ASSERT_NO_THROW(sca->getContainer(id));
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
+        sca->getContainer(id);
+    });
 }
 
 TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
-    ContainerID id = sca->createContainer(valid_config);
-    sca->deleteContainer(id);
+    ContainerID id;
+    ASSERT_NO_THROW({
+        id = sca->createContainer(valid_config);
+        sca->deleteContainer(id);
+    });
 
     ASSERT_THROW(sca->getContainer(id), SoftwareContainerError);
 }
@@ -176,67 +181,71 @@ TEST_F(SoftwareContainerAgentTest, ThawInvalidContainer) {
 
 // Thaw a container that has not been frozen
 TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
-    ContainerID id = sca->createContainer(valid_config);
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
 
-    ASSERT_NO_THROW(sca->getContainer(id));
-
-    ASSERT_NO_THROW(sca->resumeContainer(id));
+        sca->getContainer(id);
+        sca->resumeContainer(id);
+    });
 }
 
 // Freeze a container and try to resume it twice
 TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
-    ContainerID id = sca->createContainer(valid_config);
-    ASSERT_NO_THROW(sca->getContainer(id));
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
+        sca->getContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
-
-    ASSERT_NO_THROW(sca->resumeContainer(id));
-
-    ASSERT_NO_THROW(sca->resumeContainer(id));
+        sca->suspendContainer(id);
+        sca->resumeContainer(id);
+        sca->resumeContainer(id);
+    });
 }
 
 // Freeze an already frozen container
 TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
-    ContainerID id = sca->createContainer(valid_config);
-    ASSERT_NO_THROW(sca->getContainer(id));
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
+        sca->getContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
-
-    ASSERT_NO_THROW(sca->suspendContainer(id));
+        sca->suspendContainer(id);
+        sca->suspendContainer(id);
+    });
 }
 
 // Freeze an already frozen container, and then resume it
 TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
-    ContainerID id = sca->createContainer(valid_config);
-    ASSERT_NO_THROW(sca->getContainer(id));
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
+        sca->getContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
+        sca->suspendContainer(id);
+        sca->suspendContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
-
-    ASSERT_NO_THROW(sca->resumeContainer(id));
+        sca->resumeContainer(id);
+    });
 }
 
 // Double suspend and then double resume
 TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
-    ContainerID id = sca->createContainer(valid_config);
-    ASSERT_NO_THROW(sca->getContainer(id));
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
+        sca->getContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
+        sca->suspendContainer(id);
+        sca->suspendContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
-
-    ASSERT_NO_THROW(sca->resumeContainer(id));
-
-    ASSERT_NO_THROW(sca->resumeContainer(id));
+        sca->resumeContainer(id);
+        sca->resumeContainer(id);
+    });
 }
 
 // Make sure you can still shutdown a frozen container
 TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
-    ContainerID id = sca->createContainer(valid_config);
-    ASSERT_NO_THROW(sca->getContainer(id));
+    ASSERT_NO_THROW({
+        ContainerID id = sca->createContainer(valid_config);
+        sca->getContainer(id);
 
-    ASSERT_NO_THROW(sca->suspendContainer(id));
-
-    ASSERT_NO_THROW(sca->shutdownContainer(id));
+        sca->suspendContainer(id);
+        sca->shutdownContainer(id);
+    });
 }
