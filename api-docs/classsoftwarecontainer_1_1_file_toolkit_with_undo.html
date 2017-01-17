@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.16.0-5010566 2017-01-16</span>
+   &#160;<span id="projectnumber">0.17.0-466db54 2017-01-17</span>
    </div>
   </td>
  </tr>
@@ -369,7 +369,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">createDirectory()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>, <a class="el" href="filetoolkitwithundo_8h_source.html#l00135">m_cleanupHandlers</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00245">pathInList()</a>.</p>
 
-<p>Referenced by <a class="el" href="container_8cpp_source.html#l00137">softwarecontainer::Container::create()</a>.</p>
+<p>Referenced by <a class="el" href="container_8cpp_source.html#l00139">softwarecontainer::Container::create()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;{</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    std::string fstype = <span class="stringliteral">&quot;overlay&quot;</span>;</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> flags = MS_BIND;</div>
@@ -529,7 +529,7 @@ Here is the call graph for this function:</div>
 
 <p>References <a class="el" href="filetoolkitwithundo_8h_source.html#l00135">m_cleanupHandlers</a>.</p>
 
-<p>Referenced by <a class="el" href="container_8cpp_source.html#l00103">softwarecontainer::Container::initialize()</a>.</p>
+<p>Referenced by <a class="el" href="container_8cpp_source.html#l00105">softwarecontainer::Container::initialize()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;{</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    <span class="keyword">auto</span> mountRes = mount(path.c_str(), path.c_str(), <span class="stringliteral">&quot;&quot;</span>, MS_BIND, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keywordflow">if</span> (mountRes != 0) {</div>
@@ -601,7 +601,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="softwarecontainer-common_8cpp_source.html#l00046">softwarecontainer::isDirectory()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>, <a class="el" href="filetoolkitwithundo_8h_source.html#l00135">m_cleanupHandlers</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00245">pathInList()</a>.</p>
 
-<p>Referenced by <a class="el" href="workspace_8cpp_source.html#l00040">softwarecontainer::Workspace::checkWorkspace()</a>, <a class="el" href="container_8cpp_source.html#l00103">softwarecontainer::Container::initialize()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00166">overlayMount()</a>.</p>
+<p>Referenced by <a class="el" href="workspace_8cpp_source.html#l00040">softwarecontainer::Workspace::checkWorkspace()</a>, <a class="el" href="container_8cpp_source.html#l00105">softwarecontainer::Container::initialize()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00166">overlayMount()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;{</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">isDirectory</a>(path)) {</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
@@ -741,7 +741,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html">FileToolkitWithUndo</a></li>
-    <li class="footer">Generated on Mon Jan 16 2017 15:32:32 for softwarecontainer by
+    <li class="footer">Generated on Tue Jan 17 2017 15:47:25 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

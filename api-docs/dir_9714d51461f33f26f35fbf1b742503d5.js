@@ -6,6 +6,8 @@ var dir_9714d51461f33f26f35fbf1b742503d5 =
     [ "netlink.h", "netlink_8h_source.html", null ],
     [ "networkgateway.cpp", "networkgateway_8cpp_source.html", null ],
     [ "networkgateway.h", "networkgateway_8h_source.html", null ],
+    [ "networkgatewayfunctions.cpp", "networkgatewayfunctions_8cpp_source.html", null ],
+    [ "networkgatewayfunctions.h", "networkgatewayfunctions_8h_source.html", null ],
     [ "networkgatewayparser.cpp", "networkgatewayparser_8cpp_source.html", null ],
     [ "networkgatewayparser.h", "networkgatewayparser_8h_source.html", null ]
 ];

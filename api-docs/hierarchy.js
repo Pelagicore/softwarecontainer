@@ -43,7 +43,11 @@ var hierarchy =
       ] ],
       [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
       [ "softwarecontainer::GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", null ],
-      [ "softwarecontainer::SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", null ]
+      [ "softwarecontainer::SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", [
+        [ "softwarecontainer::NetworkGatewayError", "classsoftwarecontainer_1_1_network_gateway_error.html", [
+          [ "softwarecontainer::IPAllocationError", "classsoftwarecontainer_1_1_i_p_allocation_error.html", null ]
+        ] ]
+      ] ]
     ] ],
     [ "softwarecontainer::Executable", "classsoftwarecontainer_1_1_executable.html", [
       [ "softwarecontainer::ContainerAbstractInterface", "classsoftwarecontainer_1_1_container_abstract_interface.html", [
@@ -78,6 +82,7 @@ var hierarchy =
     ] ],
     [ "softwarecontainer::JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", null ],
     [ "softwarecontainer::Netlink", "classsoftwarecontainer_1_1_netlink.html", null ],
+    [ "softwarecontainer::NetworkGatewayFunctions", "classsoftwarecontainer_1_1_network_gateway_functions.html", null ],
     [ "softwarecontainer::NetworkGatewayParser", "classsoftwarecontainer_1_1_network_gateway_parser.html", null ],
     [ "ObservableProperty< Type >", "class_observable_property.html", [
       [ "ObservableWritableProperty< Type >", "class_observable_writable_property.html", null ]
@@ -90,10 +95,10 @@ var hierarchy =
     [ "softwarecontainer::RecursiveCopy", "classsoftwarecontainer_1_1_recursive_copy.html", null ],
     [ "softwarecontainer::IPTableEntry::Rule", "structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
+    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "com::pelagicore::SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
     ] ],
-    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
     [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ]
 ];

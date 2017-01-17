@@ -18,7 +18,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#abb3ac782dd520cfaa1b61f7ddf090dce" target="_top" xlink:title="Bind mount a folder into the container. ">
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a97d427dada015dc9337ce5673f55ec9f" target="_top" xlink:title="Bind mount a folder into the container. ">
 <polygon fill="white" stroke="black" points="159,-240.5 159,-281.5 282,-281.5 282,-240.5 159,-240.5"/>
 <text text-anchor="start" x="167" y="-269.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="167" y="-258.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
@@ -33,7 +33,7 @@
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
-<g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#aa56cfb46275b5cb0959ab9fdbbee148b" target="_top" xlink:title="Launch the given command in a the given container. ">
+<g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#aef2eb474a1a8406815536cb7d10eefe6" target="_top" xlink:title="Launch the given command in a the given container. ">
 <polygon fill="white" stroke="black" points="159,-180.5 159,-221.5 282,-221.5 282,-180.5 159,-180.5"/>
 <text text-anchor="start" x="167" y="-209.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="167" y="-198.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
@@ -48,7 +48,7 @@
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
-<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#ac4015d7ba7850424994fe561c5dbe333" target="_top" xlink:title="resumes execution of a container ">
+<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#ab65058b805cfa4706fbf0d16854cfde3" target="_top" xlink:title="resumes execution of a container ">
 <polygon fill="white" stroke="black" points="159,-120.5 159,-161.5 282,-161.5 282,-120.5 159,-120.5"/>
 <text text-anchor="start" x="167" y="-149.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="167" y="-138.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
@@ -63,7 +63,7 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a4dd0cf44da28cf8781e6c29c5d09eb86" target="_top" xlink:title="shuts down a container ">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a24b59cd9982d4e2e51f999bedea60957" target="_top" xlink:title="shuts down a container ">
 <polygon fill="white" stroke="black" points="159,-60.5 159,-101.5 282,-101.5 282,-60.5 159,-60.5"/>
 <text text-anchor="start" x="167" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="167" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
@@ -78,7 +78,7 @@
 </g>
 <!-- Node6 -->
 <g id="node6" class="node"><title>Node6</title>
-<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#aa9f97277f85c0abc20fc87eb4e285d24" target="_top" xlink:title="suspends execution of a container ">
+<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a8a0ad026d0b1682355aa9aa4094ba0ff" target="_top" xlink:title="suspends execution of a container ">
 <polygon fill="white" stroke="black" points="159,-0.5 159,-41.5 282,-41.5 282,-0.5 159,-0.5"/>
 <text text-anchor="start" x="167" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="167" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>

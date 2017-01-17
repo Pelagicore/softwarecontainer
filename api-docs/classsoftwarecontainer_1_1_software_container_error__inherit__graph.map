@@ -1,2 +1,4 @@
 <map id="softwarecontainer::SoftwareContainerError" name="softwarecontainer::SoftwareContainerError">
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="9,169,160,211"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="18,259,151,300"/>
 </map>
