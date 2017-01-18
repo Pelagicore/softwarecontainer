@@ -39,8 +39,6 @@ public:
 private:
     std::string m_group;
     std::string m_name;
-    bool m_missing;
-    bool m_mandatory;
     ConfigSourceType m_source;
 };
 
