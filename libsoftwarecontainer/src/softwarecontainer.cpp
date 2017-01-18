@@ -82,11 +82,11 @@ void SoftwareContainer::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainL
     m_mainLoopContext = mainLoopContext;
 }
 
-ReturnCode SoftwareContainer::preload()
+ReturnCode SoftwareContainer::start()
 {
     log_debug() << "Initializing container";
     if (isError(m_container->initialize())) {
-        log_error() << "Could not setup container for preloading";
+        log_error() << "Could not initialize container";
         return ReturnCode::FAILURE;
     }
 
@@ -98,12 +98,12 @@ ReturnCode SoftwareContainer::preload()
     log_debug() << "Starting container";
     ReturnCode result = m_container->start(&m_pcPid);
     if (isError(result)) {
-        log_error() << "Could not start the container during preload";
+        log_error() << "Could not start container";
         return ReturnCode::FAILURE;
     }
 
     log_debug() << "Started container with PID " << m_pcPid;
-    m_containerState.setValueNotify(ContainerState::PRELOADED);
+    m_containerState.setValueNotify(ContainerState::INITIALIZED);
     return ReturnCode::SUCCESS;
 }
 
@@ -114,10 +114,9 @@ ReturnCode SoftwareContainer::init()
         return ReturnCode::FAILURE;
     }
 
-    // TODO: Rename this... preloading is a bit wierd name
-    if (getContainerState() != ContainerState::PRELOADED) {
-        if (isError(preload())) {
-            log_error() << "Failed to preload container";
+    if (getContainerState() != ContainerState::INITIALIZED) {
+        if (isError(start())) {
+            log_error() << "Failed to start container";
             return ReturnCode::FAILURE;
         }
     }

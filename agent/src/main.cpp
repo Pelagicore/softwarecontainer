@@ -63,13 +63,6 @@ int main(int argc, char **argv)
     configOpt.set_description("Path to SoftwareContainer configuration file,"
                               " defaults to \"" + std::string(SC_CONFIG_FILE) + "\"");
 
-    Glib::OptionEntry preloadOpt;
-    preloadOpt.set_long_name("preload");
-    preloadOpt.set_short_name('p');
-    preloadOpt.set_arg_description("<number>");
-    preloadOpt.set_description("Number of containers to preload, "
-                               "defaults to " + std::to_string(SC_PRELOAD_COUNT));
-
     Glib::OptionEntry userOpt;
     userOpt.set_long_name("user");
     userOpt.set_short_name('u');
@@ -117,7 +110,6 @@ int main(int argc, char **argv)
     /* Default values need to be somehting that should not be set explicitly
      * by the user. */
     Glib::ustring configPath = ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE;
-    int preloadCount = ConfigDefinition::PRELOAD_COUNT_INITIAL_VALUE;
     int userID = 0;
     bool keepContainersAlive = ConfigDefinition::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
     int timeout = ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE;
@@ -127,7 +119,6 @@ int main(int argc, char **argv)
 
     Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
     mainGroup.add_entry(configOpt, configPath);
-    mainGroup.add_entry(preloadOpt, preloadCount);
     mainGroup.add_entry(userOpt, userID);
     mainGroup.add_entry(keepContainersAliveOpt, keepContainersAlive);
 
@@ -185,12 +176,6 @@ int main(int argc, char **argv)
     }
 
     std::vector<IntConfig> intConfigs = std::vector<IntConfig>();
-    if (preloadCount != ConfigDefinition::PRELOAD_COUNT_INITIAL_VALUE) {
-        IntConfig config(ConfigDefinition::SC_GROUP,
-                         ConfigDefinition::SC_PRELOAD_COUNT_KEY,
-                         preloadCount);
-        intConfigs.push_back(config);
-    }
     if (timeout != ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE) {
         IntConfig config(ConfigDefinition::SC_GROUP,
                          ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY,

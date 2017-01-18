@@ -37,9 +37,6 @@
 #
 
 [SoftwareContainer]
-# Set number of containers to preload on startup of SoftwareContainer
-@SC_PRELOAD_COUNT_ACTIVATE@preload-count = @SC_PRELOAD_COUNT_CONFIG_FILE_VAR@
-
 # Set to 'true' to not shut down containers when SoftwareContainer exits
 @SC_KEEP_CONTAINERS_ALIVE_ACTIVATE@keep-containers-alive = @SC_KEEP_CONTAINERS_ALIVE_CONFIG_FILE_VAR@
 

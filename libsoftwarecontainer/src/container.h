@@ -188,7 +188,7 @@ public:
     ReturnCode ensureContainerRunning();
 
     /**
-     * @brief Setup the container for preloading
+     * @brief Setup the container for startup
      *
      * Setup the container so directories are available for later use when
      * setApplication is called.

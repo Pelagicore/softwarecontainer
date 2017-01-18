@@ -63,14 +63,8 @@ DefaultConfigSource::DefaultConfigSource():
     m_stringConfigs.push_back(stringConfig);
 
     IntConfig intConfig = IntConfig(ConfigDefinition::SC_GROUP,
-                                    ConfigDefinition::SC_PRELOAD_COUNT_KEY,
-                                    SC_PRELOAD_COUNT);
-    intConfig.setSource(ConfigSourceType::Default);
-    m_intConfigs.push_back(intConfig);
-
-    intConfig = IntConfig(ConfigDefinition::SC_GROUP,
-                          ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY,
-                          SC_SHUTDOWN_TIMEOUT);
+                                    ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY,
+                                    SC_SHUTDOWN_TIMEOUT);
     intConfig.setSource(ConfigSourceType::Default);
     m_intConfigs.push_back(intConfig);
 

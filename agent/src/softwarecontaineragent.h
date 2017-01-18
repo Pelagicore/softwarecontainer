@@ -216,7 +216,7 @@ public:
     std::shared_ptr<Workspace> getWorkspace();
 
 private:
-    // Get a preloaded container if possible otherwise make a new container.
+    // Make a new container.
     std::pair<ContainerID, SoftwareContainerPtr> getContainerPair();
 
     // Helper for creating software container instances
@@ -247,13 +247,7 @@ private:
     // List of containers in use
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
 
-    // Queue of pre-loaded containers
-    // Push and pop are the only operations that is applied to this collection
-    // That is why it is a std::queue and not a std::map
-    std::queue<std::pair<ContainerID, SoftwareContainerPtr>> m_preloadedContainers;
-
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
-    size_t m_preloadCount;
     SignalConnectionsHandler m_connections;
     std::vector<ContainerID> m_containerIdPool;
 
