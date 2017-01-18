@@ -17,8 +17,6 @@
 
 include(GNUInstallDirs)
 include(Configs)
-include(GenerateDBusCpp)
-generate_dbuscpp_hfile(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-agent.xml "SoftwareContainerAgent")
 
 install(DIRECTORY DESTINATION ${SC_SERVICE_MANIFEST_DIR})
 install(DIRECTORY DESTINATION ${SC_DEFAULT_SERVICE_MANIFEST_DIR})
