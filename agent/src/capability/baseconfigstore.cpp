@@ -53,7 +53,7 @@ ReturnCode BaseConfigStore::readCapsFromDir(const std::string &dirPath)
 {
     if (dirPath.compare("/") == 0) {
         log_warning() << "Searching for configuration files from root dir not allowed";
-        return ReturnCode::FAILURE;
+        throw ServiceManifestPathError("Path to root dir not allowed for Service Manifests");
     }
     if (isDirectoryEmpty(dirPath)) {
         log_warning() << "Path to configuration files is empty: " << dirPath;
@@ -64,7 +64,7 @@ ReturnCode BaseConfigStore::readCapsFromDir(const std::string &dirPath)
 
     if (files.empty()) {
         log_info() << "No configuration files found: " << dirPath;
-        return ReturnCode::SUCCESS;
+        throw ConfigStoreError("No configuration files found");
     }
 
     for (std::string file : files) {
@@ -72,7 +72,7 @@ ReturnCode BaseConfigStore::readCapsFromDir(const std::string &dirPath)
 
         if (isError(readCapsFromFile(filePath))) {
             log_warning() << "Could not parse a file in directory: " << filePath;
-            return ReturnCode::FAILURE;
+            throw ServiceManifestPathError("Could not parse a file in directory");
         }
     }
 
@@ -83,7 +83,7 @@ ReturnCode BaseConfigStore::readCapsFromFile(const std::string &filePath)
 {
     if (!isJsonFile(filePath)) {
         log_debug() << "File is not a json file: " << filePath;
-        return ReturnCode::FAILURE;
+        throw ServiceManifestPathError("File is not a json file");
     }
 
     json_error_t error;
@@ -92,26 +92,31 @@ ReturnCode BaseConfigStore::readCapsFromFile(const std::string &filePath)
     if (nullptr == fileroot) {
         log_error() << "Could not parse Service Manifest: "
                     << filePath << ":" << error.line <<" : " << error.text;
-        return ReturnCode::FAILURE;
+        throw ServiceManifestParseError("Could not parse Service Manifest")
     } else if (!json_is_object(fileroot)) {
         log_error() << "Configuration is not a json object: \n"
                     << filePath << ":" << error.line <<" : " << error.text;
-        return ReturnCode::FAILURE;
+        throw ServiceManifestParseError("Service Manifest parse error - Configuration is not a json object");
     }
 
     json_t *capabilities = json_object_get(fileroot, "capabilities");
     if (nullptr == capabilities) {
         log_error() << "Could not parse Capabilities";
+        throw CapabilityParseError();
         return ReturnCode::FAILURE;
     }
     if (!json_is_array(capabilities)) {
         log_error() << "Capabilities is not an array";
+        //throw CapabilityParseError("Capabilities is not an array");
         return ReturnCode::FAILURE;
     }
 
     // Can't use json_decref on fileroot, it removes objects too early
-
-    return parseCapabilities(capabilities);
+    try {
+        parseCapabilities(capabilities);
+    } catch(CapabilityParseError &error) {
+        throw;
+    }
 }
 
 ReturnCode BaseConfigStore::parseCapabilities(json_t *capabilities)
@@ -124,30 +129,32 @@ ReturnCode BaseConfigStore::parseCapabilities(json_t *capabilities)
     json_array_foreach(capabilities, i, capability) {
         if (!json_is_object(capability)) {
             log_error() << "Capability is not a json object";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Capability is not a json object");
         }
 
         std::string capName;
         if (!JSONParser::read(capability, "name", capName)) {
             log_error() << "Could not read Capability name";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Could not read Capability name");
         }
 
         json_t *gateways = json_object_get(capability, "gateways");
         if (nullptr == gateways) {
             log_error() << "Could not read Gateways";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Could not read Gateways");
         }
         if (!json_is_array(gateways)) {
             log_error() << "Gateways is not an array";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Gateways is not an array");
         }
 
         log_debug() << "Found capability \"" << capName << "\", parsing gateways...";
 
-        ReturnCode parseGatewayResult = parseGatewayConfigs(capName, gateways);
-        if (isError(parseGatewayResult)) {
-            return ReturnCode::FAILURE;
+        // TODO (ethenor): Is this correct?
+        try {
+            parseGatewayConfigs(capName, gateways);
+        } catch(CapabilityParseError &error) {
+            throw;
         }
     }
     return ReturnCode::SUCCESS;
@@ -167,23 +174,23 @@ ReturnCode BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gat
     json_array_foreach(gateways, i, gateway) {
         if (!json_is_object(gateway)) {
             log_error() << "Gateway is not a json object";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Gateways is not json object");
         }
 
         std::string gwID;
         if (!JSONParser::read(gateway, "id", gwID)) {
             log_error() << "Could not read Gateway ID";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Could not read Gateway ID");
         }
 
         json_t *confs = json_object_get(gateway, "config");
         if (nullptr == confs) {
             log_error() << "Could not read Gateway Config";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Could not read Gateway config");
         }
         if (!json_is_array(confs)) {
             log_error() << "Gateway Config is not an array";
-            return ReturnCode::FAILURE;
+            throw CapabilityParseError("Capability parse error - Gateways config is not an array");
         }
         gwConf.append(gwID, confs);
     }

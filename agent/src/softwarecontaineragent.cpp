@@ -41,7 +41,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
                                             ConfigDefinition::SC_PRELOAD_COUNT_KEY);
 
     } catch (ConfigError &error) {
-        throw ReturnCode::FAILURE;
+        throw;
     }
 
     // Get all configs for the workspace
@@ -56,7 +56,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         lxcConfigPath = m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                                  ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
     } catch (ConfigError &error) {
-        throw ReturnCode::FAILURE;
+        throw;
     }
 
     // Create and set all values on workspace
@@ -68,12 +68,12 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
     } catch (ReturnCode err) {
         log_error() << "Failed to set up workspace";
-        throw ReturnCode::FAILURE;
+        throw SoftwareContainerAgentError();
     }
 
     if (!triggerPreload()) {
         log_error() << "Failed to preload";
-        throw ReturnCode::FAILURE;
+        throw SoftwareContainerAgentError();
     }
 
     // Get all configs for the config stores
@@ -85,7 +85,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         defaultServiceManifestDir = m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                                              ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
     } catch (ConfigError &error) {
-        throw ReturnCode::FAILURE;
+        throw;
     }
 
     try {
@@ -93,7 +93,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         m_defaultConfigStore = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
     } catch (ReturnCode err) {
         log_error() << "Failed to initialize ConfigStore";
-        throw ReturnCode::FAILURE;
+        throw SoftwareContainerAgentError();
     }
 }
 
