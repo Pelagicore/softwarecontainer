@@ -35,15 +35,6 @@ SoftwareContainerAgent::SoftwareContainerAgent(
 {
     m_containerIdPool.push_back(0);
 
-    // Get all configs for this objects members
-    try {
-        m_preloadCount = config->getIntValue(ConfigDefinition::SC_GROUP,
-                                            ConfigDefinition::SC_PRELOAD_COUNT_KEY);
-
-    } catch (ConfigError &error) {
-        throw ReturnCode::FAILURE;
-    }
-
     // Get all configs for the workspace
     int shutdownTimeout;
     std::string containerRootDir;
@@ -68,11 +59,6 @@ SoftwareContainerAgent::SoftwareContainerAgent(
         m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
     } catch (ReturnCode err) {
         log_error() << "Failed to set up workspace";
-        throw ReturnCode::FAILURE;
-    }
-
-    if (!triggerPreload()) {
-        log_error() << "Failed to preload";
         throw ReturnCode::FAILURE;
     }
 
@@ -101,23 +87,6 @@ SoftwareContainerAgent::~SoftwareContainerAgent()
 {
 }
 
-bool SoftwareContainerAgent::triggerPreload()
-{
-    while (m_preloadedContainers.size() < m_preloadCount) {
-        auto availableID = findSuitableId();
-        SoftwareContainerPtr container = std::move(makeSoftwareContainer(availableID));
-
-        if (isError(container->preload())) {
-            log_error() << "Preloading failed";
-            return false;
-        }
-        auto pair = std::pair<ContainerID, SoftwareContainerPtr>(availableID, std::move(container));
-        m_preloadedContainers.push(std::move(pair));
-    }
-
-    return true;
-}
-
 void SoftwareContainerAgent::assertContainerExists(ContainerID containerID)
 {
     if (containerID >= INT32_MAX) {
@@ -127,7 +96,7 @@ void SoftwareContainerAgent::assertContainerExists(ContainerID containerID)
         log_error() << errorMessage;
         throw SoftwareContainerError(errorMessage);
     }
-    
+
     if (containerID < 0) {
         std::string errorMessage("Invalid Container ID: "
                                 + std::to_string(containerID)
@@ -279,11 +248,6 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
         throw SoftwareContainerError(errorMessage);
     }
 
-    // TODO: Would be nice if this could be done async.
-    if (!triggerPreload()) {
-        log_warning() << "Failed to preload new container";
-    }
-
     m_containers.insert(std::move(pair));
 
     return containerID;
@@ -291,14 +255,6 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 
 std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareContainerAgent::getContainerPair()
 {
-    if (!m_preloadedContainers.empty()) {
-        auto pair = std::move(m_preloadedContainers.front());
-        m_preloadedContainers.pop();
-
-        return pair;
-    }
-
-    // Nothing is preloaded
     ContainerID availableID = findSuitableId();
     auto container = std::move(makeSoftwareContainer(availableID));
     return std::make_pair(availableID, std::move(container));

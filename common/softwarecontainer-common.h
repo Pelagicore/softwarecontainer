@@ -38,9 +38,8 @@ static constexpr uid_t ROOT_UID = 0;
 enum class ContainerState
 {
     CREATED,
-    PRELOADED,
+    INITIALIZED,
     READY,
-    //    RUNNING,
     TERMINATED
 };
 

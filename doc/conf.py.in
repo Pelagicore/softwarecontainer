@@ -44,7 +44,6 @@ extensions = [
 substs = {
     "sc-config-file": "@SC_CONFIG_FILE@",
     "bridge-device": "@SC_BRIDGE_DEVICE_CONFIG_FILE_VAR@",
-    "preload-count": "@SC_PRELOAD_COUNT_CONFIG_FILE_VAR@",
     "keep-containers-alive": "@SC_KEEP_CONTAINERS_ALIVE_CONFIG_FILE_VAR@",
     "use-session-bus": "@SC_USE_SESSION_BUS_CONFIG_FILE_VAR@",
     "shutdown-timeout": "@SC_SHUTDOWN_TIMEOUT_CONFIG_FILE_VAR@",

@@ -172,8 +172,6 @@ add_boolean_config(${SC_CONFIG_GROUP} USE_SESSION_BUS FALSE "false")
 
 add_boolean_config(${SC_CONFIG_GROUP} CREATE_BRIDGE TRUE "true")
 
-add_integer_config(${SC_CONFIG_GROUP} PRELOAD_COUNT 0 0)
-
 add_integer_config(${SC_CONFIG_GROUP} SHUTDOWN_TIMEOUT 1 1)
 
 add_string_config(${SC_CONFIG_GROUP} SHARED_MOUNTS_DIR "/tmp/container/" "/tmp/container/")

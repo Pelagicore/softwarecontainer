@@ -90,11 +90,8 @@ public:
 
     bool isInitialized() const;
 
-    /**
-     * @brief Preload the container.
-     * That method can be called before setting the main loop context
-     */
-    ReturnCode preload();
+    ReturnCode start();
+
     ReturnCode init();
 
     std::shared_ptr<ContainerAbstractInterface> getContainer();

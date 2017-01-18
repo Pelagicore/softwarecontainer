@@ -61,10 +61,10 @@ public:
 
 class SoftwareContainerAgentTest: public ::testing::Test
 {
-
-LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
-
 public:
+
+    LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
+
     SoftwareContainerAgentTest() {}
 
     std::shared_ptr<SoftwareContainerAgent> sca;
@@ -75,7 +75,6 @@ public:
 
     // Define minimal required config values
     const std::string configString = "[SoftwareContainer]\n"
-                                     "preload-count = 0\n"
                                      "keep-containers-alive = false\n"
                                      "shutdown-timeout = 1\n"
                                      "shared-mounts-dir = " + std::string(SHARED_MOUNTS_DIR_TESTING) + "\n"

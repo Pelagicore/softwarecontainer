@@ -75,8 +75,6 @@ It is possible to configure SoftwareContainer with command line options.
 
 **-c or --config <path>** Path to SoftwareContainer configuration file, defaults to |sc-config-file-code|
 
-**-p or --preload <num>** Number of containers to preload, defaults to |preload-count-code|
-
 **-u or --user <uid>** Default user id to be used when starting processes in the container, defaults to ``0``.
 This option is deprecated.
 

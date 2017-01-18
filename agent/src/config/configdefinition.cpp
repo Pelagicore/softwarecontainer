@@ -48,7 +48,6 @@ const int ITEM_INDEX_MANDATORY = 3;
 // Illegal values used as initial command line option values to check if user
 // set them or not
 const std::string ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE = "";
-const int ConfigDefinition::PRELOAD_COUNT_INITIAL_VALUE = -1;
 const bool ConfigDefinition::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE = false;
 const int ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE = -2;
 const std::string ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE = "";
@@ -59,7 +58,6 @@ const bool ConfigDefinition::USE_SESSION_BUS_INITIAL_VALUE = false;
 const std::string ConfigDefinition::SC_GROUP = "SoftwareContainer";
 
 // Config keys for SoftwareContainer group
-const std::string ConfigDefinition::SC_PRELOAD_COUNT_KEY = "preload-count";
 const std::string ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY = "keep-containers-alive";
 const std::string ConfigDefinition::SC_USE_SESSION_BUS_KEY = "session-bus";
 const std::string ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY = "shutdown-timeout";
@@ -82,10 +80,6 @@ const std::string ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY = "bridge-netmask
  */
 const ConfigItems CONFIGS
 {
-    std::make_tuple(ConfigDefinition::SC_GROUP,
-                    ConfigDefinition::SC_PRELOAD_COUNT_KEY,
-                    ConfigType::Integer,
-                    Optional),
     std::make_tuple(ConfigDefinition::SC_GROUP,
                     ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,
                     ConfigType::Boolean,
