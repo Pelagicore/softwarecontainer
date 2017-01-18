@@ -9,6 +9,10 @@
 <area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_config_mandatory_error.html" title="softwarecontainer::\lConfigMandatoryError" alt="" coords="345,201,494,243"/>
 <area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. " alt="" coords="347,267,492,308"/>
 <area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_config_unknown_error.html" title="A config is found which is not defined in ConfigDefinition. " alt="" coords="348,332,491,373"/>
-<area shape="rect" id="node12" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="344,397,495,439"/>
-<area shape="rect" id="node13" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="548,397,681,439"/>
+<area shape="rect" id="node12" href="$classsoftwarecontainer_1_1_cgroups_gateway_error.html" title="softwarecontainer::\lCgroupsGatewayError" alt="" coords="344,397,495,439"/>
+<area shape="rect" id="node16" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="344,479,495,520"/>
+<area shape="rect" id="node13" href="$classsoftwarecontainer_1_1_bad_suffix_error.html" title="softwarecontainer::\lBadSuffixError" alt="" coords="548,315,681,356"/>
+<area shape="rect" id="node14" href="$classsoftwarecontainer_1_1_j_son_error.html" title="softwarecontainer::\lJSonError" alt="" coords="548,380,681,421"/>
+<area shape="rect" id="node15" href="$classsoftwarecontainer_1_1_limit_range_error.html" title="softwarecontainer::\lLimitRangeError" alt="" coords="548,445,681,487"/>
+<area shape="rect" id="node17" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="548,511,681,552"/>
 </map>

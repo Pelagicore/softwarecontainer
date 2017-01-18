@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-2936551 2017-01-18</span>
+   &#160;<span id="projectnumber">0.17.0-fa29f3f 2017-01-18</span>
    </div>
   </td>
  </tr>
@@ -155,7 +155,7 @@ Protected Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The cgroups gateway sets cgroups related settings for the container. </p>
 
-<p>Definition at line <a class="el" href="cgroupsgateway_8h_source.html#l00032">32</a> of file <a class="el" href="cgroupsgateway_8h_source.html">cgroupsgateway.h</a>.</p>
+<p>Definition at line <a class="el" href="cgroupsgateway_8h_source.html#l00033">33</a> of file <a class="el" href="cgroupsgateway_8h_source.html">cgroupsgateway.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a2333bb26b5768b956410183490483e95"></a>
 <div class="memitem">
@@ -192,26 +192,17 @@ Protected Member Functions</h2></td></tr>
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway</a>.</p>
 
 <p>Definition at line <a class="el" href="cgroupsgateway_8cpp_source.html#l00033">33</a> of file <a class="el" href="cgroupsgateway_8cpp_source.html">cgroupsgateway.cpp</a>.</p>
-
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(m_parser.parseCGroupsGatewayConfiguration(element))) {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse CGroups configuration element&quot;</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        m_parser.parseCGroupsGatewayConfiguration(element);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    } <span class="keywordflow">catch</span> (CgroupsGatewayError &amp;e) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not parse CGroups configuration element&quot;</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_cgroups_gateway_a2333bb26b5768b956410183490483e95_cgraph.svg" width="387" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <a class="anchor" id="af421b6ffb3db76240a491b2302e78699"></a>
@@ -825,7 +816,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_cgroups_gateway.html">CgroupsGateway</a></li>
-    <li class="footer">Generated on Wed Jan 18 2017 12:07:20 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 18 2017 17:12:39 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

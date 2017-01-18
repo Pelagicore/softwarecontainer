@@ -1,8 +1,10 @@
 var namespacesoftwarecontainer =
 [
+    [ "BadSuffixError", "classsoftwarecontainer_1_1_bad_suffix_error.html", "classsoftwarecontainer_1_1_bad_suffix_error" ],
     [ "BaseConfigStore", "classsoftwarecontainer_1_1_base_config_store.html", "classsoftwarecontainer_1_1_base_config_store" ],
     [ "BoolConfig", "classsoftwarecontainer_1_1_bool_config.html", "classsoftwarecontainer_1_1_bool_config" ],
     [ "CgroupsGateway", "classsoftwarecontainer_1_1_cgroups_gateway.html", "classsoftwarecontainer_1_1_cgroups_gateway" ],
+    [ "CgroupsGatewayError", "classsoftwarecontainer_1_1_cgroups_gateway_error.html", "classsoftwarecontainer_1_1_cgroups_gateway_error" ],
     [ "CGroupsParser", "classsoftwarecontainer_1_1_c_groups_parser.html", "classsoftwarecontainer_1_1_c_groups_parser" ],
     [ "CleanUpHandler", "classsoftwarecontainer_1_1_clean_up_handler.html", "classsoftwarecontainer_1_1_clean_up_handler" ],
     [ "CommandJob", "classsoftwarecontainer_1_1_command_job.html", "classsoftwarecontainer_1_1_command_job" ],
@@ -50,7 +52,9 @@ var namespacesoftwarecontainer =
     [ "IPAllocationError", "classsoftwarecontainer_1_1_i_p_allocation_error.html", "classsoftwarecontainer_1_1_i_p_allocation_error" ],
     [ "IPTableEntry", "classsoftwarecontainer_1_1_i_p_table_entry.html", "classsoftwarecontainer_1_1_i_p_table_entry" ],
     [ "JobAbstract", "classsoftwarecontainer_1_1_job_abstract.html", "classsoftwarecontainer_1_1_job_abstract" ],
+    [ "JSonError", "classsoftwarecontainer_1_1_j_son_error.html", "classsoftwarecontainer_1_1_j_son_error" ],
     [ "JSONParser", "classsoftwarecontainer_1_1_j_s_o_n_parser.html", "classsoftwarecontainer_1_1_j_s_o_n_parser" ],
+    [ "LimitRangeError", "classsoftwarecontainer_1_1_limit_range_error.html", "classsoftwarecontainer_1_1_limit_range_error" ],
     [ "MainConfigSource", "classsoftwarecontainer_1_1_main_config_source.html", "classsoftwarecontainer_1_1_main_config_source" ],
     [ "MountCleanUpHandler", "classsoftwarecontainer_1_1_mount_clean_up_handler.html", "classsoftwarecontainer_1_1_mount_clean_up_handler" ],
     [ "Netlink", "classsoftwarecontainer_1_1_netlink.html", "classsoftwarecontainer_1_1_netlink" ],

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CGroups gateway &#8212; softwarecontainer 0.17.0-2936551 2017-01-18 documentation</title>
+    <title>CGroups gateway &#8212; softwarecontainer 0.17.0-fa29f3f 2017-01-18 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.17.0-2936551 2017-01-18',
+        VERSION:     '0.17.0-fa29f3f 2017-01-18',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -73,12 +73,15 @@ configuration options. The operating system also uses swap memory which means if
 memories is the desired action then <code class="docutils literal"><span class="pre">memory.memsw.limit_in_bytes</span></code> setting should also be specified
 in gateway configuration. Note that value of <code class="docutils literal"><span class="pre">memory.memsw.limit_in_bytes</span></code> indicates rss + swap
 memory, thus it cannot be less than <code class="docutils literal"><span class="pre">memory.limit_in_bytes</span></code>.</p>
+<p>Also note that the one can use a suffix (k, K, m, M, g or G) to indicate values in kilo,
+mega or gigabytes when setting <code class="docutils literal"><span class="pre">memory.limit_in_bytes</span></code> or <code class="docutils literal"><span class="pre">memory.memsw.limit_in_bytes</span></code>.</p>
 </div>
 <div class="section" id="whitelisting">
 <h2>Whitelisting<a class="headerlink" href="#whitelisting" title="Permalink to this headline">¶</a></h2>
-<p>This gateway has a whitelisting policy only when the setting is memory.limit_in_bytes. If the
-gateway is configured multiple times whith the memory.limit_in_bytes setting, the bigger value
-will be set. For all other settings the last value will be set.</p>
+<p>This gateway has a whitelisting policy only when the setting is either <code class="docutils literal"><span class="pre">memory.limit_in_bytes`</span> <span class="pre">or</span>
+<span class="pre">``memory.memsw.limit_in_bytes</span></code>. If the gateway is configured multiple times whith either one of
+<code class="docutils literal"><span class="pre">memory.limit_in_bytes</span></code> setting or <code class="docutils literal"><span class="pre">memory.memsw.limit_in_byte</span></code>, the bigger value will be set.
+For all other settings the last value will be set.</p>
 </div>
 <div class="section" id="example-configurations">
 <h2>Example configurations<a class="headerlink" href="#example-configurations" title="Permalink to this headline">¶</a></h2>

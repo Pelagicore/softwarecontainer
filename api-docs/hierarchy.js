@@ -44,6 +44,11 @@ var hierarchy =
       [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
       [ "softwarecontainer::GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", null ],
       [ "softwarecontainer::SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", [
+        [ "softwarecontainer::CgroupsGatewayError", "classsoftwarecontainer_1_1_cgroups_gateway_error.html", [
+          [ "softwarecontainer::BadSuffixError", "classsoftwarecontainer_1_1_bad_suffix_error.html", null ],
+          [ "softwarecontainer::JSonError", "classsoftwarecontainer_1_1_j_son_error.html", null ],
+          [ "softwarecontainer::LimitRangeError", "classsoftwarecontainer_1_1_limit_range_error.html", null ]
+        ] ],
         [ "softwarecontainer::NetworkGatewayError", "classsoftwarecontainer_1_1_network_gateway_error.html", [
           [ "softwarecontainer::IPAllocationError", "classsoftwarecontainer_1_1_i_p_allocation_error.html", null ]
         ] ]
