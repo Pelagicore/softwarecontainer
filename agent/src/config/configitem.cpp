@@ -30,9 +30,7 @@ namespace softwarecontainer {
  */
 ConfigItem::ConfigItem(const std::string &group, const std::string &name):
     m_group(group),
-    m_name(name),
-    m_missing(false),
-    m_mandatory(false)
+    m_name(name)
 {
 }
 
