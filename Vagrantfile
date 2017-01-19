@@ -20,7 +20,7 @@
 # For further information see LICENSE
 #
 
-require './cookbook/system-config/vagrant-reload.rb'
+require './cookbook/host-system-config/vagrant-reload/plugin.rb'
 
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
@@ -65,7 +65,15 @@ Vagrant.configure(2) do |config|
 
     # Change grub to support cgroups memory if necessary
     config.vm.provision "shell", path: "cookbook/system-config/grub-enable-cgroup-memory.sh"
-    config.vm.provision :reload
+    fileCheck = lambda {
+        if File.exists?("VAGRANT_NEEDS_RELOAD")
+            File.delete("VAGRANT_NEEDS_RELOAD")
+            return true
+        else
+            return false
+        end
+    }
+    config.vm.provision "reload", condition: fileCheck
 
     # Add known hosts
     config.vm.provision "shell", privileged: false,
