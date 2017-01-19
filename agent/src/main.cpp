@@ -109,22 +109,24 @@ int main(int argc, char **argv)
 
     /* Default values need to be somehting that should not be set explicitly
      * by the user. */
-    Glib::ustring configPath = ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE;
+
+    std::string configPath = ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE;
     int userID = 0;
     bool keepContainersAlive = ConfigDefinition::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
     int timeout = ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE;
-    Glib::ustring serviceManifestDir = ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE;
-    Glib::ustring defaultServiceManifestDir = ConfigDefinition::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    std::string serviceManifestDir = ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE;
+    std::string defaultServiceManifestDir = ConfigDefinition::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
     bool useSessionBus = ConfigDefinition::USE_SESSION_BUS_INITIAL_VALUE;
 
     Glib::OptionGroup mainGroup("Options", "Options for SoftwareContainer");
-    mainGroup.add_entry(configOpt, configPath);
+
+    mainGroup.add_entry_filename(configOpt, configPath);
     mainGroup.add_entry(userOpt, userID);
     mainGroup.add_entry(keepContainersAliveOpt, keepContainersAlive);
 
     mainGroup.add_entry(timeoutOpt, timeout);
-    mainGroup.add_entry(serviceManifestDirOpt, serviceManifestDir);
-    mainGroup.add_entry(defaultServiceManifestDirOpt, defaultServiceManifestDir);
+    mainGroup.add_entry_filename(serviceManifestDirOpt, serviceManifestDir);
+    mainGroup.add_entry_filename(defaultServiceManifestDirOpt, defaultServiceManifestDir);
     mainGroup.add_entry(sessionBusOpt, useSessionBus);
 
     Glib::OptionContext optionContext;
@@ -153,7 +155,7 @@ int main(int argc, char **argv)
     // Config file set on commandline should take precedence over default
     std::string configFileLocation;
     if (configPath != ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE) {
-        configFileLocation = std::string(configPath);
+        configFileLocation = configPath;
     } else {
         configFileLocation = std::string(SC_CONFIG_FILE /* defined by CMake*/);
     }
@@ -163,12 +165,20 @@ int main(int argc, char **argv)
      */
     std::vector<StringConfig> stringConfigs = std::vector<StringConfig>();
     if (serviceManifestDir != ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
+        if ('/' != serviceManifestDir.back()) {
+            serviceManifestDir.push_back('/');
+        }
+
         StringConfig config(ConfigDefinition::SC_GROUP,
                             ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY,
                             serviceManifestDir);
         stringConfigs.push_back(config);
     }
     if (defaultServiceManifestDir != ConfigDefinition::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE) {
+        if ('/' != defaultServiceManifestDir.back()) {
+            defaultServiceManifestDir.push_back('/');
+        }
+
         StringConfig config(ConfigDefinition::SC_GROUP,
                             ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY,
                             defaultServiceManifestDir);
