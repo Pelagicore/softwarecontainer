@@ -115,6 +115,31 @@ public:
     }
 };
 
+
+/*
+ * Test that an agent instance can create, destroy, and create another container.
+ */
+TEST_F(SoftwareContainerAgentTest, CreateDestroyCreate) {
+    ASSERT_NO_THROW({
+        ContainerID id1 = sca->createContainer(valid_config);
+        sca->deleteContainer(id1);
+        ContainerID id2 = sca->createContainer(valid_config);
+        sca->deleteContainer(id2);
+    });
+}
+
+/*
+ * Test that an agent instance can create two containers in succession
+ */
+TEST_F(SoftwareContainerAgentTest, CreateTwice) {
+    ASSERT_NO_THROW({
+        ContainerID id1 = sca->createContainer(valid_config);
+        ContainerID id2 = sca->createContainer(valid_config);
+        sca->deleteContainer(id1);
+        sca->deleteContainer(id2);
+    });
+}
+
 TEST_F(SoftwareContainerAgentTest, CreatAndCheckContainer) {
     ASSERT_NO_THROW({
         ContainerID id = sca->createContainer(valid_config);

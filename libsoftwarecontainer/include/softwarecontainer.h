@@ -24,6 +24,7 @@
 #include "workspace.h"
 #include "gatewayconfig.h"
 #include "signalconnectionshandler.h"
+#include "config/softwarecontainerconfig.h"
 
 #include <glibmm.h>
 
@@ -50,8 +51,7 @@ public:
 
     SoftwareContainer(std::shared_ptr<Workspace> workspace,
                       const ContainerID id,
-                      std::string bridgeIp = "10.0.3.1",
-                      int netmaskBits = 16);
+                      std::unique_ptr<const SoftwareContainerConfig> config);
 
     ~SoftwareContainer();
 

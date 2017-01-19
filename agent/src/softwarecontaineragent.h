@@ -40,10 +40,7 @@
 #include "commandjob.h"
 #include <queue>
 
-/**
- * @class softwarecontainer::SoftwareContainerAgent
- * @brief A wrapper class
- */
+
 namespace softwarecontainer {
 
 static constexpr ContainerID INVALID_CONTAINER_ID = -1;
@@ -76,6 +73,7 @@ public:
 protected:
     std::string m_message;
 };
+
 
 class SoftwareContainerAgent
 {
@@ -287,6 +285,17 @@ private:
     std::shared_ptr<DefaultConfigStore>  m_defaultConfigStore;
 
     std::shared_ptr<Config> m_config;
+
+    /*
+     * Holds all configs to use for each SoftwareContainer instance,
+     * both the static configs from Config, as well as dynamic values
+     * set by the client when creating a container.
+     *
+     * Each SoftwareContainer instance needs its own copy of these configs
+     * so this reference should be used to create a copy from, which should
+     * be passed to SoftwareContainer as a unique_ptr.
+     */
+    SoftwareContainerConfig m_containerConfig;
 };
 
 } // namespace softwarecontainer

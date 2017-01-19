@@ -21,6 +21,7 @@ add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
 
 include_directories(
     ${LIBSOFTWARECONTAINER_DIR}/src
+    ${LIBSOFTWARECONTAINER_DIR}/src/config
 )
 
 set(TEST_LIBRARY_DEPENDENCIES
@@ -45,6 +46,7 @@ add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
 set(TEST_FILES
     softwarecontainer_test.cpp
     softwarecontainerlib_unittest.cpp
+    ${LIBSOFTWARECONTAINER_DIR}/src/config/softwarecontainerconfig.cpp
     ${GATEWAY_TEST_FILES}
     main.cpp
 )
