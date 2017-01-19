@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-fa29f3f 2017-01-18</span>
+   &#160;<span id="projectnumber">0.17.0-b710538 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -132,46 +132,40 @@ $(document).ready(function(){initNavTree('defaultconfigsource_8cpp_source.html',
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    m_stringConfigs.push_back(stringConfig);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    IntConfig intConfig = IntConfig(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                    ConfigDefinition::SC_PRELOAD_COUNT_KEY,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                    SC_PRELOAD_COUNT);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                    ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                    SC_SHUTDOWN_TIMEOUT);</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    intConfig.setSource(ConfigSourceType::Default);</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    m_intConfigs.push_back(intConfig);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    intConfig = IntConfig(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                          ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                          SC_SHUTDOWN_TIMEOUT);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    intConfig.setSource(ConfigSourceType::Default);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    m_intConfigs.push_back(intConfig);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    BoolConfig boolConfig = BoolConfig(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                                       ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                       SC_KEEP_CONTAINERS_ALIVE);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    boolConfig.setSource(ConfigSourceType::Default);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    m_boolConfigs.push_back(boolConfig);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    BoolConfig boolConfig = BoolConfig(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                                       ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                       SC_KEEP_CONTAINERS_ALIVE);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    boolConfig = BoolConfig(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                            ConfigDefinition::SC_USE_SESSION_BUS_KEY,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                            SC_USE_SESSION_BUS);</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    boolConfig.setSource(ConfigSourceType::Default);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    m_boolConfigs.push_back(boolConfig);</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    boolConfig = BoolConfig(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                            ConfigDefinition::SC_USE_SESSION_BUS_KEY,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                            SC_USE_SESSION_BUS);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    boolConfig.setSource(ConfigSourceType::Default);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    m_boolConfigs.push_back(boolConfig);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;std::vector&lt;StringConfig&gt; DefaultConfigSource::stringConfigs()</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;{</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">return</span> m_stringConfigs;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;std::vector&lt;IntConfig&gt; DefaultConfigSource::intConfigs()</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;{</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordflow">return</span> m_intConfigs;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;std::vector&lt;BoolConfig&gt; DefaultConfigSource::boolConfigs()</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;{</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">return</span> m_boolConfigs;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;std::vector&lt;StringConfig&gt; DefaultConfigSource::stringConfigs()</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">return</span> m_stringConfigs;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;std::vector&lt;IntConfig&gt; DefaultConfigSource::intConfigs()</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;{</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">return</span> m_intConfigs;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;std::vector&lt;BoolConfig&gt; DefaultConfigSource::boolConfigs()</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;{</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">return</span> m_boolConfigs;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -179,7 +173,7 @@ $(document).ready(function(){initNavTree('defaultconfigsource_8cpp_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><a class="el" href="dir_91f28cb6b1af0be1ff9e84931ad37c4b.html">config</a></li><li class="navelem"><b>defaultconfigsource.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 18 2017 17:12:39 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 08:42:16 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

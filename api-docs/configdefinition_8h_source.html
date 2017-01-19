@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-fa29f3f 2017-01-18</span>
+   &#160;<span id="projectnumber">0.17.0-b710538 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -134,37 +134,35 @@ $(document).ready(function(){initNavTree('configdefinition_8h_source.html','');}
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// Illegal values used as initial command line option values to check if user</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">// set them or not</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_CONFIG_PATH_INITIAL_VALUE;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> PRELOAD_COUNT_INITIAL_VALUE;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> SHUTDOWN_TIMEOUT_INITIAL_VALUE;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SERVICE_MANIFEST_DIR_INITIAL_VALUE;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> USE_SESSION_BUS_INITIAL_VALUE;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="comment">// Config group &quot;SoftwareContainer&quot;</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_GROUP;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">// Config keys for SoftwareContainer group</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_PRELOAD_COUNT_KEY;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_KEEP_CONTAINERS_ALIVE_KEY;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_USE_SESSION_BUS_KEY;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_SHUTDOWN_TIMEOUT_KEY;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_SHARED_MOUNTS_DIR_KEY;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_LXC_CONFIG_PATH_KEY;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_SERVICE_MANIFEST_DIR_KEY;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_CREATE_BRIDGE_KEY;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_BRIDGE_DEVICE_KEY;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_BRIDGE_IP_KEY;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_BRIDGE_NETMASK_BITS_KEY;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">static</span> MandatoryConfigs mandatory();</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">static</span> ConfigDependencies dependencies();</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">static</span> TypeMap typeMap();</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">static</span> MandatoryFlag convertDefineToFlag(<span class="keywordtype">bool</span> definition);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;};</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> SHUTDOWN_TIMEOUT_INITIAL_VALUE;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SERVICE_MANIFEST_DIR_INITIAL_VALUE;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">bool</span> USE_SESSION_BUS_INITIAL_VALUE;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// Config group &quot;SoftwareContainer&quot;</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_GROUP;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// Config keys for SoftwareContainer group</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_KEEP_CONTAINERS_ALIVE_KEY;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_USE_SESSION_BUS_KEY;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_SHUTDOWN_TIMEOUT_KEY;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_SHARED_MOUNTS_DIR_KEY;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_LXC_CONFIG_PATH_KEY;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_SERVICE_MANIFEST_DIR_KEY;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_CREATE_BRIDGE_KEY;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_BRIDGE_DEVICE_KEY;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_BRIDGE_IP_KEY;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> std::string SC_BRIDGE_NETMASK_BITS_KEY;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">static</span> MandatoryConfigs mandatory();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">static</span> ConfigDependencies dependencies();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">static</span> TypeMap typeMap();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">static</span> MandatoryFlag convertDefineToFlag(<span class="keywordtype">bool</span> definition);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;};</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_config_definition_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_config_definition.html">softwarecontainer::ConfigDefinition</a></div><div class="ttdef"><b>Definition:</b> <a href="configdefinition_8h_source.html#l00062">configdefinition.h:62</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -173,7 +171,7 @@ $(document).ready(function(){initNavTree('configdefinition_8h_source.html','');}
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><a class="el" href="dir_91f28cb6b1af0be1ff9e84931ad37c4b.html">config</a></li><li class="navelem"><b>configdefinition.h</b></li>
-    <li class="footer">Generated on Wed Jan 18 2017 17:12:39 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 08:42:16 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

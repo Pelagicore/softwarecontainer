@@ -65,8 +65,6 @@ subsequently uses:
 
     Agent -> SoftwareContainer [label = "init()"]
 
-    SoftwareContainer -> SoftwareContainer [label = "preload()"]
-
     SoftwareContainer -> ContainerAbstractInterface [label = "initialize()"]
     SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
 

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-fa29f3f 2017-01-18</span>
+   &#160;<span id="projectnumber">0.17.0-b710538 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -156,7 +156,7 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ensureContainerRunning</b> ()</td></tr>
 <tr class="separator:aedbf74019c7d3ede6612e66a775f03c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8461f293ef5db5ee5fbdeddd24f36214"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214">initialize</a> ()</td></tr>
-<tr class="memdesc:a8461f293ef5db5ee5fbdeddd24f36214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the container for preloading.  <a href="#a8461f293ef5db5ee5fbdeddd24f36214">More...</a><br /></td></tr>
+<tr class="memdesc:a8461f293ef5db5ee5fbdeddd24f36214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the container for startup.  <a href="#a8461f293ef5db5ee5fbdeddd24f36214">More...</a><br /></td></tr>
 <tr class="separator:a8461f293ef5db5ee5fbdeddd24f36214"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8412d93d20efd8ea25cce28378d2c1be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8412d93d20efd8ea25cce28378d2c1be"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td></tr>
@@ -433,7 +433,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00259">259</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;{</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keywordflow">if</span> (m_state &lt; ContainerState::CREATED) {</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Trying to start container that isn&#39;t created. Please create the container first&quot;</span>;</div>
@@ -470,7 +470,7 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    log_info() &lt;&lt; <span class="stringliteral">&quot;To connect to this container : lxc-attach -n &quot;</span> &lt;&lt; id();</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -550,7 +550,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00387">387</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;{</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(ensureContainerRunning())) {</div>
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t attach&quot;</span>;</div>
@@ -593,8 +593,8 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_container_html_a83a367840850c0bfb6da2587f2b246de"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">softwarecontainer::Container::execute</a></div><div class="ttdeci">ReturnCode execute(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00387">container.cpp:387</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -669,7 +669,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00309">309</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;{</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
@@ -741,7 +741,7 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    }</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -951,7 +951,7 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;</div>
 <div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    <span class="keywordflow">return</span> ret;</div>
 <div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00050">softwarecontainer-common.h:50</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -976,14 +976,14 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Setup the container for preloading. </p>
+<p>Setup the container for startup. </p>
 <p>Setup the container so directories are available for later use when setApplication is called. </p><dl class="section return"><dt>Returns</dt><dd>true or false </dd></dl>
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00105">105</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 
-<p>References <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00219">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00219">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordflow">if</span> (m_state &lt; ContainerState::PREPARED) {</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        std::string gatewayDir = gatewaysDir();</div>
@@ -1001,7 +1001,7 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    }</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_aff5073fb683649d6753baae354d202b9"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">softwarecontainer::FileToolkitWithUndo::createDirectory</a></div><div class="ttdeci">ReturnCode createDirectory(const std::string &amp;path)</div><div class="ttdoc">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00068">filetoolkitwithundo.cpp:68</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_ab74e5ec0784b2aa597d54f28f44f7112"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab74e5ec0784b2aa597d54f28f44f7112">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint</a></div><div class="ttdeci">ReturnCode createSharedMountPoint(const std::string &amp;path)</div><div class="ttdoc">createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount wil...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00219">filetoolkitwithundo.cpp:219</a></div></div>
 </div><!-- fragment -->
@@ -1025,7 +1025,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_container.html">Container</a></li>
-    <li class="footer">Generated on Wed Jan 18 2017 17:12:39 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 08:42:16 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

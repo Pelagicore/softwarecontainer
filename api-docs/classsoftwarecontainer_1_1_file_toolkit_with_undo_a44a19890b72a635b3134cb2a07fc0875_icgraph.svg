@@ -77,7 +77,7 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for preloading. ">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for startup. ">
 <polygon fill="white" stroke="black" points="306,-120 306,-150 406,-150 406,-120 306,-120"/>
 <text text-anchor="start" x="314" y="-138" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="356" y="-127" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>

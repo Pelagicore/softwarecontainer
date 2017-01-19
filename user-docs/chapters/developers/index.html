@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developer guidelines &#8212; softwarecontainer 0.17.0-fa29f3f 2017-01-18 documentation</title>
+    <title>Developer guidelines &#8212; softwarecontainer 0.17.0-b710538 2017-01-19 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.17.0-fa29f3f 2017-01-18',
+        VERSION:     '0.17.0-b710538 2017-01-19',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -80,7 +80,7 @@ destruction. The interface provides access to the underlying <code class="docuti
 utilize to access the container interface. The interface is implemented by <code class="docutils literal"><span class="pre">SoftwareContainer</span></code>.</p>
 <p>Below is a diagram showing the interaction between the user <cite>Agent</cite> and the interfaces <code class="docutils literal"><span class="pre">SoftwareContainer</span></code>
 subsequently uses:</p>
-<div><svg height="766" viewBox="0 0 844 766" width="844" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+<div><svg height="720" viewBox="0 0 844 720" width="844" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs id="defs_block">
     <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
       <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
@@ -88,37 +88,37 @@ subsequently uses:</p>
   </defs>
   <title>blockdiag</title>
   <desc />
-  <rect fill="rgb(0,0,0)" height="690" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
+  <rect fill="rgb(0,0,0)" height="644" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
   <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="71" />
   <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="116" />
   <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="161" />
-  <rect fill="rgb(0,0,0)" height="467" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="206" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="282" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="342" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="402" />
-  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="462" />
-  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="583" />
-  <polygon fill="rgb(0,0,0)" points="723,455 823,455 831,463 831,470 723,470 723,455" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
-  <polygon fill="rgb(0,0,0)" points="435,530 535,530 543,538 543,545 435,545 435,530" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
-  <polygon fill="rgb(0,0,0)" points="723,576 823,576 831,584 831,591 723,591 723,576" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <rect fill="rgb(0,0,0)" height="421" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="206" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="236" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="296" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="356" />
+  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="416" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="537" />
+  <polygon fill="rgb(0,0,0)" points="723,409 823,409 831,417 831,424 723,424 723,409" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <polygon fill="rgb(0,0,0)" points="435,484 535,484 543,492 543,499 435,499 435,484" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <polygon fill="rgb(0,0,0)" points="723,530 823,530 831,538 831,545 723,545 723,530" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="11" />
   <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="643" y="11" />
-  <path d="M 128 45 L 128 771" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="690" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
-  <path d="M 320 45 L 320 771" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 128 45 L 128 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="644" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
+  <path d="M 320 45 L 320 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
   <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="316" y="65" />
   <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="316" y="110" />
   <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="316" y="155" />
-  <rect fill="moccasin" height="467" stroke="rgb(0,0,0)" width="8" x="316" y="200" />
-  <path d="M 512 45 L 512 771" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="276" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="336" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="396" />
-  <path d="M 704 45 L 704 771" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
-  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="700" y="456" />
-  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="577" />
+  <rect fill="moccasin" height="421" stroke="rgb(0,0,0)" width="8" x="316" y="200" />
+  <path d="M 512 45 L 512 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="230" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="290" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="350" />
+  <path d="M 704 45 L 704 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="700" y="410" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="531" />
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="5" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="128" y="31">Agent</text>
   <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="5" />
@@ -142,69 +142,64 @@ subsequently uses:</p>
   <polygon fill="rgb(0,0,0)" points="144,166 136,170 144,174" stroke="rgb(0,0,0)" />
   <path d="M 136 200 L 312 200" fill="none" stroke="rgb(0,0,0)" />
   <polygon fill="rgb(0,0,0)" points="304,196 312,200 304,204" stroke="rgb(0,0,0)" />
-  <path d="M 328 230 L 416 230" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 416 230 L 416 246" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 416 246 L 328 246" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="336,242 328,246 336,250" stroke="rgb(0,0,0)" />
-  <path d="M 328 276 L 504 276" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,272 504,276 496,280" stroke="rgb(0,0,0)" />
-  <path d="M 328 306 L 504 306" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,302 328,306 336,310" stroke="rgb(0,0,0)" />
-  <path d="M 328 336 L 504 336" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,332 504,336 496,340" stroke="rgb(0,0,0)" />
-  <path d="M 328 366 L 504 366" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,362 328,366 336,370" stroke="rgb(0,0,0)" />
-  <path d="M 328 396 L 504 396" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="496,392 504,396 496,400" stroke="rgb(0,0,0)" />
-  <path d="M 328 426 L 504 426" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,422 328,426 336,430" stroke="rgb(0,0,0)" />
-  <path d="M 328 456 L 696 456" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="688,452 696,456 688,460" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(255,182,193)" points="720,449 820,449 828,457 828,464 720,464 720,449" stroke="rgb(0,0,0)" />
-  <path d="M 820 449 L 820 457" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 820 457 L 828 457" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="770" y="462">multiple calls</text>
-  <path d="M 328 471 L 696 471" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,467 328,471 336,475" stroke="rgb(0,0,0)" />
-  <path d="M 328 531 L 416 531" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 416 531 L 416 547" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 416 547 L 328 547" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="336,543 328,547 336,551" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(255,182,193)" points="432,524 532,524 540,532 540,539 432,539 432,524" stroke="rgb(0,0,0)" />
-  <path d="M 532 524 L 532 532" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 532 532 L 540 532" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="482" y="537">multiple calls</text>
-  <path d="M 328 577 L 696 577" fill="none" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(0,0,0)" points="688,573 696,577 688,581" stroke="rgb(0,0,0)" />
-  <polygon fill="rgb(255,182,193)" points="720,570 820,570 828,578 828,585 720,585 720,570" stroke="rgb(0,0,0)" />
-  <path d="M 820 570 L 820 578" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 820 578 L 828 578" fill="none" stroke="rgb(0,0,0)" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="770" y="583">multiple calls</text>
-  <path d="M 328 607 L 696 607" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="336,603 328,607 336,611" stroke="rgb(0,0,0)" />
-  <path d="M 136 667 L 312 667" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
-  <polygon fill="rgb(0,0,0)" points="144,663 136,667 144,671" stroke="rgb(0,0,0)" />
+  <path d="M 328 230 L 504 230" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,226 504,230 496,234" stroke="rgb(0,0,0)" />
+  <path d="M 328 260 L 504 260" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,256 328,260 336,264" stroke="rgb(0,0,0)" />
+  <path d="M 328 290 L 504 290" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,286 504,290 496,294" stroke="rgb(0,0,0)" />
+  <path d="M 328 320 L 504 320" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,316 328,320 336,324" stroke="rgb(0,0,0)" />
+  <path d="M 328 350 L 504 350" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,346 504,350 496,354" stroke="rgb(0,0,0)" />
+  <path d="M 328 380 L 504 380" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,376 328,380 336,384" stroke="rgb(0,0,0)" />
+  <path d="M 328 410 L 696 410" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,406 696,410 688,414" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="720,403 820,403 828,411 828,418 720,418 720,403" stroke="rgb(0,0,0)" />
+  <path d="M 820 403 L 820 411" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 820 411 L 828 411" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="770" y="416">multiple calls</text>
+  <path d="M 328 425 L 696 425" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,421 328,425 336,429" stroke="rgb(0,0,0)" />
+  <path d="M 328 485 L 416 485" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 485 L 416 501" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 501 L 328 501" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="336,497 328,501 336,505" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="432,478 532,478 540,486 540,493 432,493 432,478" stroke="rgb(0,0,0)" />
+  <path d="M 532 478 L 532 486" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 532 486 L 540 486" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="482" y="491">multiple calls</text>
+  <path d="M 328 531 L 696 531" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,527 696,531 688,535" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="720,524 820,524 828,532 828,539 720,539 720,524" stroke="rgb(0,0,0)" />
+  <path d="M 820 524 L 820 532" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 820 532 L 828 532" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="770" y="537">multiple calls</text>
+  <path d="M 328 561 L 696 561" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,557 328,561 336,565" stroke="rgb(0,0,0)" />
+  <path d="M 136 621 L 312 621" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,617 136,621 144,625" stroke="rgb(0,0,0)" />
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="155" y="63">new()</text>
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="96" x="188" y="108">setContainerID()</text>
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="120" x="200" y="153">setMainLoopContext()</text>
   <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="158" y="198">init()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="54" x="355" y="228">preload()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="368" y="274">initialize()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="304">ReturnCode</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="356" y="334">create()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="364">ReturnCode</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="353" y="394">start()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="424">ReturnCode</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="347" y="454">new()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="364" y="529">addGateway()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="374" y="575">setContainer()</text>
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="282" y="665">ReturnCode</text>
-  <path d="M 40 714 L 349 714" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 40 718 L 349 718" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 483 714 L 792 714" fill="none" stroke="rgb(0,0,0)" />
-  <path d="M 483 718 L 792 718" fill="none" stroke="rgb(0,0,0)" />
-  <rect fill="rgb(208,208,208)" height="19" stroke="rgb(0,0,0)" width="134" x="349" y="707" />
-  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="416" y="722">further events here</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="368" y="228">initialize()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="258">ReturnCode</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="356" y="288">create()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="318">ReturnCode</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="353" y="348">start()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="474" y="378">ReturnCode</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="347" y="408">new()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="364" y="483">addGateway()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="374" y="529">setContainer()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="282" y="619">ReturnCode</text>
+  <path d="M 40 668 L 349 668" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 40 672 L 349 672" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 483 668 L 792 668" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 483 672 L 792 672" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(208,208,208)" height="19" stroke="rgb(0,0,0)" width="134" x="349" y="661" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="416" y="676">further events here</text>
 </svg>
 </div>
 </div>

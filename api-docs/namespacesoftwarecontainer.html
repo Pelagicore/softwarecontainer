@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-fa29f3f 2017-01-18</span>
+   &#160;<span id="projectnumber">0.17.0-b710538 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -313,7 +313,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="separator:aecadcbe957cb7bc2658152804b6de22b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd6b492c905bceb4fc6d72df514ca96d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd6b492c905bceb4fc6d72df514ca96d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>ContainerState</b> { <b>CREATED</b>, 
-<b>PRELOADED</b>, 
+<b>INITIALIZED</b>, 
 <b>READY</b>, 
 <b>TERMINATED</b>
  }</td></tr>
@@ -496,11 +496,11 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 
 <p>The ReturnCode enum contains common return values. </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00050">50</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;{</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    FAILURE,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    SUCCESS</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;};</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00049">49</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    FAILURE,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    SUCCESS</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -631,7 +631,7 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 
 <p>References <a class="el" href="signalconnectionshandler_8cpp_source.html#l00024">softwarecontainer::SignalConnectionsHandler::addConnection()</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00307">softwarecontainer::SoftwareContainerAgent::execute()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00263">softwarecontainer::SoftwareContainerAgent::execute()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    Glib::SignalChildWatch watch = context-&gt;signal_child_watch();</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">auto</span> connection = watch.connect(<span class="keyword">function</span>, pid);</div>
@@ -911,10 +911,10 @@ Here is the caller graph for this function:</div>
 <dd>
 ReturnCode::FAILURE if b is false </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00062">62</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">return</span> b ? ReturnCode::SUCCESS : ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00061">61</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;{</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">return</span> b ? ReturnCode::SUCCESS : ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -949,17 +949,17 @@ ReturnCode::FAILURE if b is false </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if ReturnCode::FAILURE is indicated </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00072">72</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00071">71</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
 
-<p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00057">softwarecontainer::DBusGateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00392">softwarecontainer::SoftwareContainerAgent::bindMount()</a>, <a class="el" href="netlink_8cpp_source.html#l00480">softwarecontainer::Netlink::checkKernelDump()</a>, <a class="el" href="workspace_8cpp_source.html#l00040">softwarecontainer::Workspace::checkWorkspace()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00258">softwarecontainer::SoftwareContainerAgent::createContainer()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="container_8cpp_source.html#l00309">softwarecontainer::Container::execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00307">softwarecontainer::SoftwareContainerAgent::execute()</a>, <a class="el" href="netlink_8cpp_source.html#l00313">softwarecontainer::Netlink::findAddresses()</a>, <a class="el" href="netlink_8cpp_source.html#l00288">softwarecontainer::Netlink::findLink()</a>, <a class="el" href="netlink_8cpp_source.html#l00454">softwarecontainer::Netlink::getKernelDump()</a>, <a class="el" href="container_8cpp_source.html#l00105">softwarecontainer::Container::initialize()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00082">isSuccess()</a>, <a class="el" href="netlink_8cpp_source.html#l00260">softwarecontainer::Netlink::linkDown()</a>, <a class="el" href="netlink_8cpp_source.html#l00193">softwarecontainer::Netlink::linkUp()</a>, <a class="el" href="netlink_8cpp_source.html#l00029">softwarecontainer::Netlink::Netlink()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00166">softwarecontainer::FileToolkitWithUndo::overlayMount()</a>, <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00085">softwarecontainer::SoftwareContainer::preload()</a>, <a class="el" href="envgateway_8cpp_source.html#l00037">softwarecontainer::EnvironmentGateway::readConfigElement()</a>, <a class="el" href="filegateway_8cpp_source.html#l00030">softwarecontainer::FileGateway::readConfigElement()</a>, <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00065">softwarecontainer::DBusGatewayInstance::readConfigElement()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00034">softwarecontainer::DeviceNodeGateway::readConfigElement()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, <a class="el" href="netlink_8cpp_source.html#l00222">softwarecontainer::Netlink::setIP()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00358">softwarecontainer::SoftwareContainerAgent::shutdownContainer()</a>, <a class="el" href="container_8cpp_source.html#l00259">softwarecontainer::Container::start()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00174">softwarecontainer::SoftwareContainer::startGateways()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00078">softwarecontainer::DBusGateway::teardown()</a>, and <a class="el" href="workspace_8cpp_source.html#l00024">softwarecontainer::Workspace::Workspace()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">return</span> (code != ReturnCode::SUCCESS);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00057">softwarecontainer::DBusGateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00348">softwarecontainer::SoftwareContainerAgent::bindMount()</a>, <a class="el" href="netlink_8cpp_source.html#l00480">softwarecontainer::Netlink::checkKernelDump()</a>, <a class="el" href="workspace_8cpp_source.html#l00040">softwarecontainer::Workspace::checkWorkspace()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00227">softwarecontainer::SoftwareContainerAgent::createContainer()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="container_8cpp_source.html#l00309">softwarecontainer::Container::execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00263">softwarecontainer::SoftwareContainerAgent::execute()</a>, <a class="el" href="netlink_8cpp_source.html#l00313">softwarecontainer::Netlink::findAddresses()</a>, <a class="el" href="netlink_8cpp_source.html#l00288">softwarecontainer::Netlink::findLink()</a>, <a class="el" href="netlink_8cpp_source.html#l00454">softwarecontainer::Netlink::getKernelDump()</a>, <a class="el" href="container_8cpp_source.html#l00105">softwarecontainer::Container::initialize()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00081">isSuccess()</a>, <a class="el" href="netlink_8cpp_source.html#l00260">softwarecontainer::Netlink::linkDown()</a>, <a class="el" href="netlink_8cpp_source.html#l00193">softwarecontainer::Netlink::linkUp()</a>, <a class="el" href="netlink_8cpp_source.html#l00029">softwarecontainer::Netlink::Netlink()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00166">softwarecontainer::FileToolkitWithUndo::overlayMount()</a>, <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="envgateway_8cpp_source.html#l00037">softwarecontainer::EnvironmentGateway::readConfigElement()</a>, <a class="el" href="filegateway_8cpp_source.html#l00030">softwarecontainer::FileGateway::readConfigElement()</a>, <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00065">softwarecontainer::DBusGatewayInstance::readConfigElement()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00034">softwarecontainer::DeviceNodeGateway::readConfigElement()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, <a class="el" href="netlink_8cpp_source.html#l00222">softwarecontainer::Netlink::setIP()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00314">softwarecontainer::SoftwareContainerAgent::shutdownContainer()</a>, <a class="el" href="container_8cpp_source.html#l00259">softwarecontainer::Container::start()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00173">softwarecontainer::SoftwareContainer::startGateways()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00078">softwarecontainer::DBusGateway::teardown()</a>, and <a class="el" href="workspace_8cpp_source.html#l00024">softwarecontainer::Workspace::Workspace()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;{</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">return</span> (code != ReturnCode::SUCCESS);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a51a25e6a54b7bb79fc5b4ce8902a31a4_icgraph.svg" width="920" height="2046"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a51a25e6a54b7bb79fc5b4ce8902a31a4_icgraph.svg" width="920" height="1980"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -997,15 +997,15 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if ReturnCode::SUCCESS is indicated </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00082">82</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00081">81</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
 
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00072">isError()</a>.</p>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">isError()</a>.</p>
 
 <p>Referenced by <a class="el" href="pulsegateway_8cpp_source.html#l00076">softwarecontainer::PulseGateway::activateGateway()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, and <a class="el" href="networkgateway_8cpp_source.html#l00042">softwarecontainer::NetworkGateway::readConfigElement()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;{</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">return</span> !<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(code);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00072">softwarecontainer-common.h:72</a></div></div>
+<div class="fragment"><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;{</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">return</span> !<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(code);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1056,12 +1056,12 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Process termination status. </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00093">93</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;{</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">int</span> status = 0;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    waitpid(pid, &amp;status, 0);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordflow">return</span> WEXITSTATUS(status);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00092">92</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;{</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">int</span> status = 0;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    waitpid(pid, &amp;status, 0);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">return</span> WEXITSTATUS(status);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1071,7 +1071,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li>
-    <li class="footer">Generated on Wed Jan 18 2017 17:12:39 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 08:42:16 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

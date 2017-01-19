@@ -32,7 +32,7 @@
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
-<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for preloading. ">
+<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for startup. ">
 <polygon fill="white" stroke="black" points="165,-60 165,-90 265,-90 265,-60 165,-60"/>
 <text text-anchor="start" x="173" y="-78" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="215" y="-67" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
