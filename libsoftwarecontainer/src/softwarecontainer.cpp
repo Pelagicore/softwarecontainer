@@ -58,18 +58,20 @@ namespace softwarecontainer {
 
 SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace,
                                      const ContainerID id,
-                                     std::string bridgeIp,
-                                     int netmaskBits) :
+                                     std::unique_ptr<const SoftwareContainerConfig> config):
     m_workspace(workspace),
-    m_containerID(id),
-    m_bridgeIp(bridgeIp),
-    m_netmaskBits(netmaskBits),
-    m_container(new Container("SC-" + std::to_string(id),
-                              m_workspace->m_containerConfigPath,
-                              m_workspace->m_containerRootDir,
-                              m_workspace->m_enableWriteBuffer,
-                              m_workspace->m_containerShutdownTimeout))
+    m_containerID(id)
 {
+    m_bridgeIp = config->bridgeIp();
+    m_netmaskBits = config->netmaskBitLength();
+
+    m_container = std::shared_ptr<ContainerAbstractInterface>(
+        new Container("SC-" + std::to_string(id),
+                      config->containerConfigPath(),
+                      config->containerRootDir(),
+                      config->enableWriteBuffer(),
+                      config->containerShutdownTimeout()));
+
     m_containerState = ContainerState::CREATED;
 }
 

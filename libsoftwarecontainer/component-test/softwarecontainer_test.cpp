@@ -23,7 +23,7 @@
 
 void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
 {
-    sc->addGateway(gw);
+    m_sc->addGateway(gw);
 }
 
 void SoftwareContainerTest::run()
@@ -56,14 +56,23 @@ void SoftwareContainerTest::SetUp()
 
     srand(time(NULL));
     uint32_t containerId =  rand() % 100;
-    sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace, containerId));
-    sc->setMainLoopContext(m_context);
-    ASSERT_TRUE(isSuccess(sc->init()));
+
+    std::unique_ptr<SoftwareContainerConfig> config =
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
+                                                                             LXC_CONFIG_PATH_TESTING,
+                                                                             SHARED_MOUNTS_DIR_TESTING,
+                                                                             24 /*netmask bit length*/,
+                                                                             1 /*shutdown timeout*/));
+    config->setEnableWriteBuffer(false);
+
+    m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace, containerId, std::move(config)));
+    m_sc->setMainLoopContext(m_context);
+    ASSERT_TRUE(isSuccess(m_sc->init()));
 }
 
 void SoftwareContainerTest::TearDown()
 {
     ::testing::Test::TearDown();
-    sc.reset();
+    m_sc.reset();
     workspace.reset();
 }

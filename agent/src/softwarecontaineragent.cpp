@@ -22,16 +22,17 @@
 #include "softwarecontaineragent.h"
 #include "config/configerror.h"
 #include "config/configdefinition.h"
+#include "config/softwarecontainerconfig.h"
 #include "softwarecontainererror.h"
 
 namespace softwarecontainer {
 
 
-SoftwareContainerAgent::SoftwareContainerAgent(
-        Glib::RefPtr<Glib::MainContext> mainLoopContext,
-        std::shared_ptr<Config> config):
+SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
+                                               std::shared_ptr<Config> config):
     m_mainLoopContext(mainLoopContext),
-    m_config(config)
+    m_config(config),
+    m_containerConfig(SoftwareContainerConfig())
 {
     m_containerIdPool.push_back(0);
 
@@ -63,6 +64,16 @@ SoftwareContainerAgent::SoftwareContainerAgent(
     m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
     m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
 
+    std::string bridgeIp = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                    ConfigDefinition::SC_BRIDGE_IP_KEY);
+    int netmaskBits = m_config->getIntValue(ConfigDefinition::SC_GROUP,
+                                            ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY);
+
+    m_containerConfig = SoftwareContainerConfig(bridgeIp,
+                                                lxcConfigPath,
+                                                containerRootDir,
+                                                netmaskBits,
+                                                shutdownTimeout);
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
@@ -135,6 +146,7 @@ void SoftwareContainerAgent::readConfigElement(const json_t *element)
     }
 
     m_softwarecontainerWorkspace->m_enableWriteBuffer = wo;
+    m_containerConfig.setEnableWriteBuffer(wo);
 }
 
 void SoftwareContainerAgent::parseConfig(const std::string &config)
@@ -192,17 +204,16 @@ ContainerID SoftwareContainerAgent::findSuitableId()
 
 SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwareContainer(const ContainerID containerID)
 {
-    std::string bridgeIp = m_config->getStringValue(ConfigDefinition::SC_GROUP,
-                                                    ConfigDefinition::SC_BRIDGE_IP_KEY);
-    int netmaskBits = m_config->getIntValue(ConfigDefinition::SC_GROUP,
-                                            ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY);
-
-    log_debug() << "Created container with ID :" << containerID;
+    // At this point, the configs are all gathered and should be unique to each SC instance
+    // so we create a copy and pass along ownership.
+    std::unique_ptr<SoftwareContainerConfig> config =
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(m_containerConfig));
 
     auto container = SoftwareContainerPtr(new SoftwareContainer(m_softwarecontainerWorkspace,
                                                                 containerID,
-                                                                bridgeIp,
-                                                                netmaskBits));
+                                                                std::move(config)));
+    log_debug() << "Created container with ID :" << containerID;
+
     return container;
 }
 

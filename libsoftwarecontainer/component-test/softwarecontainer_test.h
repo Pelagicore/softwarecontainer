@@ -45,7 +45,7 @@ public:
 
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> m_ml;
-    std::unique_ptr<SoftwareContainer> sc;
+    std::unique_ptr<SoftwareContainer> m_sc;
     std::shared_ptr<Workspace> workspace;
 };
 

@@ -54,7 +54,7 @@ public:
 
     SoftwareContainer &getSc()
     {
-        return *sc;
+        return *m_sc;
     }
 };
 
@@ -123,8 +123,25 @@ TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
 
     const ContainerID id = 1;
 
-    SoftwareContainer s1(workspace, id);
-    SoftwareContainer s2(workspace, id);
+    std::unique_ptr<SoftwareContainerConfig> config =
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
+                                                                             LXC_CONFIG_PATH_TESTING,
+                                                                             SHARED_MOUNTS_DIR_TESTING,
+                                                                             24 /*netmask bit length*/,
+                                                                             1 /*shutdown timeout*/));
+    config->setEnableWriteBuffer(false);
+
+    SoftwareContainer s1(workspace, id, std::move(config));
+
+    config =
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
+                                                                             LXC_CONFIG_PATH_TESTING,
+                                                                             SHARED_MOUNTS_DIR_TESTING,
+                                                                             24 /*netmask bit length*/,
+                                                                             1 /*shutdown timeout*/));
+    config->setEnableWriteBuffer(false);
+
+    SoftwareContainer s2(workspace, id, std::move(config));
 
     s1.setMainLoopContext(getMainContext());
     s2.setMainLoopContext(getMainContext());
@@ -517,7 +534,16 @@ TEST(SoftwareContainer, MultithreadTest) {
     static const int TIMEOUT = 20;
 
     std::shared_ptr<Workspace> workspacePtr(new Workspace());
-    SoftwareContainer lib(workspacePtr, 2);
+
+    std::unique_ptr<SoftwareContainerConfig> config =
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
+                                                                             LXC_CONFIG_PATH_TESTING,
+                                                                             SHARED_MOUNTS_DIR_TESTING,
+                                                                             24 /*netmask bit length*/,
+                                                                             1 /*shutdown timeout*/));
+    config->setEnableWriteBuffer(false);
+
+    SoftwareContainer lib(workspacePtr, 2, std::move(config));
     lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;
