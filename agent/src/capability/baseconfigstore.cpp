@@ -76,7 +76,7 @@ void BaseConfigStore::readCapsFromFile(const std::string &filePath)
     std::string errorMessage;
 
     if (!isJsonFile(filePath)) {
-        errorMessage = "File is not a json file: " + filePath;
+        errorMessage = "The file is not a json file: " + filePath;
         log_debug() << errorMessage;
         throw ServiceManifestParseError(errorMessage);
     }
@@ -85,12 +85,12 @@ void BaseConfigStore::readCapsFromFile(const std::string &filePath)
     json_t *fileroot = json_load_file(filePath.c_str(), 0, &error);
 
     if (nullptr == fileroot) {
-        errorMessage = "Could not parse Service Manifest: "
+        errorMessage = "Could not parse the Service Manifest: "
             + filePath + ":" + std::to_string(error.line) + " : " + std::string(error.text);
         log_error() << errorMessage;
         throw ServiceManifestParseError(errorMessage);
     } else if (!json_is_object(fileroot)) {
-        errorMessage = "Configuration is not a json object: "
+        errorMessage = "The Service Manifest does not contain a json object: "
             + filePath + ":" + std::to_string(error.line) + " : " + std::string(error.text);
         log_error() << errorMessage;
         throw ServiceManifestParseError(errorMessage);
@@ -98,12 +98,12 @@ void BaseConfigStore::readCapsFromFile(const std::string &filePath)
 
     json_t *capabilities = json_object_get(fileroot, "capabilities");
     if (nullptr == capabilities) {
-        errorMessage = "Could not parse Capabilities in file: " + filePath;
+        errorMessage = "Could not parse the \"capability\" object in file: " + filePath;
         log_error() << errorMessage;
         throw CapabilityParseError(errorMessage);
     }
     if (!json_is_array(capabilities)) {
-        errorMessage = "Capabilities is not an array, in file: " + filePath;
+        errorMessage = "The \"capability\" object is not an array, in file: " + filePath;
         log_error() << errorMessage;
         throw CapabilityParseError(errorMessage);
     }
@@ -122,26 +122,26 @@ void BaseConfigStore::parseCapabilities(json_t *capabilities)
 
     json_array_foreach(capabilities, i, capability) {
         if (!json_is_object(capability)) {
-            errorMessage = "Capability is not a json object";
+            errorMessage = "A \"capability\" in the Service Manifest is not a json object";
             log_error() << errorMessage;
             throw CapabilityParseError(errorMessage);
         }
 
         std::string capName;
         if (!JSONParser::read(capability, "name", capName)) {
-            errorMessage = "Could not read Capability name";
+            errorMessage = "Could not read the name of the \"capability\" object";
             log_error() << errorMessage;
             throw CapabilityParseError(errorMessage);
         }
 
         json_t *gateways = json_object_get(capability, "gateways");
         if (nullptr == gateways) {
-            errorMessage = "Could not read Gateways";
+            errorMessage = "Could not read the \"gateway\" objects in \"" + capName + "\"";
             log_error() << errorMessage;
             throw CapabilityParseError(errorMessage);
         }
         if (!json_is_array(gateways)) {
-            errorMessage = "Gateways is not an array";
+            errorMessage = "The \"gateway\" object is not an array";
             log_error() << errorMessage;
             throw CapabilityParseError(errorMessage);
         }
@@ -166,7 +166,7 @@ void BaseConfigStore::parseGatewayConfigs(std::string capName, json_t *gateways)
     GatewayConfiguration gwConf;
     json_array_foreach(gateways, i, gateway) {
         if (!json_is_object(gateway)) {
-            errorMessage = "The \"gateway\" key in the Service Manifest is not a json object";
+            errorMessage = "A \"gateway\" in the Service Manifest is not a json object";
             log_error() << errorMessage;
             throw CapabilityParseError(errorMessage);
         }

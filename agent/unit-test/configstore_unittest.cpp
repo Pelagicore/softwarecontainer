@@ -50,7 +50,7 @@ public:
 
 /* Constructing a BaseConfigStore with an empty file path should not throw an exception.
  */
-TEST_F(ConfigStoreTest, constructorEmptyStr) {
+TEST_F(ConfigStoreTest, constructorEmptyStrOk) {
     ASSERT_NO_THROW(BaseConfigStore(""));
 }
 
@@ -68,42 +68,61 @@ TEST_F(ConfigStoreTest, constructorFileOk2) {
     ASSERT_NO_THROW(BaseConfigStore(testDataDir + manifestPath));
 }
 
-/* Constructing a BaseConfigStore with a file path,
- * pointing at a file which can not be parsed,
- * should throw an exception of type ReturnCode.
+/* Constructing a FilteredConfigStore with a directory path,
+ * even if all files can not be parsed, should not throw an exception.
  */
-TEST_F(ConfigStoreTest, constructorEvilFile) {
+TEST_F(ConfigStoreTest, constructorDirNoJsonFiles) {
+    // No Service Manifests, but ok dir
+    ASSERT_NO_THROW(FilteredConfigStore(dirPath + ""));
+}
+
+/* Constructing a BaseConfigStore with a directory path,
+ * when the directory does not exist, should throw an exception of type ServiceManifestPathError.
+ */
+TEST_F(ConfigStoreTest, dirDoesNotExist) {
+    ASSERT_THROW(BaseConfigStore("/home/tester"), ServiceManifestPathError);
+}
+
+/* Constructing a FilteredConfigStore with a directory path,
+ * when the directory is "/", should throw an exception of type ServiceManifestPathError.
+ */
+TEST_F(ConfigStoreTest, rootDirNotAllowed) {
+    ASSERT_THROW(FilteredConfigStore("/"), ServiceManifestPathError);
+}
+
+/* Constructing a BaseConfigStore with a file path
+ * pointing at a Service Manifest which doesn't have the file extension "json"
+ * should throw an exception of type ServiceManifestParseError.
+ */
+TEST_F(ConfigStoreTest, fileExtensionIsNotJson) {
+    std::string filePath = "fileErrorManifests/CS_unittest_fileExtensionIsNotJson.txt";
+    ASSERT_THROW(BaseConfigStore(testDataDir + filePath), ServiceManifestParseError);
+}
+
+/* Constructing a BaseConfigStore with a file path
+ * pointing at a Service Manifest which can not be parsed
+ * due to that the file is not a json file
+ * should throw an exception of type ServiceManifestParseError.
+ */
+TEST_F(ConfigStoreTest, fileIsNotJsonFile) {
+    std::string filePath = "fileErrorManifests/CS_unittest_fileIsNotJson.json";
+    ASSERT_THROW(BaseConfigStore(testDataDir + filePath), ServiceManifestParseError);
+}
+
+/* Constructing a BaseConfigStore with a file path,
+ * pointing at a Service Manifest which can not be parsed
+ * due to that the Capability object is not a json array,
+ * should throw an exception of type CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, capabilitiesIsNotAJsonArray) {
     ASSERT_THROW(BaseConfigStore(testDataDir + evilManifest), CapabilityParseError);
 }
 
 /* Constructing a BaseConfigStore with a directory path,
  * that contains a file that can't be parsed results in an exception.
  */
-TEST_F(ConfigStoreTest, constructorDir) {
+TEST_F(ConfigStoreTest, dirOneFileNotOk) {
     ASSERT_THROW(BaseConfigStore(testDataDir + ""), CapabilityParseError);
-}
-
-/* Constructing a FilteredConfigStore with a directory path,
- * even if all files can not be parsed, should not throw an exception.
- */
-TEST_F(ConfigStoreTest, constructorDir2) {
-    // No config files, but ok dir
-    ASSERT_NO_THROW(FilteredConfigStore(dirPath + ""));
-}
-
-
-/* Constructing a FilteredConfigStore with a directory path,
- * when the directory does not exist, should throw an exception of type ReturnCode.
- */
-TEST_F(ConfigStoreTest, constructorEvilDir) {
-    ASSERT_THROW(BaseConfigStore("/home/tester"), ConfigStoreError);
-}
-
-/* Constructing a FilteredConfigStore with a directory path,
- * when the directory is "/", should throw an exception of type ReturnCode.
- */
-TEST_F(ConfigStoreTest, constructorEvilDir2) {
-    ASSERT_THROW(FilteredConfigStore("/"), ServiceManifestPathError);
 }
 
 /* Reading gateway configurations from a Service Manifest file
