@@ -144,16 +144,18 @@ add_feature_info("System D-Bus" ENABLE_SYSTEM_BUS "Install policy file for the D
 
 # Options for documentation
 option(ENABLE_USER_DOC "Enable building and installation of the user documentation" OFF)
-add_feature_info("User documentation" ENABLE_USER_DOC "Enable building and installation of the user documentation")
-
 option(ENABLE_API_DOC "Enable building and installation of the api documentation" OFF)
-add_feature_info("API documentation" ENABLE_API_DOC "Enable building and installation of the api documentation")
 
+# Set both above docs options if user enables this option
 option(ENABLE_ALL_DOC "Enable building and installation of both the user and the api documentation." OFF)
 if(ENABLE_ALL_DOC)
     set(ENABLE_API_DOC ON)
     set(ENABLE_USER_DOC ON)
 endif()
+
+# Add feature info after the above if() when the "enabled" variables are possibly re-set
+add_feature_info("API documentation" ENABLE_API_DOC "Enable building and installation of the api documentation")
+add_feature_info("User documentation" ENABLE_USER_DOC "Enable building and installation of the user documentation")
 
 SET(SYS_CONFIG_DIR ${CMAKE_INSTALL_FULL_SYSCONFDIR}/softwarecontainer/)
 add_feature_info("Config directory" TRUE "Configuration files will be installed in ${SYS_CONFIG_DIR}")
