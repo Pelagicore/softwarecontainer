@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-a4b9dd8 2017-01-19</span>
+   &#160;<span id="projectnumber">0.17.0-daf8a0d 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -129,7 +129,7 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A wrapper class. </p>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8h_source.html#l00050">50</a> of file <a class="el" href="softwarecontaineragent_8h_source.html">softwarecontaineragent.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8h_source.html#l00080">80</a> of file <a class="el" href="softwarecontaineragent_8h_source.html">softwarecontaineragent.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a855cca21622d64dbc5ac5b65905ec6d3"></a>
 <div class="memitem">
@@ -166,7 +166,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">ReturnCode::FAILURE</td><td>if initialization of the agent fails </td></tr>
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_software_container_agent_error.html" title="An error occured in SoftwareContainerAgent. ">SoftwareContainerAgentError</a></td><td>if initialization of the agent fails because of the <a class="el" href="classsoftwarecontainer_1_1_workspace.html" title="Holds information about the container workspace. ">Workspace</a> initialization or Preloading </td></tr>
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_config_store_error.html">ConfigStoreError</a></td><td>if initialization of ConfigStore fails </td></tr>
   </table>
   </dd>
 </dl>
@@ -179,53 +180,34 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    m_containerIdPool.push_back(0);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">// Get all configs for the workspace</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">int</span> shutdownTimeout;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    std::string containerRootDir;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    std::string lxcConfigPath;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        shutdownTimeout = m_config-&gt;getIntValue(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                                ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        containerRootDir = m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                                                    ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        lxcConfigPath = m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                                 ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    } <span class="keywordflow">catch</span> (ConfigError &amp;error) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// Create and set all values on workspace</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        m_softwarecontainerWorkspace = std::make_shared&lt;Workspace&gt;();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        m_softwarecontainerWorkspace-&gt;m_enableWriteBuffer = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        m_softwarecontainerWorkspace-&gt;m_containerRootDir = containerRootDir;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        m_softwarecontainerWorkspace-&gt;m_containerConfigPath = lxcConfigPath;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        m_softwarecontainerWorkspace-&gt;m_containerShutdownTimeout = shutdownTimeout;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    } <span class="keywordflow">catch</span> (<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> err) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Failed to set up workspace&quot;</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// Get all configs for the config stores</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    std::string serviceManifestDir;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::string defaultServiceManifestDir;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        serviceManifestDir = m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                                                      ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        defaultServiceManifestDir = m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                                                             ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    } <span class="keywordflow">catch</span> (ConfigError &amp;error) {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        m_filteredConfigStore = std::make_shared&lt;FilteredConfigStore&gt;(serviceManifestDir);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        m_defaultConfigStore = std::make_shared&lt;DefaultConfigStore&gt;(defaultServiceManifestDir);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    } <span class="keywordflow">catch</span> (<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> err) {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Failed to initialize ConfigStore&quot;</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">int</span> shutdownTimeout =</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        m_config-&gt;getIntValue(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                              ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    std::string containerRootDir =</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                 ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::string lxcConfigPath =</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                                 ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">// Create and set all values on workspace</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    m_softwarecontainerWorkspace = std::make_shared&lt;Workspace&gt;();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    m_softwarecontainerWorkspace-&gt;m_enableWriteBuffer = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    m_softwarecontainerWorkspace-&gt;m_containerRootDir = containerRootDir;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    m_softwarecontainerWorkspace-&gt;m_containerConfigPath = lxcConfigPath;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    m_softwarecontainerWorkspace-&gt;m_containerShutdownTimeout = shutdownTimeout;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// Get all configs for the config stores</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::string serviceManifestDir =</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                 ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    std::string defaultServiceManifestDir =</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                                 ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    m_filteredConfigStore = std::make_shared&lt;FilteredConfigStore&gt;(serviceManifestDir);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    m_defaultConfigStore  = std::make_shared&lt;DefaultConfigStore&gt;(defaultServiceManifestDir);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -246,15 +228,15 @@ Public Member Functions</h2></td></tr>
 <p>get a list of all containers </p>
 <dl class="section return"><dt>Returns</dt><dd>a vector of container IDs </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">116</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;{</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    std::vector&lt;ContainerID&gt; containerIDs;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;cont : m_containers) {</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        containerIDs.push_back(cont.first);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    }</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">return</span> containerIDs;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00098">98</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;{</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    std::vector&lt;ContainerID&gt; containerIDs;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;cont : m_containers) {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        containerIDs.push_back(cont.first);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordflow">return</span> containerIDs;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -281,10 +263,10 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00376">376</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;{</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="keywordflow">return</span> m_filteredConfigStore-&gt;IDs();</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00358">358</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;{</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="keywordflow">return</span> m_filteredConfigStore-&gt;IDs();</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -310,15 +292,15 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00126">126</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00108">108</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00314">shutdownContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;{</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    assertContainerExists(containerID);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    m_containers.erase(containerID);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    m_containerIdPool.push_back(containerID);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;}</div>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00296">shutdownContainer()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;{</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    assertContainerExists(containerID);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    m_containers.erase(containerID);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    m_containerIdPool.push_back(containerID);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -359,13 +341,13 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00134">134</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">116</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00348">bindMount()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00263">execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00342">resumeContainer()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00314">shutdownContainer()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00336">suspendContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;{</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    assertContainerExists(containerID);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordflow">return</span> m_containers[containerID];</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00330">bindMount()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00245">execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00324">resumeContainer()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00296">shutdownContainer()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00318">suspendContainer()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;{</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    assertContainerExists(containerID);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">return</span> m_containers[containerID];</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -406,27 +388,27 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00140">140</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00122">122</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
 <p>References <a class="el" href="jsonparser_8cpp_source.html#l00051">softwarecontainer::JSONParser::read()</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00158">parseConfig()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;{</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">if</span> (!json_is_object(element)) {</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Configure entry is not an object&quot;</span>);</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    }</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keywordtype">bool</span> wo = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordflow">if</span>(!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;enableWriteBuffer&quot;</span>, wo)) {</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not parse config due to: &#39;enableWriteBuffer&#39; not found.&quot;</span>);</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    }</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    m_softwarecontainerWorkspace-&gt;m_enableWriteBuffer = wo;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;}</div>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00140">parseConfig()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;{</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordflow">if</span> (!json_is_object(element)) {</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Configure entry is not an object&quot;</span>);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    }</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">bool</span> wo = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">if</span>(!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;enableWriteBuffer&quot;</span>, wo)) {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not parse config due to: &#39;enableWriteBuffer&#39; not found.&quot;</span>);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    }</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    m_softwarecontainerWorkspace-&gt;m_enableWriteBuffer = wo;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00051">jsonparser.cpp:51</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -470,51 +452,51 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00158">158</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00140">140</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00140">readConfigElement()</a>.</p>
+<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00122">readConfigElement()</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00227">createContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;{</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordflow">if</span> (config.size() == 0) {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Empty JSON config strings are not supported.&quot;</span>);</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00209">createContainer()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;{</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">if</span> (config.size() == 0) {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Empty JSON config strings are not supported.&quot;</span>);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    }</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    json_error_t error;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    json_t *root = json_loads(config.c_str(), 0, &amp;error);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordflow">if</span> (!root) {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not parse config: &quot;</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                                + std::string(error.text)</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                                + config);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    }</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordflow">if</span> (!json_is_array(root)) {</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Root JSON element is not an array&quot;</span>);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        json_decref(root);</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    json_error_t error;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    json_t *root = json_loads(config.c_str(), 0, &amp;error);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keywordtype">size_t</span> index;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    json_t *element;</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordflow">if</span> (!root) {</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not parse config: &quot;</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                                + std::string(error.text)</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                                + config);</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    }</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">if</span> (!json_is_array(root)) {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Root JSON element is not an array&quot;</span>);</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        json_decref(root);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    }</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordtype">size_t</span> index;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    json_t *element;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        json_array_foreach(root, index, element) {</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a240b26b41f1cdb6b3c1e476e51a028dc">readConfigElement</a>(element);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        }</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    } <span class="keywordflow">catch</span> (SoftwareContainerError &amp;err) {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        json_decref(root);</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordflow">throw</span>;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    }</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    json_decref(root);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a240b26b41f1cdb6b3c1e476e51a028dc"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a240b26b41f1cdb6b3c1e476e51a028dc">softwarecontainer::SoftwareContainerAgent::readConfigElement</a></div><div class="ttdeci">void readConfigElement(const json_t *element)</div><div class="ttdoc">Tries to read a config in json format for a container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00140">softwarecontaineragent.cpp:140</a></div></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        json_array_foreach(root, index, element) {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a240b26b41f1cdb6b3c1e476e51a028dc">readConfigElement</a>(element);</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        }</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    } <span class="keywordflow">catch</span> (SoftwareContainerError &amp;err) {</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        json_decref(root);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordflow">throw</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    json_decref(root);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a240b26b41f1cdb6b3c1e476e51a028dc"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a240b26b41f1cdb6b3c1e476e51a028dc">softwarecontainer::SoftwareContainerAgent::readConfigElement</a></div><div class="ttdeci">void readConfigElement(const json_t *element)</div><div class="ttdoc">Tries to read a config in json format for a container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00122">softwarecontaineragent.cpp:122</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -564,38 +546,38 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00227">227</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00209">209</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00158">parseConfig()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;{</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    profilepoint(<span class="stringliteral">&quot;createContainerStart&quot;</span>);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    profilefunction(<span class="stringliteral">&quot;createContainerFunction&quot;</span>);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ab1c1ce8bce34c1225aea72d0c232ec15">parseConfig</a>(config);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    } <span class="keywordflow">catch</span> (SoftwareContainerError &amp;err) {</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;The provided config could not be successfully parsed:&quot;</span> + std::string(err.what()));</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    }</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    std::pair&lt;ContainerID, SoftwareContainerPtr&gt; pair = std::move(getContainerPair());</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    pair.second-&gt;setMainLoopContext(m_mainLoopContext);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    ContainerID containerID = pair.first;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(pair.second-&gt;init())) {</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not init the container&quot;</span> + std::to_string(containerID));</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    }</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    m_containers.insert(std::move(pair));</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="keywordflow">return</span> containerID;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;}</div>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>, and <a class="el" href="softwarecontaineragent_8cpp_source.html#l00140">parseConfig()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;{</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    profilepoint(<span class="stringliteral">&quot;createContainerStart&quot;</span>);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    profilefunction(<span class="stringliteral">&quot;createContainerFunction&quot;</span>);</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#ab1c1ce8bce34c1225aea72d0c232ec15">parseConfig</a>(config);</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    } <span class="keywordflow">catch</span> (SoftwareContainerError &amp;err) {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;The provided config could not be successfully parsed:&quot;</span> + std::string(err.what()));</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    std::pair&lt;ContainerID, SoftwareContainerPtr&gt; pair = std::move(getContainerPair());</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    pair.second-&gt;setMainLoopContext(m_mainLoopContext);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    ContainerID containerID = pair.first;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(pair.second-&gt;init())) {</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not init the container&quot;</span> + std::to_string(containerID));</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    }</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    m_containers.insert(std::move(pair));</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="keywordflow">return</span> containerID;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ab1c1ce8bce34c1225aea72d0c232ec15"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ab1c1ce8bce34c1225aea72d0c232ec15">softwarecontainer::SoftwareContainerAgent::parseConfig</a></div><div class="ttdeci">void parseConfig(const std::string &amp;config)</div><div class="ttdoc">Parse config needed for starting up the container in a correct manner. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00158">softwarecontaineragent.cpp:158</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_ab1c1ce8bce34c1225aea72d0c232ec15"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#ab1c1ce8bce34c1225aea72d0c232ec15">softwarecontainer::SoftwareContainerAgent::parseConfig</a></div><div class="ttdeci">void parseConfig(const std::string &amp;config)</div><div class="ttdoc">Parse config needed for starting up the container in a correct manner. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00140">softwarecontaineragent.cpp:140</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -667,58 +649,58 @@ Here is the call graph for this function:</div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>process id which belongs to given command </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>process id of the given command </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00263">263</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00245">245</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="signalconnectionshandler_8h_source.html#l00058">softwarecontainer::addProcessListener()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00134">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;{</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    profilefunction(<span class="stringliteral">&quot;executeFunction&quot;</span>);</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<p>References <a class="el" href="signalconnectionshandler_8h_source.html#l00058">softwarecontainer::addProcessListener()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;{</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    profilefunction(<span class="stringliteral">&quot;executeFunction&quot;</span>);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">     * We want to always apply any default capabilities we have. If the container is in READY state,</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">     * that means that its gateways have been configured. The only way to configure the gateways</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">     * from the agent is through setCapabilities - which sets the default caps also.</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">     * If it has not been set, then we use a call without arguments to setCapabilities to set it up,</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">     * since we then should get only the default ones.</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordflow">if</span> (container-&gt;getContainerState() != ContainerState::READY) {</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Container not configured yet, configuring with default capabilities, if any&quot;</span>;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        GatewayConfiguration gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            std::string errorMessage(<span class="stringliteral">&quot;Could not set default capabilities on container &quot;</span> + std::to_string(containerID));</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">     * We want to always apply any default capabilities we have. If the container is in READY state,</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">     * that means that its gateways have been configured. The only way to configure the gateways</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">     * from the agent is through setCapabilities - which sets the default caps also.</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">     * If it has not been set, then we use a call without arguments to setCapabilities to set it up,</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">     * since we then should get only the default ones.</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keywordflow">if</span> (container-&gt;getContainerState() != ContainerState::READY) {</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot;Container not configured yet, configuring with default capabilities, if any&quot;</span>;</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        GatewayConfiguration gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            std::string errorMessage(<span class="stringliteral">&quot;Could not set default capabilities on container &quot;</span> + std::to_string(containerID));</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    }</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="comment">// Set up a CommandJob for this run in the container</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keyword">auto</span> job = container-&gt;createCommandJob(cmdLine);</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    job-&gt;setOutputFile(outputFile);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    job-&gt;setEnvironmentVariables(env);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    job-&gt;setWorkingDirectory(workingDirectory);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="comment">// Start it</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(job-&gt;start())) {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not start job&quot;</span>);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    }</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="comment">// If things went well, do what we need when it exits</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#abe759ac0b4bfb58c0dfd87ad9917ec5e">addProcessListener</a>(m_connections, job-&gt;pid(), [listener](pid_t pid, <span class="keywordtype">int</span> exitCode) {</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        listener(pid, exitCode);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    }, m_mainLoopContext);</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="comment">// Set up a CommandJob for this run in the container</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keyword">auto</span> job = container-&gt;createCommandJob(cmdLine);</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    job-&gt;setOutputFile(outputFile);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    job-&gt;setEnvironmentVariables(env);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    job-&gt;setWorkingDirectory(workingDirectory);</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="comment">// Start it</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(job-&gt;start())) {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not start job&quot;</span>);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    }</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="comment">// If things went well, do what we need when it exits</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#abe759ac0b4bfb58c0dfd87ad9917ec5e">addProcessListener</a>(m_connections, job-&gt;pid(), [listener](pid_t pid, <span class="keywordtype">int</span> exitCode) {</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        listener(pid, exitCode);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    }, m_mainLoopContext);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    profilepoint(<span class="stringliteral">&quot;executeEnd&quot;</span>);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordflow">return</span> job-&gt;pid();</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;}</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    profilepoint(<span class="stringliteral">&quot;executeEnd&quot;</span>);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordflow">return</span> job-&gt;pid();</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_abe759ac0b4bfb58c0dfd87ad9917ec5e"><div class="ttname"><a href="namespacesoftwarecontainer.html#abe759ac0b4bfb58c0dfd87ad9917ec5e">softwarecontainer::addProcessListener</a></div><div class="ttdeci">void addProcessListener(SignalConnectionsHandler &amp;connections, pid_t pid, std::function&lt; void(pid_t, int)&gt; function, Glib::RefPtr&lt; Glib::MainContext &gt; context)</div><div class="ttdoc">addProcessListener Adds a glib child watch for a process. </div><div class="ttdef"><b>Definition:</b> <a href="signalconnectionshandler_8h_source.html#l00058">signalconnectionshandler.h:58</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00134">softwarecontaineragent.cpp:134</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00116">softwarecontaineragent.cpp:116</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -758,32 +740,32 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00314">314</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00296">296</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00126">deleteContainer()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00134">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;{</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    profilefunction(<span class="stringliteral">&quot;shutdownContainerFunction&quot;</span>);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keywordtype">int</span> timeout = m_softwarecontainerWorkspace-&gt;m_containerShutdownTimeout;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(container-&gt;shutdown(timeout))) {</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not shut down the container&quot;</span>);</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    }</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a35311d002cb7493c7b62665a9b43edbf">deleteContainer</a>(containerID);</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    } <span class="keywordflow">catch</span> (SoftwareContainerError &amp;err) {</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not delete the container&quot;</span> + std::string(err.what()));</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    }</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;}</div>
+<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00108">deleteContainer()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;{</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    profilefunction(<span class="stringliteral">&quot;shutdownContainerFunction&quot;</span>);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keywordtype">int</span> timeout = m_softwarecontainerWorkspace-&gt;m_containerShutdownTimeout;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(container-&gt;shutdown(timeout))) {</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not shut down the container&quot;</span>);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    }</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <span class="keywordflow">try</span> {</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a35311d002cb7493c7b62665a9b43edbf">deleteContainer</a>(containerID);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    } <span class="keywordflow">catch</span> (SoftwareContainerError &amp;err) {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not delete the container&quot;</span> + std::string(err.what()));</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    }</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00134">softwarecontaineragent.cpp:134</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a35311d002cb7493c7b62665a9b43edbf"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a35311d002cb7493c7b62665a9b43edbf">softwarecontainer::SoftwareContainerAgent::deleteContainer</a></div><div class="ttdeci">void deleteContainer(ContainerID containerID)</div><div class="ttdoc">delete container by ID </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00126">softwarecontaineragent.cpp:126</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00116">softwarecontaineragent.cpp:116</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a35311d002cb7493c7b62665a9b43edbf"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a35311d002cb7493c7b62665a9b43edbf">softwarecontainer::SoftwareContainerAgent::deleteContainer</a></div><div class="ttdeci">void deleteContainer(ContainerID containerID)</div><div class="ttdoc">delete container by ID </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00108">softwarecontaineragent.cpp:108</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -823,14 +805,14 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00336">336</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00318">318</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00134">getContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;{</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    container-&gt;suspend();</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00134">softwarecontaineragent.cpp:134</a></div></div>
+<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">getContainer()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;{</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    container-&gt;suspend();</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00116">softwarecontaineragent.cpp:116</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -870,14 +852,14 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00342">342</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00324">324</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00134">getContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;{</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    container-&gt;resume();</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00134">softwarecontaineragent.cpp:134</a></div></div>
+<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">getContainer()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;{</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    container-&gt;resume();</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00116">softwarecontaineragent.cpp:116</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -943,25 +925,25 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00348">348</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00330">330</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00134">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;{</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    profilefunction(<span class="stringliteral">&quot;bindMountFunction&quot;</span>);</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = container-&gt;bindMount(pathInHost,</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                                             pathInContainer,</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;                                             readOnly);</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Unable to bind mount &quot;</span> + pathInHost + <span class="stringliteral">&quot; to &quot;</span> + pathInContainer);</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    }</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;}</div>
+<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00116">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;{</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    profilefunction(<span class="stringliteral">&quot;bindMountFunction&quot;</span>);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = container-&gt;bindMount(pathInHost,</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                                             pathInContainer,</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                                             readOnly);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Unable to bind mount &quot;</span> + pathInHost + <span class="stringliteral">&quot; to &quot;</span> + pathInContainer);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00134">softwarecontaineragent.cpp:134</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00116">softwarecontaineragent.cpp:116</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -1013,32 +995,32 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00381">381</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;{</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keywordflow">if</span> (capabilities.empty()) {</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Got empty list of capabilities&quot;</span>;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    }</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    GatewayConfiguration gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    GatewayConfiguration filteredConfigs = m_filteredConfigStore-&gt;configsByID(capabilities);</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="comment">// If we get an empty config the user passed a non existent cap name</span></div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordflow">if</span> (filteredConfigs.empty()) {</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;One or more capabilities were not found&quot;</span>);</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    }</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    gatewayConfigs.append(filteredConfigs);</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="comment">// Update container gateway configuration</span></div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not set gateway configuration for capability&quot;</span>);</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    }</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00363">363</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;{</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">if</span> (capabilities.empty()) {</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Got empty list of capabilities&quot;</span>;</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    }</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    GatewayConfiguration gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    GatewayConfiguration filteredConfigs = m_filteredConfigStore-&gt;configsByID(capabilities);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="comment">// If we get an empty config the user passed a non existent cap name</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="keywordflow">if</span> (filteredConfigs.empty()) {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;One or more capabilities were not found&quot;</span>);</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    }</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    gatewayConfigs.append(filteredConfigs);</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="comment">// Update container gateway configuration</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not set gateway configuration for capability&quot;</span>);</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    }</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1058,10 +1040,10 @@ Here is the call graph for this function:</div>
 <p>get a pointer to the workspace used TODO: This is only used for testing </p>
 <dl class="section return"><dt>Returns</dt><dd>a shared pointer to the current workspace </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00410">410</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;{</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    <span class="keywordflow">return</span> m_softwarecontainerWorkspace;</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00392">392</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;{</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="keywordflow">return</span> m_softwarecontainerWorkspace;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1075,7 +1057,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html">SoftwareContainerAgent</a></li>
-    <li class="footer">Generated on Thu Jan 19 2017 11:41:46 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 11:49:32 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

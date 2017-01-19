@@ -1,0 +1,6 @@
+<map id="softwarecontainer::ConfigStoreError" name="softwarecontainer::ConfigStoreError">
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_capability_parse_error.html" title="An error occured in ConfigStore when parsing a Capability in a Service Manifest. " alt="" coords="563,5,706,47"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_service_manifest_parse_error.html" title="An error occured in ConfigStore when parsing a Service Manifest. " alt="" coords="545,71,724,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_service_manifest_path_error.html" title="An error occured in ConfigStore relating to the path to the Service Manifest(s) " alt="" coords="549,136,720,177"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_error.html" title="softwarecontainer::\lSoftwareContainerError" alt="" coords="157,71,316,112"/>
+</map>

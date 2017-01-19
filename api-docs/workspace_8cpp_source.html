@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-a4b9dd8 2017-01-19</span>
+   &#160;<span id="projectnumber">0.17.0-daf8a0d 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114">checkWorkspace</a>())) {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">throw</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">throw</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_error.html">SoftwareContainerError</a>(<span class="stringliteral">&quot;Failed to initialize Workspace&quot;</span>);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
@@ -154,13 +154,14 @@ $(document).ready(function(){initNavTree('workspace_8cpp_source.html','');});
 <div class="ttc" id="namespacesoftwarecontainer_html_a44f64c34c09d1ffdb18428b41f0d9e91"><div class="ttname"><a href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">softwarecontainer::isDirectory</a></div><div class="ttdeci">bool isDirectory(const std::string &amp;path)</div><div class="ttdoc">isDirectory Check if path is a directory </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8cpp_source.html#l00046">softwarecontainer-common.cpp:46</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_error.html">softwarecontainer::SoftwareContainerError</a></div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainererror_8h_source.html#l00027">softwarecontainererror.h:27</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><b>workspace.cpp</b></li>
-    <li class="footer">Generated on Thu Jan 19 2017 11:41:46 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 11:49:31 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-a4b9dd8 2017-01-19</span>
+   &#160;<span id="projectnumber">0.17.0-daf8a0d 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -103,8 +103,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a307fe479b7000a83582fab008d20e3e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a307fe479b7000a83582fab008d20e3e4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NetworkGateway</b> (const int32_t <a class="el" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>, const std::string gateway, const uint8_t maskBits)</td></tr>
+<tr class="memitem:a307fe479b7000a83582fab008d20e3e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html#a307fe479b7000a83582fab008d20e3e4">NetworkGateway</a> (const int32_t <a class="el" href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">id</a>, const std::string gateway, const uint8_t maskBits)</td></tr>
+<tr class="memdesc:a307fe479b7000a83582fab008d20e3e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a network gateway.  <a href="#a307fe479b7000a83582fab008d20e3e4">More...</a><br /></td></tr>
 <tr class="separator:a307fe479b7000a83582fab008d20e3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad67674d2ce8d329188446e71c14e3a88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html#ad67674d2ce8d329188446e71c14e3a88">readConfigElement</a> (const json_t *element) override</td></tr>
 <tr class="memdesc:ad67674d2ce8d329188446e71c14e3a88"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. ">Gateway</a> specific parsing of config elements.  <a href="#ad67674d2ce8d329188446e71c14e3a88">More...</a><br /></td></tr>
@@ -160,7 +160,58 @@ Protected Member Functions</h2></td></tr>
 <p>The responsibility of <a class="el" href="classsoftwarecontainer_1_1_network_gateway.html" title="Sets up and manages network access and routing to the container. ">NetworkGateway</a> is to setup network connection as specified by given configuration. This configuration is described in detail in the user documentation, but a short summary of it is how to handle incoming and outgoing network packages using the three targets: ACCEPT, DROP and REJECT. </p>
 
 <p>Definition at line <a class="el" href="networkgateway_8h_source.html#l00039">39</a> of file <a class="el" href="networkgateway_8h_source.html">networkgateway.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a307fe479b7000a83582fab008d20e3e4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">softwarecontainer::NetworkGateway::NetworkGateway </td>
+          <td>(</td>
+          <td class="paramtype">const int32_t&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramname"><em>gateway</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t&#160;</td>
+          <td class="paramname"><em>maskBits</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a network gateway. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_software_container_error.html">SoftwareContainerError</a></td><td>if there is an error during initialization. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="networkgateway_8cpp_source.html#l00029">29</a> of file <a class="el" href="networkgateway_8cpp_source.html">networkgateway.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                                                       :</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Gateway(ID),</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    m_netmask(maskBits),</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    m_gateway(gateway),</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    m_interfaceInitialized(<span class="keyword">false</span>),</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    m_containerID(<span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ad67674d2ce8d329188446e71c14e3a88"></a>
 <div class="memitem">
 <div class="memproto">
@@ -954,7 +1005,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html">NetworkGateway</a></li>
-    <li class="footer">Generated on Thu Jan 19 2017 11:41:46 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 11:49:32 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

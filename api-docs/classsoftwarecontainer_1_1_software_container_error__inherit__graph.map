@@ -1,8 +1,13 @@
 <map id="softwarecontainer::SoftwareContainerError" name="softwarecontainer::SoftwareContainerError">
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_cgroups_gateway_error.html" title="softwarecontainer::\lCgroupsGatewayError" alt="" coords="364,104,515,145"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="364,169,515,211"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_bad_suffix_error.html" title="softwarecontainer::\lBadSuffixError" alt="" coords="563,5,696,47"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_j_son_error.html" title="softwarecontainer::\lJSonError" alt="" coords="563,71,696,112"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_limit_range_error.html" title="softwarecontainer::\lLimitRangeError" alt="" coords="563,136,696,177"/>
-<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="563,201,696,243"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_cgroups_gateway_error.html" title="softwarecontainer::\lCgroupsGatewayError" alt="" coords="385,104,535,145"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_config_store_error.html" title="softwarecontainer::\lConfigStoreError" alt="" coords="393,267,527,308"/>
+<area shape="rect" id="node11" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="385,332,535,373"/>
+<area shape="rect" id="node13" href="$classsoftwarecontainer_1_1_software_container_agent_error.html" title="An error occured in SoftwareContainerAgent. " alt="" coords="364,397,556,439"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_bad_suffix_error.html" title="softwarecontainer::\lBadSuffixError" alt="" coords="627,5,760,47"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_j_son_error.html" title="softwarecontainer::\lJSonError" alt="" coords="627,71,760,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_limit_range_error.html" title="softwarecontainer::\lLimitRangeError" alt="" coords="627,136,760,177"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_capability_parse_error.html" title="An error occured in ConfigStore when parsing a Capability in a Service Manifest. " alt="" coords="622,201,765,243"/>
+<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_service_manifest_parse_error.html" title="An error occured in ConfigStore when parsing a Service Manifest. " alt="" coords="604,267,783,308"/>
+<area shape="rect" id="node10" href="$classsoftwarecontainer_1_1_service_manifest_path_error.html" title="An error occured in ConfigStore relating to the path to the Service Manifest(s) " alt="" coords="608,332,779,373"/>
+<area shape="rect" id="node12" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="627,397,760,439"/>
 </map>

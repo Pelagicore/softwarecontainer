@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-a4b9dd8 2017-01-19</span>
+   &#160;<span id="projectnumber">0.17.0-daf8a0d 2017-01-19</span>
    </div>
   </td>
  </tr>
@@ -95,10 +95,10 @@ $(document).ready(function(){initNavTree('networkgateway_8cpp_source.html','');}
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;NetworkGateway::NetworkGateway(<span class="keyword">const</span> int32_t <span class="keywordtype">id</span>,</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_network_gateway.html#a307fe479b7000a83582fab008d20e3e4">   29</a></span>&#160;<a class="code" href="classsoftwarecontainer_1_1_network_gateway.html#a307fe479b7000a83582fab008d20e3e4">NetworkGateway::NetworkGateway</a>(<span class="keyword">const</span> int32_t <span class="keywordtype">id</span>,</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                               <span class="keyword">const</span> std::string gateway,</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                               <span class="keyword">const</span> uint8_t maskBits) :</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Gateway(ID),</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a>(ID),</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    m_netmask(maskBits),</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    m_gateway(gateway),</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    m_interfaceInitialized(false),</div>
@@ -291,7 +291,9 @@ $(document).ready(function(){initNavTree('networkgateway_8cpp_source.html','');}
 <div class="ttc" id="classsoftwarecontainer_1_1_netlink_html_aec31c67231b12f8a1702054e13029cbb"><div class="ttname"><a href="classsoftwarecontainer_1_1_netlink.html#aec31c67231b12f8a1702054e13029cbb">softwarecontainer::Netlink::findAddresses</a></div><div class="ttdeci">ReturnCode findAddresses(const unsigned int interfaceIndex, std::vector&lt; AddressInfo &gt; &amp;result)</div><div class="ttdoc">Get all addresses associated with the given interface index. </div><div class="ttdef"><b>Definition:</b> <a href="netlink_8cpp_source.html#l00313">netlink.cpp:313</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_network_gateway_html_a8a08792ecd43b1694222ca286514ee21"><div class="ttname"><a href="classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21">softwarecontainer::NetworkGateway::activateGateway</a></div><div class="ttdeci">bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00055">networkgateway.cpp:55</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_network_gateway_functions_html_acd4156881bb546b07867ff8345404558"><div class="ttname"><a href="classsoftwarecontainer_1_1_network_gateway_functions.html#acd4156881bb546b07867ff8345404558">softwarecontainer::NetworkGatewayFunctions::generateIP</a></div><div class="ttdeci">uint32_t generateIP(const uint32_t netmask, const std::string gatewayIP, const int32_t containerID)</div><div class="ttdoc">Generate IP address for the container. </div><div class="ttdef"><b>Definition:</b> <a href="networkgatewayfunctions_8cpp_source.html#l00028">networkgatewayfunctions.cpp:28</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_i_p_allocation_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_allocation_error.html">softwarecontainer::IPAllocationError</a></div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8h_source.html#l00149">networkgateway.h:149</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_network_gateway_html_a307fe479b7000a83582fab008d20e3e4"><div class="ttname"><a href="classsoftwarecontainer_1_1_network_gateway.html#a307fe479b7000a83582fab008d20e3e4">softwarecontainer::NetworkGateway::NetworkGateway</a></div><div class="ttdeci">NetworkGateway(const int32_t id, const std::string gateway, const uint8_t maskBits)</div><div class="ttdoc">Creates a network gateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00029">networkgateway.cpp:29</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_i_p_allocation_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_i_p_allocation_error.html">softwarecontainer::IPAllocationError</a></div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8h_source.html#l00154">networkgateway.h:154</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html">softwarecontainer::Gateway</a></div><div class="ttdoc">Gateway base class for SoftwareContainer. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00068">gateway.h:68</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_network_gateway_html_adf3c1eff6621486ea81748e23cc9cbbb"><div class="ttname"><a href="classsoftwarecontainer_1_1_network_gateway.html#adf3c1eff6621486ea81748e23cc9cbbb">softwarecontainer::NetworkGateway::teardownGateway</a></div><div class="ttdeci">bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="networkgateway_8cpp_source.html#l00102">networkgateway.cpp:102</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_network_gateway_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_network_gateway_parser.html">softwarecontainer::NetworkGatewayParser</a></div><div class="ttdef"><b>Definition:</b> <a href="networkgatewayparser_8h_source.html#l00028">networkgatewayparser.h:28</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
@@ -307,7 +309,7 @@ $(document).ready(function(){initNavTree('networkgateway_8cpp_source.html','');}
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_9714d51461f33f26f35fbf1b742503d5.html">network</a></li><li class="navelem"><b>networkgateway.cpp</b></li>
-    <li class="footer">Generated on Thu Jan 19 2017 11:41:46 for softwarecontainer by
+    <li class="footer">Generated on Thu Jan 19 2017 11:49:31 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
