@@ -108,40 +108,13 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
  * Test that it is not possible to create two containers with the same id.
  */
 TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
-
-    std::shared_ptr<Workspace> workspace = std::make_shared<Workspace>();
-
-    /* Set up the workspace with all the config values it needs.
-     *
-     * NOTE: This could be done more nicely perhaps, but the workspace will get an overhaul
-     *       or be removed, so pending that design change this is a workaround.
-     */
-    workspace->m_enableWriteBuffer = false;
-    workspace->m_containerRootDir = SHARED_MOUNTS_DIR_TESTING; // Should be set be CMake
-    workspace->m_containerConfigPath = LXC_CONFIG_PATH_TESTING; // Should be set be CMake
-    workspace->m_containerShutdownTimeout = 1;
-
     const ContainerID id = 1;
 
-    std::unique_ptr<SoftwareContainerConfig> config =
-        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
-                                                                             LXC_CONFIG_PATH_TESTING,
-                                                                             SHARED_MOUNTS_DIR_TESTING,
-                                                                             24 /*netmask bit length*/,
-                                                                             1 /*shutdown timeout*/));
-    config->setEnableWriteBuffer(false);
+    auto config = createConfig();
+    SoftwareContainer s1(id, std::move(config));
 
-    SoftwareContainer s1(workspace, id, std::move(config));
-
-    config =
-        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
-                                                                             LXC_CONFIG_PATH_TESTING,
-                                                                             SHARED_MOUNTS_DIR_TESTING,
-                                                                             24 /*netmask bit length*/,
-                                                                             1 /*shutdown timeout*/));
-    config->setEnableWriteBuffer(false);
-
-    SoftwareContainer s2(workspace, id, std::move(config));
+    config = createConfig();
+    SoftwareContainer s2(id, std::move(config));
 
     s1.setMainLoopContext(getMainContext());
     s2.setMainLoopContext(getMainContext());
@@ -529,21 +502,13 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 }
 
 
-TEST(SoftwareContainer, MultithreadTest) {
+TEST_F(SoftwareContainerApp, MultithreadTest) {
 
     static const int TIMEOUT = 20;
+    static const ContainerID containerID = 1;
 
-    std::shared_ptr<Workspace> workspacePtr(new Workspace());
-
-    std::unique_ptr<SoftwareContainerConfig> config =
-        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
-                                                                             LXC_CONFIG_PATH_TESTING,
-                                                                             SHARED_MOUNTS_DIR_TESTING,
-                                                                             24 /*netmask bit length*/,
-                                                                             1 /*shutdown timeout*/));
-    config->setEnableWriteBuffer(false);
-
-    SoftwareContainer lib(workspacePtr, 2, std::move(config));
+    auto config = createConfig();
+    SoftwareContainer lib(containerID, std::move(config));
     lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;
@@ -628,6 +593,8 @@ TEST_F(SoftwareContainerApp, TestStdin) {
 }
 
 
+#ifdef ENABLE_NETWORKGATEWAY
+
 /**
  * We do not enable the network gateway so we expect the ping to fail
  */
@@ -698,6 +665,8 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
     job->start();
     ASSERT_EQ(job->wait(), 0);
 }
+
+#endif // ENABLE_NETWORKGATEWAY
 
 
 TEST_F(SoftwareContainerApp, TestJobReturnCode) {

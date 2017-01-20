@@ -19,6 +19,7 @@
 
 #include "softwarecontaineragent.h"
 #include "softwarecontainererror.h"
+#include "containerconfigparser.h"
 #include "config/config.h"
 #include "config/configloader.h"
 #include "config/mainconfigsource.h"
@@ -68,23 +69,24 @@ public:
     SoftwareContainerAgentTest() {}
 
     std::shared_ptr<SoftwareContainerAgent> sca;
-
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
-
-    std::shared_ptr<Workspace> workspace;
 
     // Define minimal required config values
     const std::string configString = "[SoftwareContainer]\n"
+#ifdef ENABLE_NETWORKGATEWAY
+                                     "create-bridge = true\n"
+                                     "bridge-device = " + std::string(BRIDGE_DEVICE_TESTING) + "\n"
+                                     "bridge-ip = " + std::string(BRIDGE_IP_TESTING) + "\n"
+                                     "bridge-netmask = " + std::string(BRIDGE_NETMASK_TESTING) + "\n"
+                                     "bridge-netmask-bits = " + std::string(BRIDGE_NETMASK_BITS_TESTING) +"\n"
+                                     "bridge-netaddr = " + std::string(BRIDGE_NETADDR_TESTING) + "\n"
+#endif
                                      "keep-containers-alive = false\n"
                                      "shutdown-timeout = 1\n"
                                      "shared-mounts-dir = " + std::string(SHARED_MOUNTS_DIR_TESTING) + "\n"
                                      "deprecated-lxc-config-path = " + std::string(LXC_CONFIG_PATH_TESTING) + "\n"
                                      "service-manifest-dir = " + std::string(SERVICE_MANIFEST_DIR_TESTING) + "\n"
-                                     "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING) + "\n"
-                                     "create-bridge = true\n"
-                                     "bridge-device = lxcbr0\n"
-                                     "bridge-ip = 10.0.3.1\n"
-                                     "bridge-netmask-bits = 24";
+                                     "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING) + "\n";
 
     const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
 
@@ -103,7 +105,6 @@ public:
 
         try {
             sca = std::make_shared<SoftwareContainerAgent>(m_context, config);
-            workspace = sca->getWorkspace();
         } catch(ReturnCode failure) {
             log_error() << "Exception in software agent constructor";
             ASSERT_TRUE(false);
@@ -114,7 +115,6 @@ public:
     {
     }
 };
-
 
 /*
  * Test that an agent instance can create, destroy, and create another container.
@@ -169,34 +169,6 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
     ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
 }
  */
-
-TEST_F(SoftwareContainerAgentTest, parseConfigNice) {
-    ASSERT_NO_THROW(sca->parseConfig("[{\"enableWriteBuffer\": true}]"));
-    ASSERT_TRUE(workspace->m_enableWriteBuffer);
-}
-
-TEST_F(SoftwareContainerAgentTest, parseConfigNice2) {
-    ASSERT_NO_THROW(sca->parseConfig("[{\"enableWriteBuffer\": false}]"));
-}
-
-TEST_F(SoftwareContainerAgentTest, parseConfigNoConfig) {
-    ASSERT_THROW(sca->parseConfig(""), SoftwareContainerError);
-}
-
-TEST_F(SoftwareContainerAgentTest, parseConfigBadConfig) {
-    ASSERT_THROW(sca->parseConfig("gobfmsrfe"), SoftwareContainerError);
-}
-
-TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig) {
-    ASSERT_THROW(sca->parseConfig("[{\"WRONG_PARAM_NAME\": true}]"), SoftwareContainerError);
-    ASSERT_FALSE(workspace->m_enableWriteBuffer);
-}
-
-TEST_F(SoftwareContainerAgentTest, parseConfigEvilConfig2) {
-    // This actually parses and should be true
-    ASSERT_NO_THROW(sca->parseConfig("[{\"enableWriteBuffer\": false}]"));
-    ASSERT_FALSE(workspace->m_enableWriteBuffer);
-}
 
 // Freeze an invalid container
 TEST_F(SoftwareContainerAgentTest, FreezeInvalidContainer) {
@@ -278,3 +250,4 @@ TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
         sca->shutdownContainer(id);
     });
 }
+

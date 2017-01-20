@@ -28,10 +28,11 @@
 
 #include <ivi-profiling.h>
 
-
+#include "filetoolkitwithundo.h"
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
 #include "softwarecontainererror.h"
+#include "containerconfigparser.h"
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
 #include "config/config.h"
@@ -84,7 +85,8 @@ public:
     /**
      * @brief creates a new agent object and runs some initialization
      *
-     * This will check if the workspace is sound, and also call triggerPreload()
+     * This will check if the workspace is sound
+     *
      * The config is used to set various values in the agent, or for the agent
      * to pass along to objects it creates.
      *
@@ -92,7 +94,7 @@ public:
      * @param config A general SoftwareContainer config
      *
      * @throws SoftwareContainerAgentError if initialization of the agent fails because of
-     * the Workspace initialization or Preloading
+     * the Workspace initialization
      * @throws ConfigStoreError if initialization of ConfigStore fails
      */
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext, std::shared_ptr<Config> config);
@@ -131,27 +133,6 @@ public:
      * @throws SoftwareContainerError on failure.
      */
     SoftwareContainerPtr getContainer(ContainerID containerID);
-
-    /**
-     * @brief Tries to read a config in json format for a container
-     *
-     * One can pass options to the agent when creating containers, options that
-     * are not gateway specific. These options will be read by this function
-     *
-     * @param element a config snippet in json format
-     * @throws SoftwareContainerError on failure.
-     */
-    void readConfigElement(const json_t *element);
-
-    /**
-     * @brief Parse config needed for starting up the container in a correct manner.
-     *
-     * This reads a config string into json format, makes sure it is formatted
-     * correctly, and then calls readConfigElement for its elements.
-     *
-     * @param config a configuration string
-     */
-    void parseConfig(const std::string &config);
 
     /**
      * @brief Create a new container
@@ -237,14 +218,6 @@ public:
     void setCapabilities(const ContainerID &containerID,
                          const std::vector<std::string> &capabilities);
 
-    /**
-     * @brief get a pointer to the workspace used
-     * TODO: This is only used for testing
-     *
-     * @return a shared pointer to the current workspace
-     */
-    std::shared_ptr<Workspace> getWorkspace();
-
 private:
     // Make a new container.
     std::pair<ContainerID, SoftwareContainerPtr> getContainerPair();
@@ -263,16 +236,13 @@ private:
     bool updateGatewayConfigs(const ContainerID &containerID,
                               const GatewayConfiguration &configs);
 
-    // Pre-loads container until the we have as many as configured
-    bool triggerPreload();
+
     // Find a job given a pid
     std::shared_ptr<CommandJob> getJob(pid_t pid);
     // Check if a given containerID is valid
     void assertContainerExists(ContainerID containerID);
     // Return a suitable container id
     ContainerID findSuitableId();
-
-    std::shared_ptr<Workspace> m_softwarecontainerWorkspace;
 
     // List of containers in use
     std::map<ContainerID, SoftwareContainerPtr> m_containers;
@@ -296,6 +266,11 @@ private:
      * be passed to SoftwareContainer as a unique_ptr.
      */
     SoftwareContainerConfig m_containerConfig;
+
+    /*
+     * Responsible for parsing any dynamic values given when creating a container
+     */
+    ContainerConfigParser m_configParser;
 };
 
 } // namespace softwarecontainer

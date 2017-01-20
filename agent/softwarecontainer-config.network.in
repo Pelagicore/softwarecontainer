@@ -1,0 +1,17 @@
+# Set to 'true' if SoftwareContainer should create a network bridge
+@SC_CREATE_BRIDGE_ACTIVATE@create-bridge = @SC_CREATE_BRIDGE_CONFIG_FILE_VAR@
+
+# Name of network bridge
+@SC_BRIDGE_DEVICE_ACTIVATE@bridge-device = @SC_BRIDGE_DEVICE_CONFIG_FILE_VAR@
+
+# IP address of the network bridge
+@SC_BRIDGE_IP_ACTIVATE@bridge-ip = @SC_BRIDGE_IP_CONFIG_FILE_VAR@
+
+# Netmask for the network bridge ip
+@SC_BRIDGE_NETMASK_ACTIVATE@bridge-netmask = @SC_BRIDGE_NETMASK_CONFIG_FILE_VAR@
+
+# Netmask bits for the network bridge
+@SC_BRIDGE_NETMASK_BITS_ACTIVATE@bridge-netmask-bits = @SC_BRIDGE_NETMASK_BITS_CONFIG_FILE_VAR@
+
+# Network address part for the network bridge ip
+@SC_BRIDGE_NETADDR_ACTIVATE@bridge-netaddr = @SC_BRIDGE_NETADDR_CONFIG_FILE_VAR@

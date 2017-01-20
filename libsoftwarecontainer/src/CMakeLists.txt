@@ -32,7 +32,6 @@ add_subdirectory(jobs)
 add_library(softwarecontainer SHARED
     container.cpp
     softwarecontainer.cpp
-    workspace.cpp
     config/softwarecontainerconfig.cpp
     ${GATEWAY_SOURCES}
     ${JOB_SOURCES}

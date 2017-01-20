@@ -82,10 +82,15 @@ public:
     static const std::string SC_LXC_CONFIG_PATH_KEY;
     static const std::string SC_SERVICE_MANIFEST_DIR_KEY;
     static const std::string SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY;
+
+#ifdef ENABLE_NETWORKGATEWAY
     static const std::string SC_CREATE_BRIDGE_KEY;
     static const std::string SC_BRIDGE_DEVICE_KEY;
     static const std::string SC_BRIDGE_IP_KEY;
+    static const std::string SC_BRIDGE_NETADDR_KEY;
+    static const std::string SC_BRIDGE_NETMASK_KEY;
     static const std::string SC_BRIDGE_NETMASK_BITS_KEY;
+#endif
 
     static MandatoryConfigs mandatory();
     static ConfigDependencies dependencies();

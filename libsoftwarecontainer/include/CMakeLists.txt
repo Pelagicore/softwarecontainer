@@ -21,7 +21,6 @@
 set(HEADERS
     softwarecontainer.h
     executable.h
-    workspace.h
     observableproperty.h
 )
 

@@ -21,30 +21,40 @@
 
 #include "config/softwarecontainerconfig.h"
 
-
 namespace softwarecontainer {
 
-SoftwareContainerConfig::SoftwareContainerConfig(const std::string &bridgeIp,
+SoftwareContainerConfig::SoftwareContainerConfig(
+#ifdef ENABLE_NETWORKGATEWAY
+                                                 const bool shouldCreateBridge,
+                                                 const std::string &bridgeDevice,
+                                                 const std::string &bridgeIPAddress,
+                                                 const std::string &bridgeNetmask,
+                                                 int bridgeNetmaskBitLength,
+                                                 const std::string &bridgeNetAddr,
+#endif // ENABLE_NETWORKGATEWAY
                                                  const std::string &containerConfigPath,
                                                  const std::string &containerRootDir,
-                                                 int netmaskBitLength,
-                                                 unsigned int containerShutdownTimeout):
-    m_bridgeIp(bridgeIp),
+                                                 unsigned int containerShutdownTimeout) :
+#ifdef ENABLE_NETWORKGATEWAY
+    m_shouldCreateBridge(shouldCreateBridge),
+    m_bridgeDevice(bridgeDevice),
+    m_bridgeIPAddress(bridgeIPAddress),
+    m_bridgeNetmask(bridgeNetmask),
+    m_bridgeNetmaskBitLength(bridgeNetmaskBitLength),
+    m_bridgeNetAddr(bridgeNetAddr),
+#endif
     m_containerConfigPath(containerConfigPath),
     m_containerRootDir(containerRootDir),
-    m_netmaskBitLength(netmaskBitLength),
     m_containerShutdownTimeout(containerShutdownTimeout)
 {
+    if (m_containerRootDir.back() != '/') {
+        m_containerRootDir += "/";
+    }
 }
 
 void SoftwareContainerConfig::setEnableWriteBuffer(bool enabledFlag)
 {
     m_enableWriteBuffer = enabledFlag;
-}
-
-std::string SoftwareContainerConfig::bridgeIp() const
-{
-    return m_bridgeIp;
 }
 
 std::string SoftwareContainerConfig::containerConfigPath() const
@@ -57,11 +67,6 @@ std::string SoftwareContainerConfig::containerRootDir() const
     return m_containerRootDir;
 }
 
-int SoftwareContainerConfig::netmaskBitLength() const
-{
-    return m_netmaskBitLength;
-}
-
 unsigned int SoftwareContainerConfig::containerShutdownTimeout() const
 {
     return m_containerShutdownTimeout;
@@ -71,6 +76,40 @@ bool SoftwareContainerConfig::enableWriteBuffer() const
 {
     return m_enableWriteBuffer;
 }
+
+#ifdef ENABLE_NETWORKGATEWAY
+
+bool SoftwareContainerConfig::shouldCreateBridge() const
+{
+    return m_shouldCreateBridge;
+}
+
+std::string SoftwareContainerConfig::bridgeDevice() const
+{
+    return m_bridgeDevice;
+}
+
+std::string SoftwareContainerConfig::bridgeIPAddress() const
+{
+    return m_bridgeIPAddress;
+}
+
+std::string SoftwareContainerConfig::bridgeNetmask() const
+{
+    return m_bridgeNetmask;
+}
+
+int SoftwareContainerConfig::bridgeNetmaskBitLength() const
+{
+    return m_bridgeNetmaskBitLength;
+}
+
+std::string SoftwareContainerConfig::bridgeNetAddr() const
+{
+    return m_bridgeNetAddr;
+}
+
+#endif // ENABLE_NETWORKGATEWAY
 
 
 } // namespace softwarecontainer

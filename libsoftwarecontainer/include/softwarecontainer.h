@@ -17,14 +17,13 @@
  * For further information see LICENSE
  */
 
-
 #pragma once
 
 #include "observableproperty.h"
-#include "workspace.h"
 #include "gatewayconfig.h"
 #include "signalconnectionshandler.h"
 #include "config/softwarecontainerconfig.h"
+#include "filetoolkitwithundo.h"
 
 #include <glibmm.h>
 
@@ -38,8 +37,8 @@
 #include "functionjob.h"
 #include "commandjob.h"
 
-
 namespace softwarecontainer {
+
 class Gateway;
 class ContainerAbstractInterface;
 
@@ -49,8 +48,16 @@ class SoftwareContainer :
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    SoftwareContainer(std::shared_ptr<Workspace> workspace,
-                      const ContainerID id,
+    /*
+     * @brief creates a new SoftwareContainer instance.
+     *
+     * @param id the containerID to use.
+     * @param config an object holding all needed settings for the container
+     *
+     * @throws SoftwareContainerError if unable to set up the needed directories
+     *         or network settings for this container.
+     */
+    SoftwareContainer(const ContainerID id,
                       std::unique_ptr<const SoftwareContainerConfig> config);
 
     ~SoftwareContainer();
@@ -119,21 +126,22 @@ private:
     ReturnCode activateGateways();
     ReturnCode shutdownGateways();
 
-    std::shared_ptr<Workspace> m_workspace;
+    // Check if the workspace is sound, and set it up if it isn't
+    void checkWorkspace();
+#ifdef ENABLE_NETWORKGATEWAY
+    void checkNetworkSettings();
+#endif // ENABLE_NETWORKGATEWAY
+
     ContainerID m_containerID;
-    std::string m_bridgeIp;
-    int m_netmaskBits;
-
-    ObservableWritableProperty<ContainerState> m_containerState;
-
     std::shared_ptr<ContainerAbstractInterface> m_container;
     pid_t m_pcPid = INVALID_PID;
+    ObservableWritableProperty<ContainerState> m_containerState;
 
     std::vector<std::unique_ptr<Gateway>> m_gateways;
+    std::unique_ptr<const SoftwareContainerConfig> m_config;
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     SignalConnectionsHandler m_connections;
-
     bool m_initialized = false;
 };
 

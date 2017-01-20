@@ -61,12 +61,4 @@
 # e.g. when having "default capabilities" in the platform.
 @SC_DEFAULT_SERVICE_MANIFEST_DIR_ACTIVATE@default-service-manifest-dir = @SC_DEFAULT_SERVICE_MANIFEST_DIR_CONFIG_FILE_VAR@
 
-# Set to 'true' if SoftwareContainer should create a network bridge
-@SC_CREATE_BRIDGE_ACTIVATE@create-bridge = @SC_CREATE_BRIDGE_CONFIG_FILE_VAR@
-
-# Name of network bridge
-@SC_BRIDGE_DEVICE_ACTIVATE@bridge-device = @SC_BRIDGE_DEVICE_CONFIG_FILE_VAR@
-
-@SC_BRIDGE_IP_ACTIVATE@bridge-ip = @SC_BRIDGE_IP_CONFIG_FILE_VAR@
-
-@SC_BRIDGE_NETMASK_BITS_ACTIVATE@bridge-netmask-bits = @SC_BRIDGE_NETMASK_BITS_CONFIG_FILE_VAR@
+@SC_NETWORK_CONF_FILE@

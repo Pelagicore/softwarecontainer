@@ -1,6 +1,0 @@
-    echo "@SC_BRIDGE_DEVICE@ was NOT FOUND, attempting to add..."
-    brctl addbr @SC_BRIDGE_DEVICE@
-    brctl setfd @SC_BRIDGE_DEVICE@ 0
-    ifconfig @SC_BRIDGE_DEVICE@ @SC_BRIDGE_IP@ netmask @BRIDGE_NETMASK@ promisc up
-    iptables -t nat -A POSTROUTING -s @BRIDGE_NETADDR@/@SC_BRIDGE_NETMASK_BITS@ ! -d @BRIDGE_NETADDR@/@SC_BRIDGE_NETMASK_BITS@ -j MASQUERADE
-    echo 1 > /proc/sys/net/ipv4/ip_forward
