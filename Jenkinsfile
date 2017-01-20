@@ -24,6 +24,10 @@ def runInVagrant = { String workspace, String command ->
     sh "cd ${workspace} && vagrant ssh -c '${command}'"
 }
 
+def shutdownVagrant = {
+    sh "cd ${workspace} && while ! vagrant destroy -f; do echo \"Shutdown failed, retrying...\"; done"
+}
+
 node {
     String workspace = pwd()
     try {
@@ -56,7 +60,7 @@ node {
             }
 
             // Start the machine (destroy it if present) and provision it
-            sh "cd ${workspace} && vagrant destroy -f || true"
+            shutdownVagrant()
             withEnv(["VAGRANT_RAM=${gigsram}",
                      "APT_CACHE_SERVER=10.8.36.16"]) {
                 sh "cd ${workspace} && vagrant up"
@@ -139,8 +143,9 @@ node {
         currentBuild.result = "FAILURE"
     }
 
-    // Always try to shut down the machine
-    // Shutdown the machine
-    sh "cd ${workspace} && vagrant destroy -f || true"
+    finally {
+        // Always try to shut down the machine
+        shutdownVagrant()
+    }
 }
 
