@@ -105,7 +105,7 @@ ConfigType MainConfigSource::typeOf(const std::string &group, const std::string 
     try {
         return m_typeMapping.at(std::make_pair(group, key));
     } catch (std::exception &error) {
-        std::string message = "Unkown config " + group + "::" + key;
+        std::string message = "Unknown config " + group + "::" + key;
         log_error() << message;
         throw ConfigUnknownError(message);
     }

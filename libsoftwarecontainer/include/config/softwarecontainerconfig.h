@@ -35,15 +35,23 @@ namespace softwarecontainer {
  * to set values dynamically in any way by SoftwareContainer, so it should be received
  * as const.
  */
+
 class SoftwareContainerConfig
 {
 public:
     SoftwareContainerConfig() {}
 
-    SoftwareContainerConfig(const std::string &bridgeIp,
+    SoftwareContainerConfig(
+#ifdef ENABLE_NETWORKGATEWAY
+                            const bool shouldCreateBridge,
+                            const std::string &bridgeDevice,
+                            const std::string &bridgeIPAddress,
+                            const std::string &bridgeNetmask,
+                            const int bridgeNetmaskBitLength,
+                            const std::string &bridgeNetAddr,
+#endif // ENABLE_NETWORKGATEWAY
                             const std::string &containerConfigPath,
                             const std::string &containerRootDir,
-                            int netmaskBitLength,
                             unsigned int containerShutdownTimeout);
 
     ~SoftwareContainerConfig() {}
@@ -57,10 +65,17 @@ public:
      * Getters for values that are set on creation only, i.e. these originate from the
      * static configs and should not be "re-set" after creation of this class.
      */
-    std::string bridgeIp() const;
+#ifdef ENABLE_NETWORKGATEWAY
+    bool shouldCreateBridge() const;
+    std::string bridgeDevice() const;
+    std::string bridgeIPAddress() const;
+    std::string bridgeNetmask() const;
+    int bridgeNetmaskBitLength() const;
+    std::string bridgeNetAddr() const;
+#endif // ENABLE_NETWORKGATEWAY
+
     std::string containerConfigPath() const;
     std::string containerRootDir() const;
-    int netmaskBitLength() const;
     unsigned int containerShutdownTimeout() const;
 
     /*
@@ -70,10 +85,17 @@ public:
     bool enableWriteBuffer() const;
 
 private:
-    std::string m_bridgeIp;
+#ifdef ENABLE_NETWORKGATEWAY
+    bool m_shouldCreateBridge;
+    std::string m_bridgeDevice;
+    std::string m_bridgeIPAddress;
+    std::string m_bridgeNetmask;
+    int m_bridgeNetmaskBitLength;
+    std::string m_bridgeNetAddr;
+#endif // ENABLE_NETWORKGATEWAY
+
     std::string m_containerConfigPath;
     std::string m_containerRootDir;
-    int m_netmaskBitLength;
     unsigned int m_containerShutdownTimeout;
 
     bool m_enableWriteBuffer;

@@ -50,9 +50,12 @@ if(ENABLE_NETWORKGATEWAY)
     endif(NOT brctl_binary)
 
     # Read network config to be used below when configuring the general config file
+    # Since network support is optional, there are lots of options that should only be ine the
+    # config file in case it is enabled. This configures the network settings, and reads it into
+    # a variable, which will be substituted by CMake when we configure the full config file.
     configure_file(softwarecontainer_network.conf.in softwarecontainer_network.conf)
-
     file(READ ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer_network.conf NETWORK_LXC_CONF)
+
 endif(ENABLE_NETWORKGATEWAY)
 
 configure_file(softwarecontainer.conf.in softwarecontainer.conf)

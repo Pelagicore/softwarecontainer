@@ -32,6 +32,7 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragentadaptor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/containerconfigparser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/baseconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/defaultconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/filteredconfigstore.cpp
@@ -57,8 +58,14 @@ install(TARGETS softwarecontainer-agent DESTINATION bin)
 # At this point, there should be no more definitions being added/changed so it's OK to set them
 set_all_deferred_config_definitions()
 
+# Network settings should only be in the config if the network gateway is enabled
+if(ENABLE_NETWORKGATEWAY)
+    configure_file(softwarecontainer-config.network.in softwarecontainer-config.network)
+    file(READ ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config.network SC_NETWORK_CONF_FILE)
+endif()
+
 # Configure and install the general config file
-configure_file(softwarecontainer-config.in softwarecontainer-config)
+configure_file(softwarecontainer-config.in softwarecontainer-config @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config" DESTINATION ${SYS_CONFIG_DIR})
 
 #

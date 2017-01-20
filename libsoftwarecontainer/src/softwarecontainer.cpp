@@ -17,7 +17,6 @@
  * For further information see LICENSE
  */
 
-
 #include "softwarecontainer.h"
 #include "gateway/gateway.h"
 #include "container.h"
@@ -56,21 +55,22 @@
 
 namespace softwarecontainer {
 
-SoftwareContainer::SoftwareContainer(std::shared_ptr<Workspace> workspace,
-                                     const ContainerID id,
+SoftwareContainer::SoftwareContainer(const ContainerID id,
                                      std::unique_ptr<const SoftwareContainerConfig> config):
-    m_workspace(workspace),
-    m_containerID(id)
+    m_containerID(id),
+    m_config(std::move(config))
 {
-    m_bridgeIp = config->bridgeIp();
-    m_netmaskBits = config->netmaskBitLength();
+    checkWorkspace();
+#ifdef ENABLE_NETWORKGATEWAY
+    checkNetworkSettings();
+#endif // ENABLE_NETWORKGATEWAY
 
     m_container = std::shared_ptr<ContainerAbstractInterface>(
         new Container("SC-" + std::to_string(id),
-                      config->containerConfigPath(),
-                      config->containerRootDir(),
-                      config->enableWriteBuffer(),
-                      config->containerShutdownTimeout()));
+                      m_config->containerConfigPath(),
+                      m_config->containerRootDir(),
+                      m_config->enableWriteBuffer(),
+                      m_config->containerShutdownTimeout()));
 
     m_containerState = ContainerState::CREATED;
 }
@@ -125,7 +125,9 @@ ReturnCode SoftwareContainer::init()
 
 #ifdef ENABLE_NETWORKGATEWAY
     try {
-        addGateway(new NetworkGateway(m_containerID, m_bridgeIp, m_netmaskBits));
+        addGateway(new NetworkGateway(m_containerID,
+                                      m_config->bridgeIPAddress(),
+                                      m_config->bridgeNetmaskBitLength()));
     } catch (ReturnCode failure) {
         log_error() << "Given netmask is not appropriate for creating ip address."
                     << "It should be an unsigned value between 1 and 31";
@@ -261,7 +263,7 @@ ReturnCode SoftwareContainer::activateGateways()
 
 ReturnCode SoftwareContainer::shutdown()
 {
-    return shutdown(m_workspace->m_containerShutdownTimeout);
+    return shutdown(m_config->containerShutdownTimeout());
 }
 
 ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
@@ -321,7 +323,7 @@ std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
 std::string SoftwareContainer::getContainerDir()
 {
     const std::string containerID = std::string(m_container->id());
-    return m_workspace->m_containerRootDir + "/" + containerID;
+    return m_config->containerRootDir() + "/" + containerID;
 }
 
 std::string SoftwareContainer::getGatewayDir()
@@ -350,5 +352,53 @@ ReturnCode SoftwareContainer::bindMount(const std::string &pathOnHost, const std
 {
     return getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly);
 }
+
+void SoftwareContainer::checkWorkspace()
+{
+    const std::string rootDir = m_config->containerRootDir();
+    if (!isDirectory(rootDir)) {
+        log_debug() << "Container root " << rootDir << " does not exist, trying to create";
+        if(isError(createDirectory(rootDir))) {
+            std::string message = "Failed to create container root directory";
+            log_error() << message;
+            throw SoftwareContainerError(message);
+        }
+    }
+}
+
+#ifdef ENABLE_NETWORKGATEWAY
+void SoftwareContainer::checkNetworkSettings()
+{
+    std::vector<std::string> argv;
+    argv.push_back(std::string(INSTALL_BINDIR) + "/setup_softwarecontainer.sh");
+    argv.push_back(m_config->bridgeDevice());
+
+    if (m_config->shouldCreateBridge()) {
+        argv.push_back(m_config->bridgeIPAddress());
+        argv.push_back(m_config->bridgeNetmask());
+        argv.push_back(std::to_string(m_config->bridgeNetmaskBitLength()));
+        argv.push_back(m_config->bridgeNetAddr());
+    }
+
+    log_debug() << "Checking the network setup...";
+    int returnCode;
+    try {
+        Glib::spawn_sync("", argv, Glib::SPAWN_DEFAULT,
+                         sigc::slot<void>(), nullptr,
+                         nullptr, &returnCode);
+    } catch (Glib::SpawnError e) {
+        std::string message = "Failed to spawn setup_softwarecontainer.sh: " + e.what();
+        log_error() << message;
+        throw SoftwareContainerError(message);
+    }
+
+    if (returnCode != 0) {
+        std::string message = "Return code of setup_softwarecontainer.sh is non-zero";
+        log_error() << message;
+        throw SoftwareContainerError(message);
+    }
+
+}
+#endif // ENABLE_NETWORKGATEWAY
 
 } // namespace softwarecontainer

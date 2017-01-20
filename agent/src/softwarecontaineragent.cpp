@@ -27,16 +27,14 @@
 
 namespace softwarecontainer {
 
-
 SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
                                                std::shared_ptr<Config> config):
     m_mainLoopContext(mainLoopContext),
-    m_config(config),
-    m_containerConfig(SoftwareContainerConfig())
+    m_config(config)
 {
     m_containerIdPool.push_back(0);
 
-    // Get all configs for the workspace
+    // Get all configs for the config object
     int shutdownTimeout =
         m_config->getIntValue(ConfigDefinition::SC_GROUP,
                               ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
@@ -46,13 +44,21 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
     std::string lxcConfigPath =
         m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                  ConfigDefinition::SC_LXC_CONFIG_PATH_KEY);
-
-    // Create and set all values on workspace
-    m_softwarecontainerWorkspace = std::make_shared<Workspace>();
-    m_softwarecontainerWorkspace->m_enableWriteBuffer = false;
-    m_softwarecontainerWorkspace->m_containerRootDir = containerRootDir;
-    m_softwarecontainerWorkspace->m_containerConfigPath = lxcConfigPath;
-    m_softwarecontainerWorkspace->m_containerShutdownTimeout = shutdownTimeout;
+#ifdef ENABLE_NETWORKGATEWAY
+        // All of the below are network settings
+    bool createBridge = m_config->getBoolValue(ConfigDefinition::SC_GROUP,
+                                               ConfigDefinition::SC_CREATE_BRIDGE_KEY);
+    std::string bridgeDevice = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                        ConfigDefinition::SC_BRIDGE_DEVICE_KEY);
+    std::string bridgeIp = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                    ConfigDefinition::SC_BRIDGE_IP_KEY);
+    std::string bridgeNetmask = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                         ConfigDefinition::SC_BRIDGE_NETMASK_KEY);
+    int bridgeNetmaskBits = m_config->getIntValue(ConfigDefinition::SC_GROUP,
+                                                  ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY);
+    std::string bridgeNetAddr = m_config->getStringValue(ConfigDefinition::SC_GROUP,
+                                                 ConfigDefinition::SC_BRIDGE_NETADDR_KEY);
+#endif // ENABLE_NETWORKGATEWAY
 
     // Get all configs for the config stores
     std::string serviceManifestDir =
@@ -61,18 +67,21 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
     std::string defaultServiceManifestDir =
         m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                  ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
+
     m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
     m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
 
-    std::string bridgeIp = m_config->getStringValue(ConfigDefinition::SC_GROUP,
-                                                    ConfigDefinition::SC_BRIDGE_IP_KEY);
-    int netmaskBits = m_config->getIntValue(ConfigDefinition::SC_GROUP,
-                                            ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY);
-
-    m_containerConfig = SoftwareContainerConfig(bridgeIp,
+    m_containerConfig = SoftwareContainerConfig(
+#ifdef ENABLE_NETWORKGATEWAY
+                                                createBridge,
+                                                bridgeDevice,
+                                                bridgeIp,
+                                                bridgeNetmask,
+                                                bridgeNetmaskBits,
+                                                bridgeNetAddr,
+#endif // ENABLE_NETWORKGATEWAY
                                                 lxcConfigPath,
                                                 containerRootDir,
-                                                netmaskBits,
                                                 shutdownTimeout);
 }
 
@@ -130,65 +139,6 @@ SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::getContaine
     return m_containers[containerID];
 }
 
-void SoftwareContainerAgent::readConfigElement(const json_t *element)
-{
-    if (!json_is_object(element)) {
-        std::string errorMessage("Configure entry is not an object");
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
-
-    bool wo = false;
-    if(!JSONParser::read(element, "enableWriteBuffer", wo)) {
-        std::string errorMessage("Could not parse config due to: 'enableWriteBuffer' not found.");
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
-
-    m_softwarecontainerWorkspace->m_enableWriteBuffer = wo;
-    m_containerConfig.setEnableWriteBuffer(wo);
-}
-
-void SoftwareContainerAgent::parseConfig(const std::string &config)
-{
-    if (config.size() == 0) {
-        std::string errorMessage("Empty JSON config strings are not supported.");
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
-
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-
-    if (!root) {
-        std::string errorMessage("Could not parse config: "
-                                + std::string(error.text)
-                                + config);
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
-
-    if (!json_is_array(root)) {
-        std::string errorMessage("Root JSON element is not an array");
-        log_error() << errorMessage;
-        json_decref(root);
-        throw SoftwareContainerError(errorMessage);
-    }
-
-    size_t index;
-    json_t *element;
-
-    try {
-        json_array_foreach(root, index, element) {
-            readConfigElement(element);
-        }
-    } catch (SoftwareContainerError &err) {
-        json_decref(root);
-        throw;
-    }
-
-    json_decref(root);
-}
 
 ContainerID SoftwareContainerAgent::findSuitableId()
 {
@@ -209,8 +159,7 @@ SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwar
     std::unique_ptr<SoftwareContainerConfig> config =
         std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(m_containerConfig));
 
-    auto container = SoftwareContainerPtr(new SoftwareContainer(m_softwarecontainerWorkspace,
-                                                                containerID,
+    auto container = SoftwareContainerPtr(new SoftwareContainer(containerID,
                                                                 std::move(config)));
     log_debug() << "Created container with ID :" << containerID;
 
@@ -222,13 +171,8 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
     profilepoint("createContainerStart");
     profilefunction("createContainerFunction");
 
-    try {
-        parseConfig(config);
-    } catch (SoftwareContainerError &err) {
-        std::string errorMessage("The provided config could not be successfully parsed:" + std::string(err.what()));
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
+    ContainerConfigParser::ContainerOptions options = m_configParser.parse(config);
+    m_containerConfig.setEnableWriteBuffer(options.enableWriteBuffer);
 
     std::pair<ContainerID, SoftwareContainerPtr> pair = std::move(getContainerPair());
     pair.second->setMainLoopContext(m_mainLoopContext);
@@ -310,7 +254,7 @@ void SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
 
     SoftwareContainerPtr container = getContainer(containerID);
 
-    int timeout = m_softwarecontainerWorkspace->m_containerShutdownTimeout;
+    int timeout = m_containerConfig.containerShutdownTimeout();
     if (isError(container->shutdown(timeout))) {
         std::string errorMessage("Could not shut down the container");
         log_error() << errorMessage;
@@ -397,12 +341,6 @@ void SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
         log_error() << errorMessage;
         throw SoftwareContainerError(errorMessage);
     }
-}
-
-
-std::shared_ptr<Workspace> SoftwareContainerAgent::getWorkspace()
-{
-    return m_softwarecontainerWorkspace;
 }
 
 } // namespace softwarecontainer

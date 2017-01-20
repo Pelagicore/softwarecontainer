@@ -31,6 +31,7 @@ set(SOFTWARECONTAINERAGENT_TEST_FILES
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragentadaptor.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/containerconfigparser.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp

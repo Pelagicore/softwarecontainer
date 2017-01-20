@@ -37,35 +37,41 @@ void SoftwareContainerTest::exit()
     m_ml->quit();
 }
 
+/* 
+ * Set up the workspace with all the config values it needs.
+ */ 
+std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
+{
+    std::unique_ptr<SoftwareContainerConfig> config = 
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(
+#ifdef ENABLE_NETWORKGATEWAY
+        // Setup network stuff
+        true, // createBridge
+        std::string(BRIDGE_DEVICE_TESTING),// Should be set be CMake
+        std::string(BRIDGE_IP_TESTING),// Should be set be CMake
+        std::string(BRIDGE_NETMASK_TESTING),// Should be set be CMake
+        std::stoi(BRIDGE_NETMASK_BITS_TESTING),// Should be set be CMake
+        std::string(BRIDGE_NETADDR_TESTING),// Should be set be CMake
+#endif // ENABLE_NETWORKGATEWAY
+        LXC_CONFIG_PATH_TESTING, // Should be set be CMake
+        SHARED_MOUNTS_DIR_TESTING, // Should be set be CMake
+        1 // timeout
+    ));
+    
+    config->setEnableWriteBuffer(false);
+    return config;
+}
+
 void SoftwareContainerTest::SetUp()
 {
     ::testing::Test::SetUp();
-    ASSERT_NO_THROW({
-        workspace = std::make_shared<Workspace>();
-    });
 
-    /* Set up the workspace with all the config values it needs.
-     *
-     * NOTE: This could be done more nicely perhaps, but the workspace will get an overhaul
-     *       or be removed, so pending that design change this is a workaround.
-     */
-    workspace->m_enableWriteBuffer = false;
-    workspace->m_containerRootDir = SHARED_MOUNTS_DIR_TESTING; // Should be set be CMake
-    workspace->m_containerConfigPath = LXC_CONFIG_PATH_TESTING; // Should be set be CMake
-    workspace->m_containerShutdownTimeout = 1;
+    std::unique_ptr<SoftwareContainerConfig> config = createConfig();
 
     srand(time(NULL));
     uint32_t containerId =  rand() % 100;
 
-    std::unique_ptr<SoftwareContainerConfig> config =
-        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig("10.0.3.1" /*bridge ip*/,
-                                                                             LXC_CONFIG_PATH_TESTING,
-                                                                             SHARED_MOUNTS_DIR_TESTING,
-                                                                             24 /*netmask bit length*/,
-                                                                             1 /*shutdown timeout*/));
-    config->setEnableWriteBuffer(false);
-
-    m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(workspace, containerId, std::move(config)));
+    m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(containerId, std::move(config)));
     m_sc->setMainLoopContext(m_context);
     ASSERT_TRUE(isSuccess(m_sc->init()));
 }
@@ -74,5 +80,4 @@ void SoftwareContainerTest::TearDown()
 {
     ::testing::Test::TearDown();
     m_sc.reset();
-    workspace.reset();
 }

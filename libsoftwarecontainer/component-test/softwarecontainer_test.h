@@ -29,6 +29,7 @@
 
 #include "gateway/gateway.h"
 #include "softwarecontainer.h"
+#include "config/softwarecontainerconfig.h"
 
 using namespace softwarecontainer;
 
@@ -46,7 +47,8 @@ public:
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> m_ml;
     std::unique_ptr<SoftwareContainer> m_sc;
-    std::shared_ptr<Workspace> workspace;
+
+    std::unique_ptr<SoftwareContainerConfig> createConfig();
 };
 
 class SoftwareContainerGatewayTest : public SoftwareContainerTest

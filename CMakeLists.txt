@@ -172,8 +172,6 @@ add_boolean_config(${SC_CONFIG_GROUP} KEEP_CONTAINERS_ALIVE FALSE "false")
 
 add_boolean_config(${SC_CONFIG_GROUP} USE_SESSION_BUS FALSE "false")
 
-add_boolean_config(${SC_CONFIG_GROUP} CREATE_BRIDGE TRUE "true")
-
 add_integer_config(${SC_CONFIG_GROUP} SHUTDOWN_TIMEOUT 1 1)
 
 add_string_config(${SC_CONFIG_GROUP} SHARED_MOUNTS_DIR "/tmp/container/" "/tmp/container/")
@@ -191,13 +189,6 @@ add_string_config(${SC_CONFIG_GROUP}
                   DEFAULT_SERVICE_MANIFEST_DIR
                   "${SYS_CONFIG_DIR}/service-manifest.default.d/"
                   "${SYS_CONFIG_DIR}/service-manifest.default.d/")
-
-add_string_config(${SC_CONFIG_GROUP} BRIDGE_DEVICE "lxcbr0" "lxcbr0")
-
-add_string_config(${SC_CONFIG_GROUP} BRIDGE_IP "10.0.3.1" "10.0.3.1")
-
-add_integer_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS 24 24)
-
 
 # NOTE: These definitons are only set because the "middle layer" tests currently need to create a Workspace
 #       with valid values, see the setup code of SoftwareContainerTest test class.
@@ -249,61 +240,41 @@ if(ENABLE_COVERAGE)
     add_coverage("CoverageUnitTest" "${CMAKE_BINARY_DIR}/run-unit-tests.py")
 endif(ENABLE_COVERAGE)
 
-
 #
 # Network related options
 #
 if(ENABLE_NETWORKGATEWAY)
+    add_boolean_config(${SC_CONFIG_GROUP} CREATE_BRIDGE TRUE "true")
+    add_string_config(${SC_CONFIG_GROUP} BRIDGE_DEVICE "lxcbr0" "lxcbr0")
+    add_string_config(${SC_CONFIG_GROUP} BRIDGE_IP "10.0.3.1" "10.0.3.1")
+    add_string_config(${SC_CONFIG_GROUP} BRIDGE_NETADDR "10.0.3.0" "10.0.3.0")
+    add_string_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK "255.255.255.0" "255.255.255.0")
+    add_integer_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS 24 24)
 
-    macro(set_if_undefined VAR VALUE)
-        if(NOT DEFINED ${VAR})
-            set(${VAR} ${VALUE})
-        endif()
-    endmacro()
-
-    # BRIDGE_DEVICE config is mandatory if we are configured for network
+    # All these are mandatory if we are configured for network
+    make_config_mandatory(${SC_CONFIG_GROUP} CREATE_BRIDGE)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_DEVICE)
-
-    # BRIDGE_IP is mandatory if we are configured for network
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_IP)
-
-    # BRIDGE_NETMASK_BITS is mandatory if we are configured for network
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS)
+    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETADDR)
+    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK)
 
     add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${${SC_CONFIG_GROUP}_BRIDGE_DEVICE}")
 
-    #
-    # Some settings for whether or not SC should create a bridge
-    # if one is not found.
-    #
+    # NOTE: These definitons are only set because the "middle layer" tests currently need to create
+    # a Workspace with valid values, see the setup code of SoftwareContainerTest test class.
+    add_definitions(-DENABLE_NETWORKGATEWAY)
+    add_definitions(-DBRIDGE_DEVICE_TESTING="${SC_BRIDGE_DEVICE}")
+    add_definitions(-DBRIDGE_IP_TESTING="${SC_BRIDGE_IP}")
+    add_definitions(-DBRIDGE_NETADDR_TESTING="${SC_BRIDGE_NETADDR}")
+    add_definitions(-DBRIDGE_NETMASK_TESTING="${SC_BRIDGE_NETMASK}")
+    add_definitions(-DBRIDGE_NETMASK_BITS_TESTING="${SC_BRIDGE_NETMASK_BITS}")
 
-    # TODO: When CREATE_BRIDGE is in the main config, it means we should not need to have it here
-    #       but until we have removed the use of the setup scripts, or reworked how that works,
-    #       we need it here for now.
-    if(CREATE_BRIDGE)
-        # We are configured to create the network bridge so the corresponding config should be
-        # made present in the main config
-        enable_config_in_file(${SC_CONFIG_GROUP} CREATE_BRIDGE "true")
-
-        set_if_undefined(BRIDGE_NETADDR 10.0.3.0)
-
-        set_if_undefined(BRIDGE_NETMASK 255.255.255.0)
-
-        configure_file(scripts/setup_create_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh)
-        file(READ ${CMAKE_CURRENT_BINARY_DIR}/create_bridge.sh NOBRIDGE)
-    else()
-        # We are configured to not create network bridge so the corresponding config should say so
-        # in the main config file.
-        enable_config_in_file(${SC_CONFIG_GROUP} CREATE_BRIDGE "false")
-
-        configure_file(scripts/setup_exit_nobridge.sh.in ${CMAKE_CURRENT_BINARY_DIR}/exit_nobridge.sh)
-        file(READ ${CMAKE_CURRENT_BINARY_DIR}/exit_nobridge.sh NOBRIDGE)
-    endif()
-
-    # Get the actual setup script
-    configure_file(scripts/setup_softwarecontainer.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup_softwarecontainer.sh DESTINATION bin
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    # Install the actual script
+    install(FILES ${CMAKE_SOURCE_DIR}/scripts/setup_softwarecontainer.sh DESTINATION bin
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                        GROUP_READ GROUP_EXECUTE
+                        WORLD_READ WORLD_EXECUTE)
 endif()
 
 #

@@ -65,11 +65,15 @@ const std::string ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY = "shared-mounts-di
 const std::string ConfigDefinition::SC_LXC_CONFIG_PATH_KEY = "deprecated-lxc-config-path";
 const std::string ConfigDefinition::SC_SERVICE_MANIFEST_DIR_KEY = "service-manifest-dir";
 const std::string ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY = "default-service-manifest-dir";
+
+#ifdef ENABLE_NETWORKGATEWAY
 const std::string ConfigDefinition::SC_CREATE_BRIDGE_KEY = "create-bridge";
 const std::string ConfigDefinition::SC_BRIDGE_DEVICE_KEY = "bridge-device";
 const std::string ConfigDefinition::SC_BRIDGE_IP_KEY = "bridge-ip";
+const std::string ConfigDefinition::SC_BRIDGE_NETADDR_KEY = "bridge-netaddr";
+const std::string ConfigDefinition::SC_BRIDGE_NETMASK_KEY = "bridge-netmask";
 const std::string ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY = "bridge-netmask-bits";
-
+#endif
 
 /*
  * Used to create a mapping between group-key pairs and a type, as well as defining what configs
@@ -80,6 +84,38 @@ const std::string ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY = "bridge-netmask
  */
 const ConfigItems CONFIGS
 {
+#ifdef ENABLE_NETWORKGATEWAY
+    std::make_tuple(ConfigDefinition::SC_GROUP,
+                    ConfigDefinition::SC_CREATE_BRIDGE_KEY,
+                    ConfigType::Boolean,
+                    ConfigDefinition::convertDefineToFlag(
+                        SC_CREATE_BRIDGE_MANDATORY_FLAG /* set by cmake */)),
+    std::make_tuple(ConfigDefinition::SC_GROUP,
+                    ConfigDefinition::SC_BRIDGE_DEVICE_KEY,
+                    ConfigType::String,
+                    ConfigDefinition::convertDefineToFlag(
+                        SC_BRIDGE_DEVICE_MANDATORY_FLAG /* set by cmake */)),
+    std::make_tuple(ConfigDefinition::SC_GROUP,
+                    ConfigDefinition::SC_BRIDGE_IP_KEY,
+                    ConfigType::String,
+                    ConfigDefinition::convertDefineToFlag(
+                        SC_BRIDGE_IP_MANDATORY_FLAG /* set by cmake */)),
+    std::make_tuple(ConfigDefinition::SC_GROUP,
+                    ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY,
+                    ConfigType::Integer,
+                    ConfigDefinition::convertDefineToFlag(
+                        SC_BRIDGE_NETMASK_BITS_MANDATORY_FLAG /* set by cmake */)),
+    std::make_tuple(ConfigDefinition::SC_GROUP,
+                    ConfigDefinition::SC_BRIDGE_NETMASK_KEY,
+                    ConfigType::String,
+                    ConfigDefinition::convertDefineToFlag(
+                        SC_BRIDGE_NETMASK_MANDATORY_FLAG /* set by cmake */)),
+    std::make_tuple(ConfigDefinition::SC_GROUP,
+                    ConfigDefinition::SC_BRIDGE_NETADDR_KEY,
+                    ConfigType::String,
+                    ConfigDefinition::convertDefineToFlag(
+                        SC_BRIDGE_NETADDR_MANDATORY_FLAG /* set by cmake */)),
+#endif // ENABLE_NETWORKGATEWAY
     std::make_tuple(ConfigDefinition::SC_GROUP,
                     ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,
                     ConfigType::Boolean,
@@ -107,26 +143,7 @@ const ConfigItems CONFIGS
     std::make_tuple(ConfigDefinition::SC_GROUP,
                     ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY,
                     ConfigType::String,
-                    Optional),
-    std::make_tuple(ConfigDefinition::SC_GROUP,
-                    ConfigDefinition::SC_CREATE_BRIDGE_KEY,
-                    ConfigType::Boolean,
-                    Optional),
-    std::make_tuple(ConfigDefinition::SC_GROUP,
-                    ConfigDefinition::SC_BRIDGE_DEVICE_KEY,
-                    ConfigType::String,
-                    ConfigDefinition::convertDefineToFlag(
-                        SC_BRIDGE_DEVICE_MANDATORY_FLAG /* set by cmake */)),
-    std::make_tuple(ConfigDefinition::SC_GROUP,
-                    ConfigDefinition::SC_BRIDGE_IP_KEY,
-                    ConfigType::String,
-                    ConfigDefinition::convertDefineToFlag(
-                        SC_BRIDGE_IP_MANDATORY_FLAG /* set by cmake */)),
-    std::make_tuple(ConfigDefinition::SC_GROUP,
-                    ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY,
-                    ConfigType::Integer,
-                    ConfigDefinition::convertDefineToFlag(
-                        SC_BRIDGE_NETMASK_BITS_MANDATORY_FLAG /* set by cmake */))
+                    Optional)
 };
 
 MandatoryFlag ConfigDefinition::convertDefineToFlag(bool defined)
