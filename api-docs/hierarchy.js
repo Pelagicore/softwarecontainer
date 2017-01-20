@@ -111,5 +111,6 @@ var hierarchy =
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
     ] ],
     [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
-    [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ]
+    [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ],
+    [ "softwarecontainer::SoftwareContainerConfig", "classsoftwarecontainer_1_1_software_container_config.html", null ]
 ];
