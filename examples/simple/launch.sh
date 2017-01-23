@@ -22,6 +22,8 @@
 # container, the example will launch simple.c in a container, and observe that
 # it is killed inside the container by the OOM killer.
 
+set -e
+
 # Register the path of the script. This is what we will mount in to the
 # container later, in order to access the 'simple' binary.
 SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
@@ -74,25 +76,24 @@ export SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 $SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 
 # Create a new container
-$SC_CMD $AGENTPREFIX.Create string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.Create string:'[{"enableWriteBuffer": false}]'
 
 # A few thing that we use for more or less every call below
-CONTAINERID="uint32:0"
+CONTAINERID="int32:0"
 ROOTID="uint32:0"
 OUTFILE="/tmp/stdout"
+APPBASE="/gateways/app"
 
 # Expose a directory to the container
 $SC_CMD $AGENTPREFIX.BindMount \
     $CONTAINERID \
     string:${SCRIPTPATH} \
-    string:app \
+    string:${APPBASE} \
     boolean:true
-APPBASE="/gateways/app"
 
 # Run the simple example
 $SC_CMD $AGENTPREFIX.Execute \
     $CONTAINERID \
-    $ROOTID \
     string:$APPBASE/simple \
     string:$APPBASE \
     string:$OUTFILE \
@@ -102,4 +103,7 @@ $SC_CMD $AGENTPREFIX.Execute \
 sleep 10
 
 # Clean up
+$SC_CMD $AGENTPREFIX.Destroy \
+    $CONTAINERID
+
 kill $AGENTPID

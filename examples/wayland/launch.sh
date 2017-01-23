@@ -17,6 +17,7 @@
 #
 # For further information see LICENSE
 
+set -e 
 
 # This is an example of a misbehaving application being launched in a
 # container, the example will launch simple.c in a container, and observe that
@@ -92,11 +93,10 @@ $SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 $SC_CMD $AGENTPREFIX.Ping
 
 # Create a new container
-$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"enableWriteBuffer": false}]'
 
 # A few thing that we use for more or less every call below
-CONTAINERID="uint32:0"
-ROOTID="uint32:0"
+CONTAINERID="int32:0"
 OUTFILE="/tmp/stdout"
 
 # Set gateway config allowing wayland access
@@ -111,7 +111,6 @@ $SC_CMD $AGENTPREFIX.SetGatewayConfigs \
 # Run the simple egl example from weston
 $SC_CMD $AGENTPREFIX.LaunchCommand \
     $CONTAINERID \
-    $ROOTID \
     string:"$SIMPLEWESTON" \
     string:/gateways/app \
     string:${OUTFILE}-simple \
@@ -120,7 +119,6 @@ $SC_CMD $AGENTPREFIX.LaunchCommand \
 # Run weston-flower
 $SC_CMD $AGENTPREFIX.LaunchCommand \
     $CONTAINERID \
-    $ROOTID \
     string:"$FLOWERWESTON" \
     string:/gateways/app \
     string:${OUTFILE}-flower \
