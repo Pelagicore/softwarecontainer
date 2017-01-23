@@ -20,20 +20,16 @@
 #include "temperatureservice.h"
 #include "temperatureservicetodbusadapter.h"
 
-#include <dbus-c++/dbus.h>
-
-
-int main(int argc, char **argv)
+int main(void)
 {
-    DBus::BusDispatcher dispatcher;
-    DBus::default_dispatcher = &dispatcher;
-    DBus::Connection bus = DBus::Connection::SystemBus();
-    bus.request_name("com.pelagicore.TemperatureService");
+    Glib::init();
+    Gio::init();
+    auto loop = Glib::MainLoop::create();
 
-    TemperatureService ts;
-    TemperatureServiceToDBusAdapter temperatureDBusInterface(bus, &ts);
+    TemperatureServiceImpl ts;
+    bool useSessionBus = true;
+    TemperatureServiceToDBusAdapter temperatureDBusInterface(&ts, useSessionBus);
 
-    dispatcher.enter();
-
+    loop->run();
     return 0;
 }

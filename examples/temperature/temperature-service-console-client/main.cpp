@@ -19,35 +19,44 @@
 
 #include <thread>
 #include <unistd.h>
-#include <dbus-c++/dbus.h>
 
 #include "temperatureserviceinterface.h"
-#include "periodictemperature.h"
+
+
+class PeriodicTemperature
+{
+public:
+    PeriodicTemperature() : m_temperature(0.0) {}
+
+    bool setTemperaturePeriodically() {
+           if(m_temperature > 40) {
+               m_temperature = 0;
+           }
+
+           m_temperature = m_temperature + 0.5;
+           m_interface.setTemperature(m_temperature);
+           m_interface.getTemperature();
+           return true;
+    }
+
+private:
+    TemperatureServiceInterface m_interface;
+    double m_temperature;
+};
 
 int main()
 {
-    // Setup DBus
-    DBus::BusDispatcher dispatcher;
-    DBus::default_dispatcher = &dispatcher;
-    DBus::Connection bus = DBus::Connection::SystemBus();
+    Glib::init();
+    Gio::init();
 
-    // We use the $HOME to point to where we want to log messages
-    std::string homeDir = getenv("HOME");
-    if (homeDir.empty()) {
-        std::cout << "No $HOME set, can't run" << std::endl;
-        return 1;
-    }
+    auto loop = Glib::MainLoop::create();
 
-    std::cout << "App home dir is : " << homeDir << std::endl;
-    TemperatureServiceInterface tsInterface(bus, homeDir + "/temperatureservice_client.log");
+    PeriodicTemperature tsInterface;
+    auto callbackFunction = sigc::mem_fun(&tsInterface,
+                                          &PeriodicTemperature::setTemperaturePeriodically);
 
-    // We use a different thread to set the temperature periodically
-    // that way we don't block the main thread which is used by dbus
-    // when we sleep.
-    std::thread setterThread(setTemperaturePeriodically, &tsInterface);
-
-    // Listen for DBus
-    dispatcher.enter();
+    Glib::signal_timeout().connect(callbackFunction, 1000);
+    loop->run();
 
     return 0;
 }

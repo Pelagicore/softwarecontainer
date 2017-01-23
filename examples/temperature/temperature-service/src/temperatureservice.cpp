@@ -19,31 +19,27 @@
 
 #include "temperatureservice.h"
 
-TemperatureService::TemperatureService()
+TemperatureServiceImpl::TemperatureServiceImpl()
 {
     
 }
 
-TemperatureService::~TemperatureService()
+TemperatureServiceImpl::~TemperatureServiceImpl()
 {
 
 }
 
-void TemperatureService::setAdapter(TemperatureServiceToDBusAdapter *adapter)
+void TemperatureServiceImpl::setAdapter(TemperatureServiceToDBusAdapter *adapter)
 {
     m_adapter = adapter;
 }
 
-double TemperatureService::getTemperature()
+double TemperatureServiceImpl::getTemperature()
 {
     return m_temperature;
 }
 
-void TemperatureService::setTemperature(double temperature)
+void TemperatureServiceImpl::setTemperature(double temperature)
 {
     m_temperature = temperature;
-    
-    if(m_adapter) {
-        m_adapter->TemperatureChanged(temperature);
-    }
 }

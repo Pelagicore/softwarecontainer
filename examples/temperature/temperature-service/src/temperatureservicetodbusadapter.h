@@ -19,28 +19,24 @@
 
 #pragma once
 
-#include <dbus-c++/dbus.h>
-#include "TemperatureService_dbuscpp_adaptor.h"
-
+#include "temperatureservice_dbus_stub.h"
 #include "temperatureservice.h"
 
-class TemperatureService;
+class TemperatureServiceImpl;
 
 /*
  * Adapter between DBus and TemperatureService class
  */
 class TemperatureServiceToDBusAdapter :
-    public com::pelagicore::TemperatureService_adaptor,
-    public DBus::IntrospectableAdaptor,
-    public DBus::ObjectAdaptor
+    public com::pelagicore::TemperatureService
 {
 public:
-    TemperatureServiceToDBusAdapter(DBus::Connection &connection, TemperatureService *ts);
+    TemperatureServiceToDBusAdapter(TemperatureServiceImpl *ts, bool useSessionBus);
 
-    virtual std::string Echo(const std::string &argument);
-    virtual double GetTemperature();
-    virtual void SetTemperature(const double &temperature);
+    virtual void Echo (std::string argument, TemperatureServiceMessageHelper msg);
+    virtual void GetTemperature (TemperatureServiceMessageHelper msg);
+    virtual void SetTemperature (double temperature, TemperatureServiceMessageHelper msg);
 
 private:
-    TemperatureService *m_ts;
+    TemperatureServiceImpl *m_ts;
 };

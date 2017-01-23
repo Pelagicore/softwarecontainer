@@ -29,13 +29,13 @@ class TemperatureServiceToDBusAdapter;
  * your service, this is the work horse.
  */
 
-class TemperatureService {
+class TemperatureServiceImpl {
 public:
     /*
      * @brief Sets temperature to 0.0 per default.
      */
-    TemperatureService();
-    ~TemperatureService();
+    TemperatureServiceImpl();
+    ~TemperatureServiceImpl();
 
     void setAdapter(TemperatureServiceToDBusAdapter *adapter);
 
