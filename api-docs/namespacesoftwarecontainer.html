@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-e036ade 2017-01-23</span>
+   &#160;<span id="projectnumber">0.17.0-719c432 2017-01-23</span>
    </div>
   </td>
  </tr>
@@ -144,6 +144,10 @@ Data Structures</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. ">Container</a> class is an abstraction of the specific containment technology used.  <a href="classsoftwarecontainer_1_1_container.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container_config_parse_error.html">ContainerConfigParseError</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container_config_parser.html">ContainerConfigParser</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_d_bus_gateway.html">DBusGateway</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,9 +277,6 @@ Data Structures</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a config item of type string.  <a href="classsoftwarecontainer_1_1_string_config.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_wayland_gateway.html">WaylandGateway</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_workspace.html">Workspace</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds information about the container workspace.  <a href="classsoftwarecontainer_1_1_workspace.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -647,7 +648,7 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 
 <p>References <a class="el" href="signalconnectionshandler_8cpp_source.html#l00024">softwarecontainer::SignalConnectionsHandler::addConnection()</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00256">softwarecontainer::SoftwareContainerAgent::execute()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontaineragent_8cpp_source.html#l00200">softwarecontainer::SoftwareContainerAgent::execute()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    Glib::SignalChildWatch watch = context-&gt;signal_child_watch();</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">auto</span> connection = watch.connect(<span class="keyword">function</span>, pid);</div>
@@ -697,7 +698,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00046">46</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="container_8cpp_source.html#l00517">softwarecontainer::Container::bindMountInContainer()</a>, <a class="el" href="workspace_8cpp_source.html#l00040">softwarecontainer::Workspace::checkWorkspace()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>.</p>
+<p>Referenced by <a class="el" href="container_8cpp_source.html#l00517">softwarecontainer::Container::bindMountInContainer()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> S_ISDIR(getStat(path).st_mode);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
@@ -705,7 +706,7 @@ Here is the caller graph for this function:</div>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a44f64c34c09d1ffdb18428b41f0d9e91_icgraph.svg" width="862" height="252"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a44f64c34c09d1ffdb18428b41f0d9e91_icgraph.svg" width="775" height="160"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -967,7 +968,7 @@ ReturnCode::FAILURE if b is false </dd></dl>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00071">71</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
 
-<p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00057">softwarecontainer::DBusGateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00341">softwarecontainer::SoftwareContainerAgent::bindMount()</a>, <a class="el" href="netlink_8cpp_source.html#l00480">softwarecontainer::Netlink::checkKernelDump()</a>, <a class="el" href="workspace_8cpp_source.html#l00040">softwarecontainer::Workspace::checkWorkspace()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00220">softwarecontainer::SoftwareContainerAgent::createContainer()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="container_8cpp_source.html#l00309">softwarecontainer::Container::execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00256">softwarecontainer::SoftwareContainerAgent::execute()</a>, <a class="el" href="netlink_8cpp_source.html#l00313">softwarecontainer::Netlink::findAddresses()</a>, <a class="el" href="netlink_8cpp_source.html#l00288">softwarecontainer::Netlink::findLink()</a>, <a class="el" href="netlink_8cpp_source.html#l00454">softwarecontainer::Netlink::getKernelDump()</a>, <a class="el" href="container_8cpp_source.html#l00105">softwarecontainer::Container::initialize()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00081">isSuccess()</a>, <a class="el" href="netlink_8cpp_source.html#l00260">softwarecontainer::Netlink::linkDown()</a>, <a class="el" href="netlink_8cpp_source.html#l00193">softwarecontainer::Netlink::linkUp()</a>, <a class="el" href="netlink_8cpp_source.html#l00029">softwarecontainer::Netlink::Netlink()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00166">softwarecontainer::FileToolkitWithUndo::overlayMount()</a>, <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="envgateway_8cpp_source.html#l00037">softwarecontainer::EnvironmentGateway::readConfigElement()</a>, <a class="el" href="filegateway_8cpp_source.html#l00030">softwarecontainer::FileGateway::readConfigElement()</a>, <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00065">softwarecontainer::DBusGatewayInstance::readConfigElement()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00034">softwarecontainer::DeviceNodeGateway::readConfigElement()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, <a class="el" href="netlink_8cpp_source.html#l00222">softwarecontainer::Netlink::setIP()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00307">softwarecontainer::SoftwareContainerAgent::shutdownContainer()</a>, <a class="el" href="container_8cpp_source.html#l00259">softwarecontainer::Container::start()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00175">softwarecontainer::SoftwareContainer::startGateways()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00078">softwarecontainer::DBusGateway::teardown()</a>, and <a class="el" href="workspace_8cpp_source.html#l00024">softwarecontainer::Workspace::Workspace()</a>.</p>
+<p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00057">softwarecontainer::DBusGateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00285">softwarecontainer::SoftwareContainerAgent::bindMount()</a>, <a class="el" href="netlink_8cpp_source.html#l00480">softwarecontainer::Netlink::checkKernelDump()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00169">softwarecontainer::SoftwareContainerAgent::createContainer()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="container_8cpp_source.html#l00309">softwarecontainer::Container::execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00200">softwarecontainer::SoftwareContainerAgent::execute()</a>, <a class="el" href="netlink_8cpp_source.html#l00313">softwarecontainer::Netlink::findAddresses()</a>, <a class="el" href="netlink_8cpp_source.html#l00288">softwarecontainer::Netlink::findLink()</a>, <a class="el" href="netlink_8cpp_source.html#l00454">softwarecontainer::Netlink::getKernelDump()</a>, <a class="el" href="container_8cpp_source.html#l00105">softwarecontainer::Container::initialize()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00081">isSuccess()</a>, <a class="el" href="netlink_8cpp_source.html#l00260">softwarecontainer::Netlink::linkDown()</a>, <a class="el" href="netlink_8cpp_source.html#l00193">softwarecontainer::Netlink::linkUp()</a>, <a class="el" href="netlink_8cpp_source.html#l00029">softwarecontainer::Netlink::Netlink()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00166">softwarecontainer::FileToolkitWithUndo::overlayMount()</a>, <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="envgateway_8cpp_source.html#l00037">softwarecontainer::EnvironmentGateway::readConfigElement()</a>, <a class="el" href="filegateway_8cpp_source.html#l00030">softwarecontainer::FileGateway::readConfigElement()</a>, <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00065">softwarecontainer::DBusGatewayInstance::readConfigElement()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00034">softwarecontainer::DeviceNodeGateway::readConfigElement()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, <a class="el" href="netlink_8cpp_source.html#l00222">softwarecontainer::Netlink::setIP()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00251">softwarecontainer::SoftwareContainerAgent::shutdownContainer()</a>, <a class="el" href="container_8cpp_source.html#l00259">softwarecontainer::Container::start()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00177">softwarecontainer::SoftwareContainer::startGateways()</a>, and <a class="el" href="dbusgateway_8cpp_source.html#l00078">softwarecontainer::DBusGateway::teardown()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;{</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">return</span> (code != ReturnCode::SUCCESS);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
@@ -975,7 +976,7 @@ ReturnCode::FAILURE if b is false </dd></dl>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a51a25e6a54b7bb79fc5b4ce8902a31a4_icgraph.svg" width="920" height="1980"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a51a25e6a54b7bb79fc5b4ce8902a31a4_icgraph.svg" width="912" height="1880"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -1087,7 +1088,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li>
-    <li class="footer">Generated on Mon Jan 23 2017 12:53:44 for softwarecontainer by
+    <li class="footer">Generated on Mon Jan 23 2017 15:16:58 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

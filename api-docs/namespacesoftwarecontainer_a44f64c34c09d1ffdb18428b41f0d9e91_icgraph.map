@@ -1,9 +1,7 @@
 <map id="softwarecontainer::isDirectory" name="softwarecontainer::isDirectory">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c" title="Tries to bind mount a path from host to container. " alt="" coords="187,5,400,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_workspace.html#af9be59382096de97cfab692bc5c89114" title="Check if the workspace is present and create it if needed. " alt="" coords="448,61,645,103"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="223,125,363,181"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_workspace.html#a4cca8749e6f3bd90452511ede207f5e5" title="Creates a workspace. " alt="" coords="693,61,856,103"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="477,126,617,182"/>
-<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" title="Setup the container for startup. " alt="" coords="480,205,613,247"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="708,133,841,175"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="223,70,363,126"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="448,34,588,90"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" title="Setup the container for startup. " alt="" coords="451,113,585,155"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="636,41,769,83"/>
 </map>

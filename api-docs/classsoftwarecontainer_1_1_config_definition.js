@@ -17,9 +17,5 @@ var classsoftwarecontainer_1_1_config_definition =
     [ "SC_SHARED_MOUNTS_DIR_KEY", "classsoftwarecontainer_1_1_config_definition.html#a9d31bff8f67c5dee42c950208165c4f0", null ],
     [ "SC_LXC_CONFIG_PATH_KEY", "classsoftwarecontainer_1_1_config_definition.html#a9261160f4c5124a753ddc7f56473497e", null ],
     [ "SC_SERVICE_MANIFEST_DIR_KEY", "classsoftwarecontainer_1_1_config_definition.html#a8be5cdda56d1fe55ff58532125684a6e", null ],
-    [ "SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY", "classsoftwarecontainer_1_1_config_definition.html#a6358b44d3ea10b4b69284816ddcd4009", null ],
-    [ "SC_CREATE_BRIDGE_KEY", "classsoftwarecontainer_1_1_config_definition.html#a785c1e18a13b14ce5501c650c1e2f5d9", null ],
-    [ "SC_BRIDGE_DEVICE_KEY", "classsoftwarecontainer_1_1_config_definition.html#a6b81f153fd5eb3e19cb4966150c259e2", null ],
-    [ "SC_BRIDGE_IP_KEY", "classsoftwarecontainer_1_1_config_definition.html#a92f9013160aaa33bb183fc55eab518af", null ],
-    [ "SC_BRIDGE_NETMASK_BITS_KEY", "classsoftwarecontainer_1_1_config_definition.html#a880ff5e57fd9d706039f40a4b6519d7f", null ]
+    [ "SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY", "classsoftwarecontainer_1_1_config_definition.html#a6358b44d3ea10b4b69284816ddcd4009", null ]
 ];

@@ -6,6 +6,5 @@ var dir_dd2ca9362a6a20c7dd07ad4af02f7410 =
     [ "container.cpp", "container_8cpp_source.html", null ],
     [ "container.h", "container_8h_source.html", null ],
     [ "containerabstractinterface.h", "containerabstractinterface_8h_source.html", null ],
-    [ "softwarecontainer.cpp", "softwarecontainer_8cpp_source.html", null ],
-    [ "workspace.cpp", "workspace_8cpp_source.html", null ]
+    [ "softwarecontainer.cpp", "softwarecontainer_8cpp_source.html", null ]
 ];

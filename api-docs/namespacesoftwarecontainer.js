@@ -26,6 +26,8 @@ var namespacesoftwarecontainer =
     [ "ConfigUnknownError", "classsoftwarecontainer_1_1_config_unknown_error.html", "classsoftwarecontainer_1_1_config_unknown_error" ],
     [ "Container", "classsoftwarecontainer_1_1_container.html", "classsoftwarecontainer_1_1_container" ],
     [ "ContainerAbstractInterface", "classsoftwarecontainer_1_1_container_abstract_interface.html", "classsoftwarecontainer_1_1_container_abstract_interface" ],
+    [ "ContainerConfigParseError", "classsoftwarecontainer_1_1_container_config_parse_error.html", "classsoftwarecontainer_1_1_container_config_parse_error" ],
+    [ "ContainerConfigParser", "classsoftwarecontainer_1_1_container_config_parser.html", "classsoftwarecontainer_1_1_container_config_parser" ],
     [ "DBusGateway", "classsoftwarecontainer_1_1_d_bus_gateway.html", "classsoftwarecontainer_1_1_d_bus_gateway" ],
     [ "DBusGatewayInstance", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html", "classsoftwarecontainer_1_1_d_bus_gateway_instance" ],
     [ "DBusGatewayParser", "classsoftwarecontainer_1_1_d_bus_gateway_parser.html", "classsoftwarecontainer_1_1_d_bus_gateway_parser" ],
@@ -77,6 +79,5 @@ var namespacesoftwarecontainer =
     [ "SoftwareContainerConfig", "classsoftwarecontainer_1_1_software_container_config.html", "classsoftwarecontainer_1_1_software_container_config" ],
     [ "SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", "classsoftwarecontainer_1_1_software_container_error" ],
     [ "StringConfig", "classsoftwarecontainer_1_1_string_config.html", "classsoftwarecontainer_1_1_string_config" ],
-    [ "WaylandGateway", "classsoftwarecontainer_1_1_wayland_gateway.html", "classsoftwarecontainer_1_1_wayland_gateway" ],
-    [ "Workspace", "classsoftwarecontainer_1_1_workspace.html", "classsoftwarecontainer_1_1_workspace" ]
+    [ "WaylandGateway", "classsoftwarecontainer_1_1_wayland_gateway.html", "classsoftwarecontainer_1_1_wayland_gateway" ]
 ];

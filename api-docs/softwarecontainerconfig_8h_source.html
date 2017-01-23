@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-e036ade 2017-01-23</span>
+   &#160;<span id="projectnumber">0.17.0-719c432 2017-01-23</span>
    </div>
   </td>
  </tr>
@@ -90,52 +90,73 @@ $(document).ready(function(){initNavTree('softwarecontainerconfig_8h_source.html
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_config.html">   38</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>() {}</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>(<span class="keyword">const</span> std::string &amp;bridgeIp,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                            <span class="keyword">const</span> std::string &amp;containerConfigPath,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                            <span class="keyword">const</span> std::string &amp;containerRootDir,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                            <span class="keywordtype">int</span> netmaskBitLength,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>() {}</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">     * Setters for the values that are not part of the static configs</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> setEnableWriteBuffer(<span class="keywordtype">bool</span> enabledFlag);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">     * Getters for values that are set on creation only, i.e. these originate from the</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">     * static configs and should not be &quot;re-set&quot; after creation of this class.</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    std::string bridgeIp() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    std::string containerConfigPath() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    std::string containerRootDir() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">int</span> netmaskBitLength() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">     * Getters for values that do not originate from the static configs and thus might be</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">     * set after creation of this class, i.e. these can be set with setters</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">bool</span> enableWriteBuffer() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string m_bridgeIp;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::string m_containerConfigPath;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::string m_containerRootDir;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">int</span> m_netmaskBitLength;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_containerShutdownTimeout;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">bool</span> m_enableWriteBuffer;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_config_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_config.html">softwarecontainer::SoftwareContainerConfig</a></div><div class="ttdoc">Contains all values that should be passed to SoftwareContainer on creation. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainerconfig_8h_source.html#l00038">softwarecontainerconfig.h:38</a></div></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_software_container_config.html">   39</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>() {}</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>(</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;#ifdef ENABLE_NETWORKGATEWAY</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                            <span class="keyword">const</span> <span class="keywordtype">bool</span> shouldCreateBridge,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                            <span class="keyword">const</span> std::string &amp;bridgeDevice,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                            <span class="keyword">const</span> std::string &amp;bridgeIPAddress,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                            <span class="keyword">const</span> std::string &amp;bridgeNetmask,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                            <span class="keyword">const</span> <span class="keywordtype">int</span> bridgeNetmaskBitLength,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                            <span class="keyword">const</span> std::string &amp;bridgeNetAddr,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;#endif <span class="comment">// ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                            <span class="keyword">const</span> std::string &amp;containerConfigPath,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                            <span class="keyword">const</span> std::string &amp;containerRootDir,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>() {}</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">     * Setters for the values that are not part of the static configs</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> setEnableWriteBuffer(<span class="keywordtype">bool</span> enabledFlag);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">     * Getters for values that are set on creation only, i.e. these originate from the</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">     * static configs and should not be &quot;re-set&quot; after creation of this class.</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#ifdef ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">bool</span> shouldCreateBridge() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    std::string bridgeDevice() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::string bridgeIPAddress() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::string bridgeNetmask() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">int</span> bridgeNetmaskBitLength() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::string bridgeNetAddr() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#endif // ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    std::string containerConfigPath() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    std::string containerRootDir() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">     * Getters for values that do not originate from the static configs and thus might be</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">     * set after creation of this class, i.e. these can be set with setters</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">bool</span> enableWriteBuffer() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#ifdef ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">bool</span> m_shouldCreateBridge;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    std::string m_bridgeDevice;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    std::string m_bridgeIPAddress;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    std::string m_bridgeNetmask;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">int</span> m_bridgeNetmaskBitLength;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    std::string m_bridgeNetAddr;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#endif // ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    std::string m_containerConfigPath;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::string m_containerRootDir;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_containerShutdownTimeout;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">bool</span> m_enableWriteBuffer;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;};</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_config_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_config.html">softwarecontainer::SoftwareContainerConfig</a></div><div class="ttdoc">Contains all values that should be passed to SoftwareContainer on creation. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainerconfig_8h_source.html#l00039">softwarecontainerconfig.h:39</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -143,7 +164,7 @@ $(document).ready(function(){initNavTree('softwarecontainerconfig_8h_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><a class="el" href="dir_eefa90ef70950130375a87fe6a69f674.html">config</a></li><li class="navelem"><b>softwarecontainerconfig.h</b></li>
-    <li class="footer">Generated on Mon Jan 23 2017 12:53:43 for softwarecontainer by
+    <li class="footer">Generated on Mon Jan 23 2017 15:16:58 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
