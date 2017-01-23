@@ -18,25 +18,29 @@
  */
 #pragma once
 
-#include "TemperatureServiceConsoleClient_dbuscpp_proxy.h"
-#include "temperatureinterface.h"
+#include "temperature_dbus_proxy.h"
+#include "sigc++/signal.h"
 
 /*
  * Adapter between DBus and TemperatureService_proxy class
  */
-class TemperatureServiceInterface:
-    public com::pelagicore::TemperatureService_proxy,
-    public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy,
-    public TemperatureInterface
+class TemperatureServiceInterface
 {
 public:
-    TemperatureServiceInterface(DBus::Connection &connection, std::string logfilepath);
-    std::string echo(const std::string &argument);
-    double getTemperature();
+    TemperatureServiceInterface(void);
+
+    void echo(const std::string &argument);
+
+    void getTemperature();
+
     void setTemperature(const double &temperature);
-    void TemperatureChanged(const double& argin0);
+
+    void proxy_callback(const Glib::RefPtr<Gio::AsyncResult> &result);
+    void on_echo_finished(const Glib::RefPtr<Gio::AsyncResult> &result);
+    void on_gettemp_finished(const Glib::RefPtr<Gio::AsyncResult> &result);
+    void on_settemp_finished(const Glib::RefPtr<Gio::AsyncResult> &result);
 private:
-    std::string m_logfilepath;
+    Glib::RefPtr<com::pelagicore::TemperatureService> m_proxy;
 };
+
 

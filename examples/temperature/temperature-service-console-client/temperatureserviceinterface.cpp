@@ -22,42 +22,51 @@
 
 #include "temperatureserviceinterface.h"
 
-TemperatureServiceInterface::TemperatureServiceInterface(DBus::Connection &connection,
-                                                         std::string logfilepath) :
-    m_logfilepath(logfilepath),
-    DBus::ObjectProxy(connection,
-                      "/com/pelagicore/TemperatureService",
-                      "com.pelagicore.TemperatureService")
-{
+void TemperatureServiceInterface::proxy_callback(const Glib::RefPtr<Gio::AsyncResult> &result) {
+    m_proxy = com::pelagicore::TemperatureService::createForBusFinish(result);
 }
 
-std::string TemperatureServiceInterface::echo(const std::string &str)
+TemperatureServiceInterface::TemperatureServiceInterface()
 {
-    std::cout << str << std::endl;
-    return str;
+    auto callbackFunction = sigc::mem_fun(*this, &TemperatureServiceInterface::proxy_callback);
+    com::pelagicore::TemperatureService::createForBus(Gio::DBus::BUS_TYPE_SESSION,
+                                                      Gio::DBus::PROXY_FLAGS_NONE,
+                                                      "com.pelagicore.TemperatureService",
+                                                      "/com/pelagicore/TemperatureService",
+                                                      callbackFunction);
 }
 
-double TemperatureServiceInterface::getTemperature()
+void TemperatureServiceInterface::on_echo_finished(const Glib::RefPtr<Gio::AsyncResult> &result) {
+    std::string  echoReturn;;
+    m_proxy->Echo_finish(echoReturn, result);
+    std::cout << "Echo : " << echoReturn;
+}
+
+void TemperatureServiceInterface::echo(const std::string &str)
 {
-    return GetTemperature();
+    auto callbackFunction = sigc::mem_fun(*this ,&TemperatureServiceInterface::on_echo_finished);
+    m_proxy->Echo(str, callbackFunction);
+}
+
+void TemperatureServiceInterface::on_gettemp_finished(const Glib::RefPtr<Gio::AsyncResult> &result) {
+    double temperature;
+    m_proxy->GetTemperature_finish(temperature, result);
+    std::cout << "Temperature : " << temperature << std::endl;
+}
+
+void TemperatureServiceInterface::getTemperature()
+{
+    auto callbackFunction = sigc::mem_fun(*this, &TemperatureServiceInterface::on_gettemp_finished);
+    m_proxy->GetTemperature(callbackFunction);
+}
+
+void TemperatureServiceInterface::on_settemp_finished(const Glib::RefPtr<Gio::AsyncResult> &result) {
+    m_proxy->SetTemperature_finish(result);
+    std::cout << "Temperature set" << std::endl;
 }
 
 void TemperatureServiceInterface::setTemperature(const double &temperature)
 {
-    SetTemperature(temperature);
-}
-
-/*
- * On temperature changed signal write the change into logfile
- */
-void TemperatureServiceInterface::TemperatureChanged(const double &temperature)
-{
-    std::ofstream logfile(m_logfilepath.c_str(), std::ofstream::app);
-    if(logfile.is_open()) {
-        logfile << __TIMESTAMP__ << " - Temperature changed to: "
-                << temperature << "°C" << std::endl;
-        logfile.close();
-    } else {
-        std::cerr << m_logfilepath << " could not be opened to write." << std::endl;
-    }
+    auto callbackFunction = sigc::mem_fun(*this, &TemperatureServiceInterface::on_settemp_finished);
+    m_proxy->SetTemperature(temperature, callbackFunction);
 }

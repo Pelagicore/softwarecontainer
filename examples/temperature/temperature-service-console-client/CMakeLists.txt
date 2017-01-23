@@ -15,25 +15,43 @@
 #
 # For further information see LICENSE
 
-include(GenerateDBusCpp)
-generate_dbuscpp_hfile(${TEMPSERVICE_XML} "TemperatureServiceConsoleClient")
+cmake_minimum_required(VERSION 3.0.2)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wall -std=c++11 -pedantic -Wextra")
 
 add_executable( temperatureserviceconsoleclient
     main.cpp
-    ${GENERATED_PROXY_FILENAME}
+    temperature_dbus_proxy.cpp
     temperatureserviceinterface.cpp
-    periodictemperature.cpp
 )
 
-find_package(Threads REQUIRED)
+find_package(PkgConfig          REQUIRED)
+
+pkg_check_modules(Glibmm        REQUIRED glibmm-2.4>=2.42.0)
+pkg_check_modules(Giomm         REQUIRED giomm-2.4>=2.42.0)
+pkg_check_modules(sigc          REQUIRED sigc++-2.0)
+
+
+add_definitions(${Glibmm_CFLAGS_OTHER})
+add_definitions(${Giomm_CFLAGS_OTHER})
+add_definitions(${sigc_CFLAGS_OTHER})
+
+include_directories(${Glibmm_INCLUDE_DIRS})
+include_directories(${Giomm_INCLUDE_DIRS})
+include_directories(${sigc_INCLUDE_DIRS})
+
+link_directories(${Glibmm_LIBRARY_DIRS})
+link_directories(${Giomm_LIBRARY_DIRS})
+link_directories(${sigc_LIBRARY_DIRS})
 
 TARGET_LINK_LIBRARIES( temperatureserviceconsoleclient
-    ${DBusCpp_LIBRARIES}
-    ${DBusCppGlib_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
+    ${Glibmm_LIBRARIES}
+    ${Giomm_LIBRARIES}
+    ${sigc_LIBRARIES}
 )
 
 install(TARGETS temperatureserviceconsoleclient
-        RUNTIME DESTINATION share/softwarecontainer/examples/temperature
+    RUNTIME DESTINATION share/softwarecontainer/examples/temperature
 )
 

@@ -72,7 +72,7 @@ AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
 SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 
 # Create a new container
-$SC_CMD $AGENTPREFIX.Create string:'[{"writeOften": "0"}]'
+$SC_CMD $AGENTPREFIX.Create string:'[{"enableWriteBuffer": false}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="int32:0"
@@ -97,20 +97,18 @@ sleep 1
 # Run the simple example
 $SC_CMD $AGENTPREFIX.Execute \
     $CONTAINERID \
-    $ROOTID \
     string:$APPBASE/temperatureserviceconsoleclient \
     string:$APPBASE \
     string:$OUTFILE \
     dict:string:string:""
 
-tail -F ${SCRIPTPATH}/temperatureservice_client.log &
+tail -f $OUTFILE &
 TAILPID="$!"
 
 # Let the example run for a while
 sleep 10
 
 kill $TAILPID
-
 $SC_CMD $AGENTPREFIX.Destroy $CONTAINERID
 sleep 1
 

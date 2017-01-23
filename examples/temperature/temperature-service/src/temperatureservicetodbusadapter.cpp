@@ -19,26 +19,33 @@
 
 #include "temperatureservicetodbusadapter.h"
 
-TemperatureServiceToDBusAdapter::TemperatureServiceToDBusAdapter(DBus::Connection &connection, TemperatureService *ts) :
-    DBus::ObjectAdaptor(connection, "/com/pelagicore/TemperatureService"),
+TemperatureServiceToDBusAdapter::TemperatureServiceToDBusAdapter(TemperatureServiceImpl *ts,
+                                                                 bool useSessionBus) :
     m_ts(ts)
 {
-    m_ts->setAdapter(this);
+    std::string busName = "com.pelagicore.TemperatureService";
+    Gio::DBus::BusType busType = useSessionBus ? Gio::DBus::BUS_TYPE_SESSION
+                                               : Gio::DBus::BUS_TYPE_SYSTEM;
+    connect(busType, busName);
 }
 
-std::string TemperatureServiceToDBusAdapter::Echo(const std::string &argument)
+void TemperatureServiceToDBusAdapter::Echo(std::string argument,
+                                           TemperatureServiceMessageHelper msg)
 {
     std::cout << argument << std::endl;
-    return argument;
+    msg.ret(argument);
 }
 
-double TemperatureServiceToDBusAdapter::GetTemperature()
+void TemperatureServiceToDBusAdapter::GetTemperature (TemperatureServiceMessageHelper msg)
 {
-    return m_ts->getTemperature();
+    msg.ret(m_ts->getTemperature());
 }
 
-void TemperatureServiceToDBusAdapter::SetTemperature(const double &temperature)
+void TemperatureServiceToDBusAdapter::SetTemperature(double temperature,
+                                                     TemperatureServiceMessageHelper msg)
 {
-    m_ts->setTemperature(temperature);    
+    m_ts->setTemperature(temperature);
+    TemperatureChanged_emitter(temperature);
+    msg.ret();
 }
 

@@ -15,18 +15,16 @@
 #
 # For further information see LICENSE
 
-include(GenerateDBusCpp)
-generate_dbuscpp_hfile(${TEMPSERVICE_XML} "TemperatureService")
 
 add_executable(temperatureservice
     main.cpp
-    ${GENERATED_ADAPTOR_FILENAME}
+    temperatureservice_dbus_stub.cpp
     temperatureservice.cpp
     temperatureservicetodbusadapter.cpp
 )
 
 TARGET_LINK_LIBRARIES( temperatureservice
-    ${DBusCpp_LIBRARIES}
+    ${Giomm_LIBRARIES}
 )
 
 install(TARGETS temperatureservice

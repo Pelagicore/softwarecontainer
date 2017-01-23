@@ -6,8 +6,7 @@
                 {
                     "id": "dbus",
                     "config": [
-                        { "dbus-gateway-config-session": []},
-                        { "dbus-gateway-config-system": [
+                        { "dbus-gateway-config-session": [
                              {
                                  "direction": "outgoing",
                                  "interface": "org.freedesktop.DBus.Introspectable",
@@ -43,8 +42,7 @@
                 {
                     "id": "dbus",
                     "config": [
-                        { "dbus-gateway-config-session": []},
-                        { "dbus-gateway-config-system": [
+                        { "dbus-gateway-config-session": [
                             {
                                 "direction": "outgoing",
                                 "interface": "org.freedesktop.DBus.Introspectable",
