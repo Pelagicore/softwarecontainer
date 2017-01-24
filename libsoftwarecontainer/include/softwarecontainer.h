@@ -42,6 +42,13 @@ namespace softwarecontainer {
 class Gateway;
 class ContainerAbstractInterface;
 
+
+/**
+ * @class SoftwareContainer
+ *
+ * @brief An abstraction of concrete container implementations
+ */
+
 class SoftwareContainer :
     private FileToolkitWithUndo
 {
@@ -89,8 +96,6 @@ public:
     ReturnCode resume();
 
     void addGateway(Gateway *gateway);
-
-    bool isInitialized() const;
 
     ReturnCode init();
 
