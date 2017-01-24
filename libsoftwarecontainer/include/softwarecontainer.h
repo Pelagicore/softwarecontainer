@@ -106,9 +106,6 @@ public:
 
     ReturnCode bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
 
-    std::string getContainerDir();
-    std::string getGatewayDir();
-
     ObservableProperty<ContainerState> &getContainerState();
 
     /**
@@ -125,6 +122,9 @@ private:
     ReturnCode configureGateways(const GatewayConfiguration &gwConfig);
     ReturnCode activateGateways();
     ReturnCode shutdownGateways();
+
+    std::string getContainerDir();
+    std::string getGatewayDir();
 
     // Check if the workspace is sound, and set it up if it isn't
     void checkWorkspace();
