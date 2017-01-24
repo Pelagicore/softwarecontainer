@@ -175,7 +175,6 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
     m_containerConfig.setEnableWriteBuffer(options.enableWriteBuffer);
 
     std::pair<ContainerID, SoftwareContainerPtr> pair = std::move(getContainerPair());
-    pair.second->setMainLoopContext(m_mainLoopContext);
 
     ContainerID containerID = pair.first;
 
