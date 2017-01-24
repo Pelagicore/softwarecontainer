@@ -1,7 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html#a6ff9aced9289d83e8376e52ea3eac9e8":[1,0,1,55,1,0],
-"structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html#a837a7de98726734d1f3c7a33fe220f5d":[1,0,1,55,1,1],
 "structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html#aaac352ab9cb3d69797f201392e2daf81":[1,0,1,55,1,3],
 "structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html#aed9d6e04fa14beb7982b2a80f568f545":[1,0,1,55,1,2],
 "structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html":[1,0,1,55,0],

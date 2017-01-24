@@ -13,8 +13,6 @@ var classsoftwarecontainer_1_1_software_container =
     [ "createFunctionJob", "classsoftwarecontainer_1_1_software_container.html#a47be9e4b2c49aedf67cd23404c9d4eee", null ],
     [ "createCommandJob", "classsoftwarecontainer_1_1_software_container.html#a911b62ba4d9307275f59698d2ae69467", null ],
     [ "bindMount", "classsoftwarecontainer_1_1_software_container.html#afe11b13492ae3abde2ca4f8e001a8a6d", null ],
-    [ "getContainerDir", "classsoftwarecontainer_1_1_software_container.html#ac3ca1f534473dc59131be8553b088de8", null ],
-    [ "getGatewayDir", "classsoftwarecontainer_1_1_software_container.html#ac8c0632a74f160c257bd73a994dc280e", null ],
     [ "getContainerState", "classsoftwarecontainer_1_1_software_container.html#a25cb629242d33c12d2f3468bbd34964a", null ],
     [ "startGateways", "classsoftwarecontainer_1_1_software_container.html#ac20c6d0cd340297ed80ae5684d9d64d3", null ]
 ];
