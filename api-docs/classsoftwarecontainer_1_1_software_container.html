@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-719c432 2017-01-23</span>
+   &#160;<span id="projectnumber">0.17.0-fdedc22 2017-01-24</span>
    </div>
   </td>
  </tr>
@@ -95,9 +95,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6141f7e59438e4f1dce565f3826a81f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6141f7e59438e4f1dce565f3826a81f0"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SoftwareContainer</b> (const ContainerID id, std::unique_ptr&lt; const <a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a> &gt; config)</td></tr>
 <tr class="separator:a6141f7e59438e4f1dce565f3826a81f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84a34e91e09b30a2f62b25e0b3926a6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a84a34e91e09b30a2f62b25e0b3926a6d">setMainLoopContext</a> (Glib::RefPtr&lt; Glib::MainContext &gt; mainLoopContext)</td></tr>
-<tr class="memdesc:a84a34e91e09b30a2f62b25e0b3926a6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the main loop.  <a href="#a84a34e91e09b30a2f62b25e0b3926a6d">More...</a><br /></td></tr>
-<tr class="separator:a84a34e91e09b30a2f62b25e0b3926a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a> ()</td></tr>
 <tr class="memdesc:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shutdown the container.  <a href="#ab7f458bb2d29ef1a99c3aae09188a0d4">More...</a><br /></td></tr>
 <tr class="separator:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,9 +113,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addGateway</b> (<a cl
 <tr class="memitem:ad1654b3ad40de803aaf440c8ea66092d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1654b3ad40de803aaf440c8ea66092d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInitialized</b> () const </td></tr>
 <tr class="separator:ad1654b3ad40de803aaf440c8ea66092d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a257e066c6a4f01752b074f66b4493bd2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a257e066c6a4f01752b074f66b4493bd2"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()</td></tr>
-<tr class="separator:a257e066c6a4f01752b074f66b4493bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f43e70e787d3b56baf1d6e863282820"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f43e70e787d3b56baf1d6e863282820"></a>
 <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
 <tr class="separator:a1f43e70e787d3b56baf1d6e863282820"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,29 +186,6 @@ Private Attributes</h2></td></tr>
 <div class="textblock">
 <p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00045">45</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a84a34e91e09b30a2f62b25e0b3926a6d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void softwarecontainer::SoftwareContainer::setMainLoopContext </td>
-          <td>(</td>
-          <td class="paramtype">Glib::RefPtr&lt; Glib::MainContext &gt;&#160;</td>
-          <td class="paramname"><em>mainLoopContext</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set the main loop. </p>
-
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00082">82</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;{</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    m_mainLoopContext = mainLoopContext;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
-</div><!-- fragment -->
-</div>
-</div>
 <a class="anchor" id="ab7f458bb2d29ef1a99c3aae09188a0d4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -230,11 +201,11 @@ Private Attributes</h2></td></tr>
 
 <p>Shutdown the container. </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00264">264</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;{</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_config-&gt;containerShutdownTimeout());</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00264">softwarecontainer.cpp:264</a></div></div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00254">254</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;{</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_config-&gt;containerShutdownTimeout());</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00254">softwarecontainer.cpp:254</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -255,26 +226,26 @@ Private Attributes</h2></td></tr>
 <p>Starts the Gateways by setting the gateway configurations and activating the configured gateway. </p>
 <dl class="section return"><dt>Returns</dt><dd>ReturnCode::FAILURE if configuration or activation failed </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00177">177</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00167">167</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
 <p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;{</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = ReturnCode::SUCCESS;</div>
+<div class="fragment"><div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;{</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    result = configureGateways(gwConfig);</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    result = activateGateways();</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    }</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    result = configureGateways(gwConfig);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    }</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    result = activateGateways();</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;}</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
 </div><!-- fragment -->
@@ -298,7 +269,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a></li>
-    <li class="footer">Generated on Mon Jan 23 2017 15:16:59 for softwarecontainer by
+    <li class="footer">Generated on Tue Jan 24 2017 09:22:00 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
