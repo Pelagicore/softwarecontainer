@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include <exception>
+#include "softwarecontainererror.h"
 
 
 namespace softwarecontainer {
 
-class ConfigError : public std::exception
+class ConfigError : public SoftwareContainerError
 {
 public:
     ConfigError():
