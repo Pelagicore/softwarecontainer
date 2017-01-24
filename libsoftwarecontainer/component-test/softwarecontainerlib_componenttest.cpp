@@ -37,9 +37,18 @@ class SoftwareContainerApp : public SoftwareContainerTest
 
 public:
 
-    void startGateways(const GatewayConfiguration &config)
+    void startGateways(const std::string &config, const std::string &gatewayID)
     {
-        getSc().startGateways(config);
+        json_error_t error;
+        json_t *configJson = json_loads(config.c_str(), 0, &error);
+        ASSERT_FALSE(configJson == nullptr);
+
+        GatewayConfiguration gwConf;
+        gwConf.append(gatewayID, configJson);
+
+        getSc().startGateways(gwConf);
+
+        json_decref(configJson);
     }
 
     ReturnCode bindMountInContainer(const std::string src, const std::string dst, bool readOnly)
@@ -56,22 +65,15 @@ public:
     {
         return *m_sc;
     }
+
 };
 
 TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
 
     GatewayConfiguration config;
-    std::string configStr = "[ { \"enabled\" : true } ]";
-    std::string configStrFalse = "[ { \"enabled\" : false } ]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(WaylandGateway::ID ,configJson);
-
-    configJson = json_loads(configStrFalse.c_str(), 0, &error);
-    config.append(WaylandGateway::ID ,configJson);
-    startGateways(config);
-    json_decref(configJson);
+    std::string configStr = "[ { \"enabled\" : true },\
+                               { \"enabled\" : false } ]";
+    startGateways(configStr, WaylandGateway::ID);
 
     auto jobTrue = getSc().createFunctionJob([] (){
         bool ERROR = 1;
@@ -136,19 +138,9 @@ static constexpr int NON_EXISTENT = 0;
 
 TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
-    // Make sure /tmp exists in both host and container
-    ASSERT_TRUE(isDirectory("/tmp"));
-    auto job0 = getSc().createFunctionJob([&] () {
-        return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
-    });
-    job0->start();
-    ASSERT_EQ(job0->wait(), EXISTENT);
-
-    // Create a temporary file, and verify that we could indeed create it.
-    char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
-    int fd1 = mkstemp(tempFilename1);
-    ASSERT_NE(fd1, 0);
-    close(fd1);
+    bool directory = false;
+    bool shouldUnlink = false;
+    std::string tempFilename1 = getTempPath(directory, shouldUnlink);
 
     // They will be mapped to these files, which should not yet exist
     std::string containerPath1 = "/tmp/testFile1";
@@ -159,21 +151,15 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     ASSERT_EQ(jobMounted->wait(), NON_EXISTENT);
 
     // Let's configure the env gateway
-    GatewayConfiguration config;
     std::string configStr =
     "["
         "{"
-            "  \"path-host\" : \"" + std::string(tempFilename1) + "\""
+            "  \"path-host\" : \"" + tempFilename1 + "\""
             ", \"path-container\" : \"" + containerPath1 + "\""
             ", \"read-only\": true"
         "}"
     "]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(FileGateway::ID, configJson);
-    startGateways(config);
-    json_decref(configJson);
+    startGateways(configStr, FileGateway::ID);
 
     jobMounted->start();
     ASSERT_EQ(jobMounted->wait(), EXISTENT);
@@ -206,23 +192,14 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     ASSERT_EQ(readBack, testData);
 
     // Remove the temp files
-    ASSERT_EQ(unlink(tempFilename1), 0);
+    ASSERT_EQ(unlink(tempFilename1.c_str()), 0);
 }
 
 TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
-    // Make sure /tmp exists in both host and container
-    ASSERT_TRUE(isDirectory("/tmp"));
-    auto job0 = getSc().createFunctionJob([&] () {
-        return isDirectory("/tmp") ? EXISTENT : NON_EXISTENT;
-    });
-    job0->start();
-    ASSERT_EQ(job0->wait(), EXISTENT);
 
-    // Create one temporary file, and verify that we indeed could create it.
-    char tempFilename1[] = "/tmp/fileGatewayXXXXXX";
-    int fd1 = mkstemp(tempFilename1);
-    ASSERT_NE(fd1, -1);
-    close(fd1);
+    bool directory = false;
+    bool shouldUnlink = false;
+    std::string tempFilename1 = getTempPath(directory, shouldUnlink);
 
     // They will be mapped to these files
     std::string containerPath1 = "/tmp/testFile1";
@@ -232,7 +209,6 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     jobMounted->start();
     ASSERT_EQ(jobMounted->wait(), NON_EXISTENT);
 
-    GatewayConfiguration config;
     std::string configStr =
     "["
         "{" // The files below are mounted read-only
@@ -241,12 +217,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
             ", \"read-only\": false"
         "}"
     "]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(FileGateway::ID, configJson);
-    startGateways(config);
-    json_decref(configJson);
+    startGateways(configStr, FileGateway::ID);
 
     jobMounted->start();
     ASSERT_EQ(jobMounted->wait(), EXISTENT);
@@ -279,7 +250,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     ASSERT_EQ(newData, readBack);
 
     // Let's remove the temp files also
-    ASSERT_EQ(unlink(tempFilename1), 0);
+    ASSERT_EQ(unlink(tempFilename1.c_str()), 0);
 }
 
 /**
@@ -532,14 +503,8 @@ TEST_F(SoftwareContainerApp, MultithreadTest) {
 
 TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
 
-    GatewayConfiguration config;
     std::string configStr = "[ { \"audio\" : true } ]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(PulseGateway::ID, configJson);
-    startGateways(config);
-    json_decref(configJson);
+    startGateways(configStr, PulseGateway::ID);
 
     // We need access to the test file, so we bind mount it
     std::string soundFile = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
@@ -608,17 +573,12 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
  * We can also disable it explicitly
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
-    GatewayConfiguration config;
     std::string configStr =
         "[{"
             "\"direction\": \"OUTGOING\","
             "\"allow\": []"
         "}]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(NetworkGateway::ID, configJson);
-    startGateways(config);
+    startGateways(configStr, NetworkGateway::ID);
 
     auto job = getSc().createCommandJob("/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
     job->start();
@@ -633,8 +593,6 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
  * This test checks that an external is accessible after the network gateway has been enabled to access the internet.
  */
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
-
-    GatewayConfiguration config;
     std::string configStr =
         "[{"
             "\"direction\": \"OUTGOING\","
@@ -650,12 +608,7 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
                          "{ \"host\": \"*\", \"protocols\": [\"udp\", \"tcp\"], \"ports\": 53}"
                        "]"
         "}]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(NetworkGateway::ID, configJson);
-    startGateways(config);
-    json_decref(configJson);
+    startGateways(configStr, NetworkGateway::ID);
 
     auto job = getSc().createCommandJob("/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
     job->start();
@@ -680,7 +633,6 @@ TEST_F(SoftwareContainerApp, TestJobReturnCode) {
  * Checks that DBUS daemons are accessible if the corresponding capability is enabled
  */
 TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
-    GatewayConfiguration config;
     std::string configStr = "[{"
         "\"dbus-gateway-config-session\": "
            "[{ \"direction\": \"*\", "
@@ -695,12 +647,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
               "\"method\": \"*\" "
         "}]"
     "}]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(DBusGateway::ID, configJson);
-    startGateways(config);
-    json_decref(configJson);
+    startGateways(configStr, DBusGateway::ID);
 
     {
         auto jobTrue = getSc().createCommandJob(
@@ -719,7 +666,6 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
 
 // Regression test against previously reported bug.
 TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
-    GatewayConfiguration config;
     std::string configStr =
         "[{"
         "\"dbus-gateway-config-session\": "
@@ -735,12 +681,7 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
               "\"method\": \"*\" "
            "}]"
     "}]";
-    json_error_t error;
-    json_t *configJson = json_loads(configStr.c_str(), 0, &error);
-    ASSERT_FALSE(configJson == nullptr);
-    config.append(DBusGateway::ID, configJson);
-    startGateways(config);
-    json_decref(configJson);
+    startGateways(configStr, DBusGateway::ID);
 
     for(int i=0; i<2000; i++) {
         auto jobTrue = getSc().createCommandJob(

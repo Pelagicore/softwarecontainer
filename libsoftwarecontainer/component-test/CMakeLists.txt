@@ -36,16 +36,16 @@ macro(add_gateway_test GATEWAY_FLAG FILENAME)
     endif()
 endmacro()
 
-add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_unittest.cpp)
-add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_unittest.cpp)
-add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_unittest.cpp)
-add_gateway_test(ENABLE_FILEGATEWAY filegateway_unittest.cpp)
-add_gateway_test(ENABLE_NETWORKGATEWAY netlink_unittest.cpp)
-add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_unittest.cpp)
+add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_componenttest.cpp)
+add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_componenttest.cpp)
+add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_componenttest.cpp)
+add_gateway_test(ENABLE_FILEGATEWAY filegateway_componenttest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY netlink_componenttest.cpp)
+add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_componenttest.cpp)
 
 set(TEST_FILES
     softwarecontainer_test.cpp
-    softwarecontainerlib_unittest.cpp
+    softwarecontainerlib_componenttest.cpp
     ${LIBSOFTWARECONTAINER_DIR}/src/config/softwarecontainerconfig.cpp
     ${GATEWAY_TEST_FILES}
     main.cpp

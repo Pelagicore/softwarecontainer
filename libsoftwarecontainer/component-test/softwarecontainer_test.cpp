@@ -80,3 +80,28 @@ void SoftwareContainerTest::TearDown()
     ::testing::Test::TearDown();
     m_sc.reset();
 }
+
+/*
+ * Create a temporary directory or file, and optionally remove it.
+ * Removal is useful if one only wants a unique tmp name
+ */
+std::string SoftwareContainerTest::getTempPath(bool directory, bool shouldUnlink)
+{
+    char fileTemplate[] = "/tmp/SC-tmpXXXXXX";
+    int fd = 0;
+
+    if (directory) {
+        mkdtemp(fileTemplate);
+        if (shouldUnlink) {
+            rmdir(fileTemplate);
+        }
+    } else {
+        fd = mkstemp(fileTemplate);
+        close(fd);
+        if (shouldUnlink) {
+            unlink(fileTemplate);
+        }
+    }
+
+    return std::string(fileTemplate);
+}
