@@ -25,10 +25,6 @@ FilteredConfigStore::FilteredConfigStore(const std::string &path): BaseConfigSto
 {
 }
 
-FilteredConfigStore::~FilteredConfigStore()
-{
-}
-
 const std::vector<std::string> FilteredConfigStore::IDs() const
 {
     std::vector<std::string> ids;

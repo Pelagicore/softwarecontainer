@@ -181,7 +181,7 @@ ReturnCode Container::create()
     log_debug() << "Successfully loaded container config";
 
     // File system stuff
-    m_rootFSPath = logging::StringBuilder() << s_LXCRoot << "/" << containerID << "/rootfs";
+    m_rootFSPath = buildPath(s_LXCRoot, containerID, "rootfs");
 
     if (m_enableWriteBuffer) {
         const std::string rootFSPathLower = m_rootFSPath + "-lower";
@@ -340,11 +340,9 @@ ReturnCode Container::execute(ExecFunction function,
         if (variables.count(var.first) != 0) {
             if (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {
                 // Inform user that GW config will be overridden, it might be unintentionally done
-                log_info() << "Variable \""
-                           << var.first
+                log_info() << "Variable \"" << var.first
                            << "\" set by gateway will be overwritten with the value: \""
-                           << variables.at(var.first)
-                           << "\"";
+                           << variables.at(var.first) << "\"";
             }
             actualVariables[var.first] = variables.at(var.first);
         } else {
@@ -374,7 +372,7 @@ ReturnCode Container::execute(ExecFunction function,
                                          &Container::executeInContainerEntryFunction,
                                          &function, &options, pid);
 
-    delete envVariablesArray;
+    delete[] envVariablesArray;
     if (attach_res == 0) {
         log_info() << " Attached PID: " << *pid;
         return ReturnCode::SUCCESS;
@@ -524,8 +522,10 @@ ReturnCode Container::bindMountInContainer(const std::string &pathInHost,
     }
 
     // Create a file to mount to in gateways
+
+    // TODO: use softwarecontainer::parentPath here
     std::string parentPath = basename(strdup(pathInContainer.c_str()));
-    std::string tempPath = gatewaysDir() + "/" + parentPath;
+    std::string tempPath = buildPath(gatewaysDir(), parentPath);
 
     if (isDirectory(pathInHost)) {
         log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
@@ -609,11 +609,12 @@ ReturnCode Container::bindMountCore(const std::string &pathInHost,
     }
 
     // Paths inside the container
+    // TODO: Use parentPath from softwarecontainer-common.cpp instead
     std::string parentPath = basename(strdup(pathInContainer.c_str()));
-    std::string tempDirInContainer = gatewaysDirInContainer() + "/" + parentPath;
+    std::string tempDirInContainer = buildPath(gatewaysDirInContainer(), parentPath);
 
     // The same paths on the host
-    std::string pathInContainerOnHost = rootFS() + pathInContainer;
+    std::string pathInContainerOnHost = buildPath(rootFS(), pathInContainer);
 
     // Move the mount in the container if the tempdir is not the desired dir
     if (tempDirInContainer.compare(pathInContainer) != 0) {
@@ -718,7 +719,7 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
     for (auto &var : m_gatewayEnvironmentVariables) {
         s << "export " << var.first << "='" << var.second << "'\n";
     }
-    std::string path = gatewaysDir() + "/env";
+    std::string path = buildPath(gatewaysDir(), "env");
     FileToolkitWithUndo::writeToFile(path, s);
 
     return ReturnCode::SUCCESS;
@@ -781,7 +782,7 @@ std::string Container::gatewaysDirInContainer() const
 
 std::string Container::gatewaysDir() const
 {
-    return m_containerRoot + "/" + id() + GATEWAYS_PATH;
+    return buildPath(m_containerRoot, id(), GATEWAYS_PATH);
 }
 
 const std::string &Container::rootFS() const

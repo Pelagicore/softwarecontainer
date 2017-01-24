@@ -66,8 +66,8 @@ ReturnCode DeviceNodeGateway::applySettings()
     for (auto &dev : devlist) {
         log_info() << "Mapping device " << dev.name;
 
-        std::string devicePathInContainerOnHost = getContainer()->rootFS() + dev.name;
-        std::string deviceParent = dirname(strdup(devicePathInContainerOnHost.c_str()));
+        std::string devicePathInContainerOnHost = buildPath(getContainer()->rootFS(), dev.name);
+        std::string deviceParent = parentPath(devicePathInContainerOnHost);
 
         // Already existing files can't be converted into directories
         if (existsInFileSystem(deviceParent) && !isDirectory(deviceParent)) {

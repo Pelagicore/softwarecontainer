@@ -47,9 +47,6 @@ SoftwareContainerConfig::SoftwareContainerConfig(
     m_containerRootDir(containerRootDir),
     m_containerShutdownTimeout(containerShutdownTimeout)
 {
-    if (m_containerRootDir.back() != '/') {
-        m_containerRootDir += "/";
-    }
 }
 
 void SoftwareContainerConfig::setEnableWriteBuffer(bool enabledFlag)

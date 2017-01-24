@@ -27,7 +27,6 @@ class FilteredConfigStore : public BaseConfigStore
     LOG_DECLARE_CLASS_CONTEXT("FCS", "FilteredConfigStore");
 public:
     FilteredConfigStore(const std::string &path);
-    ~FilteredConfigStore();
 
     /**
      * @brief Returns all capability IDs

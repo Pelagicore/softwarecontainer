@@ -70,8 +70,8 @@ bool WaylandGateway::activateGateway()
     }
 
     log_info() << "enabling Wayland gateway. Socket dir:" << dir;
-    std::string pathInHost = logging::StringBuilder() << dir << "/" << SOCKET_FILE_NAME;
-    std::string pathInContainer = logging::StringBuilder() << "/gateways/" << SOCKET_FILE_NAME;
+    std::string pathInHost = buildPath(dir, SOCKET_FILE_NAME);
+    std::string pathInContainer = buildPath("/gateways", SOCKET_FILE_NAME);
     ReturnCode result = getContainer()->bindMountInContainer(pathInHost, pathInContainer, false);
 
     if (isError(result)) {
@@ -80,7 +80,6 @@ bool WaylandGateway::activateGateway()
     }
 
     setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, parentPath(pathInContainer));
-
     return true;
 }
 

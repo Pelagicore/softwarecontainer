@@ -195,10 +195,7 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
         json_t *config = gwConfig.config(gatewayId);
         if (config != nullptr) {
             std::string configStr = json_dumps(config,0);
-            log_debug() << "Configuring gateway \""
-                        << gatewayId
-                        << "\" with config: "
-                        << configStr;
+            log_debug() << "Configuring gateway \"" << gatewayId << "\" with config: " << configStr;
             try {
                 ReturnCode configurationResult = gateway->setConfig(configStr);
                 if (isError(configurationResult)) {
@@ -211,9 +208,7 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
                  * as it means one or more capabilities are broken.
                  */
                 log_error() << "Fatal error when configuring gateway \""
-                            << gatewayId
-                            << "\" : "
-                            << error.what();
+                            << gatewayId << "\" : " << error.what();
                 throw error;
             }
             json_decref(config);
@@ -232,9 +227,7 @@ ReturnCode SoftwareContainer::activateGateways()
             if (gateway->isConfigured()) {
                 ReturnCode activationResult = gateway->activate();
                 if (isError(activationResult)) {
-                    log_error() << "Failed to activate gateway \""
-                                << gatewayId
-                                << "\"";
+                    log_error() << "Failed to activate gateway \"" << gatewayId << "\"";
                     return activationResult;
                 }
             }
@@ -245,9 +238,7 @@ ReturnCode SoftwareContainer::activateGateways()
              * capabilities implies, i.e. the application environment will be in a broken state.
              */
             log_error() << "Fatal error when activating gateway \""
-                        << gatewayId
-                        << "\" : "
-                        << error.what();
+                        << gatewayId << "\" : " << error.what();
             throw error;
         }
     }
@@ -262,7 +253,7 @@ ReturnCode SoftwareContainer::shutdown()
 
 ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
 {
-    log_debug() << "shutdown called"; // << logging::getStackTrace();
+    log_debug() << "Shutdown called";
     if(isError(shutdownGateways())) {
         log_error() << "Could not shut down all gateways cleanly, check the log";
     }
@@ -312,12 +303,12 @@ std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
 std::string SoftwareContainer::getContainerDir()
 {
     const std::string containerID = std::string(m_container->id());
-    return m_config->containerRootDir() + "/" + containerID;
+    return buildPath(m_config->containerRootDir(), containerID);
 }
 
 std::string SoftwareContainer::getGatewayDir()
 {
-    return getContainerDir() + "/gateways";
+    return buildPath(getContainerDir(), "gateways");
 }
 
 ObservableProperty<ContainerState> &SoftwareContainer::getContainerState()
@@ -359,7 +350,7 @@ void SoftwareContainer::checkWorkspace()
 void SoftwareContainer::checkNetworkSettings()
 {
     std::vector<std::string> argv;
-    argv.push_back(std::string(INSTALL_BINDIR) + "/setup_softwarecontainer.sh");
+    argv.push_back(buildPath(std::string(INSTALL_BINDIR), "setup_softwarecontainer.sh"));
     argv.push_back(m_config->bridgeDevice());
 
     if (m_config->shouldCreateBridge()) {
