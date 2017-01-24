@@ -63,11 +63,6 @@ public:
     ~SoftwareContainer();
 
     /**
-     * @brief Set the main loop
-     */
-    void setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext);
-
-    /**
      * @brief Shutdown the container
      */
     ReturnCode shutdown();
@@ -97,8 +92,6 @@ public:
 
     bool isInitialized() const;
 
-    ReturnCode start();
-
     ReturnCode init();
 
     std::shared_ptr<ContainerAbstractInterface> getContainer();
@@ -122,6 +115,8 @@ public:
     ReturnCode startGateways(const GatewayConfiguration &configs);
 
 private:
+    ReturnCode start();
+
     ReturnCode configureGateways(const GatewayConfiguration &gwConfig);
     ReturnCode activateGateways();
     ReturnCode shutdownGateways();

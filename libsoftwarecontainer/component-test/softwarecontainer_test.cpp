@@ -72,7 +72,6 @@ void SoftwareContainerTest::SetUp()
     uint32_t containerId =  rand() % 100;
 
     m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(containerId, std::move(config)));
-    m_sc->setMainLoopContext(m_context);
     ASSERT_TRUE(isSuccess(m_sc->init()));
 }
 

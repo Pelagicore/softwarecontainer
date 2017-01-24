@@ -116,9 +116,6 @@ TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
     config = createConfig();
     SoftwareContainer s2(id, std::move(config));
 
-    s1.setMainLoopContext(getMainContext());
-    s2.setMainLoopContext(getMainContext());
-
     ASSERT_TRUE(isSuccess(s1.init()));
     ASSERT_TRUE(isError(s2.init()));
 }
@@ -509,7 +506,6 @@ TEST_F(SoftwareContainerApp, MultithreadTest) {
 
     auto config = createConfig();
     SoftwareContainer lib(containerID, std::move(config));
-    lib.setMainLoopContext(Glib::MainContext::get_default());
 
     bool finished = false;
 

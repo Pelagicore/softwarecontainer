@@ -79,11 +79,6 @@ SoftwareContainer::~SoftwareContainer()
 {
 }
 
-void SoftwareContainer::setMainLoopContext(Glib::RefPtr<Glib::MainContext> mainLoopContext)
-{
-    m_mainLoopContext = mainLoopContext;
-}
-
 ReturnCode SoftwareContainer::start()
 {
     log_debug() << "Initializing container";
@@ -111,11 +106,6 @@ ReturnCode SoftwareContainer::start()
 
 ReturnCode SoftwareContainer::init()
 {
-    if (m_mainLoopContext->gobj() == nullptr) {
-        log_error() << "Main loop context must be set first !";
-        return ReturnCode::FAILURE;
-    }
-
     if (getContainerState() != ContainerState::INITIALIZED) {
         if (isError(start())) {
             log_error() << "Failed to start container";
