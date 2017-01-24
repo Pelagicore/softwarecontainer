@@ -27,11 +27,10 @@ set(AGENT_TEST_LIBRARY_DEPENDENCIES
 set(SOFTWARECONTAINERAGENT_TEST_FILES
     main.cpp
     softwarecontaineragent_componenttest.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_common.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragentadaptor.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/containerconfigparser.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/dbus/softwarecontaineragent_dbus_common.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/dbus/softwarecontaineragent_dbus_stub.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/dbus/softwarecontaineragentadaptor.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
@@ -40,6 +39,8 @@ set(SOFTWARECONTAINERAGENT_TEST_FILES
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/mainconfigsource.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/configitem.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/configdefinition.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/containeroptions/dynamiccontaineroptions.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/containeroptions/containeroptionparser.cpp
 )
 
 add_gtest_test(softwarecontaineragent-component-test

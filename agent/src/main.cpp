@@ -31,7 +31,7 @@
 #include "config/configitem.h"
 #include "config/configdefinition.h"
 
-#include "softwarecontaineragentadaptor.h"
+#include "dbus/softwarecontaineragentadaptor.h"
 
 namespace softwarecontainer {
 

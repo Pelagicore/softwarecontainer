@@ -32,15 +32,15 @@
 #include "softwarecontainer.h"
 #include "softwarecontainer-common.h"
 #include "softwarecontainererror.h"
-#include "containerconfigparser.h"
+
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
 #include "config/config.h"
+#include "containeroptions/containeroptionparser.h"
 
 #include <jsonparser.h>
 #include "commandjob.h"
 #include <queue>
-
 
 namespace softwarecontainer {
 
@@ -264,7 +264,7 @@ private:
     /*
      * Responsible for parsing any dynamic values given when creating a container
      */
-    ContainerConfigParser m_configParser;
+    ContainerOptionParser m_optionParser;
 };
 
 } // namespace softwarecontainer

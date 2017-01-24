@@ -19,7 +19,6 @@
 
 #include "softwarecontaineragent.h"
 #include "softwarecontainererror.h"
-#include "containerconfigparser.h"
 #include "config/config.h"
 #include "config/configloader.h"
 #include "config/mainconfigsource.h"

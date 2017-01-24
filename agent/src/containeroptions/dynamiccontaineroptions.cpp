@@ -17,34 +17,27 @@
  * For further information see LICENSE
  */
 
-#pragma once
-
-#include <exception>
-#include <string>
+#include "containeroptions/dynamiccontaineroptions.h"
 
 namespace softwarecontainer {
 
-class SoftwareContainerError : public std::exception
+std::unique_ptr<SoftwareContainerConfig> DynamicContainerOptions::toConfig(const SoftwareContainerConfig &conf) const
 {
-public:
-    SoftwareContainerError():
-        m_message("SoftwareContainer error")
-    {
-    }
+    std::unique_ptr<SoftwareContainerConfig> dynamicConf = 
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(conf));
 
-    SoftwareContainerError(const std::string &message):
-        m_message(message)
-    {
-    }
+    dynamicConf->setEnableWriteBuffer(enableWriteBuffer());
+    return dynamicConf;
+}
 
-    virtual const char *what() const throw()
-    {
-        return m_message.c_str();
-    }
+void DynamicContainerOptions::setEnableWriteBuffer(bool enabled)
+{
+    m_enableWriteBuffer = enabled;
+}
 
-protected:
-    std::string m_message;
-};
-
+bool DynamicContainerOptions::enableWriteBuffer() const
+{
+    return m_enableWriteBuffer;
+}
 
 } // namespace softwarecontainer

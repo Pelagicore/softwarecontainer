@@ -19,32 +19,33 @@
 
 #pragma once
 
-#include <exception>
-#include <string>
+#include "config/softwarecontainerconfig.h"
+
+#include <memory>
 
 namespace softwarecontainer {
 
-class SoftwareContainerError : public std::exception
+class DynamicContainerOptions
 {
 public:
-    SoftwareContainerError():
-        m_message("SoftwareContainer error")
-    {
-    }
+    /*
+     * @brief creates a SoftwareContainerConfig with the dynamic options set
+     *
+     * @param conf a SoftwareContainerConfig with static settings
+     * @return a SoftwareContainerConfig pointer where the dynamic options that this object
+     *         holds are set
+     */
+    std::unique_ptr<SoftwareContainerConfig> toConfig(const SoftwareContainerConfig &conf) const;
 
-    SoftwareContainerError(const std::string &message):
-        m_message(message)
-    {
-    }
+    /*
+     * Setter and getter for the dynamic value on whether or not to enable
+     * buffered write to disk for the container.
+     */
+    void setEnableWriteBuffer(bool enabled);
+    bool enableWriteBuffer() const;
 
-    virtual const char *what() const throw()
-    {
-        return m_message.c_str();
-    }
-
-protected:
-    std::string m_message;
+private:
+    bool m_enableWriteBuffer = false;
 };
-
 
 } // namespace softwarecontainer
