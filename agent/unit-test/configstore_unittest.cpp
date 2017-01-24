@@ -21,6 +21,8 @@
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
 
+#include <glibmm.h>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <unistd.h>
@@ -40,12 +42,16 @@ public:
     std::string capNameD = "dummyCapD";
 
     /* The Service Manifests' (relative) file paths */
-    std::string testDataDir   = std::string(TEST_DATA_DIR) + "/";
-    std::string dirPath       = testDataDir + "testDirectory/";
-    std::string manifestPath       = "CS_unittest_ServiceManifest.json";
-    std::string shortManifestPath  = "CS_unittest_short_ServiceManifest.json";
-    std::string evilManifest       = "CS_unittest_parseError.json";
-
+    const std::string testDataDir   = std::string(TEST_DATA_DIR);
+    const std::string dirPath       = buildPath(testDataDir, "testDirectory");
+    const std::string errorDir      = buildPath(testDataDir, "fileErrorManifests");
+    const std::string onlyValidDir  = buildPath(testDataDir, "onlyValidManifests");
+    const std::string manifestPath       = "CS_unittest_ServiceManifest.json";
+    const std::string shortManifestPath  = "CS_unittest_short_ServiceManifest.json";
+    const std::string evilManifest       = "CS_unittest_parseError.json";
+    const std::string notJSONManifest    = "CS_unittest_fileExtensionIsNotJson.txt";
+    const std::string notJSONManifest2   = "CS_unittest_fileIsNotJson.json";
+    const std::string nonExistingPath    = "/home/aiuaiai/iuatxia";
 };
 
 /* Constructing a BaseConfigStore with an empty file path should not throw an exception.
@@ -58,14 +64,14 @@ TEST_F(ConfigStoreTest, constructorEmptyStrOk) {
  * pointing at a parsable json file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk) {
-    ASSERT_NO_THROW(BaseConfigStore(testDataDir + shortManifestPath));
+    ASSERT_NO_THROW(BaseConfigStore(buildPath(testDataDir, shortManifestPath)));
 }
 
 /* Constructing a BaseConfigStore with a file path,
  * pointing at a parsable file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk2) {
-    ASSERT_NO_THROW(BaseConfigStore(testDataDir + manifestPath));
+    ASSERT_NO_THROW(BaseConfigStore(buildPath(testDataDir, manifestPath)));
 }
 
 /* Constructing a FilteredConfigStore with a directory path,
@@ -73,6 +79,7 @@ TEST_F(ConfigStoreTest, constructorFileOk2) {
  */
 TEST_F(ConfigStoreTest, constructorDirNoJsonFiles) {
     // No Service Manifests, but ok dir
+    // TODO: Get rid of this + ""
     ASSERT_NO_THROW(FilteredConfigStore(dirPath + ""));
 }
 
@@ -80,7 +87,8 @@ TEST_F(ConfigStoreTest, constructorDirNoJsonFiles) {
  * when the directory does not exist, should throw an exception of type ServiceManifestPathError.
  */
 TEST_F(ConfigStoreTest, dirDoesNotExist) {
-    ASSERT_THROW(BaseConfigStore("/home/tester"), ServiceManifestPathError);
+    // TODO: Get rid of this + ""
+    ASSERT_THROW(BaseConfigStore(nonExistingPath + ""), ServiceManifestPathError);
 }
 
 /* Constructing a FilteredConfigStore with a directory path,
@@ -95,8 +103,7 @@ TEST_F(ConfigStoreTest, rootDirNotAllowed) {
  * should throw an exception of type ServiceManifestParseError.
  */
 TEST_F(ConfigStoreTest, fileExtensionIsNotJson) {
-    std::string filePath = "fileErrorManifests/CS_unittest_fileExtensionIsNotJson.txt";
-    ASSERT_THROW(BaseConfigStore(testDataDir + filePath), ServiceManifestParseError);
+    ASSERT_THROW(BaseConfigStore(buildPath(errorDir, notJSONManifest)), ServiceManifestParseError);
 }
 
 /* Constructing a BaseConfigStore with a file path
@@ -105,8 +112,7 @@ TEST_F(ConfigStoreTest, fileExtensionIsNotJson) {
  * should throw an exception of type ServiceManifestParseError.
  */
 TEST_F(ConfigStoreTest, fileIsNotJsonFile) {
-    std::string filePath = "fileErrorManifests/CS_unittest_fileIsNotJson.json";
-    ASSERT_THROW(BaseConfigStore(testDataDir + filePath), ServiceManifestParseError);
+    ASSERT_THROW(BaseConfigStore(buildPath(errorDir, notJSONManifest2)), ServiceManifestParseError);
 }
 
 /* Constructing a BaseConfigStore with a file path,
@@ -115,13 +121,14 @@ TEST_F(ConfigStoreTest, fileIsNotJsonFile) {
  * should throw an exception of type CapabilityParseError.
  */
 TEST_F(ConfigStoreTest, capabilitiesIsNotAJsonArray) {
-    ASSERT_THROW(BaseConfigStore(testDataDir + evilManifest), CapabilityParseError);
+    ASSERT_THROW(BaseConfigStore(buildPath(testDataDir, evilManifest)), CapabilityParseError);
 }
 
 /* Constructing a BaseConfigStore with a directory path,
  * that contains a file that can't be parsed results in an exception.
  */
 TEST_F(ConfigStoreTest, dirOneFileNotOk) {
+    // TODO: Get rid of this + ""
     ASSERT_THROW(BaseConfigStore(testDataDir + ""), CapabilityParseError);
 }
 
@@ -130,7 +137,7 @@ TEST_F(ConfigStoreTest, dirOneFileNotOk) {
  * should result in a non-empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + manifestPath);
+    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, manifestPath));
 
     GatewayConfiguration retGWs = cs.configByID(capNameA);
     ASSERT_FALSE(retGWs.empty());
@@ -140,7 +147,7 @@ TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
  * result in getting all those names that are listed in the manifest file.
  */
 TEST_F(ConfigStoreTest, readConfigFetchAllCaps) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + manifestPath);
+    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, manifestPath));
 
     std::vector<std::string> ids = cs.IDs();
     ASSERT_FALSE(ids.empty());
@@ -155,7 +162,7 @@ TEST_F(ConfigStoreTest, readConfigFetchAllCaps) {
  * should result in an empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + manifestPath);
+    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, manifestPath));
     GatewayConfiguration retGWs = cs.configByID("EvilCapName");
     ASSERT_TRUE(retGWs.empty());
 }
@@ -165,7 +172,7 @@ TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
  * should result in a non-empty result. Match result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + shortManifestPath);
+    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, shortManifestPath));
     GatewayConfiguration retGWs = cs.configByID(capNameA);
     EXPECT_FALSE(retGWs.empty());
 
@@ -201,7 +208,7 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
  * reading of file results in a warning (for the "parseError" file).
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
-    FilteredConfigStore cs = FilteredConfigStore(testDataDir + "onlyValidManifests/");
+    FilteredConfigStore cs = FilteredConfigStore(onlyValidDir);
     GatewayConfiguration retGWs = cs.configByID(capNameA);
     EXPECT_FALSE(retGWs.empty());
     std::vector<json_t *> expectedDbusConfigs;

@@ -24,6 +24,8 @@
 #include <iostream>
 #include <string>
 
+#include <glibmm.h>
+
 namespace softwarecontainer {
 
 std::string dstRoot;
@@ -50,9 +52,9 @@ int copyFile(const char* srcPath, const struct stat* sb, int typeflag)
     std::string src(srcPath);
 
     if (src.find(srcRoot) != std::string::npos) {
-        dstPath = dstRoot + src.erase(0, srcRoot.length());
+        dstPath = buildPath(dstRoot, src.erase(0, srcRoot.length()));
     } else {
-        dstPath = dstRoot + src;
+        dstPath = buildPath(dstRoot, src);
     }
 
     switch(typeflag) {
@@ -88,8 +90,7 @@ ReturnCode RecursiveCopy::copy(std::string src, std::string dst)
     return retval;
 }
 
-RecursiveCopy::RecursiveCopy() { }
-
-RecursiveCopy::~RecursiveCopy() { }
+RecursiveCopy::RecursiveCopy() {}
+RecursiveCopy::~RecursiveCopy() {}
 
 } // namespace softwarecontainer

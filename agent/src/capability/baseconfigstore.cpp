@@ -39,10 +39,6 @@ BaseConfigStore::BaseConfigStore(const std::string &inputPath)
     }
 }
 
-BaseConfigStore::~BaseConfigStore()
-{
-}
-
 void BaseConfigStore::readCapsFromDir(const std::string &dirPath)
 {
     std::string errorMessage;
@@ -65,7 +61,7 @@ void BaseConfigStore::readCapsFromDir(const std::string &dirPath)
     }
 
     for (std::string file : files) {
-        std::string filePath = dirPath + file;
+        std::string filePath = buildPath(dirPath, file);
 
         readCapsFromFile(filePath);
     }

@@ -28,10 +28,8 @@ DBusGatewayInstance::DBusGatewayInstance(ProxyType type
     : Gateway(ID)
     , m_type(type)
 {
-    m_socket = gatewayDir
-             + (m_type == SessionProxy ? "/sess_" : "/sys_")
-             + name
-             + ".sock";
+    std::string socketName = (m_type == SessionProxy ? "sess_" : "sys_") + name + ".sock";
+    m_socket = buildPath(gatewayDir, socketName);
 
     // Write configuration
     m_entireConfig = json_object();
@@ -81,7 +79,7 @@ bool DBusGatewayInstance::activateGateway()
     std::string variable = std::string("DBUS_")
                          + (m_type == SessionProxy ? "SESSION" : "SYSTEM")
                          + std::string("_BUS_ADDRESS");
-    std::string value = "unix:path=/gateways/" + socketName();
+    std::string value = "unix:path=" + buildPath("/gateways", socketName());
     setEnvironmentVariable(variable, value);
 
     std::vector<std::string> commandVec = { "dbus-proxy"
@@ -221,9 +219,7 @@ bool DBusGatewayInstance::teardownGateway()
 
 std::string DBusGatewayInstance::socketName()
 {
-    // Return the filename after stripping directory info
-    std::string socket(m_socket.c_str());
-    return socket.substr(socket.rfind('/') + 1);
+    return basename(m_socket.c_str());
 }
 
 } // namespace softwarecontainer

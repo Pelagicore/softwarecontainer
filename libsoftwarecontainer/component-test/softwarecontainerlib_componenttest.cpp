@@ -87,8 +87,7 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
             return ERROR;
         }
         log_debug() << "Wayland dir : " << waylandDir;
-        std::string socketPath = logging::StringBuilder() << waylandDir << "/"
-                                                          << WaylandGateway::SOCKET_FILE_NAME;
+        std::string socketPath = buildPath(waylandDir, WaylandGateway::SOCKET_FILE_NAME);
         log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
         if ( !isSocket(socketPath) ) {
             return ERROR;
@@ -388,6 +387,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     char *tmp = new char[strlen(tempDirname) + 8];
     strcpy(tmp, tempDirname);
+
     char *tempUnixSocket = strcat(tmp, "/socket");
 
     auto job1 = getSc().createFunctionJob([&] () {
@@ -507,7 +507,7 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     startGateways(configStr, PulseGateway::ID);
 
     // We need access to the test file, so we bind mount it
-    std::string soundFile = std::string(TEST_DATA_DIR) + std::string("/Rear_Center.wav");
+    std::string soundFile = buildPath(TEST_DATA_DIR, std::string("Rear_Center.wav"));
     ASSERT_TRUE(isSuccess(bindMountInContainer(soundFile, soundFile, true)));
 
     // Make sure the file is there

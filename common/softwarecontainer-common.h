@@ -146,4 +146,14 @@ ReturnCode writeToFile(const std::string &path, const std::string &content);
 ReturnCode readFromFile(const std::string &path, std::string &content);
 bool parseInt(const char *args, int *result);
 
+/*
+ * This builds a full path from parts, including the appropriate separator.
+ *
+ * Example: buildPath("usr", "local", "bin) => usr/local/bin
+ *
+ * @returns a string representing the combined path
+ */
+std::string buildPath(const std::string &arg1, const std::string &arg2);
+std::string buildPath(const std::string &arg1, const std::string &arg2, const std::string &arg3);
+
 } // namespace softwarecontainer;

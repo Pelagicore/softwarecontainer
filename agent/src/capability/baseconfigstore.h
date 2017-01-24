@@ -23,11 +23,13 @@
  */
 
 #pragma once
+
 #include "softwarecontainer-common.h"
 #include "gatewayconfig.h"
 #include "configstoreerror.h"
 
 #include <jsonparser.h>
+
 
 namespace softwarecontainer {
 
@@ -45,11 +47,9 @@ public:
      * or if the path is not allowed
      * @throws ServiceManifestParseError if parsing of the json file(s) fails
      * @throws CapabilityParseError if parsing of one or more Capabilities or Gateway
-     * Configurations in a file is unsuccessful
+     *         Configurations in a file is unsuccessful
      */
     BaseConfigStore(const std::string &filePath);
-
-    virtual ~BaseConfigStore();
 
 protected:
     std::map<std::string, GatewayConfiguration> m_capMap;

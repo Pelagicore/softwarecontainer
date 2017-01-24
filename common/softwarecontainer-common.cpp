@@ -23,6 +23,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <cstdarg>
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -108,6 +109,16 @@ std::string parentPath(const std::string &path_)
     }
     std::string parentPath = path.substr(0, pos - strlen(separator) + 1);
     return parentPath;
+}
+
+std::string buildPath(const std::string &arg1, const std::string &arg2)
+{
+    return Glib::build_filename(arg1, arg2);
+}
+
+std::string buildPath(const std::string &arg1, const std::string &arg2, const std::string &arg3)
+{
+    return buildPath(buildPath(arg1, arg2), arg3);
 }
 
 ReturnCode touch(const std::string &path)

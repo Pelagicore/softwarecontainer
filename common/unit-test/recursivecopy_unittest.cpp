@@ -42,8 +42,6 @@ public:
     FileToolkitWithUndo ft;
     std::string srcdir;
     std::string dstdir;
-
-
 };
 
 void createFile(std::string dst, std::string val="abcdefg123")
@@ -73,45 +71,67 @@ TEST_F(RecursiveCopyTest, copyDirEmptyToEmpty)
 
 TEST_F(RecursiveCopyTest, copyDirFilesToEmpty)
 {
-    createFile(srcdir + "/lala.txt");
+    std::string srcFile = buildPath(srcdir, "lala.txt");
+    std::string dstFile = buildPath(dstdir, "lala.txt");
+    createFile(srcFile);
+
     ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
-    ASSERT_TRUE(isFile(srcdir + "/lala.txt"));
-    ASSERT_TRUE(isFile(dstdir + "/lala.txt"));
+    ASSERT_TRUE(isFile(srcFile));
+    ASSERT_TRUE(isFile(dstFile));
 }
 
 TEST_F(RecursiveCopyTest, copyDirEmptyToFiles)
 {
-    createFile(dstdir + "/lala.txt");
+    std::string dstFile = buildPath(dstdir, "lala.txt");
+    std::string srcFile = buildPath(srcdir, "lala.txt");
+    createFile(dstFile);
+
     ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
-    ASSERT_FALSE(isFile(srcdir + "/lala.txt"));
-    ASSERT_TRUE(isFile(dstdir + "/lala.txt"));
+    ASSERT_FALSE(isFile(srcFile));
+    ASSERT_TRUE(isFile(dstFile));
     ASSERT_TRUE(isDirectoryEmpty(srcdir));
 }
 
 TEST_F(RecursiveCopyTest, copyDirFilesToFiles)
 {
-    createFile(srcdir + "/lala.txt");
-    createFile(dstdir + "/lala2.txt");
-    ASSERT_FALSE(isFile(srcdir + "/lala2.txt"));
+    std::string srcFile = buildPath(srcdir, "lala.txt");
+    std::string srcFile2 = buildPath(srcdir, "lala2.txt");
+    std::string dstFile = buildPath(dstdir, "lala.txt");
+    std::string dstFile2 = buildPath(dstdir, "lala2.txt");
+    createFile(srcFile);
+    createFile(dstFile2);
+
+    ASSERT_FALSE(isFile(srcFile2));
+
     ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
-    ASSERT_TRUE(isFile(srcdir + "/lala.txt"));
-    ASSERT_FALSE(isFile(srcdir + "/lala2.txt"));
-    ASSERT_TRUE(isFile(dstdir + "/lala.txt"));
-    ASSERT_TRUE(isFile(dstdir + "/lala2.txt"));
+
+    ASSERT_TRUE(isFile(srcFile));
+    ASSERT_FALSE(isFile(srcFile2));
+
+    ASSERT_TRUE(isFile(dstFile));
+    ASSERT_TRUE(isFile(dstFile2));
 }
 
 TEST_F(RecursiveCopyTest, copyDirFilesToFilesOverWrite)
 {
     std::string content1 = "abcdefg123";
     std::string content2 = "123gfedcba";
-    createFile(srcdir + "/lala.txt", content1);
-    createFile(dstdir + "/lala.txt", content2);
-    ASSERT_TRUE(checkContent(srcdir + "/lala.txt", content1));
-    ASSERT_TRUE(checkContent(dstdir + "/lala.txt", content2));
+
+    std::string srcFile = buildPath(srcdir, "lala.txt");
+    std::string dstFile = buildPath(dstdir, "lala.txt");
+
+    createFile(srcFile, content1);
+    createFile(dstFile, content2);
+
+    ASSERT_TRUE(checkContent(srcFile, content1));
+    ASSERT_TRUE(checkContent(dstFile, content2));
+
     ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
-    ASSERT_TRUE(isFile(srcdir + "/lala.txt"));
-    ASSERT_TRUE(isFile(dstdir + "/lala.txt"));
-    ASSERT_TRUE(checkContent(srcdir + "/lala.txt", content1));
-    ASSERT_TRUE(checkContent(dstdir + "/lala.txt", content1));
+
+    ASSERT_TRUE(isFile(srcFile));
+    ASSERT_TRUE(isFile(dstFile));
+
+    ASSERT_TRUE(checkContent(srcFile, content1));
+    ASSERT_TRUE(checkContent(dstFile, content1));
 }
 

@@ -57,8 +57,8 @@ ReturnCode PulseGateway::enablePulseAudio() {
         return ReturnCode::FAILURE;
     }
 
-    log_info() << "enabling pulseaudio gateway. Socket location : " << dir;
-    std::string pathInContainer = "/gateways/" + std::string(SOCKET_FILE_NAME);
+    log_info() << "Enabling pulseaudio gateway. Socket location : " << dir;
+    std::string pathInContainer = buildPath("/gateways/", SOCKET_FILE_NAME);
     ReturnCode result = getContainer()->bindMountInContainer(std::string(dir),
                                                              pathInContainer,
                                                              false);
