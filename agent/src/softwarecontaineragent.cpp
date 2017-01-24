@@ -20,10 +20,12 @@
 #include <cstdint>
 
 #include "softwarecontaineragent.h"
+
+#include "softwarecontainererror.h"
+
 #include "config/configerror.h"
 #include "config/configdefinition.h"
 #include "config/softwarecontainerconfig.h"
-#include "softwarecontainererror.h"
 
 namespace softwarecontainer {
 
@@ -158,10 +160,8 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
     profilefunction("createContainerFunction");
 
     // Set options for this container
-    std::unique_ptr<SoftwareContainerConfig> containerConfig =
-        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(m_containerConfig));
-    ContainerConfigParser::ContainerOptions options = m_configParser.parse(config);
-    containerConfig->setEnableWriteBuffer(options.enableWriteBuffer);
+    std::unique_ptr<DynamicContainerOptions> options = m_optionParser.parse(config);
+    std::unique_ptr<SoftwareContainerConfig> containerConfig = options->toConfig(m_containerConfig);
 
     // Get an ID and create the container
     ContainerID containerID = findSuitableId();
@@ -169,7 +169,6 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
                                                                 std::move(containerConfig)));
     log_debug() << "Created container with ID :" << containerID;
 
-    container->setMainLoopContext(m_mainLoopContext);
     if (isError(container->init())) {
         std::string errorMessage("Could not init the container" + std::to_string(containerID));
         log_error() << errorMessage;

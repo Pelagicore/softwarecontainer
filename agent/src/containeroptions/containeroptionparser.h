@@ -19,35 +19,39 @@
 
 #pragma once
 
+#include "jansson.h"
+#include <memory>
+
 #include "softwarecontainer-common.h"
 #include "softwarecontainererror.h"
 
-#include "jansson.h"
+#include "containeroptions/dynamiccontaineroptions.h"
 
 namespace softwarecontainer {
 
-class ContainerConfigParseError : public SoftwareContainerError
+class ContainerOptionParseError : public SoftwareContainerError
 {
 public:
-    ContainerConfigParseError() :
+    ContainerOptionParseError() :
         SoftwareContainerError("Container config parse error")
     {
     }
 
-    ContainerConfigParseError(const std::string &message) :
+    ContainerOptionParseError(const std::string &message) :
         SoftwareContainerError(message)
     {
     }
 };
 
-class ContainerConfigParser
+/*
+ * @brief a parser for dynamic container configurations.
+ */
+class ContainerOptionParser
 {
-    LOG_DECLARE_CLASS_CONTEXT("CCPA", "ContainerConfigParser");
+    LOG_DECLARE_CLASS_CONTEXT("CCPA", "ContainerOptionParser");
 
 public:
-    struct ContainerOptions {
-        bool enableWriteBuffer;
-    };
+    ContainerOptionParser();
 
     /**
      * @brief Parse config needed for starting up the container in a correct manner.
@@ -56,10 +60,10 @@ public:
      * correctly, and then calls readConfigElement for its elements.
      *
      * @param config a configuration string
-     * @return a ContainerOptions struct with the given settings set.
-     * @throws a ContainerConfigParserError in case of bad input
+     * @return a DynamicContainerOptions object with the given settings set.
+     * @throws a ContainerOptionParserError in case of bad input
      */
-    ContainerOptions parse(const std::string &config);
+    std::unique_ptr<DynamicContainerOptions> parse(const std::string &config);
 
 private:
     /**
@@ -70,9 +74,11 @@ private:
      * This will also set the corresponding field in the given ContainerOptions struct
      *
      * @param element a config snippet in json format
-     * @throws ContainerConfigParseError on failure.
+     * @throws ContainerOptionParseError on failure.
      */
-    void readConfigElement(const json_t *element, ContainerOptions &options);
+    void readConfigElement(const json_t *element);
+
+    std::unique_ptr<DynamicContainerOptions> m_options;
 };
 
 } // namespace softwarecontainer

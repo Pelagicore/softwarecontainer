@@ -17,33 +17,41 @@
  * For further information see LICENSE
  */
 
-#include "containerconfigparser.h"
+#include "containeroptions/containeroptionparser.h"
 
 #include "jsonparser.h"
 
 namespace softwarecontainer {
 
-void ContainerConfigParser::readConfigElement(const json_t *element, ContainerOptions &options)
+ContainerOptionParser::ContainerOptionParser() :
+    m_options(new DynamicContainerOptions())
+{
+}
+
+void ContainerOptionParser::readConfigElement(const json_t *element)
 {
     if (!json_is_object(element)) {
         std::string errorMessage("Configure entry is not an object");
         log_error() << errorMessage;
-        throw ContainerConfigParseError(errorMessage);
+        throw ContainerOptionParseError(errorMessage);
     }
 
-    if(!JSONParser::read(element, "enableWriteBuffer", options.enableWriteBuffer)) {
+    bool wo = false;
+    if(!JSONParser::read(element, "enableWriteBuffer", wo)) {
         std::string errorMessage("Could not parse config due to: 'enableWriteBuffer' not found.");
         log_error() << errorMessage;
-        throw ContainerConfigParseError(errorMessage);
+        throw ContainerOptionParseError(errorMessage);
     }
+
+    m_options->setEnableWriteBuffer(wo);
 }
 
-ContainerConfigParser::ContainerOptions ContainerConfigParser::parse(const std::string &config)
+std::unique_ptr<DynamicContainerOptions> ContainerOptionParser::parse(const std::string &config)
 {
     if (config.size() == 0) {
         std::string errorMessage("Empty JSON config strings are not supported.");
         log_error() << errorMessage;
-        throw ContainerConfigParseError(errorMessage);
+        throw ContainerOptionParseError(errorMessage);
     }
 
     json_error_t error;
@@ -54,32 +62,32 @@ ContainerConfigParser::ContainerOptions ContainerConfigParser::parse(const std::
                                 + std::string(error.text)
                                 + config);
         log_error() << errorMessage;
-        throw ContainerConfigParseError(errorMessage);
+        throw ContainerOptionParseError(errorMessage);
     }
 
     if (!json_is_array(root)) {
         std::string errorMessage("Root JSON element is not an array");
         log_error() << errorMessage;
         json_decref(root);
-        throw ContainerConfigParseError(errorMessage);
+        throw ContainerOptionParseError(errorMessage);
     }
 
     size_t index;
     json_t *element;
 
-    ContainerOptions options;
-
     try {
         json_array_foreach(root, index, element) {
-            readConfigElement(element, options);
+            readConfigElement(element);
         }
-    } catch (ContainerConfigParseError &err) {
+    } catch (ContainerOptionParseError &err) {
         json_decref(root);
         throw;
     }
-
     json_decref(root);
-    return options;
+
+    std::unique_ptr<DynamicContainerOptions> ret = std::move(m_options);
+    m_options.reset(new DynamicContainerOptions());
+    return ret;
 }
 
 } // namespace softwarecontainer

@@ -28,15 +28,20 @@ include_directories(src)
 #
 add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent_dbus_common.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent_dbus_stub.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragentadaptor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/containerconfigparser.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dbus/softwarecontaineragent_dbus_common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dbus/softwarecontaineragent_dbus_stub.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dbus/softwarecontaineragentadaptor.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/containeroptions/containeroptionparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/containeroptions/dynamiccontaineroptions.cpp
+
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/baseconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/defaultconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/filteredconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/configstoreerror.h
+
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/fileconfigloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/commandlineconfigsource.cpp
@@ -44,7 +49,6 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/defaultconfigsource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configitem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/configdefinition.cpp
-    ${GENERATED_ADAPTOR_FILENAME}
 )
 
 target_link_libraries(softwarecontainer-agent

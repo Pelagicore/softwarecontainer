@@ -30,7 +30,7 @@ set(CONFIGSTORE_TEST_FILES
     main.cpp
     configstore_unittest.cpp
     config_unittest.cpp
-    containerconfigparser_unittest.cpp
+    containeroptionparser_unittest.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
@@ -38,7 +38,8 @@ set(CONFIGSTORE_TEST_FILES
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/mainconfigsource.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/configitem.cpp
-    ${SOFTWARECONTAINERAGENT_DIR}/src/containerconfigparser.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/containeroptions/containeroptionparser.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/containeroptions/dynamiccontaineroptions.cpp
 )
 
 add_gtest_test(softwarecontaineragent-unit-test
