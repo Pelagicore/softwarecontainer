@@ -774,7 +774,3 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
 }
 
-
-TEST_F(SoftwareContainerApp, InitTest) {
-    ASSERT_TRUE(getSc().isInitialized());
-}

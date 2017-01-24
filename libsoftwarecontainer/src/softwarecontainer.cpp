@@ -154,7 +154,6 @@ ReturnCode SoftwareContainer::init()
     addGateway(new FileGateway());
 #endif
 
-    m_initialized = true;
     return ReturnCode::SUCCESS;
 }
 
@@ -297,11 +296,6 @@ ReturnCode SoftwareContainer::shutdownGateways()
 
     m_gateways.clear();
     return status;
-}
-
-bool SoftwareContainer::isInitialized() const
-{
-    return m_initialized;
 }
 
 std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
