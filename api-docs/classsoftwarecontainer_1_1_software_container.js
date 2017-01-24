@@ -8,7 +8,6 @@ var classsoftwarecontainer_1_1_software_container =
     [ "suspend", "classsoftwarecontainer_1_1_software_container.html#ae46b4cd3f7b831cf445a45624842a0df", null ],
     [ "resume", "classsoftwarecontainer_1_1_software_container.html#a9975f8b2714301b79b2e290adc252bef", null ],
     [ "addGateway", "classsoftwarecontainer_1_1_software_container.html#ac9483d1d07e84b77820498eba3e7b284", null ],
-    [ "isInitialized", "classsoftwarecontainer_1_1_software_container.html#ad1654b3ad40de803aaf440c8ea66092d", null ],
     [ "init", "classsoftwarecontainer_1_1_software_container.html#a1f43e70e787d3b56baf1d6e863282820", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2", null ],
     [ "createFunctionJob", "classsoftwarecontainer_1_1_software_container.html#a47be9e4b2c49aedf67cd23404c9d4eee", null ],

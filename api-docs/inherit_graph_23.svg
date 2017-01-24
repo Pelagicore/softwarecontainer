@@ -76,7 +76,7 @@
 </g>
 <!-- Node6 -->
 <g id="node6" class="node"><title>Node6</title>
-<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_software_container.html" target="_top" xlink:title="softwarecontainer::\lSoftwareContainer">
+<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_software_container.html" target="_top" xlink:title="An abstraction of concrete container implementations. ">
 <polygon fill="white" stroke="black" points="315,-441.5 315,-471.5 415,-471.5 415,-441.5 315,-441.5"/>
 <text text-anchor="start" x="323" y="-459.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="365" y="-448.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainer</text>
