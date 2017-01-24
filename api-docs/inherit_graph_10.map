@@ -1,6 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_config_item.html" title="Base class for all config item types. " alt="" coords="5,71,139,112"/>
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_bool_config.html" title="Represents a config item of type bool. " alt="" coords="187,5,320,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_int_config.html" title="Represents a config item of type int. " alt="" coords="187,71,320,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_string_config.html" title="Represents a config item of type string. " alt="" coords="187,136,320,177"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_config_loader.html" title="softwarecontainer::\lConfigLoader" alt="" coords="5,5,139,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_config_loader.html" title="softwarecontainer::\lFileConfigLoader" alt="" coords="187,5,320,47"/>
 </map>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-fdedc22 2017-01-24</span>
+   &#160;<span id="projectnumber">0.17.0-d7d3816 2017-01-24</span>
    </div>
   </td>
  </tr>
@@ -88,12 +88,12 @@ $(document).ready(function(){initNavTree('configerror_8h_source.html','');});
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;exception&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;softwarecontainererror.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_config_error.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_config_error.html">ConfigError</a> : <span class="keyword">public</span> std::exception</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_config_error.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_config_error.html">ConfigError</a> : <span class="keyword">public</span> <a class="code" href="classsoftwarecontainer_1_1_software_container_error.html">SoftwareContainerError</a></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_config_error.html">ConfigError</a>():</div>
@@ -213,6 +213,7 @@ $(document).ready(function(){initNavTree('configerror_8h_source.html','');});
 <div class="ttc" id="classsoftwarecontainer_1_1_config_mandatory_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_config_mandatory_error.html">softwarecontainer::ConfigMandatoryError</a></div><div class="ttdef"><b>Definition:</b> <a href="configerror_8h_source.html#l00086">configerror.h:86</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_config_not_found_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_config_not_found_error.html">softwarecontainer::ConfigNotFoundError</a></div><div class="ttdoc">A requested config item could not be found in any of the config sources. </div><div class="ttdef"><b>Definition:</b> <a href="configerror_8h_source.html#l00140">configerror.h:140</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_error.html">softwarecontainer::SoftwareContainerError</a></div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainererror_8h_source.html#l00027">softwarecontainererror.h:27</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_config_internal_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_config_internal_error.html">softwarecontainer::ConfigInternalError</a></div><div class="ttdoc">An error occured which is an internal error in the config code. </div><div class="ttdef"><b>Definition:</b> <a href="configerror_8h_source.html#l00056">configerror.h:56</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -220,7 +221,7 @@ $(document).ready(function(){initNavTree('configerror_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_7729c337850573dc74d1ac4f90fc9ea2.html">agent</a></li><li class="navelem"><a class="el" href="dir_724cf3138c1364a179c3c90509b5ea66.html">src</a></li><li class="navelem"><a class="el" href="dir_91f28cb6b1af0be1ff9e84931ad37c4b.html">config</a></li><li class="navelem"><b>configerror.h</b></li>
-    <li class="footer">Generated on Tue Jan 24 2017 09:21:59 for softwarecontainer by
+    <li class="footer">Generated on Tue Jan 24 2017 11:17:09 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

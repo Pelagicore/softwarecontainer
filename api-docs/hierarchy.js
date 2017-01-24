@@ -35,14 +35,6 @@ var hierarchy =
     [ "softwarecontainer::DeviceNodeParser", "classsoftwarecontainer_1_1_device_node_parser.html", null ],
     [ "softwarecontainer::EnvironmentGatewayParser", "classsoftwarecontainer_1_1_environment_gateway_parser.html", null ],
     [ "exception", null, [
-      [ "softwarecontainer::ConfigError", "classsoftwarecontainer_1_1_config_error.html", [
-        [ "softwarecontainer::ConfigDependencyError", "classsoftwarecontainer_1_1_config_dependency_error.html", null ],
-        [ "softwarecontainer::ConfigFileError", "classsoftwarecontainer_1_1_config_file_error.html", null ],
-        [ "softwarecontainer::ConfigInternalError", "classsoftwarecontainer_1_1_config_internal_error.html", null ],
-        [ "softwarecontainer::ConfigMandatoryError", "classsoftwarecontainer_1_1_config_mandatory_error.html", null ],
-        [ "softwarecontainer::ConfigNotFoundError", "classsoftwarecontainer_1_1_config_not_found_error.html", null ],
-        [ "softwarecontainer::ConfigUnknownError", "classsoftwarecontainer_1_1_config_unknown_error.html", null ]
-      ] ],
       [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
       [ "softwarecontainer::GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", null ],
       [ "softwarecontainer::SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", [
@@ -50,6 +42,14 @@ var hierarchy =
           [ "softwarecontainer::BadSuffixError", "classsoftwarecontainer_1_1_bad_suffix_error.html", null ],
           [ "softwarecontainer::JSonError", "classsoftwarecontainer_1_1_j_son_error.html", null ],
           [ "softwarecontainer::LimitRangeError", "classsoftwarecontainer_1_1_limit_range_error.html", null ]
+        ] ],
+        [ "softwarecontainer::ConfigError", "classsoftwarecontainer_1_1_config_error.html", [
+          [ "softwarecontainer::ConfigDependencyError", "classsoftwarecontainer_1_1_config_dependency_error.html", null ],
+          [ "softwarecontainer::ConfigFileError", "classsoftwarecontainer_1_1_config_file_error.html", null ],
+          [ "softwarecontainer::ConfigInternalError", "classsoftwarecontainer_1_1_config_internal_error.html", null ],
+          [ "softwarecontainer::ConfigMandatoryError", "classsoftwarecontainer_1_1_config_mandatory_error.html", null ],
+          [ "softwarecontainer::ConfigNotFoundError", "classsoftwarecontainer_1_1_config_not_found_error.html", null ],
+          [ "softwarecontainer::ConfigUnknownError", "classsoftwarecontainer_1_1_config_unknown_error.html", null ]
         ] ],
         [ "softwarecontainer::ConfigStoreError", "classsoftwarecontainer_1_1_config_store_error.html", [
           [ "softwarecontainer::CapabilityParseError", "classsoftwarecontainer_1_1_capability_parse_error.html", null ],

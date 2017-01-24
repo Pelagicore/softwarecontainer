@@ -1,3 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_file_gateway_setting_store.html" title="softwarecontainer::\lFileGatewaySettingStore" alt="" coords="5,5,172,47"/>
+<area shape="rect" id="node1" href="$classsoftwarecontainer_1_1_executable.html" title="softwarecontainer::\lExecutable" alt="" coords="5,5,139,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container_abstract_interface.html" title="softwarecontainer::\lContainerAbstractInterface" alt="" coords="187,5,365,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="425,5,559,47"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="206,71,346,112"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_device_node_gateway.html" title="This gateway is responsible for exposing device nodes in an LXC container. " alt="" coords="419,136,565,177"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="425,71,559,112"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. " alt="" coords="209,397,343,439"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_cgroups_gateway.html" title="The cgroups gateway sets cgroups related settings for the container. " alt="" coords="425,201,559,243"/>
+<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_d_bus_gateway.html" title="softwarecontainer::\lDBusGateway" alt="" coords="425,267,559,308"/>
+<area shape="rect" id="node10" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html" title="DBus Gateway takes care of spawning and killing the DBus proxies. " alt="" coords="413,332,571,373"/>
+<area shape="rect" id="node11" href="$classsoftwarecontainer_1_1_environment_gateway.html" title="Environment Gateway is used to define environment variables to the container. " alt="" coords="419,397,565,439"/>
+<area shape="rect" id="node12" href="$classsoftwarecontainer_1_1_file_gateway.html" title="This gateway lets you map files (including socket files) or folders from the host into the container&#39;..." alt="" coords="425,463,559,504"/>
+<area shape="rect" id="node13" href="$classsoftwarecontainer_1_1_network_gateway.html" title="Sets up and manages network access and routing to the container. " alt="" coords="425,528,559,569"/>
+<area shape="rect" id="node14" href="$classsoftwarecontainer_1_1_pulse_gateway.html" title="The PulseAudio Gateway is used to provide access to the host system PulseAudio server. " alt="" coords="425,593,559,635"/>
+<area shape="rect" id="node15" href="$classsoftwarecontainer_1_1_wayland_gateway.html" title="softwarecontainer::\lWaylandGateway" alt="" coords="425,659,559,700"/>
 </map>

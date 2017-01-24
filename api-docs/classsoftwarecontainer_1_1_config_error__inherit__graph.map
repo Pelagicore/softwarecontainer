@@ -1,8 +1,9 @@
 <map id="softwarecontainer::ConfigError" name="softwarecontainer::ConfigError">
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_config_dependency_error.html" title="softwarecontainer::\lConfigDependencyError" alt="" coords="313,5,475,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_config_file_error.html" title="An error occured in a Glib operation. " alt="" coords="327,71,461,112"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_config_internal_error.html" title="An error occured which is an internal error in the config code. " alt="" coords="327,136,461,177"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_config_mandatory_error.html" title="softwarecontainer::\lConfigMandatoryError" alt="" coords="319,201,469,243"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. " alt="" coords="321,267,467,308"/>
-<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_config_unknown_error.html" title="A config is found which is not defined in ConfigDefinition. " alt="" coords="323,332,465,373"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_config_dependency_error.html" title="softwarecontainer::\lConfigDependencyError" alt="" coords="545,5,707,47"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_config_file_error.html" title="An error occured in a Glib operation. " alt="" coords="559,71,693,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_config_internal_error.html" title="An error occured which is an internal error in the config code. " alt="" coords="559,136,693,177"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_config_mandatory_error.html" title="softwarecontainer::\lConfigMandatoryError" alt="" coords="551,201,701,243"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_config_not_found_error.html" title="A requested config item could not be found in any of the config sources. " alt="" coords="553,267,699,308"/>
+<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_config_unknown_error.html" title="A config is found which is not defined in ConfigDefinition. " alt="" coords="555,332,697,373"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container_error.html" title="softwarecontainer::\lSoftwareContainerError" alt="" coords="157,169,316,211"/>
 </map>
