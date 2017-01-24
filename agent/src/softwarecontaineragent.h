@@ -219,12 +219,6 @@ public:
                          const std::vector<std::string> &capabilities);
 
 private:
-    // Make a new container.
-    std::pair<ContainerID, SoftwareContainerPtr> getContainerPair();
-
-    // Helper for creating software container instances
-    SoftwareContainerPtr makeSoftwareContainer(const ContainerID containerID);
-
     /**
      * @brief Update gateway configurations for the container
      *
