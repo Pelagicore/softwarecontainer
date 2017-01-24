@@ -27,12 +27,12 @@ var hierarchy =
       [ "softwarecontainer::MainConfigSource", "classsoftwarecontainer_1_1_main_config_source.html", null ]
     ] ],
     [ "softwarecontainer::ConfigTypes", "classsoftwarecontainer_1_1_config_types.html", null ],
-    [ "softwarecontainer::ContainerConfigParser", "classsoftwarecontainer_1_1_container_config_parser.html", null ],
-    [ "softwarecontainer::ContainerConfigParser::ContainerOptions", "structsoftwarecontainer_1_1_container_config_parser_1_1_container_options.html", null ],
+    [ "softwarecontainer::ContainerOptionParser", "classsoftwarecontainer_1_1_container_option_parser.html", null ],
     [ "softwarecontainer::DBusGatewayParser", "classsoftwarecontainer_1_1_d_bus_gateway_parser.html", null ],
     [ "softwarecontainer::DeviceNodeParser::Device", "structsoftwarecontainer_1_1_device_node_parser_1_1_device.html", null ],
     [ "softwarecontainer::DeviceNodeLogic", "classsoftwarecontainer_1_1_device_node_logic.html", null ],
     [ "softwarecontainer::DeviceNodeParser", "classsoftwarecontainer_1_1_device_node_parser.html", null ],
+    [ "softwarecontainer::DynamicContainerOptions", "classsoftwarecontainer_1_1_dynamic_container_options.html", null ],
     [ "softwarecontainer::EnvironmentGatewayParser", "classsoftwarecontainer_1_1_environment_gateway_parser.html", null ],
     [ "exception", null, [
       [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
@@ -56,7 +56,7 @@ var hierarchy =
           [ "softwarecontainer::ServiceManifestParseError", "classsoftwarecontainer_1_1_service_manifest_parse_error.html", null ],
           [ "softwarecontainer::ServiceManifestPathError", "classsoftwarecontainer_1_1_service_manifest_path_error.html", null ]
         ] ],
-        [ "softwarecontainer::ContainerConfigParseError", "classsoftwarecontainer_1_1_container_config_parse_error.html", null ],
+        [ "softwarecontainer::ContainerOptionParseError", "classsoftwarecontainer_1_1_container_option_parse_error.html", null ],
         [ "softwarecontainer::NetworkGatewayError", "classsoftwarecontainer_1_1_network_gateway_error.html", [
           [ "softwarecontainer::IPAllocationError", "classsoftwarecontainer_1_1_i_p_allocation_error.html", null ]
         ] ],

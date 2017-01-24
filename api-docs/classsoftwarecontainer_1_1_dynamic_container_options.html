@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>softwarecontainer: softwarecontainer::ContainerConfigParser::ContainerOptions Struct Reference</title>
+<title>softwarecontainer: softwarecontainer::DynamicContainerOptions Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-b924c85 2017-01-24</span>
+   &#160;<span id="projectnumber">0.17.0-07358af 2017-01-24</span>
    </div>
   </td>
  </tr>
@@ -62,36 +62,44 @@
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('structsoftwarecontainer_1_1_container_config_parser_1_1_container_options.html','');});
+$(document).ready(function(){initNavTree('classsoftwarecontainer_1_1_dynamic_container_options.html','');});
 </script>
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Data Fields</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">softwarecontainer::ContainerConfigParser::ContainerOptions Struct Reference</div>  </div>
+<div class="title">softwarecontainer::DynamicContainerOptions Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Data Fields</h2></td></tr>
-<tr class="memitem:a5d122054de3619839624a892049772cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d122054de3619839624a892049772cc"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableWriteBuffer</b></td></tr>
-<tr class="separator:a5d122054de3619839624a892049772cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8d0cc27377eb3a37ec59e1b1696189fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d0cc27377eb3a37ec59e1b1696189fd"></a>
+std::unique_ptr<br class="typebreak" />
+&lt; <a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toConfig</b> (const <a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a> &amp;conf) const </td></tr>
+<tr class="separator:a8d0cc27377eb3a37ec59e1b1696189fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c606ae78d20ea7ed0db9e869076101"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91c606ae78d20ea7ed0db9e869076101"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnableWriteBuffer</b> (bool enabled)</td></tr>
+<tr class="separator:a91c606ae78d20ea7ed0db9e869076101"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5fa2fc5e2e501401431ed3c83a187ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5fa2fc5e2e501401431ed3c83a187ea"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableWriteBuffer</b> () const </td></tr>
+<tr class="separator:af5fa2fc5e2e501401431ed3c83a187ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="containerconfigparser_8h_source.html#l00048">48</a> of file <a class="el" href="containerconfigparser_8h_source.html">containerconfigparser.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>agent/src/<a class="el" href="containerconfigparser_8h_source.html">containerconfigparser.h</a></li>
+<p>Definition at line <a class="el" href="dynamiccontaineroptions_8h_source.html#l00028">28</a> of file <a class="el" href="dynamiccontaineroptions_8h_source.html">dynamiccontaineroptions.h</a>.</p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
+<li>agent/src/containeroptions/<a class="el" href="dynamiccontaineroptions_8h_source.html">dynamiccontaineroptions.h</a></li>
+<li>agent/src/containeroptions/<a class="el" href="dynamiccontaineroptions_8cpp_source.html">dynamiccontaineroptions.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_container_config_parser.html">ContainerConfigParser</a></li><li class="navelem"><a class="el" href="structsoftwarecontainer_1_1_container_config_parser_1_1_container_options.html">ContainerOptions</a></li>
-    <li class="footer">Generated on Tue Jan 24 2017 12:36:56 for softwarecontainer by
+    <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_dynamic_container_options.html">DynamicContainerOptions</a></li>
+    <li class="footer">Generated on Tue Jan 24 2017 13:26:51 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

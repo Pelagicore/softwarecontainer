@@ -5,7 +5,7 @@
 <area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_cgroups_gateway_error.html" title="softwarecontainer::\lCgroupsGatewayError" alt="" coords="359,104,510,145"/>
 <area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_config_error.html" title="softwarecontainer::\lConfigError" alt="" coords="368,397,501,439"/>
 <area shape="rect" id="node16" href="$classsoftwarecontainer_1_1_config_store_error.html" title="softwarecontainer::\lConfigStoreError" alt="" coords="368,625,501,667"/>
-<area shape="rect" id="node20" href="$classsoftwarecontainer_1_1_container_config_parse_error.html" title="softwarecontainer::\lContainerConfigParseError" alt="" coords="345,691,524,732"/>
+<area shape="rect" id="node20" href="$classsoftwarecontainer_1_1_container_option_parse_error.html" title="softwarecontainer::\lContainerOptionParseError" alt="" coords="345,691,524,732"/>
 <area shape="rect" id="node21" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="359,756,510,797"/>
 <area shape="rect" id="node23" href="$classsoftwarecontainer_1_1_software_container_agent_error.html" title="An error occured in SoftwareContainerAgent. " alt="" coords="339,821,531,863"/>
 <area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_bad_suffix_error.html" title="softwarecontainer::\lBadSuffixError" alt="" coords="601,5,735,47"/>
