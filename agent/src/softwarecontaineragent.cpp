@@ -152,48 +152,32 @@ ContainerID SoftwareContainerAgent::findSuitableId()
     return availableID;
 }
 
-SoftwareContainerAgent::SoftwareContainerPtr SoftwareContainerAgent::makeSoftwareContainer(const ContainerID containerID)
-{
-    // At this point, the configs are all gathered and should be unique to each SC instance
-    // so we create a copy and pass along ownership.
-    std::unique_ptr<SoftwareContainerConfig> config =
-        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(m_containerConfig));
-
-    auto container = SoftwareContainerPtr(new SoftwareContainer(containerID,
-                                                                std::move(config)));
-    log_debug() << "Created container with ID :" << containerID;
-
-    return container;
-}
-
 ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 {
     profilepoint("createContainerStart");
     profilefunction("createContainerFunction");
 
+    // Set options for this container
+    std::unique_ptr<SoftwareContainerConfig> containerConfig =
+        std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(m_containerConfig));
     ContainerConfigParser::ContainerOptions options = m_configParser.parse(config);
-    m_containerConfig.setEnableWriteBuffer(options.enableWriteBuffer);
+    containerConfig->setEnableWriteBuffer(options.enableWriteBuffer);
 
-    std::pair<ContainerID, SoftwareContainerPtr> pair = std::move(getContainerPair());
+    // Get an ID and create the container
+    ContainerID containerID = findSuitableId();
+    auto container = SoftwareContainerPtr(new SoftwareContainer(containerID,
+                                                                std::move(containerConfig)));
+    log_debug() << "Created container with ID :" << containerID;
 
-    ContainerID containerID = pair.first;
-
-    if (isError(pair.second->init())) {
+    container->setMainLoopContext(m_mainLoopContext);
+    if (isError(container->init())) {
         std::string errorMessage("Could not init the container" + std::to_string(containerID));
         log_error() << errorMessage;
         throw SoftwareContainerError(errorMessage);
     }
 
-    m_containers.insert(std::move(pair));
-
+    m_containers[containerID] = container;
     return containerID;
-}
-
-std::pair<ContainerID, SoftwareContainerAgent::SoftwareContainerPtr> SoftwareContainerAgent::getContainerPair()
-{
-    ContainerID availableID = findSuitableId();
-    auto container = std::move(makeSoftwareContainer(availableID));
-    return std::make_pair(availableID, std::move(container));
 }
 
 pid_t SoftwareContainerAgent::execute(ContainerID containerID,
