@@ -112,14 +112,13 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
 TEST_F(SoftwareContainerApp, DoubleIDCreatesError) {
     const ContainerID id = 1;
 
-    auto config = createConfig();
-    SoftwareContainer s1(id, std::move(config));
-
-    config = createConfig();
-    SoftwareContainer s2(id, std::move(config));
-
-    ASSERT_TRUE(isSuccess(s1.init()));
-    ASSERT_TRUE(isError(s2.init()));
+    // Containers need to be created in the same scope since they will
+    // shut down and "release" their ID when the object is destroyed
+    // when it goes out of scope.
+    ASSERT_THROW({
+        SoftwareContainer s1(id, createConfig());
+        SoftwareContainer s2(id, createConfig());
+    }, SoftwareContainerError);
 }
 
 TEST_F(SoftwareContainerApp, EnvVarsSet) {
@@ -469,37 +468,6 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
     }
 }
 
-
-TEST_F(SoftwareContainerApp, MultithreadTest) {
-
-    static const int TIMEOUT = 20;
-    static const ContainerID containerID = 1;
-
-    auto config = createConfig();
-    SoftwareContainer lib(containerID, std::move(config));
-
-    bool finished = false;
-
-    auto f = [&]() {
-        log_info() << "Initializing";
-        lib.init();
-        finished = true;
-    };
-
-    std::thread t(f);
-
-    for (int i = 0; (i < TIMEOUT) && !finished; i++) {
-        log_info() << "Waiting for softwarecontainer to be initialized";
-        sleep(1);
-    }
-
-    ASSERT_TRUE(finished);
-
-    if (finished) {
-        t.join();
-    }
-
-}
 
 TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
 

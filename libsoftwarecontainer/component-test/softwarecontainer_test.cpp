@@ -72,7 +72,6 @@ void SoftwareContainerTest::SetUp()
     uint32_t containerId =  rand() % 100;
 
     m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(containerId, std::move(config)));
-    ASSERT_TRUE(isSuccess(m_sc->init()));
 }
 
 void SoftwareContainerTest::TearDown()

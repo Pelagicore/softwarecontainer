@@ -169,12 +169,6 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
                                                                 std::move(containerConfig)));
     log_debug() << "Created container with ID :" << containerID;
 
-    if (isError(container->init())) {
-        std::string errorMessage("Could not init the container" + std::to_string(containerID));
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
-
     m_containers[containerID] = container;
     return containerID;
 }
