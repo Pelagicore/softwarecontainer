@@ -49,7 +49,13 @@ public:
     std::unique_ptr<SoftwareContainer> m_sc;
 
     std::unique_ptr<SoftwareContainerConfig> createConfig();
-    std::string getTempPath(bool directory, bool shouldUnlink);
+    std::string getTempPath(bool directory);
+    std::string createTempFile(const std::string &prefix = "");
+    std::string createTempDir(const std::string &prefix = "");
+
+private:
+    std::vector<std::string> filesToRemove;
+    std::vector<std::string> dirsToRemove;
 };
 
 class SoftwareContainerGatewayTest : public SoftwareContainerTest

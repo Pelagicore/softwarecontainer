@@ -136,9 +136,7 @@ static constexpr int NON_EXISTENT = 0;
 
 TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
-    bool directory = false;
-    bool shouldUnlink = false;
-    std::string tempFilename1 = getTempPath(directory, shouldUnlink);
+    std::string tempFilename1 = createTempFile();
 
     // They will be mapped to these files, which should not yet exist
     std::string containerPath1 = "/tmp/testFile1";
@@ -188,16 +186,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     std::string readBack = "";
     readFromFile(tempFilename1, readBack);
     ASSERT_EQ(readBack, testData);
-
-    // Remove the temp files
-    ASSERT_EQ(unlink(tempFilename1.c_str()), 0);
 }
 
 TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
 
-    bool directory = false;
-    bool shouldUnlink = false;
-    std::string tempFilename1 = getTempPath(directory, shouldUnlink);
+    std::string tempFilename1 = createTempFile();
 
     // They will be mapped to these files
     std::string containerPath1 = "/tmp/testFile1";
@@ -246,9 +239,6 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     std::string readBack = "";
     readFromFile(tempFilename1, readBack);
     ASSERT_EQ(newData, readBack);
-
-    // Let's remove the temp files also
-    ASSERT_EQ(unlink(tempFilename1.c_str()), 0);
 }
 
 /**
@@ -256,8 +246,7 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
  */
 TEST_F(SoftwareContainerApp, TestFileMounting) {
 
-    char tempFilename[] = "/tmp/blablaXXXXXX";
-    ASSERT_NE(mkstemp(tempFilename), -1);
+    std::string tempFilename = createTempFile();
 
     std::string content = "GFDGDFHDHRWG";
     writeToFile(tempFilename, content);
@@ -282,14 +271,11 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
  */
 TEST_F(SoftwareContainerApp, TestDoubleMounting) {
 
-    char tempFilename[] = "/tmp/blablaXXXXXX";
-    int fileDescriptor = mkstemp(tempFilename);
-    ASSERT_NE(fileDescriptor, -1);
+    std::string tempFilename = createTempFile();
 
     // create a temporary file with some content
-    const char *content = "GFDGDFHDHRWG";
-    write(fileDescriptor, content, sizeof(content));
-    close(fileDescriptor);
+    std::string content = "GFDGDFHDHRWG";
+    writeToFile(tempFilename, content);
 
     // Make sure that the file is not already in the container
     auto job = getSc().createFunctionJob([&] () {
@@ -318,8 +304,7 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
  */
 TEST_F(SoftwareContainerApp, TestMountingOverRoot) {
 
-    char tempDirname[] = "/tmp/blablaXXXXXX";
-    mkdtemp(tempDirname);
+    std::string tempDirname = createTempDir();
     ASSERT_TRUE(isDirectory(tempDirname));
 
     ASSERT_TRUE(isError(bindMountInContainer(tempDirname, "/", false)));
@@ -331,9 +316,7 @@ TEST_F(SoftwareContainerApp, TestMountingOverRoot) {
  */
 TEST_F(SoftwareContainerApp, TestFolderMounting) {
 
-    char tempDirname[] = "/tmp/blablaXXXXXX";
-    mkdtemp(tempDirname);
-    ASSERT_TRUE(isDirectory(tempDirname));
+    std::string tempDirname = createTempDir();
 
     auto job1 = getSc().createFunctionJob([&] () {
         return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
@@ -345,9 +328,9 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
 
     job1->start();
     ASSERT_EQ(job1->wait(), EXISTENT);
-    //
+
     // Test that an unexisting path is created when you mount to it
-    const char *longUnexistingPath = "/var/apa/bepa/cepa";
+    std::string longUnexistingPath = "/var/apa/bepa/cepa";
     ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, longUnexistingPath, false)));
     auto job2 = getSc().createFunctionJob([&] () {
         return isDirectory(longUnexistingPath) ? EXISTENT : NON_EXISTENT;
@@ -356,12 +339,10 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     ASSERT_EQ(job2->wait(), EXISTENT);
 
     // Write some data to a file inside the directory
-    char *tempFilename = strcat(tempDirname, "/bluhuXXXXXX");
+    std::string tempFilename = createTempFile(tempDirname);
     std::string content = "GFDGDFHDHRWG";
-    ASSERT_NE(mkstemp(tempFilename), -1);
 
     writeToFile(tempFilename, content);
-    ASSERT_TRUE(isFile(tempFilename));
 
     auto job3 = getSc().createFunctionJob([&] () {
         return isFile(std::string(tempFilename)) ? EXISTENT : NON_EXISTENT;
@@ -378,16 +359,11 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
  */
 TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
-    char tempDirname[] = "/tmp/blablaXXXXXX";
-    ASSERT_FALSE(mkdtemp(tempDirname) == NULL);
+    std::string tempDirname = createTempDir();
 
-    ASSERT_TRUE(isDirectory(tempDirname));
     ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, tempDirname, false)));
 
-    char *tmp = new char[strlen(tempDirname) + 8];
-    strcpy(tmp, tempDirname);
-
-    char *tempUnixSocket = strcat(tmp, "/socket");
+    const char *tempUnixSocket = buildPath(tempDirname, "/socket").c_str();
 
     auto job1 = getSc().createFunctionJob([&] () {
 
@@ -442,12 +418,8 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
             _exit(NON_EXISTENT);
         }
 
-        char *x = new char[strlen(tempDirname) + 8];
-        strcpy(x, tempDirname);
-        strcat(x, "/socket");
-
         remote.sun_family = AF_UNIX;
-        strcpy(remote.sun_path, x);
+        strcpy(remote.sun_path, tempUnixSocket);
         len = strlen(remote.sun_path) + sizeof(remote.sun_family);
         if (connect(s, (struct sockaddr *)&remote, len) == -1) {
             _exit(NON_EXISTENT);

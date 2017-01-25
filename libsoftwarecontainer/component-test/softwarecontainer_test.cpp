@@ -37,12 +37,12 @@ void SoftwareContainerTest::exit()
     m_ml->quit();
 }
 
-/* 
+/*
  * Set up the workspace with all the config values it needs.
- */ 
+ */
 std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
 {
-    std::unique_ptr<SoftwareContainerConfig> config = 
+    std::unique_ptr<SoftwareContainerConfig> config =
         std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(
 #ifdef ENABLE_NETWORKGATEWAY
         // Setup network stuff
@@ -57,7 +57,7 @@ std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
         SHARED_MOUNTS_DIR_TESTING, // Should be set be CMake
         1 // timeout
     ));
-    
+
     config->setEnableWriteBuffer(false);
     return config;
 }
@@ -78,29 +78,70 @@ void SoftwareContainerTest::TearDown()
 {
     ::testing::Test::TearDown();
     m_sc.reset();
+
+    for (auto &file: filesToRemove) {
+        unlink(file.c_str());
+    }
+    filesToRemove.clear();
+
+    for (auto &dir: dirsToRemove) {
+        rmdir(dir.c_str());
+    }
+    dirsToRemove.clear();
+}
+
+std::string SoftwareContainerTest::createTempFile(const std::string &prefix)
+{
+    std::string strWithPrefix(prefix + "/tmp/SC-tmpFileXXXXXX");
+    size_t n = strWithPrefix.size() + 1;
+    char *fileTemplate = new char[n];
+    strncpy(fileTemplate, strWithPrefix.c_str(), n);
+
+    int fd = 0;
+    fd = mkstemp(fileTemplate);
+    close(fd);
+
+    std::string filename(fileTemplate);
+    delete[] fileTemplate;
+
+    filesToRemove.push_back(filename);
+    return filename;
+}
+
+std::string SoftwareContainerTest::createTempDir(const std::string &prefix)
+{
+    std::string strWithPrefix(prefix + "/tmp/SC-tmpDirXXXXXX");
+    size_t n = strWithPrefix.size() + 1;
+    char *dirTemplate = new char[n];
+    strncpy(dirTemplate, strWithPrefix.c_str(), n);
+
+    mkdtemp(dirTemplate);
+
+    std::string dirname(dirTemplate);
+    delete[] dirTemplate;
+
+    dirsToRemove.push_back(dirname);
+    return dirname;
 }
 
 /*
  * Create a temporary directory or file, and optionally remove it.
  * Removal is useful if one only wants a unique tmp name
  */
-std::string SoftwareContainerTest::getTempPath(bool directory, bool shouldUnlink)
+std::string SoftwareContainerTest::getTempPath(bool directory)
 {
-    char fileTemplate[] = "/tmp/SC-tmpXXXXXX";
-    int fd = 0;
+    std::string name;
 
     if (directory) {
-        mkdtemp(fileTemplate);
-        if (shouldUnlink) {
-            rmdir(fileTemplate);
-        }
+        name = createTempDir();
+        dirsToRemove.pop_back();
+        rmdir(name.c_str());
+
     } else {
-        fd = mkstemp(fileTemplate);
-        close(fd);
-        if (shouldUnlink) {
-            unlink(fileTemplate);
-        }
+        name = createTempFile();
+        unlink(name.c_str());
+        filesToRemove.pop_back();
     }
 
-    return std::string(fileTemplate);
+    return name;
 }
