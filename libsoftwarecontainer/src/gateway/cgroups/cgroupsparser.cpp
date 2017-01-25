@@ -21,6 +21,8 @@
 #include "cgroupsgateway.h"
 #include "jsonparser.h"
 
+#include <math.h>
+
 namespace softwarecontainer {
 
 CGroupsParser::CGroupsParser()
