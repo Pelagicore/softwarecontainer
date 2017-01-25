@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-bfeccbf 2017-01-25</span>
+   &#160;<span id="projectnumber">0.17.0-32e0fe0 2017-01-25</span>
    </div>
   </td>
  </tr>
@@ -90,102 +90,104 @@ $(document).ready(function(){initNavTree('cgroupsparser_8cpp_source.html','');})
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;cgroupsgateway.h&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;jsonparser.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;math.h&gt;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;CGroupsParser::CGroupsParser()</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    : m_settings()</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;std::string CGroupsParser::convertToBytes(<span class="keyword">const</span> std::string settingValue, <span class="keyword">const</span> <span class="keywordtype">int</span> multiply)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">char</span> *end;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">long</span> limit_in_bytes = std::strtoll(settingValue.c_str(), &amp;end, 10);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">if</span> (limit_in_bytes ==  std::numeric_limits&lt;long long&gt;::max() ||</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        limit_in_bytes ==  std::numeric_limits&lt;long long&gt;::min()) {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">if</span> (errno == ERANGE) {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            std::string errMessage = settingValue + <span class="stringliteral">&quot; is out of range&quot;</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            log_error() &lt;&lt; errMessage;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">throw</span> LimitRangeError(errMessage);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">if</span> (limit_in_bytes &gt; llrint(std::numeric_limits&lt;long long&gt;::max() / multiply)) {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        std::string errMessage = settingValue + <span class="stringliteral">&quot; * &quot;</span> + std::to_string(multiply) + <span class="stringliteral">&quot; is out of range&quot;</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        log_error() &lt;&lt; errMessage;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">throw</span> LimitRangeError(errMessage);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    limit_in_bytes *= multiply;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">return</span> std::to_string(limit_in_bytes);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;std::string CGroupsParser::suffixCorrection(<span class="keyword">const</span> std::string settingValue)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;{</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">auto</span> suffix = settingValue.back();</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::string removeUnit = settingValue;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    removeUnit.pop_back();</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">if</span> (std::isdigit(suffix)) {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">//the value is digit already no need to do anything</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> settingValue;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="charliteral">&#39;K&#39;</span> == suffix || <span class="charliteral">&#39;k&#39;</span> == suffix) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="comment">//the value is Kilobyte unit convert it to byte</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">int</span> KB = 1024;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">return</span> convertToBytes(removeUnit, KB);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="charliteral">&#39;M&#39;</span> == suffix || <span class="charliteral">&#39;m&#39;</span> == suffix) {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="comment">//the value is Megabyte unit convert it to byte</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">int</span> MB = 1024 * 1024;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> convertToBytes(removeUnit, MB);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="charliteral">&#39;G&#39;</span> == suffix || <span class="charliteral">&#39;g&#39;</span> == suffix) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="comment">//the value is Gigabyte unit convert it to byte</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">int</span> GB = 1024 * 1024 * 1024;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">return</span> convertToBytes(removeUnit, GB);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    std::string errMessage = <span class="stringliteral">&quot;Bad suffix on setting value &quot;</span> + settingValue;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    log_error() &lt;&lt; errMessage;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">throw</span> BadSuffixError(errMessage);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keywordtype">void</span> CGroupsParser::parseCGroupsGatewayConfiguration(<span class="keyword">const</span> json_t *element)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;{</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    std::string settingKey;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    std::string settingValue;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;setting&quot;</span>, settingKey)) {</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        std::string errMessage = <span class="stringliteral">&quot;Key \&quot;setting\&quot; either not a string or not in json configuration&quot;</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        log_error() &lt;&lt; errMessage;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">throw</span> JSonError(errMessage);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;value&quot;</span>, settingValue)) {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        std::string errMessage = <span class="stringliteral">&quot;Key \&quot;value\&quot; either not a string or not in json configuration&quot;</span>;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        log_error() &lt;&lt; errMessage;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">throw</span> JSonError(errMessage);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordflow">if</span> ((<span class="stringliteral">&quot;memory.limit_in_bytes&quot;</span> == settingKey) || (<span class="stringliteral">&quot;memory.memsw.limit_in_bytes&quot;</span> == settingKey)) {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        settingValue = suffixCorrection(settingValue);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">if</span> (m_settings.count(settingKey)) {</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="comment">// if the new value is greater than old one set is as the value</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">if</span> (std::stoll(m_settings[settingKey]) &lt; std::stoll(settingValue)) {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                m_settings[settingKey] = settingValue;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            }</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            m_settings[settingKey] = settingValue;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        log_warning() &lt;&lt; settingKey &lt;&lt; <span class="stringliteral">&quot; is not supported by CGroups Gateway&quot;</span> ;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        m_settings[settingKey] = settingValue;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;CGroupsParser::getSettings()</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;{</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> m_settings;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;CGroupsParser::CGroupsParser()</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    : m_settings()</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;std::string CGroupsParser::convertToBytes(<span class="keyword">const</span> std::string settingValue, <span class="keyword">const</span> <span class="keywordtype">int</span> multiply)</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">char</span> *end;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">long</span> <span class="keywordtype">long</span> limit_in_bytes = std::strtoll(settingValue.c_str(), &amp;end, 10);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">if</span> (limit_in_bytes ==  std::numeric_limits&lt;long long&gt;::max() ||</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        limit_in_bytes ==  std::numeric_limits&lt;long long&gt;::min()) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">if</span> (errno == ERANGE) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            std::string errMessage = settingValue + <span class="stringliteral">&quot; is out of range&quot;</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            log_error() &lt;&lt; errMessage;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">throw</span> LimitRangeError(errMessage);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">if</span> (limit_in_bytes &gt; llrint(std::numeric_limits&lt;long long&gt;::max() / multiply)) {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::string errMessage = settingValue + <span class="stringliteral">&quot; * &quot;</span> + std::to_string(multiply) + <span class="stringliteral">&quot; is out of range&quot;</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        log_error() &lt;&lt; errMessage;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">throw</span> LimitRangeError(errMessage);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    limit_in_bytes *= multiply;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">return</span> std::to_string(limit_in_bytes);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;std::string CGroupsParser::suffixCorrection(<span class="keyword">const</span> std::string settingValue)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">auto</span> suffix = settingValue.back();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    std::string removeUnit = settingValue;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    removeUnit.pop_back();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">if</span> (std::isdigit(suffix)) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="comment">//the value is digit already no need to do anything</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">return</span> settingValue;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="charliteral">&#39;K&#39;</span> == suffix || <span class="charliteral">&#39;k&#39;</span> == suffix) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="comment">//the value is Kilobyte unit convert it to byte</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">int</span> KB = 1024;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> convertToBytes(removeUnit, KB);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="charliteral">&#39;M&#39;</span> == suffix || <span class="charliteral">&#39;m&#39;</span> == suffix) {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">//the value is Megabyte unit convert it to byte</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">int</span> MB = 1024 * 1024;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> convertToBytes(removeUnit, MB);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="charliteral">&#39;G&#39;</span> == suffix || <span class="charliteral">&#39;g&#39;</span> == suffix) {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="comment">//the value is Gigabyte unit convert it to byte</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">int</span> GB = 1024 * 1024 * 1024;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> convertToBytes(removeUnit, GB);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    std::string errMessage = <span class="stringliteral">&quot;Bad suffix on setting value &quot;</span> + settingValue;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    log_error() &lt;&lt; errMessage;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordflow">throw</span> BadSuffixError(errMessage);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keywordtype">void</span> CGroupsParser::parseCGroupsGatewayConfiguration(<span class="keyword">const</span> json_t *element)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;{</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::string settingKey;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    std::string settingValue;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;setting&quot;</span>, settingKey)) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        std::string errMessage = <span class="stringliteral">&quot;Key \&quot;setting\&quot; either not a string or not in json configuration&quot;</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        log_error() &lt;&lt; errMessage;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">throw</span> JSonError(errMessage);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;value&quot;</span>, settingValue)) {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        std::string errMessage = <span class="stringliteral">&quot;Key \&quot;value\&quot; either not a string or not in json configuration&quot;</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        log_error() &lt;&lt; errMessage;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">throw</span> JSonError(errMessage);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">if</span> ((<span class="stringliteral">&quot;memory.limit_in_bytes&quot;</span> == settingKey) || (<span class="stringliteral">&quot;memory.memsw.limit_in_bytes&quot;</span> == settingKey)) {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        settingValue = suffixCorrection(settingValue);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">if</span> (m_settings.count(settingKey)) {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <span class="comment">// if the new value is greater than old one set is as the value</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">if</span> (std::stoll(m_settings[settingKey]) &lt; std::stoll(settingValue)) {</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                m_settings[settingKey] = settingValue;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            m_settings[settingKey] = settingValue;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        }</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        log_warning() &lt;&lt; settingKey &lt;&lt; <span class="stringliteral">&quot; is not supported by CGroups Gateway&quot;</span> ;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        m_settings[settingKey] = settingValue;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="keyword">const</span> std::map&lt;std::string, std::string&gt; &amp;CGroupsParser::getSettings()</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;{</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">return</span> m_settings;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00051">jsonparser.cpp:51</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -194,7 +196,7 @@ $(document).ready(function(){initNavTree('cgroupsparser_8cpp_source.html','');})
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_646af10687434ab6c31bea5c882c000e.html">cgroups</a></li><li class="navelem"><b>cgroupsparser.cpp</b></li>
-    <li class="footer">Generated on Wed Jan 25 2017 06:59:41 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 25 2017 09:49:56 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
