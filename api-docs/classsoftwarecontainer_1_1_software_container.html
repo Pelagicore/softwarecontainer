@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-32e0fe0 2017-01-25</span>
+   &#160;<span id="projectnumber">0.17.0-603a507 2017-01-25</span>
    </div>
   </td>
  </tr>
@@ -74,11 +74,6 @@ $(document).ready(function(){initNavTree('classsoftwarecontainer_1_1_software_co
 <div class="title">softwarecontainer::SoftwareContainer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>An abstraction of concrete container implementations.  
- <a href="classsoftwarecontainer_1_1_software_container.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for softwarecontainer::SoftwareContainer:</div>
 <div class="dyncontent">
@@ -97,37 +92,30 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8cc232907b449ebad4af8da60d29fc4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8cc232907b449ebad4af8da60d29fc4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>LOG_DECLARE_CLASS_CONTEXT</b> (&quot;PCL&quot;,&quot;<a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> library&quot;)</td></tr>
 <tr class="separator:ad8cc232907b449ebad4af8da60d29fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6141f7e59438e4f1dce565f3826a81f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6141f7e59438e4f1dce565f3826a81f0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SoftwareContainer</b> (const ContainerID id, std::unique_ptr&lt; const <a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a> &gt; config)</td></tr>
+<tr class="memitem:a6141f7e59438e4f1dce565f3826a81f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a6141f7e59438e4f1dce565f3826a81f0">SoftwareContainer</a> (const ContainerID id, std::unique_ptr&lt; const <a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a> &gt; config)</td></tr>
+<tr class="memdesc:a6141f7e59438e4f1dce565f3826a81f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> instance.  <a href="#a6141f7e59438e4f1dce565f3826a81f0">More...</a><br /></td></tr>
 <tr class="separator:a6141f7e59438e4f1dce565f3826a81f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac20c6d0cd340297ed80ae5684d9d64d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#ac20c6d0cd340297ed80ae5684d9d64d3">startGateways</a> (const <a class="el" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;configs)</td></tr>
+<tr class="memdesc:ac20c6d0cd340297ed80ae5684d9d64d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the Gateways by setting the gateway configurations and activating the configured gateway.  <a href="#ac20c6d0cd340297ed80ae5684d9d64d3">More...</a><br /></td></tr>
+<tr class="separator:ac20c6d0cd340297ed80ae5684d9d64d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_function_job.html">FunctionJob</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a47be9e4b2c49aedf67cd23404c9d4eee">createFunctionJob</a> (const std::function&lt; int()&gt; fun)</td></tr>
+<tr class="memdesc:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a job that can run a function in a container.  <a href="#a47be9e4b2c49aedf67cd23404c9d4eee">More...</a><br /></td></tr>
+<tr class="separator:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a911b62ba4d9307275f59698d2ae69467"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a911b62ba4d9307275f59698d2ae69467">createCommandJob</a> (const std::string &amp;command)</td></tr>
+<tr class="memdesc:a911b62ba4d9307275f59698d2ae69467"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a job that can run a command in a container.  <a href="#a911b62ba4d9307275f59698d2ae69467">More...</a><br /></td></tr>
+<tr class="separator:a911b62ba4d9307275f59698d2ae69467"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a> ()</td></tr>
-<tr class="memdesc:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shutdown the container.  <a href="#ab7f458bb2d29ef1a99c3aae09188a0d4">More...</a><br /></td></tr>
+<tr class="memdesc:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shut down the container.  <a href="#ab7f458bb2d29ef1a99c3aae09188a0d4">More...</a><br /></td></tr>
 <tr class="separator:ab7f458bb2d29ef1a99c3aae09188a0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed9c303ecb97a102ab5957b913bda721"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed9c303ecb97a102ab5957b913bda721"></a>
 <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>shutdown</b> (unsigned int timeout)</td></tr>
 <tr class="separator:aed9c303ecb97a102ab5957b913bda721"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae46b4cd3f7b831cf445a45624842a0df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae46b4cd3f7b831cf445a45624842a0df"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>suspend</b> ()</td></tr>
+<tr class="memitem:ae46b4cd3f7b831cf445a45624842a0df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#ae46b4cd3f7b831cf445a45624842a0df">suspend</a> ()</td></tr>
+<tr class="memdesc:ae46b4cd3f7b831cf445a45624842a0df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspend the container.  <a href="#ae46b4cd3f7b831cf445a45624842a0df">More...</a><br /></td></tr>
 <tr class="separator:ae46b4cd3f7b831cf445a45624842a0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9975f8b2714301b79b2e290adc252bef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9975f8b2714301b79b2e290adc252bef"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resume</b> ()</td></tr>
+<tr class="memitem:a9975f8b2714301b79b2e290adc252bef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a9975f8b2714301b79b2e290adc252bef">resume</a> ()</td></tr>
+<tr class="memdesc:a9975f8b2714301b79b2e290adc252bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resume a suspended container.  <a href="#a9975f8b2714301b79b2e290adc252bef">More...</a><br /></td></tr>
 <tr class="separator:a9975f8b2714301b79b2e290adc252bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9483d1d07e84b77820498eba3e7b284"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9483d1d07e84b77820498eba3e7b284"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addGateway</b> (<a class="el" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a> *gateway)</td></tr>
-<tr class="separator:ac9483d1d07e84b77820498eba3e7b284"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f43e70e787d3b56baf1d6e863282820"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f43e70e787d3b56baf1d6e863282820"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
-<tr class="separator:a1f43e70e787d3b56baf1d6e863282820"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88d21d398c782cd7715b8f17307a14b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88d21d398c782cd7715b8f17307a14b2"></a>
-std::shared_ptr<br class="typebreak" />
-&lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainer</b> ()</td></tr>
-<tr class="separator:a88d21d398c782cd7715b8f17307a14b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47be9e4b2c49aedf67cd23404c9d4eee"></a>
-std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_function_job.html">FunctionJob</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createFunctionJob</b> (const std::function&lt; int()&gt; fun)</td></tr>
-<tr class="separator:a47be9e4b2c49aedf67cd23404c9d4eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a911b62ba4d9307275f59698d2ae69467"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a911b62ba4d9307275f59698d2ae69467"></a>
-std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createCommandJob</b> (const std::string &amp;command)</td></tr>
-<tr class="separator:a911b62ba4d9307275f59698d2ae69467"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe11b13492ae3abde2ca4f8e001a8a6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe11b13492ae3abde2ca4f8e001a8a6d"></a>
 <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>bindMount</b> (const std::string &amp;pathOnHost, const std::string &amp;pathInContainer, bool readonly=true)</td></tr>
 <tr class="separator:afe11b13492ae3abde2ca4f8e001a8a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,9 +123,13 @@ std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_command_job.h
 <a class="el" href="class_observable_property.html">ObservableProperty</a><br class="typebreak" />
 &lt; ContainerState &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainerState</b> ()</td></tr>
 <tr class="separator:a25cb629242d33c12d2f3468bbd34964a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac20c6d0cd340297ed80ae5684d9d64d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#ac20c6d0cd340297ed80ae5684d9d64d3">startGateways</a> (const <a class="el" href="classsoftwarecontainer_1_1_gateway_configuration.html">GatewayConfiguration</a> &amp;configs)</td></tr>
-<tr class="memdesc:ac20c6d0cd340297ed80ae5684d9d64d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the Gateways by setting the gateway configurations and activating the configured gateway.  <a href="#ac20c6d0cd340297ed80ae5684d9d64d3">More...</a><br /></td></tr>
-<tr class="separator:ac20c6d0cd340297ed80ae5684d9d64d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88d21d398c782cd7715b8f17307a14b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88d21d398c782cd7715b8f17307a14b2"></a>
+std::shared_ptr<br class="typebreak" />
+&lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getContainer</b> ()</td></tr>
+<tr class="separator:a88d21d398c782cd7715b8f17307a14b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9483d1d07e84b77820498eba3e7b284"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#ac9483d1d07e84b77820498eba3e7b284">addGateway</a> (<a class="el" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a> *gateway)</td></tr>
+<tr class="memdesc:ac9483d1d07e84b77820498eba3e7b284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only used for testing, should not be used by e.g.  <a href="#ac9483d1d07e84b77820498eba3e7b284">More...</a><br /></td></tr>
+<tr class="separator:ac9483d1d07e84b77820498eba3e7b284"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -179,33 +171,87 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a415851aff0b78df32945ae503b6847df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>An abstraction of concrete container implementations. </p>
-
-<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00052">52</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab7f458bb2d29ef1a99c3aae09188a0d4"></a>
+<div class="textblock">
+<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00046">46</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a6141f7e59438e4f1dce565f3826a81f0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::SoftwareContainer::shutdown </td>
+          <td class="memname">softwarecontainer::SoftwareContainer::SoftwareContainer </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const ContainerID&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::unique_ptr&lt; const <a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a> &gt;&#160;</td>
+          <td class="paramname"><em>config</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Shutdown the container. </p>
+<p>Creates a new <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The containerID to use. </td></tr>
+    <tr><td class="paramname">config</td><td>An object holding all needed settings for the container</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_software_container_error.html">SoftwareContainerError</a></td><td>If unable to set up the needed directories or network settings for this container, or if anything goes wrong when creating and initializing the underlying container implementation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00253">253</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;{</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_config-&gt;containerShutdownTimeout());</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shutdown the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00253">softwarecontainer.cpp:253</a></div></div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00058">58</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                                                                         :</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    m_containerID(<span class="keywordtype">id</span>),</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    m_config(std::move(config))</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;{</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    checkWorkspace();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#ifdef ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    checkNetworkSettings();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#endif // ENABLE_NETWORKGATEWAY</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    m_container = std::shared_ptr&lt;ContainerAbstractInterface&gt;(</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">new</span> Container(<span class="stringliteral">&quot;SC-&quot;</span> + std::to_string(<span class="keywordtype">id</span>),</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                      m_config-&gt;containerConfigPath(),</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                      m_config-&gt;containerRootDir(),</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                      m_config-&gt;enableWriteBuffer(),</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                      m_config-&gt;containerShutdownTimeout()));</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    m_containerState = ContainerState::CREATED;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(init())) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(<span class="stringliteral">&quot;Could not initialize SoftwareContainer, container ID: &quot;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                     + std::to_string(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 </div><!-- fragment -->
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_a6141f7e59438e4f1dce565f3826a81f0_cgraph.svg" width="383" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
+</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ac20c6d0cd340297ed80ae5684d9d64d3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -223,26 +269,26 @@ Private Attributes</h2></td></tr>
 <p>Starts the Gateways by setting the gateway configurations and activating the configured gateway. </p>
 <dl class="section return"><dt>Returns</dt><dd>ReturnCode::FAILURE if configuration or activation failed </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00166">166</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00171">171</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
 <p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;{</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    result = configureGateways(gwConfig);</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    }</div>
+<div class="fragment"><div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;{</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    result = activateGateways();</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    result = configureGateways(gwConfig);</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    }</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;}</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    result = activateGateways();</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00049">softwarecontainer-common.h:49</a></div></div>
 </div><!-- fragment -->
@@ -250,6 +296,165 @@ Private Attributes</h2></td></tr>
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_ac20c6d0cd340297ed80ae5684d9d64d3_cgraph.svg" width="415" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+</p>
+
+</div>
+</div>
+<a class="anchor" id="a47be9e4b2c49aedf67cd23404c9d4eee"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_function_job.html">FunctionJob</a> &gt; softwarecontainer::SoftwareContainer::createFunctionJob </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; int()&gt;&#160;</td>
+          <td class="paramname"><em>fun</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a job that can run a function in a container. </p>
+
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00328">328</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;{</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keyword">auto</span> containerInterface = getContainer();</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;FunctionJob&gt;(containerInterface, fun);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a911b62ba4d9307275f59698d2ae69467"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a> &gt; softwarecontainer::SoftwareContainer::createCommandJob </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>command</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a job that can run a command in a container. </p>
+
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00334">334</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;{</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keyword">auto</span> containerInterface = getContainer();</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;CommandJob&gt;(containerInterface, command);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="ab7f458bb2d29ef1a99c3aae09188a0d4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::SoftwareContainer::shutdown </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Shut down the container. </p>
+
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00258">258</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;{</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_config-&gt;containerShutdownTimeout());</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shut down the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00258">softwarecontainer.cpp:258</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="ae46b4cd3f7b831cf445a45624842a0df"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::SoftwareContainer::suspend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Suspend the container. </p>
+<p>This suspends any execution inside the container until resume is called.</p>
+<dl class="section return"><dt>Returns</dt><dd>ReturnCode::FAILURE if the container was already suspended </dd>
+<dd>
+ReturnCode::SUCCESS if the container was successfully suspended </dd></dl>
+
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00279">279</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;{</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keywordflow">return</span> m_container-&gt;suspend();</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a9975f8b2714301b79b2e290adc252bef"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::SoftwareContainer::resume </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resume a suspended container. </p>
+<p>This resumes execution of a container that was suspended.</p>
+<dl class="section return"><dt>Returns</dt><dd>ReturnCode::FAILURE if the container was not suspended </dd>
+<dd>
+ReturnCode::SUCCESS if the container was successfully resumed </dd></dl>
+
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00284">284</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;{</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keywordflow">return</span> m_container-&gt;resume();</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="ac9483d1d07e84b77820498eba3e7b284"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void softwarecontainer::SoftwareContainer::addGateway </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classsoftwarecontainer_1_1_gateway.html">Gateway</a> *&#160;</td>
+          <td class="paramname"><em>gateway</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Only used for testing, should not be used by e.g. </p>
+<p>the launcher</p>
+<p>TODO: Remove or change scope of this method if possible. </p>
+
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00165">165</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+
+<p>References <a class="el" href="gateway_8cpp_source.html#l00130">softwarecontainer::Gateway::setContainer()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;{</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    gateway-&gt;setContainer(m_container);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    m_gateways.push_back(std::move(std::unique_ptr&lt;Gateway&gt;(gateway)));</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;}</div>
+</div><!-- fragment -->
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_ac9483d1d07e84b77820498eba3e7b284_cgraph.svg" width="426" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -266,7 +471,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a></li>
-    <li class="footer">Generated on Wed Jan 25 2017 09:49:58 for softwarecontainer by
+    <li class="footer">Generated on Wed Jan 25 2017 13:44:15 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

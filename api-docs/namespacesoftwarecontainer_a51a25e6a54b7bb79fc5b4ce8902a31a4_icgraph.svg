@@ -11,9 +11,9 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-1406 680,-1406 680,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<polygon fill="#bfbfbf" stroke="black" points="0,-722.5 0,-752.5 100,-752.5 100,-722.5 0,-722.5"/>
-<text text-anchor="start" x="8" y="-740.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="50" y="-729.5" font-family="Helvetica,sans-Serif" font-size="10.00">isError</text>
+<polygon fill="#bfbfbf" stroke="black" points="0,-738.5 0,-768.5 100,-768.5 100,-738.5 0,-738.5"/>
+<text text-anchor="start" x="8" y="-756.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="50" y="-745.5" font-family="Helvetica,sans-Serif" font-size="10.00">isError</text>
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
@@ -26,8 +26,8 @@
 </g>
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge"><title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M51.0417,-762.907C51.7166,-867.529 59.3708,-1263.86 136,-1356.5 143.587,-1365.67 154.083,-1372.05 165.214,-1376.49"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="54.5405,-762.645 50.9927,-752.662 47.5406,-762.678 54.5405,-762.645"/>
+<path fill="none" stroke="midnightblue" d="M51.1413,-778.589C52.2141,-881.032 61.2346,-1266.44 136,-1356.5 143.603,-1365.66 154.107,-1372.03 165.239,-1376.47"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="54.6409,-778.515 51.0529,-768.546 47.6411,-778.576 54.6409,-778.515"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
@@ -40,8 +40,8 @@
 </g>
 <!-- Node1&#45;&gt;Node3 -->
 <g id="edge2" class="edge"><title>Node1&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M50.9186,-762.818C51.1342,-864.498 57.3064,-1241.6 136,-1323.5 143.561,-1331.37 265.327,-1352.19 351.638,-1366.11"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="54.4187,-762.574 50.916,-752.575 47.4187,-762.576 54.4187,-762.574"/>
+<path fill="none" stroke="midnightblue" d="M51.0322,-778.784C51.7,-878.658 59.4189,-1244.12 136,-1323.5 143.577,-1331.35 265.339,-1352.18 351.644,-1366.1"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="54.5318,-778.684 50.9836,-768.701 47.5319,-778.718 54.5318,-778.684"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
@@ -55,8 +55,8 @@
 </g>
 <!-- Node1&#45;&gt;Node4 -->
 <g id="edge3" class="edge"><title>Node1&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M53.1025,-762.909C60.2173,-843.232 85.7964,-1089.87 136,-1149.5 143.485,-1158.39 153.532,-1165.04 164.178,-1170"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="56.5696,-762.377 52.2204,-752.716 49.5956,-762.98 56.5696,-762.377"/>
+<path fill="none" stroke="midnightblue" d="M53.3359,-778.93C60.9908,-857.183 87.6439,-1092.53 136,-1149.5 143.521,-1158.36 153.583,-1164.99 164.234,-1169.95"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="56.7807,-778.186 52.344,-768.565 49.8126,-778.852 56.7807,-778.186"/>
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
@@ -69,198 +69,183 @@
 </g>
 <!-- Node1&#45;&gt;Node5 -->
 <g id="edge4" class="edge"><title>Node1&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M53.3355,-762.538C60.6111,-834.455 85.4681,-1039.02 136,-1078.5 213.705,-1139.21 340.173,-1102.93 401.463,-1079.57"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="56.8154,-762.161 52.3529,-752.551 49.849,-762.846 56.8154,-762.161"/>
+<path fill="none" stroke="midnightblue" d="M53.6848,-778.747C61.6756,-848.522 87.7994,-1041.28 136,-1078.5 213.846,-1138.6 339.687,-1102.88 401.047,-1079.66"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="57.1453,-778.197 52.5574,-768.647 50.1885,-778.974 57.1453,-778.197"/>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node"><title>Node6</title>
 <g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#abaaa3af391069f8b624edd0c066eb958" target="_top" xlink:title="Bring the given interface up. ">
-<polygon fill="white" stroke="black" points="568,-1077.5 568,-1107.5 668,-1107.5 668,-1077.5 568,-1077.5"/>
-<text text-anchor="start" x="576" y="-1095.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="618" y="-1084.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::linkUp</text>
+<polygon fill="white" stroke="black" points="568,-1081.5 568,-1111.5 668,-1111.5 668,-1081.5 568,-1081.5"/>
+<text text-anchor="start" x="576" y="-1099.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="618" y="-1088.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::linkUp</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node6 -->
-<g id="edge27" class="edge"><title>Node1&#45;&gt;Node6</title>
-<path fill="none" stroke="midnightblue" d="M52.809,-762.668C58.8623,-838.917 81.2018,-1064.84 136,-1108.5 201.428,-1160.63 458.81,-1121.42 567.81,-1101.86"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="56.287,-762.246 52.0321,-752.543 49.3076,-762.782 56.287,-762.246"/>
+<g id="edge26" class="edge"><title>Node1&#45;&gt;Node6</title>
+<path fill="none" stroke="midnightblue" d="M53.1201,-779.046C59.8726,-853.418 83.5851,-1067.15 136,-1108.5 201.666,-1160.3 458.914,-1123.72 567.844,-1105.33"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="56.5761,-778.391 52.2127,-768.736 49.6031,-779.004 56.5761,-778.391"/>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node"><title>Node7</title>
 <g id="a_node7"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a07b353cd40aeffd94d9fb03d9cdd1119" target="_top" xlink:title="Check that the device given is a network bridge. ">
-<polygon fill="white" stroke="black" points="568,-1020.5 568,-1050.5 668,-1050.5 668,-1020.5 568,-1020.5"/>
-<text text-anchor="start" x="576" y="-1038.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="618" y="-1027.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::findLink</text>
+<polygon fill="white" stroke="black" points="568,-1016.5 568,-1046.5 668,-1046.5 668,-1016.5 568,-1016.5"/>
+<text text-anchor="start" x="576" y="-1034.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="618" y="-1023.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::findLink</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node7 -->
-<g id="edge16" class="edge"><title>Node1&#45;&gt;Node7</title>
-<path fill="none" stroke="midnightblue" d="M53.2475,-762.679C58.7047,-807.481 76.9185,-900.546 136,-945.5 205.098,-998.076 440.554,-967.509 524,-991.5 547.689,-998.311 572.863,-1010.56 591.038,-1020.41"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="56.7152,-762.193 52.1421,-752.636 49.7572,-762.958 56.7152,-762.193"/>
+<g id="edge15" class="edge"><title>Node1&#45;&gt;Node7</title>
+<path fill="none" stroke="midnightblue" d="M54.6474,-778.567C62.0346,-819.511 82.8417,-900.112 136,-939.5 205.897,-991.29 440.152,-968.321 524,-991.5 546.023,-997.588 569.661,-1007.81 587.595,-1016.39"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="58.0814,-777.882 52.975,-768.599 51.1779,-779.04 58.0814,-777.882"/>
 </g>
 <!-- Node8 -->
 <g id="node8" class="node"><title>Node8</title>
 <g id="a_node8"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#aec31c67231b12f8a1702054e13029cbb" target="_top" xlink:title="Get all addresses associated with the given interface index. ">
-<polygon fill="white" stroke="black" points="560,-955.5 560,-985.5 676,-985.5 676,-955.5 560,-955.5"/>
-<text text-anchor="start" x="568" y="-973.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="618" y="-962.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::findAddresses</text>
+<polygon fill="white" stroke="black" points="560,-942.5 560,-972.5 676,-972.5 676,-942.5 560,-942.5"/>
+<text text-anchor="start" x="568" y="-960.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="618" y="-949.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::findAddresses</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node8 -->
-<g id="edge15" class="edge"><title>Node1&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M55.171,-762.647C63.1721,-802.181 84.6715,-878.109 136,-914.5 206.768,-964.674 437.923,-946.716 524,-957.5 535.647,-958.959 548.099,-960.626 559.982,-962.268"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="58.5964,-761.924 53.2981,-752.749 51.7184,-763.225 58.5964,-761.924"/>
+<g id="edge14" class="edge"><title>Node1&#45;&gt;Node8</title>
+<path fill="none" stroke="midnightblue" d="M57.2715,-778.654C67.411,-813.554 90.9766,-875.725 136,-905.5 204.307,-950.674 447.636,-957.199 559.719,-957.744"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="60.5773,-777.475 54.5469,-768.764 53.8288,-779.334 60.5773,-777.475"/>
 </g>
 <!-- Node9 -->
 <g id="node9" class="node"><title>Node9</title>
-<g id="a_node9"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#aa5f19daf29d5fda482e657ac6e8fca5c" target="_top" xlink:title="Create a new container. ">
-<polygon fill="white" stroke="black" points="164.5,-864 164.5,-905 287.5,-905 287.5,-864 164.5,-864"/>
-<text text-anchor="start" x="172.5" y="-893" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="172.5" y="-882" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
-<text text-anchor="middle" x="226" y="-871" font-family="Helvetica,sans-Serif" font-size="10.00">::createContainer</text>
+<g id="a_node9"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
+<polygon fill="white" stroke="black" points="173.5,-826 173.5,-867 278.5,-867 278.5,-826 173.5,-826"/>
+<text text-anchor="start" x="181.5" y="-855" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="181.5" y="-844" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
+<text text-anchor="middle" x="226" y="-833" font-family="Helvetica,sans-Serif" font-size="10.00">::createDirectory</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node9 -->
 <g id="edge8" class="edge"><title>Node1&#45;&gt;Node9</title>
-<path fill="none" stroke="midnightblue" d="M63.9026,-761.521C78.4444,-786.567 104.25,-825.456 136,-849.5 144.471,-855.915 154.269,-861.31 164.201,-865.794"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="66.8607,-759.642 58.8919,-752.66 60.7674,-763.088 66.8607,-759.642"/>
+<path fill="none" stroke="midnightblue" d="M78.8889,-774.877C95.0155,-786.629 116.015,-800.924 136,-811.5 147.74,-817.713 160.834,-823.461 173.289,-828.427"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="80.5897,-771.782 70.4684,-768.65 76.4274,-777.41 80.5897,-771.782"/>
 </g>
 <!-- Node10 -->
 <g id="node10" class="node"><title>Node10</title>
-<g id="a_node10"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
-<polygon fill="white" stroke="black" points="173.5,-766 173.5,-807 278.5,-807 278.5,-766 173.5,-766"/>
-<text text-anchor="start" x="181.5" y="-795" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="181.5" y="-784" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
-<text text-anchor="middle" x="226" y="-773" font-family="Helvetica,sans-Serif" font-size="10.00">::createDirectory</text>
+<g id="a_node10"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
+<polygon fill="white" stroke="black" points="385.5,-864 385.5,-905 490.5,-905 490.5,-864 385.5,-864"/>
+<text text-anchor="start" x="393.5" y="-893" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="393.5" y="-882" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
+<text text-anchor="middle" x="438" y="-871" font-family="Helvetica,sans-Serif" font-size="10.00">::overlayMount</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node10 -->
-<g id="edge9" class="edge"><title>Node1&#45;&gt;Node10</title>
-<path fill="none" stroke="midnightblue" d="M110.248,-754.185C130.74,-759.955 153.525,-766.372 173.357,-771.957"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="110.97,-750.752 100.396,-751.41 109.073,-757.49 110.97,-750.752"/>
+<g id="edge28" class="edge"><title>Node1&#45;&gt;Node10</title>
+<path fill="none" stroke="midnightblue" d="M60.0118,-778.259C72.1977,-807.664 97.0024,-855.381 136,-876.5 214.604,-919.068 322.499,-908.338 385.482,-896.519"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="63.1608,-776.705 56.2251,-768.696 56.6524,-779.282 63.1608,-776.705"/>
 </g>
-<!-- Node11 -->
-<g id="node11" class="node"><title>Node11</title>
-<g id="a_node11"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
-<polygon fill="white" stroke="black" points="385.5,-793 385.5,-834 490.5,-834 490.5,-793 385.5,-793"/>
-<text text-anchor="start" x="393.5" y="-822" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="393.5" y="-811" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
-<text text-anchor="middle" x="438" y="-800" font-family="Helvetica,sans-Serif" font-size="10.00">::overlayMount</text>
+<!-- Node12 -->
+<g id="node12" class="node"><title>Node12</title>
+<g id="a_node12"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for startup. ">
+<polygon fill="white" stroke="black" points="388,-798.5 388,-828.5 488,-828.5 488,-798.5 388,-798.5"/>
+<text text-anchor="start" x="396" y="-816.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="438" y="-805.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node11 -->
-<g id="edge29" class="edge"><title>Node1&#45;&gt;Node11</title>
-<path fill="none" stroke="midnightblue" d="M67.7056,-760.638C83.0163,-779.695 107.58,-805.332 136,-816.5 218.443,-848.896 323.669,-837.078 385.365,-825.392"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="70.4272,-758.436 61.5338,-752.678 64.8952,-762.725 70.4272,-758.436"/>
+<!-- Node1&#45;&gt;Node12 -->
+<g id="edge19" class="edge"><title>Node1&#45;&gt;Node12</title>
+<path fill="none" stroke="midnightblue" d="M106.859,-771.395C116.507,-774.063 126.491,-776.564 136,-778.5 223.765,-796.374 327.921,-805.954 387.85,-810.366"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="107.538,-767.949 96.9613,-768.569 105.617,-774.68 107.538,-767.949"/>
 </g>
 <!-- Node13 -->
 <g id="node13" class="node"><title>Node13</title>
-<g id="a_node13"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for startup. ">
-<polygon fill="white" stroke="black" points="388,-733.5 388,-763.5 488,-763.5 488,-733.5 388,-733.5"/>
-<text text-anchor="start" x="396" y="-751.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="438" y="-740.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
+<g id="a_node13"><a xlink:href="classsoftwarecontainer_1_1_container.html#aaff4ed1ad7fbbe7e34b047fd9e80fdb7" target="_top" xlink:title="Executes a commandline. ">
+<polygon fill="white" stroke="black" points="176,-738.5 176,-768.5 276,-768.5 276,-738.5 176,-738.5"/>
+<text text-anchor="start" x="184" y="-756.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="226" y="-745.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::execute</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node13 -->
-<g id="edge20" class="edge"><title>Node1&#45;&gt;Node13</title>
-<path fill="none" stroke="midnightblue" d="M110.646,-739.2C186.742,-741.368 316.949,-745.079 387.71,-747.095"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="110.375,-735.691 100.279,-738.904 110.175,-742.688 110.375,-735.691"/>
+<g id="edge12" class="edge"><title>Node1&#45;&gt;Node13</title>
+<path fill="none" stroke="midnightblue" d="M110.603,-753.5C131.844,-753.5 155.511,-753.5 175.782,-753.5"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="110.396,-750 100.396,-753.5 110.396,-757 110.396,-750"/>
 </g>
 <!-- Node14 -->
 <g id="node14" class="node"><title>Node14</title>
-<g id="a_node14"><a xlink:href="classsoftwarecontainer_1_1_container.html#aaff4ed1ad7fbbe7e34b047fd9e80fdb7" target="_top" xlink:title="Executes a commandline. ">
-<polygon fill="white" stroke="black" points="176,-678.5 176,-708.5 276,-708.5 276,-678.5 176,-678.5"/>
-<text text-anchor="start" x="184" y="-696.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="226" y="-685.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::execute</text>
+<g id="a_node14"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#aef2eb474a1a8406815536cb7d10eefe6" target="_top" xlink:title="Launch the given command in a the given container. ">
+<polygon fill="white" stroke="black" points="164.5,-679 164.5,-720 287.5,-720 287.5,-679 164.5,-679"/>
+<text text-anchor="start" x="172.5" y="-708" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="172.5" y="-697" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
+<text text-anchor="middle" x="226" y="-686" font-family="Helvetica,sans-Serif" font-size="10.00">::execute</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node14 -->
 <g id="edge13" class="edge"><title>Node1&#45;&gt;Node14</title>
-<path fill="none" stroke="midnightblue" d="M110.313,-722.501C131.628,-717.111 155.419,-711.095 175.782,-705.946"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="109.233,-719.164 100.396,-725.009 110.949,-725.951 109.233,-719.164"/>
+<path fill="none" stroke="midnightblue" d="M109.126,-735.461C126.884,-729.95 146.452,-723.877 164.372,-718.316"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="107.982,-732.151 99.4687,-738.458 110.057,-738.837 107.982,-732.151"/>
 </g>
 <!-- Node15 -->
 <g id="node15" class="node"><title>Node15</title>
-<g id="a_node15"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#aef2eb474a1a8406815536cb7d10eefe6" target="_top" xlink:title="Launch the given command in a the given container. ">
-<polygon fill="white" stroke="black" points="164.5,-619 164.5,-660 287.5,-660 287.5,-619 164.5,-619"/>
-<text text-anchor="start" x="172.5" y="-648" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="172.5" y="-637" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
-<text text-anchor="middle" x="226" y="-626" font-family="Helvetica,sans-Serif" font-size="10.00">::execute</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node15 -->
-<g id="edge14" class="edge"><title>Node1&#45;&gt;Node15</title>
-<path fill="none" stroke="midnightblue" d="M73.8144,-715.559C90.0811,-700.883 113.053,-682.034 136,-669.5 144.872,-664.654 154.667,-660.395 164.418,-656.724"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="71.3869,-713.036 66.397,-722.383 76.1262,-718.188 71.3869,-713.036"/>
-</g>
-<!-- Node16 -->
-<g id="node16" class="node"><title>Node16</title>
-<g id="a_node16"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a1756adb8382b2ed3c1518567862139c1" target="_top" xlink:title="get a dump of all links, addresses and routes from the kernel. ">
+<g id="a_node15"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a1756adb8382b2ed3c1518567862139c1" target="_top" xlink:title="get a dump of all links, addresses and routes from the kernel. ">
 <polygon fill="white" stroke="black" points="165.5,-1038.5 165.5,-1068.5 286.5,-1068.5 286.5,-1038.5 165.5,-1038.5"/>
 <text text-anchor="start" x="173.5" y="-1056.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="226" y="-1045.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::getKernelDump</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node16 -->
-<g id="edge17" class="edge"><title>Node1&#45;&gt;Node16</title>
-<path fill="none" stroke="midnightblue" d="M51.1278,-762.85C52.7956,-817.899 64.5138,-949.376 136,-1023.5 144.037,-1031.83 154.461,-1037.85 165.331,-1042.2"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="54.6218,-762.527 50.9099,-752.604 47.6234,-762.676 54.6218,-762.527"/>
+<!-- Node1&#45;&gt;Node15 -->
+<g id="edge16" class="edge"><title>Node1&#45;&gt;Node15</title>
+<path fill="none" stroke="midnightblue" d="M51.666,-778.905C54.4316,-831.756 68.2401,-954.363 136,-1023.5 144.103,-1031.77 154.558,-1037.76 165.436,-1042.1"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="55.1549,-778.571 51.228,-768.731 48.1614,-778.872 55.1549,-778.571"/>
 </g>
-<!-- Node17 -->
-<g id="node17" class="node"><title>Node17</title>
-<g id="a_node17"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a2a6160a9363a9660c82276342dcaf477" target="_top" xlink:title="Construct a new Netlink object. ">
+<!-- Node16 -->
+<g id="node16" class="node"><title>Node16</title>
+<g id="a_node16"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a2a6160a9363a9660c82276342dcaf477" target="_top" xlink:title="Construct a new Netlink object. ">
 <polygon fill="white" stroke="black" points="388,-1000.5 388,-1030.5 488,-1030.5 488,-1000.5 388,-1000.5"/>
 <text text-anchor="start" x="396" y="-1018.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="438" y="-1007.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::Netlink</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node17 -->
-<g id="edge28" class="edge"><title>Node1&#45;&gt;Node17</title>
-<path fill="none" stroke="midnightblue" d="M51.2921,-762.768C53.3831,-814.03 66.0359,-930.074 136,-985.5 173.871,-1015.5 312.799,-1017.87 387.951,-1016.84"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="54.7848,-762.469 50.9839,-752.58 47.788,-762.681 54.7848,-762.469"/>
+<!-- Node1&#45;&gt;Node16 -->
+<g id="edge27" class="edge"><title>Node1&#45;&gt;Node16</title>
+<path fill="none" stroke="midnightblue" d="M51.9534,-778.531C55.2828,-827.234 70.128,-934.432 136,-985.5 174.132,-1015.06 312.598,-1017.64 387.719,-1016.74"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="55.4469,-778.316 51.3784,-768.534 48.4584,-778.718 55.4469,-778.316"/>
 </g>
-<!-- Node18 -->
-<g id="node18" class="node"><title>Node18</title>
-<g id="a_node18"><a xlink:href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a" target="_top" xlink:title="isSuccess Check if ReturnCode indicates Success or not ">
+<!-- Node17 -->
+<g id="node17" class="node"><title>Node17</title>
+<g id="a_node17"><a xlink:href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a" target="_top" xlink:title="isSuccess Check if ReturnCode indicates Success or not ">
 <polygon fill="white" stroke="black" points="176,-1283.5 176,-1313.5 276,-1313.5 276,-1283.5 176,-1283.5"/>
 <text text-anchor="start" x="184" y="-1301.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="226" y="-1290.5" font-family="Helvetica,sans-Serif" font-size="10.00">isSuccess</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node18 -->
-<g id="edge21" class="edge"><title>Node1&#45;&gt;Node18</title>
-<path fill="none" stroke="midnightblue" d="M51.4811,-762.993C53.8131,-859.055 66.8818,-1197.61 136,-1274.5 146.163,-1285.81 161.04,-1292.03 175.732,-1295.38"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="54.9749,-762.673 51.2518,-752.754 47.9767,-762.83 54.9749,-762.673"/>
+<!-- Node1&#45;&gt;Node17 -->
+<g id="edge20" class="edge"><title>Node1&#45;&gt;Node17</title>
+<path fill="none" stroke="midnightblue" d="M51.613,-778.834C54.4024,-872.849 68.8555,-1200.16 136,-1274.5 146.19,-1285.78 161.073,-1292 175.764,-1295.35"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="55.1039,-778.456 51.3279,-768.557 48.1066,-778.651 55.1039,-778.456"/>
 </g>
-<!-- Node22 -->
-<g id="node22" class="node"><title>Node22</title>
-<g id="a_node22"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#ab6cfc59121b64f8cf5a89b706b77826b" target="_top" xlink:title="Bring a given interface down. ">
-<polygon fill="white" stroke="black" points="176,-570.5 176,-600.5 276,-600.5 276,-570.5 176,-570.5"/>
-<text text-anchor="start" x="184" y="-588.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="226" y="-577.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::linkDown</text>
+<!-- Node21 -->
+<g id="node21" class="node"><title>Node21</title>
+<g id="a_node21"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#ab6cfc59121b64f8cf5a89b706b77826b" target="_top" xlink:title="Bring a given interface down. ">
+<polygon fill="white" stroke="black" points="176,-630.5 176,-660.5 276,-660.5 276,-630.5 176,-630.5"/>
+<text text-anchor="start" x="184" y="-648.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="226" y="-637.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::linkDown</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node22 -->
-<g id="edge26" class="edge"><title>Node1&#45;&gt;Node22</title>
-<path fill="none" stroke="midnightblue" d="M60.8817,-712.82C73.8016,-683.726 99.2057,-635.99 136,-609.5 147.559,-601.178 161.838,-595.742 175.548,-592.19"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="57.5547,-711.698 56.8341,-722.268 63.9892,-714.455 57.5547,-711.698"/>
+<!-- Node1&#45;&gt;Node21 -->
+<g id="edge25" class="edge"><title>Node1&#45;&gt;Node21</title>
+<path fill="none" stroke="midnightblue" d="M68.5525,-730.46C84.242,-711.421 108.889,-685.074 136,-669.5 148.073,-662.565 162.219,-657.571 175.634,-654.001"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="65.7296,-728.386 62.1967,-738.374 71.1874,-732.769 65.7296,-728.386"/>
 </g>
-<!-- Node23 -->
-<g id="node23" class="node"><title>Node23</title>
-<g id="a_node23"><a xlink:href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4" target="_top" xlink:title="Parses NetworkGateway configuration into IPTableEntry. ">
+<!-- Node22 -->
+<g id="node22" class="node"><title>Node22</title>
+<g id="a_node22"><a xlink:href="classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4" target="_top" xlink:title="Parses NetworkGateway configuration into IPTableEntry. ">
 <polygon fill="white" stroke="black" points="136,-1224 136,-1265 316,-1265 316,-1224 136,-1224"/>
 <text text-anchor="start" x="144" y="-1253" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="144" y="-1242" font-family="Helvetica,sans-Serif" font-size="10.00">NetworkGatewayParser</text>
@@ -268,126 +253,141 @@
 </a>
 </g>
 </g>
+<!-- Node1&#45;&gt;Node22 -->
+<g id="edge29" class="edge"><title>Node1&#45;&gt;Node22</title>
+<path fill="none" stroke="midnightblue" d="M52.3591,-778.845C57.4941,-865.469 78.4326,-1148.06 136,-1214.5 139.097,-1218.07 142.634,-1221.22 146.472,-1224"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="55.8396,-778.402 51.7732,-768.619 48.851,-778.803 55.8396,-778.402"/>
+</g>
+<!-- Node23 -->
+<g id="node23" class="node"><title>Node23</title>
+<g id="a_node23"><a xlink:href="classsoftwarecontainer_1_1_environment_gateway.html#ad58a972633ebc7fed2d8d455900e7ed4" target="_top" xlink:title="Gateway specific parsing of config elements. ">
+<polygon fill="white" stroke="black" points="168,-571 168,-612 284,-612 284,-571 168,-571"/>
+<text text-anchor="start" x="176" y="-600" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="176" y="-589" font-family="Helvetica,sans-Serif" font-size="10.00">EnvironmentGateway::</text>
+<text text-anchor="middle" x="226" y="-578" font-family="Helvetica,sans-Serif" font-size="10.00">readConfigElement</text>
+</a>
+</g>
+</g>
 <!-- Node1&#45;&gt;Node23 -->
-<g id="edge30" class="edge"><title>Node1&#45;&gt;Node23</title>
-<path fill="none" stroke="midnightblue" d="M52.1874,-762.853C56.8271,-851.427 76.513,-1145.43 136,-1214.5 138.979,-1217.96 142.372,-1221.02 146.051,-1223.73"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="55.6721,-762.46 51.6727,-752.649 48.681,-762.813 55.6721,-762.46"/>
+<g id="edge31" class="edge"><title>Node1&#45;&gt;Node23</title>
+<path fill="none" stroke="midnightblue" d="M60.7625,-728.906C73.7025,-699.336 99.2646,-650.123 136,-621.5 145.389,-614.184 156.661,-608.601 167.978,-604.358"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="57.3851,-727.907 56.7142,-738.48 63.8324,-730.633 57.3851,-727.907"/>
 </g>
 <!-- Node24 -->
 <g id="node24" class="node"><title>Node24</title>
-<g id="a_node24"><a xlink:href="classsoftwarecontainer_1_1_environment_gateway.html#ad58a972633ebc7fed2d8d455900e7ed4" target="_top" xlink:title="Gateway specific parsing of config elements. ">
-<polygon fill="white" stroke="black" points="168,-511 168,-552 284,-552 284,-511 168,-511"/>
-<text text-anchor="start" x="176" y="-540" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="176" y="-529" font-family="Helvetica,sans-Serif" font-size="10.00">EnvironmentGateway::</text>
-<text text-anchor="middle" x="226" y="-518" font-family="Helvetica,sans-Serif" font-size="10.00">readConfigElement</text>
+<g id="a_node24"><a xlink:href="classsoftwarecontainer_1_1_file_gateway.html#af9355afbe0fa41df8309a55d08eda7f2" target="_top" xlink:title="Gateway specific parsing of config elements. ">
+<polygon fill="white" stroke="black" points="145.5,-522.5 145.5,-552.5 306.5,-552.5 306.5,-522.5 145.5,-522.5"/>
+<text text-anchor="start" x="153.5" y="-540.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="226" y="-529.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileGateway::readConfigElement</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node24 -->
 <g id="edge32" class="edge"><title>Node1&#45;&gt;Node24</title>
-<path fill="none" stroke="midnightblue" d="M56.4644,-712.634C66.0583,-674.72 89.4863,-602.543 136,-561.5 145.047,-553.517 156.301,-547.642 167.729,-543.324"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="53.0597,-711.823 54.1176,-722.365 59.8646,-713.464 53.0597,-711.823"/>
+<path fill="none" stroke="midnightblue" d="M54.9995,-728.413C62.8972,-687.294 84.4268,-605.713 136,-561.5 140.009,-558.063 144.464,-555.113 149.183,-552.582"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="51.5267,-727.95 53.1971,-738.412 58.4157,-729.192 51.5267,-727.95"/>
 </g>
 <!-- Node25 -->
 <g id="node25" class="node"><title>Node25</title>
-<g id="a_node25"><a xlink:href="classsoftwarecontainer_1_1_file_gateway.html#af9355afbe0fa41df8309a55d08eda7f2" target="_top" xlink:title="Gateway specific parsing of config elements. ">
-<polygon fill="white" stroke="black" points="145.5,-462.5 145.5,-492.5 306.5,-492.5 306.5,-462.5 145.5,-462.5"/>
-<text text-anchor="start" x="153.5" y="-480.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="226" y="-469.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileGateway::readConfigElement</text>
+<g id="a_node25"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a4cf958746ad9911ebb99b9eeb8392060" target="_top" xlink:title="Gateway specific parsing of config elements. ">
+<polygon fill="white" stroke="black" points="167,-463 167,-504 285,-504 285,-463 167,-463"/>
+<text text-anchor="start" x="175" y="-492" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="175" y="-481" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGatewayInstance</text>
+<text text-anchor="middle" x="226" y="-470" font-family="Helvetica,sans-Serif" font-size="10.00">::readConfigElement</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node25 -->
 <g id="edge33" class="edge"><title>Node1&#45;&gt;Node25</title>
-<path fill="none" stroke="midnightblue" d="M52.646,-712.325C57.1823,-664.132 74.0349,-558.564 136,-501.5 139.767,-498.031 143.983,-495.054 148.477,-492.501"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="49.1414,-712.236 51.7946,-722.493 56.1169,-712.82 49.1414,-712.236"/>
+<path fill="none" stroke="midnightblue" d="M52.8335,-728.251C57.6936,-679.849 75.081,-573.496 136,-513.5 144.481,-505.148 155.362,-499.119 166.585,-494.769"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="49.3254,-728.183 51.9111,-738.458 56.297,-728.813 49.3254,-728.183"/>
 </g>
 <!-- Node26 -->
 <g id="node26" class="node"><title>Node26</title>
-<g id="a_node26"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a4cf958746ad9911ebb99b9eeb8392060" target="_top" xlink:title="Gateway specific parsing of config elements. ">
-<polygon fill="white" stroke="black" points="167,-403 167,-444 285,-444 285,-403 167,-403"/>
-<text text-anchor="start" x="175" y="-432" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="175" y="-421" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGatewayInstance</text>
-<text text-anchor="middle" x="226" y="-410" font-family="Helvetica,sans-Serif" font-size="10.00">::readConfigElement</text>
+<g id="a_node26"><a xlink:href="classsoftwarecontainer_1_1_device_node_gateway.html#a0734b6ab0ccd33f80c3139962a55f114" target="_top" xlink:title="Gateway specific parsing of config elements. ">
+<polygon fill="white" stroke="black" points="144.5,-403 144.5,-444 307.5,-444 307.5,-403 144.5,-403"/>
+<text text-anchor="start" x="152.5" y="-432" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="152.5" y="-421" font-family="Helvetica,sans-Serif" font-size="10.00">DeviceNodeGateway::readConfig</text>
+<text text-anchor="middle" x="226" y="-410" font-family="Helvetica,sans-Serif" font-size="10.00">Element</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node26 -->
 <g id="edge34" class="edge"><title>Node1&#45;&gt;Node26</title>
-<path fill="none" stroke="midnightblue" d="M51.1859,-712.324C52.9692,-657.651 64.9023,-527.08 136,-453.5 144.384,-444.823 155.358,-438.655 166.724,-434.272"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="47.6828,-712.419 50.9459,-722.499 54.6809,-712.585 47.6828,-712.419"/>
+<path fill="none" stroke="midnightblue" d="M50.7035,-728.104C51.4422,-671.127 61.2845,-531.971 136,-453.5 139.373,-449.957 143.178,-446.833 147.267,-444.078"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="47.2026,-728.347 50.6607,-738.361 54.2025,-728.376 47.2026,-728.347"/>
 </g>
 <!-- Node27 -->
 <g id="node27" class="node"><title>Node27</title>
-<g id="a_node27"><a xlink:href="classsoftwarecontainer_1_1_device_node_gateway.html#a0734b6ab0ccd33f80c3139962a55f114" target="_top" xlink:title="Gateway specific parsing of config elements. ">
-<polygon fill="white" stroke="black" points="144.5,-343 144.5,-384 307.5,-384 307.5,-343 144.5,-343"/>
-<text text-anchor="start" x="152.5" y="-372" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="152.5" y="-361" font-family="Helvetica,sans-Serif" font-size="10.00">DeviceNodeGateway::readConfig</text>
-<text text-anchor="middle" x="226" y="-350" font-family="Helvetica,sans-Serif" font-size="10.00">Element</text>
+<g id="a_node27"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#a2dafa9d879e1a694e30b17a067a9c504" target="_top" xlink:title="Sets config for both dbus session instances. ">
+<polygon fill="white" stroke="black" points="374,-332.5 374,-362.5 502,-362.5 502,-332.5 374,-332.5"/>
+<text text-anchor="start" x="382" y="-350.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="438" y="-339.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::setConfig</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node27 -->
 <g id="edge35" class="edge"><title>Node1&#45;&gt;Node27</title>
-<path fill="none" stroke="midnightblue" d="M54.1009,-712.066C63.2759,-640.729 92.4015,-440.87 136,-393.5 139.202,-390.021 142.821,-386.945 146.721,-384.225"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="50.5805,-712.009 52.8006,-722.368 57.5254,-712.885 50.5805,-712.009"/>
+<path fill="none" stroke="midnightblue" d="M52.2667,-728.03C56.9043,-646.486 75.9503,-394.329 136,-345.5 210.3,-285.084 332.461,-312.187 395.892,-332.47"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="48.7529,-728.19 51.7051,-738.365 55.7426,-728.57 48.7529,-728.19"/>
 </g>
 <!-- Node28 -->
 <g id="node28" class="node"><title>Node28</title>
-<g id="a_node28"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#a2dafa9d879e1a694e30b17a067a9c504" target="_top" xlink:title="Sets config for both dbus session instances. ">
-<polygon fill="white" stroke="black" points="374,-272.5 374,-302.5 502,-302.5 502,-272.5 374,-272.5"/>
-<text text-anchor="start" x="382" y="-290.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="438" y="-279.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::setConfig</text>
+<g id="a_node28"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a" target="_top" xlink:title="Configure this gateway according to the supplied JSON configuration string. ">
+<polygon fill="white" stroke="black" points="174,-354.5 174,-384.5 278,-384.5 278,-354.5 174,-354.5"/>
+<text text-anchor="start" x="182" y="-372.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="226" y="-361.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::setConfig</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node28 -->
 <g id="edge36" class="edge"><title>Node1&#45;&gt;Node28</title>
-<path fill="none" stroke="midnightblue" d="M51.7052,-712.179C54.711,-625.15 69.5491,-340.619 136,-285.5 209.908,-224.195 332.792,-251.927 396.268,-272.463"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="48.2054,-712.121 51.3814,-722.229 55.2017,-712.347 48.2054,-712.121"/>
+<path fill="none" stroke="midnightblue" d="M53.6221,-728.22C61.7631,-654.53 88.9249,-442.083 136,-393.5 146.023,-383.156 159.998,-377.119 173.908,-373.639"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="50.1134,-728.112 52.5186,-738.431 57.0729,-728.865 50.1134,-728.112"/>
 </g>
 <!-- Node29 -->
 <g id="node29" class="node"><title>Node29</title>
-<g id="a_node29"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a" target="_top" xlink:title="Configure this gateway according to the supplied JSON configuration string. ">
-<polygon fill="white" stroke="black" points="174,-294.5 174,-324.5 278,-324.5 278,-294.5 174,-294.5"/>
-<text text-anchor="start" x="182" y="-312.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="226" y="-301.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::setConfig</text>
+<g id="a_node29"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a53e313aa155f065c1d1ef6a4e20ccede" target="_top" xlink:title="Sets an IP address for a network link. ">
+<polygon fill="white" stroke="black" points="176,-266.5 176,-296.5 276,-296.5 276,-266.5 176,-266.5"/>
+<text text-anchor="start" x="184" y="-284.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="226" y="-273.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::setIP</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node29 -->
-<g id="edge37" class="edge"><title>Node1&#45;&gt;Node29</title>
-<path fill="none" stroke="midnightblue" d="M52.9076,-712.345C59.4354,-632.862 83.444,-389.086 136,-333.5 145.895,-323.034 159.833,-316.961 173.748,-313.485"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="49.4092,-712.186 52.1013,-722.433 56.387,-712.744 49.4092,-712.186"/>
+<g id="edge38" class="edge"><title>Node1&#45;&gt;Node29</title>
+<path fill="none" stroke="midnightblue" d="M52.5848,-728.074C58.3329,-643.708 80.7281,-374.795 136,-311.5 146.189,-299.832 161.072,-292.693 175.762,-288.328"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="49.0913,-727.862 51.9235,-738.072 56.076,-728.324 49.0913,-727.862"/>
 </g>
 <!-- Node30 -->
 <g id="node30" class="node"><title>Node30</title>
-<g id="a_node30"><a xlink:href="classsoftwarecontainer_1_1_netlink.html#a53e313aa155f065c1d1ef6a4e20ccede" target="_top" xlink:title="Sets an IP address for a network link. ">
-<polygon fill="white" stroke="black" points="176,-206.5 176,-236.5 276,-236.5 276,-206.5 176,-206.5"/>
-<text text-anchor="start" x="184" y="-224.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="226" y="-213.5" font-family="Helvetica,sans-Serif" font-size="10.00">Netlink::setIP</text>
+<g id="a_node30"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a24b59cd9982d4e2e51f999bedea60957" target="_top" xlink:title="shuts down a container ">
+<polygon fill="white" stroke="black" points="164.5,-207 164.5,-248 287.5,-248 287.5,-207 164.5,-207"/>
+<text text-anchor="start" x="172.5" y="-236" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="172.5" y="-225" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
+<text text-anchor="middle" x="226" y="-214" font-family="Helvetica,sans-Serif" font-size="10.00">::shutdownContainer</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node30 -->
 <g id="edge39" class="edge"><title>Node1&#45;&gt;Node30</title>
-<path fill="none" stroke="midnightblue" d="M52.1051,-711.948C56.4892,-622.051 75.4759,-321.999 136,-251.5 146.09,-239.747 160.948,-232.585 175.645,-228.226"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="48.6029,-711.914 51.6308,-722.067 55.5952,-712.242 48.6029,-711.914"/>
+<path fill="none" stroke="midnightblue" d="M52.0021,-728.032C56.0775,-637.051 74.254,-329.672 136,-257.5 143.42,-248.827 153.437,-242.654 164.075,-238.262"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="48.4955,-728.113 51.5636,-738.254 55.4891,-728.413 48.4955,-728.113"/>
 </g>
 <!-- Node31 -->
 <g id="node31" class="node"><title>Node31</title>
-<g id="a_node31"><a xlink:href="classsoftwarecontainer_1_1_software_container_agent.html#a24b59cd9982d4e2e51f999bedea60957" target="_top" xlink:title="shuts down a container ">
-<polygon fill="white" stroke="black" points="164.5,-147 164.5,-188 287.5,-188 287.5,-147 164.5,-147"/>
-<text text-anchor="start" x="172.5" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="172.5" y="-165" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainerAgent</text>
-<text text-anchor="middle" x="226" y="-154" font-family="Helvetica,sans-Serif" font-size="10.00">::shutdownContainer</text>
+<g id="a_node31"><a xlink:href="classsoftwarecontainer_1_1_software_container.html#a6141f7e59438e4f1dce565f3826a81f0" target="_top" xlink:title="Creates a new SoftwareContainer instance. ">
+<polygon fill="white" stroke="black" points="154.5,-147 154.5,-188 297.5,-188 297.5,-147 154.5,-147"/>
+<text text-anchor="start" x="162.5" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="162.5" y="-165" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainer::Software</text>
+<text text-anchor="middle" x="226" y="-154" font-family="Helvetica,sans-Serif" font-size="10.00">Container</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node31 -->
 <g id="edge40" class="edge"><title>Node1&#45;&gt;Node31</title>
-<path fill="none" stroke="midnightblue" d="M51.6107,-711.997C54.412,-615.879 68.9578,-276.95 136,-197.5 143.466,-188.652 153.637,-182.405 164.437,-177.995"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="48.1053,-712.149 51.3306,-722.241 55.1027,-712.341 48.1053,-712.149"/>
+<path fill="none" stroke="midnightblue" d="M51.4781,-728.194C53.8199,-630.548 66.9786,-279.663 136,-197.5 141.034,-191.507 147.31,-186.707 154.184,-182.863"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="47.9761,-728.25 51.253,-738.325 54.9744,-728.405 47.9761,-728.25"/>
 </g>
 <!-- Node32 -->
 <g id="node32" class="node"><title>Node32</title>
@@ -400,8 +400,8 @@
 </g>
 <!-- Node1&#45;&gt;Node32 -->
 <g id="edge41" class="edge"><title>Node1&#45;&gt;Node32</title>
-<path fill="none" stroke="midnightblue" d="M51.0103,-712.407C51.5672,-609.966 58.8392,-224.758 136,-137.5 146.071,-126.111 160.924,-119.87 175.622,-116.524"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="47.5102,-712.438 50.9731,-722.45 54.5102,-712.463 47.5102,-712.438"/>
+<path fill="none" stroke="midnightblue" d="M50.9082,-728.086C51.0532,-623.454 56.8972,-227.28 136,-137.5 146.051,-126.093 160.898,-119.847 175.598,-116.502"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="47.4082,-728.334 50.9118,-738.333 54.4082,-728.332 47.4082,-728.334"/>
 </g>
 <!-- Node33 -->
 <g id="node33" class="node"><title>Node33</title>
@@ -414,8 +414,8 @@
 </g>
 <!-- Node1&#45;&gt;Node33 -->
 <g id="edge42" class="edge"><title>Node1&#45;&gt;Node33</title>
-<path fill="none" stroke="midnightblue" d="M50.7416,-712.194C50.1605,-604.435 53.3221,-184.975 136,-89.5 139.362,-85.6176 143.274,-82.3151 147.546,-79.5084"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="47.2433,-712.46 50.814,-722.435 54.2431,-712.41 47.2433,-712.46"/>
+<path fill="none" stroke="midnightblue" d="M50.6531,-728.264C49.6696,-618.977 51.2897,-187.629 136,-89.5 139.251,-85.7338 143.02,-82.5132 147.133,-79.7612"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="47.1542,-728.395 50.7604,-738.358 54.1538,-728.321 47.1542,-728.395"/>
 </g>
 <!-- Node34 -->
 <g id="node34" class="node"><title>Node34</title>
@@ -428,66 +428,66 @@
 </g>
 <!-- Node1&#45;&gt;Node34 -->
 <g id="edge43" class="edge"><title>Node1&#45;&gt;Node34</title>
-<path fill="none" stroke="midnightblue" d="M52.4511,-711.977C59.4589,-592.559 91.3009,-92.5934 136,-40.5 143.002,-32.3393 152.436,-26.7378 162.548,-22.9149"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="48.9363,-712.132 51.8509,-722.318 55.9246,-712.537 48.9363,-712.132"/>
+<path fill="none" stroke="midnightblue" d="M52.3681,-728.152C59.1035,-607.377 90.2664,-93.9447 136,-40.5 143.096,-32.2079 152.701,-26.5571 162.983,-22.7295"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="48.8651,-728.111 51.809,-738.289 55.8544,-728.497 48.8651,-728.111"/>
 </g>
 <!-- Node5&#45;&gt;Node6 -->
 <g id="edge5" class="edge"><title>Node5&#45;&gt;Node6</title>
-<path fill="none" stroke="midnightblue" d="M515.377,-1076.51C533.125,-1079.31 551.558,-1082.21 567.772,-1084.76"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="515.45,-1072.98 505.028,-1074.89 514.362,-1079.9 515.45,-1072.98"/>
+<path fill="none" stroke="midnightblue" d="M514.879,-1078.14C532.781,-1081.36 551.406,-1084.71 567.772,-1087.65"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="515.489,-1074.69 505.028,-1076.37 514.251,-1081.58 515.489,-1074.69"/>
 </g>
 <!-- Node5&#45;&gt;Node7 -->
 <g id="edge6" class="edge"><title>Node5&#45;&gt;Node7</title>
-<path fill="none" stroke="midnightblue" d="M515.377,-1052.06C533.125,-1049.16 551.558,-1046.16 567.772,-1043.52"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="514.335,-1048.68 505.028,-1053.74 515.46,-1055.59 514.335,-1048.68"/>
+<path fill="none" stroke="midnightblue" d="M514.879,-1050.43C532.781,-1047.11 551.406,-1043.66 567.772,-1040.63"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="514.222,-1046.99 505.028,-1052.26 515.498,-1053.88 514.222,-1046.99"/>
 </g>
 <!-- Node5&#45;&gt;Node8 -->
 <g id="edge7" class="edge"><title>Node5&#45;&gt;Node8</title>
-<path fill="none" stroke="midnightblue" d="M512.86,-1045.67C516.687,-1044.07 520.424,-1042.35 524,-1040.5 542.256,-1031.07 543.654,-1023.95 560,-1011.5 571.541,-1002.71 584.669,-993.234 595.415,-985.608"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="511.268,-1042.53 503.204,-1049.4 513.793,-1049.06 511.268,-1042.53"/>
+<path fill="none" stroke="midnightblue" d="M513.79,-1045.59C517.304,-1044.02 520.727,-1042.32 524,-1040.5 542.958,-1029.93 543.841,-1021.99 560,-1007.5 573.132,-995.724 588.134,-982.576 599.45,-972.72"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="512.239,-1042.45 504.316,-1049.48 514.896,-1048.92 512.239,-1042.45"/>
 </g>
-<!-- Node10&#45;&gt;Node11 -->
-<g id="edge10" class="edge"><title>Node10&#45;&gt;Node11</title>
-<path fill="none" stroke="midnightblue" d="M288.787,-794.444C319.436,-798.385 356.034,-803.09 385.195,-806.839"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="289.005,-790.943 278.641,-793.14 288.113,-797.886 289.005,-790.943"/>
+<!-- Node9&#45;&gt;Node10 -->
+<g id="edge9" class="edge"><title>Node9&#45;&gt;Node10</title>
+<path fill="none" stroke="midnightblue" d="M288.787,-857.681C319.436,-863.226 356.034,-869.849 385.195,-875.126"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="289.104,-854.181 278.641,-855.845 287.858,-861.069 289.104,-854.181"/>
 </g>
-<!-- Node10&#45;&gt;Node13 -->
-<g id="edge12" class="edge"><title>Node10&#45;&gt;Node13</title>
-<path fill="none" stroke="midnightblue" d="M288.649,-775.344C320.22,-769.632 358.132,-762.771 387.728,-757.416"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="287.858,-771.931 278.641,-777.155 289.104,-778.819 287.858,-771.931"/>
+<!-- Node9&#45;&gt;Node12 -->
+<g id="edge11" class="edge"><title>Node9&#45;&gt;Node12</title>
+<path fill="none" stroke="midnightblue" d="M288.649,-836.812C320.22,-831.851 358.132,-825.893 387.728,-821.243"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="287.976,-833.375 278.641,-838.385 289.063,-840.29 287.976,-833.375"/>
 </g>
-<!-- Node12 -->
-<g id="node12" class="node"><title>Node12</title>
-<g id="a_node12"><a xlink:href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" target="_top" xlink:title="create Creates a new lxc_container and creates it with all the initialization. ">
-<polygon fill="white" stroke="black" points="568,-798.5 568,-828.5 668,-828.5 668,-798.5 568,-798.5"/>
-<text text-anchor="start" x="576" y="-816.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="618" y="-805.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::create</text>
+<!-- Node11 -->
+<g id="node11" class="node"><title>Node11</title>
+<g id="a_node11"><a xlink:href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" target="_top" xlink:title="create Creates a new lxc_container and creates it with all the initialization. ">
+<polygon fill="white" stroke="black" points="568,-869.5 568,-899.5 668,-899.5 668,-869.5 568,-869.5"/>
+<text text-anchor="start" x="576" y="-887.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="618" y="-876.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::create</text>
 </a>
 </g>
 </g>
-<!-- Node11&#45;&gt;Node12 -->
-<g id="edge11" class="edge"><title>Node11&#45;&gt;Node12</title>
-<path fill="none" stroke="midnightblue" d="M501.122,-813.5C522.931,-813.5 547.115,-813.5 567.724,-813.5"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="500.964,-810 490.963,-813.5 500.963,-817 500.964,-810"/>
+<!-- Node10&#45;&gt;Node11 -->
+<g id="edge10" class="edge"><title>Node10&#45;&gt;Node11</title>
+<path fill="none" stroke="midnightblue" d="M501.122,-884.5C522.931,-884.5 547.115,-884.5 567.724,-884.5"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="500.964,-881 490.963,-884.5 500.963,-888 500.964,-881"/>
 </g>
-<!-- Node16&#45;&gt;Node5 -->
-<g id="edge19" class="edge"><title>Node16&#45;&gt;Node5</title>
+<!-- Node15&#45;&gt;Node5 -->
+<g id="edge18" class="edge"><title>Node15&#45;&gt;Node5</title>
 <path fill="none" stroke="midnightblue" d="M296.687,-1057.15C320.622,-1058.4 347.328,-1059.8 370.964,-1061.04"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="296.785,-1053.65 286.616,-1056.62 296.419,-1060.64 296.785,-1053.65"/>
 </g>
-<!-- Node16&#45;&gt;Node17 -->
-<g id="edge18" class="edge"><title>Node16&#45;&gt;Node17</title>
+<!-- Node15&#45;&gt;Node16 -->
+<g id="edge17" class="edge"><title>Node15&#45;&gt;Node16</title>
 <path fill="none" stroke="midnightblue" d="M296.569,-1040.91C326.457,-1035.5 360.683,-1029.31 387.864,-1024.39"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="295.833,-1037.49 286.616,-1042.71 297.079,-1044.38 295.833,-1037.49"/>
 </g>
-<!-- Node18&#45;&gt;Node3 -->
-<g id="edge24" class="edge"><title>Node18&#45;&gt;Node3</title>
+<!-- Node17&#45;&gt;Node3 -->
+<g id="edge23" class="edge"><title>Node17&#45;&gt;Node3</title>
 <path fill="none" stroke="midnightblue" d="M285.638,-1315.29C295.997,-1319.09 306.498,-1323.5 316,-1328.5 333.7,-1337.81 334.073,-1346.63 352,-1355.5 358.872,-1358.9 366.302,-1361.89 373.811,-1364.49"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="286.793,-1311.99 276.198,-1311.98 284.475,-1318.59 286.793,-1311.99"/>
 </g>
-<!-- Node19 -->
-<g id="node19" class="node"><title>Node19</title>
-<g id="a_node19"><a xlink:href="classsoftwarecontainer_1_1_device_node_gateway.html#a9e912027cad4fff3ed4d9a9581f45227" target="_top" xlink:title="Implements Gateway::activateGateway. ">
+<!-- Node18 -->
+<g id="node18" class="node"><title>Node18</title>
+<g id="a_node18"><a xlink:href="classsoftwarecontainer_1_1_device_node_gateway.html#a9e912027cad4fff3ed4d9a9581f45227" target="_top" xlink:title="Implements Gateway::activateGateway. ">
 <polygon fill="white" stroke="black" points="363,-1305 363,-1346 513,-1346 513,-1305 363,-1305"/>
 <text text-anchor="start" x="371" y="-1334" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="371" y="-1323" font-family="Helvetica,sans-Serif" font-size="10.00">DeviceNodeGateway::activate</text>
@@ -495,14 +495,14 @@
 </a>
 </g>
 </g>
-<!-- Node18&#45;&gt;Node19 -->
-<g id="edge22" class="edge"><title>Node18&#45;&gt;Node19</title>
+<!-- Node17&#45;&gt;Node18 -->
+<g id="edge21" class="edge"><title>Node17&#45;&gt;Node18</title>
 <path fill="none" stroke="midnightblue" d="M286.197,-1306.11C310.045,-1309.18 337.813,-1312.75 362.975,-1315.98"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="286.6,-1302.63 276.236,-1304.83 285.708,-1309.58 286.6,-1302.63"/>
 </g>
-<!-- Node20 -->
-<g id="node20" class="node"><title>Node20</title>
-<g id="a_node20"><a xlink:href="classsoftwarecontainer_1_1_network_gateway.html#ad67674d2ce8d329188446e71c14e3a88" target="_top" xlink:title="Gateway specific parsing of config elements. ">
+<!-- Node19 -->
+<g id="node19" class="node"><title>Node19</title>
+<g id="a_node19"><a xlink:href="classsoftwarecontainer_1_1_network_gateway.html#ad67674d2ce8d329188446e71c14e3a88" target="_top" xlink:title="Gateway specific parsing of config elements. ">
 <polygon fill="white" stroke="black" points="365,-1197 365,-1238 511,-1238 511,-1197 365,-1197"/>
 <text text-anchor="start" x="373" y="-1226" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="373" y="-1215" font-family="Helvetica,sans-Serif" font-size="10.00">NetworkGateway::readConfig</text>
@@ -510,34 +510,34 @@
 </a>
 </g>
 </g>
-<!-- Node18&#45;&gt;Node20 -->
-<g id="edge23" class="edge"><title>Node18&#45;&gt;Node20</title>
+<!-- Node17&#45;&gt;Node19 -->
+<g id="edge22" class="edge"><title>Node17&#45;&gt;Node19</title>
 <path fill="none" stroke="midnightblue" d="M286.004,-1285.99C296.254,-1282.87 306.624,-1279.07 316,-1274.5 333.979,-1265.74 334.367,-1256.94 352,-1247.5 358.347,-1244.1 365.157,-1240.96 372.06,-1238.09"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="284.9,-1282.67 276.249,-1288.78 286.826,-1289.4 284.9,-1282.67"/>
 </g>
-<!-- Node21 -->
-<g id="node21" class="node"><title>Node21</title>
-<g id="a_node21"><a xlink:href="classsoftwarecontainer_1_1_pulse_gateway.html#a0cd0a00ca7590d7c9c3c961e20de56df" target="_top" xlink:title="Implements Gateway::activateGateway. ">
+<!-- Node20 -->
+<g id="node20" class="node"><title>Node20</title>
+<g id="a_node20"><a xlink:href="classsoftwarecontainer_1_1_pulse_gateway.html#a0cd0a00ca7590d7c9c3c961e20de56df" target="_top" xlink:title="Implements Gateway::activateGateway. ">
 <polygon fill="white" stroke="black" points="358,-1256.5 358,-1286.5 518,-1286.5 518,-1256.5 358,-1256.5"/>
 <text text-anchor="start" x="366" y="-1274.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="438" y="-1263.5" font-family="Helvetica,sans-Serif" font-size="10.00">PulseGateway::activateGateway</text>
 </a>
 </g>
 </g>
-<!-- Node18&#45;&gt;Node21 -->
-<g id="edge25" class="edge"><title>Node18&#45;&gt;Node21</title>
+<!-- Node17&#45;&gt;Node20 -->
+<g id="edge24" class="edge"><title>Node17&#45;&gt;Node20</title>
 <path fill="none" stroke="midnightblue" d="M286.173,-1290.89C308.363,-1288.04 333.95,-1284.75 357.673,-1281.7"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="285.708,-1287.42 276.236,-1292.17 286.6,-1294.37 285.708,-1287.42"/>
 </g>
-<!-- Node23&#45;&gt;Node20 -->
-<g id="edge31" class="edge"><title>Node23&#45;&gt;Node20</title>
+<!-- Node22&#45;&gt;Node19 -->
+<g id="edge30" class="edge"><title>Node22&#45;&gt;Node19</title>
 <path fill="none" stroke="midnightblue" d="M326.056,-1231.76C339.179,-1230.08 352.426,-1228.37 364.973,-1226.76"/>
 <polygon fill="midnightblue" stroke="midnightblue" points="325.531,-1228.3 316.059,-1233.05 326.424,-1235.25 325.531,-1228.3"/>
 </g>
-<!-- Node29&#45;&gt;Node28 -->
-<g id="edge38" class="edge"><title>Node29&#45;&gt;Node28</title>
-<path fill="none" stroke="midnightblue" d="M288.148,-303.094C315.002,-300.281 346.521,-296.979 373.625,-294.139"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="287.684,-299.623 278.103,-304.146 288.414,-306.585 287.684,-299.623"/>
+<!-- Node28&#45;&gt;Node27 -->
+<g id="edge37" class="edge"><title>Node28&#45;&gt;Node27</title>
+<path fill="none" stroke="midnightblue" d="M288.148,-363.094C315.002,-360.281 346.521,-356.979 373.625,-354.139"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="287.684,-359.623 278.103,-364.146 288.414,-366.585 287.684,-359.623"/>
 </g>
 </g>
 </svg>

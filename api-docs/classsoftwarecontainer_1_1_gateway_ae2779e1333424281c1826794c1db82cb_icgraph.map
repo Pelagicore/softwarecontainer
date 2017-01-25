@@ -1,3 +1,4 @@
 <map id="softwarecontainer::Gateway::setContainer" name="softwarecontainer::Gateway::setContainer">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#a40ae97b8ae2ea56707d348a5a8bd04ab" title="Set the associated container for this gateway. " alt="" coords="209,5,399,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_software_container.html#ac9483d1d07e84b77820498eba3e7b284" title="Only used for testing, should not be used by e.g. " alt="" coords="209,5,420,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#a40ae97b8ae2ea56707d348a5a8bd04ab" title="Set the associated container for this gateway. " alt="" coords="220,71,409,112"/>
 </map>

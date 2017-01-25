@@ -1,5 +1,5 @@
 <map id="softwarecontainer::FileToolkitWithUndo" name="softwarecontainer::FileToolkitWithUndo">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="200,5,333,47"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_device_node_gateway.html" title="This gateway is responsible for exposing device nodes in an LXC container. " alt="" coords="193,71,340,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html" title="An abstraction of concrete container implementations. " alt="" coords="200,136,333,177"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="200,136,333,177"/>
 </map>
