@@ -73,8 +73,7 @@ var NAVTREEINDEX0 =
 "classsoftwarecontainer_1_1_bad_suffix_error.html#afad14d329d6a3e4b93a6d2dcd6f11d2f":[1,0,1,0,3],
 "classsoftwarecontainer_1_1_base_config_store.html":[1,0,1,1],
 "classsoftwarecontainer_1_1_base_config_store.html#a8282adbe1ef33e910a51e748c25e3f26":[1,0,1,1,0],
-"classsoftwarecontainer_1_1_base_config_store.html#addc992cceb4216e1717e48e48bc6333d":[1,0,1,1,1],
-"classsoftwarecontainer_1_1_base_config_store.html#aee5b788a20e7feabf75ca612f8057dc6":[1,0,1,1,2],
+"classsoftwarecontainer_1_1_base_config_store.html#aee5b788a20e7feabf75ca612f8057dc6":[1,0,1,1,1],
 "classsoftwarecontainer_1_1_bool_config.html":[1,0,1,2],
 "classsoftwarecontainer_1_1_bool_config.html#a706d0a474a4ca02f82317b8d7c1fb5a8":[1,0,1,2,4],
 "classsoftwarecontainer_1_1_bool_config.html#a84946cf05ae0b06de36d43623e958818":[1,0,1,2,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classsoftwarecontainer_1_1_container.html#a3ca2252bc66ae9f985a010d3a7446e85":[1,0,1,24,1],
 "classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c":[1,0,1,24,8],
 "classsoftwarecontainer_1_1_container.html#a4e9c554bba33a65aea63a35c10f0407e":[1,0,1,24,9],
-"classsoftwarecontainer_1_1_container.html#a5ad5d17e2e896bdae1f453d2ad53b066":[1,0,1,24,17]
+"classsoftwarecontainer_1_1_container.html#a5ad5d17e2e896bdae1f453d2ad53b066":[1,0,1,24,17],
+"classsoftwarecontainer_1_1_container.html#a5cdb7beda250ad4a1c49b34336518174":[1,0,1,24,16]
 };
