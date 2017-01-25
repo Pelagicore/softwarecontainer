@@ -25,7 +25,11 @@ def runInVagrant = { String workspace, String command ->
 }
 
 def shutdownVagrant = {
-    sh "cd ${workspace} && while ! vagrant destroy -f; do echo \"Shutdown failed, retrying...\"; done"
+    // In case the destroy step fails (happens sometimes with hung up ssh connections)
+    // we retry a couple of times to make sure it shuts down and is destroyed.
+    retry(5) {
+        sh "cd ${workspace} && vagrant destroy -f"
+    }
 }
 
 node {
@@ -122,6 +126,15 @@ node {
                 reportDir: 'build/CoverageUnitTest',
                 reportFiles: 'index.html',
                 reportName: 'Coverage report'
+            ])
+
+            publishHTML (target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: 'clang/scan_build_output/report',
+                reportFiles: 'index.html',
+                reportName: 'Clang report'
             ])
 
             // Store the unit test results and graph them
