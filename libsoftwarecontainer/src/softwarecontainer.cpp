@@ -73,6 +73,11 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
                       m_config->containerShutdownTimeout()));
 
     m_containerState = ContainerState::CREATED;
+
+    if(isError(init())) {
+        throw SoftwareContainerError("Could not initialize SoftwareContainer, container ID: "
+                                     + std::to_string(id));
+    }
 }
 
 SoftwareContainer::~SoftwareContainer()

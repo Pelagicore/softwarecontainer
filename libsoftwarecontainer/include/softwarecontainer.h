@@ -43,70 +43,26 @@ class Gateway;
 class ContainerAbstractInterface;
 
 
-/**
- * @class SoftwareContainer
- *
- * @brief An abstraction of concrete container implementations
- */
-
 class SoftwareContainer :
     private FileToolkitWithUndo
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");
 
-    /*
-     * @brief creates a new SoftwareContainer instance.
+    /**
+     * @brief Creates a new SoftwareContainer instance.
      *
-     * @param id the containerID to use.
-     * @param config an object holding all needed settings for the container
+     * @param id The containerID to use.
+     * @param config An object holding all needed settings for the container
      *
-     * @throws SoftwareContainerError if unable to set up the needed directories
-     *         or network settings for this container.
+     * @throws SoftwareContainerError If unable to set up the needed directories
+     *         or network settings for this container, or if anything goes wrong
+     *         when creating and initializing the underlying container implementation.
      */
     SoftwareContainer(const ContainerID id,
                       std::unique_ptr<const SoftwareContainerConfig> config);
 
     ~SoftwareContainer();
-
-    /**
-     * @brief Shutdown the container
-     */
-    ReturnCode shutdown();
-    ReturnCode shutdown(unsigned int timeout);
-
-    /*
-     * @brief suspend the container
-     *
-     * This suspends any execution inside the container until resume is called.
-     *
-     * @return ReturnCode::FAILURE if the container was already suspended
-     * @return ReturnCode::SUCCESS if the container was successfully suspended
-     */
-    ReturnCode suspend();
-
-    /*
-     * @brief resume a suspended container
-     *
-     * This resumes execution of a container that was suspended.
-     *
-     * @return ReturnCode::FAILURE if the container was not suspended
-     * @return ReturnCode::SUCCESS if the container was successfully resumed
-     */
-    ReturnCode resume();
-
-    void addGateway(Gateway *gateway);
-
-    ReturnCode init();
-
-    std::shared_ptr<ContainerAbstractInterface> getContainer();
-
-    std::shared_ptr<FunctionJob> createFunctionJob(const std::function<int()> fun);
-    std::shared_ptr<CommandJob> createCommandJob(const std::string &command);
-
-    ReturnCode bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
-
-    ObservableProperty<ContainerState> &getContainerState();
 
     /**
      * @brief Starts the Gateways by setting the gateway configurations
@@ -116,7 +72,62 @@ public:
      */
     ReturnCode startGateways(const GatewayConfiguration &configs);
 
+    /**
+     * @brief Create a job that can run a function in a container
+     */
+    std::shared_ptr<FunctionJob> createFunctionJob(const std::function<int()> fun);
+
+    /**
+     * @brief Create a job that can run a command in a container
+     */
+    std::shared_ptr<CommandJob> createCommandJob(const std::string &command);
+
+    /**
+     * @brief Shut down the container
+     */
+    ReturnCode shutdown();
+    ReturnCode shutdown(unsigned int timeout);
+
+    /**
+     * @brief Suspend the container
+     *
+     * This suspends any execution inside the container until resume is called.
+     *
+     * @return ReturnCode::FAILURE if the container was already suspended
+     * @return ReturnCode::SUCCESS if the container was successfully suspended
+     */
+    ReturnCode suspend();
+
+    /**
+     * @brief Resume a suspended container
+     *
+     * This resumes execution of a container that was suspended.
+     *
+     * @return ReturnCode::FAILURE if the container was not suspended
+     * @return ReturnCode::SUCCESS if the container was successfully resumed
+     */
+    ReturnCode resume();
+
+    ReturnCode bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
+
+    ObservableProperty<ContainerState> &getContainerState();
+
+    std::shared_ptr<ContainerAbstractInterface> getContainer();
+
+    /**
+     * @brief Only used for testing, should not be used by e.g. the launcher
+     *
+     * TODO: Remove or change scope of this method if possible.
+     */
+    void addGateway(Gateway *gateway);
+
 private:
+    /*
+     * Add gateways and create and initialize the underlying container
+     * implementation.
+     */
+    ReturnCode init();
+
     ReturnCode start();
 
     ReturnCode configureGateways(const GatewayConfiguration &gwConfig);
