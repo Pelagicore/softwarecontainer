@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.17.0-2113e8c 2017-01-25 documentation</title>
+    <title>API &#8212; softwarecontainer 0.17.0-2c329dc 2017-01-26 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.17.0-2113e8c 2017-01-25',
+        VERSION:     '0.17.0-2c329dc 2017-01-26',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -61,12 +61,15 @@ provides following object path and interface.</p>
 </tr>
 </tbody>
 </table>
+<div class="section" id="error-handling">
+<h3>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h3>
+<p>All methods in this API can and will return D-Bus errors on failure. All calls
+that don&#8217;t return a D-Bus error have worked successfully. Any call that returns
+a D-Bus error has failed. All calls that change a state and raise a D-Bus error
+shall have their side effects documented in this chapter.</p>
+</div>
 <div class="section" id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<p>All methods that modify the state of the containers return a <code class="docutils literal"><span class="pre">success</span></code>
-variable along with the actual return value. This is to not have to rely on
-magic values. The two methods <code class="docutils literal"><span class="pre">List</span></code> and <code class="docutils literal"><span class="pre">ListCapabilities</span></code> are the only
-ones that doesn&#8217;t modify the state.</p>
 </div>
 <div class="section" id="bindmount">
 <h3>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h3>
@@ -98,22 +101,6 @@ the path will be created.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="create">
 <h3>Create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h3>
@@ -152,8 +139,6 @@ the path will be created.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> ID of created SoftwareContainer.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
 </tbody>
 </table>
 </td>
@@ -184,22 +169,6 @@ container with all reserved sources.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="execute">
 <h3>Execute<a class="headerlink" href="#execute" title="Permalink to this headline">¶</a></h3>
@@ -240,8 +209,6 @@ container with all reserved sources.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> PID of the process run inside the container.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
 </tr>
 </tbody>
 </table>
@@ -313,22 +280,6 @@ the default capabilities, which are not listable.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="setcapabilities">
 <h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
@@ -356,22 +307,6 @@ map a configuration.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="suspend">
 <h3>Suspend<a class="headerlink" href="#suspend" title="Permalink to this headline">¶</a></h3>
@@ -395,62 +330,6 @@ map a configuration.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="id2">
-<h3>SetCapabilities<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Applies the given list of capability names to the container. Capabilities are mapped to gateway
-configurations and applied to each gateway for which they map a configuration.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">success:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether or not the operation was successful.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="signals">
 <h3>Signals<a class="headerlink" href="#signals" title="Permalink to this headline">¶</a></h3>
@@ -459,6 +338,10 @@ configurations and applied to each gateway for which they map a configuration.</
 <h3>ProcessStateChanged<a class="headerlink" href="#processstatechanged" title="Permalink to this headline">¶</a></h3>
 <p>The D-Bus API sends signal when process state is changed. There are four values to be emitted.</p>
 <table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -472,6 +355,13 @@ configurations and applied to each gateway for which they map a configuration.</
 </tr>
 </tbody>
 </table>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </div>
 <div class="section" id="introspection">
 <h3>Introspection<a class="headerlink" href="#introspection" title="Permalink to this headline">¶</a></h3>
@@ -491,6 +381,7 @@ SoftwareContainerAgent D-Bus API can be observed.</p>
   <ul>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
+<li><a class="reference internal" href="#error-handling">Error Handling</a></li>
 <li><a class="reference internal" href="#methods">Methods</a></li>
 <li><a class="reference internal" href="#bindmount">BindMount</a></li>
 <li><a class="reference internal" href="#create">Create</a></li>
@@ -501,7 +392,6 @@ SoftwareContainerAgent D-Bus API can be observed.</p>
 <li><a class="reference internal" href="#resume">Resume</a></li>
 <li><a class="reference internal" href="#setcapabilities">SetCapabilities</a></li>
 <li><a class="reference internal" href="#suspend">Suspend</a></li>
-<li><a class="reference internal" href="#id2">SetCapabilities</a></li>
 <li><a class="reference internal" href="#signals">Signals</a></li>
 <li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a></li>
 <li><a class="reference internal" href="#introspection">Introspection</a></li>

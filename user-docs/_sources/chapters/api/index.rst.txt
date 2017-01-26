@@ -17,12 +17,15 @@ provides following object path and interface.
 :Object Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
 
+Error Handling
+--------------
+All methods in this API can and will return D-Bus errors on failure. All calls
+that don't return a D-Bus error have worked successfully. Any call that returns
+a D-Bus error has failed. All calls that change a state and raise a D-Bus error
+shall have their side effects documented in this chapter. 
+
 Methods
 -------
-All methods that modify the state of the containers return a ``success``
-variable along with the actual return value. This is to not have to rely on
-magic values. The two methods ``List`` and ``ListCapabilities`` are the only
-ones that doesn't modify the state.
 
 BindMount
 ---------
@@ -36,9 +39,6 @@ the path will be created.
         :readOnly: ``bool`` indicates whether the directory is read-only or not.
 
 |
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
 
 Create
 ------
@@ -55,7 +55,6 @@ Creates a container with given configuration.
 
 :Return Values:
         :containerID: ``int32`` ID of created SoftwareContainer.
-        :success: ``bool`` Whether or not the operation was successful.
 
 Destroy
 -------
@@ -66,9 +65,6 @@ container with all reserved sources.
         :containerID: ``int32`` The ID obtained by CreateContainer method.
 
 |
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
 
 Execute
 -------
@@ -85,7 +81,6 @@ Launches the specified application/code in the container.
 
 :Return Values:
         :pid: ``int32`` PID of the process run inside the container.
-        :success: ``bool`` Whether or not the operation was successful.
 
 List
 ----
@@ -111,9 +106,6 @@ Resumes a suspended container
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 SetCapabilities
 ---------------
 Applies the given list of capability names to the container. Capabilities are
@@ -126,9 +118,6 @@ map a configuration.
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 Suspend
 -------
 Suspends all execution inside a given container.
@@ -138,22 +127,6 @@ Suspends all execution inside a given container.
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
-SetCapabilities
----------------
-Applies the given list of capability names to the container. Capabilities are mapped to gateway
-configurations and applied to each gateway for which they map a configuration.
-
-:Parameters:
-        :containerID: ``int32`` The ID obtained by CreateContainer method.
-
-|
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 Signals
 -------
 
@@ -161,13 +134,13 @@ ProcessStateChanged
 -------------------
 The D-Bus API sends signal when process state is changed. There are four values to be emitted.
 
-:containerID: ``int32`` The ID obtained by CreateContainer method.
+:Parameters:
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
+        :processID: ``uint32`` Pocess ID of container.
+        :isRunning: ``bool`` Whether the process is running or not.
+        :exitCode: ``uint32`` exit code of Process.
 
-:processID: ``uint32`` Pocess ID of container.
-
-:isRunning: ``bool`` Whether the process is running or not.
-
-:exitCode: ``uint32`` exit code of Process.
+|
 
 
 Introspection
