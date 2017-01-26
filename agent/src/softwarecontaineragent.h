@@ -230,6 +230,11 @@ private:
     bool updateGatewayConfigs(const ContainerID &containerID,
                               const GatewayConfiguration &configs);
 
+    /**
+     * @brief This method cleans unused old containers before agent starts up
+     */
+    void removeOldContainers(void);
+
 
     // Find a job given a pid
     std::shared_ptr<CommandJob> getJob(pid_t pid);

@@ -54,6 +54,7 @@ add_executable(softwarecontainer-agent
 target_link_libraries(softwarecontainer-agent
     ${Giomm_LIBRARIES}
     ${IVILogging_LIBRARIES}
+    ${LXC_LIBRARIES}
     softwarecontainer
 )
 

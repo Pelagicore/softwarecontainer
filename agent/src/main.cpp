@@ -19,7 +19,6 @@
 
 
 #include <glibmm/optioncontext.h>
-#include <lxc/lxccontainer.h>
 
 #include "config/config.h"
 #include "config/configerror.h"
@@ -53,51 +52,9 @@ int signalHandler(void *data) {
     return 0;
 }
 
-void cleanGhostContainers(void)
-{
-    char **containers = nullptr;
-    struct lxc_container **cret = nullptr;
-    const char * basePath = lxc_get_global_config_item("lxc.lxcpath");
-    auto num = list_all_containers(basePath, &containers, &cret);
-    if (num > 0 && num < std::numeric_limits<int>::max()) {
-        log_warning() << num << " ghost containers found";
-        for (; num; num--) {
-            log_debug() << "Ghost container named " << containers[num-1] << " will be deleted";
-
-            const char * state = cret[num-1]->state(cret[num-1]);
-            if ("RUNNING" == std::string(state)) {
-                bool success = cret[num-1]->stop(cret[num-1]);
-                if (!success) {
-                    std::string errorMsg = "Unable to stop ghost container " +
-                                           std::string(containers[num-1]);
-                    throw SoftwareContainerAgentError(errorMsg);
-                }
-            }
-
-            bool success = cret[num-1]->destroy(cret[num-1]);
-            if (!success) {
-                std::string errorMsg = "Unable to destroy ghost container " +
-                                       std::string(containers[num-1]);
-                throw SoftwareContainerAgentError(errorMsg);
-            }
-
-            log_debug() << "Ghost container " << containers[num-1] << " is successfully destroyed";
-            delete cret[num-1];
-            delete containers[num-1];
-        }
-        delete cret;
-        delete containers;
-    }
-}
 
 int main(int argc, char **argv)
 {
-    try {
-        cleanGhostContainers();
-    } catch (SoftwareContainerAgentError &err) {
-        log_warning() << err.what();
-    }
-
     // Config file path default 'SC_CONFIG_FILE' shuld be set by the build system
     Glib::OptionEntry configOpt;
     configOpt.set_long_name("config");
