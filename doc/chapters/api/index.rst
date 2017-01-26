@@ -17,12 +17,15 @@ provides following object path and interface.
 :Object Path: /com/pelagicore/SoftwareContainer
 :Interface: com.pelagicore.SoftwareContainerAgent
 
+Error Handling
+--------------
+All methods in this API can and will return D-Bus errors on failure. All calls
+that don't return a D-Bus error have worked successfully. Any call that returns
+a D-Bus error has failed. All calls that change a state and raise a D-Bus error
+shall have their side effects documented in this chapter. 
+
 Methods
 -------
-All methods that modify the state of the containers return a ``success``
-variable along with the actual return value. This is to not have to rely on
-magic values. The two methods ``List`` and ``ListCapabilities`` are the only
-ones that doesn't modify the state.
 
 BindMount
 ---------
