@@ -360,13 +360,12 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
 TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     std::string tempDirname = createTempDir();
-
     ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, tempDirname, false)));
 
-    const char *tempUnixSocket = buildPath(tempDirname, "/socket").c_str();
+    std::string strUnixSocket = buildPath(tempDirname, "socket");
+    const char *tempUnixSocket = strUnixSocket.c_str();
 
     auto job1 = getSc().createFunctionJob([&] () {
-
                 int fd, fd2, done, n;
                 char str[100];
                 socklen_t t;

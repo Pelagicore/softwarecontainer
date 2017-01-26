@@ -92,13 +92,18 @@ void SoftwareContainerTest::TearDown()
 
 std::string SoftwareContainerTest::createTempFile(const std::string &prefix)
 {
-    std::string strWithPrefix(prefix + "/tmp/SC-tmpFileXXXXXX");
+    std::string strWithPrefix = "SC-tmpFileXXXXXX";
+    if (prefix.empty()) {
+        strWithPrefix = buildPath("/tmp", strWithPrefix);
+    } else {
+        strWithPrefix = buildPath(prefix, strWithPrefix);
+    }
+
     size_t n = strWithPrefix.size() + 1;
     char *fileTemplate = new char[n];
     strncpy(fileTemplate, strWithPrefix.c_str(), n);
 
-    int fd = 0;
-    fd = mkstemp(fileTemplate);
+    int fd = mkstemp(fileTemplate);
     close(fd);
 
     std::string filename(fileTemplate);
@@ -110,7 +115,13 @@ std::string SoftwareContainerTest::createTempFile(const std::string &prefix)
 
 std::string SoftwareContainerTest::createTempDir(const std::string &prefix)
 {
-    std::string strWithPrefix(prefix + "/tmp/SC-tmpDirXXXXXX");
+    std::string strWithPrefix = "SC-tmpDirXXXXXX";
+    if (prefix.empty()) {
+        strWithPrefix = buildPath("/tmp", strWithPrefix);
+    } else {
+        strWithPrefix = buildPath(prefix, strWithPrefix);
+    }
+
     size_t n = strWithPrefix.size() + 1;
     char *dirTemplate = new char[n];
     strncpy(dirTemplate, strWithPrefix.c_str(), n);
