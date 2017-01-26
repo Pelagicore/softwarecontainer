@@ -89,7 +89,7 @@ $SC_CMD $AGENTPREFIX.BindMount \
     $CONTAINERID \
     string:${SCRIPTPATH} \
     string:${APPBASE} \
-    boolean:true
+    boolean:false
 
 # Run the simple example
 $SC_CMD $AGENTPREFIX.Execute \
