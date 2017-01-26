@@ -37,9 +37,6 @@ the path will be created.
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 Create
 ------
 Creates a container with given configuration.
@@ -55,7 +52,6 @@ Creates a container with given configuration.
 
 :Return Values:
         :containerID: ``int32`` ID of created SoftwareContainer.
-        :success: ``bool`` Whether or not the operation was successful.
 
 Destroy
 -------
@@ -66,9 +62,6 @@ container with all reserved sources.
         :containerID: ``int32`` The ID obtained by CreateContainer method.
 
 |
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
 
 Execute
 -------
@@ -85,7 +78,6 @@ Launches the specified application/code in the container.
 
 :Return Values:
         :pid: ``int32`` PID of the process run inside the container.
-        :success: ``bool`` Whether or not the operation was successful.
 
 List
 ----
@@ -111,9 +103,6 @@ Resumes a suspended container
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 SetCapabilities
 ---------------
 Applies the given list of capability names to the container. Capabilities are
@@ -126,9 +115,6 @@ map a configuration.
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 Suspend
 -------
 Suspends all execution inside a given container.
@@ -138,22 +124,6 @@ Suspends all execution inside a given container.
 
 |
 
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
-SetCapabilities
----------------
-Applies the given list of capability names to the container. Capabilities are mapped to gateway
-configurations and applied to each gateway for which they map a configuration.
-
-:Parameters:
-        :containerID: ``int32`` The ID obtained by CreateContainer method.
-
-|
-
-:Return Value:
-        :success: ``bool`` Whether or not the operation was successful.
-
 Signals
 -------
 
@@ -161,13 +131,13 @@ ProcessStateChanged
 -------------------
 The D-Bus API sends signal when process state is changed. There are four values to be emitted.
 
-:containerID: ``int32`` The ID obtained by CreateContainer method.
+:Parameters:
+        :containerID: ``int32`` The ID obtained by CreateContainer method.
+        :processID: ``uint32`` Pocess ID of container.
+        :isRunning: ``bool`` Whether the process is running or not.
+        :exitCode: ``uint32`` exit code of Process.
 
-:processID: ``uint32`` Pocess ID of container.
-
-:isRunning: ``bool`` Whether the process is running or not.
-
-:exitCode: ``uint32`` exit code of Process.
+|
 
 
 Introspection
