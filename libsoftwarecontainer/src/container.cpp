@@ -107,7 +107,8 @@ ReturnCode Container::initialize()
     if (m_state < ContainerState::PREPARED) {
         std::string gatewayDir = gatewaysDir();
         if (isError(createDirectory(gatewayDir))) {
-            log_error() << "Could not create gateway directory " << gatewayDir << strerror(errno);
+            log_error() << "Could not create gateway directory "
+                        << gatewayDir << ": " << strerror(errno);
             return ReturnCode::FAILURE;
         }
 
@@ -522,10 +523,8 @@ ReturnCode Container::bindMountInContainer(const std::string &pathInHost,
     }
 
     // Create a file to mount to in gateways
-
-    // TODO: use softwarecontainer::parentPath here
-    std::string parentPath = basename(strdup(pathInContainer.c_str()));
-    std::string tempPath = buildPath(gatewaysDir(), parentPath);
+    std::string filePart = baseName(pathInContainer);
+    std::string tempPath = buildPath(gatewaysDir(), filePart);
 
     if (isDirectory(pathInHost)) {
         log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
@@ -609,9 +608,8 @@ ReturnCode Container::bindMountCore(const std::string &pathInHost,
     }
 
     // Paths inside the container
-    // TODO: Use parentPath from softwarecontainer-common.cpp instead
-    std::string parentPath = basename(strdup(pathInContainer.c_str()));
-    std::string tempDirInContainer = buildPath(gatewaysDirInContainer(), parentPath);
+    std::string filePart = baseName(pathInContainer);
+    std::string tempDirInContainer = buildPath(gatewaysDirInContainer(), filePart);
 
     // The same paths on the host
     std::string pathInContainerOnHost = buildPath(rootFS(), pathInContainer);
@@ -629,7 +627,7 @@ ReturnCode Container::bindMountCore(const std::string &pathInHost,
                 return ReturnCode::FAILURE;
             }
         } else {
-            std::string fileParentOnHost = dirname(strdup(pathInContainerOnHost.c_str()));
+            std::string fileParentOnHost = parentPath(pathInContainerOnHost);
             log_debug() << "Creating parent paths " << fileParentOnHost;
             if (isError(createDirectory(fileParentOnHost))) {
                 log_error() << "Could not create parent(s) to target directory "

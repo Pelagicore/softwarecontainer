@@ -56,17 +56,18 @@ ReturnCode FileToolkitWithUndo::createParentDirectory(const std::string &path)
 {
     log_debug() << "Creating parent directories for " << path;
     std::string parent = parentPath(path);
-    if (!isDirectory(parent) && !parent.empty()) {
-        if(isError(createDirectory(parent))) {
-            log_error() << "Could not create directory " << parent;
-            return ReturnCode::FAILURE;
-        }
+
+    if (isError(createDirectory(parent))) {
+        log_error() << "Could not create directory " << parent;
+        return ReturnCode::FAILURE;
     }
+
     return ReturnCode::SUCCESS;
 }
 
 ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
 {
+    log_debug() << "createDirectory(" << path << ") called";
     if (isDirectory(path)) {
         return ReturnCode::SUCCESS;
     }
@@ -77,7 +78,7 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
     }
 
     if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-        log_error() << "Could not create directory " << path << " - Reason : " << strerror(errno);
+        log_error() << "Could not create directory " << path << ": " << strerror(errno);
         return ReturnCode::FAILURE;
     }
 

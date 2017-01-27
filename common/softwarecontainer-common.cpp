@@ -18,6 +18,7 @@
  */
 
 #include "softwarecontainer-common.h"
+#include "softwarecontainererror.h"
 
 #include <string>
 #include <iostream>
@@ -29,6 +30,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <fcntl.h>
+#include <libgen.h>
 
 namespace softwarecontainer {
     LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
@@ -93,22 +95,21 @@ bool existsInFileSystem(const std::string &path)
 
 std::string parentPath(const std::string &path_)
 {
-    static constexpr const char *separator = "/";
-    static constexpr const char separator_char = '/';
-
-    auto path = path_;
-
-    // Remove trailing backslashes
-    while ((path.size() > 0) && (path[path.size() - 1] == separator_char)) {
-        path.resize(path.size() - 1);
+    char *path = strdup(path_.c_str());
+    if (nullptr == path) {
+        std::string message = "Failed to do strdup on " + path_;
+        log_error() << message;
+        throw SoftwareContainerError(message);
     }
 
-    auto pos = path.rfind(separator);
-    if (pos == std::string::npos) {
-        pos = strlen(separator);
-    }
-    std::string parentPath = path.substr(0, pos - strlen(separator) + 1);
-    return parentPath;
+    std::string parent = dirname(path);
+    free(path);
+    return parent;
+}
+
+std::string baseName(const std::string &path)
+{
+    return Glib::path_get_basename(path);
 }
 
 std::string buildPath(const std::string &arg1, const std::string &arg2)

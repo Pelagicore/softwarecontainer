@@ -288,3 +288,28 @@ TEST_F(SoftwareContainerCommonTest, TouchDoesntModifyFiles) {
     ASSERT_EQ(testData, readBack);
 
 }
+
+TEST_F(SoftwareContainerCommonTest, ParentPathWorksAsExpected) {
+    // Absolute paths
+    EXPECT_EQ(parentPath("/"), "/");
+    EXPECT_EQ(parentPath("/usr/"), "/");
+    EXPECT_EQ(parentPath("/usr//"), "/");
+    EXPECT_EQ(parentPath("/usr/lib"), "/usr");
+    EXPECT_EQ(parentPath("/usr/lib/"), "/usr");
+    EXPECT_EQ(parentPath("/usr/local/etc/some-file.txt"), "/usr/local/etc");
+
+    // Relative paths
+    EXPECT_EQ(parentPath(""), ".");
+    EXPECT_EQ(parentPath("home"), ".");
+    EXPECT_EQ(parentPath("home/test"), "home");
+    EXPECT_EQ(parentPath("home/test/"), "home");
+    EXPECT_EQ(parentPath("home/test/some-file.txt"), "home/test");
+}
+
+TEST_F(SoftwareContainerCommonTest, BaseNameWorksAsExpected) {
+    EXPECT_EQ(baseName("/"), "/");
+    EXPECT_EQ(baseName("/usr/"), "usr");
+    EXPECT_EQ(baseName("/usr"), "usr");
+    EXPECT_EQ(baseName("/usr/lib/"), "lib");
+    EXPECT_EQ(baseName("/usr/lib"), "lib");
+}

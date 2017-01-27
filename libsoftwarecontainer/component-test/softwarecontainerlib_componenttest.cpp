@@ -371,7 +371,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
                 socklen_t t;
                 sockaddr_un local, remote;
                 local.sun_family = AF_UNIX;
-                strcpy(local.sun_path, tempUnixSocket);
+                strncpy(local.sun_path, tempUnixSocket, strlen(tempUnixSocket) + 1);
                 fd = socket(AF_UNIX, SOCK_STREAM, 0);
                 bind(fd, (sockaddr*)(&local), sizeof(local));
                 listen(fd, 100);
@@ -418,7 +418,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
         }
 
         remote.sun_family = AF_UNIX;
-        strcpy(remote.sun_path, tempUnixSocket);
+        strncpy(remote.sun_path, tempUnixSocket, strlen(tempUnixSocket) + 1);
         len = strlen(remote.sun_path) + sizeof(remote.sun_family);
         if (connect(s, (struct sockaddr *)&remote, len) == -1) {
             _exit(NON_EXISTENT);

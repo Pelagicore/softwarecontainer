@@ -65,7 +65,7 @@ private:
      * @throws ServiceManifestPathError if the path to the Service Manifest(s) is not allowed
      *
      */
-    virtual void readCapsFromDir(const std::string &dirPath);
+    void readCapsFromDir(const std::string &dirPath);
 
     /**
      * @brief Reads a Service Manifest file, of type json, and adds the
@@ -78,7 +78,7 @@ private:
      * is unsuccessful
      *
      */
-    virtual void readCapsFromFile(const std::string &filePath);
+    void readCapsFromFile(const std::string &filePath);
 
     /**
      * @brief Parse a JSON object, which should be a JSON array, of capabilities

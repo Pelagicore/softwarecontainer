@@ -134,6 +134,8 @@ bool isSocket(const std::string &path);
 bool existsInFileSystem(const std::string &path);
 
 std::string parentPath(const std::string &path);
+std::string baseName(const std::string &path);
+
 ReturnCode touch(const std::string &path);
 ReturnCode writeToFile(const std::string &path, const std::string &content);
 ReturnCode readFromFile(const std::string &path, std::string &content);
