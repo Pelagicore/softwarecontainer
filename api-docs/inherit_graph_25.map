@@ -1,13 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway_error.html" title="softwarecontainer::\lGatewayError" alt="" coords="145,528,278,569"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway_parser_error.html" title="softwarecontainer::\lGatewayParserError" alt="" coords="141,593,281,635"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_error.html" title="softwarecontainer::\lSoftwareContainerError" alt="" coords="132,659,291,700"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway_error.html" title="softwarecontainer::\lGatewayError" alt="" coords="145,561,278,603"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway_parser_error.html" title="softwarecontainer::\lGatewayParserError" alt="" coords="141,627,281,668"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_error.html" title="softwarecontainer::\lSoftwareContainerError" alt="" coords="132,692,291,733"/>
 <area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_cgroups_gateway_error.html" title="softwarecontainer::\lCgroupsGatewayError" alt="" coords="359,104,510,145"/>
 <area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_config_error.html" title="softwarecontainer::\lConfigError" alt="" coords="368,397,501,439"/>
-<area shape="rect" id="node16" href="$classsoftwarecontainer_1_1_config_store_error.html" title="softwarecontainer::\lConfigStoreError" alt="" coords="368,625,501,667"/>
-<area shape="rect" id="node20" href="$classsoftwarecontainer_1_1_container_option_parse_error.html" title="softwarecontainer::\lContainerOptionParseError" alt="" coords="345,691,524,732"/>
-<area shape="rect" id="node21" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="359,756,510,797"/>
-<area shape="rect" id="node23" href="$classsoftwarecontainer_1_1_software_container_agent_error.html" title="An error occured in SoftwareContainerAgent. " alt="" coords="339,821,531,863"/>
+<area shape="rect" id="node16" href="$classsoftwarecontainer_1_1_config_store_error.html" title="softwarecontainer::\lConfigStoreError" alt="" coords="368,593,501,635"/>
+<area shape="rect" id="node20" href="$classsoftwarecontainer_1_1_container_error.html" title="An error has occured in the underlying container implementation. " alt="" coords="368,659,501,700"/>
+<area shape="rect" id="node21" href="$classsoftwarecontainer_1_1_container_option_parse_error.html" title="softwarecontainer::\lContainerOptionParseError" alt="" coords="345,724,524,765"/>
+<area shape="rect" id="node22" href="$classsoftwarecontainer_1_1_invalid_operation_error.html" title="A method was called which is inappropriate in the current state. " alt="" coords="363,789,507,831"/>
+<area shape="rect" id="node23" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="359,855,510,896"/>
+<area shape="rect" id="node25" href="$classsoftwarecontainer_1_1_software_container_agent_error.html" title="An error occured in SoftwareContainerAgent. " alt="" coords="339,920,531,961"/>
 <area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_bad_suffix_error.html" title="softwarecontainer::\lBadSuffixError" alt="" coords="601,5,735,47"/>
 <area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_j_son_error.html" title="softwarecontainer::\lJSonError" alt="" coords="601,71,735,112"/>
 <area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_limit_range_error.html" title="softwarecontainer::\lLimitRangeError" alt="" coords="601,136,735,177"/>
@@ -20,5 +22,5 @@
 <area shape="rect" id="node17" href="$classsoftwarecontainer_1_1_capability_parse_error.html" title="An error occured in ConfigStore when parsing a Capability in a Service Manifest. " alt="" coords="597,593,739,635"/>
 <area shape="rect" id="node18" href="$classsoftwarecontainer_1_1_service_manifest_parse_error.html" title="An error occured in ConfigStore when parsing a Service Manifest. " alt="" coords="579,659,757,700"/>
 <area shape="rect" id="node19" href="$classsoftwarecontainer_1_1_service_manifest_path_error.html" title="An error occured in ConfigStore relating to the path to the Service Manifest(s) " alt="" coords="583,724,753,765"/>
-<area shape="rect" id="node22" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="601,789,735,831"/>
+<area shape="rect" id="node24" href="$classsoftwarecontainer_1_1_i_p_allocation_error.html" title="softwarecontainer::\lIPAllocationError" alt="" coords="601,855,735,896"/>
 </map>

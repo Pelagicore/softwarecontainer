@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html" title="The Container class is an abstraction of the specific containment technology used. " alt="" coords="425,5,559,47"/>
 <area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html" title="softwarecontainer::\lFileToolkitWithUndo" alt="" coords="206,71,346,112"/>
 <area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_device_node_gateway.html" title="This gateway is responsible for exposing device nodes in an LXC container. " alt="" coords="419,136,565,177"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container.html" title="softwarecontainer::\lSoftwareContainer" alt="" coords="425,71,559,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container.html" title="An abstraction of concrete container implementations. " alt="" coords="425,71,559,112"/>
 <area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. " alt="" coords="209,397,343,439"/>
 <area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_cgroups_gateway.html" title="The cgroups gateway sets cgroups related settings for the container. " alt="" coords="425,201,559,243"/>
 <area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_d_bus_gateway.html" title="softwarecontainer::\lDBusGateway" alt="" coords="425,267,559,308"/>

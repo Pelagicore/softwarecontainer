@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-24d8fc2 2017-01-27</span>
+   &#160;<span id="projectnumber">0.17.0-a0c0f68 2017-01-27</span>
    </div>
   </td>
  </tr>
@@ -303,7 +303,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00024">24</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8h_source.html#l00093">softwarecontainer::Gateway::id()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer::isError()</a>, and <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement()</a>.</p>
+<p>References <a class="el" href="gateway_8h_source.html#l00093">softwarecontainer::Gateway::id()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>, and <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement()</a>.</p>
 
 <p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
@@ -348,7 +348,7 @@ Here is the caller graph for this function:</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    m_state = GatewayState::CONFIGURED;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00071">softwarecontainer-common.h:71</a></div></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9f833c193f13516b4ae9e717f834e931"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9f833c193f13516b4ae9e717f834e931">softwarecontainer::Gateway::readConfigElement</a></div><div class="ttdeci">virtual ReturnCode readConfigElement(const json_t *element)=0</div><div class="ttdoc">Gateway specific parsing of config elements. </div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af421b6ffb3db76240a491b2302e78699"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699">softwarecontainer::Gateway::id</a></div><div class="ttdeci">virtual const char * id()</div><div class="ttdef"><b>Definition:</b> <a href="gateway_8h_source.html#l00093">gateway.h:93</a></div></div>
 </div><!-- fragment -->
@@ -553,7 +553,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00130">130</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="softwarecontainer_8cpp_source.html#l00165">softwarecontainer::SoftwareContainer::addGateway()</a>, and <a class="el" href="dbusgateway_8cpp_source.html#l00104">softwarecontainer::DBusGateway::setContainer()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontainer_8cpp_source.html#l00163">softwarecontainer::SoftwareContainer::addGateway()</a>, and <a class="el" href="dbusgateway_8cpp_source.html#l00104">softwarecontainer::DBusGateway::setContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;{</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    m_container = container;</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
@@ -674,7 +674,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Check if the gateway has an associated container. </p>
-<p>Inheriting gateways calls this method to know if they are safe to assume they can access a <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> instance previously set by <a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a> calling <a class="el" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb" title="Set the associated container for this gateway. ">setContainer()</a></p>
+<p>Inheriting gateways calls this method to know if they are safe to assume they can access a <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> instance previously set by <a class="el" href="classsoftwarecontainer_1_1_software_container.html" title="An abstraction of concrete container implementations. ">SoftwareContainer</a> calling <a class="el" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb" title="Set the associated container for this gateway. ">setContainer()</a></p>
 <dl class="section return"><dt>Returns</dt><dd>true if there is a <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> instance set, false if not. </dd></dl>
 
 <p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00115">115</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
@@ -834,7 +834,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_wayland_gateway.html">WaylandGateway</a></li>
-    <li class="footer">Generated on Fri Jan 27 2017 08:29:23 for softwarecontainer by
+    <li class="footer">Generated on Fri Jan 27 2017 11:19:55 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

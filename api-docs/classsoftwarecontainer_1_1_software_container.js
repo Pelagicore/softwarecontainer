@@ -8,10 +8,11 @@ var classsoftwarecontainer_1_1_software_container =
     [ "createCommandJob", "classsoftwarecontainer_1_1_software_container.html#a911b62ba4d9307275f59698d2ae69467", null ],
     [ "shutdown", "classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4", null ],
     [ "shutdown", "classsoftwarecontainer_1_1_software_container.html#aed9c303ecb97a102ab5957b913bda721", null ],
-    [ "suspend", "classsoftwarecontainer_1_1_software_container.html#ae46b4cd3f7b831cf445a45624842a0df", null ],
-    [ "resume", "classsoftwarecontainer_1_1_software_container.html#a9975f8b2714301b79b2e290adc252bef", null ],
+    [ "suspend", "classsoftwarecontainer_1_1_software_container.html#a99f3c698cc9b83d71a6c302737717e77", null ],
+    [ "resume", "classsoftwarecontainer_1_1_software_container.html#ab85363f0b8f0b9cfc6800a94bc9d8443", null ],
     [ "bindMount", "classsoftwarecontainer_1_1_software_container.html#afe11b13492ae3abde2ca4f8e001a8a6d", null ],
     [ "getContainerState", "classsoftwarecontainer_1_1_software_container.html#a25cb629242d33c12d2f3468bbd34964a", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2", null ],
+    [ "previouslyConfigured", "classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184", null ],
     [ "addGateway", "classsoftwarecontainer_1_1_software_container.html#ac9483d1d07e84b77820498eba3e7b284", null ]
 ];
