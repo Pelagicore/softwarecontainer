@@ -37,7 +37,7 @@ public:
     /**
      * @brief Sets config for both dbus session instances
      */
-    virtual ReturnCode setConfig(const std::string &config) override;
+    virtual ReturnCode setConfig(const json_t *config) override;
 
     /**
      * @brief Activates both dbus session instances

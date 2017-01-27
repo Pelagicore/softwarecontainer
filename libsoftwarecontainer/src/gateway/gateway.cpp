@@ -21,54 +21,38 @@
 
 namespace softwarecontainer {
 
-ReturnCode Gateway::setConfig(const std::string &config)
+ReturnCode Gateway::setConfig(const json_t *config)
 {
     if (m_state == GatewayState::ACTIVATED) {
         log_error() << "Can not configure a gateway that is already activated: " << id();
         throw GatewayError("Gateway already activated");
     }
 
-    json_error_t error;
-    json_t *root = json_loads(config.c_str(), 0, &error);
-    if (!root) {
-        std::string errorText = logging::StringBuilder()
-            << "Could not parse config: " << error.text;
-        setConfigRollback(errorText,root);
+    if (!json_is_array(config)) {
+        log_error() << "Root JSON element is not an array";
         return ReturnCode::FAILURE;
     }
 
-    if (!json_is_array(root)) {
-        setConfigRollback("Root JSON element is not an array",root);
+    if (json_array_size(config) == 0) {
+        log_error() << "Root JSON array is empty";
         return ReturnCode::FAILURE;
     }
 
-    if (json_array_size(root) == 0) {
-        setConfigRollback("Root JSON array is empty",root);
-        return ReturnCode::FAILURE;
-    }
-
-    for(size_t i = 0; i < json_array_size(root); i++) {
-        json_t *element = json_array_get(root, i);
+    for(size_t i = 0; i < json_array_size(config); i++) {
+        json_t *element = json_array_get(config, i);
         if (!json_is_object(element)) {
-            setConfigRollback("json configuration is not an object",root);
+            log_error() << "json configuration is not an object";
             return ReturnCode::FAILURE;
         }
 
         if (isError(readConfigElement(element))) {
-            setConfigRollback("Could not read config element",root);
+            log_error() << "Could not read config element";
             return ReturnCode::FAILURE;
         }
     }
 
-    json_decref(root);
     m_state = GatewayState::CONFIGURED;
     return ReturnCode::SUCCESS;
-}
-
-void Gateway::setConfigRollback(std::string message, json_t *element)
-{
-    log_error() << message;
-    json_decref(element);
 }
 
 ReturnCode Gateway::activate() {

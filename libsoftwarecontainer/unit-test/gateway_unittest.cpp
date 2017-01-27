@@ -48,10 +48,29 @@ public:
     std::string validConf = "[{ }]";
     std::string validEmptyConf = "[]";
 
+    json_t *jsonConf = nullptr;
+
     void SetUp() override
     {
         ::testing::DefaultValue<bool>::Set(true);
         ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
+    }
+
+    void TearDown() override
+    {
+        if (nullptr != jsonConf) {
+            json_decref(jsonConf);
+        }
+    }
+
+    void loadConfig(std::string config)
+    {
+        if (nullptr != jsonConf) {
+            json_decref(jsonConf);
+        }
+
+        json_error_t err;
+        jsonConf = json_loads(config.c_str(), 0, &err);
     }
 };
 
@@ -67,7 +86,9 @@ TEST_F(GatewayTest, ActivateWithoutConfigure) {
  * Test that teardown does not work on a gateway that has not been activated.
  */
 TEST_F(GatewayTest, TeardownWithoutActivate) {
-    ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+    loadConfig(validConf);
+
+    ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
     ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
@@ -76,7 +97,9 @@ TEST_F(GatewayTest, TeardownWithoutActivate) {
  */
 TEST_F(GatewayTest, ConfigIsNotJSON) {
     const std::string config = "apabepacepa";
-    ASSERT_TRUE(isError(gw.setConfig(config)));
+    loadConfig(config);
+
+    ASSERT_TRUE(isError(gw.setConfig(jsonConf)));
     ASSERT_THROW(gw.activate(), GatewayError);
     ASSERT_THROW(gw.teardown(), GatewayError);
 }
@@ -86,7 +109,9 @@ TEST_F(GatewayTest, ConfigIsNotJSON) {
  */
 TEST_F(GatewayTest, ConfigIsNotArray) {
     const std::string config = "{ \"key\": \"value\" }";
-    ASSERT_TRUE(isError(gw.setConfig(config)));
+    loadConfig(config);
+
+    ASSERT_TRUE(isError(gw.setConfig(jsonConf)));
     ASSERT_THROW(gw.activate(), GatewayError);
     ASSERT_THROW(gw.teardown(), GatewayError);
 }
@@ -95,7 +120,8 @@ TEST_F(GatewayTest, ConfigIsNotArray) {
  * Test that empty JSON arrays are not accepted.
  */
 TEST_F(GatewayTest, ConfigIsEmpty) {
-    ASSERT_TRUE(isError(gw.setConfig(validEmptyConf)));
+    loadConfig(validEmptyConf);
+    ASSERT_TRUE(isError(gw.setConfig(jsonConf)));
     ASSERT_THROW(gw.activate(), GatewayError);
     ASSERT_THROW(gw.teardown(), GatewayError);
 }
@@ -115,7 +141,9 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
 
     // Array of bad types
     for (std::string notObj : notObjects) {
-        ASSERT_TRUE(isError(gw.setConfig(notObj)));
+        loadConfig(notObj);
+
+        ASSERT_TRUE(isError(gw.setConfig(jsonConf)));
         ASSERT_THROW(gw.activate(), GatewayError);
         ASSERT_THROW(gw.teardown(), GatewayError);
     }
@@ -128,9 +156,8 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
             json_t *arr2 = json_loads(notObjInner.c_str(), 0, &err);
 
             json_array_extend(arr1, arr2);
-            std::string notObjCombined = json_dumps(arr1, 0);
 
-            ASSERT_TRUE(isError(gw.setConfig(notObjCombined)));
+            ASSERT_TRUE(isError(gw.setConfig(arr1)));
             ASSERT_THROW(gw.activate(), GatewayError);
             ASSERT_THROW(gw.teardown(), GatewayError);
 
@@ -145,7 +172,8 @@ TEST_F(GatewayTest, ConfigArrayElementsAreNotObjects)
  */
 TEST_F(GatewayTest, CanConfigureManyTimes) {
     for (int i = 0; i < 3; i++) {
-        ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+        loadConfig(validConf);
+        ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
     }
 }
 
@@ -154,7 +182,8 @@ TEST_F(GatewayTest, CanConfigureManyTimes) {
  * which in turn means that teardown can succeed.
  */
 TEST_F(GatewayTest, ConfigEnablesActivateEnablesTeardown) {
-    ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+    loadConfig(validConf);
+    ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
     ASSERT_TRUE(isSuccess(gw.activate()));
     ASSERT_TRUE(isSuccess(gw.teardown()));
 }
@@ -163,7 +192,8 @@ TEST_F(GatewayTest, ConfigEnablesActivateEnablesTeardown) {
  * Test that double activation is not possible
  */
 TEST_F(GatewayTest, CantActivateTwice) {
-    ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+    loadConfig(validConf);
+    ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
     ASSERT_TRUE(isSuccess(gw.activate()));
     ASSERT_THROW(gw.activate(), GatewayError);
 }
@@ -173,7 +203,9 @@ TEST_F(GatewayTest, CantActivateTwice) {
  * set on gateway.
  */
 TEST_F(GatewayTest, NoContainerSetMeansActivateThrows) {
-    ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+
+    loadConfig(validConf);
+    ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
 
     // Make the check for a container instance in activate fail
     ::testing::DefaultValue<bool>::Set(false);
@@ -187,7 +219,8 @@ TEST_F(GatewayTest, NoContainerSetMeansActivateThrows) {
  * Test that teardown throws exception if called on a non activated gateway
  */
 TEST_F(GatewayTest, FailedActivateMeansTeardownFails) {
-    ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+    loadConfig(validConf);
+    ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
 
     // Override the default mock return value set in test base class
     EXPECT_CALL(gw, activateGateway())
@@ -203,7 +236,8 @@ TEST_F(GatewayTest, FailedActivateMeansTeardownFails) {
  * Test that it is not possible to teardown a gateway twice
  */
 TEST_F(GatewayTest, CantTeardownTwice) {
-    ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+    loadConfig(validConf);
+    ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
     ASSERT_TRUE(isSuccess(gw.activate()));
 
     ASSERT_TRUE(isSuccess(gw.teardown()));
@@ -216,7 +250,8 @@ TEST_F(GatewayTest, CantTeardownTwice) {
  */
 TEST_F(GatewayTest, TornDownGatewayCanBeConfigured) {
     for (int i = 0; i < 3; i++) {
-        ASSERT_TRUE(isSuccess(gw.setConfig(validConf)));
+        loadConfig(validConf);
+        ASSERT_TRUE(isSuccess(gw.setConfig(jsonConf)));
         ASSERT_TRUE(isSuccess(gw.activate()));
         ASSERT_TRUE(isSuccess(gw.teardown()));
     }

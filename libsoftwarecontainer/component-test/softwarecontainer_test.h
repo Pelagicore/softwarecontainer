@@ -64,5 +64,10 @@ public:
     SoftwareContainerGatewayTest() { }
     ~SoftwareContainerGatewayTest() { }
 
+    json_t *jsonConfig;
+
+    void TearDown() override;
+
     void givenContainerIsSet(Gateway *gw);
+    void loadConfig(const std::string &config);
 };

@@ -193,15 +193,11 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
 
         json_t *config = gwConfig.config(gatewayId);
         if (config != nullptr) {
-            std::string configStr = json_dumps(config,0);
-            log_debug() << "Configuring gateway \""
-                        << gatewayId
-                        << "\" with config: "
-                        << configStr;
+            log_debug() << "Configuring gateway: " << gatewayId;
             try {
-                ReturnCode configurationResult = gateway->setConfig(configStr);
+                ReturnCode configurationResult = gateway->setConfig(config);
                 if (isError(configurationResult)) {
-                    log_error() << "Failed to apply gateway configuration: " << configStr;
+                    log_error() << "Failed to apply gateway configuration";
                     return configurationResult;
                 }
             } catch (GatewayError &error) {
@@ -210,7 +206,7 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
                  * as it means one or more capabilities are broken.
                  */
                 log_error() << "Fatal error when configuring gateway \""
-                            << gatewayId << "\" : " << error.what();
+                            << gatewayId << "\": " << error.what();
                 throw error;
             }
             json_decref(config);
