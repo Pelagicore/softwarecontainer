@@ -75,7 +75,8 @@ protected:
  */
 TEST_F(NetworkGatewayTest, Activate) {
     givenContainerIsSet(gw);
-    ASSERT_TRUE(isSuccess(gw->setConfig(VALID_FULL_CONFIG)));
+    loadConfig(VALID_FULL_CONFIG);
+    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
     ASSERT_TRUE(isSuccess(gw->activate()));
 }
 
@@ -86,8 +87,9 @@ TEST_F(NetworkGatewayTest, Activate) {
 TEST_F(NetworkGatewayTest, ActivateBadConfig) {
     givenContainerIsSet(gw);
     const std::string config = "[{\"internet-access\": true}]";
+    loadConfig(config);
 
-    ASSERT_TRUE(isError(gw->setConfig(config)));
+    ASSERT_TRUE(isError(gw->setConfig(jsonConfig)));
     ASSERT_THROW(gw->activate(), GatewayError);
 }
 
@@ -101,6 +103,7 @@ TEST_F(NetworkGatewayTest, ActivateNoBridge) {
     ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::FAILURE);
         EXPECT_CALL(*gw, isBridgeAvailable());
 
-    ASSERT_TRUE(isSuccess(gw->setConfig(VALID_FULL_CONFIG)));
+    loadConfig(VALID_FULL_CONFIG);
+    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
     ASSERT_TRUE(isError(gw->activate()));
 }

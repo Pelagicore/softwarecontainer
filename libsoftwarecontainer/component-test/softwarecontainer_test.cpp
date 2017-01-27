@@ -26,6 +26,23 @@ void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
     m_sc->addGateway(gw);
 }
 
+void SoftwareContainerGatewayTest::loadConfig(const std::string &config)
+{
+    if (nullptr != jsonConfig) {
+        json_decref(jsonConfig);
+    }
+
+    json_error_t err;
+    jsonConfig = json_loads(config.c_str(), 0, &err);
+}
+
+void SoftwareContainerGatewayTest::TearDown()
+{
+    if (nullptr != jsonConfig) {
+        json_decref(jsonConfig);
+    }
+}
+
 void SoftwareContainerTest::run()
 {
     m_ml = Glib::MainLoop::create(m_context);

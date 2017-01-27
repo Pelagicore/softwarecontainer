@@ -33,7 +33,7 @@ DBusGateway::~DBusGateway()
 {
 }
 
-ReturnCode DBusGateway::setConfig(const std::string &config)
+ReturnCode DBusGateway::setConfig(const json_t *config)
 {
     try {
         log_debug() << "Setting config for dbus session bus";

@@ -66,7 +66,8 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
                                   }\
                                 ]";
 
-    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    loadConfig(config);
+    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
     ASSERT_TRUE(isSuccess(gw->activate()));
 }
 
@@ -85,7 +86,8 @@ TEST_F(DeviceNodeGatewayTest, TestOverwriteDeviceFails) {
                                   }\
                                 ]";
 
-    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    loadConfig(config);
+    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
     ASSERT_FALSE(isSuccess(gw->activate()));
 
 }

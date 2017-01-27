@@ -46,7 +46,8 @@ TEST_F(CgroupsGatewayTest, ActivateWithValidConf) {
                                     \"setting\": \"memory.limit_in_bytes\",\
                                     \"value\": \"2000000\"\
                                 }]";
+    loadConfig(config);
 
-    ASSERT_TRUE(isSuccess(gw->setConfig(config)));
+    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
     ASSERT_TRUE(isSuccess(gw->activate()));
 }
