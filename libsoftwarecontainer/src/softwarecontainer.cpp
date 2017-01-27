@@ -168,6 +168,15 @@ void SoftwareContainer::addGateway(Gateway *gateway)
 
 ReturnCode SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig)
 {
+    assertValidState();
+
+    if (m_containerState != ContainerState::READY) {
+        std::string message = "Invalid to start gateways on non ready container " +
+                              std::string(m_container->id());
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
     ReturnCode result = ReturnCode::SUCCESS;
 
     result = configureGateways(gwConfig);
@@ -244,29 +253,45 @@ ReturnCode SoftwareContainer::activateGateways()
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode SoftwareContainer::shutdown()
+void SoftwareContainer::shutdown()
 {
     return shutdown(m_config->containerShutdownTimeout());
 }
 
-ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
+void SoftwareContainer::shutdown(unsigned int timeout)
 {
+    assertValidState();
+
     log_debug() << "shutdown called";
+
+    if (m_containerState != ContainerState::READY
+        && m_containerState != ContainerState::SUSPENDED)
+    {
+        std::string message = "Invalid to shut down container which is not ready or suspended " +
+                              std::string(m_container->id());
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
     if(isError(shutdownGateways())) {
         log_error() << "Could not shut down all gateways cleanly, check the log";
     }
 
     if(isError(m_container->destroy(timeout))) {
-        log_error() << "Could not destroy the container during shutdown";
-        return ReturnCode::FAILURE;
+        std::string message = "Could not destroy the container during shutdown " +
+                              std::string(m_container->id());
+        log_error() << message;
+        m_containerState.setValueNotify(ContainerState::INVALID);
+        throw ContainerError(message);
     }
 
     m_containerState.setValueNotify(ContainerState::TERMINATED);
-    return ReturnCode::SUCCESS;
 }
 
 void SoftwareContainer::suspend()
 {
+    assertValidState();
+
     std::string id = std::string(m_container->id());
 
     if (m_containerState != ContainerState::READY) {
@@ -288,6 +313,8 @@ void SoftwareContainer::suspend()
 
 void SoftwareContainer::resume()
 {
+    assertValidState();
+
     std::string id = std::string(m_container->id());
 
     if (m_containerState != ContainerState::SUSPENDED) {
@@ -326,6 +353,17 @@ ReturnCode SoftwareContainer::shutdownGateways()
 
 std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
 {
+    assertValidState();
+
+    std::string id = std::string(m_container->id());
+
+    if (m_containerState != ContainerState::READY) {
+        std::string message = "Invalid to access container implementation when "
+                              "not ready " + id;
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
     std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
     return ptrCopy;
 }
@@ -348,19 +386,56 @@ ObservableProperty<ContainerState> &SoftwareContainer::getContainerState()
 
 std::shared_ptr<FunctionJob> SoftwareContainer::createFunctionJob(const std::function<int()> fun)
 {
+    assertValidState();
+
+    if (m_containerState != ContainerState::READY) {
+        std::string message = "Invalid to execute code in non ready container " +
+                              std::string(m_container->id());
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
     auto containerInterface = getContainer();
     return std::make_shared<FunctionJob>(containerInterface, fun);
 }
 
 std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::string &command)
 {
+    assertValidState();
+
+    if (m_containerState != ContainerState::READY) {
+        std::string message = "Invalid to execute code in non ready container " +
+                              std::string(m_container->id());
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
     auto containerInterface = getContainer();
     return std::make_shared<CommandJob>(containerInterface, command);
 }
 
 ReturnCode SoftwareContainer::bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly)
 {
+    assertValidState();
+
+    std::string id = std::string(m_container->id());
+
+    if (m_containerState != ContainerState::READY) {
+        std::string message = "Invalid to bind mount in non ready container " + id;
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
     return getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly);
+}
+
+void SoftwareContainer::assertValidState()
+{
+    if (m_containerState == ContainerState::INVALID) {
+        std::string message = "Container is invalid " + std::string(m_container->id());
+        log_error() << message;
+        throw InvalidContainerError(message);
+    }
 }
 
 bool SoftwareContainer::previouslyConfigured()

@@ -94,6 +94,26 @@ public:
 
 
 /**
+ * @class InvalidContainerError
+ *
+ * @brief The container instance is in an invalid state and should not be used
+ */
+class InvalidContainerError : public SoftwareContainerError
+{
+public:
+    InvalidContainerError():
+        SoftwareContainerError("Container is in an invalid state")
+    {
+    }
+
+    InvalidContainerError(const std::string &message):
+        SoftwareContainerError(message)
+    {
+    }
+};
+
+
+/**
  * @class SoftwareContainer
  *
  * @brief An abstraction of concrete container implementations
@@ -124,7 +144,6 @@ public:
  *
  *  * shutdown() - successful call triggers a transition to TERMINATED
  *  * resume() - successful call triggers a transition to READY
- *  * getContainer()
  *
  * When SC is in state 'INVALID', something has gone wrong in the underlying container
  * implementation and the container should be considered to be in a broken state from
@@ -172,7 +191,14 @@ public:
      *
      * This should only be called on containers in state 'READY'
      *
-     * @return ReturnCode::FAILURE if configuration or activation failed
+     * @return ReturnCode::SUCCESS If configuration and activation was successful
+     * @return ReturnCode::FAILURE If configuration or activation encountered
+     *         a non-fatal error
+     *
+     * @throws GatewayError If configuration or activation of any gateway
+     *                      encountered a fatal error.
+     * @throws InvalidOperationError If called when state is not 'READY'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
      */
     ReturnCode startGateways(const GatewayConfiguration &configs);
 
@@ -180,6 +206,9 @@ public:
      * @brief Create a job that can run a function in a container
      *
      * This should only be called on containers in state 'READY'
+     *
+     * @throws InvalidOperationError If called when state is not 'READY'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
      */
     std::shared_ptr<FunctionJob> createFunctionJob(const std::function<int()> fun);
 
@@ -187,14 +216,40 @@ public:
      * @brief Create a job that can run a command in a container
      *
      * This should only be called on containers in state 'READY'
+     *
+     * @throws InvalidOperationError If called when state is not 'READY'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
      */
     std::shared_ptr<CommandJob> createCommandJob(const std::string &command);
 
     /**
      * @brief Shut down the container
+     *
+     * A successful call to this method triggers a transition to state
+     * 'TERMINATED'.
+     *
+     * This shoud only be called on containers in state 'READY' or 'SUSPENDED'
+     *
+     * If the operation is not successful, the container state will be set to
+     * 'INVALID'. This means that this container instance should be considered
+     * broken.
+     *
+     * @throws ContainerError If operation was unsucessful
+     * @htrows InvalidOperationError If called when state is not 'READY' or
+     *         'SUSPENDED'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
      */
-    ReturnCode shutdown();
-    ReturnCode shutdown(unsigned int timeout);
+    void shutdown();
+
+    /**
+     * @brief Shot down the container with an explicit timeout
+     *
+     * Same as the shutdown() method, but the value passed will override any
+     * timeout value in the main configuration.
+     *
+     * @param timeout Seconds to use for timeout
+     */
+    void shutdown(unsigned int timeout);
 
     /**
      * @brief Suspend the container
@@ -209,6 +264,7 @@ public:
      *
      * @throws ContainerError If operation was unsuccessful
      * @throws InvalidOperationError If called when state is not 'READY'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
      */
     void suspend();
 
@@ -224,15 +280,35 @@ public:
      *
      * @throws ContainerError If operation was unsucessful
      * @throws InvalidOperationError If called when state is not 'SUSPENDED'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
      */
     void resume();
 
+    /**
+     * Should only be called on containers in state 'READY'
+     *
+     * @throws InvalidOperationError If called when state is not 'READY'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
+     */
     ReturnCode bindMount(const std::string &pathOnHost,
                          const std::string &pathInContainer,
                          bool readonly = true);
 
+    /**
+     * @brief Get the state of this container instance
+     *
+     * @return ContainerState representing the current state
+     */
     ObservableProperty<ContainerState> &getContainerState();
 
+    /**
+     * @brief Rturns a pointer to the underlying container implementation
+     *
+     * This should only be called on a container in state 'READY'
+     *
+     * @throws InvalidOperationError If called when state is not 'READY'
+     * @throws InvalidContainerError If the container is in state 'INVALID'
+     */
     std::shared_ptr<ContainerAbstractInterface> getContainer();
 
     /**
@@ -269,6 +345,8 @@ private:
 
     std::string getContainerDir();
     std::string getGatewayDir();
+
+    void assertValidState();
 
     // Check if the workspace is sound, and set it up if it isn't
     void checkWorkspace();
