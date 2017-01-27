@@ -284,11 +284,7 @@ void SoftwareContainerAgent::shutdownContainer(ContainerID containerID)
     SoftwareContainerPtr container = getContainer(containerID);
 
     int timeout = m_containerConfig.containerShutdownTimeout();
-    if (isError(container->shutdown(timeout))) {
-        std::string errorMessage("Could not shut down the container");
-        log_error() << errorMessage;
-        throw SoftwareContainerError(errorMessage);
-    }
+    container->shutdown(timeout);
 
     try {
         deleteContainer(containerID);
