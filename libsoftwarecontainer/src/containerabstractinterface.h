@@ -33,7 +33,6 @@ public:
     virtual ~ContainerAbstractInterface() {};
     virtual const char *id() const = 0;
     virtual const std::string &rootFS() const = 0;
-    virtual std::string toString() = 0;
 
     virtual ReturnCode initialize() = 0;
     virtual ReturnCode create() = 0;

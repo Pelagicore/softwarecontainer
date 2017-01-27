@@ -443,7 +443,7 @@ int Netlink::readMessage()
             }
         }
     }
-    delete buf;
+    delete[] buf;
     return 0;
 }
 
