@@ -24,6 +24,7 @@
 #include "signalconnectionshandler.h"
 #include "config/softwarecontainerconfig.h"
 #include "filetoolkitwithundo.h"
+#include "softwarecontainererror.h"
 
 #include <glibmm.h>
 
@@ -43,6 +44,105 @@ class Gateway;
 class ContainerAbstractInterface;
 
 
+enum class ContainerState
+{
+    READY,
+    SUSPENDED,
+    TERMINATED,
+    INVALID
+};
+
+
+/**
+ * @class InvalidOperationError
+ *
+ * @brief A method was called which is inappropriate in the current state.
+ */
+class InvalidOperationError : public SoftwareContainerError
+{
+public:
+    InvalidOperationError():
+        SoftwareContainerError("Invalid operation on container")
+    {
+    }
+
+    InvalidOperationError(const std::string &message):
+        SoftwareContainerError(message)
+    {
+    }
+};
+
+
+/**
+ * @class ContainerError
+ *
+ * @brief An error has occured in the underlying container implementation
+ */
+class ContainerError : public SoftwareContainerError
+{
+public:
+    ContainerError():
+        SoftwareContainerError("Error in container implementation")
+    {
+    }
+
+    ContainerError(const std::string &message):
+        SoftwareContainerError(message)
+    {
+    }
+};
+
+
+/**
+ * @class SoftwareContainer
+ *
+ * @brief An abstraction of concrete container implementations
+ *
+ * SoftwareContainer (SC) can be in various states. Some method calls are only valid
+ * when SC is in a particular state.
+ *
+ * States:
+ *  * READY
+ *  * SUSPENDED
+ *  * TERMINATED
+ *  * INVALID
+ *
+ * When SC is in state 'READY', all relevant gateways are added and the underlying
+ * container implementation is created and initialized.  In this state,
+ * the following methods are allowed to be called:
+ *
+ *  * suspend() - successful call triggers transition to SUSPENDED
+ *  * shutdown() - successful call triggers trasition to TERMINATED
+ *  * bindMount()
+ *  * startGateways()
+ *  * getContainer()
+ *  * createFunctionJob()
+ *  * createCommandJob()
+ *
+ * When SC is in state 'SUSPENDED', the following method calls are allowed to be
+ * called:
+ *
+ *  * shutdown() - successful call triggers a transition to TERMINATED
+ *  * resume() - successful call triggers a transition to READY
+ *  * getContainer()
+ *
+ * When SC is in state 'INVALID', something has gone wrong in the underlying container
+ * implementation and the container should be considered to be in a broken state from
+ * which it cannot recover.
+ *
+ * The following methods are allowed to be called in every state:
+ *
+ *  * getContainerState()
+ *
+ * If a call is made when SC is in an inappropriate state, the InvalidOperationError
+ * exception is thrown. This error does not mean that the intended operation
+ * was erroneous, since the operation can't even be performed in the current state.
+ *
+ * It is an error to call a method on a state which would be the result of the
+ * operation, e.g. calling suspend on a suspended container is an invalid operation.
+ * The reason for this is that the interface should be clear that there can't be
+ * any side effects or other changes when making a call which is redundant.
+ */
 class SoftwareContainer :
     private FileToolkitWithUndo
 {
@@ -51,6 +151,8 @@ public:
 
     /**
      * @brief Creates a new SoftwareContainer instance.
+     *
+     * On successful creation, the state will be 'READY'.
      *
      * @param id The containerID to use.
      * @param config An object holding all needed settings for the container
@@ -68,17 +170,23 @@ public:
      * @brief Starts the Gateways by setting the gateway configurations
      * and activating the configured gateway
      *
+     * This should only be called on containers in state 'READY'
+     *
      * @return ReturnCode::FAILURE if configuration or activation failed
      */
     ReturnCode startGateways(const GatewayConfiguration &configs);
 
     /**
      * @brief Create a job that can run a function in a container
+     *
+     * This should only be called on containers in state 'READY'
      */
     std::shared_ptr<FunctionJob> createFunctionJob(const std::function<int()> fun);
 
     /**
      * @brief Create a job that can run a command in a container
+     *
+     * This should only be called on containers in state 'READY'
      */
     std::shared_ptr<CommandJob> createCommandJob(const std::string &command);
 
@@ -92,27 +200,52 @@ public:
      * @brief Suspend the container
      *
      * This suspends any execution inside the container until resume is called.
+     * A successful call to this method triggers a transition to state
+     * 'SUSPENDED'.
      *
-     * @return ReturnCode::FAILURE if the container was already suspended
-     * @return ReturnCode::SUCCESS if the container was successfully suspended
+     * If the operation is not successful, the container state will be set to
+     * 'INVALID'. This means that this container instance should be considered
+     * broken.
+     *
+     * @throws ContainerError If operation was unsuccessful
+     * @throws InvalidOperationError If called when state is not 'READY'
      */
-    ReturnCode suspend();
+    void suspend();
 
     /**
      * @brief Resume a suspended container
      *
-     * This resumes execution of a container that was suspended.
+     * This resumes execution of a container that was suspended. A successful
+     * call to this method will trigger a transition to state 'READY'.
      *
-     * @return ReturnCode::FAILURE if the container was not suspended
-     * @return ReturnCode::SUCCESS if the container was successfully resumed
+     * If the operation is not successful, the container state will be set to
+     * 'INVALID'. This means that this container instance should be considered
+     * broken.
+     *
+     * @throws ContainerError If operation was unsucessful
+     * @throws InvalidOperationError If called when state is not 'SUSPENDED'
      */
-    ReturnCode resume();
+    void resume();
 
-    ReturnCode bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly = true);
+    ReturnCode bindMount(const std::string &pathOnHost,
+                         const std::string &pathInContainer,
+                         bool readonly = true);
 
     ObservableProperty<ContainerState> &getContainerState();
 
     std::shared_ptr<ContainerAbstractInterface> getContainer();
+
+    /**
+     * @brief Indicates if gateways have been configured previously.
+     *
+     * The user should use this method to check if startGateways have
+     * been called previously.
+     *
+     * TODO: This should be removed when quick-launch is implemented
+     *
+     * @return true if startGateways has been called previously, false if not
+     */
+    bool previouslyConfigured();
 
     /**
      * @brief Only used for testing, should not be used by e.g. the launcher
@@ -153,7 +286,9 @@ private:
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     SignalConnectionsHandler m_connections;
-    bool m_initialized = false;
+
+    // Keeps track of if startGateways has been called on this instance
+    bool m_previouslyConfigured;
 };
 
 } // namespace softwarecontainer
