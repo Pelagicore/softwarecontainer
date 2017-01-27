@@ -169,78 +169,64 @@ TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
 }
  */
 
-// Freeze an invalid container
-TEST_F(SoftwareContainerAgentTest, FreezeInvalidContainer) {
+// Suspending an invalid container should throw an exception
+TEST_F(SoftwareContainerAgentTest, SuspendInvalidContainer) {
     ASSERT_THROW(sca->suspendContainer(0), SoftwareContainerError);
 }
 
-// Thaw an invalid container
-TEST_F(SoftwareContainerAgentTest, ThawInvalidContainer) {
+// Resuming an invalid container should throw an exception
+TEST_F(SoftwareContainerAgentTest, ResumeInvalidContainer) {
     ASSERT_THROW(sca->resumeContainer(0), SoftwareContainerError);
 }
 
-// Thaw a container that has not been frozen
-TEST_F(SoftwareContainerAgentTest, ThawUnfrozenContainer) {
-    ASSERT_NO_THROW({
+// Resuming a container that has not been suspended should throw an exception
+TEST_F(SoftwareContainerAgentTest, ResumeNonSuspendedContainer) {
+    ASSERT_THROW({
         ContainerID id = sca->createContainer(valid_config);
 
         sca->getContainer(id);
         sca->resumeContainer(id);
-    });
+    }, InvalidOperationError);
 }
 
-// Freeze a container and try to resume it twice
-TEST_F(SoftwareContainerAgentTest, FreezeContainerAndThawTwice) {
-    ASSERT_NO_THROW({
+// Suspending a container and trying to resume it twice should throw
+// an exception
+TEST_F(SoftwareContainerAgentTest, SuspendContainerAndResumeTwice) {
+    ASSERT_THROW({
         ContainerID id = sca->createContainer(valid_config);
         sca->getContainer(id);
 
         sca->suspendContainer(id);
         sca->resumeContainer(id);
         sca->resumeContainer(id);
-    });
+    }, InvalidOperationError);
 }
 
-// Freeze an already frozen container
-TEST_F(SoftwareContainerAgentTest, FreezeFrozenContainer) {
-    ASSERT_NO_THROW({
-        ContainerID id = sca->createContainer(valid_config);
-        sca->getContainer(id);
-
-        sca->suspendContainer(id);
-        sca->suspendContainer(id);
-    });
-}
-
-// Freeze an already frozen container, and then resume it
-TEST_F(SoftwareContainerAgentTest, DoubleFreezeContainerAndThaw) {
-    ASSERT_NO_THROW({
+// Suspending an already suspended container should throw an exception
+TEST_F(SoftwareContainerAgentTest, SuspendSuspendedContainer) {
+    ASSERT_THROW({
         ContainerID id = sca->createContainer(valid_config);
         sca->getContainer(id);
 
         sca->suspendContainer(id);
         sca->suspendContainer(id);
-
-        sca->resumeContainer(id);
-    });
+    }, InvalidOperationError);
 }
 
-// Double suspend and then double resume
-TEST_F(SoftwareContainerAgentTest, DoubleFreezeAndDoubleThawContainer) {
+// Suspend and resume a container shold not throw an exception
+TEST_F(SoftwareContainerAgentTest, DoubleSuspendContainerAndResume) {
     ASSERT_NO_THROW({
         ContainerID id = sca->createContainer(valid_config);
         sca->getContainer(id);
 
         sca->suspendContainer(id);
-        sca->suspendContainer(id);
 
-        sca->resumeContainer(id);
         sca->resumeContainer(id);
     });
 }
 
-// Make sure you can still shutdown a frozen container
-TEST_F(SoftwareContainerAgentTest, ShutdownFrozenContainer) {
+// Make sure you can still shut down a suspended container
+TEST_F(SoftwareContainerAgentTest, ShutdownSuspendedContainer) {
     ASSERT_NO_THROW({
         ContainerID id = sca->createContainer(valid_config);
         sca->getContainer(id);

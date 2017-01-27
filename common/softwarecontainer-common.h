@@ -35,13 +35,6 @@ static constexpr pid_t INVALID_PID = -1;
 static constexpr int INVALID_FD = -1;
 static constexpr uid_t ROOT_UID = 0;
 
-enum class ContainerState
-{
-    CREATED,
-    INITIALIZED,
-    READY,
-    TERMINATED
-};
 
 /**
  * @brief The ReturnCode enum contains common return values.

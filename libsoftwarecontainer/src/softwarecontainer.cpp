@@ -58,7 +58,8 @@ namespace softwarecontainer {
 SoftwareContainer::SoftwareContainer(const ContainerID id,
                                      std::unique_ptr<const SoftwareContainerConfig> config):
     m_containerID(id),
-    m_config(std::move(config))
+    m_config(std::move(config)),
+    m_previouslyConfigured(false)
 {
     checkWorkspace();
 #ifdef ENABLE_NETWORKGATEWAY
@@ -72,12 +73,12 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
                       m_config->enableWriteBuffer(),
                       m_config->containerShutdownTimeout()));
 
-    m_containerState = ContainerState::CREATED;
-
     if(isError(init())) {
         throw SoftwareContainerError("Could not initialize SoftwareContainer, container ID: "
                                      + std::to_string(id));
     }
+
+    m_containerState.setValueNotify(ContainerState::READY);
 }
 
 SoftwareContainer::~SoftwareContainer()
@@ -105,17 +106,14 @@ ReturnCode SoftwareContainer::start()
     }
 
     log_debug() << "Started container with PID " << m_pcPid;
-    m_containerState.setValueNotify(ContainerState::INITIALIZED);
     return ReturnCode::SUCCESS;
 }
 
 ReturnCode SoftwareContainer::init()
 {
-    if (getContainerState() != ContainerState::INITIALIZED) {
-        if (isError(start())) {
-            log_error() << "Failed to start container";
-            return ReturnCode::FAILURE;
-        }
+    if (isError(start())) {
+        log_error() << "Failed to start container";
+        return ReturnCode::FAILURE;
     }
 
 #ifdef ENABLE_NETWORKGATEWAY
@@ -182,7 +180,8 @@ ReturnCode SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig
         return result;
     }
 
-    m_containerState.setValueNotify(ContainerState::READY);
+    // Keep track of if user has called this method at least once
+    m_previouslyConfigured = true;
 
     return result;
 }
@@ -195,7 +194,10 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
         json_t *config = gwConfig.config(gatewayId);
         if (config != nullptr) {
             std::string configStr = json_dumps(config,0);
-            log_debug() << "Configuring gateway \"" << gatewayId << "\" with config: " << configStr;
+            log_debug() << "Configuring gateway \""
+                        << gatewayId
+                        << "\" with config: "
+                        << configStr;
             try {
                 ReturnCode configurationResult = gateway->setConfig(configStr);
                 if (isError(configurationResult)) {
@@ -253,7 +255,7 @@ ReturnCode SoftwareContainer::shutdown()
 
 ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
 {
-    log_debug() << "Shutdown called";
+    log_debug() << "shutdown called";
     if(isError(shutdownGateways())) {
         log_error() << "Could not shut down all gateways cleanly, check the log";
     }
@@ -267,14 +269,46 @@ ReturnCode SoftwareContainer::shutdown(unsigned int timeout)
     return ReturnCode::SUCCESS;
 }
 
-ReturnCode SoftwareContainer::suspend()
+void SoftwareContainer::suspend()
 {
-    return m_container->suspend();
+    std::string id = std::string(m_container->id());
+
+    if (m_containerState != ContainerState::READY) {
+        std::string message = "Invalid to suspend non ready container " + id;
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
+    if (isError(m_container->suspend())) {
+        std::string message =  "Failed to suspend container " + id;
+        log_error() << message;
+        m_containerState.setValueNotify(ContainerState::INVALID);
+        throw ContainerError(message);
+    }
+
+    log_debug() << "Suspended container " << id;
+    m_containerState.setValueNotify(ContainerState::SUSPENDED);
 }
 
-ReturnCode SoftwareContainer::resume()
+void SoftwareContainer::resume()
 {
-    return m_container->resume();
+    std::string id = std::string(m_container->id());
+
+    if (m_containerState != ContainerState::SUSPENDED) {
+        std::string message =  "Invalid to resume non suspended container " + id;
+        log_error() << message;
+        throw InvalidOperationError(message);
+    }
+
+    if (isError(m_container->resume())) {
+        std::string message = "Failed to resume container " + id;
+        log_error() << message;
+        m_containerState.setValueNotify(ContainerState::INVALID);
+        throw ContainerError(message);
+    }
+
+    log_debug() << "Resumed container " << id;
+    m_containerState.setValueNotify(ContainerState::READY);
 }
 
 
@@ -331,6 +365,11 @@ std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::strin
 ReturnCode SoftwareContainer::bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly)
 {
     return getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly);
+}
+
+bool SoftwareContainer::previouslyConfigured()
+{
+    return m_previouslyConfigured;
 }
 
 void SoftwareContainer::checkWorkspace()

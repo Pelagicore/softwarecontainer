@@ -184,14 +184,13 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
     SoftwareContainerPtr container = getContainer(containerID);
 
     /*
-     * We want to always apply any default capabilities we have. If the container is in READY state,
-     * that means that its gateways have been configured. The only way to configure the gateways
-     * from the agent is through setCapabilities - which sets the default caps also.
+     * We want to always apply any default capabilities we have. The only way to configure
+     * the gateways from the agent is through setCapabilities - which sets the default caps also.
      *
-     * If it has not been set, then we use a call without arguments to setCapabilities to set it up,
-     * since we then should get only the default ones.
+     * If it has not been set previously, then we use a call without arguments to setCapabilities
+     * to set it up, since we then should get only the default ones.
      */
-    if (container->getContainerState() != ContainerState::READY) {
+    if (!m_containers[containerID]->previouslyConfigured()) {
         log_info() << "Container not configured yet, configuring with default capabilities, if any";
         GatewayConfiguration gatewayConfigs = m_defaultConfigStore->configs();
         if (!updateGatewayConfigs(containerID, gatewayConfigs)) {
@@ -199,6 +198,7 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
             log_error() << errorMessage;
             throw SoftwareContainerError(errorMessage);
         }
+
     }
 
     // Set up a CommandJob for this run in the container
