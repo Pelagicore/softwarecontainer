@@ -55,6 +55,7 @@ var namespacesoftwarecontainer =
     [ "GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", "classsoftwarecontainer_1_1_gateway_error" ],
     [ "GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", "classsoftwarecontainer_1_1_gateway_parser_error" ],
     [ "IntConfig", "classsoftwarecontainer_1_1_int_config.html", "classsoftwarecontainer_1_1_int_config" ],
+    [ "InvalidContainerError", "classsoftwarecontainer_1_1_invalid_container_error.html", "classsoftwarecontainer_1_1_invalid_container_error" ],
     [ "InvalidOperationError", "classsoftwarecontainer_1_1_invalid_operation_error.html", "classsoftwarecontainer_1_1_invalid_operation_error" ],
     [ "IPAllocationError", "classsoftwarecontainer_1_1_i_p_allocation_error.html", "classsoftwarecontainer_1_1_i_p_allocation_error" ],
     [ "IPTableEntry", "classsoftwarecontainer_1_1_i_p_table_entry.html", "classsoftwarecontainer_1_1_i_p_table_entry" ],

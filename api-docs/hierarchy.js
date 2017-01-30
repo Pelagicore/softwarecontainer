@@ -58,6 +58,7 @@ var hierarchy =
         ] ],
         [ "softwarecontainer::ContainerError", "classsoftwarecontainer_1_1_container_error.html", null ],
         [ "softwarecontainer::ContainerOptionParseError", "classsoftwarecontainer_1_1_container_option_parse_error.html", null ],
+        [ "softwarecontainer::InvalidContainerError", "classsoftwarecontainer_1_1_invalid_container_error.html", null ],
         [ "softwarecontainer::InvalidOperationError", "classsoftwarecontainer_1_1_invalid_operation_error.html", null ],
         [ "softwarecontainer::NetworkGatewayError", "classsoftwarecontainer_1_1_network_gateway_error.html", [
           [ "softwarecontainer::IPAllocationError", "classsoftwarecontainer_1_1_i_p_allocation_error.html", null ]
@@ -110,10 +111,10 @@ var hierarchy =
     [ "softwarecontainer::RecursiveCopy", "classsoftwarecontainer_1_1_recursive_copy.html", null ],
     [ "softwarecontainer::IPTableEntry::Rule", "structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
+    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "com::pelagicore::SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
     ] ],
-    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
     [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ],
     [ "softwarecontainer::SoftwareContainerConfig", "classsoftwarecontainer_1_1_software_container_config.html", null ]
