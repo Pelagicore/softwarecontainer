@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html":[1,0,1,45,0],
 "structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html#a025b907f237fa4b3ef25389629bc2d80":[1,0,1,45,0,0],
 "structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html#a402aa33c2939b5543e0bcdf0a2e2de1d":[1,0,1,45,0,1],
 "structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html#a7e2df0ae5961e267b7f8c1c3fd229405":[1,0,1,45,0,2],

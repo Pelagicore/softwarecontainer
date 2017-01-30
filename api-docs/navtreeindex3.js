@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classsoftwarecontainer_1_1_software_container.html#a99f3c698cc9b83d71a6c302737717e77":[1,0,1,75,8],
 "classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184":[1,0,1,75,13],
 "classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4":[1,0,1,75,6],
 "classsoftwarecontainer_1_1_software_container.html#ab85363f0b8f0b9cfc6800a94bc9d8443":[1,0,1,75,9],
@@ -207,8 +206,8 @@ var NAVTREEINDEX3 =
 "namespacemembers_enum.html":[0,1,2],
 "namespacemembers_func.html":[0,1,1],
 "namespaces.html":[0,0],
-"namespacesoftwarecontainer.html":[0,0,0],
 "namespacesoftwarecontainer.html":[1,0,1],
+"namespacesoftwarecontainer.html":[0,0,0],
 "netlink_8cpp_source.html":[2,0,2,1,1,5,2],
 "netlink_8h_source.html":[2,0,2,1,1,5,3],
 "networkgateway_8cpp_source.html":[2,0,2,1,1,5,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#a558d075c39cfe86eae9ea303def46c3e":[1,0,1,36,0,1],
 "structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#a72d64d78b79fe090be3726acb91ef494":[1,0,1,36,0,2],
 "structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#aa5cdf2047e4973c9ff8ffcfce92ac5de":[1,0,1,36,0,0],
-"structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#acae5572de26d55fac817bb94ca020856":[1,0,1,36,0,3]
+"structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#acae5572de26d55fac817bb94ca020856":[1,0,1,36,0,3],
+"structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html":[1,0,1,45,0]
 };
