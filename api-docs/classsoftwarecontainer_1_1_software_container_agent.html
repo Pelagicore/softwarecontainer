@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-14c26cd 2017-01-30</span>
+   &#160;<span id="projectnumber">0.17.0-aaf4e7a 2017-01-30</span>
    </div>
   </td>
  </tr>
@@ -169,7 +169,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">int</span> shutdownTimeout =</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        m_config-&gt;getIntValue(ConfigDefinition::SC_GROUP,</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                              ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::string containerRootDir =</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::string sharedMountsDir =</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        m_config-&gt;getStringValue(ConfigDefinition::SC_GROUP,</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                                 ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    std::string lxcConfigPath =</div>
@@ -214,7 +214,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                                                bridgeNetAddr,</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;#endif <span class="comment">// ENABLE_NETWORKGATEWAY</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                                lxcConfigPath,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                                                containerRootDir,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                                                sharedMountsDir,</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                                                shutdownTimeout);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
 </div><!-- fragment -->
@@ -870,7 +870,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html">SoftwareContainerAgent</a></li>
-    <li class="footer">Generated on Mon Jan 30 2017 13:40:13 for softwarecontainer by
+    <li class="footer">Generated on Mon Jan 30 2017 14:30:05 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

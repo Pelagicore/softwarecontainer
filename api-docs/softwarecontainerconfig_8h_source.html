@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-14c26cd 2017-01-30</span>
+   &#160;<span id="projectnumber">0.17.0-aaf4e7a 2017-01-30</span>
    </div>
   </td>
  </tr>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('softwarecontainerconfig_8h_source.html
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                            <span class="keyword">const</span> std::string &amp;bridgeNetAddr,</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;#endif <span class="comment">// ENABLE_NETWORKGATEWAY</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                            <span class="keyword">const</span> std::string &amp;containerConfigPath,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                            <span class="keyword">const</span> std::string &amp;containerRootDir,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                            <span class="keyword">const</span> std::string &amp;sharedMountsDir,</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    ~<a class="code" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a>() {}</div>
@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('softwarecontainerconfig_8h_source.html
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#endif // ENABLE_NETWORKGATEWAY</span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    std::string containerConfigPath() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    std::string containerRootDir() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    std::string sharedMountsDir() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> containerShutdownTimeout() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">/*</span></div>
@@ -151,7 +151,7 @@ $(document).ready(function(){initNavTree('softwarecontainerconfig_8h_source.html
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif // ENABLE_NETWORKGATEWAY</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::string m_containerConfigPath;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    std::string m_containerRootDir;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    std::string m_sharedMountsDir;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_containerShutdownTimeout;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">bool</span> m_enableWriteBuffer;</div>
@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('softwarecontainerconfig_8h_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><a class="el" href="dir_eefa90ef70950130375a87fe6a69f674.html">config</a></li><li class="navelem"><b>softwarecontainerconfig.h</b></li>
-    <li class="footer">Generated on Mon Jan 30 2017 13:40:05 for softwarecontainer by
+    <li class="footer">Generated on Mon Jan 30 2017 14:29:59 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
