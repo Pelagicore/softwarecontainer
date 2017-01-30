@@ -21,8 +21,8 @@
 <area shape="rect" id="node25" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a4cf958746ad9911ebb99b9eeb8392060" title="Gateway specific parsing of config elements. " alt="" coords="228,1202,385,1258"/>
 <area shape="rect" id="node26" href="$classsoftwarecontainer_1_1_device_node_gateway.html#a0734b6ab0ccd33f80c3139962a55f114" title="Gateway specific parsing of config elements. " alt="" coords="198,1282,415,1338"/>
 <area shape="rect" id="node27" href="$classsoftwarecontainer_1_1_software_container.html#ab85363f0b8f0b9cfc6800a94bc9d8443" title="Resume a suspended container. " alt="" coords="216,1361,397,1403"/>
-<area shape="rect" id="node28" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#a2dafa9d879e1a694e30b17a067a9c504" title="Sets config for both dbus session instances. " alt="" coords="504,1456,675,1497"/>
-<area shape="rect" id="node29" href="$classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="237,1427,376,1468"/>
+<area shape="rect" id="node28" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#aad83b6fa08a863d7af731d77dade15b0" title="Sets config for both dbus session instances. " alt="" coords="504,1456,675,1497"/>
+<area shape="rect" id="node29" href="$classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="237,1427,376,1468"/>
 <area shape="rect" id="node30" href="$classsoftwarecontainer_1_1_netlink.html#a53e313aa155f065c1d1ef6a4e20ccede" title="Sets an IP address for a network link. " alt="" coords="240,1544,373,1585"/>
 <area shape="rect" id="node31" href="$classsoftwarecontainer_1_1_software_container_agent.html#a24b59cd9982d4e2e51f999bedea60957" title="shuts down a container " alt="" coords="225,1609,389,1665"/>
 <area shape="rect" id="node32" href="$classsoftwarecontainer_1_1_software_container.html#a6141f7e59438e4f1dce565f3826a81f0" title="Creates a new SoftwareContainer instance. " alt="" coords="211,1689,402,1745"/>

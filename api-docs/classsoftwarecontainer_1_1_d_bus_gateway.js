@@ -7,7 +7,7 @@ var classsoftwarecontainer_1_1_d_bus_gateway =
     ] ],
     [ "DBusGateway", "classsoftwarecontainer_1_1_d_bus_gateway.html#ad867286887e23bb5701859bfe84d6a51", null ],
     [ "~DBusGateway", "classsoftwarecontainer_1_1_d_bus_gateway.html#a1b0a20227f924faa36ee148622673ae2", null ],
-    [ "setConfig", "classsoftwarecontainer_1_1_d_bus_gateway.html#a2dafa9d879e1a694e30b17a067a9c504", null ],
+    [ "setConfig", "classsoftwarecontainer_1_1_d_bus_gateway.html#aad83b6fa08a863d7af731d77dade15b0", null ],
     [ "activate", "classsoftwarecontainer_1_1_d_bus_gateway.html#a7ba4cdcf870915d57f9f36ed68f7c33a", null ],
     [ "readConfigElement", "classsoftwarecontainer_1_1_d_bus_gateway.html#a0c90ae78ccbb3614ab66335d610f31f8", null ],
     [ "activateGateway", "classsoftwarecontainer_1_1_d_bus_gateway.html#accc74bfee2b7efb35afa0f73648c6e5f", null ],

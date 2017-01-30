@@ -31,7 +31,7 @@
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
-<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a" target="_top" xlink:title="Configure this gateway according to the supplied JSON configuration string. ">
+<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12" target="_top" xlink:title="Configure this gateway according to the supplied JSON configuration string. ">
 <polygon fill="white" stroke="black" points="136,-49.5 136,-79.5 240,-79.5 240,-49.5 136,-49.5"/>
 <text text-anchor="start" x="144" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="188" y="-56.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::setConfig</text>
@@ -73,7 +73,7 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#a2dafa9d879e1a694e30b17a067a9c504" target="_top" xlink:title="Sets config for both dbus session instances. ">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#aad83b6fa08a863d7af731d77dade15b0" target="_top" xlink:title="Sets config for both dbus session instances. ">
 <polygon fill="white" stroke="black" points="276,-49.5 276,-79.5 404,-79.5 404,-49.5 276,-49.5"/>
 <text text-anchor="start" x="284" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="340" y="-56.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::setConfig</text>

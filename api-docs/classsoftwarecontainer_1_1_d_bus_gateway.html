@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-a0c0f68 2017-01-27</span>
+   &#160;<span id="projectnumber">0.17.0-d46ed37 2017-01-30</span>
    </div>
   </td>
  </tr>
@@ -101,9 +101,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad867286887e23bb5701859bfe84d6a51"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad867286887e23bb5701859bfe84d6a51"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DBusGateway</b> (const std::string &amp;gatewayDir, const std::string &amp;name)</td></tr>
 <tr class="separator:ad867286887e23bb5701859bfe84d6a51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dafa9d879e1a694e30b17a067a9c504"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_d_bus_gateway.html#a2dafa9d879e1a694e30b17a067a9c504">setConfig</a> (const std::string &amp;config) override</td></tr>
-<tr class="memdesc:a2dafa9d879e1a694e30b17a067a9c504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets config for both dbus session instances.  <a href="#a2dafa9d879e1a694e30b17a067a9c504">More...</a><br /></td></tr>
-<tr class="separator:a2dafa9d879e1a694e30b17a067a9c504"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad83b6fa08a863d7af731d77dade15b0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_d_bus_gateway.html#aad83b6fa08a863d7af731d77dade15b0">setConfig</a> (const json_t *config) override</td></tr>
+<tr class="memdesc:aad83b6fa08a863d7af731d77dade15b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets config for both dbus session instances.  <a href="#aad83b6fa08a863d7af731d77dade15b0">More...</a><br /></td></tr>
+<tr class="separator:aad83b6fa08a863d7af731d77dade15b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ba4cdcf870915d57f9f36ed68f7c33a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_d_bus_gateway.html#a7ba4cdcf870915d57f9f36ed68f7c33a">activate</a> () override</td></tr>
 <tr class="memdesc:a7ba4cdcf870915d57f9f36ed68f7c33a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activates both dbus session instances.  <a href="#a7ba4cdcf870915d57f9f36ed68f7c33a">More...</a><br /></td></tr>
 <tr class="separator:a7ba4cdcf870915d57f9f36ed68f7c33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,7 +154,7 @@ Protected Member Functions</h2></td></tr>
 <div class="textblock">
 <p>Definition at line <a class="el" href="dbusgateway_8h_source.html#l00027">27</a> of file <a class="el" href="dbusgateway_8h_source.html">dbusgateway.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a2dafa9d879e1a694e30b17a067a9c504"></a>
+<a class="anchor" id="aad83b6fa08a863d7af731d77dade15b0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -164,7 +164,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::DBusGateway::setConfig </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const json_t *&#160;</td>
           <td class="paramname"><em>config</em></td><td>)</td>
           <td></td>
         </tr>
@@ -178,7 +178,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Sets config for both dbus session instances. </p>
 
-<p>Reimplemented from <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">softwarecontainer::Gateway</a>.</p>
+<p>Reimplemented from <a class="el" href="classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12">softwarecontainer::Gateway</a>.</p>
 
 <p>Definition at line <a class="el" href="dbusgateway_8cpp_source.html#l00036">36</a> of file <a class="el" href="dbusgateway_8cpp_source.html">dbusgateway.cpp</a>.</p>
 
@@ -186,10 +186,10 @@ Protected Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">try</span> {</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Setting config for dbus session bus&quot;</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> sessionBusParseResult = sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">setConfig</a>(config);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> sessionBusParseResult = sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12">setConfig</a>(config);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Setting config for dbus system bus&quot;</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> systemBusParseResult = systemBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">setConfig</a>(config);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> systemBusParseResult = systemBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12">setConfig</a>(config);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(sessionBusParseResult) &amp;&amp; <a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(systemBusParseResult)) {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Neither session nor system bus could use the given config&quot;</span>;</div>
@@ -203,13 +203,13 @@ Protected Member Functions</h2></td></tr>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;     <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a24843565ff6c3dfaed5ce3f7682a9b12"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12">softwarecontainer::Gateway::setConfig</a></div><div class="ttdeci">virtual ReturnCode setConfig(const json_t *config)</div><div class="ttdoc">Configure this gateway according to the supplied JSON configuration string. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00024">gateway.cpp:24</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a889e0f0ec4060e203972eefe9221f81a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a889e0f0ec4060e203972eefe9221f81a">softwarecontainer::Gateway::setConfig</a></div><div class="ttdeci">virtual ReturnCode setConfig(const std::string &amp;config)</div><div class="ttdoc">Configure this gateway according to the supplied JSON configuration string. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00024">gateway.cpp:24</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_d_bus_gateway_a2dafa9d879e1a694e30b17a067a9c504_cgraph.svg" width="610" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_d_bus_gateway_aad83b6fa08a863d7af731d77dade15b0_cgraph.svg" width="610" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -243,7 +243,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="dbusgateway_8cpp_source.html#l00057">57</a> of file <a class="el" href="dbusgateway_8cpp_source.html">dbusgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00074">softwarecontainer::Gateway::activate()</a>, <a class="el" href="gateway_8cpp_source.html#l00135">softwarecontainer::Gateway::isConfigured()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00058">softwarecontainer::Gateway::activate()</a>, <a class="el" href="gateway_8cpp_source.html#l00119">softwarecontainer::Gateway::isConfigured()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;{</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;     <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> sessionBusActivationResult = ReturnCode::FAILURE;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;     <span class="keywordflow">if</span> (sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">isConfigured</a>()) {</div>
@@ -264,8 +264,8 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;     <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af61045649376dc8972d236465aa2f8eb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">softwarecontainer::Gateway::isConfigured</a></div><div class="ttdeci">virtual bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00135">gateway.cpp:135</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_aa62fd6a17abb2762b8d62cc85c7750c7"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">softwarecontainer::Gateway::activate</a></div><div class="ttdeci">virtual ReturnCode activate()</div><div class="ttdoc">Applies any configuration set by setConfig() </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00074">gateway.cpp:74</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af61045649376dc8972d236465aa2f8eb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">softwarecontainer::Gateway::isConfigured</a></div><div class="ttdeci">virtual bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_aa62fd6a17abb2762b8d62cc85c7750c7"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7">softwarecontainer::Gateway::activate</a></div><div class="ttdeci">virtual ReturnCode activate()</div><div class="ttdoc">Applies any configuration set by setConfig() </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00058">gateway.cpp:58</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -397,12 +397,12 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="dbusgateway_8cpp_source.html#l00104">104</a> of file <a class="el" href="dbusgateway_8cpp_source.html">dbusgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00130">softwarecontainer::Gateway::setContainer()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00114">softwarecontainer::Gateway::setContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;{</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb">setContainer</a>(container);</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    systemBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb">setContainer</a>(container);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ae2779e1333424281c1826794c1db82cb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb">softwarecontainer::Gateway::setContainer</a></div><div class="ttdeci">virtual void setContainer(std::shared_ptr&lt; ContainerAbstractInterface &gt; container)</div><div class="ttdoc">Set the associated container for this gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00130">gateway.cpp:130</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ae2779e1333424281c1826794c1db82cb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb">softwarecontainer::Gateway::setContainer</a></div><div class="ttdeci">virtual void setContainer(std::shared_ptr&lt; ContainerAbstractInterface &gt; container)</div><div class="ttdoc">Set the associated container for this gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00114">gateway.cpp:114</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -449,7 +449,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="dbusgateway_8cpp_source.html#l00078">78</a> of file <a class="el" href="dbusgateway_8cpp_source.html">dbusgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00140">softwarecontainer::Gateway::isActivated()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>, and <a class="el" href="gateway_8cpp_source.html#l00099">softwarecontainer::Gateway::teardown()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00124">softwarecontainer::Gateway::isActivated()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>, and <a class="el" href="gateway_8cpp_source.html#l00083">softwarecontainer::Gateway::teardown()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;     <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> sessionBusTeardownResult;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;     <span class="keywordflow">if</span> (sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">isActivated</a>()) {</div>
@@ -475,9 +475,9 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;     <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad7679d3dce9fe0e239f3614d6ee667c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad7679d3dce9fe0e239f3614d6ee667c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00124">gateway.cpp:124</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9c01eb992bc9c094f98776b8154e932a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a9c01eb992bc9c094f98776b8154e932a"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a">softwarecontainer::Gateway::teardown</a></div><div class="ttdeci">virtual ReturnCode teardown()</div><div class="ttdoc">Restore system to the state prior to launching of gateway. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00083">gateway.cpp:83</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -516,11 +516,11 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="dbusgateway_8cpp_source.html#l00110">110</a> of file <a class="el" href="dbusgateway_8cpp_source.html">dbusgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00135">softwarecontainer::Gateway::isConfigured()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00119">softwarecontainer::Gateway::isConfigured()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;{</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordflow">return</span> sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">isConfigured</a>() || systemBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">isConfigured</a>();</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af61045649376dc8972d236465aa2f8eb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">softwarecontainer::Gateway::isConfigured</a></div><div class="ttdeci">virtual bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00135">gateway.cpp:135</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_af61045649376dc8972d236465aa2f8eb"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb">softwarecontainer::Gateway::isConfigured</a></div><div class="ttdeci">virtual bool isConfigured()</div><div class="ttdoc">Is the gateway configured or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00119">gateway.cpp:119</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -559,11 +559,11 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="dbusgateway_8cpp_source.html#l00115">115</a> of file <a class="el" href="dbusgateway_8cpp_source.html">dbusgateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00140">softwarecontainer::Gateway::isActivated()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00124">softwarecontainer::Gateway::isActivated()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;{</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> sessionBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">isActivated</a>() || systemBus.<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">isActivated</a>();</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad7679d3dce9fe0e239f3614d6ee667c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00140">gateway.cpp:140</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ad7679d3dce9fe0e239f3614d6ee667c5"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5">softwarecontainer::Gateway::isActivated</a></div><div class="ttdeci">virtual bool isActivated()</div><div class="ttdoc">Is the gateway activated or not? </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00124">gateway.cpp:124</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -599,7 +599,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="gateway_8h_source.html#l00093">93</a> of file <a class="el" href="gateway_8h_source.html">gateway.h</a>.</p>
 
-<p>Referenced by <a class="el" href="gateway_8cpp_source.html#l00074">softwarecontainer::Gateway::activate()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, and <a class="el" href="gateway_8cpp_source.html#l00099">softwarecontainer::Gateway::teardown()</a>.</p>
+<p>Referenced by <a class="el" href="gateway_8cpp_source.html#l00058">softwarecontainer::Gateway::activate()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, and <a class="el" href="gateway_8cpp_source.html#l00083">softwarecontainer::Gateway::teardown()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> m_id;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
@@ -639,12 +639,12 @@ Here is the caller graph for this function:</div>
 <p>Inheriting gateways calls this method to know if they are safe to assume they can access a <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> instance previously set by <a class="el" href="classsoftwarecontainer_1_1_software_container.html" title="An abstraction of concrete container implementations. ">SoftwareContainer</a> calling <a class="el" href="classsoftwarecontainer_1_1_gateway.html#ae2779e1333424281c1826794c1db82cb" title="Set the associated container for this gateway. ">setContainer()</a></p>
 <dl class="section return"><dt>Returns</dt><dd>true if there is a <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> instance set, false if not. </dd></dl>
 
-<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00115">115</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
+<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00099">99</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="gateway_8cpp_source.html#l00074">softwarecontainer::Gateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="gateway_8cpp_source.html#l00120">softwarecontainer::Gateway::getContainer()</a>, and <a class="el" href="gateway_8cpp_source.html#l00145">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;{</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> m_container != <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
+<p>Referenced by <a class="el" href="gateway_8cpp_source.html#l00058">softwarecontainer::Gateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="gateway_8cpp_source.html#l00104">softwarecontainer::Gateway::getContainer()</a>, and <a class="el" href="gateway_8cpp_source.html#l00129">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;{</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">return</span> m_container != <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -685,20 +685,20 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00120">120</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
+<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00104">104</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00115">softwarecontainer::Gateway::hasContainer()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00099">softwarecontainer::Gateway::hasContainer()</a>.</p>
 
-<p>Referenced by <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, and <a class="el" href="gateway_8cpp_source.html#l00145">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;{</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">throw</span> GatewayError(<span class="stringliteral">&quot;Attempting to get container reference before any container has been assigned.&quot;</span>);</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; ptrCopy = m_container;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordflow">return</span> ptrCopy;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00115">gateway.cpp:115</a></div></div>
+<p>Referenced by <a class="el" href="networkgateway_8cpp_source.html#l00055">softwarecontainer::NetworkGateway::activateGateway()</a>, and <a class="el" href="gateway_8cpp_source.html#l00129">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;{</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">throw</span> GatewayError(<span class="stringliteral">&quot;Attempting to get container reference before any container has been assigned.&quot;</span>);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; ptrCopy = m_container;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">return</span> ptrCopy;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -752,21 +752,21 @@ Here is the caller graph for this function:</div>
 
 <p>Set an environment variable in the associated container. </p>
 
-<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00145">145</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
+<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00129">129</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00120">softwarecontainer::Gateway::getContainer()</a>, and <a class="el" href="gateway_8cpp_source.html#l00115">softwarecontainer::Gateway::hasContainer()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00104">softwarecontainer::Gateway::getContainer()</a>, and <a class="el" href="gateway_8cpp_source.html#l00099">softwarecontainer::Gateway::hasContainer()</a>.</p>
 
 <p>Referenced by <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00076">softwarecontainer::DBusGatewayInstance::activateGateway()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;{</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;setEnvironmentVariable(variable, value);</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t set environment variable on gateway without container&quot;</span>;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00115">gateway.cpp:115</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00120">gateway.cpp:120</a></div></div>
+<div class="fragment"><div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;setEnvironmentVariable(variable, value);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t set environment variable on gateway without container&quot;</span>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00104">gateway.cpp:104</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
@@ -796,7 +796,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_d_bus_gateway.html">DBusGateway</a></li>
-    <li class="footer">Generated on Fri Jan 27 2017 11:19:54 for softwarecontainer by
+    <li class="footer">Generated on Mon Jan 30 2017 07:34:50 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

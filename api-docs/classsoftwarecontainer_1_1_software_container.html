@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.17.0-a0c0f68 2017-01-27</span>
+   &#160;<span id="projectnumber">0.17.0-d46ed37 2017-01-30</span>
    </div>
   </td>
  </tr>
@@ -362,11 +362,11 @@ Here is the call graph for this function:</div>
 <p>Create a job that can run a function in a container. </p>
 <p>This should only be called on containers in state 'READY' </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00353">353</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;{</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keyword">auto</span> containerInterface = getContainer();</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;FunctionJob&gt;(containerInterface, fun);</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00349">349</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;{</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keyword">auto</span> containerInterface = getContainer();</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;FunctionJob&gt;(containerInterface, fun);</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -387,11 +387,11 @@ Here is the call graph for this function:</div>
 <p>Create a job that can run a command in a container. </p>
 <p>This should only be called on containers in state 'READY' </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00359">359</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;{</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="keyword">auto</span> containerInterface = getContainer();</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;CommandJob&gt;(containerInterface, command);</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00355">355</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;{</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keyword">auto</span> containerInterface = getContainer();</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;CommandJob&gt;(containerInterface, command);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -410,11 +410,11 @@ Here is the call graph for this function:</div>
 
 <p>Shut down the container. </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00251">251</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;{</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_config-&gt;containerShutdownTimeout());</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shut down the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00251">softwarecontainer.cpp:251</a></div></div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00247">247</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;{</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">shutdown</a>(m_config-&gt;containerShutdownTimeout());</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;}</div>
+<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_ab7f458bb2d29ef1a99c3aae09188a0d4"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#ab7f458bb2d29ef1a99c3aae09188a0d4">softwarecontainer::SoftwareContainer::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Shut down the container. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00247">softwarecontainer.cpp:247</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -442,28 +442,28 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00272">272</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00268">268</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
 <p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;{</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to suspend non ready container &quot;</span> + id;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    }</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(m_container-&gt;suspend())) {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        std::string message =  <span class="stringliteral">&quot;Failed to suspend container &quot;</span> + id;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        m_containerState.setValueNotify(ContainerState::INVALID);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">throw</span> ContainerError(message);</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    }</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Suspended container &quot;</span> &lt;&lt; id;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    m_containerState.setValueNotify(ContainerState::SUSPENDED);</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;{</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to suspend non ready container &quot;</span> + id;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    }</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(m_container-&gt;suspend())) {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        std::string message =  <span class="stringliteral">&quot;Failed to suspend container &quot;</span> + id;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        m_containerState.setValueNotify(ContainerState::INVALID);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="keywordflow">throw</span> ContainerError(message);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Suspended container &quot;</span> &lt;&lt; id;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    m_containerState.setValueNotify(ContainerState::SUSPENDED);</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -500,28 +500,28 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00293">293</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00289">289</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
 <p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;{</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::SUSPENDED) {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        std::string message =  <span class="stringliteral">&quot;Invalid to resume non suspended container &quot;</span> + id;</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(m_container-&gt;resume())) {</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        std::string message = <span class="stringliteral">&quot;Failed to resume container &quot;</span> + id;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        m_containerState.setValueNotify(ContainerState::INVALID);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">throw</span> ContainerError(message);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Resumed container &quot;</span> &lt;&lt; id;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;{</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::SUSPENDED) {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        std::string message =  <span class="stringliteral">&quot;Invalid to resume non suspended container &quot;</span> + id;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    }</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(m_container-&gt;resume())) {</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        std::string message = <span class="stringliteral">&quot;Failed to resume container &quot;</span> + id;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        m_containerState.setValueNotify(ContainerState::INVALID);</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">throw</span> ContainerError(message);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    }</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Resumed container &quot;</span> &lt;&lt; id;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    m_containerState.setValueNotify(ContainerState::READY);</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -552,10 +552,10 @@ Here is the call graph for this function:</div>
 <p>TODO: This should be removed when quick-launch is implemented</p>
 <dl class="section return"><dt>Returns</dt><dd>true if startGateways has been called previously, false if not </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00370">370</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;{</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="keywordflow">return</span> m_previouslyConfigured;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00366">366</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;{</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="keywordflow">return</span> m_previouslyConfigured;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -579,7 +579,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00163">163</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
-<p>References <a class="el" href="gateway_8cpp_source.html#l00130">softwarecontainer::Gateway::setContainer()</a>.</p>
+<p>References <a class="el" href="gateway_8cpp_source.html#l00114">softwarecontainer::Gateway::setContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;{</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    gateway-&gt;setContainer(m_container);</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    m_gateways.push_back(std::move(std::unique_ptr&lt;Gateway&gt;(gateway)));</div>
@@ -605,7 +605,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a></li>
-    <li class="footer">Generated on Fri Jan 27 2017 11:19:55 for softwarecontainer by
+    <li class="footer">Generated on Mon Jan 30 2017 07:34:51 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
