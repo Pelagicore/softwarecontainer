@@ -69,7 +69,7 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
     m_container = std::shared_ptr<ContainerAbstractInterface>(
         new Container("SC-" + std::to_string(id),
                       m_config->containerConfigPath(),
-                      m_config->containerRootDir(),
+                      m_config->sharedMountsDir(),
                       m_config->enableWriteBuffer(),
                       m_config->containerShutdownTimeout()));
 
@@ -333,7 +333,7 @@ std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
 std::string SoftwareContainer::getContainerDir()
 {
     const std::string containerID = std::string(m_container->id());
-    return buildPath(m_config->containerRootDir(), containerID);
+    return buildPath(m_config->sharedMountsDir(), containerID);
 }
 
 std::string SoftwareContainer::getGatewayDir()
@@ -370,7 +370,7 @@ bool SoftwareContainer::previouslyConfigured()
 
 void SoftwareContainer::checkWorkspace()
 {
-    const std::string rootDir = m_config->containerRootDir();
+    const std::string rootDir = m_config->sharedMountsDir();
     if (!isDirectory(rootDir)) {
         log_debug() << "Container root " << rootDir << " does not exist, trying to create";
         if(isError(createDirectory(rootDir))) {

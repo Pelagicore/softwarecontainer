@@ -41,7 +41,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
     int shutdownTimeout =
         m_config->getIntValue(ConfigDefinition::SC_GROUP,
                               ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY);
-    std::string containerRootDir =
+    std::string sharedMountsDir =
         m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                  ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY);
     std::string lxcConfigPath =
@@ -86,7 +86,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
                                                 bridgeNetAddr,
 #endif // ENABLE_NETWORKGATEWAY
                                                 lxcConfigPath,
-                                                containerRootDir,
+                                                sharedMountsDir,
                                                 shutdownTimeout);
 }
 
