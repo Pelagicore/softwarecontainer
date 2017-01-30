@@ -80,7 +80,6 @@ public:
                                      "bridge-netmask-bits = " + std::string(BRIDGE_NETMASK_BITS_TESTING) +"\n"
                                      "bridge-netaddr = " + std::string(BRIDGE_NETADDR_TESTING) + "\n"
 #endif
-                                     "keep-containers-alive = false\n"
                                      "shutdown-timeout = 1\n"
                                      "shared-mounts-dir = " + std::string(SHARED_MOUNTS_DIR_TESTING) + "\n"
                                      "deprecated-lxc-config-path = " + std::string(LXC_CONFIG_PATH_TESTING) + "\n"

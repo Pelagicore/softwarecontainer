@@ -78,9 +78,6 @@ It is possible to configure SoftwareContainer with command line options.
 **-u or --user <uid>** Default user id to be used when starting processes in the container, defaults to ``0``.
 This option is deprecated.
 
-**-k or --keep-containers-alive** Containers will not be shut down on exit. Useful for debugging.
-Defaults to |keep-containers-alive-code|
-
 **-t or --timeout <seconds>** Timeout in seconds to wait for containers to shutdown,
 defaults to |shutdown-timeout-code|
 

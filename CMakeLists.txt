@@ -35,7 +35,7 @@ include(Configs)
 # Set software version
 #
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 17)
+set(${PROJECT_NAME}_MINOR_VERSION 18)
 set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
@@ -167,8 +167,6 @@ add_feature_info("Config directory" TRUE "Configuration files will be installed 
 
 # Used as prefix to config keys that belong to the SoftwareContainer group
 set(SC_CONFIG_GROUP "SC")
-
-add_boolean_config(${SC_CONFIG_GROUP} KEEP_CONTAINERS_ALIVE FALSE "false")
 
 add_boolean_config(${SC_CONFIG_GROUP} USE_SESSION_BUS FALSE "false")
 
