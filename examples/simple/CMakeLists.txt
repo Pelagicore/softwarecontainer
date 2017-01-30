@@ -23,4 +23,7 @@ ADD_EXECUTABLE(simple simple.c)
 INSTALL(TARGETS simple
         RUNTIME DESTINATION share/softwarecontainer/examples/simple)
 
-INSTALL(FILES launch.sh DESTINATION share/softwarecontainer/examples/simple)
+INSTALL(FILES launch.sh DESTINATION share/softwarecontainer/examples/simple
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                    GROUP_READ GROUP_EXECUTE
+                    WORLD_READ WORLD_EXECUTE)
