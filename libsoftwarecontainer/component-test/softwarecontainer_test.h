@@ -64,7 +64,7 @@ public:
     SoftwareContainerGatewayTest() { }
     ~SoftwareContainerGatewayTest() { }
 
-    json_t *jsonConfig;
+    json_t *jsonConfig = nullptr;
 
     void TearDown() override;
 
