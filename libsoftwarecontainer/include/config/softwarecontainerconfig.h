@@ -53,7 +53,7 @@ public:
                             const std::string &bridgeNetAddr,
 #endif // ENABLE_NETWORKGATEWAY
                             const std::string &containerConfigPath,
-                            const std::string &containerRootDir,
+                            const std::string &sharedMountsDir,
                             unsigned int containerShutdownTimeout);
 
     ~SoftwareContainerConfig() {}
@@ -77,7 +77,7 @@ public:
 #endif // ENABLE_NETWORKGATEWAY
 
     std::string containerConfigPath() const;
-    std::string containerRootDir() const;
+    std::string sharedMountsDir() const;
     unsigned int containerShutdownTimeout() const;
 
     /*
@@ -97,7 +97,7 @@ private:
 #endif // ENABLE_NETWORKGATEWAY
 
     std::string m_containerConfigPath;
-    std::string m_containerRootDir;
+    std::string m_sharedMountsDir;
     unsigned int m_containerShutdownTimeout;
 
     bool m_enableWriteBuffer;

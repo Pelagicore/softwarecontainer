@@ -33,7 +33,7 @@ SoftwareContainerConfig::SoftwareContainerConfig(
                                                  const std::string &bridgeNetAddr,
 #endif // ENABLE_NETWORKGATEWAY
                                                  const std::string &containerConfigPath,
-                                                 const std::string &containerRootDir,
+                                                 const std::string &sharedMountsDir,
                                                  unsigned int containerShutdownTimeout) :
 #ifdef ENABLE_NETWORKGATEWAY
     m_shouldCreateBridge(shouldCreateBridge),
@@ -44,7 +44,7 @@ SoftwareContainerConfig::SoftwareContainerConfig(
     m_bridgeNetAddr(bridgeNetAddr),
 #endif
     m_containerConfigPath(containerConfigPath),
-    m_containerRootDir(containerRootDir),
+    m_sharedMountsDir(sharedMountsDir),
     m_containerShutdownTimeout(containerShutdownTimeout)
 {
 }
@@ -59,9 +59,9 @@ std::string SoftwareContainerConfig::containerConfigPath() const
     return m_containerConfigPath;
 }
 
-std::string SoftwareContainerConfig::containerRootDir() const
+std::string SoftwareContainerConfig::sharedMountsDir() const
 {
-    return m_containerRootDir;
+    return m_sharedMountsDir;
 }
 
 unsigned int SoftwareContainerConfig::containerShutdownTimeout() const
