@@ -37,9 +37,6 @@
 #
 
 [SoftwareContainer]
-# Set to 'true' to not shut down containers when SoftwareContainer exits
-@SC_KEEP_CONTAINERS_ALIVE_ACTIVATE@keep-containers-alive = @SC_KEEP_CONTAINERS_ALIVE_CONFIG_FILE_VAR@
-
 # Set to 'true' to use the SessionBus
 @SC_USE_SESSION_BUS_ACTIVATE@use-session-bus = @SC_USE_SESSION_BUS_CONFIG_FILE_VAR@
 

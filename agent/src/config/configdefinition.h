@@ -65,7 +65,6 @@ public:
     // Illegal values used as initial command line option values to check if user
     // set them or not
     static const std::string SC_CONFIG_PATH_INITIAL_VALUE;
-    static const bool KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
     static const int SHUTDOWN_TIMEOUT_INITIAL_VALUE;
     static const std::string SERVICE_MANIFEST_DIR_INITIAL_VALUE;
     static const std::string DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
@@ -75,7 +74,6 @@ public:
     static const std::string SC_GROUP;
 
     // Config keys for SoftwareContainer group
-    static const std::string SC_KEEP_CONTAINERS_ALIVE_KEY;
     static const std::string SC_USE_SESSION_BUS_KEY;
     static const std::string SC_SHUTDOWN_TIMEOUT_KEY;
     static const std::string SC_SHARED_MOUNTS_DIR_KEY;

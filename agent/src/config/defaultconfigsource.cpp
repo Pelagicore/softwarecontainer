@@ -69,12 +69,6 @@ DefaultConfigSource::DefaultConfigSource():
     m_intConfigs.push_back(intConfig);
 
     BoolConfig boolConfig = BoolConfig(ConfigDefinition::SC_GROUP,
-                                       ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,
-                                       SC_KEEP_CONTAINERS_ALIVE);
-    boolConfig.setSource(ConfigSourceType::Default);
-    m_boolConfigs.push_back(boolConfig);
-
-    boolConfig = BoolConfig(ConfigDefinition::SC_GROUP,
                             ConfigDefinition::SC_USE_SESSION_BUS_KEY,
                             SC_USE_SESSION_BUS);
     boolConfig.setSource(ConfigSourceType::Default);

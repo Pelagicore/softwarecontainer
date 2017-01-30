@@ -70,13 +70,6 @@ int main(int argc, char **argv)
     userOpt.set_description("Default user id to be used when starting processes in the container,"
                             " defaults to 0");
 
-    Glib::OptionEntry keepContainersAliveOpt;
-    keepContainersAliveOpt.set_long_name("keep-containers-alive");
-    keepContainersAliveOpt.set_short_name('k');
-    keepContainersAliveOpt.set_description("Containers will not be shut down on exit. Useful for "
-                                           "debugging, defaults to "
-                                           + std::string(SC_KEEP_CONTAINERS_ALIVE ? "true" : "false"));
-
     Glib::OptionEntry timeoutOpt;
     timeoutOpt.set_long_name("timeout");
     timeoutOpt.set_short_name('t');
@@ -112,7 +105,6 @@ int main(int argc, char **argv)
 
     std::string configPath = ConfigDefinition::SC_CONFIG_PATH_INITIAL_VALUE;
     int userID = 0;
-    bool keepContainersAlive = ConfigDefinition::KEEP_CONTAINERS_ALIVE_INITIAL_VALUE;
     int timeout = ConfigDefinition::SHUTDOWN_TIMEOUT_INITIAL_VALUE;
     std::string serviceManifestDir = ConfigDefinition::SERVICE_MANIFEST_DIR_INITIAL_VALUE;
     std::string defaultServiceManifestDir = ConfigDefinition::DEFAULT_SERVICE_MANIFEST_DIR_INITIAL_VALUE;
@@ -122,7 +114,6 @@ int main(int argc, char **argv)
 
     mainGroup.add_entry_filename(configOpt, configPath);
     mainGroup.add_entry(userOpt, userID);
-    mainGroup.add_entry(keepContainersAliveOpt, keepContainersAlive);
 
     mainGroup.add_entry(timeoutOpt, timeout);
     mainGroup.add_entry_filename(serviceManifestDirOpt, serviceManifestDir);
@@ -196,12 +187,6 @@ int main(int argc, char **argv)
     std::vector<BoolConfig> boolConfigs = std::vector<BoolConfig>();
     /* The bool options should be on/off flags so if they were set they are 'true'
      * otherwise they are still the default 'false' set above. */
-    if (keepContainersAlive == true) {
-        BoolConfig config(ConfigDefinition::SC_GROUP,
-                          ConfigDefinition::SC_KEEP_CONTAINERS_ALIVE_KEY,
-                          keepContainersAlive);
-        boolConfigs.push_back(config);
-    }
     if (useSessionBus == true) {
         BoolConfig config(ConfigDefinition::SC_GROUP,
                           ConfigDefinition::SC_USE_SESSION_BUS_KEY,
