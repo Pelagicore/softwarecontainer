@@ -51,9 +51,9 @@ node {
         }
 
         stage('StartVM') {
-            // Calculate available amount of RAM
+            // Calculate available amount of RAM (excluding Swap)
             String gigsramStr = sh (
-                script: 'free -tg | tail -n1 | awk \'{ print $2 }\'',
+                script: 'free -g | grep "Mem: " | tail -n1 | awk \'{ print $2 }\'',
                 returnStdout: true
             )
             int gigsram = gigsramStr.trim() as Integer
