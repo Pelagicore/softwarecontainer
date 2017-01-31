@@ -38,12 +38,12 @@ Cleanup
 -------
 
 The internal filesystem will always be deleted and recreated when a container
-is restarted (destroyed and recreated). This means that anything you want to 
-save during debugging needs to be saved to a bind mounted directory before you 
+is restarted (destroyed and recreated). This means that anything you want to
+save during debugging needs to be saved to a bind mounted directory before you
 shut down the container.
 
 ``Note:`` This does not mean that the bind mounted filesystems will be deleted,
-and large parts of the filesystems are usually bind mounted. 
+and large parts of the filesystems are usually bind mounted.
 
 `SoftwareContainerAgent` will also delete all container instances upon startup,
 meaning that container instances will be lost when restarting.
@@ -108,7 +108,7 @@ able to connect to the process inside the container.
 
 1. Start a container
 2. Start `QtCreator` as root (sudo)
-3. Open a project in `QtCreator` 
+3. Open a project in `QtCreator`
 4. Build the code into a runnable binary
 5. Run the binary program inside the container
 6. If you are using `DBUS`, a `PID` is returned, otherwise find it in the outside
@@ -120,10 +120,28 @@ able to connect to the process inside the container.
 
 Core dumps
 ----------
+`SoftwareContainer` is configured to make the commands or functions that run inside the container
+create a core dump in case of, for example, a segmentation fault.
+
+The naming of a core dump file is the same inside a container as on the host, meaning this can
+be set by looking at `/proc/sys/kernel/core_pattern` or by running `sysctl kernel.core_pattern`.
+Because the container and host share a kernel, the setting on the host will be visible in the
+container.
+
+Note that the core_pattern can contain a path to where to store core dumps, so a wise decision from
+a systems perspective, would be to set it to some directory which is then mounted into each
+container, either by issuing `BindMount` calls on D-Bus, or by adding it as a FileGateway
+configuration in a default capability (which would then be automatically enabled for every
+container).
+
+An alternative is to not use a pattern containing a path, and make sure you always execute your
+application from a cwd which is also bind-mounted (which the application directory always is), and
+then your core dumps will be stored together with the application binary.
+
+More info about core dump patterns can be found in :linuxman:`core(5)`.
 
 Nothing special should be needed to debug a core file using for example
 `QtCreator` or `GDB`. Load the file as normal.
-
 
 Debugging SoftwareContainerAgent
 ================================
@@ -143,9 +161,9 @@ Logging
 
 All the logs are performed using `ivi-logging`, meaning that `ivi-logging`
 facilities can be used to filter logs. By default the logging is set to `DEBUG`
-as of this writing. 
+as of this writing.
 
-Logs can be written to `DLT` backend if configured and compiled properly. 
+Logs can be written to `DLT` backend if configured and compiled properly.
 
 
 LXC
