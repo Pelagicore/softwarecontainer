@@ -35,20 +35,19 @@
 namespace softwarecontainer {
     LOG_DECLARE_DEFAULT_CONTEXT(defaultLogContext, "MAIN", "Main context");
 
-struct stat getStat(const std::string &path)
+bool getStat(const std::string &path, struct stat &st)
 {
-    struct stat st;
-    memset(&st, 0, sizeof(st));
-
-    if (stat(path.c_str(), &st) == 0) {
-        return st;
-    }
-    return st;
+    return stat(path.c_str(), &st) == 0;
 }
 
 bool isDirectory(const std::string &path)
 {
-    return S_ISDIR(getStat(path).st_mode);
+    struct stat st;
+    if (getStat(path, st)) {
+        return S_ISDIR(st.st_mode);
+    }
+
+    return false;
 }
 
 bool isDirectoryEmpty(const std::string &path) {
@@ -75,22 +74,38 @@ bool isDirectoryEmpty(const std::string &path) {
 
 bool isFile(const std::string &path)
 {
-    return S_ISREG(getStat(path).st_mode);
+    struct stat st;
+    if (getStat(path, st)) {
+        return S_ISREG(st.st_mode);
+    }
+
+    return false;
 }
 
 bool isPipe(const std::string &path)
 {
-    return S_ISFIFO(getStat(path).st_mode);
+    struct stat st;
+    if (getStat(path, st)) {
+        return S_ISFIFO(st.st_mode);
+    }
+
+    return false;
 }
 
 bool isSocket(const std::string &path)
 {
-    return S_ISSOCK(getStat(path).st_mode);
+    struct stat st;
+    if (getStat(path, st)) {
+        return S_ISSOCK(st.st_mode);
+    }
+
+    return false;
 }
 
 bool existsInFileSystem(const std::string &path)
 {
-    return (getStat(path).st_mode != 0);
+    struct stat st;
+    return getStat(path, st);
 }
 
 std::string parentPath(const std::string &path_)
