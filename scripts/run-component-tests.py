@@ -35,7 +35,7 @@ from os.path import dirname
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 os.chdir(CURRENT_DIR)
 
-if "UID" in os.environ and os.environ["UID"] != 0:
+if os.getuid() != 0:
     print "This script must be run as root"
     sys.exit(1)
 
