@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-54c8a5c 2017-01-30</span>
+   &#160;<span id="projectnumber">0.18.0-4f2978b 2017-01-31</span>
    </div>
   </td>
  </tr>
@@ -373,9 +373,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>copyFile</b> (const ch
 <tr class="memitem:adc7dd824229f3d4b3f5fc4d9b20c9727"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc7dd824229f3d4b3f5fc4d9b20c9727"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>LOG_DECLARE_DEFAULT_CONTEXT</b> (defaultLogContext,&quot;MAIN&quot;,&quot;Main context&quot;)</td></tr>
 <tr class="separator:adc7dd824229f3d4b3f5fc4d9b20c9727"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92037e91ca7cdb0ea1bf528382460434"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92037e91ca7cdb0ea1bf528382460434"></a>
-struct stat&#160;</td><td class="memItemRight" valign="bottom"><b>getStat</b> (const std::string &amp;path)</td></tr>
-<tr class="separator:a92037e91ca7cdb0ea1bf528382460434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff0a58c4b792efeda27a27269ad3bf16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff0a58c4b792efeda27a27269ad3bf16"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getStat</b> (const std::string &amp;path, struct stat &amp;st)</td></tr>
+<tr class="separator:aff0a58c4b792efeda27a27269ad3bf16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44f64c34c09d1ffdb18428b41f0d9e91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91">isDirectory</a> (const std::string &amp;path)</td></tr>
 <tr class="memdesc:a44f64c34c09d1ffdb18428b41f0d9e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">isDirectory Check if path is a directory  <a href="#a44f64c34c09d1ffdb18428b41f0d9e91">More...</a><br /></td></tr>
 <tr class="separator:a44f64c34c09d1ffdb18428b41f0d9e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -717,12 +717,17 @@ Here is the caller graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true/false </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00049">49</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00043">43</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
 <p>Referenced by <a class="el" href="container_8cpp_source.html#l00516">softwarecontainer::Container::bindMountInContainer()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">return</span> S_ISDIR(getStat(path).st_mode);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">struct </span>stat st;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">if</span> (getStat(path, st)) {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">return</span> S_ISDIR(st.st_mode);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -761,28 +766,28 @@ false if the directory does not exist </dd>
 <dd>
 true if the directory is empty </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00054">54</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                             {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">int</span> n = 0;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    constexpr <span class="keywordtype">int</span> EMPTY_DIR_SIZE=2;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">struct </span>dirent *d;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    DIR *dir = opendir(path.c_str());</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span> (dir == NULL) { <span class="comment">//Not a directory or doesn&#39;t exist</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">while</span> ((d = readdir(dir)) != NULL) {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        ++n;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">if</span>(n &gt; EMPTY_DIR_SIZE) {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    closedir(dir);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">if</span> (n &lt;= EMPTY_DIR_SIZE) { <span class="comment">//Directory Empty</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00053">53</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                             {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">int</span> n = 0;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    constexpr <span class="keywordtype">int</span> EMPTY_DIR_SIZE=2;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">struct </span>dirent *d;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    DIR *dir = opendir(path.c_str());</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">if</span> (dir == NULL) { <span class="comment">//Not a directory or doesn&#39;t exist</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">while</span> ((d = readdir(dir)) != NULL) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        ++n;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">if</span>(n &gt; EMPTY_DIR_SIZE) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    closedir(dir);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (n &lt;= EMPTY_DIR_SIZE) { <span class="comment">//Directory Empty</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -809,10 +814,15 @@ true if the directory is empty </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true/false </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00076">76</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;{</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">return</span> S_ISREG(getStat(path).st_mode);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00075">75</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;{</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">struct </span>stat st;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span> (getStat(path, st)) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> S_ISREG(st.st_mode);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -839,10 +849,15 @@ true if the directory is empty </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true/false </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00081">81</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;{</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">return</span> S_ISFIFO(getStat(path).st_mode);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00085">85</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">struct </span>stat st;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">if</span> (getStat(path, st)) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> S_ISFIFO(st.st_mode);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -869,10 +884,15 @@ true if the directory is empty </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true/false </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00086">86</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;{</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">return</span> S_ISSOCK(getStat(path).st_mode);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00095">95</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;{</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keyword">struct </span>stat st;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordflow">if</span> (getStat(path, st)) {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">return</span> S_ISSOCK(st.st_mode);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -899,12 +919,13 @@ true if the directory is empty </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true/false </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00091">91</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00105">105</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
 <p>Referenced by <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00109">softwarecontainer::FileToolkitWithUndo::bindMount()</a>, and <a class="el" href="container_8cpp_source.html#l00516">softwarecontainer::Container::bindMountInContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;{</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">return</span> (getStat(path).st_mode != 0);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">struct </span>stat st;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">return</span> getStat(path, st);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;}</div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -1109,7 +1130,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li>
-    <li class="footer">Generated on Mon Jan 30 2017 14:44:33 for softwarecontainer by
+    <li class="footer">Generated on Tue Jan 31 2017 12:20:12 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
