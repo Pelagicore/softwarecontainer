@@ -20,7 +20,9 @@
 # For further information see LICENSE
 #
 
-require './cookbook/host-system-config/vagrant-reload/plugin.rb'
+# Use absolute path so that we can run this from sub-directories
+thisDir = File.dirname(__FILE__)
+require File.join(thisDir, 'cookbook/host-system-config/vagrant-reload/plugin.rb')
 
 Vagrant.configure(2) do |config|
     config.vm.box = "debian/contrib-jessie64"
@@ -66,8 +68,9 @@ Vagrant.configure(2) do |config|
     # Change grub to support cgroups memory if necessary
     config.vm.provision "shell", path: "cookbook/system-config/grub-enable-cgroup-memory.sh"
     fileCheck = lambda {
-        if File.exists?("VAGRANT_NEEDS_RELOAD")
-            File.delete("VAGRANT_NEEDS_RELOAD")
+        fileName = File.join(thisDir, "VAGRANT_NEEDS_RELOAD");
+        if File.exists?(fileName)
+            File.delete(fileName)
             return true
         else
             return false
