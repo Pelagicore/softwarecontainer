@@ -206,6 +206,17 @@ public:
     ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
 
 private:
+    /**
+     * @brief Tries to set the limit for core dump size to the maximum allowed size
+     *
+     * @return 0 on success, errno otherwise.
+     */
+    static int unlimitCoreDump();
+
+    /**
+     * @brief Function used to wrap the functions we want to run inside the container
+     * @param param the function to run.
+     */
     static int executeInContainerEntryFunction(void *param);
 
     /**

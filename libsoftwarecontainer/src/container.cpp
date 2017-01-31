@@ -26,6 +26,10 @@
 #include <sys/types.h>
 #include <sys/mount.h>
 
+// rlimit stuff
+#include <sys/time.h>
+#include <sys/resource.h>
+
 #include <lxc/lxccontainer.h>
 #include <lxc/version.h>
 
@@ -275,7 +279,7 @@ ReturnCode Container::start(pid_t *pid)
     char commandEnv[] = "env";
     char commandSleep[] = "/bin/sleep";
     char commandSleepTime[] = "100000000";
-    char* const args[] = { commandEnv, commandSleep, commandSleepTime, nullptr};
+    char* const args[] = { commandEnv, commandSleep, commandSleepTime, nullptr };
 
     if (!m_container->start(m_container, false, args)) {
         log_error() << "Error starting container";
@@ -295,8 +299,29 @@ ReturnCode Container::start(pid_t *pid)
     return ReturnCode::SUCCESS;
 }
 
+int Container::unlimitCoreDump()
+{
+    struct rlimit rlim;
+    if (getrlimit(RLIMIT_CORE, &rlim) != 0) {
+        return errno;
+    }
+
+    // Set this to the maximum allowed value (ulimit -c unlimited if root)
+    rlim.rlim_cur = rlim.rlim_max;
+    if (setrlimit(RLIMIT_CORE, &rlim) != 0) {
+        return errno;
+    }
+
+    return 0;
+}
+
 int Container::executeInContainerEntryFunction(void *param)
 {
+    int canCoreDump = unlimitCoreDump();
+    if (canCoreDump != 0) {
+        return canCoreDump;
+    }
+
     ExecFunction *function = (ExecFunction *) param;
     return (*function)();
 }
