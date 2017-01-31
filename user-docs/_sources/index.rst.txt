@@ -18,6 +18,7 @@ Contents:
     chapters/service-manifests/*
     chapters/gateways/00-index.rst
     chapters/integration-guidelines/00-index.rst
+    chapters/debugging/*
     chapters/troubleshooting/*
     chapters/filesystem/*
     chapters/developers/*

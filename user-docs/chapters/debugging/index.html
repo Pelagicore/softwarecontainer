@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Debugging &#8212; softwarecontainer 0.18.0-5f4c91d 2017-01-31 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.18.0-5f4c91d 2017-01-31',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshooting" href="../troubleshooting/index.html" />
+    <link rel="prev" title="Integration guidelines" href="../integration-guidelines/00-index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="debugging">
+<span id="id1"></span><h1>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h1>
+<p>The use of containers can make debugging a bit harder as we sometimes need to
+get information from different sources of information. Paths can require some
+help to parse for the computer as well as yourself</p>
+<div class="section" id="debugging-applications-running-in-containers">
+<h2>Debugging applications running in containers<a class="headerlink" href="#debugging-applications-running-in-containers" title="Permalink to this headline">¶</a></h2>
+<p>This section and subsections describes some common ways of debugging
+applications running inside containers and how to use common tools on the
+applications running inside the containers.</p>
+<div class="section" id="lxc">
+<h3>LXC<a class="headerlink" href="#lxc" title="Permalink to this headline">¶</a></h3>
+<p>LXC provides several tools that can be used to check out the containers
+currently running on the system. <cite>Note that all commands must be run as the main
+user which the containers are started as, ie root usually.</cite></p>
+<p><em>lxc-ls</em> lists all currently running containers on the host.</p>
+<p><em>lxc-attach</em> can be used to &#8220;get inside&#8221; the container with a shell for example,
+or to test run commands on the inside of the container. Please note that the
+command given must be available inside the container.</p>
+<p><em>lxc-console</em> can be used to login with a shell inside the container in question.</p>
+<p><em>lxc-info</em> provides information about the running container, such as network
+interface used for t he bridge, the state of the container, what PID it has and
+so forth.</p>
+</div>
+<div class="section" id="cleanup">
+<h3>Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this headline">¶</a></h3>
+<p>The internal filesystem will always be deleted and recreated when a container
+is restarted (destroyed and recreated). This means that anything you want to
+save during debugging needs to be saved to a bind mounted directory before you
+shut down the container.</p>
+<p><code class="docutils literal"><span class="pre">Note:</span></code> This does not mean that the bind mounted filesystems will be deleted,
+and large parts of the filesystems are usually bind mounted.</p>
+<p><cite>SoftwareContainerAgent</cite> will also delete all container instances upon startup,
+meaning that container instances will be lost when restarting.</p>
+</div>
+<div class="section" id="gdb">
+<h3>GDB<a class="headerlink" href="#gdb" title="Permalink to this headline">¶</a></h3>
+<p>Attaching a <cite>gdb</cite> session can be done in two ways, one is to run the <cite>gdb</cite> session
+and attach inside the container, the other is to attach to the process from the
+outside of the container. Using both methods have their own set of problems you
+need to solve.</p>
+<div class="section" id="running-gdb-inside-container">
+<h4>Running GDB inside container<a class="headerlink" href="#running-gdb-inside-container" title="Permalink to this headline">¶</a></h4>
+<p>If you run <cite>gdb</cite> from inside the container using <cite>lxc-attach</cite>, you should not
+need to change any paths etc to find the correct libraries etc. You will need
+to have the <cite>PID</cite> from inside the container available to connect to however. this
+can be found out by running:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="n">ps</span> <span class="n">aux</span>
+</pre></div>
+</div>
+<p>Then running:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="o">--</span> <span class="n">gdb</span> <span class="o">--</span><span class="n">pid</span> <span class="n">YY</span>
+</pre></div>
+</div>
+<p>Replace YY with the <cite>PID</cite> as seen inside the container. You can also run the
+application directly inside the container and start it with gdb directly:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="o">--</span> <span class="n">gdb</span> <span class="o">--</span><span class="n">args</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">ls</span>
+</pre></div>
+</div>
+<p>TODO: Uncertain why, but this fails with unable to find executable.</p>
+</div>
+<div class="section" id="running-gdb-outside-container">
+<h4>Running GDB outside container<a class="headerlink" href="#running-gdb-outside-container" title="Permalink to this headline">¶</a></h4>
+<p>If you run <cite>gdb</cite> from outside the container you will run into some problems with the
+paths as the application is executing inside a <cite>chroot</cite> and <cite>gdb</cite> is executing
+outside of it, this is fairly easily fixed however. First off you need to
+provide <cite>gdb</cite> with the path of the executable as the path provided by the system
+is inside the chroot:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># ps aux |grep main</span>
+<span class="c"># sudo gdb --pid XXX /tmp/container//SC-0/gateways/app/main</span>
+</pre></div>
+</div>
+<p>Begin with finding the global namespace <cite>PID</cite> of the application you are
+debugging and then attach <cite>gdb</cite> to that <cite>PID</cite>, and the path to the application
+in the <cite>un-chrooted</cite> filesystem.</p>
+<p>The application should now be possible to debug as normal. Most of the standard
+libraries etc are mounted inside the <cite>chroot</cite> from the outside and should be
+available as normal without any changes. If you have dynamic libraries inside
+your container that the application are linking to, you may need to add the
+proper <cite>solib-search-paths</cite> to the libraries.</p>
+</div>
+<div class="section" id="debugging-using-qtcreator-inside-a-container">
+<h4>Debugging using QtCreator inside a container<a class="headerlink" href="#debugging-using-qtcreator-inside-a-container" title="Permalink to this headline">¶</a></h4>
+<p>Debugging applications running inside a container can be done, however, all
+processes are run as root so you need to start <cite>QtCreator</cite> as root to be
+able to connect to the process inside the container.</p>
+<ol class="arabic simple">
+<li>Start a container</li>
+<li>Start <cite>QtCreator</cite> as root (sudo)</li>
+<li>Open a project in <cite>QtCreator</cite></li>
+<li>Build the code into a runnable binary</li>
+<li>Run the binary program inside the container</li>
+<li>If you are using <cite>DBUS</cite>, a <cite>PID</cite> is returned, otherwise find it in the outside
+system.</li>
+<li>Open <em>Debug -&gt; Start Debugging -&gt; Attach to Running Application...</em></li>
+<li>Find the right <cite>PID</cite> in the list, and attach.</li>
+<li>The process will be halted and you can debug it from <cite>QtCreator</cite>.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="core-dumps">
+<h3>Core dumps<a class="headerlink" href="#core-dumps" title="Permalink to this headline">¶</a></h3>
+<p>Nothing special should be needed to debug a core file using for example
+<cite>QtCreator</cite> or <cite>GDB</cite>. Load the file as normal.</p>
+</div>
+</div>
+<div class="section" id="debugging-softwarecontaineragent">
+<h2>Debugging SoftwareContainerAgent<a class="headerlink" href="#debugging-softwarecontaineragent" title="Permalink to this headline">¶</a></h2>
+<p>Debugging the <cite>SoftwareContainerAgent</cite> should not be necessary for developers of
+applications running inside containers managed by the <cite>SoftwareContainerAgent</cite>.
+This is mainly interesting for developers of the actual
+<cite>SoftwareContainerAgent</cite> and <cite>SoftwareContainer</cite> system.</p>
+<p>Debugging the <cite>SoftwareContainerAgent</cite> should be straight forward, with the
+exception that it runs as root, and hence all debugging tools also need to be
+run as root until such a time that <cite>SoftwareContainerAgent</cite> can be run as a
+non-root user.</p>
+<div class="section" id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<p>All the logs are performed using <cite>ivi-logging</cite>, meaning that <cite>ivi-logging</cite>
+facilities can be used to filter logs. By default the logging is set to <cite>DEBUG</cite>
+as of this writing.</p>
+<p>Logs can be written to <cite>DLT</cite> backend if configured and compiled properly.</p>
+</div>
+<div class="section" id="id2">
+<h3>LXC<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>LXC</cite> logs are controlled separately using two configuration options that
+needs to be added to the <cite>LXC</cite> configuration, available in
+<em>$CMAKE_INSTALL_PREFIX/etc/softwarecontainer.conf</em>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">.</span><span class="n">logfile</span>
+<span class="n">lxc</span><span class="o">.</span><span class="n">loglevel</span>
+</pre></div>
+</div>
+<p>The <cite>logfile</cite> is a pointer to the file which the log will be stored in. The
+valid <cite>loglevels</cite> are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">FATAL</span>
+<span class="n">ALERT</span>
+<span class="n">CRIT</span>
+<span class="n">ERROR</span>
+<span class="n">WARN</span>
+<span class="n">NOTICE</span>
+<span class="n">INFO</span>
+<span class="n">DEBUG</span>
+<span class="n">TRACE</span>
+</pre></div>
+</div>
+<p>It can also be worthwhile checking the output from <cite>lxc-checkconfig</cite> to make sure
+that your system is actually able to support all the <cite>LXC</cite> features that you
+need.</p>
+</div>
+<div class="section" id="id3">
+<h3>GDB<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><cite>GDB</cite> debugging of <cite>SoftwareContainerAgent</cite> should work with no issues. You do need
+to run <cite>GDB</cite> as root however, as already mentioned.</p>
+</div>
+<div class="section" id="valgrind">
+<h3>Valgrind<a class="headerlink" href="#valgrind" title="Permalink to this headline">¶</a></h3>
+<p><cite>Valgrind</cite> of <cite>SoftwareContainerAgent</cite> works as expected.</p>
+</div>
+<div class="section" id="id4">
+<h3>Core dumps<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Coredumps can be debugged normally, no special usage necessary.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Debugging</a><ul>
+<li><a class="reference internal" href="#debugging-applications-running-in-containers">Debugging applications running in containers</a><ul>
+<li><a class="reference internal" href="#lxc">LXC</a></li>
+<li><a class="reference internal" href="#cleanup">Cleanup</a></li>
+<li><a class="reference internal" href="#gdb">GDB</a><ul>
+<li><a class="reference internal" href="#running-gdb-inside-container">Running GDB inside container</a></li>
+<li><a class="reference internal" href="#running-gdb-outside-container">Running GDB outside container</a></li>
+<li><a class="reference internal" href="#debugging-using-qtcreator-inside-a-container">Debugging using QtCreator inside a container</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#core-dumps">Core dumps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#debugging-softwarecontaineragent">Debugging SoftwareContainerAgent</a><ul>
+<li><a class="reference internal" href="#logging">Logging</a></li>
+<li><a class="reference internal" href="#id2">LXC</a></li>
+<li><a class="reference internal" href="#id3">GDB</a></li>
+<li><a class="reference internal" href="#valgrind">Valgrind</a></li>
+<li><a class="reference internal" href="#id4">Core dumps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../integration-guidelines/00-index.html" title="previous chapter">Integration guidelines</a></li>
+      <li>Next: <a href="../troubleshooting/index.html" title="next chapter">Troubleshooting</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/debugging/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../../_sources/chapters/debugging/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
