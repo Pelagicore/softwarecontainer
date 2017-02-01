@@ -33,72 +33,72 @@ DBusGateway::~DBusGateway()
 {
 }
 
-ReturnCode DBusGateway::setConfig(const json_t *config)
+bool DBusGateway::setConfig(const json_t *config)
 {
     try {
         log_debug() << "Setting config for dbus session bus";
-        ReturnCode sessionBusParseResult = sessionBus.setConfig(config);
+        bool sessionBusParseResult = sessionBus.setConfig(config);
 
         log_debug() << "Setting config for dbus system bus";
-        ReturnCode systemBusParseResult = systemBus.setConfig(config);
+        bool systemBusParseResult = systemBus.setConfig(config);
 
-        if (isError(sessionBusParseResult) && isError(systemBusParseResult)) {
+        if (!sessionBusParseResult && !systemBusParseResult) {
             log_error() << "Neither session nor system bus could use the given config";
-            return ReturnCode::FAILURE;
+            return false;
         }
     } catch (GatewayParserError &err) {
         log_error() << "Bad config in one of the gateway configurations";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-     return ReturnCode::SUCCESS;
+     return true;
 }
 
-ReturnCode DBusGateway::activate()
+bool DBusGateway::activate()
 {
-     ReturnCode sessionBusActivationResult = ReturnCode::FAILURE;
+     bool sessionBusActivationResult = false;
      if (sessionBus.isConfigured()) {
          log_debug() << "Activating dbus session bus";
          sessionBusActivationResult = sessionBus.activate();
      }
 
-     ReturnCode systemBusActivationResult = ReturnCode::FAILURE;
+     bool systemBusActivationResult = false;
      if (systemBus.isConfigured()) {
          log_debug() << "Activating dbus system bus";
          sessionBusActivationResult = systemBus.activate();
      }
 
-     if (isError(sessionBusActivationResult) && isError(systemBusActivationResult)) {
+     if (!sessionBusActivationResult && !systemBusActivationResult) {
          log_error() << "Neither dbus session bus nor dbus system bus could be activated";
-         return ReturnCode::FAILURE;
+         return false;
      }
-     return ReturnCode::SUCCESS;
+     return true;
 }
 
-ReturnCode DBusGateway::teardown()
+bool DBusGateway::teardown()
 {
-     ReturnCode sessionBusTeardownResult;
+     bool sessionBusTeardownResult;
      if (sessionBus.isActivated()) {
          log_debug() << "Tearing down dbus session bus";
          sessionBusTeardownResult = sessionBus.teardown();
      } else {
-         sessionBusTeardownResult = ReturnCode::FAILURE;
+         sessionBusTeardownResult = false;
      }
 
-     ReturnCode systemBusTeardownResult ;
+     bool systemBusTeardownResult;
      if (systemBus.isActivated()) {
          log_debug() << "Tearing down dbus system bus";
          systemBusTeardownResult = systemBus.teardown();
      } else {
-         systemBusTeardownResult = ReturnCode::FAILURE;
+         systemBusTeardownResult = false;
      }
 
-     if (isError(sessionBusTeardownResult) && isError(systemBusTeardownResult)) {
+     if (!sessionBusTeardownResult && !systemBusTeardownResult) {
          log_error() << "Neither dbus session bus nor dbus system bus could be tore down";
-         return ReturnCode::FAILURE;
+         return false;
      }
 
-     return ReturnCode::SUCCESS;
+     return true;
 }
 
 void DBusGateway::setContainer(std::shared_ptr<ContainerAbstractInterface> container)

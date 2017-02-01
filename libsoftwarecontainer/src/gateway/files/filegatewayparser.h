@@ -41,7 +41,7 @@ public:
     /*
      * Check that the provided json configuration is syntactically correct
      */
-    ReturnCode parseConfigElement(const json_t *element, FileSetting &setting);
+    bool parseConfigElement(const json_t *element, FileSetting &setting);
 };
 
 } // namespace softwarecontainer

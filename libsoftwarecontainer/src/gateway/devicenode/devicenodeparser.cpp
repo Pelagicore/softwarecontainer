@@ -21,13 +21,13 @@
 
 namespace softwarecontainer {
 
-ReturnCode DeviceNodeParser::parseDeviceNodeGatewayConfiguration(const json_t *element,
+bool DeviceNodeParser::parseDeviceNodeGatewayConfiguration(const json_t *element,
                                                                  Device &result)
 {
     result.name = "";
     if (!JSONParser::read(element, "name", result.name)) {
         log_error() << "Key \"name\" missing or not a string in json configuration";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     result.major = -1;
@@ -38,13 +38,12 @@ ReturnCode DeviceNodeParser::parseDeviceNodeGatewayConfiguration(const json_t *e
     const bool modeSpecified = JSONParser::read(element, "mode",  result.mode);
 
     if (majorSpecified | minorSpecified) {
-        return bool2ReturnCode(
-               checkBoolSet(majorSpecified, "Major has to be specified when Minor is specified")
+        return checkBoolSet(majorSpecified, "Major has to be specified when Minor is specified")
             && checkBoolSet(minorSpecified, "Minor has to be specified when Major is specified")
-            && checkBoolSet(modeSpecified, "Mode has to be specified when Major and Minor are specified")
-        );
-    } 
-    return ReturnCode::SUCCESS;
+            && checkBoolSet(modeSpecified, "Mode has to be specified when "
+                            "Major and Minor are specified");
+    }
+    return true;
 }
 
 bool DeviceNodeParser::checkBoolSet(const bool &value, std::string errorMessage)

@@ -53,7 +53,7 @@ public:
 // Note, running in host
 TEST_F(NetlinkTest, DumpOK) {
     Netlink netlink;
-    ASSERT_TRUE(isSuccess(netlink.checkKernelDump()));
+    ASSERT_TRUE(netlink.checkKernelDump());
 }
 
 TEST_F(NetlinkTest, LinkUpDown) {
@@ -64,7 +64,7 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         // Get eth0 status
         Netlink::LinkInfo linkDown;
-        if (isError(netlink.findLink(IFACE, linkDown))) {
+        if (!netlink.findLink(IFACE, linkDown)) {
             return ERROR;
         }
         int linkIndex = linkDown.first.ifi_index;
@@ -75,7 +75,7 @@ TEST_F(NetlinkTest, LinkUpDown) {
         }
 
         // Bring the link up
-        if (isError(netlink.linkUp(linkIndex))) {
+        if (!netlink.linkUp(linkIndex)) {
             return ERROR;
         }
 
@@ -91,7 +91,7 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         // Check that link was up
         Netlink::LinkInfo linkUp;
-        if (isError(netlink.findLink(IFACE, linkUp))) {
+        if (!netlink.findLink(IFACE, linkUp)) {
             return ERROR;
         }
 
@@ -111,7 +111,7 @@ TEST_F(NetlinkTest, LinkUpDown) {
         Netlink netlink;
          // Get eth0 status
         Netlink::LinkInfo linkUp;
-        if (isError(netlink.findLink(IFACE, linkUp))) {
+        if (!netlink.findLink(IFACE, linkUp)) {
             return ERROR;
         }
         int linkIndex = linkUp.first.ifi_index;
@@ -122,7 +122,7 @@ TEST_F(NetlinkTest, LinkUpDown) {
         }
 
         // Bring the link up
-        if (isError(netlink.linkDown(linkIndex))) {
+        if (!netlink.linkDown(linkIndex)) {
             return ERROR;
         }
 
@@ -138,7 +138,7 @@ TEST_F(NetlinkTest, LinkUpDown) {
 
         // Check that link was up
         Netlink::LinkInfo linkDown;
-        if (isError(netlink.findLink(IFACE, linkDown))) {
+        if (!netlink.findLink(IFACE, linkDown)) {
             return ERROR;
         }
 
@@ -163,19 +163,19 @@ TEST_F(NetlinkTest, SetIP) {
 
         // Get link index
         Netlink::LinkInfo link;
-        if (isError(netlink.findLink(IFACE, link))) {
+        if (!netlink.findLink(IFACE, link)) {
             return ERROR;
         }
         int ifaceIndex = link.first.ifi_index;
 
         // Get addresses
         std::vector<Netlink::AddressInfo> addresses;
-        if (isError(netlink.findAddresses(ifaceIndex, addresses))) {
+        if (!netlink.findAddresses(ifaceIndex, addresses)) {
             return ERROR;
         }
 
         // IP should not be set before we've set it
-        if (isSuccess(netlink.hasAddress(addresses, AF_INET, IFACEADDR))) {
+        if (netlink.hasAddress(addresses, AF_INET, IFACEADDR)) {
             return ERROR;
         }
 
@@ -188,7 +188,7 @@ TEST_F(NetlinkTest, SetIP) {
     auto jobSetIP = m_sc->createFunctionJob([this] () {
         Netlink netlink;
         Netlink::LinkInfo link;
-        if (isError(netlink.findLink(IFACE, link))) {
+        if (!netlink.findLink(IFACE, link)) {
             return ERROR;
         }
         int ifaceIndex = link.first.ifi_index;
@@ -198,7 +198,7 @@ TEST_F(NetlinkTest, SetIP) {
             return ERROR;
         }
 
-        if (isError(netlink.setIP(ifaceIndex, ip, NETMASK))) {
+        if (!netlink.setIP(ifaceIndex, ip, NETMASK)) {
             return ERROR;
         }
 
@@ -213,18 +213,18 @@ TEST_F(NetlinkTest, SetIP) {
 
         // Get link index
         Netlink::LinkInfo link;
-        if (isError(netlink.findLink(IFACE, link))) {
+        if (!netlink.findLink(IFACE, link)) {
             return ERROR;
         }
         int ifaceIndex = link.first.ifi_index;
 
         // Get addresses
         std::vector<Netlink::AddressInfo> addresses;
-        if (isError(netlink.findAddresses(ifaceIndex, addresses))) {
+        if (!netlink.findAddresses(ifaceIndex, addresses)) {
             return ERROR;
         }
 
-        if (isError(netlink.hasAddress(addresses, AF_INET, IFACEADDR))) {
+        if (!netlink.hasAddress(addresses, AF_INET, IFACEADDR)) {
             return ERROR;
         }
 
@@ -243,7 +243,7 @@ TEST_F(NetlinkTest, SetGatewayWithoutUp) {
     // Set the gateway
     auto jobSetGateway = m_sc->createFunctionJob([this] () {
         Netlink netlink;
-        if (isError(netlink.setDefaultGateway(GWADDR))) {
+        if (!netlink.setDefaultGateway(GWADDR)) {
             return ERROR;
         } else {
             return SUCCESS;
@@ -266,7 +266,7 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
 
         // Get eth0 status
         Netlink::LinkInfo linkDown;
-        if (isError(netlink.findLink(IFACE, linkDown))) {
+        if (!netlink.findLink(IFACE, linkDown)) {
             return ERROR;
         }
         int linkIndex = linkDown.first.ifi_index;
@@ -277,7 +277,7 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
         }
 
         // Bring the link up
-        if (isError(netlink.linkUp(linkIndex))) {
+        if (!netlink.linkUp(linkIndex)) {
             return ERROR;
         }
 
@@ -290,7 +290,7 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
     auto jobSetIP = m_sc->createFunctionJob([this] () {
         Netlink netlink;
         Netlink::LinkInfo link;
-        if (isError(netlink.findLink(IFACE, link))) {
+        if (!netlink.findLink(IFACE, link)) {
             return ERROR;
         }
         int ifaceIndex = link.first.ifi_index;
@@ -300,7 +300,7 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
             return ERROR;
         }
 
-        if (isError(netlink.setIP(ifaceIndex, ip, NETMASK))) {
+        if (!netlink.setIP(ifaceIndex, ip, NETMASK)) {
             return ERROR;
         }
 
@@ -313,7 +313,7 @@ TEST_F(NetlinkTest, SetGatewayWithUp) {
     // Set the gateway
     auto jobSetGateway = m_sc->createFunctionJob([this] () {
         Netlink netlink;
-        if (isError(netlink.setDefaultGateway(GWADDR))) {
+        if (!netlink.setDefaultGateway(GWADDR)) {
             return ERROR;
         }
         return SUCCESS;
@@ -331,7 +331,7 @@ TEST_F(NetlinkTest, FindUnexistingLink) {
     Netlink::LinkInfo link;
     memset(&link.first, 0, sizeof(link.first));
 
-    ASSERT_FALSE(isSuccess(netlink.findLink("badlink3", link)));
+    ASSERT_FALSE(netlink.findLink("badlink3", link));
     ASSERT_TRUE(link.second.empty());
 
     // Check that no fields were set
@@ -355,8 +355,8 @@ TEST_F(NetlinkTest, HasAddress) {
 
     // First test, just an empty message address list
     std::vector<Netlink::AddressInfo> empty;
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(empty, AF_INET, IFACEADDR)));
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(empty, AF_INET6, IFACEADDR)));
+    ASSERT_FALSE(netlink.hasAddress(empty, AF_INET, IFACEADDR));
+    ASSERT_FALSE(netlink.hasAddress(empty, AF_INET6, IFACEADDR));
 
     // Second test, create some attributet without real data in them
     Netlink::AttributeList badList1;
@@ -387,8 +387,8 @@ TEST_F(NetlinkTest, HasAddress) {
     std::vector<Netlink::AddressInfo> badData1;
     badData1.push_back(badPair1);
 
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(badData1, AF_INET, IFACEADDR)));
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(badData1, AF_INET6, IFACEADDR)));
+    ASSERT_FALSE(netlink.hasAddress(badData1, AF_INET, IFACEADDR));
+    ASSERT_FALSE(netlink.hasAddress(badData1, AF_INET6, IFACEADDR));
 
     // Free since we did malloc
     free(badAttr1.second);
@@ -416,8 +416,8 @@ TEST_F(NetlinkTest, HasAddress) {
     std::vector<Netlink::AddressInfo> legitData1;
     legitData1.push_back(goodPair1);
 
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(legitData1, AF_INET, IFACEADDR)));
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(legitData1, AF_INET6, IFACEADDR)));
+    ASSERT_FALSE(netlink.hasAddress(legitData1, AF_INET, IFACEADDR));
+    ASSERT_FALSE(netlink.hasAddress(legitData1, AF_INET6, IFACEADDR));
 
     // Fourth test, with correct IP
     Netlink::AttributeInfo goodAttr2;
@@ -438,16 +438,16 @@ TEST_F(NetlinkTest, HasAddress) {
     std::vector<Netlink::AddressInfo> legitData2;
     legitData2.push_back(goodPair2);
 
-    ASSERT_TRUE(isSuccess(netlink.hasAddress(legitData2, AF_INET, IFACEADDR)));
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(legitData2, AF_INET6, IFACEADDR)));
+    ASSERT_TRUE(netlink.hasAddress(legitData2, AF_INET, IFACEADDR));
+    ASSERT_FALSE(netlink.hasAddress(legitData2, AF_INET6, IFACEADDR));
 
     // Fifth test, just try with some more stuff in the list
     std::vector<Netlink::AddressInfo> legitData3;
     legitData3.push_back(goodPair1);
     legitData3.push_back(goodPair2);
 
-    ASSERT_TRUE(isSuccess(netlink.hasAddress(legitData3, AF_INET, IFACEADDR)));
-    ASSERT_FALSE(isSuccess(netlink.hasAddress(legitData3, AF_INET6, IFACEADDR)));
+    ASSERT_TRUE(netlink.hasAddress(legitData3, AF_INET, IFACEADDR));
+    ASSERT_FALSE(netlink.hasAddress(legitData3, AF_INET6, IFACEADDR));
 }
 
 /*
@@ -459,12 +459,12 @@ TEST_F(NetlinkTest, FindAddresses) {
         Netlink netlink;
 
         Netlink::LinkInfo link;
-        if (isError(netlink.findLink(IFACE, link))) {
+        if (!netlink.findLink(IFACE, link)) {
             return ERROR;
         }
 
         std::vector<Netlink::AddressInfo> addresses;
-        if (isError(netlink.findAddresses(link.first.ifi_index, addresses))) {
+        if (!netlink.findAddresses(link.first.ifi_index, addresses)) {
             return ERROR;
         }
 
@@ -479,7 +479,7 @@ TEST_F(NetlinkTest, FindAddresses) {
                     char ip[INET6_ADDRSTRLEN];
                     if (inet_ntop(addressInfo.first.ifa_family, attrInfo.second, ip, sizeof(ip))) {
                         // And make sure that the hasAddress verifies it.
-                        if (isError(netlink.hasAddress(addresses, addressInfo.first.ifa_family, ip))) {
+                        if (!netlink.hasAddress(addresses, addressInfo.first.ifa_family, ip)) {
                             return ERROR;
                         }
                     } else {
@@ -492,11 +492,11 @@ TEST_F(NetlinkTest, FindAddresses) {
         // Just make sure some other addresses is not there
         std::vector<std::string> bogusIPs = { "0.0.0.0", "256.256.0.0", "127.0.0.1" };
         for (std::string ip : bogusIPs) {
-            if (isSuccess(netlink.hasAddress(addresses, AF_INET, ip.c_str()))) {
+            if (netlink.hasAddress(addresses, AF_INET, ip.c_str())) {
                 return ERROR;
             }
 
-            if (isSuccess(netlink.hasAddress(addresses, AF_INET6, ip.c_str()))) {
+            if (netlink.hasAddress(addresses, AF_INET6, ip.c_str())) {
                 return ERROR;
             }
         }

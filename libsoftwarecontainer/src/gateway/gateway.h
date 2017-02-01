@@ -90,35 +90,35 @@ public:
      *
      * @param config JSON string containing gateway-specific JSON configuration
      *
-     * @returns ReturnCode::SUCCESS if \p config was successfully parsed,
-     *          ReturnCode::FAILURE otherwise
+     * @returns true if \p config was successfully parsed,
+     *          false otherwise
      *
      * @throws GatewayError If called on an already activated gateway.
      */
-    virtual ReturnCode setConfig(const json_t *config);
+    virtual bool setConfig(const json_t *config);
 
     /**
      * @brief Applies any configuration set by setConfig()
      *
-     * @returns ReturnCode::SUCCESS upon successful application of configuration,
-     *          ReturnCode::FAILURE otherwise
+     * @returns true upon successful application of configuration,
+     *          false otherwise
      *
      * @throws GatewayError If called on an already activated gateway, or if the
      *                      gateway has not been previously configured, or if there
      *                      is not container instance set.
      */
-    virtual ReturnCode activate();
+    virtual bool activate();
 
     /**
      * @brief Restore system to the state prior to launching of gateway. Any cleanup
      *  code (removal of files, virtual interfaces, etc) should be placed here.
      *
-     * @returns ReturnCode::SUCCESS upon successful clean-up,
-     *          ReturnCode::FAILURE otherwise
+     * @returns true upon successful clean-up,
+     *          false otherwise
      *
      * @throws GatewayError If called on a non activated gateway.
      */
-    virtual ReturnCode teardown();
+    virtual bool teardown();
 
     /**
      * @brief Set the associated container for this gateway
@@ -143,9 +143,9 @@ protected:
      * specific parsing of the configuration content.
      *
      * @param element A JSON configuration item.
-     * @returns ReturnCode FAILURE if an error was encountered while parsing, SUCCESS otherwise.
+     * @returns false if an error was encountered while parsing, true otherwise.
      */
-    virtual ReturnCode readConfigElement(const json_t *element) = 0;
+    virtual bool readConfigElement(const json_t *element) = 0;
 
     /**
      * @brief Check if the gateway has an associated container
@@ -168,7 +168,7 @@ protected:
     /**
      * @brief Set an environment variable in the associated container
      */
-    ReturnCode setEnvironmentVariable(const std::string &variable, const std::string &value);
+    bool setEnvironmentVariable(const std::string &variable, const std::string &value);
 
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;

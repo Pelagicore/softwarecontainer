@@ -30,7 +30,7 @@ class MockPulseGateway :
 public:
     MockPulseGateway() {}
 
-    MOCK_METHOD0(enablePulseAudio, ReturnCode());
+    MOCK_METHOD0(enablePulseAudio, bool());
 };
 
 class PulseGatewayUnitTests : public ::testing::Test
@@ -39,7 +39,6 @@ public:
     ::testing::NiceMock<MockPulseGateway> pgw;
     void SetUp() override
     {
-        ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
     }
 };
 
@@ -51,13 +50,16 @@ TEST_F(PulseGatewayUnitTests, whitelist) {
     json_error_t error;
     json_t *root = json_loads(configStr.c_str(), 0, &error);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, pgw.readConfigElement(root));
+    ASSERT_TRUE(pgw.readConfigElement(root));
 
     std::string configFalseStr = "{ \"audio\" : false }";
     root = json_loads(configFalseStr.c_str(), 0, &error);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, pgw.readConfigElement(root));
+    ASSERT_TRUE(pgw.readConfigElement(root));
 
+    // Set the return value for the mocked method
+    ::testing::DefaultValue<bool>::Set(true);
     EXPECT_CALL(pgw, enablePulseAudio());
+
     ASSERT_TRUE(pgw.activateGateway());
 }

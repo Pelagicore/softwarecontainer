@@ -45,20 +45,29 @@ public:
         json_t *configJSON = convertToJSON(config);
 
         // Only works with system config right now.
-        EXPECT_THROW(parser.parseDBusConfig(configJSON, DBusGatewayInstance::SYSTEM_CONFIG, systemConf), GatewayParserError);
+        EXPECT_THROW(parser.parseDBusConfig(configJSON,
+                                            DBusGatewayInstance::SYSTEM_CONFIG,
+                                            systemConf),
+                     GatewayParserError);
 
         ASSERT_EQ(json_array_size(sessionConf), empty);
         ASSERT_EQ(json_array_size(systemConf), empty);
     }
 
-    void parse(const std::string &config, const ReturnCode systemExpectedReturnCode, const ReturnCode sessionExpectedReturnCode) {
+    void parse(const std::string &config,
+               const bool systemExpectedResult,
+               const bool sessionExpectedResult) {
         json_t *configJSON = convertToJSON(config);
 
-        ReturnCode systemBusParseResult = parser.parseDBusConfig(configJSON, DBusGatewayInstance::SYSTEM_CONFIG, systemConf);
-        ASSERT_TRUE(systemExpectedReturnCode == systemBusParseResult);
+        bool systemBusParseResult = parser.parseDBusConfig(configJSON,
+                                                           DBusGatewayInstance::SYSTEM_CONFIG,
+                                                           systemConf);
+        ASSERT_EQ(systemExpectedResult, systemBusParseResult);
 
-        ReturnCode sessionBusParseResult = parser.parseDBusConfig(configJSON, DBusGatewayInstance::SESSION_CONFIG, sessionConf);
-        ASSERT_TRUE(sessionExpectedReturnCode == sessionBusParseResult);
+        bool sessionBusParseResult = parser.parseDBusConfig(configJSON,
+                                                            DBusGatewayInstance::SESSION_CONFIG,
+                                                            sessionConf);
+        ASSERT_EQ(sessionExpectedResult, sessionBusParseResult);
     }
 };
 
@@ -70,7 +79,7 @@ TEST_F(DBusGatewayParserTest, TestNoSystemConf) {
         "{"
             "\"" + std::string(DBusGatewayInstance::SESSION_CONFIG) + "\": [{}]"
         "}";
-    parse(config, ReturnCode::FAILURE, ReturnCode::SUCCESS);
+    parse(config, false, true);
 
     ASSERT_EQ(json_array_size(systemConf), empty);
     ASSERT_NE(json_array_size(sessionConf), empty);
@@ -84,7 +93,7 @@ TEST_F(DBusGatewayParserTest, TestNoSessionConf) {
         "{"
             "\"" + std::string(DBusGatewayInstance::SYSTEM_CONFIG) + "\": [{}]"
         "}";
-    parse(config, ReturnCode::SUCCESS, ReturnCode::FAILURE);
+    parse(config, true, false);
 
     ASSERT_EQ(json_array_size(sessionConf), empty);
     ASSERT_NE(json_array_size(systemConf), empty);
@@ -95,7 +104,7 @@ TEST_F(DBusGatewayParserTest, TestNoSessionConf) {
  */
 TEST_F(DBusGatewayParserTest, TestNoConfAtAll) {
     const std::string config = "{}";
-    parse(config, ReturnCode::FAILURE, ReturnCode::FAILURE);
+    parse(config, false, false);
 
     ASSERT_EQ(json_array_size(sessionConf), empty);
     ASSERT_EQ(json_array_size(systemConf), empty);
@@ -134,7 +143,7 @@ TEST_F(DBusGatewayParserTest, TestFullValidConfig) {
             ", \"" + std::string(DBusGatewayInstance::SESSION_CONFIG) + "\": [{}]"
         "}";
 
-    parse(config, ReturnCode::SUCCESS, ReturnCode::SUCCESS);
+    parse(config, true, true);
 
     ASSERT_NE(json_array_size(sessionConf), empty);
     ASSERT_NE(json_array_size(systemConf), empty);

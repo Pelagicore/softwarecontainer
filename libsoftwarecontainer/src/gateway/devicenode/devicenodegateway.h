@@ -54,15 +54,15 @@ public:
     {
     }
 
-    virtual ReturnCode readConfigElement(const json_t *element) override;
+    virtual bool readConfigElement(const json_t *element) override;
 
     /**
      * @brief Implements Gateway::activateGateway
      *
-     * This function will iterate over all devices and issue mknod and chmod commands, which are run in the
-     * container.
-     * @return true upon success; all commands executed successfully, false
-     *              otherwise
+     * This function will iterate over all devices and issue mknod and chmod commands,
+     * which are run in the container.
+     * @return true upon success; all commands executed successfully
+     * @return false otherwise
      */
     virtual bool activateGateway() override;
 
@@ -72,12 +72,6 @@ public:
     virtual bool teardownGateway() override;
 
 private:
-    /*
-     * @brief apply all setting of device node list
-     *
-     * @return success or failure due to state of operation
-     */
-    ReturnCode applySettings(void);
 
     DeviceNodeLogic m_logic;
 };

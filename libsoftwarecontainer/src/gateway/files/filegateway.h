@@ -42,7 +42,7 @@ public:
 
     FileGateway();
 
-    ReturnCode readConfigElement(const json_t *element) override;
+    bool readConfigElement(const json_t *element) override;
     bool activateGateway() override;
     bool teardownGateway() override;
 

@@ -21,15 +21,15 @@
 
 namespace softwarecontainer {
 
-ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
+bool EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
     const json_t *element,
     EnvironmentVariable &result,
     const EnvironmentVariables &store)
 {
 
-    if (isError(requireNonEmptyKeyValue(element, "name", result.first))
-     || isError(requireNonEmptyKeyValue(element, "value", result.second))) {
-        return ReturnCode::FAILURE;
+    if (!requireNonEmptyKeyValue(element, "name", result.first)
+        || !requireNonEmptyKeyValue(element, "value", result.second)) {
+        return false;
     }
 
     std::string mode = "set";
@@ -37,7 +37,7 @@ ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
 
     if (!JSONParser::readOptional(element, "mode", mode)) {
         log_error() << "Could not parse \"mode\" key";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // Convert to lowercase
@@ -46,12 +46,12 @@ ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
     std::vector<std::string> validModes = { "set", "prepend", "append" };
     if (validModes.end() == std::find(validModes.begin(), validModes.end(), mode)) {
         log_error() << "Invalid mode, only " << validModes << " are valid";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!JSONParser::readOptional(element, "separator", separator)) {
         log_error() << "Could not parse \"separator\" key";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (store.count(result.first) == 0) {
@@ -61,37 +61,37 @@ ReturnCode EnvironmentGatewayParser::parseEnvironmentGatewayConfigElement(
                        << " been set, so it will be created. Value is set to: \""
                        << result.second << "\"";
         }
-        return ReturnCode::SUCCESS;
+        return true;
     } else {
         if (mode == "append") {
             result.second = store.at(result.first) + separator + result.second;
-            return ReturnCode::SUCCESS;
+            return true;
         } else if (mode == "prepend") {
             result.second = result.second + separator + store.at(result.first);
-            return ReturnCode::SUCCESS;
+            return true;
         } else { // mode == set
             log_error() << "Env variable " << result.first
                         << " already defined with value : " << store.at(result.first);
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 }
 
-ReturnCode EnvironmentGatewayParser::requireNonEmptyKeyValue(const json_t *element,
-                                                             const std::string key,
-                                                             std::string &result)
+bool EnvironmentGatewayParser::requireNonEmptyKeyValue(const json_t *element,
+                                                       const std::string key,
+                                                       std::string &result)
 {
     if (!JSONParser::read(element, key.c_str(), result)) {
         log_error() << "Key " << key << " missing or not a string in json configuration";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (result.length() == 0) {
         log_error() << "Value for " << key << " key is an empty string";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 } // namespace softwarecontainer

@@ -63,7 +63,7 @@ public:
 
     ~NetworkGateway();
 
-    ReturnCode readConfigElement(const json_t *element) override;
+    bool readConfigElement(const json_t *element) override;
 
     /**
      * @brief Implements Gateway::activateGateway
@@ -106,20 +106,20 @@ private:
      *
      * Disables the network interface.
      *
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE otherwise
+     * @return true on success
+     * @return false otherwise
      */
-    ReturnCode down();
+    bool down();
 
     /**
      * @brief Check the availability of the network bridge on the host
      *
      * Checks the availability of the required network bridge on the host.
      *
-     * @return ReturnCode::SUCCESS If bridge interface is available
-     * @return ReturnCode::FAILURE If bridge interface is not available
+     * @return true If bridge interface is available
+     * @return false If bridge interface is not available
      */
-    virtual ReturnCode isBridgeAvailable();
+    virtual bool isBridgeAvailable();
 
     struct in_addr m_ip;
     uint32_t m_netmask;

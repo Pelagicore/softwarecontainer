@@ -44,7 +44,7 @@ TEST_F(FileGatewayParserTest, MinimalWorkingConf) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, parser.parseConfigElement(configJSON, result));
+    ASSERT_TRUE(parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -58,7 +58,7 @@ TEST_F(FileGatewayParserTest, BadStrings) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
+    ASSERT_FALSE(parser.parseConfigElement(configJSON, result));
     ASSERT_TRUE(result.pathInHost.empty());
     ASSERT_TRUE(result.pathInContainer.empty());
 }
@@ -75,7 +75,7 @@ TEST_F(FileGatewayParserTest, BadBools) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
+    ASSERT_FALSE(parser.parseConfigElement(configJSON, result));
     ASSERT_FALSE(result.readOnly);
 }
 
@@ -89,7 +89,7 @@ TEST_F(FileGatewayParserTest, NoPathInHost) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
+    ASSERT_FALSE(parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -103,7 +103,7 @@ TEST_F(FileGatewayParserTest, EmptyPathInHost) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
+    ASSERT_FALSE(parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -116,7 +116,7 @@ TEST_F(FileGatewayParserTest, NoPathInContainer) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
+    ASSERT_FALSE(parser.parseConfigElement(configJSON, result));
 }
 
 /*
@@ -130,5 +130,5 @@ TEST_F(FileGatewayParserTest, EmptyPathInContainer) {
         "}";
     json_t *configJSON = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::FAILURE, parser.parseConfigElement(configJSON, result));
+    ASSERT_FALSE(parser.parseConfigElement(configJSON, result));
 }

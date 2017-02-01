@@ -37,7 +37,7 @@ public:
         int mode;
     };
 
-    ReturnCode parseDeviceNodeGatewayConfiguration(const json_t *element, Device &result);
+    bool parseDeviceNodeGatewayConfiguration(const json_t *element, Device &result);
 
 private:
     bool checkBoolSet(const bool &value, std::string errorMessage);

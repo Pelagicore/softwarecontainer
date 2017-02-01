@@ -60,17 +60,17 @@ DBusGatewayInstance::~DBusGatewayInstance()
     }
 }
 
-ReturnCode DBusGatewayInstance::readConfigElement(const json_t *element)
+bool DBusGatewayInstance::readConfigElement(const json_t *element)
 {
     DBusGatewayParser parser;
 
     // TODO: This should really be done with exceptions instead and json_t* as return type.
-    if (isError(parser.parseDBusConfig(element, typeStr, m_busConfig))) {
+    if (!parser.parseDBusConfig(element, typeStr, m_busConfig)) {
         log_error() << "Failed to parse DBus configuration element";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool DBusGatewayInstance::activateGateway()
@@ -146,7 +146,8 @@ bool DBusGatewayInstance::testDBusConnection(const std::string &config)
     }
 }
 
-bool DBusGatewayInstance::startDBusProxy(const std::vector<std::string> &commandVec, const std::vector<std::string> &envVec)
+bool DBusGatewayInstance::startDBusProxy(const std::vector<std::string> &commandVec,
+                                         const std::vector<std::string> &envVec)
 {
     // Spawn dbus-proxy with access to its stdin.
     try {

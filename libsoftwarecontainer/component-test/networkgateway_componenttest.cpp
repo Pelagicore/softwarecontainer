@@ -33,7 +33,7 @@ public:
     {
     }
 
-    MOCK_METHOD0(isBridgeAvailable, ReturnCode());
+    MOCK_METHOD0(isBridgeAvailable, bool());
 };
 
 class NetworkGatewayTest : public SoftwareContainerGatewayTest
@@ -48,7 +48,6 @@ protected:
 
         gw = new ::testing::NiceMock<MockNetworkGateway>(containerID);
         SoftwareContainerTest::SetUp();
-        ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
     }
 
     const std::string VALID_FULL_CONFIG =
@@ -85,8 +84,8 @@ protected:
 TEST_F(NetworkGatewayTest, Activate) {
     givenContainerIsSet(gw);
     loadConfig(VALID_FULL_CONFIG);
-    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
-    ASSERT_TRUE(isSuccess(gw->activate()));
+    ASSERT_TRUE(gw->setConfig(jsonConfig));
+    ASSERT_TRUE(gw->activate());
 }
 
 /**
@@ -98,7 +97,7 @@ TEST_F(NetworkGatewayTest, ActivateBadConfig) {
     const std::string config = "[{\"internet-access\": true}]";
     loadConfig(config);
 
-    ASSERT_TRUE(isError(gw->setConfig(jsonConfig)));
+    ASSERT_FALSE(gw->setConfig(jsonConfig));
     ASSERT_THROW(gw->activate(), GatewayError);
 }
 
@@ -109,10 +108,10 @@ TEST_F(NetworkGatewayTest, ActivateBadConfig) {
 TEST_F(NetworkGatewayTest, ActivateNoBridge) {
     givenContainerIsSet(gw);
 
-    ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::FAILURE);
-        EXPECT_CALL(*gw, isBridgeAvailable());
+    ::testing::DefaultValue<bool>::Set(false);
+    EXPECT_CALL(*gw, isBridgeAvailable());
 
     loadConfig(VALID_FULL_CONFIG);
-    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
-    ASSERT_TRUE(isError(gw->activate()));
+    ASSERT_TRUE(gw->setConfig(jsonConfig));
+    ASSERT_FALSE(gw->activate());
 }

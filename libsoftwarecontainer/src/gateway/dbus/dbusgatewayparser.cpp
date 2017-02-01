@@ -22,16 +22,16 @@
 
 namespace softwarecontainer {
 
-ReturnCode DBusGatewayParser::parseDBusConfig(const json_t *element,
-                                              const char *key,
-                                              json_t *config)
+bool DBusGatewayParser::parseDBusConfig(const json_t *element,
+                                        const char *key,
+                                        json_t *config)
 {
     log_debug() << "Parsing element for " << key;
     json_t *configExists = json_object_get(element, key);
     if (nullptr == configExists) {
         // This is not a fatal error - not providing the key for one of the buses is OK.
         log_error() << key << " was not found in config.";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!json_is_array(configExists)) {
@@ -47,7 +47,7 @@ ReturnCode DBusGatewayParser::parseDBusConfig(const json_t *element,
         }
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 void DBusGatewayParser::throwWithLog(std::string message)

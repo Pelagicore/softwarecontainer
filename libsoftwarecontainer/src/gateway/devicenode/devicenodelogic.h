@@ -58,9 +58,9 @@ public:
      *      if the device name exist and major and minor minor device IDs are also matched
      *      then update the  mode of device node
      *
-     * @return either SUCCESS or FAILURE due to state of operation
+     * @return either true or false due to state of operation
      */
-    ReturnCode updateDeviceList(DeviceNodeParser::Device dev);
+    bool updateDeviceList(DeviceNodeParser::Device dev);
 
     /*
      * @brief Get the list of device nodes

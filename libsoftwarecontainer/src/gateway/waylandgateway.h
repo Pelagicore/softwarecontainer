@@ -37,7 +37,7 @@ public:
     WaylandGateway();
     ~WaylandGateway();
 
-    ReturnCode readConfigElement(const json_t *element);
+    bool readConfigElement(const json_t *element);
     virtual bool activateGateway();
     virtual bool teardownGateway();
 

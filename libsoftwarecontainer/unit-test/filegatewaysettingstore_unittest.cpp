@@ -46,10 +46,10 @@ TEST_F(FileGatewaySettingStoreTest, SameConfigTwice) {
     setting.pathInContainer = CONTAINER_PATH;
     setting.readOnly = true;
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(setting));
+    ASSERT_TRUE(store.addSetting(setting));
     ASSERT_EQ(1u, store.getSettings().size());
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(setting));
+    ASSERT_TRUE(store.addSetting(setting));
     ASSERT_EQ(1u, store.getSettings().size());
 }
 
@@ -69,10 +69,10 @@ TEST_F(FileGatewaySettingStoreTest, ReadOnlyPrecedence) {
     settingReadWrite.pathInContainer = CONTAINER_PATH;
     settingReadWrite.readOnly = false;
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(settingReadOnly));
+    ASSERT_TRUE(store.addSetting(settingReadOnly));
     ASSERT_EQ(1u, store.getSettings().size());
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(settingReadWrite));
+    ASSERT_TRUE(store.addSetting(settingReadWrite));
     ASSERT_EQ(1u, store.getSettings().size());
 
     ASSERT_EQ(store.getSettings().at(0).readOnly, false);
@@ -92,10 +92,10 @@ TEST_F(FileGatewaySettingStoreTest, SameHostPathDifferentContainerPath) {
     settingTwo.pathInHost = FILE_PATH;
     settingTwo.pathInContainer = OTHER_CONTAINER_PATH;
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(settingOne));
+    ASSERT_TRUE(store.addSetting(settingOne));
     ASSERT_EQ(1u, store.getSettings().size());
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(settingTwo));
+    ASSERT_TRUE(store.addSetting(settingTwo));
     ASSERT_EQ(2u, store.getSettings().size());
 }
 
@@ -112,9 +112,9 @@ TEST_F(FileGatewaySettingStoreTest, DifferentHostPathSameContainerPath) {
     settingTwo.pathInHost = OTHER_FILE_PATH;
     settingTwo.pathInContainer = CONTAINER_PATH;
 
-    ASSERT_EQ(ReturnCode::SUCCESS, store.addSetting(settingOne));
+    ASSERT_TRUE(store.addSetting(settingOne));
     ASSERT_EQ(1u, store.getSettings().size());
 
-    ASSERT_EQ(ReturnCode::FAILURE, store.addSetting(settingTwo));
+    ASSERT_FALSE(store.addSetting(settingTwo));
     ASSERT_EQ(1u, store.getSettings().size());
 }

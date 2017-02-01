@@ -217,8 +217,7 @@ bool SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
         if (config != nullptr) {
             log_debug() << "Configuring gateway: " << gatewayId;
             try {
-                ReturnCode configurationResult = gateway->setConfig(config);
-                if (isError(configurationResult)) {
+                if (!gateway->setConfig(config)) {
                     log_error() << "Failed to apply gateway configuration";
                     return false;
                 }
@@ -245,8 +244,7 @@ bool SoftwareContainer::activateGateways()
 
         try {
             if (gateway->isConfigured()) {
-                ReturnCode activationResult = gateway->activate();
-                if (isError(activationResult)) {
+                if (!gateway->activate()) {
                     log_error() << "Failed to activate gateway \"" << gatewayId << "\"";
                     return false;
                 }
@@ -353,7 +351,7 @@ bool SoftwareContainer::shutdownGateways()
     bool status = true;
     for (auto &gateway : m_gateways) {
         if (gateway->isActivated()) {
-            if (isError(gateway->teardown())) {
+            if (!gateway->teardown()) {
                 log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
                 status = false;
             }

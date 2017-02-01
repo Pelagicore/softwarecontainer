@@ -22,34 +22,34 @@
 
 namespace softwarecontainer {
 
-ReturnCode FileGatewayParser::parseConfigElement(const json_t *element, FileSetting &setting)
+bool FileGatewayParser::parseConfigElement(const json_t *element, FileSetting &setting)
 {
     if (!JSONParser::read(element, "path-host", setting.pathInHost)) {
         log_error() << "path-host key missing or of wrong type";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!JSONParser::read(element, "path-container", setting.pathInContainer)) {
         log_error() << "path-container key missing or of wrong type";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (setting.pathInHost.size() == 0) {
         log_error() << "path-host setting is an empty string";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (setting.pathInContainer.size() == 0) {
         log_error() << "path-container setting is an empty string";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!JSONParser::readOptional(element, "read-only", setting.readOnly)) {
         log_error() << "read-only has wrong format";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 } // namespace softwarecontainer

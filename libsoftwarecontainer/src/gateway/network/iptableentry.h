@@ -72,7 +72,7 @@ public:
      * @return true  Upon success
      * @return false Upon failure
      */
-    ReturnCode applyRules();
+    bool applyRules();
 
     /**
      * @brief Interprets a rule to iptables applicable string
@@ -118,7 +118,7 @@ private:
      * @return true  Upon success
      * @return false Upon failure
      */
-    ReturnCode insertCommand(std::string command);
+    bool insertCommand(std::string command);
 };
 
 } // namespace softwarecontainer

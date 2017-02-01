@@ -85,13 +85,13 @@ public:
  */
 TEST_F(DeviceModeLogicFunctionsTests, findDeviceByNameFunction) {
     DeviceNodeParser::Device testDevice{"testDevice", 3, 5, 753};
-    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+    ASSERT_TRUE(dnl->updateDeviceList(testDevice));
 
     testDevice.name = "anotherTestDevice";
-    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+    ASSERT_TRUE(dnl->updateDeviceList(testDevice));
 
     testDevice.name = "yetAnotherTestDevice";
-    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+    ASSERT_TRUE(dnl->updateDeviceList(testDevice));
 
     auto device = dnl->findDeviceByName("anotherTestDevice");
     ASSERT_EQ("anotherTestDevice", device->name);
@@ -126,11 +126,11 @@ INSTANTIATE_TEST_CASE_P(DeviceParameters, UpdateDeviceListFailureTests, ::testin
  */
 TEST_P(UpdateDeviceListFailureTests, failureMismatchingDevice) {
     DeviceNodeParser::Device testDevice{"testDevice", 3, 5, 753};
-    ASSERT_EQ(ReturnCode::SUCCESS, dnl->updateDeviceList(testDevice));
+    ASSERT_TRUE(dnl->updateDeviceList(testDevice));
 
     testDevice.name  = testparams.name;
     testDevice.major = testparams.major;
     testDevice.minor = testparams.minor;
     testDevice.mode  = testparams.mode;
-    ASSERT_EQ(ReturnCode::FAILURE, dnl->updateDeviceList(testDevice));
+    ASSERT_FALSE(dnl->updateDeviceList(testDevice));
 }

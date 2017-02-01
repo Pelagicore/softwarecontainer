@@ -20,12 +20,13 @@
 
 namespace softwarecontainer {
 
-ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &e)
+bool NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *element,
+                                                            IPTableEntry &e)
 {
     std::string chain;
     if (!JSONParser::read(element, "direction", chain)) {
         log_error() << "No type specified in network config.";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     e.m_defaultTarget = IPTableEntry::Target::DROP;
@@ -36,40 +37,41 @@ ReturnCode NetworkGatewayParser::parseNetworkGatewayConfiguration(const json_t *
         e.m_type = "OUTPUT";
     } else {
         log_error() << e.m_type << " is not a valid type ('INCOMING' or 'OUTGOING')";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     const json_t *rules = json_object_get(element, "allow");
 
     if (rules == nullptr) {
         log_error() << "No rules specified";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!json_is_array(rules)) {
         log_error() << "Rules not specified as an array";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     size_t ix;
     json_t *val;
     json_array_foreach(rules, ix, val) {
         if (json_is_object(val)) {
-            if (isError(parseRule(val, e.m_rules))) {
+            if (!parseRule(val, e.m_rules)) {
                 log_error() << "Could not parse rule config";
-                return ReturnCode::FAILURE;
+                return false;
             }
         } else {
             log_error() << "formatting of rules array is incorrect.";
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 
-ReturnCode NetworkGatewayParser::parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules)
+bool NetworkGatewayParser::parseRule(const json_t *element,
+                                     std::vector<IPTableEntry::Rule> &rules)
 {
     IPTableEntry::Rule r;
 
@@ -77,7 +79,7 @@ ReturnCode NetworkGatewayParser::parseRule(const json_t *element, std::vector<IP
 
     if (!JSONParser::read(element, "host", r.host)) {
         log_error() << "Host not specified in the network config.";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // Parsing port formats
@@ -93,10 +95,10 @@ ReturnCode NetworkGatewayParser::parseRule(const json_t *element, std::vector<IP
     }
 
     rules.push_back(r);
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode NetworkGatewayParser::parsePort(const json_t *element, IPTableEntry::portFilter &ports)
+bool NetworkGatewayParser::parsePort(const json_t *element, IPTableEntry::portFilter &ports)
 {
     // Port formatted as single integer means there is only one port
     if (json_is_integer(element)) {
@@ -119,7 +121,7 @@ ReturnCode NetworkGatewayParser::parsePort(const json_t *element, IPTableEntry::
         json_array_foreach(element, ix, val) {
             if (!json_is_integer(val)) {
                 log_error() << "Entry in port array is not an integer.";
-                return ReturnCode::FAILURE;
+                return false;
             }
 
             int port = json_integer_value(val);
@@ -131,9 +133,9 @@ ReturnCode NetworkGatewayParser::parsePort(const json_t *element, IPTableEntry::
         ports.ports = portList;
     } else {
         log_error() << "Rules specified in an invalid format";
-        return ReturnCode::FAILURE;
+        return false;
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool NetworkGatewayParser::isProtocolValid(std::string protocol) {
@@ -146,14 +148,14 @@ bool NetworkGatewayParser::isProtocolValid(std::string protocol) {
     }
 }
 
-ReturnCode NetworkGatewayParser::parseProtocol(const json_t *element,
-                                               std::vector<std::string> &proto)
+bool NetworkGatewayParser::parseProtocol(const json_t *element,
+                                         std::vector<std::string> &proto)
 {
     // Single Protocol
     if (json_is_string(element)) {
         std::string protocol = json_string_value(element);
         if (!isProtocolValid(protocol)) {
-            return ReturnCode::FAILURE;
+            return false;
         }
         proto.push_back(protocol);
     // Multiple protocols
@@ -164,22 +166,22 @@ ReturnCode NetworkGatewayParser::parseProtocol(const json_t *element,
         json_array_foreach(element, ix, val) {
             if (!json_is_string(val)) {
                 log_error() << "Listed protocol is not valid";
-                return ReturnCode::FAILURE;
+                return false;
             }
 
             std::string protocol = json_string_value(val);
 
             if (!isProtocolValid(protocol)) {
-                return ReturnCode::FAILURE;
+                return false;
             }
 
             proto.push_back(protocol);
         }
     } else {
         log_error() << "Protocols specified in an invalid format";
-        return ReturnCode::FAILURE;
+        return false;
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 } // namespace softwarecontainer

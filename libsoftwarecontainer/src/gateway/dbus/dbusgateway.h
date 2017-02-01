@@ -37,17 +37,17 @@ public:
     /**
      * @brief Sets config for both dbus session instances
      */
-    virtual ReturnCode setConfig(const json_t *config) override;
+    virtual bool setConfig(const json_t *config) override;
 
     /**
      * @brief Activates both dbus session instances
      */
-    virtual ReturnCode activate() override;
+    virtual bool activate() override;
 
     /**
      * @brief Stubbed since this class only does containment
      */
-    virtual ReturnCode readConfigElement(const json_t *) override { return ReturnCode::SUCCESS; }
+    virtual bool readConfigElement(const json_t *) override { return true; }
 
     /**
      * @brief Stubbed since this class only does containment
@@ -60,7 +60,7 @@ public:
     virtual bool teardownGateway() override { return true; }
 
     virtual void setContainer(std::shared_ptr<ContainerAbstractInterface> container) override;
-    virtual ReturnCode teardown() override;
+    virtual bool teardown() override;
 
     virtual bool isConfigured() override;
     virtual bool isActivated() override;
