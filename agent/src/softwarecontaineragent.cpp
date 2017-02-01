@@ -315,10 +315,10 @@ void SoftwareContainerAgent::bindMount(const ContainerID containerID,
     profilefunction("bindMountFunction");
     SoftwareContainerPtr container = getContainer(containerID);
 
-    ReturnCode result = container->bindMount(pathInHost,
-                                             pathInContainer,
-                                             readOnly);
-    if (isError(result)) {
+    bool result = container->bindMount(pathInHost,
+                                       pathInContainer,
+                                       readOnly);
+    if (!result) {
         std::string errorMessage("Unable to bind mount " + pathInHost + " to " + pathInContainer);
         log_error() << errorMessage;
         throw SoftwareContainerError(errorMessage);
@@ -331,8 +331,7 @@ bool SoftwareContainerAgent::updateGatewayConfigs(const ContainerID &containerID
     profilefunction("updateGatewayConfigs");
     SoftwareContainerPtr container = getContainer(containerID);
 
-    ReturnCode result = container->startGateways(configs);
-    return isSuccess(result);
+    return container->startGateways(configs);
 }
 
 std::vector<std::string> SoftwareContainerAgent::listCapabilities()

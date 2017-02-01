@@ -191,8 +191,8 @@ public:
      *
      * This should only be called on containers in state 'READY'
      *
-     * @return ReturnCode::SUCCESS If configuration and activation was successful
-     * @return ReturnCode::FAILURE If configuration or activation encountered
+     * @return true If configuration and activation was successful
+     * @return false If configuration or activation encountered
      *         a non-fatal error
      *
      * @throws GatewayError If configuration or activation of any gateway
@@ -200,7 +200,7 @@ public:
      * @throws InvalidOperationError If called when state is not 'READY'
      * @throws InvalidContainerError If the container is in state 'INVALID'
      */
-    ReturnCode startGateways(const GatewayConfiguration &configs);
+    bool startGateways(const GatewayConfiguration &configs);
 
     /**
      * @brief Create a job that can run a function in a container
@@ -290,7 +290,7 @@ public:
      * @throws InvalidOperationError If called when state is not 'READY'
      * @throws InvalidContainerError If the container is in state 'INVALID'
      */
-    ReturnCode bindMount(const std::string &pathOnHost,
+    bool bindMount(const std::string &pathOnHost,
                          const std::string &pathInContainer,
                          bool readonly = true);
 
@@ -335,13 +335,13 @@ private:
      * Add gateways and create and initialize the underlying container
      * implementation.
      */
-    ReturnCode init();
+    bool init();
 
-    ReturnCode start();
+    bool start();
 
-    ReturnCode configureGateways(const GatewayConfiguration &gwConfig);
-    ReturnCode activateGateways();
-    ReturnCode shutdownGateways();
+    bool configureGateways(const GatewayConfiguration &gwConfig);
+    bool activateGateways();
+    bool shutdownGateways();
 
     std::string getContainerDir();
     std::string getGatewayDir();

@@ -73,7 +73,7 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
                       m_config->enableWriteBuffer(),
                       m_config->containerShutdownTimeout()));
 
-    if(isError(init())) {
+    if(!init()) {
         throw SoftwareContainerError("Could not initialize SoftwareContainer, container ID: "
                                      + std::to_string(id));
     }
@@ -85,35 +85,34 @@ SoftwareContainer::~SoftwareContainer()
 {
 }
 
-ReturnCode SoftwareContainer::start()
+bool SoftwareContainer::start()
 {
     log_debug() << "Initializing container";
     if (isError(m_container->initialize())) {
         log_error() << "Could not initialize container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Creating container";
     if (isError(m_container->create())) {
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Starting container";
-    ReturnCode result = m_container->start(&m_pcPid);
-    if (isError(result)) {
+    if (isError(m_container->start(&m_pcPid))) {
         log_error() << "Could not start container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Started container with PID " << m_pcPid;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode SoftwareContainer::init()
+bool SoftwareContainer::init()
 {
-    if (isError(start())) {
+    if (!start()) {
         log_error() << "Failed to start container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
 #ifdef ENABLE_NETWORKGATEWAY
@@ -125,7 +124,7 @@ ReturnCode SoftwareContainer::init()
     } catch (ReturnCode failure) {
         log_error() << "Given netmask is not appropriate for creating ip address."
                     << "It should be an unsigned value between 1 and 31";
-        return failure;
+        return false;
     }
 #endif
 
@@ -158,7 +157,7 @@ ReturnCode SoftwareContainer::init()
     addGateway(new FileGateway());
 #endif
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 void SoftwareContainer::addGateway(Gateway *gateway)
@@ -167,7 +166,7 @@ void SoftwareContainer::addGateway(Gateway *gateway)
     m_gateways.push_back(std::move(std::unique_ptr<Gateway>(gateway)));
 }
 
-ReturnCode SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig)
+bool SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig)
 {
     assertValidState();
 
@@ -178,25 +177,21 @@ ReturnCode SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig
         throw InvalidOperationError(message);
     }
 
-    ReturnCode result = ReturnCode::SUCCESS;
-
-    result = configureGateways(gwConfig);
-    if (isError(result)) {
-        return result;
+    if (!configureGateways(gwConfig)) {
+        return false;
     }
 
-    result = activateGateways();
-    if (isError(result)) {
-        return result;
+    if (!activateGateways()) {
+        return false;
     }
 
     // Keep track of if user has called this method at least once
     m_previouslyConfigured = true;
 
-    return result;
+    return true;
 }
 
-ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
+bool SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
 {
     assertValidState();
 
@@ -225,7 +220,7 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
                 ReturnCode configurationResult = gateway->setConfig(config);
                 if (isError(configurationResult)) {
                     log_error() << "Failed to apply gateway configuration";
-                    return configurationResult;
+                    return false;
                 }
             } catch (GatewayError &error) {
                 /*
@@ -240,10 +235,10 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
         }
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode SoftwareContainer::activateGateways()
+bool SoftwareContainer::activateGateways()
 {
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();
@@ -253,7 +248,7 @@ ReturnCode SoftwareContainer::activateGateways()
                 ReturnCode activationResult = gateway->activate();
                 if (isError(activationResult)) {
                     log_error() << "Failed to activate gateway \"" << gatewayId << "\"";
-                    return activationResult;
+                    return false;
                 }
             }
         } catch (GatewayError &error) {
@@ -268,7 +263,7 @@ ReturnCode SoftwareContainer::activateGateways()
         }
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 void SoftwareContainer::shutdown()
@@ -291,7 +286,7 @@ void SoftwareContainer::shutdown(unsigned int timeout)
         throw InvalidOperationError(message);
     }
 
-    if(isError(shutdownGateways())) {
+    if(!shutdownGateways()) {
         log_error() << "Could not shut down all gateways cleanly, check the log";
     }
 
@@ -353,14 +348,14 @@ void SoftwareContainer::resume()
 }
 
 
-ReturnCode SoftwareContainer::shutdownGateways()
+bool SoftwareContainer::shutdownGateways()
 {
-    ReturnCode status = ReturnCode::SUCCESS;
+    bool status = true;
     for (auto &gateway : m_gateways) {
         if (gateway->isActivated()) {
             if (isError(gateway->teardown())) {
                 log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
-                status = ReturnCode::FAILURE;
+                status = false;
             }
         }
     }
@@ -432,7 +427,9 @@ std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::strin
     return std::make_shared<CommandJob>(containerInterface, command);
 }
 
-ReturnCode SoftwareContainer::bindMount(const std::string &pathOnHost, const std::string &pathInContainer, bool readonly)
+bool SoftwareContainer::bindMount(const std::string &pathOnHost,
+                                  const std::string &pathInContainer,
+                                  bool readonly)
 {
     assertValidState();
 
@@ -444,7 +441,7 @@ ReturnCode SoftwareContainer::bindMount(const std::string &pathOnHost, const std
         throw InvalidOperationError(message);
     }
 
-    return getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly);
+    return isSuccess(getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly));
 }
 
 void SoftwareContainer::assertValidState()
