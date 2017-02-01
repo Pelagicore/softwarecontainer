@@ -52,6 +52,22 @@ public:
     pid_t pid();
 
     /**
+     * Helper about return value of jobs.
+     * Describes whether the exit status of a command or a function indicates success or not
+     *
+     * Note that this method will interpret exit status only for the last job
+     */
+    bool isSuccess();
+
+    /**
+     * Helper about return value of jobs.
+     * Describes whether the exit status of a command or a function indicates error or not
+     *
+     * Note that this method will interpret exit status only for the last job
+     */
+    bool isError();
+
+    /**
      * That method always returns true as soon as the start() method has been called, even if the command fails to start,
      * since we don't know if the exec() occurring after the fork into the container actually succeeds...
      */
@@ -63,6 +79,7 @@ protected:
     EnvironmentVariables m_env;
 
     ExecutablePtr m_executable;
+    int m_exitStatus;
 
     pid_t m_pid = 0;
     int m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};

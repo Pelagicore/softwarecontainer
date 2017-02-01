@@ -88,15 +88,15 @@ bool NetworkGateway::activateGateway()
             }
         });
         job.start();
-        int returnCode = job.wait();
 
-        if (returnCode != 0) {
+        job.wait();
+        if (job.isError()) {
             log_debug() << "Failed to apply rules for entry: " << entry.toString();
         }
 
     }
 
-    return isSuccess(returnValue);
+    return returnValue;
 }
 
 bool NetworkGateway::teardownGateway()
@@ -104,7 +104,7 @@ bool NetworkGateway::teardownGateway()
     return true;
 }
 
-ReturnCode NetworkGateway::setDefaultGateway()
+bool NetworkGateway::setDefaultGateway()
 {
     FunctionJob job(getContainer(), [this] {
         Netlink n;
@@ -113,15 +113,15 @@ ReturnCode NetworkGateway::setDefaultGateway()
     });
 
     job.start();
-
-    return job.wait() == 0 ? ReturnCode::SUCCESS : ReturnCode::FAILURE;
+    job.wait();
+    return job.isSuccess();
 }
 
-ReturnCode NetworkGateway::up()
+bool NetworkGateway::up()
 {
     if (m_interfaceInitialized) {
         log_debug() << "Interface already configured";
-        return ReturnCode::SUCCESS;
+        return true;
     }
 
     log_debug() << "Attempting to bring up eth0";
@@ -143,21 +143,22 @@ ReturnCode NetworkGateway::up()
 
     jobBringUpEthernet.start();
 
-
     int returnCode = jobBringUpEthernet.wait();
-    if (returnCode == 1) {
-        log_error() << "Could not find interface eth0 in container";
-        return ReturnCode::FAILURE;
-    }
+    if (jobBringUpEthernet.isError()) {
+        if (returnCode == 1) {
+            log_error() << "Could not find interface eth0 in container";
+            return false;
+        }
 
-    if (returnCode == 2) {
-        log_error() << "Could not bring interface eth0 up in container";
-        return ReturnCode::FAILURE;
-    }
+        if (returnCode == 2) {
+            log_error() << "Could not bring interface eth0 up in container";
+            return false;
+        }
 
-    if (returnCode == 3) {
-        log_error() << "Could not set IP-address";
-        return ReturnCode::FAILURE;
+        if (returnCode == 3) {
+            log_error() << "Could not set IP-address";
+            return false;
+        }
     }
 
     m_interfaceInitialized = true;
@@ -183,9 +184,8 @@ ReturnCode NetworkGateway::down()
         return 0;
     });
     job.start();
-
-    int returnCode = job.wait();
-    if (returnCode != 0) {
+    job.wait();
+    if (job.isError()) {
         log_error() << "Configuring eth0 to 'down state' failed.";
         return ReturnCode::FAILURE;
     }

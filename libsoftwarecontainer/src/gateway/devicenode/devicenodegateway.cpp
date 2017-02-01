@@ -104,8 +104,8 @@ ReturnCode DeviceNodeGateway::applySettings()
             });
 
             job.start();
-
-            if (job.wait() != 0) {
+            job.wait();
+            if (job.isError()) {
                 log_error() << "Failed to create device " << dev.name;
                 return ReturnCode::FAILURE;
             } else {
@@ -122,8 +122,8 @@ ReturnCode DeviceNodeGateway::applySettings()
                     return chmod(dev.name.c_str(), dev.mode);
                 });
                 job.start();
-
-                if (job.wait() != 0) {
+                job.wait();
+                if (job.isError()) {
                     log_error() << "Could not 'chmod " << dev.mode
                                 << "' the mounted device " << dev.name;
                     return ReturnCode::FAILURE;
