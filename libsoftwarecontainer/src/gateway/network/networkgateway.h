@@ -76,10 +76,9 @@ private:
      * cases when a network interface that was previously enabled has been disabled
      * and then enabled again.
      *
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE otherwise
+     * @return true on success false otherwise
      */
-    ReturnCode setDefaultGateway();
+    bool setDefaultGateway();
 
     /**
      * @brief Enable the default network interface
@@ -90,10 +89,9 @@ private:
      * the IP and netmask are also set. During subsequent calls, this merely brings
      * up the existing network interface and calls setDefaultGateway().
      *
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE otherwise
+     * @return true on success false otherwise
      */
-    ReturnCode up();
+    bool up();
 
     /**
      * @brief Disable the default network interface

@@ -25,7 +25,8 @@
 namespace softwarecontainer {
 
 JobAbstract::JobAbstract(ExecutablePtr &executable) :
-    m_executable(executable)
+    m_executable(executable),
+    m_exitStatus(-1)
 {
 }
 
@@ -57,7 +58,8 @@ void JobAbstract::captureStderr()
 
 int JobAbstract::wait()
 {
-    return waitForProcessTermination(m_pid);
+    m_exitStatus = waitForProcessTermination(m_pid);
+    return m_exitStatus;
 }
 
 int JobAbstract::stdout()
@@ -78,6 +80,24 @@ int JobAbstract::stdin()
 pid_t JobAbstract::pid()
 {
     return m_pid;
+}
+
+bool JobAbstract::isSuccess()
+{
+    if (0 == m_exitStatus) {
+        return true;
+    }
+
+    return false;
+}
+
+bool JobAbstract::isError()
+{
+    if (0 == m_exitStatus) {
+        return false;
+    }
+
+    return true;
 }
 
 /**

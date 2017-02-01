@@ -97,11 +97,13 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
 
     });
     jobTrue->start();
-    ASSERT_EQ(jobTrue->wait(), 0);
+    jobTrue->wait();
+    ASSERT_TRUE(jobTrue->isSuccess());
 
     auto westonJob = getSc().createCommandJob("/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
     westonJob->start();
-    ASSERT_EQ(westonJob->wait(), 0);
+    westonJob->wait();
+    ASSERT_TRUE(westonJob->isSuccess());
 
 }
 
@@ -128,7 +130,8 @@ TEST_F(SoftwareContainerApp, EnvVarsSet) {
     });
     job->setEnvironmentVariable("TESTVAR","YES");
     job->start();
-    ASSERT_EQ(job->wait(), 0);
+    job->wait();
+    ASSERT_TRUE(job->isSuccess());
 }
 
 static constexpr int EXISTENT = 1;
@@ -172,7 +175,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
         return readBack == testData ? 0 : 1;
     });
     jobReadData->start();
-    ASSERT_EQ(jobReadData->wait(), 0);
+    jobReadData->wait();
+    ASSERT_TRUE(jobReadData->isSuccess());
 
     // Make sure we can't write to the file
     std::string badData = "This data should never be read";
@@ -225,7 +229,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
         return readBack == testData ? 0 : 1;
     });
     jobReadData->start();
-    ASSERT_EQ(jobReadData->wait(), 0);
+    jobReadData->wait();
+    ASSERT_TRUE(jobReadData->isSuccess());
 
     // Make sure we can write to the file
     std::string newData = "This data should have been written";
@@ -459,7 +464,8 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
     auto job2 = getSc().createCommandJob("/usr/bin/paplay " + soundFile);
     job2->start();
     ASSERT_TRUE(job2->isRunning());
-    ASSERT_EQ(job2->wait(), 0);
+    job2->wait();
+    ASSERT_TRUE(job2->isSuccess());
 }
 
 
@@ -501,11 +507,13 @@ TEST_F(SoftwareContainerApp, TestStdin) {
 TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabled) {
     auto job = getSc().createCommandJob("/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
     job->start();
-    ASSERT_NE(job->wait(), 0);
+    job->wait();
+    ASSERT_TRUE(job->isError());
 
     auto job2 = getSc().createCommandJob("/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
     job2->start();
-    ASSERT_NE(job2->wait(), 0);
+    job2->wait();
+    ASSERT_TRUE(job2->isError());
 }
 
 /**
@@ -521,11 +529,13 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityDisabledExplicit) {
 
     auto job = getSc().createCommandJob("/bin/sh -c \"ping www.google.com -c 5 -q > /dev/null 2>&1\"");
     job->start();
-    ASSERT_NE(job->wait(), 0);
+    job->wait();
+    ASSERT_TRUE(job->isError());
 
     auto job2 = getSc().createCommandJob("/bin/sh -c \"ping 8.8.8.8 -c 5 -q > /dev/null 2>&1\"");
     job2->start();
-    ASSERT_NE(job2->wait(), 0);
+    job2->wait();
+    ASSERT_TRUE(job2->isError());
 }
 
 /**
@@ -551,7 +561,8 @@ TEST_F(SoftwareContainerApp, TestNetworkInternetCapabilityEnabled) {
 
     auto job = getSc().createCommandJob("/bin/sh -c \"ping example.com -c 5 -q > /dev/null\"");
     job->start();
-    ASSERT_EQ(job->wait(), 0);
+    job->wait();
+    ASSERT_TRUE(job->isSuccess());
 }
 
 #endif // ENABLE_NETWORKGATEWAY
@@ -561,11 +572,13 @@ TEST_F(SoftwareContainerApp, TestJobReturnCode) {
 
     auto jobTrue = getSc().createCommandJob("/bin/true");
     jobTrue->start();
-    ASSERT_EQ(jobTrue->wait(), 0);
+    jobTrue->wait();
+    ASSERT_TRUE(jobTrue->isSuccess());
 
     auto jobFalse = getSc().createCommandJob("/bin/false");
     jobFalse->start();
-    ASSERT_NE(jobFalse->wait(), 0);
+    jobFalse->wait();
+    ASSERT_TRUE(jobFalse->isError());
 }
 
 /**
@@ -592,14 +605,16 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithAccess) {
         auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --system --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue->start();
-        ASSERT_EQ(jobTrue->wait(), 0);
+        jobTrue->wait();
+        ASSERT_TRUE(jobTrue->isSuccess());
     }
 
     {
         auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue->start();
-        ASSERT_EQ(jobTrue->wait(), 0);
+        jobTrue->wait();
+        ASSERT_TRUE(jobTrue->isSuccess());
     }
 }
 
@@ -626,7 +641,8 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
         auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue->start();
-        ASSERT_EQ(jobTrue->wait(), 0);
+        jobTrue->wait();
+        ASSERT_TRUE(jobTrue->isSuccess());
     }
 }
 
@@ -639,8 +655,8 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
         auto jobTrue = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
         jobTrue->start();
-
-        ASSERT_NE(jobTrue->wait(), 0);
+        jobTrue->wait();
+        ASSERT_TRUE(jobTrue->isError());
     }
 
     {
@@ -649,7 +665,8 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
         jobTrue->start();
 
         // We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
-        ASSERT_NE(jobTrue->wait(), 0);
+        jobTrue->wait();
+        ASSERT_TRUE(jobTrue->isError());
     }
 
 }
