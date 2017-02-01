@@ -30,32 +30,32 @@ CgroupsGateway::CgroupsGateway()
 {
 }
 
-ReturnCode CgroupsGateway::readConfigElement(const json_t *element)
+bool CgroupsGateway::readConfigElement(const json_t *element)
 {
     try {
         m_parser.parseCGroupsGatewayConfiguration(element);
     } catch (CgroupsGatewayError &e) {
         log_error() << "Could not parse CGroups configuration element";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool CgroupsGateway::activateGateway()
 {
-    ReturnCode success = ReturnCode::FAILURE;
+    bool success = false;
     auto cgroupSettings = m_parser.getSettings();
     for (auto& setting: cgroupSettings) {
-        success = getContainer()->setCgroupItem(setting.first, setting.second);
-        if (success != ReturnCode::SUCCESS) {
+        success = isSuccess(getContainer()->setCgroupItem(setting.first, setting.second));
+        if (!success) {
             log_error() << "Error activating Cgroups Gateway, could not set cgroup item "
                         << setting.first << ": " << setting.second;
             break;
         }
     }
 
-    return isSuccess(success);
+    return success;
 }
 
 bool CgroupsGateway::teardownGateway()

@@ -35,7 +35,7 @@ public:
 
     EnvironmentGateway();
     ~EnvironmentGateway();
-    ReturnCode readConfigElement(const json_t *element);
+    bool readConfigElement(const json_t *element);
     bool activateGateway();
     bool teardownGateway();
 

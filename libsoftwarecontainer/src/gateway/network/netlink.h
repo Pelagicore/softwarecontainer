@@ -71,28 +71,28 @@ class Netlink
          * After running this successfully, there will be a local cache of these
          * network objects, which is needed to run some of the other functions.
          *
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         * @return true on success, false otherwise
          *
          * @sa clearCache()
          */
-        ReturnCode getKernelDump();
+        bool getKernelDump();
 
         /**
          * @brief check for a kernel dump, and if not present, try to get one
          *
-         * @return ReturnCode::SUCCESS if there a kernel dump was found or could be fetched
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if there a kernel dump was found or could be fetched
+         * @return false otherwise
          */
-        virtual ReturnCode checkKernelDump();
+        virtual bool checkKernelDump();
 
         /**
          * @brief Sets an ip address as the default gateway
          *
          * @param gatewayAddress the address to set
-         * @return ReturnCode::SUCCESS on success
-         * @return ReturnCode::FAILURE otherwise
+         * @return true on success
+         * @return false otherwise
          */
-        ReturnCode setDefaultGateway(const char *gatewayAddress);
+        bool setDefaultGateway(const char *gatewayAddress);
 
         /**
          * @brief Bring the given interface up
@@ -100,19 +100,19 @@ class Netlink
          * Sets the UP flag for the given interface, if it exists.
          *
          * @param ifaceIndex the index for the interface to bring up
-         * @return ReturnCode::SUCCESS if the interface was found and brought up
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if the interface was found and brought up
+         * @return false otherwise
          */
-        ReturnCode linkUp(const int ifaceIndex);
+        bool linkUp(const int ifaceIndex);
 
         /**
          * @brief Bring a given interface down
          *
          * @param ifaceIndex the index for the interface to bring down
-         * @return ReturnCode::SUCCESS if interface was found and brought down
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if interface was found and brought down
+         * @return false otherwise
          */
-        ReturnCode linkDown(const int ifaceIndex);
+        bool linkDown(const int ifaceIndex);
 
         /**
          * @brief Sets an IP address for a network link
@@ -121,20 +121,20 @@ class Netlink
          * @param ip the ipv4 address to set
          * @param netmask the netmask in CIDR format (for example 24)
          *
-         * @return ReturnCode::SUCCESS if interface was found and IP was set
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if interface was found and IP was set
+         * @return false otherwise
          */
-        ReturnCode setIP(const int ifaceIndex, const in_addr ip, const unsigned char netmask);
+        bool setIP(const int ifaceIndex, const in_addr ip, const unsigned char netmask);
 
         /**
          * @brief Check that the device given is a network bridge
          * @param ifaceName the name of the interface
          * @param ifaceIndex the index of the interface (out parameter)
          *
-         * @return ReturnCode::SUCCESS if interface with matching name was found.
-         * @return ReturnCode::FAILURE otherwise.
+         * @return true if interface with matching name was found.
+         * @return false otherwise.
          */
-        ReturnCode findLink(const char *ifaceName, LinkInfo &linkInfo);
+        bool findLink(const char *ifaceName, LinkInfo &linkInfo);
 
         /**
          * @brief Get all addresses associated with the given interface index
@@ -142,10 +142,10 @@ class Netlink
          * @param interfaceIndex the interface address to get addresses for
          * @param result the vector to place all addresses in (out parameter)
          *
-         * @return ReturnCode::SUCCESS on success
-         * @return ReturnCode::FAILURE otherwise
+         * @return true on success
+         * @return false otherwise
          */
-        ReturnCode findAddresses(const unsigned int interfaceIndex, std::vector<AddressInfo> &result);
+        bool findAddresses(const unsigned int interfaceIndex, std::vector<AddressInfo> &result);
 
         /**
          * @brief checks if an address is present in the given list
@@ -154,10 +154,10 @@ class Netlink
          * @param addressFamily the address family, AF_INET or AF_INET6
          * @param needle the ip address to search for, in dotted notation
          *
-         * @return ReturnCode::SUCCESS if the address is in the haystack
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if the address is in the haystack
+         * @return false otherwise
          */
-        ReturnCode hasAddress(const std::vector<AddressInfo> &haystack, const int addressFamily, const char *needle);
+        bool hasAddress(const std::vector<AddressInfo> &haystack, const int addressFamily, const char *needle);
 
     private:
         /**
@@ -165,9 +165,9 @@ class Netlink
          *
          * Creates a socket and binds it
          *
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         * @return true on success, false otherwise
          */
-        ReturnCode setupNetlink();
+        bool setupNetlink();
 
         /**
          * @brief clears the cache
@@ -184,10 +184,10 @@ class Netlink
          *
          * @param h the netlink message header
          * @param result the vector in which to store the results
-         * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         * @return true on success, false otherwise
          */
         template<typename msgtype, typename InfoType>
-            ReturnCode saveMessage(const struct nlmsghdr &header, std::vector<InfoType> &result);
+            bool saveMessage(const struct nlmsghdr &header, std::vector<InfoType> &result);
 
         /**
          * @brief Save the attributes and attribute data from a netlink message
@@ -201,10 +201,10 @@ class Netlink
          *
          * @param h the netlink message header
          * @param result a reference to the list in which to store results
-         * @result ReturnCode::SUCCESS on success, ReturnCode::FAILURE otherwise
+         * @result true on success, false otherwise
          */
         template<typename msgtype>
-            ReturnCode getAttributes(const struct nlmsghdr &header, AttributeList &result);
+            bool getAttributes(const struct nlmsghdr &header, AttributeList &result);
 
         /**
          * Templatified general structure for netlink requests
@@ -254,11 +254,11 @@ class Netlink
          *
          * @note the data param is copied. The pointer can be freed after this method returns.
          *
-         * @return ReturnCode::SUCCESS if the attribute fits and was added.
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if the attribute fits and was added.
+         * @return false otherwise
          */
         template<typename payload>
-            ReturnCode addAttribute(netlink_request<payload> &req, const int type, const size_t length, const void *data);
+            bool addAttribute(netlink_request<payload> &req, const int type, const size_t length, const void *data);
 
         /**
          * @brief send a netlink message and check for reply
@@ -268,11 +268,11 @@ class Netlink
          * @tparam payload the netlink message type
          * @param req the netlink request to send
          *
-         * @return ReturnCode::SUCCESS if sending was successful and reply was error-free.
-         * @return ReturnCode::FAILURE otherwise
+         * @return true if sending was successful and reply was error-free.
+         * @return false otherwise
          */
         template<typename payload>
-            ReturnCode sendMessage(netlink_request<payload> &request);
+            bool sendMessage(netlink_request<payload> &request);
 
         /**
          * @brief Listen for a netlink message

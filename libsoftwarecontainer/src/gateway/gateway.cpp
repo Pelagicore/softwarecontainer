@@ -21,7 +21,7 @@
 
 namespace softwarecontainer {
 
-ReturnCode Gateway::setConfig(const json_t *config)
+bool Gateway::setConfig(const json_t *config)
 {
     if (m_state == GatewayState::ACTIVATED) {
         log_error() << "Can not configure a gateway that is already activated: " << id();
@@ -30,32 +30,32 @@ ReturnCode Gateway::setConfig(const json_t *config)
 
     if (!json_is_array(config)) {
         log_error() << "Root JSON element is not an array";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (json_array_size(config) == 0) {
         log_error() << "Root JSON array is empty";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     for(size_t i = 0; i < json_array_size(config); i++) {
         json_t *element = json_array_get(config, i);
         if (!json_is_object(element)) {
             log_error() << "json configuration is not an object";
-            return ReturnCode::FAILURE;
+            return false;
         }
 
-        if (isError(readConfigElement(element))) {
+        if (!readConfigElement(element)) {
             log_error() << "Could not read config element";
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
     m_state = GatewayState::CONFIGURED;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Gateway::activate() {
+bool Gateway::activate() {
     if (m_state == GatewayState::ACTIVATED) {
         log_error() << "Activate was called on a gateway which was already activated: " << id();
         throw GatewayError("Gateway already activated");
@@ -73,14 +73,14 @@ ReturnCode Gateway::activate() {
 
     if (!activateGateway()) {
         log_error() << "Couldn't activate gateway: " << id();
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     m_state = GatewayState::ACTIVATED;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Gateway::teardown() {
+bool Gateway::teardown() {
     if (m_state != GatewayState::ACTIVATED) {
         log_error() << "Teardown called on non-activated gateway: " << id();
         throw GatewayError("Gateway not previosly activated");
@@ -88,12 +88,12 @@ ReturnCode Gateway::teardown() {
 
     if (!teardownGateway()) {
         log_error() << "Could not tear down gateway: " << id();
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // Return to a state of nothingness
     m_state = GatewayState::CREATED;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool Gateway::hasContainer()
@@ -126,13 +126,13 @@ bool Gateway::isActivated()
     return m_state >= GatewayState::ACTIVATED;
 }
 
-ReturnCode Gateway::setEnvironmentVariable(const std::string &variable, const std::string &value)
+bool Gateway::setEnvironmentVariable(const std::string &variable, const std::string &value)
 {
     if (hasContainer()) {
-        return getContainer()->setEnvironmentVariable(variable, value);
+        return isSuccess(getContainer()->setEnvironmentVariable(variable, value));
     } else {
         log_error() << "Can't set environment variable on gateway without container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 }
 

@@ -31,7 +31,7 @@ DeviceNodeLogic::findDeviceByName(const std::string name)
     return item;
 }
 
-ReturnCode DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
+bool DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
 {
     auto item = findDeviceByName(dev.name);
 
@@ -42,11 +42,11 @@ ReturnCode DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
             item->mode = calculateDeviceMode(item->mode, dev.mode);
         } else {
             //Unexpected behavior : a device has found with same name.
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 const std::vector<DeviceNodeParser::Device> &DeviceNodeLogic::getDevList()

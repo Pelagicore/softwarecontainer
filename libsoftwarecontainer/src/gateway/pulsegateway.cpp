@@ -31,46 +31,46 @@ PulseGateway::~PulseGateway()
 {
 }
 
-ReturnCode PulseGateway::readConfigElement(const json_t *element)
+bool PulseGateway::readConfigElement(const json_t *element)
 {
     bool configValue = false;
 
     if (!JSONParser::read(element, "audio", configValue)) {
         log_error() << "Either \"audio\" key is missing, or not a bool in json configuration";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!m_enableAudio) {
         m_enableAudio = configValue;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode PulseGateway::enablePulseAudio() {
+bool PulseGateway::enablePulseAudio() {
     bool hasPulse = false;
     std::string dir = Glib::getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, hasPulse);
 
     if (!hasPulse) {
         log_error() << "Should enable pulseaudio gateway, but "
-                    << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) << " is not defined";
-        return ReturnCode::FAILURE;
+                    << std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME)
+                    << " is not defined";
+        return false;
     }
 
     log_info() << "Enabling pulseaudio gateway. Socket location : " << dir;
     std::string pathInContainer = buildPath("/gateways/", SOCKET_FILE_NAME);
-    ReturnCode result = getContainer()->bindMountInContainer(std::string(dir),
-                                                             pathInContainer,
-                                                             false);
 
-    if (isError(result)) {
+    if (isError(getContainer()->bindMountInContainer(std::string(dir),
+                                                     pathInContainer,
+                                                     false))) {
         log_error() << "Could not bind mount pulseaudio socket in container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     std::string unixPath = "unix:" + pathInContainer;
     setEnvironmentVariable(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath);
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool PulseGateway::activateGateway()
@@ -81,7 +81,7 @@ bool PulseGateway::activateGateway()
     }
     log_debug() << "Audio will be enabled";
 
-    return isSuccess(enablePulseAudio());
+    return enablePulseAudio();
 }
 
 bool PulseGateway::teardownGateway()

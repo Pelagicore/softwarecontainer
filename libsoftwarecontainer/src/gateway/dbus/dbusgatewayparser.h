@@ -29,7 +29,7 @@ class DBusGatewayParser
     LOG_DECLARE_CLASS_CONTEXT("DBGP", "D-Bus gateway parser");
 
 public:
-    ReturnCode parseDBusConfig(const json_t *element, const char *key, json_t *config);
+    bool parseDBusConfig(const json_t *element, const char *key, json_t *config);
 
 private:
     void throwWithLog(std::string message);

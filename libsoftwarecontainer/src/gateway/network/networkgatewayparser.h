@@ -34,25 +34,25 @@ public :
      *
      * @param element JSON string containing configuration
      * @param e rule representing corresponding network rules
-     * @returns ReturnCode::SUCCESS if the rule is successfully parsed
-     * @return ReturnCode::FAILURE otherwise.
+     * @returns true if the rule is successfully parsed
+     * @return false otherwise.
      */
-    ReturnCode parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &e);
+    bool parseNetworkGatewayConfiguration(const json_t *element, IPTableEntry &e);
 
 private :
     /**
      * @brief Parses a json element to a Rule
-     * @return ReturnCode::SUCCESS if the rule is successfully parsed
-     * @return ReturnCode::FAILURE otherwise.
+     * @return true if the rule is successfully parsed
+     * @return false otherwise.
      */
-    ReturnCode parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules);
+    bool parseRule(const json_t *element, std::vector<IPTableEntry::Rule> &rules);
 
     /**
      * @brief Parses ports from a json element
-     * @return ReturnCode::SUCCESS if the rule is successfully parsed
-     * @return ReturnCode::FAILURE otherwise.
+     * @return true if the rule is successfully parsed
+     * @return false otherwise.
      */
-    ReturnCode parsePort(const json_t *element, IPTableEntry::portFilter &ports);
+    bool parsePort(const json_t *element, IPTableEntry::portFilter &ports);
 
     /**
     * @return true or false whether the given protocol is available in NetworkGateway or not
@@ -61,10 +61,10 @@ private :
 
     /**
      * @brief Parses protocols from a json element
-     * @return ReturnCode::SUCCESS if protocols are successfully parsed
-     * @return ReturnCode::FAILURE otherwise.
+     * @return true if protocols are successfully parsed
+     * @return false otherwise.
      */
-    ReturnCode parseProtocol(const json_t *element, std::vector<std::string> &proto);
+    bool parseProtocol(const json_t *element, std::vector<std::string> &proto);
 
     /**
      * @brief Parses a string to a Target

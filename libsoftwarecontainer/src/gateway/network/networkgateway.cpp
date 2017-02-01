@@ -41,17 +41,17 @@ NetworkGateway::NetworkGateway(const int32_t id,
 
 NetworkGateway::~NetworkGateway() { }
 
-ReturnCode NetworkGateway::readConfigElement(const json_t *element)
+bool NetworkGateway::readConfigElement(const json_t *element)
 {
     IPTableEntry e;
     NetworkGatewayParser configParser;
-    ReturnCode returnValue = configParser.parseNetworkGatewayConfiguration(element, e);
 
-    if (isSuccess(returnValue)) {
+    if (configParser.parseNetworkGatewayConfiguration(element, e)) {
         m_entries.push_back(e);
+        return true;
+    } else {
+        return false;
     }
-
-    return returnValue;
 }
 
 bool NetworkGateway::activateGateway()
@@ -68,7 +68,7 @@ bool NetworkGateway::activateGateway()
         return true;
     }
 
-    if (isError(isBridgeAvailable())) {
+    if (!isBridgeAvailable()) {
         log_error() << "Bridge not available, expected gateway to be " << m_gateway;
         return false;
     }
@@ -89,7 +89,7 @@ bool NetworkGateway::activateGateway()
     log_debug() << "Adding iptables entries";
     for (auto entry : m_entries) {
         FunctionJob job (getContainer(), [&] () {
-            return isSuccess(entry.applyRules()) ? SUCCESS : FAILURE;
+            return entry.applyRules() ? SUCCESS : FAILURE;
         });
         job.start();
 
@@ -112,8 +112,7 @@ bool NetworkGateway::setDefaultGateway()
 {
     FunctionJob job(getContainer(), [this] {
         Netlink n;
-        ReturnCode success = n.setDefaultGateway(m_gateway.c_str());
-        return isSuccess(success) ? SUCCESS : FAILURE;
+        return n.setDefaultGateway(m_gateway.c_str()) ? SUCCESS : FAILURE;
     });
 
     job.start();
@@ -135,16 +134,16 @@ bool NetworkGateway::up()
         Netlink n;
 
         Netlink::LinkInfo iface;
-        if (isError(n.findLink("eth0", iface))) {
+        if (!n.findLink("eth0", iface)) {
             return NO_LINK;
         }
 
         int ifaceIndex = iface.first.ifi_index;
-        if (isError(n.linkUp(ifaceIndex))) {
+        if (!n.linkUp(ifaceIndex)) {
             return BAD_LINKUP;
         }
 
-        if (isError(n.setIP(ifaceIndex, m_ip, m_netmask))) {
+        if (!n.setIP(ifaceIndex, m_ip, m_netmask)) {
             return BAD_SETIP;
         }
 
@@ -174,17 +173,17 @@ bool NetworkGateway::up()
     }
 }
 
-ReturnCode NetworkGateway::down()
+bool NetworkGateway::down()
 {
     log_debug() << "Attempting to configure eth0 to 'down state'";
     FunctionJob job(getContainer(), [this] {
         Netlink n;
         Netlink::LinkInfo iface;
-        if (isError(n.findLink("eth0", iface))) {
+        if (!n.findLink("eth0", iface)) {
             return NO_LINK;
         }
 
-        if (isError(n.linkDown(iface.first.ifi_index))) {
+        if (!n.linkDown(iface.first.ifi_index)) {
             return BAD_LINKDOWN;
         }
 
@@ -196,27 +195,27 @@ ReturnCode NetworkGateway::down()
     {
         case NO_LINK:
             log_error() << "Could not find interface eth0 in container";
-            return ReturnCode::FAILURE;
+            return false;
         case BAD_LINKDOWN:
             log_error() << "Could not bring interface eth0 down in container";
-            return ReturnCode::FAILURE;
+            return false;
         case SUCCESS:
-            return ReturnCode::SUCCESS;
+            return true;
         default:
             log_error() << "Unhandled case in NetworkGateway::down(), this is an error!";
-            return ReturnCode::FAILURE;
+            return false;
     }
 }
 
-ReturnCode NetworkGateway::isBridgeAvailable()
+bool NetworkGateway::isBridgeAvailable()
 {
     Netlink::LinkInfo iface;
-    if (isError(m_netlinkHost.findLink(m_bridgeDevice.c_str(), iface))) {
+    if (!m_netlinkHost.findLink(m_bridgeDevice.c_str(), iface)) {
         log_error() << "Could not find " << m_bridgeDevice << " in the host";
     }
 
     std::vector<Netlink::AddressInfo> addresses;
-    if (isError(m_netlinkHost.findAddresses(iface.first.ifi_index, addresses))) {
+    if (!m_netlinkHost.findAddresses(iface.first.ifi_index, addresses)) {
         log_error() << "Could not fetch addresses for " << m_bridgeDevice << " in the host";
     }
 

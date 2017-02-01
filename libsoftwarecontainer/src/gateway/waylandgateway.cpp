@@ -39,20 +39,20 @@ WaylandGateway::~WaylandGateway()
 {
 }
 
-ReturnCode WaylandGateway::readConfigElement(const json_t *element)
+bool WaylandGateway::readConfigElement(const json_t *element)
 {
     bool configValue = false;
 
     if (!JSONParser::read(element, ENABLED_FIELD, configValue)) {
         log_error() << "Key " << ENABLED_FIELD << " missing or not bool in json configuration";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!m_enabled) {
         m_enabled = configValue;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool WaylandGateway::activateGateway()

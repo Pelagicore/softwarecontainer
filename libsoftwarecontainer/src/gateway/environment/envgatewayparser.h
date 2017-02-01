@@ -30,13 +30,13 @@ class EnvironmentGatewayParser
 
 public:
     typedef std::pair<std::string, std::string> EnvironmentVariable;
-    ReturnCode parseEnvironmentGatewayConfigElement(const json_t *element,
-                                                    EnvironmentVariable &result,
-                                                    const EnvironmentVariables &store);
+    bool parseEnvironmentGatewayConfigElement(const json_t *element,
+                                              EnvironmentVariable &result,
+                                              const EnvironmentVariables &store);
 private:
-    ReturnCode requireNonEmptyKeyValue(const json_t *element,
-                                       const std::string key,
-                                       std::string &result);
+    bool requireNonEmptyKeyValue(const json_t *element,
+                                 const std::string key,
+                                 std::string &result);
 };
 
 } // namespace softwarecontainer

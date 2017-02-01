@@ -30,7 +30,7 @@ FileGatewaySettingStore::~FileGatewaySettingStore()
 {
 }
 
-ReturnCode FileGatewaySettingStore::addSetting(const FileGatewayParser::FileSetting &setting)
+bool FileGatewaySettingStore::addSetting(const FileGatewayParser::FileSetting &setting)
 {
     auto it = std::find(m_settings.begin(), m_settings.end(), setting);
     if (it != m_settings.end()) {
@@ -38,15 +38,15 @@ ReturnCode FileGatewaySettingStore::addSetting(const FileGatewayParser::FileSett
             log_error() << "Specifying two files with destination path "
                         << setting.pathInContainer << " but different host paths, "
                         << "this is an error";
-            return ReturnCode::FAILURE;
+            return false;
         } else {
             it->readOnly &= setting.readOnly;
-            return ReturnCode::SUCCESS;
+            return true;
         }
     }
 
     m_settings.push_back(setting);
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 const std::vector<FileGatewayParser::FileSetting> &FileGatewaySettingStore::getSettings()

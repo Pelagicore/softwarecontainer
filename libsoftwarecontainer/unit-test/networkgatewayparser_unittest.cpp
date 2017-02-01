@@ -54,7 +54,7 @@ TEST_F(NetworkGatewayParserTest, InputSingularPort) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
 
@@ -85,7 +85,7 @@ TEST_F(NetworkGatewayParserTest, InputMultiplePort) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
 
@@ -114,7 +114,7 @@ TEST_F(NetworkGatewayParserTest, PortTypo) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("OUTPUT", e.m_type);
 
@@ -146,7 +146,7 @@ TEST_F(NetworkGatewayParserTest, OutputMultiplePort) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("OUTPUT", e.m_type);
 
@@ -176,7 +176,7 @@ TEST_F(NetworkGatewayParserTest, OutputNoHost) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_FALSE(networkParser.parseNetworkGatewayConfiguration(root, e));
 }
 
 
@@ -195,7 +195,7 @@ TEST_F(NetworkGatewayParserTest, OutputNoPort) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
 
     ASSERT_EQ("127.0.0.1/16", e.m_rules[0].host);
     ASSERT_EQ(0, e.m_rules[0].ports.any);
@@ -214,7 +214,7 @@ TEST_F(NetworkGatewayParserTest, SetConfigNoRules) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_FALSE(networkParser.parseNetworkGatewayConfiguration(root, e));
 }
 
 /**
@@ -231,7 +231,7 @@ TEST_F(NetworkGatewayParserTest, SetConfigEmptyRules) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
 }
 
 /**
@@ -248,7 +248,7 @@ TEST_F(NetworkGatewayParserTest, TestSetConfigRulesIsInteger) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_NE(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_FALSE(networkParser.parseNetworkGatewayConfiguration(root, e));
 }
 
 
@@ -268,7 +268,7 @@ TEST_F(NetworkGatewayParserTest, MultipleProtocols) {
     IPTableEntry e;
     json_t *root = convertToJSON(config);
 
-    ASSERT_EQ(ReturnCode::SUCCESS, networkParser.parseNetworkGatewayConfiguration(root, e));
+    ASSERT_TRUE(networkParser.parseNetworkGatewayConfiguration(root, e));
     ASSERT_EQ(IPTableEntry::Target::DROP, e.m_defaultTarget);
     ASSERT_EQ("INPUT", e.m_type);
 

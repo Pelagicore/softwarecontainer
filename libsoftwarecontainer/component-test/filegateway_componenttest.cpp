@@ -66,6 +66,6 @@ TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
         "}"
     "]";
     loadConfig(config);
-    ASSERT_TRUE(isSuccess(gw->setConfig(jsonConfig)));
-    ASSERT_TRUE(isSuccess(gw->activate()));
+    ASSERT_TRUE(gw->setConfig(jsonConfig));
+    ASSERT_TRUE(gw->activate());
 }

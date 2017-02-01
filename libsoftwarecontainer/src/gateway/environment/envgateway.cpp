@@ -34,18 +34,18 @@ EnvironmentGateway::~EnvironmentGateway()
 {
 }
 
-ReturnCode EnvironmentGateway::readConfigElement(const json_t *element)
+bool EnvironmentGateway::readConfigElement(const json_t *element)
 {
     EnvironmentGatewayParser parser;
     EnvironmentGatewayParser::EnvironmentVariable variable;
 
-    if (isError(parser.parseEnvironmentGatewayConfigElement(element, variable, m_variables))) {
+    if (!parser.parseEnvironmentGatewayConfigElement(element, variable, m_variables)) {
         log_error() << "Could not parse environment gateway element";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     m_variables[variable.first] = variable.second;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool EnvironmentGateway::activateGateway()
@@ -56,8 +56,9 @@ bool EnvironmentGateway::activateGateway()
     }
 
     for (auto &variable : m_variables) {
-        if (isError(setEnvironmentVariable(variable.first, variable.second))) {
-            log_error() << "Could not set environment variable " << variable.first << " for the container";
+        if (!setEnvironmentVariable(variable.first, variable.second)) {
+            log_error() << "Could not set environment variable " << variable.first
+                        << " for the container";
             return false;
         }
     }

@@ -42,10 +42,10 @@ public:
      * @brief Add a new setting to the store
      *
      * @param setting the file setting to be added
-     * @return ReturnCode::FAILURE if the setting conflicts with any existing settings
-     * @return ReturnCode::SUCCESS otherwise
+     * @return false if the setting conflicts with any existing settings
+     * @return true otherwise
      */
-    ReturnCode addSetting(const FileGatewayParser::FileSetting &setting);
+    bool addSetting(const FileGatewayParser::FileSetting &setting);
 
     /*
      * @brief Get the list of settings

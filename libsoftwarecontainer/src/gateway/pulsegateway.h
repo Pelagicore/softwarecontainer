@@ -40,7 +40,7 @@ public:
     PulseGateway();
     ~PulseGateway();
 
-    ReturnCode readConfigElement(const json_t *element) override;
+    bool readConfigElement(const json_t *element) override;
 
     /**
      * @brief Implements Gateway::activateGateway
@@ -48,8 +48,8 @@ public:
      *  If audio is to be enabled, then calling this function results in a call
      *  to connectToPulseServer.
      *
-     * @returns true upon success (PulseAudio server connect call and mainloop
-     *               setup successfully), false otherwise.
+     * @returns true if PulseAudio server connect call and mainloop setup is successful
+     * @return false otherwise
      */
     virtual bool activateGateway() override;
 
@@ -64,7 +64,7 @@ private:
     /**
     * @brief enables Pulse audio
     */
-    virtual ReturnCode enablePulseAudio();
+    virtual bool enablePulseAudio();
 };
 
 } // namespace softwarecontainer

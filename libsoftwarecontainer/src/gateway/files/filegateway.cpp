@@ -27,20 +27,20 @@ FileGateway::FileGateway()
 {
 }
 
-ReturnCode FileGateway::readConfigElement(const json_t *element)
+bool FileGateway::readConfigElement(const json_t *element)
 {
     FileGatewayParser parser;
     FileGatewayParser::FileSetting setting;
 
-    if (isError(parser.parseConfigElement(element, setting))) {
-        return ReturnCode::FAILURE;
+    if (!parser.parseConfigElement(element, setting)) {
+        return false;
     }
 
-    if (isError(m_store.addSetting(setting))) {
-        return ReturnCode::FAILURE;
+    if (!m_store.addSetting(setting)) {
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool FileGateway::activateGateway()

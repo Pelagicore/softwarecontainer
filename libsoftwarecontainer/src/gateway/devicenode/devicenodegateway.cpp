@@ -31,14 +31,14 @@ DeviceNodeGateway::DeviceNodeGateway() :
 {
 }
 
-ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
+bool DeviceNodeGateway::readConfigElement(const json_t *element)
 {
     DeviceNodeParser parser;
     DeviceNodeParser::Device dev;
 
-    if (isError(parser.parseDeviceNodeGatewayConfiguration(element, dev))) {
+    if (!parser.parseDeviceNodeGatewayConfiguration(element, dev)) {
         log_error() << "Could not parse device node configuration";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     return m_logic.updateDeviceList(dev);
@@ -46,21 +46,10 @@ ReturnCode DeviceNodeGateway::readConfigElement(const json_t *element)
 
 bool DeviceNodeGateway::activateGateway()
 {
-    auto returnValue = applySettings();
-    return isSuccess(returnValue);
-}
-
-bool DeviceNodeGateway::teardownGateway()
-{
-    return true;
-}
-
-ReturnCode DeviceNodeGateway::applySettings()
-{
     auto devlist = m_logic.getDevList();
     if (devlist.empty()) {
         log_info() << "Activate was called when no devices has been configured.";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     for (auto &dev : devlist) {
@@ -72,20 +61,20 @@ ReturnCode DeviceNodeGateway::applySettings()
         // Already existing files can't be converted into directories
         if (existsInFileSystem(deviceParent) && !isDirectory(deviceParent)) {
             log_error() << "Parent path of " << dev.name << " already exist and is not a directory";
-            return ReturnCode::FAILURE;
+            return false;
         }
 
         // If the parent directory does not already exist, we create it.
         if (!isDirectory(deviceParent) && isError(createDirectory(deviceParent))) {
             log_error() << "Could not create parent directory for device " << deviceParent;
-            return ReturnCode::FAILURE;
+            return false;
         }
 
         if (dev.major != -1) {
             log_error() << "Device path for container on host: " << devicePathInContainerOnHost;
             if (existsInFileSystem(devicePathInContainerOnHost)) {
                 log_error() << "The device " << dev.name << " already exists";
-                return ReturnCode::FAILURE;
+                return false;
             }
 
             // mknod dev.name c dev.major dev.minor
@@ -107,7 +96,7 @@ ReturnCode DeviceNodeGateway::applySettings()
             job.wait();
             if (job.isError()) {
                 log_error() << "Failed to create device " << dev.name;
-                return ReturnCode::FAILURE;
+                return false;
             } else {
                 // Make sure the path gets deleted when we destroy this object
                 markFileForDeletion(devicePathInContainerOnHost);
@@ -126,12 +115,17 @@ ReturnCode DeviceNodeGateway::applySettings()
                 if (job.isError()) {
                     log_error() << "Could not 'chmod " << dev.mode
                                 << "' the mounted device " << dev.name;
-                    return ReturnCode::FAILURE;
+                    return false;
                 }
             }
         }
     }
-    return ReturnCode::SUCCESS;
+    return true;
+}
+
+bool DeviceNodeGateway::teardownGateway()
+{
+    return true;
 }
 
 } // namespace softwarecontainer

@@ -22,30 +22,31 @@
 
 namespace softwarecontainer {
 
-ReturnCode IPTableEntry::applyRules()
+bool IPTableEntry::applyRules()
 {
     for (auto rule : m_rules) {
         if (rule.protocols.size()) {
 
             for (auto proto : rule.protocols) {
-                if (ReturnCode::FAILURE == insertCommand(interpretRuleWithProtocol(rule, proto))) {
+                if (!insertCommand(interpretRuleWithProtocol(rule, proto))) {
                     log_error() << "Couldn't apply the rule " << rule.target;
-                    return ReturnCode::FAILURE;
+                    return false;
                 }
             }
 
-        } else if (ReturnCode::FAILURE == insertCommand(interpretRule(rule))) {
+        } else if (!insertCommand(interpretRule(rule))) {
             log_error() << "Couldn't apply the rule " << rule.target;
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
-    if (ReturnCode::FAILURE == insertCommand(interpretPolicy())) {
-        log_error() << "Unable to set policy " << convertTarget(m_defaultTarget) << " for " << m_type;
-        return ReturnCode::FAILURE;
+    if (!insertCommand(interpretPolicy())) {
+        log_error() << "Unable to set policy " << convertTarget(m_defaultTarget)
+                    << " for " << m_type;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 std::string IPTableEntry::convertTarget (Target& t)
@@ -156,7 +157,7 @@ std::string IPTableEntry::interpretPolicy()
 }
 
 
-ReturnCode IPTableEntry::insertCommand(std::string command)
+bool IPTableEntry::insertCommand(std::string command)
 {
     log_debug() << "Add network rule : " <<  command;
 
@@ -167,14 +168,14 @@ ReturnCode IPTableEntry::insertCommand(std::string command)
         log_error() << "Failed to spawn " << command << ": code " << e.code()
                                << " msg: " << e.what();
 
-        return ReturnCode::FAILURE;
+        return false;
     } catch (Glib::ShellError e) {
         log_error() << "Failed to call " << command << ": code " << e.code()
                                        << " msg: " << e.what();
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 std::string IPTableEntry::toString()
