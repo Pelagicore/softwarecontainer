@@ -11,7 +11,7 @@
 @SC_BRIDGE_NETMASK_ACTIVATE@bridge-netmask = @SC_BRIDGE_NETMASK_CONFIG_FILE_VAR@
 
 # Netmask bits for the network bridge
-@SC_BRIDGE_NETMASK_BITS_ACTIVATE@bridge-netmask-bits = @SC_BRIDGE_NETMASK_BITS_CONFIG_FILE_VAR@
+@SC_BRIDGE_NETMASK_BITLENGTH_ACTIVATE@bridge-netmask-bitlength = @SC_BRIDGE_NETMASK_BITLENGTH_CONFIG_FILE_VAR@
 
 # Network address part for the network bridge ip
 @SC_BRIDGE_NETADDR_ACTIVATE@bridge-netaddr = @SC_BRIDGE_NETADDR_CONFIG_FILE_VAR@

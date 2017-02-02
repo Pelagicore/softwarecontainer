@@ -58,7 +58,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
     std::string bridgeNetmask = m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                                          ConfigDefinition::SC_BRIDGE_NETMASK_KEY);
     int bridgeNetmaskBits = m_config->getIntValue(ConfigDefinition::SC_GROUP,
-                                                  ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY);
+                                                  ConfigDefinition::SC_BRIDGE_NETMASK_BITLENGTH_KEY);
     std::string bridgeNetAddr = m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                                  ConfigDefinition::SC_BRIDGE_NETADDR_KEY);
 #endif // ENABLE_NETWORKGATEWAY

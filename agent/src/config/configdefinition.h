@@ -87,7 +87,7 @@ public:
     static const std::string SC_BRIDGE_IP_KEY;
     static const std::string SC_BRIDGE_NETADDR_KEY;
     static const std::string SC_BRIDGE_NETMASK_KEY;
-    static const std::string SC_BRIDGE_NETMASK_BITS_KEY;
+    static const std::string SC_BRIDGE_NETMASK_BITLENGTH_KEY;
 #endif
 
     static MandatoryConfigs mandatory();

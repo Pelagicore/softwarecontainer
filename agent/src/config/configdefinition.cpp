@@ -70,7 +70,7 @@ const std::string ConfigDefinition::SC_BRIDGE_DEVICE_KEY = "bridge-device";
 const std::string ConfigDefinition::SC_BRIDGE_IP_KEY = "bridge-ip";
 const std::string ConfigDefinition::SC_BRIDGE_NETADDR_KEY = "bridge-netaddr";
 const std::string ConfigDefinition::SC_BRIDGE_NETMASK_KEY = "bridge-netmask";
-const std::string ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY = "bridge-netmask-bits";
+const std::string ConfigDefinition::SC_BRIDGE_NETMASK_BITLENGTH_KEY = "bridge-netmask-bitlength";
 #endif
 
 /*
@@ -99,10 +99,10 @@ const ConfigItems CONFIGS
                     ConfigDefinition::convertDefineToFlag(
                         SC_BRIDGE_IP_MANDATORY_FLAG /* set by cmake */)),
     std::make_tuple(ConfigDefinition::SC_GROUP,
-                    ConfigDefinition::SC_BRIDGE_NETMASK_BITS_KEY,
+                    ConfigDefinition::SC_BRIDGE_NETMASK_BITLENGTH_KEY,
                     ConfigType::Integer,
                     ConfigDefinition::convertDefineToFlag(
-                        SC_BRIDGE_NETMASK_BITS_MANDATORY_FLAG /* set by cmake */)),
+                        SC_BRIDGE_NETMASK_BITLENGTH_MANDATORY_FLAG /* set by cmake */)),
     std::make_tuple(ConfigDefinition::SC_GROUP,
                     ConfigDefinition::SC_BRIDGE_NETMASK_KEY,
                     ConfigType::String,

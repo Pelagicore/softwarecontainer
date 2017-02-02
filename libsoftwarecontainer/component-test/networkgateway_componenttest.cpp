@@ -29,7 +29,7 @@ public:
         NetworkGateway(11, // container id
                        std::string(BRIDGE_DEVICE_TESTING),
                        std::string(BRIDGE_IP_TESTING), // bridge ip
-                       std::stoi(BRIDGE_NETMASK_BITS_TESTING)) // bridge netmask 
+                       std::stoi(BRIDGE_NETMASK_BITLENGTH_TESTING)) // bridge netmask 
     {
     }
 
