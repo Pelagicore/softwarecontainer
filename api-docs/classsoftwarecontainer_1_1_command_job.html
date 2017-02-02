@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-8450d19 2017-02-02</span>
+   &#160;<span id="projectnumber">0.18.0-0c877f3 2017-02-02</span>
    </div>
   </td>
  </tr>
@@ -135,6 +135,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>stdin</b> ()</td></tr>
 <tr class="memitem:a4328b16dd535b52ba21bbb1ecde48580"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4328b16dd535b52ba21bbb1ecde48580"></a>
 pid_t&#160;</td><td class="memItemRight" valign="bottom"><b>pid</b> ()</td></tr>
 <tr class="separator:a4328b16dd535b52ba21bbb1ecde48580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab16b596f25ad93d1d415033a6084cfab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_job_abstract.html#ab16b596f25ad93d1d415033a6084cfab">isSuccess</a> ()</td></tr>
+<tr class="memdesc:ab16b596f25ad93d1d415033a6084cfab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper about return value of jobs.  <a href="#ab16b596f25ad93d1d415033a6084cfab">More...</a><br /></td></tr>
+<tr class="separator:ab16b596f25ad93d1d415033a6084cfab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c277608637ad545e9f930b5884e7204"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_job_abstract.html#a1c277608637ad545e9f930b5884e7204">isError</a> ()</td></tr>
+<tr class="memdesc:a1c277608637ad545e9f930b5884e7204"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper about return value of jobs.  <a href="#a1c277608637ad545e9f930b5884e7204">More...</a><br /></td></tr>
+<tr class="separator:a1c277608637ad545e9f930b5884e7204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bf30c2a1724092804a6bb01cf969b22"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_job_abstract.html#a8bf30c2a1724092804a6bb01cf969b22">isRunning</a> ()</td></tr>
 <tr class="memdesc:a8bf30c2a1724092804a6bb01cf969b22"><td class="mdescLeft">&#160;</td><td class="mdescRight">That method always returns true as soon as the start() method has been called, even if the command fails to start, since we don't know if the exec() occurring after the fork into the container actually succeeds...  <a href="#a8bf30c2a1724092804a6bb01cf969b22">More...</a><br /></td></tr>
 <tr class="separator:a8bf30c2a1724092804a6bb01cf969b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,6 +178,9 @@ EnvironmentVariables&#160;</td><td class="memItemRight" valign="bottom"><b>m_env
 <tr class="memitem:a07ea32ea55c47f7047af25115750c11e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07ea32ea55c47f7047af25115750c11e"></a>
 ExecutablePtr&#160;</td><td class="memItemRight" valign="bottom"><b>m_executable</b></td></tr>
 <tr class="separator:a07ea32ea55c47f7047af25115750c11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad12d2b1edde462ce71babc9c42d1050b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad12d2b1edde462ce71babc9c42d1050b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>m_exitStatus</b></td></tr>
+<tr class="separator:ad12d2b1edde462ce71babc9c42d1050b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d237048c03313216541ccb4d0b82222"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d237048c03313216541ccb4d0b82222"></a>
 pid_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_pid</b></td></tr>
 <tr class="separator:a8d237048c03313216541ccb4d0b82222"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,6 +199,78 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 
 <p>Definition at line <a class="el" href="commandjob_8h_source.html#l00029">29</a> of file <a class="el" href="commandjob_8h_source.html">commandjob.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ab16b596f25ad93d1d415033a6084cfab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool softwarecontainer::JobAbstract::isSuccess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper about return value of jobs. </p>
+<p>Describes whether the exit status of a command or a function indicates success or not</p>
+<p>Note that this method will interpret exit status only for the last job </p>
+
+<p>Definition at line <a class="el" href="jobabstract_8cpp_source.html#l00085">85</a> of file <a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;{</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">if</span> (0 == m_exitStatus) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a1c277608637ad545e9f930b5884e7204"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool softwarecontainer::JobAbstract::isError </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper about return value of jobs. </p>
+<p>Describes whether the exit status of a command or a function indicates error or not</p>
+<p>Note that this method will interpret exit status only for the last job </p>
+
+<p>Definition at line <a class="el" href="jobabstract_8cpp_source.html#l00094">94</a> of file <a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;{</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">if</span> (0 == m_exitStatus) {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;}</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a class="anchor" id="a8bf30c2a1724092804a6bb01cf969b22"></a>
 <div class="memitem">
 <div class="memproto">
@@ -213,11 +294,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 
 <p>That method always returns true as soon as the start() method has been called, even if the command fails to start, since we don't know if the exec() occurring after the fork into the container actually succeeds... </p>
 
-<p>Definition at line <a class="el" href="jobabstract_8cpp_source.html#l00087">87</a> of file <a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;{</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="comment">// TODO : find a way to test whether the exec() which occurs in the container succeeded</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> (m_pid != 0);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+<p>Definition at line <a class="el" href="jobabstract_8cpp_source.html#l00107">107</a> of file <a class="el" href="jobabstract_8cpp_source.html">jobabstract.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;{</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">// TODO : find a way to test whether the exec() which occurs in the container succeeded</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">return</span> (m_pid != 0);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -231,7 +312,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>m_stderr</b> [2]</td><
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_command_job.html">CommandJob</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 09:08:37 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 2 2017 10:09:44 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

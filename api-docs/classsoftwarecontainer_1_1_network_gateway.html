@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-8450d19 2017-02-02</span>
+   &#160;<span id="projectnumber">0.18.0-0c877f3 2017-02-02</span>
    </div>
   </td>
  </tr>
@@ -336,15 +336,15 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            }</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        });</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        job.start();</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordtype">int</span> returnCode = job.wait();</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">if</span> (returnCode != 0) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        job.wait();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">if</span> (job.isError()) {</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            log_debug() &lt;&lt; <span class="stringliteral">&quot;Failed to apply rules for entry: &quot;</span> &lt;&lt; entry.toString();</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        }</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    }</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(returnValue);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordflow">return</span> returnValue;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
@@ -995,7 +995,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_network_gateway.html">NetworkGateway</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 09:08:39 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 2 2017 10:09:45 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

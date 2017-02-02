@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-8450d19 2017-02-02</span>
+   &#160;<span id="projectnumber">0.18.0-0c877f3 2017-02-02</span>
    </div>
   </td>
  </tr>
@@ -117,32 +117,39 @@ $(document).ready(function(){initNavTree('jobabstract_8h_source.html','');});
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    pid_t pid();</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_job_abstract.html#a8bf30c2a1724092804a6bb01cf969b22">isRunning</a>();</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> setEnvironmentVariable(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> std::string &amp;value);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> setEnvironmentVariables(<span class="keyword">const</span> EnvironmentVariables &amp;env);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_job_abstract.html#ab16b596f25ad93d1d415033a6084cfab">isSuccess</a>();</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    EnvironmentVariables m_env;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    ExecutablePtr m_executable;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    pid_t m_pid = 0;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">int</span> m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">int</span> m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">int</span> m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;};</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html_a8bf30c2a1724092804a6bb01cf969b22"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html#a8bf30c2a1724092804a6bb01cf969b22">softwarecontainer::JobAbstract::isRunning</a></div><div class="ttdeci">bool isRunning()</div><div class="ttdoc">That method always returns true as soon as the start() method has been called, even if the command fa...</div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8cpp_source.html#l00087">jobabstract.cpp:87</a></div></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_job_abstract.html#a1c277608637ad545e9f930b5884e7204">isError</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_job_abstract.html#a8bf30c2a1724092804a6bb01cf969b22">isRunning</a>();</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> setEnvironmentVariable(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> std::string &amp;value);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> setEnvironmentVariables(<span class="keyword">const</span> EnvironmentVariables &amp;env);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    EnvironmentVariables m_env;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    ExecutablePtr m_executable;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">int</span> m_exitStatus;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    pid_t m_pid = 0;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">int</span> m_stdin[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">int</span> m_stdout[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">int</span> m_stderr[2] = {UNASSIGNED_STREAM, UNASSIGNED_STREAM};</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;};</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html_a8bf30c2a1724092804a6bb01cf969b22"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html#a8bf30c2a1724092804a6bb01cf969b22">softwarecontainer::JobAbstract::isRunning</a></div><div class="ttdeci">bool isRunning()</div><div class="ttdoc">That method always returns true as soon as the start() method has been called, even if the command fa...</div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8cpp_source.html#l00107">jobabstract.cpp:107</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html">softwarecontainer::JobAbstract</a></div><div class="ttdoc">Abstract class for jobs which get executed inside a container. </div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8h_source.html#l00029">jobabstract.h:29</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html_ab16b596f25ad93d1d415033a6084cfab"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html#ab16b596f25ad93d1d415033a6084cfab">softwarecontainer::JobAbstract::isSuccess</a></div><div class="ttdeci">bool isSuccess()</div><div class="ttdoc">Helper about return value of jobs. </div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8cpp_source.html#l00085">jobabstract.cpp:85</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_job_abstract_html_a1c277608637ad545e9f930b5884e7204"><div class="ttname"><a href="classsoftwarecontainer_1_1_job_abstract.html#a1c277608637ad545e9f930b5884e7204">softwarecontainer::JobAbstract::isError</a></div><div class="ttdeci">bool isError()</div><div class="ttdoc">Helper about return value of jobs. </div><div class="ttdef"><b>Definition:</b> <a href="jobabstract_8cpp_source.html#l00094">jobabstract.cpp:94</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_027bcdaa2c9ca6b108f6da6d09ccdeaf.html">include</a></li><li class="navelem"><b>jobabstract.h</b></li>
-    <li class="footer">Generated on Thu Feb 2 2017 09:08:37 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 2 2017 10:09:43 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

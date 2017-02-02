@@ -1,5 +1,14 @@
 var NAVTREEINDEX3 =
 {
+"classsoftwarecontainer_1_1_service_manifest_path_error.html#a89d06e1a66d5fe6cc271e7a72c48245a":[1,0,1,74,0],
+"classsoftwarecontainer_1_1_service_manifest_path_error.html#af97f382b4979ca584ca7a72ed78c8c78":[1,0,1,74,2],
+"classsoftwarecontainer_1_1_signal_connections_handler.html":[1,0,1,75],
+"classsoftwarecontainer_1_1_signal_connections_handler.html#a4a88755d20bcd702b90860f93642383d":[1,0,1,75,0],
+"classsoftwarecontainer_1_1_signal_connections_handler.html#a9e72ea9a472729ed468db79648578675":[1,0,1,75,1],
+"classsoftwarecontainer_1_1_software_container.html":[1,0,1,76],
+"classsoftwarecontainer_1_1_software_container.html#a25cb629242d33c12d2f3468bbd34964a":[1,0,1,76,11],
+"classsoftwarecontainer_1_1_software_container.html#a3dcbdceccb07db981aa4e9bf85daa5d7":[1,0,1,76,7],
+"classsoftwarecontainer_1_1_software_container.html#a40c0fbc114b84746b211294cb15855c5":[1,0,1,76,6],
 "classsoftwarecontainer_1_1_software_container.html#a47be9e4b2c49aedf67cd23404c9d4eee":[1,0,1,76,4],
 "classsoftwarecontainer_1_1_software_container.html#a6141f7e59438e4f1dce565f3826a81f0":[1,0,1,76,0],
 "classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2":[1,0,1,76,12],
@@ -209,8 +218,8 @@ var NAVTREEINDEX3 =
 "namespacemembers_enum.html":[0,1,2],
 "namespacemembers_func.html":[0,1,1],
 "namespaces.html":[0,0],
-"namespacesoftwarecontainer.html":[1,0,1],
 "namespacesoftwarecontainer.html":[0,0,0],
+"namespacesoftwarecontainer.html":[1,0,1],
 "netlink_8cpp_source.html":[2,0,2,1,1,5,2],
 "netlink_8h_source.html":[2,0,2,1,1,5,3],
 "networkgateway_8cpp_source.html":[2,0,2,1,1,5,4],
@@ -240,14 +249,5 @@ var NAVTREEINDEX3 =
 "softwarecontaineragent_8h_source.html":[2,0,0,0,6],
 "softwarecontaineragent__dbus__common_8cpp_source.html":[2,0,0,0,3,0],
 "softwarecontaineragent__dbus__common_8h_source.html":[2,0,0,0,3,1],
-"softwarecontaineragent__dbus__stub_8cpp_source.html":[2,0,0,0,3,2],
-"softwarecontaineragent__dbus__stub_8h_source.html":[2,0,0,0,3,3],
-"softwarecontaineragentadaptor_8cpp_source.html":[2,0,0,0,3,4],
-"softwarecontaineragentadaptor_8h_source.html":[2,0,0,0,3,5],
-"softwarecontainerconfig_8cpp_source.html":[2,0,2,1,0,0],
-"softwarecontainerconfig_8h_source.html":[2,0,2,0,0,0],
-"softwarecontainererror_8h_source.html":[2,0,1,23],
-"structsoftwarecontainer_1_1_device_node_parser_1_1_device.html":[1,0,1,36,0],
-"structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#a558d075c39cfe86eae9ea303def46c3e":[1,0,1,36,0,1],
-"structsoftwarecontainer_1_1_device_node_parser_1_1_device.html#a72d64d78b79fe090be3726acb91ef494":[1,0,1,36,0,2]
+"softwarecontaineragent__dbus__stub_8cpp_source.html":[2,0,0,0,3,2]
 };
