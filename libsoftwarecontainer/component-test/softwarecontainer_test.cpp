@@ -67,7 +67,7 @@ std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
         std::string(BRIDGE_DEVICE_TESTING),// Should be set be CMake
         std::string(BRIDGE_IP_TESTING),// Should be set be CMake
         std::string(BRIDGE_NETMASK_TESTING),// Should be set be CMake
-        std::stoi(BRIDGE_NETMASK_BITS_TESTING),// Should be set be CMake
+        std::stoi(BRIDGE_NETMASK_BITLENGTH_TESTING),// Should be set be CMake
         std::string(BRIDGE_NETADDR_TESTING),// Should be set be CMake
 #endif // ENABLE_NETWORKGATEWAY
         LXC_CONFIG_PATH_TESTING, // Should be set be CMake

@@ -247,13 +247,13 @@ if(ENABLE_NETWORKGATEWAY)
     add_string_config(${SC_CONFIG_GROUP} BRIDGE_IP "10.0.3.1" "10.0.3.1")
     add_string_config(${SC_CONFIG_GROUP} BRIDGE_NETADDR "10.0.3.0" "10.0.3.0")
     add_string_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK "255.255.255.0" "255.255.255.0")
-    add_integer_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS 24 24)
+    add_integer_config(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITLENGTH 24 24)
 
     # All these are mandatory if we are configured for network
     make_config_mandatory(${SC_CONFIG_GROUP} CREATE_BRIDGE)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_DEVICE)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_IP)
-    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITS)
+    make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK_BITLENGTH)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETADDR)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK)
 
@@ -266,7 +266,7 @@ if(ENABLE_NETWORKGATEWAY)
     add_definitions(-DBRIDGE_IP_TESTING="${SC_BRIDGE_IP}")
     add_definitions(-DBRIDGE_NETADDR_TESTING="${SC_BRIDGE_NETADDR}")
     add_definitions(-DBRIDGE_NETMASK_TESTING="${SC_BRIDGE_NETMASK}")
-    add_definitions(-DBRIDGE_NETMASK_BITS_TESTING="${SC_BRIDGE_NETMASK_BITS}")
+    add_definitions(-DBRIDGE_NETMASK_BITLENGTH_TESTING="${SC_BRIDGE_NETMASK_BITLENGTH}")
 
     # Install the actual script
     install(FILES ${CMAKE_SOURCE_DIR}/scripts/setup_softwarecontainer.sh DESTINATION bin

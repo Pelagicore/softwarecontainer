@@ -77,7 +77,7 @@ public:
                                      "bridge-device = " + std::string(BRIDGE_DEVICE_TESTING) + "\n"
                                      "bridge-ip = " + std::string(BRIDGE_IP_TESTING) + "\n"
                                      "bridge-netmask = " + std::string(BRIDGE_NETMASK_TESTING) + "\n"
-                                     "bridge-netmask-bits = " + std::string(BRIDGE_NETMASK_BITS_TESTING) +"\n"
+                                     "bridge-netmask-bitlength = " + std::string(BRIDGE_NETMASK_BITLENGTH_TESTING) +"\n"
                                      "bridge-netaddr = " + std::string(BRIDGE_NETADDR_TESTING) + "\n"
 #endif
                                      "shutdown-timeout = 1\n"
