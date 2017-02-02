@@ -44,6 +44,13 @@ class NetworkGateway :
 public:
     static constexpr const char *ID = "network";
 
+    // Exit codes used when running inside container
+    static const constexpr int FAILURE = -1;
+    static const constexpr int SUCCESS = 0;
+    static const constexpr int NO_LINK = 1; // The desired link was not found
+    static const constexpr int BAD_LINKUP = 2; // Could not bring link up
+    static const constexpr int BAD_LINKDOWN = 3; // Could not bring link up
+
     /**
      * @brief Creates a network gateway
      *

@@ -25,7 +25,13 @@ class MockNetworkGateway :
     public NetworkGateway
 {
 public:
-    MockNetworkGateway():NetworkGateway(11, "10.0.3.1", 16) {}
+    MockNetworkGateway() :
+        NetworkGateway(1, // container id
+                       std::string(BRIDGE_IP_TESTING), // bridge ip
+                       std::stoi(BRIDGE_NETMASK_BITS_TESTING) // netmask bits
+        )
+    {
+    }
 
     MOCK_METHOD0(isBridgeAvailable, ReturnCode());
 };

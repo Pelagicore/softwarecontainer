@@ -93,11 +93,7 @@ bool JobAbstract::isSuccess()
 
 bool JobAbstract::isError()
 {
-    if (0 == m_exitStatus) {
-        return false;
-    }
-
-    return true;
+    return !isSuccess();
 }
 
 /**
