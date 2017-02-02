@@ -20,5 +20,10 @@ var classsoftwarecontainer_1_1_network_gateway =
     [ "hasContainer", "classsoftwarecontainer_1_1_network_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_network_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_network_gateway.html#a20f57ddde85b938d67104625e774a714", null ],
-    [ "ID", "classsoftwarecontainer_1_1_network_gateway.html#aa1b20a494f195ccba6208b4aab76c907", null ]
+    [ "ID", "classsoftwarecontainer_1_1_network_gateway.html#aa1b20a494f195ccba6208b4aab76c907", null ],
+    [ "FAILURE", "classsoftwarecontainer_1_1_network_gateway.html#a9e606269c26c50118f027f4eac94709d", null ],
+    [ "SUCCESS", "classsoftwarecontainer_1_1_network_gateway.html#a9de7ca96c5eb1c7e835fe94d857f0f82", null ],
+    [ "NO_LINK", "classsoftwarecontainer_1_1_network_gateway.html#a80798a0acbcdfeffa076c732076fdc46", null ],
+    [ "BAD_LINKUP", "classsoftwarecontainer_1_1_network_gateway.html#ae3f3660e21af137c111df3cac3a83a19", null ],
+    [ "BAD_LINKDOWN", "classsoftwarecontainer_1_1_network_gateway.html#ac388eb59cda9e4e03b44d0d65bb39686", null ]
 ];
