@@ -21,7 +21,8 @@ import os
 import json
 import argparse
 import abc
-
+import resource
+import time
 
 """ This test helper is currently just used by the environment test suite(s).
 
@@ -206,12 +207,42 @@ class CGroupHelper(Helper):
             file_content = fh.readline()
         return int(file_content)
 
+class CoreDumpHelper(Helper):
+    """ Helper for checking for core dumps
+    """
+
+    def __init__(self, file_base_path):
+        Helper.__init__(self, file_base_path)
+
+    def checkPattern(self, expected_pattern):
+        with open("/proc/sys/kernel/core_pattern", "r") as core_pattern:
+            with open(self._base_path + "/core_pattern", "w") as fh:
+                pattern = core_pattern.read()
+                fh.write(pattern)
+                LOG(pattern)
+
+    def patternResult(self):
+        with open(self._base_path + "/core_pattern", "r") as fh:
+            return fh.read()
+
+    def assertLimit(self):
+        (soft, hard) = resource.getrlimit(resource.RLIMIT_CORE)
+        with open(self._base_path + "/core_limits", "w") as fh:
+            fh.write(str(soft))
+
+    def limitResult(self):
+        with open(self._base_path + "/core_limits", "r") as fh:
+            return fh.read()
+
+    def dumpCore(self):
+        os.abort()
 
 GET_ENV_VARS_OPTION = "get_env_vars"
 TEST_DIR_OPTION = "test_dir"
 DO_PING_OPTION = "do_ping"
 DO_IFCONFIG_OPTION = "do_ifconfig"
 DO_ALLOCATE_OPTION = "do_allocate"
+DO_CORE_DUMP_OPTION = "core_dump"
 
 if __name__ == "__main__":
     """ When the program is called from command line it is running inside
@@ -272,6 +303,16 @@ if __name__ == "__main__":
                         metavar="size",
                         help=do_allocate_help_message)
 
+    core_dump_help_message = """ Used to perform core dump related tasks
+    """
+    parser.add_argument("--core-dump",
+                        nargs=1,
+                        action="store",
+                        dest=DO_CORE_DUMP_OPTION,
+                        default=None,
+                        metavar="pattern",
+                        help=core_dump_help_message)
+
     args = parser.parse_args()
 
     parsed_value = getattr(args, TEST_DIR_OPTION,)
@@ -284,6 +325,7 @@ if __name__ == "__main__":
             * do_ifconfig
             * get_env_vars
             * do_allocate
+            * wait_for_core_dump
         """
         parsed_value = getattr(args, DO_PING_OPTION)
         if parsed_value is not None:
@@ -319,3 +361,12 @@ if __name__ == "__main__":
             # allocate the memory
             success = h.allocate(long(allocation_size))
             LOG("Is allocation successful : " + str(success))
+
+        parsed_value = getattr(args, DO_CORE_DUMP_OPTION)
+        if parsed_value is not None:
+            expected_pattern = parsed_value.pop()
+            h = CoreDumpHelper(test_file_base_path)
+            h.checkPattern(expected_pattern)
+            h.assertLimit()
+            h.dumpCore()
+
