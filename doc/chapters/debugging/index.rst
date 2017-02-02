@@ -99,6 +99,27 @@ available as normal without any changes. If you have dynamic libraries inside
 your container that the application are linking to, you may need to add the
 proper `solib-search-paths` to the libraries.
 
+Running GDBserver on application running in container
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are running `SoftwareContainerAgent` on a target hardware you can still
+debug applications inside the container using `gdbserver` which exports a gdb
+socket on network and then you connect a gdb to that network socket and you can
+debug using. Note that the `gdb` needs to be for the same architecture,
+preferably also built together with the toolchain used to build for the target.
+
+To perform this:
+
+1. Start a container.
+2. Configure network for the container.
+3. Launch the app inside the container using ``gdbserver :7777 <appname>``.
+4. The app will now wait for a gdb client to connect and start the application.
+5. Start the appropriate gdb version with the binary name to debug
+6. Type ``target remote <ip-of-container>:7777``
+7. You are now connected to the gdbserver and can run the set breakpoints,
+   start the application, etc.
+
+
 Debugging using QtCreator inside a container
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
