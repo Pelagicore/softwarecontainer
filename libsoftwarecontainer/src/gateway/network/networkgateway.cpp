@@ -55,14 +55,15 @@ ReturnCode NetworkGateway::readConfigElement(const json_t *element)
 bool NetworkGateway::activateGateway()
 {
     if (!hasContainer()) {
-        log_error() << "activate was called on an EnvironmentGateway which has no associated container";
+        log_error() << "activate was called on a NetworkGateway which has no associated container";
         return false;
     }
 
     if (m_gateway.size() != 0) {
         log_debug() << "Default gateway set to " << m_gateway;
     } else {
-        log_debug() << "No gateway. Network access will be disabled";
+        log_warning() << "No gateway. Network access will be disabled";
+        return true;
     }
 
     if (isError(isBridgeAvailable())) {
@@ -77,26 +78,27 @@ bool NetworkGateway::activateGateway()
         return false;
     }
 
-    auto returnValue = up();
+    bool returnValue = up();
+    if (!returnValue) {
+        log_error() << "Couldn't bring the network up";
+        return false;
+    }
 
+    log_debug() << "Adding iptables entries";
     for (auto entry : m_entries) {
         FunctionJob job (getContainer(), [&] () {
-            if (isSuccess(entry.applyRules())) {
-                return 0;
-            }  else {
-                return 1;
-            }
+            return isSuccess(entry.applyRules()) ? SUCCESS : FAILURE;
         });
         job.start();
 
         job.wait();
         if (job.isError()) {
             log_debug() << "Failed to apply rules for entry: " << entry.toString();
+            return false;
         }
-
     }
 
-    return returnValue;
+    return true;
 }
 
 bool NetworkGateway::teardownGateway()
@@ -109,7 +111,7 @@ bool NetworkGateway::setDefaultGateway()
     FunctionJob job(getContainer(), [this] {
         Netlink n;
         ReturnCode success = n.setDefaultGateway(m_gateway.c_str());
-        return isSuccess(success) ? 0 : 1;
+        return isSuccess(success) ? SUCCESS : FAILURE;
     });
 
     job.start();
@@ -119,6 +121,8 @@ bool NetworkGateway::setDefaultGateway()
 
 bool NetworkGateway::up()
 {
+    static const constexpr int BAD_SETIP = 3;
+
     if (m_interfaceInitialized) {
         log_debug() << "Interface already configured";
         return true;
@@ -130,39 +134,42 @@ bool NetworkGateway::up()
 
         Netlink::LinkInfo iface;
         if (isError(n.findLink("eth0", iface))) {
-            return 1;
+            return NO_LINK;
         }
 
         int ifaceIndex = iface.first.ifi_index;
         if (isError(n.linkUp(ifaceIndex))) {
-            return 2;
+            return BAD_LINKUP;
         }
 
-        return isSuccess(n.setIP(ifaceIndex, m_ip, 24)) ? 0 : 3;
+        if (isError(n.setIP(ifaceIndex, m_ip, m_netmask))) {
+            return BAD_SETIP;
+        }
+
+        return SUCCESS;
     });
 
     jobBringUpEthernet.start();
 
     int returnCode = jobBringUpEthernet.wait();
-    if (jobBringUpEthernet.isError()) {
-        if (returnCode == 1) {
+    switch(returnCode) {
+        case NO_LINK:
             log_error() << "Could not find interface eth0 in container";
             return false;
-        }
-
-        if (returnCode == 2) {
+        case BAD_LINKUP:
             log_error() << "Could not bring interface eth0 up in container";
             return false;
-        }
-
-        if (returnCode == 3) {
+        case BAD_SETIP:
             log_error() << "Could not set IP-address";
             return false;
-        }
+        case SUCCESS:
+            log_debug() << "Interface brought up, proceeding to set default gateway";
+            m_interfaceInitialized = true;
+            return setDefaultGateway();
+        default:
+            log_error() << "Unhandled case in NetworkGateway::up(), this is an error!";
+            return false;
     }
-
-    m_interfaceInitialized = true;
-    return setDefaultGateway();
 }
 
 ReturnCode NetworkGateway::down()
@@ -172,25 +179,31 @@ ReturnCode NetworkGateway::down()
         Netlink n;
         Netlink::LinkInfo iface;
         if (isError(n.findLink("eth0", iface))) {
-            log_error() << "Could not find interface eth0 in container";
-            return 1;
+            return NO_LINK;
         }
 
         if (isError(n.linkDown(iface.first.ifi_index))) {
-            log_error() << "Could not bring interface eth0 down in container";
-            return 2;
+            return BAD_LINKDOWN;
         }
 
-        return 0;
+        return SUCCESS;
     });
     job.start();
-    job.wait();
-    if (job.isError()) {
-        log_error() << "Configuring eth0 to 'down state' failed.";
-        return ReturnCode::FAILURE;
+    int returnCode = job.wait();
+    switch(returnCode)
+    {
+        case NO_LINK:
+            log_error() << "Could not find interface eth0 in container";
+            return ReturnCode::FAILURE;
+        case BAD_LINKDOWN:
+            log_error() << "Could not bring interface eth0 down in container";
+            return ReturnCode::FAILURE;
+        case SUCCESS:
+            return ReturnCode::SUCCESS;
+        default:
+            log_error() << "Unhandled case in NetworkGateway::down(), this is an error!";
+            return ReturnCode::FAILURE;
     }
-
-    return ReturnCode::SUCCESS;
 }
 
 /*
