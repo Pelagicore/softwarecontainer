@@ -27,11 +27,13 @@
 namespace softwarecontainer {
 
 NetworkGateway::NetworkGateway(const int32_t id,
+                               const std::string bridgeDevice,
                                const std::string gateway,
                                const uint8_t maskBits) :
     Gateway(ID),
     m_netmask(maskBits),
     m_gateway(gateway),
+    m_bridgeDevice(bridgeDevice),
     m_interfaceInitialized(false),
     m_containerID(id)
 {
@@ -206,19 +208,16 @@ ReturnCode NetworkGateway::down()
     }
 }
 
-/*
- * TODO: Use value from the config instead of define here.
- */
 ReturnCode NetworkGateway::isBridgeAvailable()
 {
     Netlink::LinkInfo iface;
-    if (isError(m_netlinkHost.findLink(SC_BRIDGE_DEVICE, iface))) {
-        log_error() << "Could not find " << SC_BRIDGE_DEVICE << " in the host";
+    if (isError(m_netlinkHost.findLink(m_bridgeDevice.c_str(), iface))) {
+        log_error() << "Could not find " << m_bridgeDevice << " in the host";
     }
 
     std::vector<Netlink::AddressInfo> addresses;
     if (isError(m_netlinkHost.findAddresses(iface.first.ifi_index, addresses))) {
-        log_error() << "Could not fetch addresses for " << SC_BRIDGE_DEVICE << " in the host";
+        log_error() << "Could not fetch addresses for " << m_bridgeDevice << " in the host";
     }
 
     return m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str());

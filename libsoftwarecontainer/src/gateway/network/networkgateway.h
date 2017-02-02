@@ -57,6 +57,7 @@ public:
      * @throws SoftwareContainerError if there is an error during initialization.
      */
     NetworkGateway(const int32_t id,
+                   const std::string bridgeDevice,
                    const std::string gateway,
                    const uint8_t maskBits);
 
@@ -123,6 +124,7 @@ private:
     struct in_addr m_ip;
     uint32_t m_netmask;
     std::string m_gateway;
+    std::string m_bridgeDevice;
 
     std::vector<IPTableEntry> m_entries;
 

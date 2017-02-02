@@ -119,6 +119,7 @@ ReturnCode SoftwareContainer::init()
 #ifdef ENABLE_NETWORKGATEWAY
     try {
         addGateway(new NetworkGateway(m_containerID,
+                                      m_config->bridgeDevice(),
                                       m_config->bridgeIPAddress(),
                                       m_config->bridgeNetmaskBitLength()));
     } catch (ReturnCode failure) {
