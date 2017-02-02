@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-71d655f 2017-01-31</span>
+   &#160;<span id="projectnumber">0.18.0-8450d19 2017-02-02</span>
    </div>
   </td>
  </tr>
@@ -211,78 +211,80 @@ $(document).ready(function(){initNavTree('container_8h_source.html','');});
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> setEnvironmentVariable(<span class="keyword">const</span> std::string &amp;var, <span class="keyword">const</span> std::string &amp;val);</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> executeInContainerEntryFunction(<span class="keywordtype">void</span> *param);</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> bindMountFileInContainer(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                                        <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                                        <span class="keyword">const</span> std::string &amp;tempFile,</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                                        <span class="keywordtype">bool</span> readonly = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> bindMountDirectoryInContainer(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                                             <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                                             <span class="keyword">const</span> std::string &amp;<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">tempDir</a>,</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                                             <span class="keywordtype">bool</span> readonly = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> bindMountCore(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                             <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                             <span class="keyword">const</span> std::string &amp;tempDir,</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                             <span class="keywordtype">bool</span> readonly);</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> remountReadOnlyInContainer(<span class="keyword">const</span> std::string &amp;path);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> rollbackCreate();</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    std::string m_configFile;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keyword">const</span> std::string m_id;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    std::string m_rootFSPath;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="keyword">struct </span>lxc_container *m_container = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    std::string m_containerRoot;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keywordtype">bool</span> m_enableWriteBuffer;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> unlimitCoreDump();</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> executeInContainerEntryFunction(<span class="keywordtype">void</span> *param);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> bindMountFileInContainer(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                                        <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                                        <span class="keyword">const</span> std::string &amp;tempFile,</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                                        <span class="keywordtype">bool</span> readonly = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> bindMountDirectoryInContainer(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                                             <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                                             <span class="keyword">const</span> std::string &amp;<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">tempDir</a>,</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                                             <span class="keywordtype">bool</span> readonly = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> bindMountCore(<span class="keyword">const</span> std::string &amp;pathInHost,</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                             <span class="keyword">const</span> std::string &amp;pathInContainer,</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                             <span class="keyword">const</span> std::string &amp;tempDir,</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                             <span class="keywordtype">bool</span> readonly);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> remountReadOnlyInContainer(<span class="keyword">const</span> std::string &amp;path);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> rollbackCreate();</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    std::string m_configFile;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keyword">const</span> std::string m_id;</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="comment">// All environment variables set by gateways</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    EnvironmentVariables m_gatewayEnvironmentVariables;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keywordtype">int</span> m_shutdownTimeout = 1;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keyword">enum class</span> ContainerState : unsigned int {</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        DEFAULT = 0,</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        PREPARED = 1,</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        DESTROYED = 2,</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        CREATED = 3,</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        STARTED = 4,</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        FROZEN = 5,</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    };</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    ContainerState m_state = ContainerState::DEFAULT;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;};</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    std::string m_rootFSPath;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    <span class="keyword">struct </span>lxc_container *m_container = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    std::string m_containerRoot;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="keywordtype">bool</span> m_enableWriteBuffer;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="comment">// All environment variables set by gateways</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    EnvironmentVariables m_gatewayEnvironmentVariables;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keywordtype">int</span> m_shutdownTimeout = 1;</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_aecaa29e4e21f90c2acd1f7840d20581b"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">softwarecontainer::Container::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Calls shutdown on the lxc container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00453">container.cpp:453</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a5ad5d17e2e896bdae1f453d2ad53b066"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a5ad5d17e2e896bdae1f453d2ad53b066">softwarecontainer::Container::stop</a></div><div class="ttdeci">ReturnCode stop()</div><div class="ttdoc">Calls stop on the lxc container(force stop) </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00433">container.cpp:433</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a3ca2252bc66ae9f985a010d3a7446e85"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a3ca2252bc66ae9f985a010d3a7446e85">softwarecontainer::Container::Container</a></div><div class="ttdeci">Container(const std::string id, const std::string &amp;configFile, const std::string &amp;containerRoot, bool enableWriteBuffer=false, int shutdownTimeout=1)</div><div class="ttdoc">Constructor. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00071">container.cpp:71</a></div></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keyword">enum class</span> ContainerState : unsigned int {</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        DEFAULT = 0,</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        PREPARED = 1,</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        DESTROYED = 2,</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        CREATED = 3,</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        STARTED = 4,</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        FROZEN = 5,</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    };</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    ContainerState m_state = ContainerState::DEFAULT;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;};</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_aecaa29e4e21f90c2acd1f7840d20581b"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">softwarecontainer::Container::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Calls shutdown on the lxc container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00478">container.cpp:478</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a5ad5d17e2e896bdae1f453d2ad53b066"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a5ad5d17e2e896bdae1f453d2ad53b066">softwarecontainer::Container::stop</a></div><div class="ttdeci">ReturnCode stop()</div><div class="ttdoc">Calls stop on the lxc container(force stop) </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00458">container.cpp:458</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a3ca2252bc66ae9f985a010d3a7446e85"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a3ca2252bc66ae9f985a010d3a7446e85">softwarecontainer::Container::Container</a></div><div class="ttdeci">Container(const std::string id, const std::string &amp;configFile, const std::string &amp;containerRoot, bool enableWriteBuffer=false, int shutdownTimeout=1)</div><div class="ttdoc">Constructor. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00075">container.cpp:75</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_container_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html">softwarecontainer::Container</a></div><div class="ttdoc">The Container class is an abstraction of the specific containment technology used. </div><div class="ttdef"><b>Definition:</b> <a href="container_8h_source.html#l00042">container.h:42</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a4784a2955ddf87a9f0a58720d7ca918c"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c">softwarecontainer::Container::bindMountInContainer</a></div><div class="ttdeci">ReturnCode bindMountInContainer(const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)</div><div class="ttdoc">Tries to bind mount a path from host to container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00516">container.cpp:516</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a4784a2955ddf87a9f0a58720d7ca918c"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c">softwarecontainer::Container::bindMountInContainer</a></div><div class="ttdeci">ReturnCode bindMountInContainer(const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)</div><div class="ttdoc">Tries to bind mount a path from host to container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00541">container.cpp:541</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_a649391903bf1a0eec92c829713117a74"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">softwarecontainer::FileToolkitWithUndo::tempDir</a></div><div class="ttdeci">std::string tempDir(std::string templatePath)</div><div class="ttdoc">tempDir Creates a temporary directory at templatePath. </div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00093">filetoolkitwithundo.cpp:93</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html">softwarecontainer::FileToolkitWithUndo</a></div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8h_source.html#l00027">filetoolkitwithundo.h:27</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_container_abstract_interface_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="containerabstractinterface_8h_source.html#l00028">containerabstractinterface.h:28</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8461f293ef5db5ee5fbdeddd24f36214"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214">softwarecontainer::Container::initialize</a></div><div class="ttdeci">ReturnCode initialize()</div><div class="ttdoc">Setup the container for startup. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00105">container.cpp:105</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a83a367840850c0bfb6da2587f2b246de"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">softwarecontainer::Container::execute</a></div><div class="ttdeci">ReturnCode execute(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00386">container.cpp:386</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8461f293ef5db5ee5fbdeddd24f36214"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214">softwarecontainer::Container::initialize</a></div><div class="ttdeci">ReturnCode initialize()</div><div class="ttdoc">Setup the container for startup. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00109">container.cpp:109</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a83a367840850c0bfb6da2587f2b246de"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">softwarecontainer::Container::execute</a></div><div class="ttdeci">ReturnCode execute(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00411">container.cpp:411</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8046973c568f3bd0bcc037af01630638"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">softwarecontainer::Container::destroy</a></div><div class="ttdeci">ReturnCode destroy()</div><div class="ttdoc">Calls shutdown, and then destroys the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00486">container.cpp:486</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a33340235226849d1f178e2f1d7efabe2"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a33340235226849d1f178e2f1d7efabe2">softwarecontainer::Container::start</a></div><div class="ttdeci">ReturnCode start(pid_t *pid)</div><div class="ttdoc">Start the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00260">container.cpp:260</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a6c57689a4a21b8c9342c53c7e8743203"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203">softwarecontainer::Container::create</a></div><div class="ttdeci">ReturnCode create()</div><div class="ttdoc">create Creates a new lxc_container and creates it with all the initialization. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00140">container.cpp:140</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8046973c568f3bd0bcc037af01630638"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">softwarecontainer::Container::destroy</a></div><div class="ttdeci">ReturnCode destroy()</div><div class="ttdoc">Calls shutdown, and then destroys the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00511">container.cpp:511</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a33340235226849d1f178e2f1d7efabe2"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a33340235226849d1f178e2f1d7efabe2">softwarecontainer::Container::start</a></div><div class="ttdeci">ReturnCode start(pid_t *pid)</div><div class="ttdoc">Start the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00264">container.cpp:264</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a6c57689a4a21b8c9342c53c7e8743203"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203">softwarecontainer::Container::create</a></div><div class="ttdeci">ReturnCode create()</div><div class="ttdoc">create Creates a new lxc_container and creates it with all the initialization. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00144">container.cpp:144</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><b>container.h</b></li>
-    <li class="footer">Generated on Tue Jan 31 2017 14:05:14 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 2 2017 09:08:37 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
