@@ -25,8 +25,8 @@ class MockNetworkGateway :
     public NetworkGateway
 {
 public:
-    MockNetworkGateway() :
-        NetworkGateway(11, // container id
+    MockNetworkGateway(uint32_t containerID) :
+        NetworkGateway(containerID,
                        std::string(BRIDGE_DEVICE_TESTING),
                        std::string(BRIDGE_IP_TESTING), // bridge ip
                        std::stoi(BRIDGE_NETMASK_BITLENGTH_TESTING)) // bridge netmask 
@@ -43,7 +43,10 @@ protected:
 
     void SetUp() override
     {
-        gw = new ::testing::NiceMock<MockNetworkGateway>();
+        srand(time(NULL));
+        uint32_t containerID = rand() % 100;
+
+        gw = new ::testing::NiceMock<MockNetworkGateway>(containerID);
         SoftwareContainerTest::SetUp();
         ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
     }
