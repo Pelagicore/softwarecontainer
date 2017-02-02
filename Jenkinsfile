@@ -37,10 +37,9 @@ node {
     try {
         // Store the directory we are executed in as our workspace.
         // These are the build parameters we want to use
-        String buildParams = "-DENABLE_TEST=ON -DENABLE_COVERAGE=ON "
+        String buildParams = "-DENABLE_COVERAGE=ON "
         buildParams       += "-DENABLE_USER_DOC=ON -DENABLE_API_DOC=ON "
         buildParams       += "-DENABLE_SYSTEMD=ON -DENABLE_PROFILING=ON "
-        buildParams       += "-DCMAKE_INSTALL_PREFIX=/usr"
 
         // Stages are subtasks that will be shown as subsections of the finiished build in Jenkins.
         stage('Download') {
@@ -72,15 +71,17 @@ node {
         }
 
         stage('Build') {
+            extraParams = "-DENABLE_TEST=ON -DENABLE_EXAMPLES=ON"
             runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
-                                     softwarecontainer \"${buildParams}\" -DENABLE_EXAMPLES=ON")
+                                     softwarecontainer \"${buildParams} ${extraParams}\"")
         }
 
         // TODO: Haven't figured out how to make the parallel jobs run on the same slave/agent
         // or if it is possible. Very annoying. Let's run sequentially in a single slave for now.
         stage('Clang') {
+            extraParams = "-DENABLE_TEST=OFF"
             runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
-                                     softwarecontainer clang \"${buildParams}\"")
+                                     softwarecontainer clang \"${buildParams} ${extraParams}\"")
         }
 
         stage('User documentation') {
