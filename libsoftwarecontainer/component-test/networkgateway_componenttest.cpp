@@ -26,10 +26,10 @@ class MockNetworkGateway :
 {
 public:
     MockNetworkGateway() :
-        NetworkGateway(1, // container id
+        NetworkGateway(11, // container id
+                       std::string(BRIDGE_DEVICE_TESTING),
                        std::string(BRIDGE_IP_TESTING), // bridge ip
-                       std::stoi(BRIDGE_NETMASK_BITS_TESTING) // netmask bits
-        )
+                       std::stoi(BRIDGE_NETMASK_BITS_TESTING)) // bridge netmask 
     {
     }
 
