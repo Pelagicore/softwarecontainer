@@ -92,45 +92,31 @@ Prerequisites:
   * configure and build (see project `README.md`)
 
 
-From the build directory, run the agent::
+From the build directory, run the agent:
 
-    sudo ./agent/softwarecontainer-agent
+.. literalinclude:: examples/01_start_sc.sh
 
 Note that we are running this command with ``sudo``, the Agent needs to be started with root privileges.
 
+Using e.g. ``gdbus``, we can introspect the Agent D-Bus service API:
 
-Using e.g. ``gdbus``, we can introspect the Agent D-Bus service API::
-
-    gdbus introspect --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent
+.. literalinclude:: examples/02_introspect.sh
 
 Next, we will start a new container so take note of the parameters of Create.
 
 
-Start a container::
+Start a container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.Create \
-    '[{"enableWriteBuffer": false}]'
+.. literalinclude:: examples/03_create_container.sh
 
 The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
 
 The return value of Create is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.
 
 
-Bind mount a directory inside the container::
+Bind mount a directory inside the container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.BindMount \
-    0 \
-    "/home/vagrant/softwarecontainer" \
-    "/app" \
-    false
+.. literalinclude:: examples/04_bindmount.sh
 
 Parameters:
  * ``containerID`` - a int32 with the ID of the created container, as returned by the ``Create`` method.
@@ -144,17 +130,9 @@ visible in the path ``/app`` inside the container. The actual location on the ho
 ``/tmp/container/SC-<container ID>/`` where the created ``app`` directory will be.
 
 
-Launch something in the container::
+Launch something in the container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.Execute \
-    0 \
-    "touch hello" \
-    "/app" \
-    "" \
-    '{"": ""}'
+.. literalinclude:: examples/05_execute.sh
 
 Parameters:
  * ``containerID`` - a int32 with the ID of the created container, as returned by the ``Create`` method.
@@ -168,58 +146,38 @@ The method returns the PID of the process run inside the container.
 The above method call results in a file ``hello`` being created inside the conainer in ``/app/``. This can
 also be seen in the bind mounted location ``/home/vagrant/softwarecontainer/``.
 
-Suspend the container::
+Suspend the container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.Suspend \
-    0
+.. literalinclude:: examples/06_suspend.sh
 
 This will suspend execution inside the container. The value passed as the `containerID` parameter
 should be the same value that was returned from the call to `Create`. It is not possible
 to run LaunchCommand on a suspended container.
 
-Resume the container::
+Resume the container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.Resume \
-    0
+.. literalinclude:: examples/07_resume.sh
 
 This will resume the suspended container. The value passed as the `containerID` parameter
 should be the same value that was returned from the call to `Create`.
 
-List all available Capabilities::
+List all available Capabilities:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.ListCapabilities
+.. literalinclude:: examples/08_listcapabilities.sh
 
 This will list all the capabilities that are available and possible to set on
 containers.
 
-Set Capabilities on a specific container::
+Set Capabilities on a specific container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.SetCapabilities \
-    0 \
-    "{'capability1', 'capability2'}"
+.. literalinclude:: examples/09_setcapabilities.sh
 
 This will set the capabilities listed in the last argument to the container
 identified by the `containerID` parameter returned from the `Create` call.
 
-Shut down the container::
+Shut down the container:
 
-    gdbus call --system \
-    --dest com.pelagicore.SoftwareContainerAgent \
-    --object-path /com/pelagicore/SoftwareContainerAgent \
-    --method com.pelagicore.SoftwareContainerAgent.Destroy \
-    0
+.. literalinclude:: examples/10_destroy.sh
 
 The value passed as the `containerID` parameter should be the same value that was returned from the call to `Create`.
 
