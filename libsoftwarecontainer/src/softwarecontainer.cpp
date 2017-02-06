@@ -198,6 +198,8 @@ ReturnCode SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig
 
 ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
 {
+    assertValidState();
+
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();
 
