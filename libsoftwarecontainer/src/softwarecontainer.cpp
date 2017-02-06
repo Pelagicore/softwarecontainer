@@ -200,6 +200,21 @@ ReturnCode SoftwareContainer::configureGateways(const GatewayConfiguration &gwCo
 {
     assertValidState();
 
+    // Make sure that all the gateway ids in the given GatewayConfig can map
+    // to a gateway in SoftwareContainer
+    for (auto &id : gwConfig.ids()) {
+        bool match = false;
+        for (auto &gateway : m_gateways) {
+            if (id == gateway->id()) {
+                match = true;
+            }
+        }
+        if (!match) {
+            throw GatewayError("Could not find any gateway matching id: " + id);
+        }
+    }
+
+    // Configure Gateways
     for (auto &gateway : m_gateways) {
         std::string gatewayId = gateway->id();
 
