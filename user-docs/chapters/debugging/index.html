@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Debugging &#8212; softwarecontainer 0.18.0-ab74d31 2017-02-02 documentation</title>
+    <title>Debugging &#8212; softwarecontainer 0.18.0-24bdcac 2017-02-06 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-ab74d31 2017-02-02',
+        VERSION:     '0.18.0-24bdcac 2017-02-06',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -123,6 +123,25 @@ libraries etc are mounted inside the <cite>chroot</cite> from the outside and sh
 available as normal without any changes. If you have dynamic libraries inside
 your container that the application are linking to, you may need to add the
 proper <cite>solib-search-paths</cite> to the libraries.</p>
+</div>
+<div class="section" id="running-gdbserver-on-application-running-in-container">
+<h4>Running GDBserver on application running in container<a class="headerlink" href="#running-gdbserver-on-application-running-in-container" title="Permalink to this headline">¶</a></h4>
+<p>If you are running <cite>SoftwareContainerAgent</cite> on a target hardware you can still
+debug applications inside the container using <cite>gdbserver</cite> which exports a gdb
+socket on network and then you connect a gdb to that network socket and you can
+debug using. Note that the <cite>gdb</cite> needs to be for the same architecture,
+preferably also built together with the toolchain used to build for the target.</p>
+<p>To perform this:</p>
+<ol class="arabic simple">
+<li>Start a container.</li>
+<li>Configure network for the container.</li>
+<li>Launch the app inside the container using <code class="docutils literal"><span class="pre">gdbserver</span> <span class="pre">:7777</span> <span class="pre">&lt;appname&gt;</span></code>.</li>
+<li>The app will now wait for a gdb client to connect and start the application.</li>
+<li>Start the appropriate gdb version with the binary name to debug</li>
+<li>Type <code class="docutils literal"><span class="pre">target</span> <span class="pre">remote</span> <span class="pre">&lt;ip-of-container&gt;:7777</span></code></li>
+<li>You are now connected to the gdbserver and can run the set breakpoints,
+start the application, etc.</li>
+</ol>
 </div>
 <div class="section" id="debugging-using-qtcreator-inside-a-container">
 <h4>Debugging using QtCreator inside a container<a class="headerlink" href="#debugging-using-qtcreator-inside-a-container" title="Permalink to this headline">¶</a></h4>
@@ -238,6 +257,7 @@ to run <cite>GDB</cite> as root however, as already mentioned.</p>
 <li><a class="reference internal" href="#gdb">GDB</a><ul>
 <li><a class="reference internal" href="#running-gdb-inside-container">Running GDB inside container</a></li>
 <li><a class="reference internal" href="#running-gdb-outside-container">Running GDB outside container</a></li>
+<li><a class="reference internal" href="#running-gdbserver-on-application-running-in-container">Running GDBserver on application running in container</a></li>
 <li><a class="reference internal" href="#debugging-using-qtcreator-inside-a-container">Debugging using QtCreator inside a container</a></li>
 </ul>
 </li>
