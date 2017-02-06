@@ -44,6 +44,8 @@ public:
     ReturnCode append(const std::string &id, json_t *conf);
     ReturnCode append(const GatewayConfiguration &source);
 
+    std::vector<std::string> ids() const;
+
     json_t *config(const std::string &gatewayId) const;
     bool empty();
 

@@ -92,4 +92,14 @@ bool GatewayConfiguration::empty()
     return m_configMap.empty();
 }
 
+std::vector<std::string> GatewayConfiguration::ids() const
+{
+    std::vector<std::string> ids;
+    for (auto &pair : m_configMap) {
+        ids.push_back(pair.first);
+    }
+
+    return ids;
+}
+
 } // namespace softwarecontainer
