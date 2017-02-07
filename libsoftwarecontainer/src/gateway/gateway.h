@@ -24,33 +24,22 @@
 
 #include "containerabstractinterface.h"
 #include "jsonparser.h"
+#include "softwarecontainererror.h"
 
 namespace softwarecontainer {
 
-class GatewayError : public std::exception
+class GatewayError : public SoftwareContainerError
 {
 public:
     GatewayError():
-        m_message(std::string("Gateway error."))
+        SoftwareContainerError("Gateway error.")
     {
     }
 
     GatewayError(const std::string &message):
-        m_message(message)
+        SoftwareContainerError(message)
     {
     }
-
-    ~GatewayError()
-    {
-    }
-
-    virtual const char *what() const throw()
-    {
-        return m_message.c_str();
-    }
-
-private:
-    std::string m_message;
 };
 
 /**
