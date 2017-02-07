@@ -671,3 +671,14 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
 }
 
+
+/**
+ * Test that supplying GatewayConfiguration containing gateway-ids that do not map to any existing gateway fail.
+ */
+TEST_F(SoftwareContainerApp, TestSetConfigurationBadID) {
+    GatewayConfiguration gc;
+
+    gc.append("GATEWAY_ID_THAT_DOES_NOT_MAP_TO_ANY_EXISTING_GATEWAY", "[{}]");
+
+    ASSERT_THROW(m_sc->startGateways(gc), GatewayError);
+}
