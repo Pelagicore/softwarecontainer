@@ -199,6 +199,21 @@ class TestNetworkRules(object):
         finally:
             sc.terminate()
 
+    def test_setting_network_gw_twice(self):
+        """ Regression test that checks that the Agent does not crash when setting a network twice.
+        """
+        sc = Container()
+        try:
+            sc.start(DATA)
+
+            sc.set_capabilities(["test.cap.policy-drop"])
+
+            with pytest.raises(DBusException):
+               sc.set_capabilities(["test.cap.policy-drop"])
+
+        finally:
+            sc.terminate()
+
     def test_network_policy_drop(self):
         """ Test if the default policy is DROP as it should be
             which behavior is being not possible to ping a hostname
