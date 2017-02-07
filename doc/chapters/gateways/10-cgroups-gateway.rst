@@ -38,6 +38,14 @@ memory, thus it cannot be less than ``memory.limit_in_bytes``.
 Also note that the one can use a suffix (k, K, m, M, g or G) to indicate values in kilo,
 mega or gigabytes when setting ``memory.limit_in_bytes`` or ``memory.memsw.limit_in_bytes``.
 
+Setting network classes
+-----------------------
+If you want to mark packets from containers, you can set the ``net_cls.classid`` to a hexadecimal
+value of the form 0xAAAABBBB (A denotes major number, B denotes minor number), where leading zeroes
+may be omitted. A value 0x10001 means 1:1 for major/minor. The gateway supports and checks the
+syntax for this key. More information about this can be found `in the Linux kernel docs
+<https://www.kernel.org/doc/Documentation/cgroup-v1/net_cls.txt>`_.
+
 Whitelisting
 ------------
 
@@ -63,10 +71,19 @@ Example gateway config::
         {
             "setting": "memory.memsw.limit_in_bytes",
             "value": "12000000"
+        },
+        {
+            "setting": "net_cls.classid",
+            "value": "0x10001"
+        },
+        {
+            "setting": "net_cls.classid",
+            "value": "0xFF0001"
         }
     ]
 
 The root object is an array of setting key/value pair objects. Each key/value pair
 must have the ``setting`` and ``value`` defined. In the example above value of memory.limit_in_bytes
-will be set to 12000000 due to whitelisting policy mentioned above.
-
+will be set to 12000000 due to whitelisting policy mentioned above. This example will also set the
+classid for net_cls to have major number 255 and minor number 1 (because that configuration was
+given later than then 1:1 one).
