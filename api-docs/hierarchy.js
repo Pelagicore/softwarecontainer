@@ -35,7 +35,6 @@ var hierarchy =
     [ "softwarecontainer::DynamicContainerOptions", "classsoftwarecontainer_1_1_dynamic_container_options.html", null ],
     [ "softwarecontainer::EnvironmentGatewayParser", "classsoftwarecontainer_1_1_environment_gateway_parser.html", null ],
     [ "exception", null, [
-      [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
       [ "softwarecontainer::GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", null ],
       [ "softwarecontainer::SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", [
         [ "softwarecontainer::CgroupsGatewayError", "classsoftwarecontainer_1_1_cgroups_gateway_error.html", [
@@ -58,6 +57,7 @@ var hierarchy =
         ] ],
         [ "softwarecontainer::ContainerError", "classsoftwarecontainer_1_1_container_error.html", null ],
         [ "softwarecontainer::ContainerOptionParseError", "classsoftwarecontainer_1_1_container_option_parse_error.html", null ],
+        [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
         [ "softwarecontainer::InvalidContainerError", "classsoftwarecontainer_1_1_invalid_container_error.html", null ],
         [ "softwarecontainer::InvalidOperationError", "classsoftwarecontainer_1_1_invalid_operation_error.html", null ],
         [ "softwarecontainer::NetworkGatewayError", "classsoftwarecontainer_1_1_network_gateway_error.html", [
