@@ -41,6 +41,7 @@ public:
 
     ~GatewayConfiguration();
 
+    ReturnCode append(const std::string &id, const std::string &jsonConf);
     ReturnCode append(const std::string &id, json_t *conf);
     ReturnCode append(const GatewayConfiguration &source);
 

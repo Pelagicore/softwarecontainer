@@ -39,6 +39,22 @@ GatewayConfiguration::~GatewayConfiguration()
     }
 }
 
+ReturnCode GatewayConfiguration::append(const std::string &id, const std::string &jsonConf)
+{
+    json_error_t jsonError;
+    size_t flags = 0; // default flags
+
+    json_t *json = json_loads(jsonConf.c_str(), flags, &jsonError);
+    if (nullptr == json) {
+        log_error() << "Could not parse given string to JSON. Due to: " << jsonError.text << " at line: " << jsonError.line;
+        return ReturnCode::FAILURE;
+    }
+
+    auto ret = append(id, json);
+    json_decref(json);
+    return ret;
+}
+
 ReturnCode GatewayConfiguration::append(const std::string &id, json_t *sourceArray)
 {
     auto search = m_configMap.find(id);
