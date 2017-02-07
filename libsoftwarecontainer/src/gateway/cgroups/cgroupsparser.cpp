@@ -32,8 +32,7 @@ CGroupsParser::CGroupsParser()
 
 std::string CGroupsParser::convertToBytes(const std::string settingValue, const int multiply)
 {
-    char *end;
-    long long limit_in_bytes = std::strtoll(settingValue.c_str(), &end, 10);
+    long long limit_in_bytes = std::strtoll(settingValue.c_str(), NULL, 10);
     if (limit_in_bytes ==  std::numeric_limits<long long>::max() ||
         limit_in_bytes ==  std::numeric_limits<long long>::min()) {
         if (errno == ERANGE) {
@@ -100,18 +99,37 @@ void CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
     if (("memory.limit_in_bytes" == settingKey) || ("memory.memsw.limit_in_bytes" == settingKey)) {
         settingValue = suffixCorrection(settingValue);
 
-        if (m_settings.count(settingKey)) {
-            // if the new value is greater than old one set is as the value
-            if (std::stoll(m_settings[settingKey]) < std::stoll(settingValue)) {
-                m_settings[settingKey] = settingValue;
+        // if the new value is smaller/equal than the old value, then we don't save the new value.
+        if (m_settings.count(settingKey) != 0) {
+            if (std::stoll(m_settings[settingKey]) >= std::stoll(settingValue)) {
+                return;
             }
-        } else {
-            m_settings[settingKey] = settingValue;
         }
+    } else if ("net_cls.classid" == settingKey) {
+        // Should be of format 0xAAAABBBB
+        if (settingValue.find("0x") != 0 // Has to begin with 0x
+            || settingValue.length() > 10 // Can not be longer than 0x + 8
+            || settingValue.length() < 7) // Has to be at least 0xAAAAB to cover major/minor handle
+        {
+            std::string errorMessage = "net_cls.classid should be of form 0xAAAABBBB";
+            log_error() << errorMessage;
+            throw HexFormatError(errorMessage);
+        }
+
+        char *endPtr = NULL;
+        unsigned long int hexedValue = strtoul(settingValue.c_str(), &endPtr, 16);
+        if (0 == hexedValue || ULONG_MAX == hexedValue || ((endPtr != NULL) && *endPtr != '\0')) {
+            std::string errorMessage = "Could not parse all of net_cls.classid value as hex string";
+            log_error() << errorMessage;
+            throw HexFormatError(errorMessage);
+        }
+
     } else {
         log_warning() << settingKey << " is not supported by CGroups Gateway" ;
-        m_settings[settingKey] = settingValue;
     }
+
+    // If we got this far we save the key/value pair
+    m_settings[settingKey] = settingValue;
 }
 
 const std::map<std::string, std::string> &CGroupsParser::getSettings()

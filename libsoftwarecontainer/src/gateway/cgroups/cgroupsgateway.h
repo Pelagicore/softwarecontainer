@@ -102,7 +102,7 @@ class JSonError : public CgroupsGatewayError
 {
 public:
     JSonError():
-        CgroupsGatewayError("The configuration error is occured")
+        CgroupsGatewayError("A configuration error has occured")
     {
     }
 
@@ -111,6 +111,21 @@ public:
     {
     }
 };
+
+class HexFormatError : public CgroupsGatewayError
+{
+public:
+    HexFormatError():
+        CgroupsGatewayError("The given hex string was invalid")
+    {
+    }
+
+    HexFormatError(const std::string &message):
+        CgroupsGatewayError(message)
+    {
+    }
+};
+
 
 
 } // namespace softwarecontainer

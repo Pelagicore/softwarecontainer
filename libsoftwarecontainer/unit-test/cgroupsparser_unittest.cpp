@@ -43,7 +43,7 @@ public:
 typedef CGroupsParserTest CGroupsNegativeTest;
 TEST_P(CGroupsNegativeTest, FailsWhenConfigIsBad) {
     json_t *configJSON = convertToJSON(config);
-    EXPECT_THROW(parser.parseCGroupsGatewayConfiguration(configJSON), JSonError);
+    EXPECT_THROW(parser.parseCGroupsGatewayConfiguration(configJSON), CgroupsGatewayError);
     ASSERT_TRUE(parser.getSettings().empty());
 }
 
@@ -80,16 +80,86 @@ INSTANTIATE_TEST_CASE_P(TestBadConfigs, CGroupsNegativeTest, ::testing::Values(
     "{\
        \"setting\": \"memory.limit_in_bytes\",\
        \"value\": [\"a\", \"b\"]\
-     }"
+     }",
+
+    // Value has a bad suffix
+    "{\
+       \"setting\": \"memory.limit_in_bytes\",\
+       \"value\": \"15Q\"\
+     }",
+
+    // Value is wrong type
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": []\
+    }",
+    // Value is not proper hex value
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": \"123\"\
+    }",
+    // Value is not proper hex value
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": \"0x08PGAH\"\
+    }",
+    // Value is too short
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": \"0xAAAA\"\
+    }",
+    // Value is too long
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": \"0xAAAABBBBCCCC\"\
+    }"
 ));
 
 /*
  * This data is fed to the PositiveTest
  */ 
 INSTANTIATE_TEST_CASE_P(TestGoodConfigs, CGroupsPositiveTest, ::testing::Values(
-    "{ \"value\": \"test\",\
+    "{\ 
+        \"value\": \"test\",\
         \"setting\": \"test\"\
-     }"
+     }",
+
+    // Just a normal value
+    "{\
+       \"setting\": \"memory.limit_in_bytes\",\
+       \"value\": \"1500\"\
+     }",
+    
+    // Value with proper suffix
+    "{\
+       \"setting\": \"memory.limit_in_bytes\",\
+       \"value\": \"15k\"\
+     }",
+
+    // Value with proper suffix
+    "{\
+       \"setting\": \"memory.limit_in_bytes\",\
+       \"value\": \"15m\"\
+     }",
+
+    // Value with proper suffix
+    "{\
+       \"setting\": \"memory.limit_in_bytes\",\
+       \"value\": \"15g\"\
+     }",
+
+    // Proper value for net_cls.classid
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": \"0xAAAABBBB\"\
+    }",
+
+    // Proper value for net_cls.cla
+    "{\
+        \"setting\": \"net_cls.classid\",\
+        \"value\": \"0xAAAAB\"\
+    }"
+
 ));
 
 struct testWhitelist
@@ -205,7 +275,7 @@ INSTANTIATE_TEST_CASE_P(CGroupsWhitelistParameters, CGroupsParserWhitelistTests,
 ));
 
 /*
- * Verify whitelisting with seperate keys
+ * Verify whitelisting with separate keys
  */
 TEST_P(CGroupsParserWhitelistTests, WithRelevantKeys) {
     json_t *firstConfig = convertToJSON(testparams.firstConfig);
