@@ -174,7 +174,6 @@ class TestCaps(object):
         finally:
             sc.terminate()
 
-    @pytest.mark.xfail()
     def test_setting_capability_with_unkown_gw_id_fails(self):
         """ Setting a capability that results in a gateway config with an unknown
             gateway ID should fail
