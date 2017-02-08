@@ -48,10 +48,10 @@ public:
      * The function is protected by a mutex because it uses some non thread-safe C functions.
      * @param src The source path to copy from
      * @param dst The destination path to copy to
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE on failure
+     * @return true on success
+     * @return false on failure
      */
-    ReturnCode copy(std::string src, std::string dst);
+    bool copy(std::string src, std::string dst);
 
 private:
     RecursiveCopy();

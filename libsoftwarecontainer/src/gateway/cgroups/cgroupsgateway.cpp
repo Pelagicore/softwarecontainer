@@ -47,7 +47,7 @@ bool CgroupsGateway::activateGateway()
     bool success = false;
     auto cgroupSettings = m_parser.getSettings();
     for (auto& setting: cgroupSettings) {
-        success = isSuccess(getContainer()->setCgroupItem(setting.first, setting.second));
+        success = getContainer()->setCgroupItem(setting.first, setting.second);
         if (!success) {
             log_error() << "Error activating Cgroups Gateway, could not set cgroup item "
                         << setting.first << ": " << setting.second;

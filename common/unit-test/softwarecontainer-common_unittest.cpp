@@ -61,28 +61,6 @@ public:
     }
 };
 
-TEST_F(SoftwareContainerCommonTest, ReturnCodeOperatorEquals) {
-    ASSERT_TRUE(ReturnCode::SUCCESS == ReturnCode::SUCCESS);
-    ASSERT_FALSE(ReturnCode::FAILURE == ReturnCode::SUCCESS);
-    ASSERT_FALSE(ReturnCode::SUCCESS == ReturnCode::FAILURE);
-    ASSERT_TRUE(ReturnCode::FAILURE == ReturnCode::FAILURE);
-}
-
-TEST_F(SoftwareContainerCommonTest, bool2ReturnCode) {
-    ASSERT_TRUE(bool2ReturnCode(true) == ReturnCode::SUCCESS);
-    ASSERT_TRUE(bool2ReturnCode(false) == ReturnCode::FAILURE);
-}
-
-TEST_F(SoftwareContainerCommonTest, ReturnCodeisError) {
-    ASSERT_TRUE(isError(ReturnCode::SUCCESS) == false);
-    ASSERT_TRUE(isError(ReturnCode::FAILURE) == true);
-}
-
-TEST_F(SoftwareContainerCommonTest, ReturnCodeisSuccess) {
-    ASSERT_TRUE(isSuccess(ReturnCode::SUCCESS) == true);
-    ASSERT_TRUE(isSuccess(ReturnCode::FAILURE) == false);
-}
-
 /*
  * Just a sample of bad paths, to see that it is being handled properly.
  */
@@ -224,8 +202,8 @@ TEST_F(SoftwareContainerCommonTest, ReadBackWrittenFile) {
     std::string testData = "testData";
     std::string readBack;
 
-    ASSERT_EQ(writeToFile(fileName, testData), ReturnCode::SUCCESS);
-    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_TRUE(writeToFile(fileName, testData));
+    ASSERT_TRUE(readFromFile(fileName, readBack));
     ASSERT_EQ(testData, readBack);
 }
 
@@ -242,10 +220,10 @@ TEST_F(SoftwareContainerCommonTest, ReadWriteUnexistingFile) {
     std::string readBack;
 
     ASSERT_FALSE(existsInFileSystem(fileName));
-    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::FAILURE);
+    ASSERT_FALSE(readFromFile(fileName, readBack));
 
     ASSERT_FALSE(existsInFileSystem(fileName));
-    ASSERT_EQ(writeToFile(fileName, testData), ReturnCode::SUCCESS);
+    ASSERT_TRUE(writeToFile(fileName, testData));
     ASSERT_TRUE(existsInFileSystem(fileName));
 }
 
@@ -258,11 +236,11 @@ TEST_F(SoftwareContainerCommonTest, TouchCreatesFiles) {
     std::string fileName = getTempPath(createDir, shouldUnlink);
 
     ASSERT_FALSE(existsInFileSystem(fileName));
-    ASSERT_EQ(touch(fileName), ReturnCode::SUCCESS);
+    ASSERT_TRUE(touch(fileName));
     ASSERT_TRUE(existsInFileSystem(fileName));
 
     std::string readBack;
-    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_TRUE(readFromFile(fileName, readBack));
     ASSERT_EQ(readBack, "");
 }
 
@@ -278,13 +256,13 @@ TEST_F(SoftwareContainerCommonTest, TouchDoesntModifyFiles) {
     std::string testData = "testData";
     std::string readBack;
 
-    ASSERT_EQ(writeToFile(fileName, testData), ReturnCode::SUCCESS);
-    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_TRUE(writeToFile(fileName, testData));
+    ASSERT_TRUE(readFromFile(fileName, readBack));
     ASSERT_EQ(testData, readBack);
 
-    ASSERT_EQ(touch(fileName), ReturnCode::SUCCESS);
+    ASSERT_TRUE(touch(fileName));
 
-    ASSERT_EQ(readFromFile(fileName, readBack), ReturnCode::SUCCESS);
+    ASSERT_TRUE(readFromFile(fileName, readBack));
     ASSERT_EQ(testData, readBack);
 
 }

@@ -64,7 +64,7 @@ bool checkContent(std::string dst, std::string val)
 
 TEST_F(RecursiveCopyTest, copyDirEmptyToEmpty)
 {
-    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
+    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir));
     ASSERT_TRUE(isDirectoryEmpty(srcdir));
     ASSERT_TRUE(isDirectoryEmpty(dstdir));
 }
@@ -75,7 +75,7 @@ TEST_F(RecursiveCopyTest, copyDirFilesToEmpty)
     std::string dstFile = buildPath(dstdir, "lala.txt");
     createFile(srcFile);
 
-    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
+    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir));
     ASSERT_TRUE(isFile(srcFile));
     ASSERT_TRUE(isFile(dstFile));
 }
@@ -86,7 +86,7 @@ TEST_F(RecursiveCopyTest, copyDirEmptyToFiles)
     std::string srcFile = buildPath(srcdir, "lala.txt");
     createFile(dstFile);
 
-    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
+    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir));
     ASSERT_FALSE(isFile(srcFile));
     ASSERT_TRUE(isFile(dstFile));
     ASSERT_TRUE(isDirectoryEmpty(srcdir));
@@ -103,7 +103,7 @@ TEST_F(RecursiveCopyTest, copyDirFilesToFiles)
 
     ASSERT_FALSE(isFile(srcFile2));
 
-    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
+    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir));
 
     ASSERT_TRUE(isFile(srcFile));
     ASSERT_FALSE(isFile(srcFile2));
@@ -126,7 +126,7 @@ TEST_F(RecursiveCopyTest, copyDirFilesToFilesOverWrite)
     ASSERT_TRUE(checkContent(srcFile, content1));
     ASSERT_TRUE(checkContent(dstFile, content2));
 
-    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir) == ReturnCode::SUCCESS);
+    ASSERT_TRUE(RecursiveCopy::getInstance().copy(srcdir, dstdir));
 
     ASSERT_TRUE(isFile(srcFile));
     ASSERT_TRUE(isFile(dstFile));
@@ -134,4 +134,3 @@ TEST_F(RecursiveCopyTest, copyDirFilesToFilesOverWrite)
     ASSERT_TRUE(checkContent(srcFile, content1));
     ASSERT_TRUE(checkContent(dstFile, content1));
 }
-

@@ -29,7 +29,7 @@ class DirectoryCleanUpHandler :
 public:
     DirectoryCleanUpHandler(const std::string &path);
 
-    ReturnCode clean() override;
+    bool clean() override;
 
     /**
      * @brief this function is needed to query member name

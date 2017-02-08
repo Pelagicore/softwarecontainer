@@ -32,6 +32,7 @@ public:
 
     void SetUp() override
     {
+        ::testing::DefaultValue<bool>::Set(true);
         gw = new CgroupsGateway();
         SoftwareContainerTest::SetUp();
     }

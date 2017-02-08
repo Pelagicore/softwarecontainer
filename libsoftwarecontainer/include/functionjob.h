@@ -37,7 +37,7 @@ public:
     FunctionJob(ExecutablePtr executable, std::function<int()> fun);
     virtual ~FunctionJob();
 
-    ReturnCode start();
+    bool start();
     void setEnvironmentVariable(const std::string &key, const std::string &value);
     std::string toString() const;
 

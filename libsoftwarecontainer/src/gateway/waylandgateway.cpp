@@ -74,9 +74,8 @@ bool WaylandGateway::activateGateway()
     log_info() << "enabling Wayland gateway. Socket dir:" << dir;
     std::string pathInHost = buildPath(dir, SOCKET_FILE_NAME);
     std::string pathInContainer = buildPath("/gateways", SOCKET_FILE_NAME);
-    ReturnCode result = container->bindMountInContainer(pathInHost, pathInContainer, false);
 
-    if (isError(result)) {
+    if (!container->bindMountInContainer(pathInHost, pathInContainer, false)) {
         log_error() << "Could not bind mount the wayland socket into the container";
         return false;
     }

@@ -40,10 +40,10 @@ public:
 
     /**
      * @brief clean Performs the cleanup handling.
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE on failure
+     * @return true on success
+     * @return false on failure
      */
-    ReturnCode clean() override;
+    bool clean() override;
 
     /**
      * @brief queryName is needed to query member name yet its full functionality is not needed for

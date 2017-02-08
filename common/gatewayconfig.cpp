@@ -27,7 +27,7 @@ GatewayConfiguration::GatewayConfiguration()
 
 GatewayConfiguration::GatewayConfiguration(const GatewayConfiguration &gwConf)
 {
-    if (isError(append(gwConf))) {
+    if (!append(gwConf)) {
         throw SoftwareContainerError("Failed to create GatewayConfiguration");
     }
 }
@@ -39,7 +39,7 @@ GatewayConfiguration::~GatewayConfiguration()
     }
 }
 
-ReturnCode GatewayConfiguration::append(const std::string &id, const std::string &jsonConf)
+bool GatewayConfiguration::append(const std::string &id, const std::string &jsonConf)
 {
     json_error_t jsonError;
     size_t flags = 0; // default flags
@@ -47,7 +47,7 @@ ReturnCode GatewayConfiguration::append(const std::string &id, const std::string
     json_t *json = json_loads(jsonConf.c_str(), flags, &jsonError);
     if (nullptr == json) {
         log_error() << "Could not parse given string to JSON. Due to: " << jsonError.text << " at line: " << jsonError.line;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     auto ret = append(id, json);
@@ -55,7 +55,7 @@ ReturnCode GatewayConfiguration::append(const std::string &id, const std::string
     return ret;
 }
 
-ReturnCode GatewayConfiguration::append(const std::string &id, json_t *sourceArray)
+bool GatewayConfiguration::append(const std::string &id, json_t *sourceArray)
 {
     auto search = m_configMap.find(id);
     if (search != m_configMap.end()) {
@@ -72,7 +72,7 @@ ReturnCode GatewayConfiguration::append(const std::string &id, json_t *sourceArr
                 log_error() << "Could not add Gateway Config to json array: " << id;
                 m_configMap[id] = backupArray;
                 json_decref(destArray);
-                return ReturnCode::FAILURE;
+                return false;
             }
         }
         json_decref(backupArray);
@@ -81,17 +81,17 @@ ReturnCode GatewayConfiguration::append(const std::string &id, json_t *sourceArr
         json_incref(sourceArray);
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode GatewayConfiguration::append(const GatewayConfiguration &source)
+bool GatewayConfiguration::append(const GatewayConfiguration &source)
 {
     for (auto &conf : source.m_configMap) {
-        if (isError(append(conf.first, conf.second))) {
-            return ReturnCode::FAILURE;
+        if (!append(conf.first, conf.second)) {
+            return false;
         }
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 json_t *GatewayConfiguration::config(const std::string &gatewayId) const

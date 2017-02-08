@@ -41,10 +41,10 @@ public:
 
     /**
      * @brief clean Perform the cleanupHandler clean.
-     * @return ReturnCode::SUCCESS on success
-     * @return ReturnCode::FAILURE on failure
+     * @return true on success
+     * @return false on failure
      */
-    ReturnCode clean() override;
+    bool clean() override;
 
     /**
      * @brief this function is needed to query member name

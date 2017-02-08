@@ -1,5 +1,5 @@
-
 /*
+ *
  * Copyright (C) 2016-2017 Pelagicore AB
  *
  * Permission to use, copy, modify, and/or distribute this software for
@@ -33,7 +33,7 @@ public:
     /**
      * @brief Executes a commandline.
      */
-    virtual ReturnCode execute(ExecFunction function,
+    virtual bool execute(ExecFunction function,
                                pid_t *pid,
                                const EnvironmentVariables &variables = EnvironmentVariables(),
                                int stdin = -1,
@@ -43,7 +43,7 @@ public:
     /**
      * @brief Executes a function.
      */
-    virtual ReturnCode execute(const std::string &commandLine,
+    virtual bool execute(const std::string &commandLine,
                                pid_t *pid,
                                const EnvironmentVariables &variables = EnvironmentVariables(),
                                const std::string &workingDirectory = "/",

@@ -66,13 +66,13 @@ subsequently uses:
     Agent -> SoftwareContainer [label = "init()"]
 
     SoftwareContainer -> ContainerAbstractInterface [label = "initialize()"]
-    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "bool"]
 
     SoftwareContainer -> ContainerAbstractInterface [label = "create()"]
-    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "bool"]
 
     SoftwareContainer -> ContainerAbstractInterface [label = "start()"]
-    SoftwareContainer <-- ContainerAbstractInterface [label = "ReturnCode"]
+    SoftwareContainer <-- ContainerAbstractInterface [label = "bool"]
 
     SoftwareContainer -> Gateway [label = "new()", note = "multiple calls"]
     SoftwareContainer <-- Gateway
@@ -82,7 +82,7 @@ subsequently uses:
     SoftwareContainer -> Gateway [label = "setContainer()", note = "multiple calls"]
     SoftwareContainer <-- Gateway
 
-    Agent <-- SoftwareContainer [label = "ReturnCode"]
+    Agent <-- SoftwareContainer [label = "bool"]
 
     === further events here ===
 
@@ -109,17 +109,17 @@ Below is a diagram showing the `initialize`, `create`, and `start` sequence focu
     SoftwareContainer -> Container [label = "initialize()"]
     Container -> Container [label = "createDirectory()"]
     Container -> Container [label = "createSharedMountPoint()"]
-    SoftwareContainer <-- Container [label = "ReturnCode"]
+    SoftwareContainer <-- Container [label = "bool"]
 
     SoftwareContainer -> Container [label = "create()"]
     Container -> liblxc [label = "lxc_container_new()"]
     Container <-- liblxc [label = "container_struct"]
     === various operations on the lxc struct ===
-    SoftwareContainer <-- Container [label = "ReturnCode"]
+    SoftwareContainer <-- Container [label = "bool"]
 
     SoftwareContainer -> Container [label = "start()"]
     === various operations on the lxc struct ===
-    SoftwareContainer <-- Container [label = "ReturnCode"]
+    SoftwareContainer <-- Container [label = "bool"]
 
 
 Interface: gateway.h

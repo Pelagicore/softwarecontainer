@@ -65,7 +65,7 @@ bool DeviceNodeGateway::activateGateway()
         }
 
         // If the parent directory does not already exist, we create it.
-        if (!isDirectory(deviceParent) && isError(createDirectory(deviceParent))) {
+        if (!isDirectory(deviceParent) && !createDirectory(deviceParent)) {
             log_error() << "Could not create parent directory for device " << deviceParent;
             return false;
         }

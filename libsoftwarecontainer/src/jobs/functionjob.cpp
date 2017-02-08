@@ -32,7 +32,7 @@ FunctionJob::~FunctionJob()
 {
 }
 
-ReturnCode FunctionJob::start()
+bool FunctionJob::start()
 {
     return m_executable->execute(m_command,
                                  &m_pid,

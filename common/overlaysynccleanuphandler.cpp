@@ -29,7 +29,7 @@ OverlaySyncCleanupHandler::OverlaySyncCleanupHandler(std::string src, std::strin
     m_dst = dst;
 }
 
-ReturnCode OverlaySyncCleanupHandler::clean()
+bool OverlaySyncCleanupHandler::clean()
 {
     return RecursiveCopy::getInstance().copy(m_src, m_dst);
 }

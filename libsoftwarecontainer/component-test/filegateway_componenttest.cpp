@@ -37,7 +37,7 @@ public:
         SoftwareContainerTest::SetUp();
 
         // Create file
-        ASSERT_TRUE(writeToFile(FILE_PATH, FILE_CONTENT) == ReturnCode::SUCCESS);
+        ASSERT_TRUE(writeToFile(FILE_PATH, FILE_CONTENT));
     }
 
     void TearDown() override
