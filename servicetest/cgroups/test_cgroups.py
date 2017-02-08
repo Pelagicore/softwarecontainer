@@ -48,13 +48,13 @@ def mounted_path_in_host():
 # configurations to the Container helper. Tests that need to add, remove or
 # update entries can simply base their dict on this one for convenience.
 DATA = {
-    Container.CONFIG: '[{"enableWriteBuffer": false}]',
+    Container.CONFIG: '[{ "enableWriteBuffer": false }]',
     Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
 }
 
-CONFIG_TEST_SMALL_THRESHOLD = [
+CONFIG_TEST_MEMORY_SMALL_THRESHOLD = [
     {"setting": "memory.limit_in_bytes", "value": "1K"}
 ]
 
@@ -63,16 +63,21 @@ CONFIG_TEST_MEMORY_SHARE = [
     {"setting": "memory.memsw.limit_in_bytes", "value": "1G"}
 ]
 
-CONFIG_TEST_WHITELISTING = [
+CONFIG_TEST_MEMORY_WHITELISTING = [
     {"setting": "memory.limit_in_bytes", "value": "2K"},
     {"setting": "memory.limit_in_bytes", "value": "1M"},
     {"setting": "memory.memsw.limit_in_bytes", "value": "10M"},
-    {"setting": "memory.memsw.limit_in_bytes", "value": "100K"}    
+    {"setting": "memory.memsw.limit_in_bytes", "value": "100K"}
+]
+
+TEST_NETCLS_VALUE = "0x10001"
+CONFIG_TEST_NETCLS = [
+    {"setting": "net_cls.classid", "value": TEST_NETCLS_VALUE}
 ]
 
 test_cap_0 = Capability("test.cap.small.threshold",
                         [
-                            {"id": "cgroups", "config": CONFIG_TEST_SMALL_THRESHOLD}
+                            {"id": "cgroups", "config": CONFIG_TEST_MEMORY_SMALL_THRESHOLD}
                         ])
 
 test_cap_1 = Capability("test.cap.memory.share",
@@ -82,12 +87,17 @@ test_cap_1 = Capability("test.cap.memory.share",
 
 test_cap_2 = Capability("test.cap.memory.whitelist",
                         [
-                            {"id": "cgroups", "config": CONFIG_TEST_WHITELISTING}
+                            {"id": "cgroups", "config": CONFIG_TEST_MEMORY_WHITELISTING}
+                        ])
+
+test_cap_3 = Capability("test.cap.netcls",
+                        [
+                            {"id": "cgroups", "config": CONFIG_TEST_NETCLS}
                         ])
 
 manifest = StandardManifest(TESTOUTPUT_DIR,
                             "cgroup-test-manifest.json",
-                            [test_cap_0, test_cap_1, test_cap_2])
+                            [test_cap_0, test_cap_1, test_cap_2, test_cap_3])
 
 
 def service_manifests():
@@ -117,10 +127,12 @@ class TestCGroupGateway(object):
     """ This suite tests that whether CGroupsGateway can working with supported options or not.
 
         Prerequisites :
-        CONFIG_MEMCG and CONFIG_MEMCG_SWAP kernel options should have been enabled for these tests.
-        Also cgroup_enable=memory and swapaccount=1 options should be enabled by grub.
+        CONFIG_MEMCG, CONFIG_MEMCG_SWAP and CONFIG_CGROUP_NET_CLASSID kernel options should have
+        been enabled for these tests.  Also cgroup_enable=memory and swapaccount=1 options should be
+        enabled by grub.
+
     """
-    def test_small_threshold(self):
+    def test_memory_cgroup_small_threshold(self):
         """ Test if the memory limiting with cgroup gateway is working as expected
             which behavior is when allocated more memory than limit it should fail
         """
@@ -134,7 +146,7 @@ class TestCGroupGateway(object):
         finally:
             sc.terminate()
 
-    def test_memory_limit(self):
+    def test_memory_cgroup_limit(self):
         """ Test if the memory limiting with cgroup gateway is working as expected
             which behavior is when allocated more memory than limit it should fail
         """
@@ -154,7 +166,7 @@ class TestCGroupGateway(object):
                               str(memory_limitation))
 
             # wait 5 seconds for previous operation to end
-            time.sleep(5)
+            time.sleep(3)
 
             helper = CGroupHelper(CURRENT_DIR)
             allocation_return = helper.result()
@@ -163,7 +175,7 @@ class TestCGroupGateway(object):
         finally:
             sc.terminate()
 
-    def test_whitelisting(self):
+    def test_memory_cgroup_whitelisting(self):
         """ Test if the whitelisting on cgroup memory is working as expected which behavior
             is more permissive configuration should be applied on memory.limit_in_bytes
         """
@@ -173,14 +185,38 @@ class TestCGroupGateway(object):
             containerID = "SC-" + str(cid)
             sc.set_capabilities(["test.cap.memory.whitelist"])
             most_permissive_value = 1024 * 1024
+
+            time.sleep(0.5)
             with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.limit_in_bytes", "r") as fh:
                 limit_in_bytes = int(fh.read())
-                
+
             assert limit_in_bytes == most_permissive_value
             most_permissive_value = 10 * 1024 * 1024
             with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.memsw.limit_in_bytes", "r") as fh:
                 memsw_limit = int(fh.read())
-                
+
             assert memsw_limit == most_permissive_value
+        finally:
+            sc.terminate()
+
+    def test_netcls_cgroup_set(self):
+        """ Test that the classid on net_cls cgroup gets set. Does not currently test if it is
+            picked up anywhere.
+
+            TODO: For future, run some network application inside the container, listen for the
+                  traffic on the outside and check that the classid's are being set.
+        """
+
+        try:
+            sc = Container()
+            cid = sc.start(DATA)
+            containerID = "SC-" + str(cid)
+
+            sc.set_capabilities(["test.cap.netcls"])
+
+            time.sleep(0.5)
+            with open("/sys/fs/cgroup/net_cls/lxc/" + containerID + "/net_cls.classid", "r") as fh:
+                value = int(fh.read())
+                assert value == int(TEST_NETCLS_VALUE, base=16)
         finally:
             sc.terminate()
