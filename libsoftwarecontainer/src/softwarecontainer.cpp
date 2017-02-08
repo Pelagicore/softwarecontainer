@@ -178,10 +178,12 @@ bool SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig)
     }
 
     if (!configureGateways(gwConfig)) {
+        log_error() << "Could not configure Gateways";
         return false;
     }
 
     if (!activateGateways()) {
+        log_error() << "Could not activate Gateways";
         return false;
     }
 
