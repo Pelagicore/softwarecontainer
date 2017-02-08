@@ -20,26 +20,20 @@
  */
 
 // Runs a shell command in the vagrant vm
-def runInVagrant = { String workspace, String command ->
-    sh "cd ${workspace} && vagrant ssh -c '${command}'"
+def runInVagrant = { String command ->
+    sh "cd ${env.WORKSPACE} && vagrant ssh -c 'cd softwarecontainer && ${command}'"
 }
 
 def shutdownVagrant = {
     // In case the destroy step fails (happens sometimes with hung up ssh connections)
     // we retry a couple of times to make sure it shuts down and is destroyed.
     retry(5) {
-        sh "cd ${workspace} && vagrant destroy -f"
+        sh "cd ${env.WORKSPACE} && vagrant destroy -f"
     }
 }
 
 node {
-    String workspace = pwd()
     try {
-        // Store the directory we are executed in as our workspace.
-        // These are the build parameters we want to use
-        String buildParams = "-DENABLE_COVERAGE=ON "
-        buildParams       += "-DENABLE_USER_DOC=ON -DENABLE_API_DOC=ON "
-        buildParams       += "-DENABLE_SYSTEMD=ON -DENABLE_PROFILING=ON "
 
         // Stages are subtasks that will be shown as subsections of the finiished build in Jenkins.
         stage('Download') {
@@ -66,54 +60,70 @@ node {
             shutdownVagrant()
             withEnv(["VAGRANT_RAM=${gigsram}",
                      "APT_CACHE_SERVER=10.8.36.16"]) {
-                sh "cd ${workspace} && vagrant up"
+                sh "cd ${env.WORKSPACE} && vagrant up"
             }
         }
 
-        stage('Build') {
-            extraParams = "-DENABLE_TEST=ON -DENABLE_EXAMPLES=ON"
-            runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/cmake-builder.sh \
-                                     softwarecontainer \"${buildParams} ${extraParams}\"")
+        // Configure the software with cmake
+        stage('Configure') {
+            String buildParams = "-DENABLE_COVERAGE=ON "
+            buildParams       += "-DENABLE_USER_DOC=ON -DENABLE_API_DOC=ON "
+            buildParams       += "-DENABLE_SYSTEMD=ON -DENABLE_PROFILING=ON "
+            buildParams       += "-DENABLE_TEST=ON -DENABLE_EXAMPLES=ON"
+
+            // Remove old build directory
+            runInVagrant("rm -rf build")
+            // Run cmake
+            runInVagrant("cmake -H. -Bbuild ${buildParams}")
         }
 
-        // TODO: Haven't figured out how to make the parallel jobs run on the same slave/agent
-        // or if it is possible. Very annoying. Let's run sequentially in a single slave for now.
-        stage('Clang') {
-            extraParams = "-DENABLE_TEST=OFF"
-            runInVagrant(workspace, "sh ./softwarecontainer/cookbook/build/clang-code-analysis.sh \
-                                     softwarecontainer clang \"${buildParams} ${extraParams}\"")
-        }
-
-        stage('User documentation') {
-            runInVagrant(workspace, 'cd softwarecontainer/build && make user-doc')
-        }
-
+        // We build the docs first because they are part of ALL
         stage('API documentation') {
-            runInVagrant(workspace, 'cd softwarecontainer/build && make api-doc')
+            runInVagrant("cd build && make api-doc")
+        }
+
+        // We build the docs first because they are part of ALL
+        stage('User documentation') {
+            runInVagrant("cd build && make user-doc")
+        }
+
+        // Build the rest of the projekt
+        stage('Build') {
+            runInVagrant("cd build && make")
+        }
+
+        stage('Install') {
+            runInVagrant("cd build && sudo make install")
         }
 
         stage('UnitTest') {
-            runInVagrant(workspace, "cd softwarecontainer && ./build/run-unit-tests.py")
+            runInVagrant("./build/run-unit-tests.py")
         }
 
         stage('ComponentTest') {
             // We run it in this way to avoid getting (unreachable) paths
-            runInVagrant(workspace, "cd softwarecontainer && sudo ./build/run-component-tests.py")
+            runInVagrant("sudo ./build/run-component-tests.py")
         }
 
         stage('ServiceTest') {
-            runInVagrant(workspace, "cd softwarecontainer/servicetest && sudo ./run-tests.sh")
+            runInVagrant("cd servicetest && sudo ./run-tests.sh")
+        }
+
+        stage('Clang') {
+            // Most build parameters default to off, but not tests. We don't want static
+            // analysis for our tests.
+            String buildParams = "-DENABLE_TEST=OFF"
+            runInVagrant("sh ./cookbook/build/clang-code-analysis.sh . clang ${buildParams}")
         }
 
         stage('Coverage') {
             // We run it in this way to avoid getting (unreachable) paths
-            runInVagrant(workspace, "cd softwarecontainer && sudo make -C build lcov")
+            runInVagrant("sudo make -C build lcov")
         }
 
         stage('Examples') {
-            runInVagrant(workspace, "cd softwarecontainer/examples && sudo ./run-tests.sh")
+            runInVagrant("cd examples && sudo ./run-tests.sh")
         }
-        // END TODO
 
         stage('Artifacts') {
             // Store the artifacts of the entire build
