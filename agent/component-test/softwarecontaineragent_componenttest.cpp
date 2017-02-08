@@ -103,7 +103,7 @@ public:
 
         try {
             sca = std::make_shared<SoftwareContainerAgent>(m_context, config);
-        } catch(ReturnCode failure) {
+        } catch(SoftwareContainerError &err) {
             log_error() << "Exception in software agent constructor";
             ASSERT_TRUE(false);
         }

@@ -29,7 +29,7 @@ class MountCleanUpHandler :
 public:
     MountCleanUpHandler(const std::string &path);
 
-    ReturnCode clean() override;
+    bool clean() override;
 
     /**
      * @brief queryName is needed to query member name yet its full functionality is not needed for

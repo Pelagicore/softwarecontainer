@@ -137,48 +137,48 @@ std::string buildPath(const std::string &arg1, const std::string &arg2, const st
     return buildPath(buildPath(arg1, arg2), arg3);
 }
 
-ReturnCode touch(const std::string &path)
+bool touch(const std::string &path)
 {
     int fd = open(path.c_str(), O_WRONLY | O_CREAT | O_NOCTTY | O_NONBLOCK | O_LARGEFILE, 0666);
     if (fd != -1) {
         close(fd);
-        return ReturnCode::SUCCESS;
+        return true;
     } else {
-        return ReturnCode::FAILURE;
+        return false;
     }
 }
 
-ReturnCode writeToFile(const std::string &path, const std::string &content)
+bool writeToFile(const std::string &path, const std::string &content)
 {
-    ReturnCode ret = ReturnCode::SUCCESS;
+    bool ret = true;
     log_verbose() << "writing to " << path << " : " << content;
     std::ofstream out(path);
     if (out.is_open()) {
         out << content;
         if (!out.good()) {
-            ret = ReturnCode::FAILURE;
+            ret = false;
         }
         out.close();
     } else {
-        ret = ReturnCode::FAILURE;
+        ret = false;
     }
     return ret;
 }
 
-ReturnCode readFromFile(const std::string &path, std::string &content)
+bool readFromFile(const std::string &path, std::string &content)
 {
-    ReturnCode ret = ReturnCode::SUCCESS;
+    bool ret = true;
     std::ifstream t(path);
     if (t.is_open()) {
         std::stringstream buffer;
         buffer << t.rdbuf();
         content = buffer.str();
         if (!t.good()) {
-            ret = ReturnCode::FAILURE;
+            ret = false;
         }
         t.close();
     } else {
-        ret = ReturnCode::FAILURE;
+        ret = false;
     }
     return ret;
 }
@@ -196,4 +196,3 @@ bool parseInt(const char *arg, int *result)
 }
 
 } // namespace softwarecontainer
-

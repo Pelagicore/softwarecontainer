@@ -32,7 +32,7 @@ public:
     virtual ~CleanUpHandler()
     {
     }
-    virtual ReturnCode clean() = 0;
+    virtual bool clean() = 0;
     virtual const std::string queryName() = 0;
 };
 

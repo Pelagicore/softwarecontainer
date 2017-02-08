@@ -261,7 +261,7 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
     job->setWorkingDirectory(workingDirectory);
 
     // Start it
-    if (isError(job->start())) {
+    if (!job->start()) {
         std::string errorMessage("Could not start job");
         log_error() << errorMessage;
         throw SoftwareContainerError(errorMessage);

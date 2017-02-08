@@ -62,7 +62,7 @@ bool PulseGateway::enablePulseAudio() {
     std::string pathInContainer = buildPath("/gateways/", SOCKET_FILE_NAME);
 
     std::shared_ptr<ContainerAbstractInterface> container = getContainer();
-    if (isError(container->bindMountInContainer(std::string(dir), pathInContainer, false))) {
+    if (!container->bindMountInContainer(std::string(dir), pathInContainer, false)) {
         log_error() << "Could not bind mount pulseaudio socket in container";
         return false;
     }

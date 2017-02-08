@@ -40,7 +40,7 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
         CleanUpHandler *c = m_cleanupHandlers.back();
         m_cleanupHandlers.pop_back();
 
-        if (isError(c->clean())) {
+        if (!c->clean()) {
             success = false;
         }
 
@@ -52,34 +52,34 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
     }
 }
 
-ReturnCode FileToolkitWithUndo::createParentDirectory(const std::string &path)
+bool FileToolkitWithUndo::createParentDirectory(const std::string &path)
 {
     log_debug() << "Creating parent directories for " << path;
     std::string parent = parentPath(path);
 
-    if (isError(createDirectory(parent))) {
+    if (!createDirectory(parent)) {
         log_error() << "Could not create directory " << parent;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
+bool FileToolkitWithUndo::createDirectory(const std::string &path)
 {
     log_debug() << "createDirectory(" << path << ") called";
     if (isDirectory(path)) {
-        return ReturnCode::SUCCESS;
+        return true;
     }
 
-    if(isError(createParentDirectory(path))) {
+    if(!createParentDirectory(path)) {
         log_error() << "Couldn't create parent directory for " << path;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
         log_error() << "Could not create directory " << path << ": " << strerror(errno);
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!pathInList(path)) {
@@ -87,7 +87,7 @@ ReturnCode FileToolkitWithUndo::createDirectory(const std::string &path)
     }
     log_debug() << "Created directory " << path;
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 std::string FileToolkitWithUndo::tempDir(std::string templ)
@@ -106,10 +106,10 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
     return std::string(dir);
 }
 
-ReturnCode FileToolkitWithUndo::bindMount(const std::string &src,
-                                          const std::string &dst,
-                                          bool readOnly,
-                                          bool enableWriteBuffer)
+bool FileToolkitWithUndo::bindMount(const std::string &src,
+                                    const std::string &dst,
+                                    bool readOnly,
+                                    bool enableWriteBuffer)
 {
     unsigned long flags = MS_BIND;
     std::string fstype;
@@ -118,7 +118,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src,
 
     if (!existsInFileSystem(src)) {
         log_error() << src << " does not exist on the host, can not bindMount";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
@@ -145,7 +145,7 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src,
     } else {
         log_error() << "Could not mount into container: src=" << src
                     << " , dst=" << dst << " err=" << strerror(errno);
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (readOnly) {
@@ -158,29 +158,28 @@ ReturnCode FileToolkitWithUndo::bindMount(const std::string &src,
             // Failure
             log_error() << "Could not re-mount " << src << " , read-only on "
                         << dst << " err=" << strerror(errno);
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode FileToolkitWithUndo::overlayMount(
-        const std::string &lower,
-        const std::string &upper,
-        const std::string &work,
-        const std::string &dst)
+bool FileToolkitWithUndo::overlayMount(const std::string &lower,
+                                       const std::string &upper,
+                                       const std::string &work,
+                                       const std::string &dst)
 {
     std::string fstype = "overlay";
     unsigned long flags = MS_BIND;
 
-    if (isError(createDirectory(lower))
-        || isError(createDirectory(upper))
-        || isError(createDirectory(work))
-        || isError(createDirectory(dst)))
+    if (!createDirectory(lower)
+        || !createDirectory(upper)
+        || !createDirectory(work)
+        || !createDirectory(dst))
     {
         log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
                        lower << ", upper=" << upper << ", work=" << work;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     std::string mountoptions = logging::StringBuilder() << "lowerdir=" << lower
@@ -204,43 +203,42 @@ ReturnCode FileToolkitWithUndo::overlayMount(
                     << ",lower=" << lower
                     << ",work=" << work
                     << " at dst=" << dst << " err=" << strerror(errno);
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode FileToolkitWithUndo::syncOverlayMount(
-        const std::string &lower,
-        const std::string &upper)
+bool FileToolkitWithUndo::syncOverlayMount(const std::string &lower,
+                                           const std::string &upper)
 {
     return RecursiveCopy::getInstance().copy(upper, lower);
 }
 
-ReturnCode FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
+bool FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
 {
     auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
     if (mountRes != 0) {
         log_error() << "Could not bind mount " << path << " to itself";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     mountRes = mount(path.c_str(), path.c_str(), "", MS_UNBINDABLE, nullptr);
     if (mountRes != 0) {
         log_error() << "Could not make " << path << " unbindable";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     mountRes = mount(path.c_str(), path.c_str(), "", MS_SHARED, nullptr);
     if (mountRes != 0) {
         log_error() << "Could not make " << path << " shared";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     m_cleanupHandlers.push_back(new MountCleanUpHandler(path));
     log_debug() << "Created shared mount point at " << path;
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 bool FileToolkitWithUndo::pathInList(const std::string path)
@@ -253,18 +251,17 @@ bool FileToolkitWithUndo::pathInList(const std::string path)
     return false;
 }
 
-ReturnCode FileToolkitWithUndo::writeToFile(const std::string &path, const std::string &content)
+bool FileToolkitWithUndo::writeToFile(const std::string &path, const std::string &content)
 {
-    auto ret = softwarecontainer::writeToFile(path, content);
-    if (isError(ret)) {
-        return ret;
+    if (!softwarecontainer::writeToFile(path, content)) {
+        return false;
     }
 
     if (!pathInList(path)) {
         m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
     }
     log_debug() << "Successfully wrote to " << path;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 void FileToolkitWithUndo::markFileForDeletion(const std::string &path)
@@ -274,9 +271,8 @@ void FileToolkitWithUndo::markFileForDeletion(const std::string &path)
     }
 }
 
-ReturnCode FileToolkitWithUndo::createSymLink(
-        const std::string &source,
-        const std::string &destination)
+bool FileToolkitWithUndo::createSymLink(const std::string &source,
+                                        const std::string &destination)
 {
     log_debug() << "creating symlink " << source << " pointing to " << destination;
 
@@ -291,9 +287,9 @@ ReturnCode FileToolkitWithUndo::createSymLink(
         log_error() << "Error creating symlink " << destination
                     << " pointing to " << source << ". Error: "
                     << strerror(errno);
-        return ReturnCode::FAILURE;
+        return false;
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 } // namespace softwarecontainer

@@ -81,6 +81,7 @@ std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
 
 void SoftwareContainerTest::SetUp()
 {
+    ::testing::DefaultValue<bool>::Set(true);
     ::testing::Test::SetUp();
 
     std::unique_ptr<SoftwareContainerConfig> config = createConfig();

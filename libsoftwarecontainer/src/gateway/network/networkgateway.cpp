@@ -209,6 +209,7 @@ bool NetworkGateway::down()
 
 bool NetworkGateway::isBridgeAvailable()
 {
+    log_debug() << "Is bridge available?";
     Netlink::LinkInfo iface;
     if (!m_netlinkHost.findLink(m_bridgeDevice.c_str(), iface)) {
         log_error() << "Could not find " << m_bridgeDevice << " in the host";
@@ -219,7 +220,9 @@ bool NetworkGateway::isBridgeAvailable()
         log_error() << "Could not fetch addresses for " << m_bridgeDevice << " in the host";
     }
 
-    return m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str());
+    log_debug() << "Could find bridge and could fetch address, running hasAddress";
+    bool retval = m_netlinkHost.hasAddress(addresses, AF_INET, m_gateway.c_str());
+    return retval;
 }
 
 } // namespace softwarecontainer

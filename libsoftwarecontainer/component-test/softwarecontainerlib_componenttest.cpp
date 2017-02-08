@@ -76,8 +76,8 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
     startGateways(configStr, WaylandGateway::ID);
 
     auto jobTrue = getSc().createFunctionJob([] (){
-        bool ERROR = 1;
-        bool SUCCESS = 0;
+        int ERROR = 1;
+        int SUCCESS = 0;
 
         bool hasWayland = false;
         std::string waylandDir = Glib::getenv(WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME,
@@ -652,21 +652,22 @@ TEST_F(SoftwareContainerApp, TestDBusGatewayOutputBuffer) {
 TEST_F(SoftwareContainerApp, TestDBusGatewayWithoutAccess) {
 
     {
-        auto jobTrue = getSc().createCommandJob(
+        auto job = getSc().createCommandJob(
                 "/usr/bin/dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue->start();
-        jobTrue->wait();
-        ASSERT_TRUE(jobTrue->isError());
+        job->start();
+        job->wait();
+        ASSERT_TRUE(job->isError());
     }
 
     {
-        auto jobTrue = getSc().createCommandJob(
+        auto job = getSc().createCommandJob(
                 "/usr/bin/dbus-send --system --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.Introspectable.Introspect");
-        jobTrue->start();
+        job->start();
 
-        // We expect the system bus to be accessible, even if we can not access any service. TODO : test if the services are accessible
-        jobTrue->wait();
-        ASSERT_TRUE(jobTrue->isError());
+        // We expect the system bus to be accessible, even if we can not access any service.
+        // TODO : test if the services are accessible
+        job->wait();
+        ASSERT_TRUE(job->isError());
     }
 
 }

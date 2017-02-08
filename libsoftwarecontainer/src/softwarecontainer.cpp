@@ -88,18 +88,18 @@ SoftwareContainer::~SoftwareContainer()
 bool SoftwareContainer::start()
 {
     log_debug() << "Initializing container";
-    if (isError(m_container->initialize())) {
+    if (!m_container->initialize()) {
         log_error() << "Could not initialize container";
         return false;
     }
 
     log_debug() << "Creating container";
-    if (isError(m_container->create())) {
+    if (!m_container->create()) {
         return false;
     }
 
     log_debug() << "Starting container";
-    if (isError(m_container->start(&m_pcPid))) {
+    if (!m_container->start(&m_pcPid)) {
         log_error() << "Could not start container";
         return false;
     }
@@ -121,7 +121,7 @@ bool SoftwareContainer::init()
                                       m_config->bridgeDevice(),
                                       m_config->bridgeIPAddress(),
                                       m_config->bridgeNetmaskBitLength()));
-    } catch (ReturnCode failure) {
+    } catch (SoftwareContainerError &error) {
         log_error() << "Given netmask is not appropriate for creating ip address."
                     << "It should be an unsigned value between 1 and 31";
         return false;
@@ -290,7 +290,7 @@ void SoftwareContainer::shutdown(unsigned int timeout)
         log_error() << "Could not shut down all gateways cleanly, check the log";
     }
 
-    if(isError(m_container->destroy(timeout))) {
+    if(!m_container->destroy(timeout)) {
         std::string message = "Could not destroy the container during shutdown " +
                               std::string(m_container->id());
         log_error() << message;
@@ -313,7 +313,7 @@ void SoftwareContainer::suspend()
         throw InvalidOperationError(message);
     }
 
-    if (isError(m_container->suspend())) {
+    if (!m_container->suspend()) {
         std::string message =  "Failed to suspend container " + id;
         log_error() << message;
         m_containerState.setValueNotify(ContainerState::INVALID);
@@ -336,7 +336,7 @@ void SoftwareContainer::resume()
         throw InvalidOperationError(message);
     }
 
-    if (isError(m_container->resume())) {
+    if (!m_container->resume()) {
         std::string message = "Failed to resume container " + id;
         log_error() << message;
         m_containerState.setValueNotify(ContainerState::INVALID);
@@ -422,7 +422,7 @@ bool SoftwareContainer::bindMount(const std::string &pathOnHost,
         throw InvalidOperationError(message);
     }
 
-    return isSuccess(m_container->bindMountInContainer(pathOnHost, pathInContainer, readonly));
+    return m_container->bindMountInContainer(pathOnHost, pathInContainer, readonly);
 }
 
 void SoftwareContainer::assertValidState()
@@ -444,7 +444,7 @@ void SoftwareContainer::checkWorkspace()
     const std::string rootDir = m_config->sharedMountsDir();
     if (!isDirectory(rootDir)) {
         log_debug() << "Container root " << rootDir << " does not exist, trying to create";
-        if(isError(createDirectory(rootDir))) {
+        if(!createDirectory(rootDir)) {
             std::string message = "Failed to create container root directory";
             log_error() << message;
             throw SoftwareContainerError(message);

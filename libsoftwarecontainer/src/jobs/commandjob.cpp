@@ -31,13 +31,13 @@ CommandJob::~CommandJob()
 {
 }
 
-ReturnCode CommandJob::setWorkingDirectory(const std::string &folder)
+bool CommandJob::setWorkingDirectory(const std::string &folder)
 {
     m_workingDirectory = folder;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode CommandJob::start()
+bool CommandJob::start()
 {
     return m_executable->execute(m_command,
                                  &m_pid,

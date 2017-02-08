@@ -78,48 +78,48 @@ public:
      * @param enableWriteBuffer Enable RAM write buffers on top of rootfs
      * @param shutdownTimeout Timeout for shutdown of container.
      */
-    Container(const std::string id
-            , const std::string &configFile
-            , const std::string &containerRoot
-            , bool enableWriteBuffer = false
-            , int shutdownTimeout = 1);
+    Container(const std::string id,
+              const std::string &configFile,
+              const std::string &containerRoot,
+              bool enableWriteBuffer = false,
+              int shutdownTimeout = 1);
 
     ~Container();
 
     /**
      * @brief create Creates a new lxc_container and creates it with all the initialization.
-     * @return ReturnCode::FAILURE on failed creation and ReturnCode::SUCCESS on a successful
+     * @return false on failed creation and true on a successful
      *  creation.
      */
-    ReturnCode create();
+    bool create();
 
     /**
      * @brief Start the container
      * @return The pid of the init process of the container
      */
-    ReturnCode start(pid_t *pid);
+    bool start(pid_t *pid);
 
-    ReturnCode setCgroupItem(std::string subsys, std::string value);
+    bool setCgroupItem(std::string subsys, std::string value);
 
     /**
      * @brief Start a process from the given command line, with an environment consisting of the
      * variables previously set by the gateways,
      * plus the ones passed as parameters here.
      */
-    ReturnCode execute(const std::string &commandLine,
-                       pid_t *pid,
-                       const EnvironmentVariables &variables,
-                       const std::string &workingDirectory = "/",
-                       int stdin = -1,
-                       int stdout = 1,
-                       int stderr = 2);
+    bool execute(const std::string &commandLine,
+                 pid_t *pid,
+                 const EnvironmentVariables &variables,
+                 const std::string &workingDirectory = "/",
+                 int stdin = -1,
+                 int stdout = 1,
+                 int stderr = 2);
 
-    ReturnCode execute(ExecFunction function,
-                       pid_t *pid,
-                       const EnvironmentVariables &variables = EnvironmentVariables(),
-                       int stdin = -1,
-                       int stdout = 1,
-                       int stderr = 2);
+    bool execute(ExecFunction function,
+                 pid_t *pid,
+                 const EnvironmentVariables &variables = EnvironmentVariables(),
+                 int stdin = -1,
+                 int stdout = 1,
+                 int stderr = 2);
 
 
     /**
@@ -133,14 +133,14 @@ public:
      *
      * @return SUCCESS if everything worked as expected, FAILURE otherwise
      */
-    ReturnCode bindMountInContainer(const std::string &pathInHost,
-                                    const std::string &pathInContainer,
-                                    bool readOnly = true);
+    bool bindMountInContainer(const std::string &pathInHost,
+                              const std::string &pathInContainer,
+                              bool readOnly = true);
 
 
-    ReturnCode mountDevice(const std::string &pathInHost);
+    bool mountDevice(const std::string &pathInHost);
 
-    ReturnCode createSymLink(const std::string &source, const std::string &destination)
+    bool createSymLink(const std::string &source, const std::string &destination)
     {
         return FileToolkitWithUndo::createSymLink(source, destination);
     }
@@ -148,14 +148,14 @@ public:
     /**
      * @brief Calls shutdown, and then destroys the container
      */
-    ReturnCode destroy();
-    ReturnCode destroy(unsigned int timeout);
+    bool destroy();
+    bool destroy(unsigned int timeout);
 
     /**
      * @brief Calls shutdown on the lxc container
      */
-    ReturnCode shutdown();
-    ReturnCode shutdown(unsigned int timeout);
+    bool shutdown();
+    bool shutdown(unsigned int timeout);
 
     /*
      * @brief calls freeze() on the LXC container
@@ -163,10 +163,10 @@ public:
      * This only works if the container is currently running and is not already
      * suspended.
      *
-     * @return ReturnCode::SUCCESS if the container was successfully suspended
-     * @return ReturnCode::FAILURE otherwise
+     * @return true if the container was successfully suspended
+     * @return false otherwise
      */
-    ReturnCode suspend();
+    bool suspend();
 
     /*
      * @brief calls unfreeze() on the LXC container
@@ -174,18 +174,18 @@ public:
      * This only works if the container was already suspended. This sets the container
      * into running state again.
      *
-     * @return ReturnCode::SUCCESS if the container was successfully resumed
-     * @return ReturnCode::FAILURE otherwise
+     * @return true if the container was successfully resumed
+     * @return false otherwise
      */
-    ReturnCode resume();
+    bool resume();
 
     /**
      * @brief Calls stop on the lxc container(force stop)
      */
-    ReturnCode stop();
+    bool stop();
 
-    ReturnCode waitForState(LXCContainerState state, int timeout = 20);
-    ReturnCode ensureContainerRunning();
+    bool waitForState(LXCContainerState state, int timeout = 20);
+    bool ensureContainerRunning();
 
     /**
      * @brief Setup the container for startup
@@ -194,7 +194,7 @@ public:
      * setApplication is called.
      * @return true or false
      */
-    ReturnCode initialize();
+    bool initialize();
 
     std::string toString();
 
@@ -203,7 +203,7 @@ public:
     std::string gatewaysDir() const;
     const std::string &rootFS() const;
 
-    ReturnCode setEnvironmentVariable(const std::string &var, const std::string &val);
+    bool setEnvironmentVariable(const std::string &var, const std::string &val);
 
 private:
     /**
@@ -230,10 +230,10 @@ private:
      *
      * @return SUCCESS if everything worked as expected, FAILURE otherwise.
      */
-    ReturnCode bindMountFileInContainer(const std::string &pathInHost,
-                                        const std::string &pathInContainer,
-                                        const std::string &tempFile,
-                                        bool readonly = true);
+    bool bindMountFileInContainer(const std::string &pathInHost,
+                                  const std::string &pathInContainer,
+                                  const std::string &tempFile,
+                                  bool readonly = true);
 
     /**
      * @brief Tries to bind mount a directory in the container
@@ -244,24 +244,24 @@ private:
      * @param pathInContainer Where to mount the file in the container.
      * @param readonly Sets if the mount should be read only or read write
      *
-     * @return SUCCESS if everything worked as expected,FAILURE otherwise.
+     * @return true if everything worked as expected, false otherwise.
      */
-    ReturnCode bindMountDirectoryInContainer(const std::string &pathInHost,
-                                             const std::string &pathInContainer,
-                                             const std::string &tempDir,
-                                             bool readonly = true);
+    bool bindMountDirectoryInContainer(const std::string &pathInHost,
+                                       const std::string &pathInContainer,
+                                       const std::string &tempDir,
+                                       bool readonly = true);
 
-    ReturnCode bindMountCore(const std::string &pathInHost,
-                             const std::string &pathInContainer,
-                             const std::string &tempDir,
-                             bool readonly);
+    bool bindMountCore(const std::string &pathInHost,
+                       const std::string &pathInContainer,
+                       const std::string &tempDir,
+                       bool readonly);
 
-    ReturnCode remountReadOnlyInContainer(const std::string &path);
+    bool remountReadOnlyInContainer(const std::string &path);
 
     /**
      * @brief Helper function that rollsback the changes done in Container::create().
      */
-    ReturnCode rollbackCreate();
+    bool rollbackCreate();
 
     /**
      * @brief The LXC configuration file for this container

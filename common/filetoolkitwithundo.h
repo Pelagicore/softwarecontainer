@@ -37,13 +37,12 @@ public:
      * @param dst Path to mount to
      * @param readOnly Make the bind mount destination read only
      * @param enableWriteBuffer Enable write buffers on the bind mount.
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     * @return true on success, false on failure
      */
-    ReturnCode bindMount(
-            const std::string &src,
-            const std::string &dst,
-            bool readOnly,
-            bool enableWriteBuffer=false);
+    bool bindMount(const std::string &src,
+                   const std::string &dst,
+                   bool readOnly,
+                   bool enableWriteBuffer=false);
 
 
     /**
@@ -56,12 +55,12 @@ public:
      */
     std::string tempDir(std::string templatePath);
 protected:
-    ReturnCode createSymLink(const std::string &source, const std::string &destination);
+    bool createSymLink(const std::string &source, const std::string &destination);
 
     /*
      * @brief Writes to a file (and optionally create it)
      */
-    ReturnCode writeToFile(const std::string &path, const std::string &content);
+    bool writeToFile(const std::string &path, const std::string &content);
 
     /*
      * @brief Creates a file cleanup handler for a specific file.
@@ -80,31 +79,29 @@ protected:
      * @param work This is a work directory, preferably a tmpfs/ramfs of some kind. This is where
      *  writes wind up temporarily.
      * @param dst Where the overlay filesystem will be mounted.
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     * @return true on success, false on failure
      */
-    ReturnCode overlayMount(
-            const std::string &lower,
-            const std::string &upper,
-            const std::string &work,
-            const std::string &dst);
+    bool overlayMount(const std::string &lower,
+                      const std::string &upper,
+                      const std::string &work,
+                      const std::string &dst);
 
     /**
      * @brief syncOverlayMount Copy the directory structure from upper layer to the lower layer
      * @param lower The lower layer used in an overlay file system.
      * @param upper The upper layer in an overlay file system.
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     * @return true on success, false on failure
      */
-    ReturnCode syncOverlayMount(
-            const std::string &lower,
-            const std::string &upper);
+    bool syncOverlayMount(const std::string &lower,
+                          const std::string &upper);
 
     /**
      * @brief createSharedMountPoint Make the mount point shared, ie new mount points created in
      *  one bind mount will also be created in the other mount point.
      * @param path The mount path to make shared.
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     * @return true on success, false on failure
      */
-    ReturnCode createSharedMountPoint(const std::string &path);
+    bool createSharedMountPoint(const std::string &path);
 
     /**
      * @brief createDirectory Create a directory, and if successful append it
@@ -112,9 +109,9 @@ protected:
      *  need to be deleted in reverse order to creation insert to the beginning
      *  of the list.
      * @param path Path of directory to be created
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     * @return true on success, false on failure
      */
-    ReturnCode createDirectory(const std::string &path);
+    bool createDirectory(const std::string &path);
 
     /**
      * @brief checks whether given path is already added to clean up handlers or not
@@ -137,9 +134,9 @@ private :
     /**
      * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
      * @param path The directory path to be created.
-     * @return ReturnCode::SUCCESS on success, ReturnCode::FAILURE on failure
+     * @return true on success, false on failure
      */
-    ReturnCode createParentDirectory(const std::string &path);
+    bool createParentDirectory(const std::string &path);
 };
 
 } // namespace softwarecontainer

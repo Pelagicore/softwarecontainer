@@ -75,15 +75,15 @@ RecursiveCopy &RecursiveCopy::getInstance()
     return instance;
 }
 
-ReturnCode RecursiveCopy::copy(std::string src, std::string dst)
+bool RecursiveCopy::copy(std::string src, std::string dst)
 {
-    ReturnCode retval = ReturnCode::SUCCESS;
+    bool retval = true;
     m_copyLock.lock();
     dstRoot.assign(dst);
     srcRoot.assign(src);
     if (ftw(src.c_str(), copyFile, 20) != 0) {
         log_error() << "Failed to recursively copy " << src << " to " << dst;
-        retval = ReturnCode::FAILURE;
+        retval = false;
     }
     m_copyLock.unlock();
 

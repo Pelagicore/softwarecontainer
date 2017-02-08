@@ -346,11 +346,13 @@ bool Netlink::hasAddress(const std::vector<AddressInfo> &haystack,
 
             // It is ok here for inet_ntop to fail (data could be bad)
             if (inet_ntop(addressFamily, data, out, sizeof(out)) && strcmp(out, needle) == 0) {
+                log_debug() << "Netlink has address";
                 return true;
             }
         }
     }
 
+    log_debug() << "Netlink does not have address";
     return false;
 }
 
@@ -460,18 +462,21 @@ bool Netlink::getKernelDump()
     netlink_request<rtgenmsg> link_msg = createMessage<rtgenmsg>(RTM_GETLINK, NLM_F_DUMP);
     link_msg.pay.rtgen_family = AF_PACKET;
     if (!sendMessage(link_msg)) {
+        log_error() << "Could not send link message";
         return false;
     }
 
     netlink_request<rtgenmsg> addr_msg = createMessage<rtgenmsg>(RTM_GETADDR, NLM_F_DUMP);
     addr_msg.pay.rtgen_family = AF_PACKET;
     if (!sendMessage(addr_msg)) {
+        log_error() << "Could not send address message";
         return false;
     }
 
     netlink_request<rtgenmsg> route_msg = createMessage<rtgenmsg>(RTM_GETROUTE, NLM_F_DUMP);
     route_msg.pay.rtgen_family = AF_PACKET;
     if (!sendMessage(route_msg)) {
+        log_error() << "Could not send route message";
         return false;
     }
 
@@ -482,7 +487,7 @@ bool Netlink::getKernelDump()
 bool Netlink::checkKernelDump()
 {
     if (!m_hasKernelDump && !getKernelDump()) {
-        fprintf(stderr, "Could not get cache dump from kernel\n");
+        log_error() << "Could not get cache dump from kernel";
         return false;
     }
 

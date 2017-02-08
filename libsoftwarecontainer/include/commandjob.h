@@ -36,8 +36,8 @@ public:
     CommandJob(ExecutablePtr executable, const std::string &command);
     virtual ~CommandJob();
 
-    ReturnCode setWorkingDirectory(const std::string &folder);
-    ReturnCode start();
+    bool setWorkingDirectory(const std::string &folder);
+    bool start();
     std::string toString() const;
 
 private:

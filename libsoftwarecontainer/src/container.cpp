@@ -106,24 +106,24 @@ Container::~Container()
     }
 }
 
-ReturnCode Container::initialize()
+bool Container::initialize()
 {
     if (m_state < ContainerState::PREPARED) {
         std::string gatewayDir = gatewaysDir();
-        if (isError(createDirectory(gatewayDir))) {
+        if (!createDirectory(gatewayDir)) {
             log_error() << "Could not create gateway directory "
                         << gatewayDir << ": " << strerror(errno);
-            return ReturnCode::FAILURE;
+            return false;
         }
 
-        if (isError(createSharedMountPoint(gatewayDir))) {
+        if (!createSharedMountPoint(gatewayDir)) {
             log_error() << "Could not create shared mount point for dir: " << gatewayDir;
-            return ReturnCode::FAILURE;
+            return false;
         }
 
         m_state = ContainerState::PREPARED;
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 std::string Container::toString()
@@ -141,11 +141,11 @@ std::string Container::toString()
     return ss.str();
 }
 
-ReturnCode Container::create()
+bool Container::create()
 {
     if (m_state >= ContainerState::CREATED) {
         log_warning() << "Container already created";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Creating container " << toString();
@@ -153,7 +153,7 @@ ReturnCode Container::create()
     const char *containerID = id();
     if (strlen(containerID) == 0) {
         log_error() << "ContainerID cannot be empty";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     setenv("GATEWAY_DIR", gatewaysDir().c_str(), true);
@@ -215,62 +215,62 @@ ReturnCode Container::create()
     m_state = ContainerState::CREATED;
     log_debug() << "Container created. RootFS: " << m_rootFSPath;
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::rollbackCreate() {
+bool Container::rollbackCreate() {
     if (m_container) {
         lxc_container_put(m_container);
         m_container = nullptr;
     }
-    return ReturnCode::FAILURE;
+    return false;
 }
 
-ReturnCode Container::ensureContainerRunning()
+bool Container::ensureContainerRunning()
 {
     if (ContainerState::FROZEN == m_state) {
         log_error() << "Container is frozen, does not run";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (m_state < ContainerState::STARTED) {
         log_error() << "Container is not in state STARTED, state is " << ((int)m_state);
         log_error() << logging::getStackTrace();
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (!m_container->is_running(m_container)) {
         return waitForState(LXCContainerState::RUNNING);
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::waitForState(LXCContainerState state, int timeout)
+bool Container::waitForState(LXCContainerState state, int timeout)
 {
     const char* currentState = m_container->state(m_container);
     if (strcmp(currentState, toString(state))) {
         log_debug() << "Waiting for container to change from " << currentState
                     << " to state : " << toString(state);
-        bool b = m_container->wait(m_container, toString(state), timeout);
-        if (b) {
+        bool expired = m_container->wait(m_container, toString(state), timeout);
+        if (expired) {
             log_error() << "Container did not reach" << toString(state) << " in time";
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::start(pid_t *pid)
+bool Container::start(pid_t *pid)
 {
     if (m_state < ContainerState::CREATED) {
         log_warning() << "Trying to start container that isn't created. Please create the container first";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (pid == nullptr) {
         log_error() << "Supplied pid argument is nullptr";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // For some reason the LXC start function does not work out
@@ -283,20 +283,20 @@ ReturnCode Container::start(pid_t *pid)
 
     if (!m_container->start(m_container, false, args)) {
         log_error() << "Error starting container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Container started: " << toString();
     *pid = m_container->init_pid(m_container);
     m_state = ContainerState::STARTED;
 
-    if (isError(ensureContainerRunning())) {
+    if (!ensureContainerRunning()) {
         log_error() << "Container started but is not running";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_info() << "To connect to this container : lxc-attach -n " << id();
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 int Container::unlimitCoreDump()
@@ -326,27 +326,26 @@ int Container::executeInContainerEntryFunction(void *param)
     return (*function)();
 }
 
-ReturnCode Container::setCgroupItem(std::string subsys, std::string value)
+bool Container::setCgroupItem(std::string subsys, std::string value)
 {
-    bool success = m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
-    return bool2ReturnCode(success);
+    return m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
 }
 
-ReturnCode Container::execute(ExecFunction function,
-                              pid_t *pid,
-                              const EnvironmentVariables &variables,
-                              int stdin,
-                              int stdout,
-                              int stderr)
+bool Container::execute(ExecFunction function,
+                        pid_t *pid,
+                        const EnvironmentVariables &variables,
+                        int stdin,
+                        int stdout,
+                        int stderr)
 {
     if (pid == nullptr) {
         log_error() << "Supplied pid argument is nullptr";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    if (isError(ensureContainerRunning())) {
+    if (!ensureContainerRunning()) {
         log_error() << "Container is not running or in bad state, can't execute";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;
@@ -401,26 +400,26 @@ ReturnCode Container::execute(ExecFunction function,
     delete[] envVariablesArray;
     if (attach_res == 0) {
         log_info() << " Attached PID: " << *pid;
-        return ReturnCode::SUCCESS;
+        return true;
     } else  {
         log_error() << "Attach call to LXC container failed: " << std::string(strerror(errno));
-        return ReturnCode::FAILURE;
+        return false;
     }
 }
 
-ReturnCode Container::execute(const std::string &commandLine, pid_t *pid,
-                              const EnvironmentVariables &variables,
-                              const std::string &workingDirectory,
-                              int stdin, int stdout, int stderr)
+bool Container::execute(const std::string &commandLine, pid_t *pid,
+                        const EnvironmentVariables &variables,
+                        const std::string &workingDirectory,
+                        int stdin, int stdout, int stderr)
 {
-    if (isError(ensureContainerRunning())) {
+    if (!ensureContainerRunning()) {
         log_error() << "Container is not running or in bad state, can't attach";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (pid == nullptr) {
         log_error() << "Supplied pid argument is nullptr";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Attach " << commandLine ;
@@ -437,27 +436,28 @@ ReturnCode Container::execute(const std::string &commandLine, pid_t *pid,
     // We need a null terminated array
     args.push_back(nullptr);
 
-    ReturnCode result = execute([&] () {
+    bool result = execute([&] () {
                 if (workingDirectory.length() != 0) {
                     auto ret = chdir(workingDirectory.c_str());
                     if (ret != 0) {
-                        log_error() << "Error when changing current directory : " << strerror(errno);
+                        log_error() << "Error when changing current directory : "
+                                    << strerror(errno);
                     }
                 }
                 execvp(args[0], args.data());
                 return 1;
             }, pid, variables, stdin, stdout, stderr);
-    if (isError(result)) {
+    if (!result) {
         log_error() << "Could not execute in container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::stop()
+bool Container::stop()
 {
-    ReturnCode ret = ReturnCode::SUCCESS;
+    bool ret = true;
     if (m_state >= ContainerState::STARTED) {
         log_debug() << "Stopping the container";
         if (m_container->stop(m_container)) {
@@ -465,26 +465,26 @@ ReturnCode Container::stop()
             waitForState(LXCContainerState::STOPPED);
         } else {
             log_error() << "Unable to stop container";
-            ret = ReturnCode::FAILURE;
+            ret = false;
         }
     } else {
         log_error() << "Can't stop container that has not been started";
-        ret = ReturnCode::FAILURE;
+        ret = false;
     }
 
     return ret;
 }
 
-ReturnCode Container::shutdown()
+bool Container::shutdown()
 {
     return shutdown(m_shutdownTimeout);
 }
 
-ReturnCode Container::shutdown(unsigned int timeout)
+bool Container::shutdown(unsigned int timeout)
 {
     if (m_state < ContainerState::STARTED) {
         log_error() << "Trying to shutdown container that has not been started. Aborting";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Shutting down container " << toString() << " pid: "
@@ -498,32 +498,32 @@ ReturnCode Container::shutdown(unsigned int timeout)
     bool success = m_container->shutdown(m_container, timeout);
     if (!success) {
         log_warning() << "Failed to cleanly shutdown container, forcing stop" << toString();
-        if(isError(stop())) {
+        if(!stop()) {
             log_error() << "Failed to force stop the container" << toString();
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
     m_state = ContainerState::CREATED;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::destroy()
+bool Container::destroy()
 {
     return destroy(m_shutdownTimeout);
 }
 
-ReturnCode Container::destroy(unsigned int timeout)
+bool Container::destroy(unsigned int timeout)
 {
     if (m_state < ContainerState::CREATED) {
         log_error() << "Trying to destroy container that has not been created. Aborting destroy";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (m_state >= ContainerState::STARTED) {
-        if(isError(shutdown(timeout))) {
+        if(!shutdown(timeout)) {
             log_error() << "Could not shutdown container. Aborting destroy";
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
@@ -531,20 +531,20 @@ ReturnCode Container::destroy(unsigned int timeout)
     bool success = m_container->destroy(m_container);
     if (!success) {
         log_error() << "Failed to destroy the container " << toString();
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     m_state = ContainerState::DESTROYED;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::bindMountInContainer(const std::string &pathInHost,
-                                           const std::string &pathInContainer,
-                                           bool readOnly)
+bool Container::bindMountInContainer(const std::string &pathInHost,
+                                     const std::string &pathInContainer,
+                                     bool readOnly)
 {
     if (!existsInFileSystem(pathInHost)) {
         log_error() << "Path on host does not exist: " << pathInHost;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // Create a file to mount to in gateways
@@ -562,15 +562,15 @@ ReturnCode Container::bindMountInContainer(const std::string &pathInHost,
     }
 }
 
-ReturnCode Container::bindMountFileInContainer(const std::string &pathInHost,
+bool Container::bindMountFileInContainer(const std::string &pathInHost,
                                                const std::string &pathInContainer,
                                                const std::string &tempFile,
                                                bool readonly)
 {
     if (!pathInList(tempFile)) {
-        if (isError(touch(tempFile))) {
+        if (!touch(tempFile)) {
             log_error() << "Could not create file " << tempFile;
-            return ReturnCode::FAILURE;
+            return false;
         }
         m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
     }
@@ -578,14 +578,14 @@ ReturnCode Container::bindMountFileInContainer(const std::string &pathInHost,
     return bindMountCore(pathInHost, pathInContainer, tempFile, readonly);
 }
 
-ReturnCode Container::bindMountDirectoryInContainer(const std::string &pathInHost,
+bool Container::bindMountDirectoryInContainer(const std::string &pathInHost,
                                                     const std::string &pathInContainer,
                                                     const std::string &tempDir,
                                                     bool readonly)
 {
     // Check that the target is not already mounted
     pid_t pid = INVALID_PID;
-    ReturnCode checkIfAlreadyMountpoint = execute([pathInContainer] () {
+    bool checkIfAlreadyMountpoint = execute([pathInContainer] () {
         FILE *mountsfile = setmntent("/proc/mounts", "r");
         struct mntent *mounts;
         while ((mounts = getmntent(mountsfile)) != nullptr) {
@@ -597,39 +597,39 @@ ReturnCode Container::bindMountDirectoryInContainer(const std::string &pathInHos
         return 0;
     }, &pid);
 
-    if (isError(checkIfAlreadyMountpoint) || waitForProcessTermination(pid) != 0) {
+    if (!checkIfAlreadyMountpoint || waitForProcessTermination(pid) != 0) {
         log_error() << pathInContainer << " is already mounted to.";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Creating folder : " << tempDir;
-    if (isError(createDirectory(tempDir))) {
+    if (!createDirectory(tempDir)) {
         log_error() << "Could not create folder " << tempDir;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     return bindMountCore(pathInHost, pathInContainer, tempDir, readonly);
 }
 
-ReturnCode Container::bindMountCore(const std::string &pathInHost,
+bool Container::bindMountCore(const std::string &pathInHost,
                                     const std::string &pathInContainer,
                                     const std::string &tempDirInContainerOnHost,
                                     bool readonly)
 {
-    if (isError(ensureContainerRunning())) {
+    if (!ensureContainerRunning()) {
         log_error() << "Container is not running or in bad state, can't bind-mount folder";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (pathInContainer.front() != '/') {
         log_error() << "Provided path '" << pathInContainer<< "' is not absolute!";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // Bind mount to /gateways
-    if (isError(bindMount(pathInHost, tempDirInContainerOnHost, readonly, m_enableWriteBuffer))) {
+    if (!bindMount(pathInHost, tempDirInContainerOnHost, readonly, m_enableWriteBuffer)) {
         log_error() << "Could not bind mount " << pathInHost << " to " << tempDirInContainerOnHost;
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     // Paths inside the container
@@ -647,29 +647,29 @@ ReturnCode Container::bindMountCore(const std::string &pathInHost,
         //
         if (isDirectory(tempDirInContainerOnHost)) {
             log_debug() << "Creating " << pathInContainerOnHost;
-            if (isError(createDirectory(pathInContainerOnHost))) {
+            if (!createDirectory(pathInContainerOnHost)) {
                 log_error() << "Could not create target directory " << pathInContainerOnHost;
-                return ReturnCode::FAILURE;
+                return false;
             }
         } else {
             std::string fileParentOnHost = parentPath(pathInContainerOnHost);
             log_debug() << "Creating parent paths " << fileParentOnHost;
-            if (isError(createDirectory(fileParentOnHost))) {
+            if (!createDirectory(fileParentOnHost)) {
                 log_error() << "Could not create parent(s) to target directory "
                             << pathInContainerOnHost;
-                return ReturnCode::FAILURE;
+                return false;
             }
 
             log_debug() << "Touching file: " << pathInContainerOnHost;
-            if (isError(touch(pathInContainerOnHost))) {
+            if (!touch(pathInContainerOnHost)) {
                 log_error() << "Could not touch target file: " << pathInContainerOnHost;
-                return ReturnCode::FAILURE;
+                return false;
             }
         }
 
         // Move the mount inside the container.
         pid_t pid = INVALID_PID;
-        ReturnCode mountMoveResult = execute([tempDirInContainer, pathInContainer] () {
+        bool mountMoveResult = execute([tempDirInContainer, pathInContainer] () {
             unsigned long flags = MS_MOVE;
             int ret = mount(tempDirInContainer.c_str(), pathInContainer.c_str(), nullptr, flags, nullptr);
             if (ret != 0) {
@@ -682,56 +682,55 @@ ReturnCode Container::bindMountCore(const std::string &pathInHost,
         }, &pid);
 
         int status = waitForProcessTermination(pid);
-        if (isError(mountMoveResult) || status != 0) {
+        if (!mountMoveResult || status != 0) {
             log_error() << "Could not move the mount inside the container: "
                         << tempDirInContainer << " to " << pathInContainer;
-            return ReturnCode::FAILURE;
+            return false;
         }
     }
 
     // Remount read only in the container if applicable
-    if (readonly && isError(remountReadOnlyInContainer(pathInContainer))) {
+    if (readonly && !remountReadOnlyInContainer(pathInContainer)) {
        log_error() << "Failed to remount read only: " << pathInContainer;
-       return ReturnCode::FAILURE;
+       return false;
     }
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::remountReadOnlyInContainer(const std::string &path)
+bool Container::remountReadOnlyInContainer(const std::string &path)
 {
     pid_t pid = INVALID_PID;
 
-    ReturnCode ret = execute([path] () {
+    bool ret = execute([path] () {
         unsigned long flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
         return mount(path.c_str(), path.c_str(), "", flags, nullptr);
     }, &pid);
 
     int status = waitForProcessTermination(pid);
-    if (isError(ret) || status != 0) {
+    if (!ret || status != 0) {
         log_error() << "Could not remount " << path << " read-only in container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
-    return bool2ReturnCode(status == 0);
+    return status == 0;
 }
 
-ReturnCode Container::mountDevice(const std::string &pathInHost)
+bool Container::mountDevice(const std::string &pathInHost)
 {
-    if(isError(ensureContainerRunning())) {
+    if(!ensureContainerRunning()) {
         log_error() << "Container is not running or in bad state, can't mount device";
-        return ReturnCode::FAILURE;
+        return false;
     }
     log_debug() << "Mounting device in container : " << pathInHost;
-    bool returnCode = m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
-    return bool2ReturnCode(returnCode);
+    return m_container->add_device_node(m_container, pathInHost.c_str(), nullptr);
 }
 
-ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::string &val)
+bool Container::setEnvironmentVariable(const std::string &var, const std::string &val)
 {
     if (m_state < ContainerState::CREATED) {
         log_error() << "Can't set environment variable for non-created container";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Setting env variable in container " << var << "=" << val;
@@ -745,19 +744,19 @@ ReturnCode Container::setEnvironmentVariable(const std::string &var, const std::
     std::string path = buildPath(gatewaysDir(), "env");
     FileToolkitWithUndo::writeToFile(path, s);
 
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::suspend()
+bool Container::suspend()
 {
     if (m_state < ContainerState::STARTED) {
         log_error() << "Container is not started yet";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     if (m_state == ContainerState::FROZEN) {
         log_error() << "Container is already suspended";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Suspending container";
@@ -770,14 +769,14 @@ ReturnCode Container::suspend()
     }
 
     m_state = ContainerState::FROZEN;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
-ReturnCode Container::resume()
+bool Container::resume()
 {
     if (m_state < ContainerState::FROZEN) {
         log_error() << "Container is not suspended";
-        return ReturnCode::FAILURE;
+        return false;
     }
 
     log_debug() << "Resuming container";
@@ -790,7 +789,7 @@ ReturnCode Container::resume()
     }
 
     m_state = ContainerState::STARTED;
-    return ReturnCode::SUCCESS;
+    return true;
 }
 
 const char *Container::id() const

@@ -46,6 +46,8 @@ protected:
         srand(time(NULL));
         uint32_t containerID = rand() % 100;
 
+        ::testing::DefaultValue<bool>::Set(true);
+
         gw = new ::testing::NiceMock<MockNetworkGateway>(containerID);
         SoftwareContainerTest::SetUp();
     }
