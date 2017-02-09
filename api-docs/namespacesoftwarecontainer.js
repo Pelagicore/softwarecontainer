@@ -54,6 +54,7 @@ var namespacesoftwarecontainer =
     [ "GatewayConfiguration", "classsoftwarecontainer_1_1_gateway_configuration.html", "classsoftwarecontainer_1_1_gateway_configuration" ],
     [ "GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", "classsoftwarecontainer_1_1_gateway_error" ],
     [ "GatewayParserError", "classsoftwarecontainer_1_1_gateway_parser_error.html", "classsoftwarecontainer_1_1_gateway_parser_error" ],
+    [ "HexFormatError", "classsoftwarecontainer_1_1_hex_format_error.html", "classsoftwarecontainer_1_1_hex_format_error" ],
     [ "IntConfig", "classsoftwarecontainer_1_1_int_config.html", "classsoftwarecontainer_1_1_int_config" ],
     [ "InvalidContainerError", "classsoftwarecontainer_1_1_invalid_container_error.html", "classsoftwarecontainer_1_1_invalid_container_error" ],
     [ "InvalidOperationError", "classsoftwarecontainer_1_1_invalid_operation_error.html", "classsoftwarecontainer_1_1_invalid_operation_error" ],

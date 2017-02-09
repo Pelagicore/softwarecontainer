@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-3f93be9 2017-02-09</span>
+   &#160;<span id="projectnumber">0.18.0-72f9606 2017-02-09</span>
    </div>
   </td>
  </tr>
@@ -167,7 +167,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8h_source.html','');});
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;{</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_j_son_error.html">JSonError</a>():</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">CgroupsGatewayError</a>(<span class="stringliteral">&quot;The configuration error is occured&quot;</span>)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">CgroupsGatewayError</a>(<span class="stringliteral">&quot;A configuration error has occured&quot;</span>)</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
@@ -177,8 +177,23 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8h_source.html','');});
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;};</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_hex_format_error.html">  115</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsoftwarecontainer_1_1_hex_format_error.html">HexFormatError</a> : <span class="keyword">public</span> <a class="code" href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">CgroupsGatewayError</a></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;{</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_hex_format_error.html">HexFormatError</a>():</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">CgroupsGatewayError</a>(<span class="stringliteral">&quot;The given hex string was invalid&quot;</span>)</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_hex_format_error.html">HexFormatError</a>(<span class="keyword">const</span> std::string &amp;message):</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">CgroupsGatewayError</a>(message)</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;};</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_html_ade0f87777e456e5af637a18482a06713"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway.html#ade0f87777e456e5af637a18482a06713">softwarecontainer::CgroupsGateway::readConfigElement</a></div><div class="ttdeci">bool readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8cpp_source.html#l00033">cgroupsgateway.cpp:33</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway.html">softwarecontainer::CgroupsGateway</a></div><div class="ttdoc">The cgroups gateway sets cgroups related settings for the container. </div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00033">cgroupsgateway.h:33</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_limit_range_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_limit_range_error.html">softwarecontainer::LimitRangeError</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00073">cgroupsgateway.h:73</a></div></div>
@@ -187,6 +202,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8h_source.html','');});
 <div class="ttc" id="classsoftwarecontainer_1_1_bad_suffix_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_bad_suffix_error.html">softwarecontainer::BadSuffixError</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00087">cgroupsgateway.h:87</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_son_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_son_error.html">softwarecontainer::JSonError</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00101">cgroupsgateway.h:101</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_c_groups_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_c_groups_parser.html">softwarecontainer::CGroupsParser</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsparser_8h_source.html#l00028">cgroupsparser.h:28</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_hex_format_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_hex_format_error.html">softwarecontainer::HexFormatError</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00115">cgroupsgateway.h:115</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_error.html">softwarecontainer::SoftwareContainerError</a></div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainererror_8h_source.html#l00027">softwarecontainererror.h:27</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -195,7 +211,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_646af10687434ab6c31bea5c882c000e.html">cgroups</a></li><li class="navelem"><b>cgroupsgateway.h</b></li>
-    <li class="footer">Generated on Thu Feb 9 2017 09:49:52 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 9 2017 11:55:07 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
