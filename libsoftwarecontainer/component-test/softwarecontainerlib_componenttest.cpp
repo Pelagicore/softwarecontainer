@@ -51,9 +51,9 @@ public:
         json_decref(configJson);
     }
 
-    ReturnCode bindMountInContainer(const std::string src, const std::string dst, bool readOnly)
+    bool bindMountInContainer(const std::string src, const std::string dst, bool readOnly)
     {
-        return getSc().getContainer()->bindMountInContainer(src, dst, readOnly);
+        return getSc().bindMount(src, dst, readOnly);
     }
 
     Glib::RefPtr<Glib::MainContext> getMainContext()
@@ -264,7 +264,7 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     // File should not be available
     ASSERT_EQ(job->wait(), NON_EXISTENT);
 
-    ASSERT_TRUE(isSuccess(bindMountInContainer(tempFilename, tempFilename, true)));
+    ASSERT_TRUE(bindMountInContainer(tempFilename, tempFilename, true));
 
     // Now file should be available
     job->start();
@@ -290,14 +290,14 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
     ASSERT_EQ(job->wait(), NON_EXISTENT);
 
     // Bind mount the file
-    ASSERT_TRUE(isSuccess(bindMountInContainer(tempFilename, tempFilename, true)));
+    ASSERT_TRUE(bindMountInContainer(tempFilename, tempFilename, true));
 
     // Check that the file is now in the container
     job->start();
     ASSERT_EQ(job->wait(), EXISTENT);
 
     // Try to bind mount again. This should fail!
-    ASSERT_TRUE(isError(bindMountInContainer(tempFilename, tempFilename, true)));
+    ASSERT_FALSE(bindMountInContainer(tempFilename, tempFilename, true));
 
     // Check that the file is still in the container
     job->start();
@@ -312,8 +312,8 @@ TEST_F(SoftwareContainerApp, TestMountingOverRoot) {
     std::string tempDirname = createTempDir();
     ASSERT_TRUE(isDirectory(tempDirname));
 
-    ASSERT_TRUE(isError(bindMountInContainer(tempDirname, "/", false)));
-    ASSERT_TRUE(isError(bindMountInContainer(tempDirname, "/lib", false)));
+    ASSERT_FALSE(bindMountInContainer(tempDirname, "/", false));
+    ASSERT_FALSE(bindMountInContainer(tempDirname, "/lib", false));
 }
 
 /**
@@ -329,14 +329,14 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     job1->start();
     ASSERT_EQ(job1->wait(), NON_EXISTENT);
 
-    ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, tempDirname, false)));
+    ASSERT_TRUE(bindMountInContainer(tempDirname, tempDirname, false));
 
     job1->start();
     ASSERT_EQ(job1->wait(), EXISTENT);
 
     // Test that an unexisting path is created when you mount to it
     std::string longUnexistingPath = "/var/apa/bepa/cepa";
-    ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, longUnexistingPath, false)));
+    ASSERT_TRUE(bindMountInContainer(tempDirname, longUnexistingPath, false));
     auto job2 = getSc().createFunctionJob([&] () {
         return isDirectory(longUnexistingPath) ? EXISTENT : NON_EXISTENT;
     });
@@ -365,7 +365,7 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
 TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
     std::string tempDirname = createTempDir();
-    ASSERT_TRUE(isSuccess(bindMountInContainer(tempDirname, tempDirname, false)));
+    ASSERT_TRUE(bindMountInContainer(tempDirname, tempDirname, false));
 
     std::string strUnixSocket = buildPath(tempDirname, "socket");
     const char *tempUnixSocket = strUnixSocket.c_str();
@@ -452,7 +452,7 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
 
     // We need access to the test file, so we bind mount it
     std::string soundFile = buildPath(TEST_DATA_DIR, std::string("Rear_Center.wav"));
-    ASSERT_TRUE(isSuccess(bindMountInContainer(soundFile, soundFile, true)));
+    ASSERT_TRUE(bindMountInContainer(soundFile, soundFile, true));
 
     // Make sure the file is there
     auto job1 = getSc().createFunctionJob([&] () {

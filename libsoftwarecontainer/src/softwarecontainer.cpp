@@ -364,23 +364,6 @@ bool SoftwareContainer::shutdownGateways()
     return status;
 }
 
-std::shared_ptr<ContainerAbstractInterface> SoftwareContainer::getContainer()
-{
-    assertValidState();
-
-    std::string id = std::string(m_container->id());
-
-    if (m_containerState != ContainerState::READY) {
-        std::string message = "Invalid to access container implementation when "
-                              "not ready " + id;
-        log_error() << message;
-        throw InvalidOperationError(message);
-    }
-
-    std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
-    return ptrCopy;
-}
-
 std::string SoftwareContainer::getContainerDir()
 {
     const std::string containerID = std::string(m_container->id());
@@ -408,8 +391,7 @@ std::shared_ptr<FunctionJob> SoftwareContainer::createFunctionJob(const std::fun
         throw InvalidOperationError(message);
     }
 
-    auto containerInterface = getContainer();
-    return std::make_shared<FunctionJob>(containerInterface, fun);
+    return std::make_shared<FunctionJob>(m_container, fun);
 }
 
 std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::string &command)
@@ -423,8 +405,7 @@ std::shared_ptr<CommandJob> SoftwareContainer::createCommandJob(const std::strin
         throw InvalidOperationError(message);
     }
 
-    auto containerInterface = getContainer();
-    return std::make_shared<CommandJob>(containerInterface, command);
+    return std::make_shared<CommandJob>(m_container, command);
 }
 
 bool SoftwareContainer::bindMount(const std::string &pathOnHost,
@@ -441,7 +422,7 @@ bool SoftwareContainer::bindMount(const std::string &pathOnHost,
         throw InvalidOperationError(message);
     }
 
-    return isSuccess(getContainer()->bindMountInContainer(pathOnHost, pathInContainer, readonly));
+    return isSuccess(m_container->bindMountInContainer(pathOnHost, pathInContainer, readonly));
 }
 
 void SoftwareContainer::assertValidState()

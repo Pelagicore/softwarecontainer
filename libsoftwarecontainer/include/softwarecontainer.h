@@ -135,7 +135,6 @@ public:
  *  * shutdown() - successful call triggers trasition to TERMINATED
  *  * bindMount()
  *  * startGateways()
- *  * getContainer()
  *  * createFunctionJob()
  *  * createCommandJob()
  *
@@ -300,16 +299,6 @@ public:
      * @return ContainerState representing the current state
      */
     ObservableProperty<ContainerState> &getContainerState();
-
-    /**
-     * @brief Rturns a pointer to the underlying container implementation
-     *
-     * This should only be called on a container in state 'READY'
-     *
-     * @throws InvalidOperationError If called when state is not 'READY'
-     * @throws InvalidContainerError If the container is in state 'INVALID'
-     */
-    std::shared_ptr<ContainerAbstractInterface> getContainer();
 
     /**
      * @brief Indicates if gateways have been configured previously.
