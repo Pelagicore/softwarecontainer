@@ -126,14 +126,4 @@ bool Gateway::isActivated()
     return m_state >= GatewayState::ACTIVATED;
 }
 
-bool Gateway::setEnvironmentVariable(const std::string &variable, const std::string &value)
-{
-    if (hasContainer()) {
-        return isSuccess(getContainer()->setEnvironmentVariable(variable, value));
-    } else {
-        log_error() << "Can't set environment variable on gateway without container";
-        return false;
-    }
-}
-
 } // namespace softwarecontainer
