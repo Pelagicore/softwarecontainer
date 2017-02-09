@@ -49,7 +49,10 @@ substs = {
     "shared-mounts-dir": "@SC_SHARED_MOUNTS_DIR_CONFIG_FILE_VAR@",
     "lxc-config-path": "@SC_LXC_CONFIG_PATH_CONFIG_FILE_VAR@",
     "service-manifest-dir": "@SC_SERVICE_MANIFEST_DIR_CONFIG_FILE_VAR@",
-    "default-service-manifest-dir": "@SC_DEFAULT_SERVICE_MANIFEST_DIR_CONFIG_FILE_VAR@"
+    "default-service-manifest-dir": "@SC_DEFAULT_SERVICE_MANIFEST_DIR_CONFIG_FILE_VAR@",
+    # These should be used to point out directories, when we get that working.
+    "cmake-build-dir": "@CMAKE_BINARY_DIR@",
+    "cmake-root-dir": "@CMAKE_SOURCE_DIR@"
 }
 
 # Duplicate all entries with different formatting options

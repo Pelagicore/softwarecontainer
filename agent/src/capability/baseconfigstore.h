@@ -18,7 +18,7 @@
  */
 
 /**
- * @file configstore.h
+ * @file baseconfigstore.h
  * @brief Contains the softwarecontainer::BaseConfigStore class
  */
 
