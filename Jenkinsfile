@@ -84,14 +84,6 @@ node {
                                      softwarecontainer clang \"${buildParams} ${extraParams}\"")
         }
 
-        stage('User documentation') {
-            runInVagrant(workspace, 'cd softwarecontainer/build && make user-doc')
-        }
-
-        stage('API documentation') {
-            runInVagrant(workspace, 'cd softwarecontainer/build && make api-doc')
-        }
-
         stage('UnitTest') {
             runInVagrant(workspace, "cd softwarecontainer && ./build/run-unit-tests.py")
         }
