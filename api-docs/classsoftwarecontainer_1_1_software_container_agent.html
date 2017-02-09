@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-5914c5f 2017-02-07</span>
+   &#160;<span id="projectnumber">0.18.0-3f93be9 2017-02-09</span>
    </div>
   </td>
  </tr>
@@ -272,10 +272,10 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00338">338</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;{</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="keywordflow">return</span> m_filteredConfigStore-&gt;IDs();</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00337">337</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;{</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="keywordflow">return</span> m_filteredConfigStore-&gt;IDs();</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -763,28 +763,26 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00310">310</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00191">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="softwarecontaineragent_8cpp_source.html#l00191">getContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;{</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    profilefunction(<span class="stringliteral">&quot;bindMountFunction&quot;</span>);</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    SoftwareContainerPtr container = <a class="code" href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">getContainer</a>(containerID);</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = container-&gt;bindMount(pathInHost,</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                                             pathInContainer,</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                                             readOnly);</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordtype">bool</span> result = container-&gt;bindMount(pathInHost,</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                                       pathInContainer,</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                                       readOnly);</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordflow">if</span> (!result) {</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Unable to bind mount &quot;</span> + pathInHost + <span class="stringliteral">&quot; to &quot;</span> + pathInContainer);</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    }</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_software_container_agent_html_a51595505c72fe46fffb502b2db6ef814"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814">softwarecontainer::SoftwareContainerAgent::getContainer</a></div><div class="ttdeci">SoftwareContainerPtr getContainer(ContainerID containerID)</div><div class="ttdoc">Fetches a pointer to a SoftwareContainer matching an ID. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontaineragent_8cpp_source.html#l00191">softwarecontaineragent.cpp:191</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_agent_a97d427dada015dc9337ce5673f55ec9f_cgraph.svg" width="387" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_agent_a97d427dada015dc9337ce5673f55ec9f_cgraph.svg" width="387" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -831,32 +829,32 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00343">343</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;{</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="keywordflow">if</span> (capabilities.empty()) {</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Got empty list of capabilities&quot;</span>;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    }</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    GatewayConfiguration gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    GatewayConfiguration filteredConfigs = m_filteredConfigStore-&gt;configsByID(capabilities);</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="comment">// If we get an empty config the user passed a non existent cap name</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keywordflow">if</span> (filteredConfigs.empty()) {</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;One or more capabilities were not found&quot;</span>);</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    }</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    gatewayConfigs.append(filteredConfigs);</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="comment">// Update container gateway configuration</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not set gateway configuration for capability&quot;</span>);</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    }</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontaineragent_8cpp_source.html#l00342">342</a> of file <a class="el" href="softwarecontaineragent_8cpp_source.html">softwarecontaineragent.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;{</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="keywordflow">if</span> (capabilities.empty()) {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Got empty list of capabilities&quot;</span>;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    }</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    GatewayConfiguration gatewayConfigs = m_defaultConfigStore-&gt;configs();</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    GatewayConfiguration filteredConfigs = m_filteredConfigStore-&gt;configsByID(capabilities);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="comment">// If we get an empty config the user passed a non existent cap name</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keywordflow">if</span> (filteredConfigs.empty()) {</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;One or more capabilities were not found&quot;</span>);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    }</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    gatewayConfigs.append(filteredConfigs);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="comment">// Update container gateway configuration</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keywordflow">if</span> (!updateGatewayConfigs(containerID, gatewayConfigs)) {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        std::string errorMessage(<span class="stringliteral">&quot;Could not set gateway configuration for capability&quot;</span>);</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        log_error() &lt;&lt; errorMessage;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        <span class="keywordflow">throw</span> SoftwareContainerError(errorMessage);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    }</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -870,7 +868,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container_agent.html">SoftwareContainerAgent</a></li>
-    <li class="footer">Generated on Tue Feb 7 2017 15:20:01 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 9 2017 09:49:55 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

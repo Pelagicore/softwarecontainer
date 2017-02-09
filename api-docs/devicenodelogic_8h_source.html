@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-5914c5f 2017-02-07</span>
+   &#160;<span id="projectnumber">0.18.0-3f93be9 2017-02-09</span>
    </div>
   </td>
  </tr>
@@ -123,9 +123,9 @@ $(document).ready(function(){initNavTree('devicenodelogic_8h_source.html','');})
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">     *      if the device name exist and major and minor minor device IDs are also matched</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">     *      then update the  mode of device node</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">     * @return either SUCCESS or FAILURE due to state of operation</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">     * @return either true or false due to state of operation</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> updateDeviceList(<a class="code" href="structsoftwarecontainer_1_1_device_node_parser_1_1_device.html">DeviceNodeParser::Device</a> dev);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> updateDeviceList(<a class="code" href="structsoftwarecontainer_1_1_device_node_parser_1_1_device.html">DeviceNodeParser::Device</a> dev);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">/*</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">     * @brief Get the list of device nodes</span></div>
@@ -139,7 +139,6 @@ $(document).ready(function(){initNavTree('devicenodelogic_8h_source.html','');})
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;};</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 <div class="ttc" id="structsoftwarecontainer_1_1_device_node_parser_1_1_device_html"><div class="ttname"><a href="structsoftwarecontainer_1_1_device_node_parser_1_1_device.html">softwarecontainer::DeviceNodeParser::Device</a></div><div class="ttdef"><b>Definition:</b> <a href="devicenodeparser_8h_source.html#l00032">devicenodeparser.h:32</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_device_node_logic_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_device_node_logic.html">softwarecontainer::DeviceNodeLogic</a></div><div class="ttdoc">This class is responsible for storing all device node configurations in a well-formed list...</div><div class="ttdef"><b>Definition:</b> <a href="devicenodelogic_8h_source.html#l00031">devicenodelogic.h:31</a></div></div>
@@ -149,7 +148,7 @@ $(document).ready(function(){initNavTree('devicenodelogic_8h_source.html','');})
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_385e7606189d1fb5ca15ea16396c7241.html">devicenode</a></li><li class="navelem"><b>devicenodelogic.h</b></li>
-    <li class="footer">Generated on Tue Feb 7 2017 15:19:58 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 9 2017 09:49:52 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

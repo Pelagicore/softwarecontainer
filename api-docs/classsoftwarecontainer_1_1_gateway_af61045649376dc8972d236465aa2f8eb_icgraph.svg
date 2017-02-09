@@ -17,7 +17,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#a7ba4cdcf870915d57f9f36ed68f7c33a" target="_top" xlink:title="Activates both dbus session instances. ">
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#af84424bf49120532516ea0660b5857f1" target="_top" xlink:title="Activates both dbus session instances. ">
 <polygon fill="white" stroke="black" points="162,-49.5 162,-79.5 283,-79.5 283,-49.5 162,-49.5"/>
 <text text-anchor="start" x="170" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="222.5" y="-56.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::activate</text>

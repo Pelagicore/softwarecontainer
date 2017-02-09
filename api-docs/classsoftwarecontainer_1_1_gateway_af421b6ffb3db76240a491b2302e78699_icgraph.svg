@@ -17,7 +17,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#aa62fd6a17abb2762b8d62cc85c7750c7" target="_top" xlink:title="Applies any configuration set by setConfig() ">
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#abd136fffb30a625ca5ab4abe06adc680" target="_top" xlink:title="Applies any configuration set by setConfig() ">
 <polygon fill="white" stroke="black" points="138,-98.5 138,-128.5 238,-128.5 238,-98.5 138,-98.5"/>
 <text text-anchor="start" x="146" y="-116.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="188" y="-105.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::activate</text>
@@ -31,7 +31,7 @@
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
-<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#a24843565ff6c3dfaed5ce3f7682a9b12" target="_top" xlink:title="Configure this gateway according to the supplied JSON configuration string. ">
+<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#ae32068e630d51cb3e641e974eed2614c" target="_top" xlink:title="Configure this gateway according to the supplied JSON configuration string. ">
 <polygon fill="white" stroke="black" points="136,-49.5 136,-79.5 240,-79.5 240,-49.5 136,-49.5"/>
 <text text-anchor="start" x="144" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="188" y="-56.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::setConfig</text>
@@ -45,7 +45,7 @@
 </g>
 <!-- Node6 -->
 <g id="node6" class="node"><title>Node6</title>
-<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a" target="_top" xlink:title="Restore system to the state prior to launching of gateway. ">
+<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#af38a5c8ee0ff839a0134eefce61ba7a3" target="_top" xlink:title="Restore system to the state prior to launching of gateway. ">
 <polygon fill="white" stroke="black" points="137.5,-0.5 137.5,-30.5 238.5,-30.5 238.5,-0.5 137.5,-0.5"/>
 <text text-anchor="start" x="145.5" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="188" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::teardown</text>
@@ -59,7 +59,7 @@
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
-<g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#a7ba4cdcf870915d57f9f36ed68f7c33a" target="_top" xlink:title="Activates both dbus session instances. ">
+<g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#af84424bf49120532516ea0660b5857f1" target="_top" xlink:title="Activates both dbus session instances. ">
 <polygon fill="white" stroke="black" points="279.5,-98.5 279.5,-128.5 400.5,-128.5 400.5,-98.5 279.5,-98.5"/>
 <text text-anchor="start" x="287.5" y="-116.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="340" y="-105.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::activate</text>
@@ -73,7 +73,7 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#aad83b6fa08a863d7af731d77dade15b0" target="_top" xlink:title="Sets config for both dbus session instances. ">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#aba926ebbabc356d598ee8d32f37d7f6b" target="_top" xlink:title="Sets config for both dbus session instances. ">
 <polygon fill="white" stroke="black" points="276,-49.5 276,-79.5 404,-79.5 404,-49.5 276,-49.5"/>
 <text text-anchor="start" x="284" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="340" y="-56.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::setConfig</text>
@@ -87,7 +87,7 @@
 </g>
 <!-- Node7 -->
 <g id="node7" class="node"><title>Node7</title>
-<g id="a_node7"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#a003afe7ddc034ad69f0b6ecc7abe2fdc" target="_top" xlink:title="Restore system to the state prior to launching of gateway. ">
+<g id="a_node7"><a xlink:href="classsoftwarecontainer_1_1_d_bus_gateway.html#acc3278f8b78471a72c908f16b7aa36c6" target="_top" xlink:title="Restore system to the state prior to launching of gateway. ">
 <polygon fill="white" stroke="black" points="277,-0.5 277,-30.5 403,-30.5 403,-0.5 277,-0.5"/>
 <text text-anchor="start" x="285" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="340" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">DBusGateway::teardown</text>

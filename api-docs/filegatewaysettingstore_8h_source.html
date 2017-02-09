@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-5914c5f 2017-02-07</span>
+   &#160;<span id="projectnumber">0.18.0-3f93be9 2017-02-09</span>
    </div>
   </td>
  </tr>
@@ -111,10 +111,10 @@ $(document).ready(function(){initNavTree('filegatewaysettingstore_8h_source.html
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">     * @brief Add a new setting to the store</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">     * @param setting the file setting to be added</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">     * @return ReturnCode::FAILURE if the setting conflicts with any existing settings</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">     * @return ReturnCode::SUCCESS otherwise</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">     * @return false if the setting conflicts with any existing settings</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">     * @return true otherwise</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> addSetting(<span class="keyword">const</span> <a class="code" href="structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html">FileGatewayParser::FileSetting</a> &amp;setting);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">bool</span> addSetting(<span class="keyword">const</span> <a class="code" href="structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html">FileGatewayParser::FileSetting</a> &amp;setting);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">/*</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">     * @brief Get the list of settings</span></div>
@@ -131,7 +131,6 @@ $(document).ready(function(){initNavTree('filegatewaysettingstore_8h_source.html
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting_html"><div class="ttname"><a href="structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html">softwarecontainer::FileGatewayParser::FileSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="filegatewayparser_8h_source.html#l00031">filegatewayparser.h:31</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_file_gateway_setting_store_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_gateway_setting_store.html">softwarecontainer::FileGatewaySettingStore</a></div><div class="ttdef"><b>Definition:</b> <a href="filegatewaysettingstore_8h_source.html#l00026">filegatewaysettingstore.h:26</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -139,7 +138,7 @@ $(document).ready(function(){initNavTree('filegatewaysettingstore_8h_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_fb9b4f6d7638029c403f9b6e00db042e.html">files</a></li><li class="navelem"><b>filegatewaysettingstore.h</b></li>
-    <li class="footer">Generated on Tue Feb 7 2017 15:19:59 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 9 2017 09:49:52 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

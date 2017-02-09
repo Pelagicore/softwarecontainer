@@ -1,5 +1,6 @@
 <map id="softwarecontainer::Gateway::getContainer" name="softwarecontainer::Gateway::getContainer">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21" title="Implements Gateway::activateGateway. " alt="" coords="209,5,439,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714" title="Set an environment variable in the associated container. " alt="" coords="214,71,434,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129" title="Implements Gateway::activateGateway. " alt="" coords="487,63,644,119"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_device_node_gateway.html#a9e912027cad4fff3ed4d9a9581f45227" title="Implements Gateway::activateGateway. " alt="" coords="224,5,424,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21" title="Implements Gateway::activateGateway. " alt="" coords="209,85,439,126"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b" title="Set an environment variable in the associated container. " alt="" coords="214,150,434,191"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129" title="Implements Gateway::activateGateway. " alt="" coords="487,143,644,199"/>
 </map>

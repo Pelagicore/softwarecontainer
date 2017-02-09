@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-5914c5f 2017-02-07</span>
+   &#160;<span id="projectnumber">0.18.0-3f93be9 2017-02-09</span>
    </div>
   </td>
  </tr>
@@ -719,7 +719,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00043">43</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="container_8cpp_source.html#l00541">softwarecontainer::Container::bindMountInContainer()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>.</p>
+<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="container_8cpp_source.html#l00541">softwarecontainer::Container::bindMountInContainer()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">struct </span>stat st;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">if</span> (getStat(path, st)) {</div>
@@ -732,7 +732,7 @@ Here is the caller graph for this function:</div>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a44f64c34c09d1ffdb18428b41f0d9e91_icgraph.svg" width="775" height="160"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a44f64c34c09d1ffdb18428b41f0d9e91_icgraph.svg" width="835" height="238"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -921,7 +921,7 @@ true if the directory is empty </dd></dl>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00105">105</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00109">softwarecontainer::FileToolkitWithUndo::bindMount()</a>, and <a class="el" href="container_8cpp_source.html#l00541">softwarecontainer::Container::bindMountInContainer()</a>.</p>
+<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00109">softwarecontainer::FileToolkitWithUndo::bindMount()</a>, and <a class="el" href="container_8cpp_source.html#l00541">softwarecontainer::Container::bindMountInContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">struct </span>stat st;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">return</span> getStat(path, st);</div>
@@ -930,7 +930,7 @@ true if the directory is empty </dd></dl>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_ae8835f968ab1d43b4a395b0097490734_icgraph.svg" width="407" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_ae8835f968ab1d43b4a395b0097490734_icgraph.svg" width="407" height="212"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -1010,7 +1010,7 @@ ReturnCode::FAILURE if b is false </dd></dl>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8h_source.html#l00064">64</a> of file <a class="el" href="softwarecontainer-common_8h_source.html">softwarecontainer-common.h</a>.</p>
 
-<p>Referenced by <a class="el" href="dbusgateway_8cpp_source.html#l00057">softwarecontainer::DBusGateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00057">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00310">softwarecontainer::SoftwareContainerAgent::bindMount()</a>, <a class="el" href="netlink_8cpp_source.html#l00480">softwarecontainer::Netlink::checkKernelDump()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="container_8cpp_source.html#l00335">softwarecontainer::Container::execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00229">softwarecontainer::SoftwareContainerAgent::execute()</a>, <a class="el" href="netlink_8cpp_source.html#l00313">softwarecontainer::Netlink::findAddresses()</a>, <a class="el" href="netlink_8cpp_source.html#l00288">softwarecontainer::Netlink::findLink()</a>, <a class="el" href="netlink_8cpp_source.html#l00454">softwarecontainer::Netlink::getKernelDump()</a>, <a class="el" href="container_8cpp_source.html#l00109">softwarecontainer::Container::initialize()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00074">isSuccess()</a>, <a class="el" href="netlink_8cpp_source.html#l00260">softwarecontainer::Netlink::linkDown()</a>, <a class="el" href="netlink_8cpp_source.html#l00193">softwarecontainer::Netlink::linkUp()</a>, <a class="el" href="netlink_8cpp_source.html#l00029">softwarecontainer::Netlink::Netlink()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00167">softwarecontainer::FileToolkitWithUndo::overlayMount()</a>, <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="envgateway_8cpp_source.html#l00037">softwarecontainer::EnvironmentGateway::readConfigElement()</a>, <a class="el" href="filegateway_8cpp_source.html#l00030">softwarecontainer::FileGateway::readConfigElement()</a>, <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00063">softwarecontainer::DBusGatewayInstance::readConfigElement()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00034">softwarecontainer::DeviceNodeGateway::readConfigElement()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00332">softwarecontainer::SoftwareContainer::resume()</a>, <a class="el" href="dbusgateway_8cpp_source.html#l00036">softwarecontainer::DBusGateway::setConfig()</a>, <a class="el" href="gateway_8cpp_source.html#l00024">softwarecontainer::Gateway::setConfig()</a>, <a class="el" href="netlink_8cpp_source.html#l00222">softwarecontainer::Netlink::setIP()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00279">softwarecontainer::SoftwareContainer::shutdown()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00058">softwarecontainer::SoftwareContainer::SoftwareContainer()</a>, <a class="el" href="container_8cpp_source.html#l00264">softwarecontainer::Container::start()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00170">softwarecontainer::SoftwareContainer::startGateways()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00309">softwarecontainer::SoftwareContainer::suspend()</a>, and <a class="el" href="dbusgateway_8cpp_source.html#l00078">softwarecontainer::DBusGateway::teardown()</a>.</p>
+<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="container_8cpp_source.html#l00335">softwarecontainer::Container::execute()</a>, <a class="el" href="softwarecontaineragent_8cpp_source.html#l00229">softwarecontainer::SoftwareContainerAgent::execute()</a>, <a class="el" href="container_8cpp_source.html#l00109">softwarecontainer::Container::initialize()</a>, <a class="el" href="softwarecontainer-common_8h_source.html#l00074">isSuccess()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00167">softwarecontainer::FileToolkitWithUndo::overlayMount()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00327">softwarecontainer::SoftwareContainer::resume()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00274">softwarecontainer::SoftwareContainer::shutdown()</a>, <a class="el" href="container_8cpp_source.html#l00264">softwarecontainer::Container::start()</a>, and <a class="el" href="softwarecontainer_8cpp_source.html#l00304">softwarecontainer::SoftwareContainer::suspend()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">return</span> (code != ReturnCode::SUCCESS);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
@@ -1018,7 +1018,7 @@ ReturnCode::FAILURE if b is false </dd></dl>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a51a25e6a54b7bb79fc5b4ce8902a31a4_icgraph.svg" width="912" height="1996"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a51a25e6a54b7bb79fc5b4ce8902a31a4_icgraph.svg" width="860" height="702"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -1060,7 +1060,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00064">isError()</a>.</p>
 
-<p>Referenced by <a class="el" href="pulsegateway_8cpp_source.html#l00076">softwarecontainer::PulseGateway::activateGateway()</a>, <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00057">softwarecontainer::NetworkGateway::activateGateway()</a>, and <a class="el" href="networkgateway_8cpp_source.html#l00044">softwarecontainer::NetworkGateway::readConfigElement()</a>.</p>
+<p>Referenced by <a class="el" href="softwarecontainer_8cpp_source.html#l00430">softwarecontainer::SoftwareContainer::bindMount()</a>, and <a class="el" href="gateway_8cpp_source.html#l00129">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> !<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(code);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
@@ -1077,7 +1077,7 @@ Here is the call graph for this function:</div>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a7e308629b69d1bcc3bc5e8ceac9b5a2a_icgraph.svg" width="422" height="276"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacesoftwarecontainer_a7e308629b69d1bcc3bc5e8ceac9b5a2a_icgraph.svg" width="618" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -1130,7 +1130,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li>
-    <li class="footer">Generated on Tue Feb 7 2017 15:19:59 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 9 2017 09:49:53 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

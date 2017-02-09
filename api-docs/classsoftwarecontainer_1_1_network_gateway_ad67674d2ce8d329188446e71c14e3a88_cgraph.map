@@ -1,6 +1,0 @@
-<map id="softwarecontainer::NetworkGateway::readConfigElement" name="softwarecontainer::NetworkGateway::readConfigElement">
-<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a" title="isSuccess Check if ReturnCode indicates Success or not " alt="" coords="301,5,435,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_network_gateway_parser.html#a3139a32ac1978488b7a7f9e8474ecea4" title="Parses NetworkGateway configuration into IPTableEntry. " alt="" coords="248,70,488,126"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="536,9,669,51"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="536,77,669,119"/>
-</map>

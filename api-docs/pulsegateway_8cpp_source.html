@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-5914c5f 2017-02-07</span>
+   &#160;<span id="projectnumber">0.18.0-3f93be9 2017-02-09</span>
    </div>
   </td>
  </tr>
@@ -100,46 +100,46 @@ $(document).ready(function(){initNavTree('pulsegateway_8cpp_source.html','');});
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;}</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_pulse_gateway.html#a46f0c9cbf8282d716c8bbbbd2cce31c0">   34</a></span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> <a class="code" href="classsoftwarecontainer_1_1_pulse_gateway.html#a46f0c9cbf8282d716c8bbbbd2cce31c0">PulseGateway::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_pulse_gateway.html#a5b89dda3e94723ecacddfc77ee0f84a1">   34</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_pulse_gateway.html#a5b89dda3e94723ecacddfc77ee0f84a1">PulseGateway::readConfigElement</a>(<span class="keyword">const</span> json_t *element)</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">bool</span> configValue = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">JSONParser::read</a>(element, <span class="stringliteral">&quot;audio&quot;</span>, configValue)) {</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Either \&quot;audio\&quot; key is missing, or not a bool in json configuration&quot;</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> (!m_enableAudio) {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        m_enableAudio = configValue;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> PulseGateway::enablePulseAudio() {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keywordtype">bool</span> PulseGateway::enablePulseAudio() {</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">bool</span> hasPulse = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    std::string dir = Glib::getenv(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, hasPulse);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">if</span> (!hasPulse) {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Should enable pulseaudio gateway, but &quot;</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    &lt;&lt; std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME) &lt;&lt; <span class="stringliteral">&quot; is not defined&quot;</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    log_info() &lt;&lt; <span class="stringliteral">&quot;Enabling pulseaudio gateway. Socket location : &quot;</span> &lt;&lt; dir;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    std::string pathInContainer = buildPath(<span class="stringliteral">&quot;/gateways/&quot;</span>, SOCKET_FILE_NAME);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;bindMountInContainer(std::string(dir),</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                                             pathInContainer,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                                                             <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    &lt;&lt; std::string(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                    &lt;&lt; <span class="stringliteral">&quot; is not defined&quot;</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    log_info() &lt;&lt; <span class="stringliteral">&quot;Enabling pulseaudio gateway. Socket location : &quot;</span> &lt;&lt; dir;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    std::string pathInContainer = buildPath(<span class="stringliteral">&quot;/gateways/&quot;</span>, SOCKET_FILE_NAME);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;bindMountInContainer(std::string(dir),</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                                     pathInContainer,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                                     <span class="keyword">false</span>))) {</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not bind mount pulseaudio socket in container&quot;</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::string unixPath = <span class="stringliteral">&quot;unix:&quot;</span> + pathInContainer;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">setEnvironmentVariable</a>(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b">setEnvironmentVariable</a>(PULSE_AUDIO_SERVER_ENVIRONMENT_VARIABLE_NAME, unixPath);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;}</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_pulse_gateway.html#a0cd0a00ca7590d7c9c3c961e20de56df">   76</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_pulse_gateway.html#a0cd0a00ca7590d7c9c3c961e20de56df">PulseGateway::activateGateway</a>()</div>
@@ -150,7 +150,7 @@ $(document).ready(function(){initNavTree('pulsegateway_8cpp_source.html','');});
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Audio will be enabled&quot;</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(enablePulseAudio());</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">return</span> enablePulseAudio();</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
 <div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classsoftwarecontainer_1_1_pulse_gateway.html#a677394c342fa146f62983c2500d88213">   87</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classsoftwarecontainer_1_1_pulse_gateway.html#a677394c342fa146f62983c2500d88213">PulseGateway::teardownGateway</a>()</div>
@@ -160,14 +160,12 @@ $(document).ready(function(){initNavTree('pulsegateway_8cpp_source.html','');});
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a7e308629b69d1bcc3bc5e8ceac9b5a2a"><div class="ttname"><a href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">softwarecontainer::isSuccess</a></div><div class="ttdeci">bool isSuccess(ReturnCode code)</div><div class="ttdoc">isSuccess Check if ReturnCode indicates Success or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer-common.h:74</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_pulse_gateway_html_a0cd0a00ca7590d7c9c3c961e20de56df"><div class="ttname"><a href="classsoftwarecontainer_1_1_pulse_gateway.html#a0cd0a00ca7590d7c9c3c961e20de56df">softwarecontainer::PulseGateway::activateGateway</a></div><div class="ttdeci">virtual bool activateGateway() override</div><div class="ttdoc">Implements Gateway::activateGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00076">pulsegateway.cpp:76</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ab048dec9bf64f292e2a9c7f10c3e784b"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">bool setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00129">gateway.cpp:129</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_pulse_gateway_html_a5b89dda3e94723ecacddfc77ee0f84a1"><div class="ttname"><a href="classsoftwarecontainer_1_1_pulse_gateway.html#a5b89dda3e94723ecacddfc77ee0f84a1">softwarecontainer::PulseGateway::readConfigElement</a></div><div class="ttdeci">bool readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00034">pulsegateway.cpp:34</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00104">gateway.cpp:104</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a20f57ddde85b938d67104625e774a714"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a20f57ddde85b938d67104625e774a714">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">ReturnCode setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00129">gateway.cpp:129</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_j_s_o_n_parser_html_a7ea50df505b43684c4a1d82ca6cb6e82"><div class="ttname"><a href="classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82">softwarecontainer::JSONParser::read</a></div><div class="ttdeci">static bool read(const json_t *element, const char *key, std::string &amp;result)</div><div class="ttdoc">Reads a string from a JSON Object. </div><div class="ttdef"><b>Definition:</b> <a href="jsonparser_8cpp_source.html#l00051">jsonparser.cpp:51</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_pulse_gateway_html_a46f0c9cbf8282d716c8bbbbd2cce31c0"><div class="ttname"><a href="classsoftwarecontainer_1_1_pulse_gateway.html#a46f0c9cbf8282d716c8bbbbd2cce31c0">softwarecontainer::PulseGateway::readConfigElement</a></div><div class="ttdeci">ReturnCode readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00034">pulsegateway.cpp:34</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_pulse_gateway_html_a677394c342fa146f62983c2500d88213"><div class="ttname"><a href="classsoftwarecontainer_1_1_pulse_gateway.html#a677394c342fa146f62983c2500d88213">softwarecontainer::PulseGateway::teardownGateway</a></div><div class="ttdeci">virtual bool teardownGateway() override</div><div class="ttdoc">Implements Gateway::teardownGateway. </div><div class="ttdef"><b>Definition:</b> <a href="pulsegateway_8cpp_source.html#l00087">pulsegateway.cpp:87</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -175,7 +173,7 @@ $(document).ready(function(){initNavTree('pulsegateway_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><b>pulsegateway.cpp</b></li>
-    <li class="footer">Generated on Tue Feb 7 2017 15:19:59 for softwarecontainer by
+    <li class="footer">Generated on Thu Feb 9 2017 09:49:52 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

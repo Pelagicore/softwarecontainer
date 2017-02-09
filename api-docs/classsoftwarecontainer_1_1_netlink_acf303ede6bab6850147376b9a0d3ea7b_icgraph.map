@@ -1,5 +1,0 @@
-<map id="softwarecontainer::Netlink::checkKernelDump" name="softwarecontainer::Netlink::checkKernelDump">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_netlink.html#aec31c67231b12f8a1702054e13029cbb" title="Get all addresses associated with the given interface index. " alt="" coords="232,5,387,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_netlink.html#a07b353cd40aeffd94d9fb03d9cdd1119" title="Check that the device given is a network bridge. " alt="" coords="243,71,376,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_netlink.html#abaaa3af391069f8b624edd0c066eb958" title="Bring the given interface up. " alt="" coords="243,136,376,177"/>
-</map>

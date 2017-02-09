@@ -1,6 +1,0 @@
-<map id="softwarecontainer::DBusGateway::teardown" name="softwarecontainer::DBusGateway::teardown">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5" title="Is the gateway activated or not? " alt="" coords="221,5,368,47"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="228,71,361,112"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#a9c01eb992bc9c094f98776b8154e932a" title="Restore system to the state prior to launching of gateway. " alt="" coords="227,136,362,177"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="416,136,549,177"/>
-</map>
