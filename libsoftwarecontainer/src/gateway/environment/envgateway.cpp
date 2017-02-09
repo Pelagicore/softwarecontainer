@@ -56,7 +56,8 @@ bool EnvironmentGateway::activateGateway()
     }
 
     for (auto &variable : m_variables) {
-        if (!setEnvironmentVariable(variable.first, variable.second)) {
+        std::shared_ptr<ContainerAbstractInterface> container = getContainer();
+        if (isError(container->setEnvironmentVariable(variable.first, variable.second))) {
             log_error() << "Could not set environment variable " << variable.first
                         << " for the container";
             return false;

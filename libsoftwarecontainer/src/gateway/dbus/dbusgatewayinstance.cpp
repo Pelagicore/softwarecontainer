@@ -80,7 +80,7 @@ bool DBusGatewayInstance::activateGateway()
                          + (m_type == SessionProxy ? "SESSION" : "SYSTEM")
                          + std::string("_BUS_ADDRESS");
     std::string value = "unix:path=" + buildPath("/gateways", socketName());
-    setEnvironmentVariable(variable, value);
+    getContainer()->setEnvironmentVariable(variable, value);
 
     std::vector<std::string> commandVec = { "dbus-proxy"
                                           , m_socket
