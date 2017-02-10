@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-fe55929 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
    </div>
   </td>
  </tr>
@@ -128,10 +128,6 @@ Public Member Functions</h2></td></tr>
 &lt; ContainerState &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a25cb629242d33c12d2f3468bbd34964a">getContainerState</a> ()</td></tr>
 <tr class="memdesc:a25cb629242d33c12d2f3468bbd34964a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the state of this container instance.  <a href="#a25cb629242d33c12d2f3468bbd34964a">More...</a><br /></td></tr>
 <tr class="separator:a25cb629242d33c12d2f3468bbd34964a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88d21d398c782cd7715b8f17307a14b2"><td class="memItemLeft" align="right" valign="top">std::shared_ptr<br class="typebreak" />
-&lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">getContainer</a> ()</td></tr>
-<tr class="memdesc:a88d21d398c782cd7715b8f17307a14b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rturns a pointer to the underlying container implementation.  <a href="#a88d21d398c782cd7715b8f17307a14b2">More...</a><br /></td></tr>
-<tr class="separator:a88d21d398c782cd7715b8f17307a14b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa699253aa7955f9d41c78324d5f49184"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184">previouslyConfigured</a> ()</td></tr>
 <tr class="memdesc:aa699253aa7955f9d41c78324d5f49184"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates if gateways have been configured previously.  <a href="#aa699253aa7955f9d41c78324d5f49184">More...</a><br /></td></tr>
 <tr class="separator:aa699253aa7955f9d41c78324d5f49184"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,7 +189,6 @@ Private Attributes</h2></td></tr>
 <li><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a40c0fbc114b84746b211294cb15855c5" title="Shut down the container. ">shutdown()</a> - successful call triggers trasition to TERMINATED</li>
 <li><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a7bf541dc506ae1293441a3f734a8cde4" title="Should only be called on containers in state &#39;READY&#39;. ">bindMount()</a></li>
 <li><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a62b92fe0c12600d3e520a82d70fef821" title="Starts the Gateways by setting the gateway configurations and activating the configured gateway...">startGateways()</a></li>
-<li><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2" title="Rturns a pointer to the underlying container implementation. ">getContainer()</a></li>
 <li><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a47be9e4b2c49aedf67cd23404c9d4eee" title="Create a job that can run a function in a container. ">createFunctionJob()</a></li>
 <li><a class="el" href="classsoftwarecontainer_1_1_software_container.html#a911b62ba4d9307275f59698d2ae69467" title="Create a job that can run a command in a container. ">createCommandJob()</a></li>
 </ul>
@@ -210,7 +205,7 @@ Private Attributes</h2></td></tr>
 <p>If a call is made when SC is in an inappropriate state, the <a class="el" href="classsoftwarecontainer_1_1_invalid_operation_error.html" title="A method was called which is inappropriate in the current state. ">InvalidOperationError</a> exception is thrown. This error does not mean that the intended operation was erroneous, since the operation can't even be performed in the current state.</p>
 <p>It is an error to call a method on a state which would be the result of the operation, e.g. calling suspend on a suspended container is an invalid operation. The reason for this is that the interface should be clear that there can't be any side effects or other changes when making a call which is redundant. </p>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00165">165</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8h_source.html#l00164">164</a> of file <a class="el" href="softwarecontainer_8h_source.html">softwarecontainer.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6141f7e59438e4f1dce565f3826a81f0"></a>
 <div class="memitem">
@@ -362,32 +357,20 @@ false If configuration or activation encountered a non-fatal error</dd></dl>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00400">400</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-
-<p>References <a class="el" href="softwarecontainer_8cpp_source.html#l00367">getContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;{</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    assertValidState();</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to execute code in non ready container &quot;</span> +</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;                              std::string(m_container-&gt;id());</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    }</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keyword">auto</span> containerInterface = <a class="code" href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">getContainer</a>();</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;FunctionJob&gt;(containerInterface, fun);</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a88d21d398c782cd7715b8f17307a14b2"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">softwarecontainer::SoftwareContainer::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Rturns a pointer to the underlying container implementation. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00367">softwarecontainer.cpp:367</a></div></div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00383">383</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;{</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    assertValidState();</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to execute code in non ready container &quot;</span> +</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                              std::string(m_container-&gt;id());</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    }</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;FunctionJob&gt;(m_container, fun);</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_a47be9e4b2c49aedf67cd23404c9d4eee_cgraph.svg" width="516" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <a class="anchor" id="a911b62ba4d9307275f59698d2ae69467"></a>
@@ -414,32 +397,20 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00415">415</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-
-<p>References <a class="el" href="softwarecontainer_8cpp_source.html#l00367">getContainer()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;{</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    assertValidState();</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to execute code in non ready container &quot;</span> +</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;                              std::string(m_container-&gt;id());</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    }</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keyword">auto</span> containerInterface = <a class="code" href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">getContainer</a>();</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;CommandJob&gt;(containerInterface, command);</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a88d21d398c782cd7715b8f17307a14b2"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">softwarecontainer::SoftwareContainer::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Rturns a pointer to the underlying container implementation. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00367">softwarecontainer.cpp:367</a></div></div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00397">397</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;{</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    assertValidState();</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to execute code in non ready container &quot;</span> +</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;                              std::string(m_container-&gt;id());</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    }</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keywordflow">return</span> std::make_shared&lt;CommandJob&gt;(m_container, command);</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_a911b62ba4d9307275f59698d2ae69467_cgraph.svg" width="526" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <a class="anchor" id="a40c0fbc114b84746b211294cb15855c5"></a>
@@ -702,29 +673,28 @@ Here is the call graph for this function:</div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00430">430</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00411">411</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
 
-<p>References <a class="el" href="softwarecontainer_8cpp_source.html#l00367">getContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer::isSuccess()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;{</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    assertValidState();</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to bind mount in non ready container &quot;</span> + id;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    }</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(<a class="code" href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">getContainer</a>()-&gt;bindMountInContainer(pathOnHost, pathInContainer, readonly));</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_software_container_html_a88d21d398c782cd7715b8f17307a14b2"><div class="ttname"><a href="classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2">softwarecontainer::SoftwareContainer::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Rturns a pointer to the underlying container implementation. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer_8cpp_source.html#l00367">softwarecontainer.cpp:367</a></div></div>
+<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer::isSuccess()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;{</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    assertValidState();</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to bind mount in non ready container &quot;</span> + id;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        log_error() &lt;&lt; message;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    }</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(m_container-&gt;bindMountInContainer(pathOnHost, pathInContainer, readonly));</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;}</div>
 <div class="ttc" id="namespacesoftwarecontainer_html_a7e308629b69d1bcc3bc5e8ceac9b5a2a"><div class="ttname"><a href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">softwarecontainer::isSuccess</a></div><div class="ttdeci">bool isSuccess(ReturnCode code)</div><div class="ttdoc">isSuccess Check if ReturnCode indicates Success or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer-common.h:74</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_a7bf541dc506ae1293441a3f734a8cde4_cgraph.svg" width="651" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_a7bf541dc506ae1293441a3f734a8cde4_cgraph.svg" width="572" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -747,63 +717,11 @@ Here is the call graph for this function:</div>
 <p>Get the state of this container instance. </p>
 <dl class="section return"><dt>Returns</dt><dd>ContainerState representing the current state </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00395">395</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;{</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordflow">return</span> m_containerState;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00378">378</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;{</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="keywordflow">return</span> m_containerState;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;}</div>
 </div><!-- fragment -->
-</div>
-</div>
-<a class="anchor" id="a88d21d398c782cd7715b8f17307a14b2"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">ContainerAbstractInterface</a> &gt; softwarecontainer::SoftwareContainer::getContainer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Rturns a pointer to the underlying container implementation. </p>
-<p>This should only be called on a container in state 'READY'</p>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_invalid_operation_error.html" title="A method was called which is inappropriate in the current state. ">InvalidOperationError</a></td><td>If called when state is not 'READY' </td></tr>
-    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_invalid_container_error.html" title="The container instance is in an invalid state and should not be used. ">InvalidContainerError</a></td><td>If the container is in state 'INVALID' </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00367">367</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-
-<p>Referenced by <a class="el" href="softwarecontainer_8cpp_source.html#l00430">bindMount()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00415">createCommandJob()</a>, and <a class="el" href="softwarecontainer_8cpp_source.html#l00400">createFunctionJob()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;{</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    assertValidState();</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    std::string <span class="keywordtype">id</span> = std::string(m_container-&gt;id());</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keywordflow">if</span> (m_containerState != ContainerState::READY) {</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        std::string message = <span class="stringliteral">&quot;Invalid to access container implementation when &quot;</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                              <span class="stringliteral">&quot;not ready &quot;</span> + id;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        log_error() &lt;&lt; message;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        <span class="keywordflow">throw</span> InvalidOperationError(message);</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    std::shared_ptr&lt;ContainerAbstractInterface&gt; ptrCopy = m_container;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keywordflow">return</span> ptrCopy;</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;}</div>
-</div><!-- fragment -->
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_software_container_a88d21d398c782cd7715b8f17307a14b2_icgraph.svg" width="526" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <a class="anchor" id="aa699253aa7955f9d41c78324d5f49184"></a>
@@ -824,10 +742,10 @@ Here is the caller graph for this function:</div>
 <p>TODO: This should be removed when quick-launch is implemented</p>
 <dl class="section return"><dt>Returns</dt><dd>true if startGateways has been called previously, false if not </dd></dl>
 
-<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00456">456</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;{</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    <span class="keywordflow">return</span> m_previouslyConfigured;</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;}</div>
+<p>Definition at line <a class="el" href="softwarecontainer_8cpp_source.html#l00437">437</a> of file <a class="el" href="softwarecontainer_8cpp_source.html">softwarecontainer.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;{</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keywordflow">return</span> m_previouslyConfigured;</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -877,7 +795,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container.html">SoftwareContainer</a></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:00:05 for softwarecontainer by
+    <li class="footer">Generated on Fri Feb 10 2017 08:09:55 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

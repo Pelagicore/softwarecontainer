@@ -12,7 +12,6 @@ var classsoftwarecontainer_1_1_software_container =
     [ "resume", "classsoftwarecontainer_1_1_software_container.html#ab85363f0b8f0b9cfc6800a94bc9d8443", null ],
     [ "bindMount", "classsoftwarecontainer_1_1_software_container.html#a7bf541dc506ae1293441a3f734a8cde4", null ],
     [ "getContainerState", "classsoftwarecontainer_1_1_software_container.html#a25cb629242d33c12d2f3468bbd34964a", null ],
-    [ "getContainer", "classsoftwarecontainer_1_1_software_container.html#a88d21d398c782cd7715b8f17307a14b2", null ],
     [ "previouslyConfigured", "classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184", null ],
     [ "addGateway", "classsoftwarecontainer_1_1_software_container.html#ac9483d1d07e84b77820498eba3e7b284", null ]
 ];

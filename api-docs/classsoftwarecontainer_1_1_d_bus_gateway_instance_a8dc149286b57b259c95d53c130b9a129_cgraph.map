@@ -1,7 +1,4 @@
 <map id="softwarecontainer::DBusGatewayInstance::activateGateway" name="softwarecontainer::DBusGatewayInstance::activateGateway">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b" title="Set an environment variable in the associated container. " alt="" coords="211,64,431,105"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="479,5,635,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527" title="Check if the gateway has an associated container. " alt="" coords="683,32,841,73"/>
-<area shape="rect" id="node5" href="$namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a" title="isSuccess Check if ReturnCode indicates Success or not " alt="" coords="490,123,623,164"/>
-<area shape="rect" id="node6" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="695,123,829,164"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="211,13,367,54"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527" title="Check if the gateway has an associated container. " alt="" coords="415,13,573,54"/>
 </map>

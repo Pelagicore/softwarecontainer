@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-fe55929 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
    </div>
   </td>
  </tr>
@@ -668,7 +668,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00099">99</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="gateway_8cpp_source.html#l00058">softwarecontainer::Gateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00057">softwarecontainer::NetworkGateway::activateGateway()</a>, <a class="el" href="gateway_8cpp_source.html#l00104">softwarecontainer::Gateway::getContainer()</a>, and <a class="el" href="gateway_8cpp_source.html#l00129">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
+<p>Referenced by <a class="el" href="gateway_8cpp_source.html#l00058">softwarecontainer::Gateway::activate()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00057">softwarecontainer::NetworkGateway::activateGateway()</a>, and <a class="el" href="gateway_8cpp_source.html#l00104">softwarecontainer::Gateway::getContainer()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;{</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">return</span> m_container != <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
@@ -676,7 +676,7 @@ Here is the caller graph for this function:</div>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_a5e1b860ea7c1ed7b69d2e5dd7021a527_icgraph.svg" width="856" height="270"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_a5e1b860ea7c1ed7b69d2e5dd7021a527_icgraph.svg" width="651" height="278"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -716,7 +716,7 @@ Here is the caller graph for this function:</div>
 
 <p>References <a class="el" href="gateway_8cpp_source.html#l00099">softwarecontainer::Gateway::hasContainer()</a>.</p>
 
-<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00057">softwarecontainer::NetworkGateway::activateGateway()</a>, and <a class="el" href="gateway_8cpp_source.html#l00129">softwarecontainer::Gateway::setEnvironmentVariable()</a>.</p>
+<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00047">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="networkgateway_8cpp_source.html#l00057">softwarecontainer::NetworkGateway::activateGateway()</a>, and <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00076">softwarecontainer::DBusGatewayInstance::activateGateway()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;{</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">throw</span> GatewayError(<span class="stringliteral">&quot;Attempting to get container reference before any container has been assigned.&quot;</span>);</div>
@@ -738,7 +738,7 @@ Here is the call graph for this function:</div>
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_a6f0a60c9f29ea869916f7524085b3e5f_icgraph.svg" width="650" height="204"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_a6f0a60c9f29ea869916f7524085b3e5f_icgraph.svg" width="444" height="211"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -779,40 +779,6 @@ Here is the caller graph for this function:</div>
 
 <p>Set an environment variable in the associated container. </p>
 
-<p>Definition at line <a class="el" href="gateway_8cpp_source.html#l00129">129</a> of file <a class="el" href="gateway_8cpp_source.html">gateway.cpp</a>.</p>
-
-<p>References <a class="el" href="gateway_8cpp_source.html#l00104">softwarecontainer::Gateway::getContainer()</a>, <a class="el" href="gateway_8cpp_source.html#l00099">softwarecontainer::Gateway::hasContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer::isSuccess()</a>.</p>
-
-<p>Referenced by <a class="el" href="dbusgatewayinstance_8cpp_source.html#l00076">softwarecontainer::DBusGatewayInstance::activateGateway()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;{</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">hasContainer</a>()) {</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;<a class="code" href="classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b">setEnvironmentVariable</a>(variable, value));</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t set environment variable on gateway without container&quot;</span>;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a5e1b860ea7c1ed7b69d2e5dd7021a527"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527">softwarecontainer::Gateway::hasContainer</a></div><div class="ttdeci">virtual bool hasContainer()</div><div class="ttdoc">Check if the gateway has an associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00099">gateway.cpp:99</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a7e308629b69d1bcc3bc5e8ceac9b5a2a"><div class="ttname"><a href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">softwarecontainer::isSuccess</a></div><div class="ttdeci">bool isSuccess(ReturnCode code)</div><div class="ttdoc">isSuccess Check if ReturnCode indicates Success or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer-common.h:74</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_ab048dec9bf64f292e2a9c7f10c3e784b"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b">softwarecontainer::Gateway::setEnvironmentVariable</a></div><div class="ttdeci">bool setEnvironmentVariable(const std::string &amp;variable, const std::string &amp;value)</div><div class="ttdoc">Set an environment variable in the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00129">gateway.cpp:129</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00104">gateway.cpp:104</a></div></div>
-</div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_ab048dec9bf64f292e2a9c7f10c3e784b_cgraph.svg" width="642" height="170"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
-<p><div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_gateway_ab048dec9bf64f292e2a9c7f10c3e784b_icgraph.svg" width="436" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-</div>
-</p>
-
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -825,7 +791,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_wayland_gateway.html">WaylandGateway</a></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:00:05 for softwarecontainer by
+    <li class="footer">Generated on Fri Feb 10 2017 08:09:56 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

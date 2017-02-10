@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-fe55929 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
    </div>
   </td>
  </tr>
@@ -125,22 +125,24 @@ $(document).ready(function(){initNavTree('envgateway_8cpp_source.html','');});
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;variable : m_variables) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">if</span> (!setEnvironmentVariable(variable.first, variable.second)) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not set environment variable &quot;</span> &lt;&lt; variable.first</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                        &lt;&lt; <span class="stringliteral">&quot; for the container&quot;</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keywordtype">bool</span> EnvironmentGateway::teardownGateway()</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;{</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        std::shared_ptr&lt;ContainerAbstractInterface&gt; container = getContainer();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(container-&gt;setEnvironmentVariable(variable.first, variable.second))) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not set environment variable &quot;</span> &lt;&lt; variable.first</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                        &lt;&lt; <span class="stringliteral">&quot; for the container&quot;</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">bool</span> EnvironmentGateway::teardownGateway()</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;{</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
+<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_environment_gateway_parser_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_environment_gateway_parser.html">softwarecontainer::EnvironmentGatewayParser</a></div><div class="ttdef"><b>Definition:</b> <a href="envgatewayparser_8h_source.html#l00027">envgatewayparser.h:27</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_environment_gateway_html_ab0bc77e649b4bfa6db780ac65587c565"><div class="ttname"><a href="classsoftwarecontainer_1_1_environment_gateway.html#ab0bc77e649b4bfa6db780ac65587c565">softwarecontainer::EnvironmentGateway::readConfigElement</a></div><div class="ttdeci">bool readConfigElement(const json_t *element)</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="envgateway_8cpp_source.html#l00037">envgateway.cpp:37</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
@@ -150,7 +152,7 @@ $(document).ready(function(){initNavTree('envgateway_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_0fa704ff3a6f29536320c0056049a312.html">environment</a></li><li class="navelem"><b>envgateway.cpp</b></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:00:03 for softwarecontainer by
+    <li class="footer">Generated on Fri Feb 10 2017 08:09:54 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

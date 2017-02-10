@@ -1,9 +1,8 @@
 <map id="softwarecontainer::Gateway::hasContainer" name="softwarecontainer::Gateway::hasContainer">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#abd136fffb30a625ca5ab4abe06adc680" title="Applies any configuration set by setConfig() " alt="" coords="223,9,357,51"/>
 <area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21" title="Implements Gateway::activateGateway. " alt="" coords="416,71,645,112"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="212,140,368,181"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b" title="Set an environment variable in the associated container. " alt="" coords="421,215,641,256"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="212,136,368,177"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#af84424bf49120532516ea0660b5857f1" title="Activates both dbus session instances. " alt="" coords="450,5,611,47"/>
 <area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_device_node_gateway.html#a9e912027cad4fff3ed4d9a9581f45227" title="Implements Gateway::activateGateway. " alt="" coords="431,135,631,191"/>
-<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129" title="Implements Gateway::activateGateway. " alt="" coords="693,207,851,263"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129" title="Implements Gateway::activateGateway. " alt="" coords="452,215,609,271"/>
 </map>
