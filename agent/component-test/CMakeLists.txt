@@ -28,6 +28,7 @@ set(SOFTWARECONTAINERAGENT_TEST_FILES
     main.cpp
     softwarecontaineragent_componenttest.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontainerfactory.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/dbus/softwarecontaineragent_dbus_common.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/dbus/softwarecontaineragent_dbus_stub.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/dbus/softwarecontaineragentadaptor.cpp

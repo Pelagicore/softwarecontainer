@@ -25,6 +25,7 @@
 #include "config/softwarecontainerconfig.h"
 #include "filetoolkitwithundo.h"
 #include "softwarecontainererror.h"
+#include "containeragentinterface.h"
 
 #include <glibmm.h>
 
@@ -162,7 +163,8 @@ public:
  * any side effects or other changes when making a call which is redundant.
  */
 class SoftwareContainer :
-    private FileToolkitWithUndo
+    private FileToolkitWithUndo,
+    public ContainerAgentInterface
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");

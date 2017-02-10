@@ -327,7 +327,6 @@ void SoftwareContainer::suspend()
 void SoftwareContainer::resume()
 {
     assertValidState();
-
     std::string id = std::string(m_container->id());
 
     if (m_containerState != ContainerState::SUSPENDED) {
