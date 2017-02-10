@@ -31,9 +31,11 @@
 namespace softwarecontainer {
 
 SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
-                                               std::shared_ptr<Config> config):
+                                               std::shared_ptr<Config> config,
+                                               std::shared_ptr<SoftwareContainerFactory> factory):
     m_mainLoopContext(mainLoopContext),
-    m_config(config)
+    m_config(config),
+    m_factory(factory)
 {
     m_containerIdPool.push_back(0);
 
@@ -88,6 +90,8 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
                                                 lxcConfigPath,
                                                 sharedMountsDir,
                                                 shutdownTimeout);
+
+    log_debug() << "Created SCA instance :" ;
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
@@ -218,8 +222,7 @@ ContainerID SoftwareContainerAgent::createContainer(const std::string &config)
 
     // Get an ID and create the container
     ContainerID containerID = findSuitableId();
-    auto container = SoftwareContainerPtr(new SoftwareContainer(containerID,
-                                                                std::move(containerConfig)));
+    auto container = m_factory->createContainer(containerID, std::move(containerConfig));
     log_debug() << "Created container with ID :" << containerID;
 
     m_containers[containerID] = container;
@@ -256,6 +259,12 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
 
     // Set up a CommandJob for this run in the container
     auto job = container->createCommandJob(cmdLine);
+    if (nullptr == job) {
+        std::string errorMessage("Could not create job instance");
+        log_error() << errorMessage;
+        throw SoftwareContainerAgentError(errorMessage);
+    }
+
     job->setOutputFile(outputFile);
     job->setEnvironmentVariables(env);
     job->setWorkingDirectory(workingDirectory);

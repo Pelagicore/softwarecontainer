@@ -23,6 +23,7 @@
 #include "config/configloader.h"
 #include "config/mainconfigsource.h"
 #include "config/configdefinition.h"
+#include "softwarecontainerfactory.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -102,8 +103,9 @@ public:
                                                                   ConfigDependencies());
 
         try {
-            sca = std::make_shared<SoftwareContainerAgent>(m_context, config);
-        } catch(SoftwareContainerError &err) {
+            std::shared_ptr<SoftwareContainerFactory> factory = std::shared_ptr<SoftwareContainerFactory> (new SoftwareContainerFactory());
+            sca = std::make_shared<SoftwareContainerAgent>(m_context, config, factory);
+        }  catch(SoftwareContainerError &err) {
             log_error() << "Exception in software agent constructor";
             ASSERT_TRUE(false);
         }
@@ -183,7 +185,7 @@ TEST_F(SoftwareContainerAgentTest, ResumeNonSuspendedContainer) {
     ASSERT_THROW({
         ContainerID id = sca->createContainer(valid_config);
 
-        sca->getContainer(id);
+//        sca->getContainer(id);
         sca->resumeContainer(id);
     }, InvalidOperationError);
 }

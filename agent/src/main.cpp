@@ -216,8 +216,9 @@ int main(int argc, char **argv)
         std::shared_ptr<Config> config = std::make_shared<Config>(std::move(configSources),
                                                                   ConfigDefinition::mandatory(),
                                                                   ConfigDependencies());
+        std::shared_ptr<SoftwareContainerFactory> factory = std::shared_ptr<SoftwareContainerFactory> (new SoftwareContainerFactory());
 
-        ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config);
+        ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config, factory);
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor(new SoftwareContainerAgentAdaptor(agent, useSessionBus));
 
         // Register UNIX signal handler
