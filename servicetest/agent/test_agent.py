@@ -62,18 +62,19 @@ def create_testoutput_dir(scope="module"):
 
 
 @pytest.mark.usefixtures("create_testoutput_dir", "agent")
-class TestClearGhostContainers(object):
-    """ This test suite is stands for testing agent to examine cleaning
-        ghost containers feature
+class TestClearOldContainers(object):
+    """ This test suite tests that SC cleans out old container, i.e.
+        container related files left on the file system.
     """
 
-    def testDeprecatedContainersCleanUp(self):
-        """ The first goal of this test to create ghost container.
+    def test_old_containers_cleanup(self):
+        """ The first goal of this test is to create a sitation where files from
+            a previous run of SC are left on the file system.
             To be able to produce it a SC is started and after that
             softwarecontainer-agent is killed.
 
-            The second phase of the test is running agent again to see
-            ghost container is cleaned.
+            The second phase of the test is to run SC again and make sure
+            it does not fail because of any files left from the previous run.
         """
         sc = Container()
         container_id = sc.start(DATA)
