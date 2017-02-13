@@ -31,6 +31,7 @@ Vagrant.configure(2) do |config|
     config.vm.network "public_network", bridge: [ "eth0", "eth1", "em1" ]
 
     config.vm.provider "virtualbox" do |vb|
+        vb.cpus = 1
         vb.customize [ "guestproperty", "set", :id,
                        "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 200 ]
         if ENV['VAGRANT_RAM'] then
