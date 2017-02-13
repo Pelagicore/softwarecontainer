@@ -95,7 +95,7 @@ bool NetworkGateway::activateGateway()
 
         job.wait();
         if (job.isError()) {
-            log_debug() << "Failed to apply rules for entry: " << entry.toString();
+            log_error() << "Failed to apply rules for entry: " << entry.toString();
             return false;
         }
     }
