@@ -19,6 +19,7 @@
 
 #include "iptableentry.h"
 #include "gateway/gateway.h"
+#include <iostream>
 
 namespace softwarecontainer {
 
@@ -29,20 +30,20 @@ bool IPTableEntry::applyRules()
 
             for (auto proto : rule.protocols) {
                 if (!insertCommand(interpretRuleWithProtocol(rule, proto))) {
-                    log_error() << "Couldn't apply the rule " << rule.target;
+                    std::cerr << "Couldn't apply the rule " << rule.target << std::endl;
                     return false;
                 }
             }
 
         } else if (!insertCommand(interpretRule(rule))) {
-            log_error() << "Couldn't apply the rule " << rule.target;
+            std::cerr << "Couldn't apply the rule " << rule.target << std::endl;
             return false;
         }
     }
 
     if (!insertCommand(interpretPolicy())) {
-        log_error() << "Unable to set policy " << convertTarget(m_defaultTarget)
-                    << " for " << m_type;
+        std::cerr << "Unable to set policy " << convertTarget(m_defaultTarget)
+                  << " for " << m_type << std::endl;
         return false;
     }
 
@@ -148,7 +149,7 @@ std::string IPTableEntry::interpretRule(Rule rule)
 std::string IPTableEntry::interpretPolicy()
 {
     if (m_defaultTarget != Target::ACCEPT && m_defaultTarget != Target::DROP) {
-        log_error() << "Wrong default target : " << convertTarget(m_defaultTarget);
+        std::cerr << "Wrong default target : " << convertTarget(m_defaultTarget) << std::endl;
         return "";
     }
     std::string iptableCommand = "iptables -P " + m_type + " " + convertTarget(m_defaultTarget);
@@ -159,19 +160,19 @@ std::string IPTableEntry::interpretPolicy()
 
 bool IPTableEntry::insertCommand(std::string command)
 {
-    log_debug() << "Add network rule : " <<  command;
+    std::cout << "Add network rule : " <<  command << std::endl;
 
     try {
         Glib::spawn_command_line_sync(command);
 
     } catch (Glib::SpawnError e) {
-        log_error() << "Failed to spawn " << command << ": code " << e.code()
-                               << " msg: " << e.what();
+        std::cerr << "Failed to spawn " << command << ": code " << e.code()
+                  << " msg: " << e.what() << std::endl;
 
         return false;
     } catch (Glib::ShellError e) {
-        log_error() << "Failed to call " << command << ": code " << e.code()
-                                       << " msg: " << e.what();
+        std::cerr << "Failed to call " << command << ": code " << e.code()
+                  << " msg: " << e.what() << std::endl;
         return false;
     }
 
