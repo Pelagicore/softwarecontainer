@@ -32,7 +32,7 @@
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
-<g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c" target="_top" xlink:title="Tries to bind mount a path from host to container. ">
+<g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" target="_top" xlink:title="Tries to bind mount a path from host to container. ">
 <polygon fill="white" stroke="black" points="136,-98.5 136,-128.5 296,-128.5 296,-98.5 136,-98.5"/>
 <text text-anchor="start" x="144" y="-116.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="216" y="-105.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::bindMountInContainer</text>
@@ -46,7 +46,7 @@
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
-<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
+<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
 <polygon fill="white" stroke="black" points="163.5,-39 163.5,-80 268.5,-80 268.5,-39 163.5,-39"/>
 <text text-anchor="start" x="171.5" y="-68" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="171.5" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
@@ -66,7 +66,7 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
 <polygon fill="white" stroke="black" points="354.5,-49 354.5,-90 459.5,-90 459.5,-49 354.5,-49"/>
 <text text-anchor="start" x="362.5" y="-78" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="362.5" y="-67" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
@@ -81,7 +81,7 @@
 </g>
 <!-- Node7 -->
 <g id="node7" class="node"><title>Node7</title>
-<g id="a_node7"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for startup. ">
+<g id="a_node7"><a xlink:href="classsoftwarecontainer_1_1_container.html#a25102e42007fb34a93d982b231ae6c78" target="_top" xlink:title="Setup the container for startup. ">
 <polygon fill="white" stroke="black" points="357,-0.5 357,-30.5 457,-30.5 457,-0.5 357,-0.5"/>
 <text text-anchor="start" x="365" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="407" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
@@ -95,7 +95,7 @@
 </g>
 <!-- Node6 -->
 <g id="node6" class="node"><title>Node6</title>
-<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" target="_top" xlink:title="create Creates a new lxc_container and creates it with all the initialization. ">
+<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_container.html#a67f48ee29e9294f4f42436e1297d34c7" target="_top" xlink:title="create Creates a new lxc_container and creates it with all the initialization. ">
 <polygon fill="white" stroke="black" points="518,-54.5 518,-84.5 618,-84.5 618,-54.5 518,-54.5"/>
 <text text-anchor="start" x="526" y="-72.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="568" y="-61.5" font-family="Helvetica,sans-Serif" font-size="10.00">Container::create</text>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-0f9c67e 2017-02-13</span>
    </div>
   </td>
  </tr>
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">bool</span> success = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">auto</span> cgroupSettings = m_parser.getSettings();</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; setting: cgroupSettings) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        success = <a class="code" href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">isSuccess</a>(<a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;setCgroupItem(setting.first, setting.second));</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        success = <a class="code" href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">getContainer</a>()-&gt;setCgroupItem(setting.first, setting.second);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordflow">if</span> (!success) {</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Error activating Cgroups Gateway, could not set cgroup item &quot;</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                        &lt;&lt; setting.first &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; setting.second;</div>
@@ -134,7 +134,6 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_html_ade0f87777e456e5af637a18482a06713"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway.html#ade0f87777e456e5af637a18482a06713">softwarecontainer::CgroupsGateway::readConfigElement</a></div><div class="ttdeci">bool readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8cpp_source.html#l00033">cgroupsgateway.cpp:33</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a7e308629b69d1bcc3bc5e8ceac9b5a2a"><div class="ttname"><a href="namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a">softwarecontainer::isSuccess</a></div><div class="ttdeci">bool isSuccess(ReturnCode code)</div><div class="ttdoc">isSuccess Check if ReturnCode indicates Success or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00074">softwarecontainer-common.h:74</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">softwarecontainer::CgroupsGatewayError</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00051">cgroupsgateway.h:51</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00104">gateway.cpp:104</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
@@ -144,7 +143,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_646af10687434ab6c31bea5c882c000e.html">cgroups</a></li><li class="navelem"><b>cgroupsgateway.cpp</b></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:09:54 for softwarecontainer by
+    <li class="footer">Generated on Mon Feb 13 2017 12:50:25 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

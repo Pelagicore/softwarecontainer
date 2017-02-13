@@ -1,6 +1,0 @@
-<map id="softwarecontainer::FileToolkitWithUndo::overlayMount" name="softwarecontainer::FileToolkitWithUndo::overlayMount">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="193,63,333,119"/>
-<area shape="rect" id="node4" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="385,5,518,47"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="381,135,521,191"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="385,71,518,112"/>
-</map>

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-0f9c67e 2017-02-13</span>
    </div>
   </td>
  </tr>
@@ -88,18 +88,18 @@ typedef std::function&lt; int()&gt;&#160;</td><td class="memItemRight" valign="b
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac804538b1fe087ee7ddc65520acb1ae9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_executable.html#ac804538b1fe087ee7ddc65520acb1ae9">execute</a> (ExecFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=-1, int stderr=2)=0</td></tr>
-<tr class="memdesc:ac804538b1fe087ee7ddc65520acb1ae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a commandline.  <a href="#ac804538b1fe087ee7ddc65520acb1ae9">More...</a><br /></td></tr>
-<tr class="separator:ac804538b1fe087ee7ddc65520acb1ae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24bd4798807cfd758cb0cde5662c0ca9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_executable.html#a24bd4798807cfd758cb0cde5662c0ca9">execute</a> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)=0</td></tr>
-<tr class="memdesc:a24bd4798807cfd758cb0cde5662c0ca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a function.  <a href="#a24bd4798807cfd758cb0cde5662c0ca9">More...</a><br /></td></tr>
-<tr class="separator:a24bd4798807cfd758cb0cde5662c0ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84b538f37297e9f5406bba8ba1bc050"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_executable.html#ac84b538f37297e9f5406bba8ba1bc050">execute</a> (ExecFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=-1, int stderr=2)=0</td></tr>
+<tr class="memdesc:ac84b538f37297e9f5406bba8ba1bc050"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a commandline.  <a href="#ac84b538f37297e9f5406bba8ba1bc050">More...</a><br /></td></tr>
+<tr class="separator:ac84b538f37297e9f5406bba8ba1bc050"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab19faf190dac61bef4c6f386799e5ff1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_executable.html#ab19faf190dac61bef4c6f386799e5ff1">execute</a> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)=0</td></tr>
+<tr class="memdesc:ab19faf190dac61bef4c6f386799e5ff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a function.  <a href="#ab19faf190dac61bef4c6f386799e5ff1">More...</a><br /></td></tr>
+<tr class="separator:ab19faf190dac61bef4c6f386799e5ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="executable_8h_source.html#l00027">27</a> of file <a class="el" href="executable_8h_source.html">executable.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ac804538b1fe087ee7ddc65520acb1ae9"></a>
+<a class="anchor" id="ac84b538f37297e9f5406bba8ba1bc050"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -107,7 +107,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Executable::execute </td>
+          <td class="memname">virtual bool softwarecontainer::Executable::execute </td>
           <td>(</td>
           <td class="paramtype">ExecFunction&#160;</td>
           <td class="paramname"><em>function</em>, </td>
@@ -157,11 +157,11 @@ Public Member Functions</h2></td></tr>
 
 <p>Executes a commandline. </p>
 
-<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#aaff4ed1ad7fbbe7e34b047fd9e80fdb7">softwarecontainer::Container</a>.</p>
+<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#a140cd2747557097e0cb6a76965b914cc">softwarecontainer::Container</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a24bd4798807cfd758cb0cde5662c0ca9"></a>
+<a class="anchor" id="ab19faf190dac61bef4c6f386799e5ff1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -169,7 +169,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Executable::execute </td>
+          <td class="memname">virtual bool softwarecontainer::Executable::execute </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>commandLine</em>, </td>
@@ -225,7 +225,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Executes a function. </p>
 
-<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">softwarecontainer::Container</a>.</p>
+<p>Implemented in <a class="el" href="classsoftwarecontainer_1_1_container.html#ae18efbb5f1588ed2211d7e876ede84ab">softwarecontainer::Container</a>.</p>
 
 </div>
 </div>
@@ -238,7 +238,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_executable.html">Executable</a></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:09:55 for softwarecontainer by
+    <li class="footer">Generated on Mon Feb 13 2017 12:50:27 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -7,6 +7,7 @@ var classsoftwarecontainer_1_1_netlink =
     [ "RouteInfo", "classsoftwarecontainer_1_1_netlink.html#a13dd76267ee663edeef346302f100e6e", null ],
     [ "Netlink", "classsoftwarecontainer_1_1_netlink.html#a2a6160a9363a9660c82276342dcaf477", null ],
     [ "~Netlink", "classsoftwarecontainer_1_1_netlink.html#ac6063d31d0e002d19d39f3377edadb22", null ],
+    [ "LOG_DECLARE_CLASS_CONTEXT", "classsoftwarecontainer_1_1_netlink.html#a5a9f8bd0216e7f7a5597c1f911111ae7", null ],
     [ "getKernelDump", "classsoftwarecontainer_1_1_netlink.html#ade23853f3df53186bd2601b3749db5e4", null ],
     [ "checkKernelDump", "classsoftwarecontainer_1_1_netlink.html#a04e7cfff31da1e4c4576a052346ea598", null ],
     [ "setDefaultGateway", "classsoftwarecontainer_1_1_netlink.html#aa71449f361a756717daadc81dd1a6ceb", null ],

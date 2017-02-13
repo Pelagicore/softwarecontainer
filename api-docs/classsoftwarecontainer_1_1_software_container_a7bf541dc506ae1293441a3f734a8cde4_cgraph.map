@@ -1,4 +1,0 @@
-<map id="softwarecontainer::SoftwareContainer::bindMount" name="softwarecontainer::SoftwareContainer::bindMount">
-<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#a7e308629b69d1bcc3bc5e8ceac9b5a2a" title="isSuccess Check if ReturnCode indicates Success or not " alt="" coords="252,5,385,47"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="433,5,567,47"/>
-</map>

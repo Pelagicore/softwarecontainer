@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-0f9c67e 2017-02-13</span>
    </div>
   </td>
  </tr>
@@ -87,9 +87,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae0bad50a26f022f89c66ca5cb7c91a1a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0bad50a26f022f89c66ca5cb7c91a1a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html">RecursiveCopy</a> const &amp;s)=delete</td></tr>
 <tr class="separator:ae0bad50a26f022f89c66ca5cb7c91a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed9b0f8d340207741b057ed0b3231b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html#a3ed9b0f8d340207741b057ed0b3231b3">copy</a> (std::string src, std::string dst)</td></tr>
-<tr class="memdesc:a3ed9b0f8d340207741b057ed0b3231b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy Copy files from src to dst  <a href="#a3ed9b0f8d340207741b057ed0b3231b3">More...</a><br /></td></tr>
-<tr class="separator:a3ed9b0f8d340207741b057ed0b3231b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcbe2b9294d3791548d5aeec6d266aa2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html#adcbe2b9294d3791548d5aeec6d266aa2">copy</a> (std::string src, std::string dst)</td></tr>
+<tr class="memdesc:adcbe2b9294d3791548d5aeec6d266aa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy Copy files from src to dst  <a href="#adcbe2b9294d3791548d5aeec6d266aa2">More...</a><br /></td></tr>
+<tr class="separator:adcbe2b9294d3791548d5aeec6d266aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -155,7 +155,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="recursivecopy_8cpp_source.html#l00072">72</a> of file <a class="el" href="recursivecopy_8cpp_source.html">recursivecopy.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00213">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
+<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00212">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">static</span> <a class="code" href="classsoftwarecontainer_1_1_recursive_copy.html#ae8f1795ba4b9523f1f1714ce8aca3965">RecursiveCopy</a> instance;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> instance;</div>
@@ -172,12 +172,12 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a class="anchor" id="a3ed9b0f8d340207741b057ed0b3231b3"></a>
+<a class="anchor" id="adcbe2b9294d3791548d5aeec6d266aa2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::RecursiveCopy::copy </td>
+          <td class="memname">bool softwarecontainer::RecursiveCopy::copy </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -204,32 +204,31 @@ Here is the caller graph for this function:</div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>ReturnCode::SUCCESS on success </dd>
+<dl class="section return"><dt>Returns</dt><dd>true on success </dd>
 <dd>
-ReturnCode::FAILURE on failure </dd></dl>
+false on failure </dd></dl>
 
 <p>Definition at line <a class="el" href="recursivecopy_8cpp_source.html#l00078">78</a> of file <a class="el" href="recursivecopy_8cpp_source.html">recursivecopy.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00213">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
+<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00212">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> retval = ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">bool</span> retval = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    m_copyLock.lock();</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    dstRoot.assign(dst);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    srcRoot.assign(src);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">if</span> (ftw(src.c_str(), copyFile, 20) != 0) {</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Failed to recursively copy &quot;</span> &lt;&lt; src &lt;&lt; <span class="stringliteral">&quot; to &quot;</span> &lt;&lt; dst;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        retval = ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        retval = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    m_copyLock.unlock();</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> retval;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_recursive_copy_a3ed9b0f8d340207741b057ed0b3231b3_icgraph.svg" width="398" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_recursive_copy_adcbe2b9294d3791548d5aeec6d266aa2_icgraph.svg" width="398" height="147"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -246,7 +245,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html">RecursiveCopy</a></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:09:55 for softwarecontainer by
+    <li class="footer">Generated on Mon Feb 13 2017 12:50:28 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

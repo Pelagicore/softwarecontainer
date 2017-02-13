@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-932d525 2017-02-10</span>
+   &#160;<span id="projectnumber">0.18.0-0f9c67e 2017-02-13</span>
    </div>
   </td>
  </tr>
@@ -104,60 +104,60 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3ca2252bc66ae9f985a010d3a7446e85"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a3ca2252bc66ae9f985a010d3a7446e85">Container</a> (const std::string id, const std::string &amp;configFile, const std::string &amp;containerRoot, bool enableWriteBuffer=false, int shutdownTimeout=1)</td></tr>
 <tr class="memdesc:a3ca2252bc66ae9f985a010d3a7446e85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a3ca2252bc66ae9f985a010d3a7446e85">More...</a><br /></td></tr>
 <tr class="separator:a3ca2252bc66ae9f985a010d3a7446e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c57689a4a21b8c9342c53c7e8743203"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203">create</a> ()</td></tr>
-<tr class="memdesc:a6c57689a4a21b8c9342c53c7e8743203"><td class="mdescLeft">&#160;</td><td class="mdescRight">create Creates a new lxc_container and creates it with all the initialization.  <a href="#a6c57689a4a21b8c9342c53c7e8743203">More...</a><br /></td></tr>
-<tr class="separator:a6c57689a4a21b8c9342c53c7e8743203"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33340235226849d1f178e2f1d7efabe2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a33340235226849d1f178e2f1d7efabe2">start</a> (pid_t *pid)</td></tr>
-<tr class="memdesc:a33340235226849d1f178e2f1d7efabe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the container.  <a href="#a33340235226849d1f178e2f1d7efabe2">More...</a><br /></td></tr>
-<tr class="separator:a33340235226849d1f178e2f1d7efabe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa001314049bd479b599618c85b3e711f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa001314049bd479b599618c85b3e711f"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setCgroupItem</b> (std::string subsys, std::string value)</td></tr>
-<tr class="separator:aa001314049bd479b599618c85b3e711f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83a367840850c0bfb6da2587f2b246de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">execute</a> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</td></tr>
-<tr class="memdesc:a83a367840850c0bfb6da2587f2b246de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a process from the given command line, with an environment consisting of the variables previously set by the gateways, plus the ones passed as parameters here.  <a href="#a83a367840850c0bfb6da2587f2b246de">More...</a><br /></td></tr>
-<tr class="separator:a83a367840850c0bfb6da2587f2b246de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaff4ed1ad7fbbe7e34b047fd9e80fdb7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#aaff4ed1ad7fbbe7e34b047fd9e80fdb7">execute</a> (ExecFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=1, int stderr=2)</td></tr>
-<tr class="memdesc:aaff4ed1ad7fbbe7e34b047fd9e80fdb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a commandline.  <a href="#aaff4ed1ad7fbbe7e34b047fd9e80fdb7">More...</a><br /></td></tr>
-<tr class="separator:aaff4ed1ad7fbbe7e34b047fd9e80fdb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4784a2955ddf87a9f0a58720d7ca918c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a4784a2955ddf87a9f0a58720d7ca918c">bindMountInContainer</a> (const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)</td></tr>
-<tr class="memdesc:a4784a2955ddf87a9f0a58720d7ca918c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a path from host to container.  <a href="#a4784a2955ddf87a9f0a58720d7ca918c">More...</a><br /></td></tr>
-<tr class="separator:a4784a2955ddf87a9f0a58720d7ca918c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e9c554bba33a65aea63a35c10f0407e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e9c554bba33a65aea63a35c10f0407e"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mountDevice</b> (const std::string &amp;pathInHost)</td></tr>
-<tr class="separator:a4e9c554bba33a65aea63a35c10f0407e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4b25d96c1284606561d8911d8cf377b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4b25d96c1284606561d8911d8cf377b"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>createSymLink</b> (const std::string &amp;source, const std::string &amp;destination)</td></tr>
-<tr class="separator:ae4b25d96c1284606561d8911d8cf377b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8046973c568f3bd0bcc037af01630638"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">destroy</a> ()</td></tr>
-<tr class="memdesc:a8046973c568f3bd0bcc037af01630638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls shutdown, and then destroys the container.  <a href="#a8046973c568f3bd0bcc037af01630638">More...</a><br /></td></tr>
-<tr class="separator:a8046973c568f3bd0bcc037af01630638"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33a5c006ab50d0cdf17e029412c87212"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33a5c006ab50d0cdf17e029412c87212"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>destroy</b> (unsigned int timeout)</td></tr>
-<tr class="separator:a33a5c006ab50d0cdf17e029412c87212"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecaa29e4e21f90c2acd1f7840d20581b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">shutdown</a> ()</td></tr>
-<tr class="memdesc:aecaa29e4e21f90c2acd1f7840d20581b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls shutdown on the lxc container.  <a href="#aecaa29e4e21f90c2acd1f7840d20581b">More...</a><br /></td></tr>
-<tr class="separator:aecaa29e4e21f90c2acd1f7840d20581b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fb204dbe08df01aac77701b6c4198f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6fb204dbe08df01aac77701b6c4198f1"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>shutdown</b> (unsigned int timeout)</td></tr>
-<tr class="separator:a6fb204dbe08df01aac77701b6c4198f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcf307bd84c1aa22a0618973544da1b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adcf307bd84c1aa22a0618973544da1b2"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>suspend</b> ()</td></tr>
-<tr class="separator:adcf307bd84c1aa22a0618973544da1b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cdb7beda250ad4a1c49b34336518174"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5cdb7beda250ad4a1c49b34336518174"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resume</b> ()</td></tr>
-<tr class="separator:a5cdb7beda250ad4a1c49b34336518174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ad5d17e2e896bdae1f453d2ad53b066"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a5ad5d17e2e896bdae1f453d2ad53b066">stop</a> ()</td></tr>
-<tr class="memdesc:a5ad5d17e2e896bdae1f453d2ad53b066"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls stop on the lxc container(force stop)  <a href="#a5ad5d17e2e896bdae1f453d2ad53b066">More...</a><br /></td></tr>
-<tr class="separator:a5ad5d17e2e896bdae1f453d2ad53b066"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a842011ff7d05d51c1c95ad073a679418"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a842011ff7d05d51c1c95ad073a679418"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>waitForState</b> (LXCContainerState state, int timeout=20)</td></tr>
-<tr class="separator:a842011ff7d05d51c1c95ad073a679418"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedbf74019c7d3ede6612e66a775f03c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedbf74019c7d3ede6612e66a775f03c5"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ensureContainerRunning</b> ()</td></tr>
-<tr class="separator:aedbf74019c7d3ede6612e66a775f03c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8461f293ef5db5ee5fbdeddd24f36214"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214">initialize</a> ()</td></tr>
-<tr class="memdesc:a8461f293ef5db5ee5fbdeddd24f36214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the container for startup.  <a href="#a8461f293ef5db5ee5fbdeddd24f36214">More...</a><br /></td></tr>
-<tr class="separator:a8461f293ef5db5ee5fbdeddd24f36214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67f48ee29e9294f4f42436e1297d34c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a67f48ee29e9294f4f42436e1297d34c7">create</a> ()</td></tr>
+<tr class="memdesc:a67f48ee29e9294f4f42436e1297d34c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">create Creates a new lxc_container and creates it with all the initialization.  <a href="#a67f48ee29e9294f4f42436e1297d34c7">More...</a><br /></td></tr>
+<tr class="separator:a67f48ee29e9294f4f42436e1297d34c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a2c5ebcba14be130e23d92f5b742bc6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a2a2c5ebcba14be130e23d92f5b742bc6">start</a> (pid_t *pid)</td></tr>
+<tr class="memdesc:a2a2c5ebcba14be130e23d92f5b742bc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the container.  <a href="#a2a2c5ebcba14be130e23d92f5b742bc6">More...</a><br /></td></tr>
+<tr class="separator:a2a2c5ebcba14be130e23d92f5b742bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd17f341b23f5089b6c6177419c41c16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd17f341b23f5089b6c6177419c41c16"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>setCgroupItem</b> (std::string subsys, std::string value)</td></tr>
+<tr class="separator:abd17f341b23f5089b6c6177419c41c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae18efbb5f1588ed2211d7e876ede84ab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#ae18efbb5f1588ed2211d7e876ede84ab">execute</a> (const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</td></tr>
+<tr class="memdesc:ae18efbb5f1588ed2211d7e876ede84ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a process from the given command line, with an environment consisting of the variables previously set by the gateways, plus the ones passed as parameters here.  <a href="#ae18efbb5f1588ed2211d7e876ede84ab">More...</a><br /></td></tr>
+<tr class="separator:ae18efbb5f1588ed2211d7e876ede84ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a140cd2747557097e0cb6a76965b914cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a140cd2747557097e0cb6a76965b914cc">execute</a> (ExecFunction function, pid_t *pid, const EnvironmentVariables &amp;variables=EnvironmentVariables(), int stdin=-1, int stdout=1, int stderr=2)</td></tr>
+<tr class="memdesc:a140cd2747557097e0cb6a76965b914cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes a commandline.  <a href="#a140cd2747557097e0cb6a76965b914cc">More...</a><br /></td></tr>
+<tr class="separator:a140cd2747557097e0cb6a76965b914cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5445d6a0c4b8b006ed38b3c01bb870c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c">bindMountInContainer</a> (const std::string &amp;pathInHost, const std::string &amp;pathInContainer, bool readOnly=true)</td></tr>
+<tr class="memdesc:ae5445d6a0c4b8b006ed38b3c01bb870c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to bind mount a path from host to container.  <a href="#ae5445d6a0c4b8b006ed38b3c01bb870c">More...</a><br /></td></tr>
+<tr class="separator:ae5445d6a0c4b8b006ed38b3c01bb870c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7f129fd56c1c02e1bb586f111e19971"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7f129fd56c1c02e1bb586f111e19971"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>mountDevice</b> (const std::string &amp;pathInHost)</td></tr>
+<tr class="separator:ac7f129fd56c1c02e1bb586f111e19971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae975f01e5293bf7d9ac2226adeec363b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae975f01e5293bf7d9ac2226adeec363b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>createSymLink</b> (const std::string &amp;source, const std::string &amp;destination)</td></tr>
+<tr class="separator:ae975f01e5293bf7d9ac2226adeec363b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5e7ca390a1783272fbe703f29a791ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#ad5e7ca390a1783272fbe703f29a791ae">destroy</a> ()</td></tr>
+<tr class="memdesc:ad5e7ca390a1783272fbe703f29a791ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls shutdown, and then destroys the container.  <a href="#ad5e7ca390a1783272fbe703f29a791ae">More...</a><br /></td></tr>
+<tr class="separator:ad5e7ca390a1783272fbe703f29a791ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f6b307c9beef120fd07123d5932fdca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f6b307c9beef120fd07123d5932fdca"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>destroy</b> (unsigned int timeout)</td></tr>
+<tr class="separator:a8f6b307c9beef120fd07123d5932fdca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a485f695e1f3afb402ca83d447fdd6acd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a485f695e1f3afb402ca83d447fdd6acd">shutdown</a> ()</td></tr>
+<tr class="memdesc:a485f695e1f3afb402ca83d447fdd6acd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls shutdown on the lxc container.  <a href="#a485f695e1f3afb402ca83d447fdd6acd">More...</a><br /></td></tr>
+<tr class="separator:a485f695e1f3afb402ca83d447fdd6acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a9ff31e4ea80e228928db3973cc762e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a9ff31e4ea80e228928db3973cc762e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>shutdown</b> (unsigned int timeout)</td></tr>
+<tr class="separator:a1a9ff31e4ea80e228928db3973cc762e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acac69c3a167efed1fe75be97bdd76710"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acac69c3a167efed1fe75be97bdd76710"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>suspend</b> ()</td></tr>
+<tr class="separator:acac69c3a167efed1fe75be97bdd76710"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f9442e4ed941bff87de466a619e2d22"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f9442e4ed941bff87de466a619e2d22"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>resume</b> ()</td></tr>
+<tr class="separator:a1f9442e4ed941bff87de466a619e2d22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5813e4ebb4ce81f041ead8e76cf5c8ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a5813e4ebb4ce81f041ead8e76cf5c8ec">stop</a> ()</td></tr>
+<tr class="memdesc:a5813e4ebb4ce81f041ead8e76cf5c8ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls stop on the lxc container(force stop)  <a href="#a5813e4ebb4ce81f041ead8e76cf5c8ec">More...</a><br /></td></tr>
+<tr class="separator:a5813e4ebb4ce81f041ead8e76cf5c8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a078afc98145276bd50b6930a1ec40712"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a078afc98145276bd50b6930a1ec40712"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>waitForState</b> (LXCContainerState state, int timeout=20)</td></tr>
+<tr class="separator:a078afc98145276bd50b6930a1ec40712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c9d77fc0cc4647baa792ffce0d0caa5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c9d77fc0cc4647baa792ffce0d0caa5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>ensureContainerRunning</b> ()</td></tr>
+<tr class="separator:a5c9d77fc0cc4647baa792ffce0d0caa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25102e42007fb34a93d982b231ae6c78"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_container.html#a25102e42007fb34a93d982b231ae6c78">initialize</a> ()</td></tr>
+<tr class="memdesc:a25102e42007fb34a93d982b231ae6c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the container for startup.  <a href="#a25102e42007fb34a93d982b231ae6c78">More...</a><br /></td></tr>
+<tr class="separator:a25102e42007fb34a93d982b231ae6c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8412d93d20efd8ea25cce28378d2c1be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8412d93d20efd8ea25cce28378d2c1be"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td></tr>
 <tr class="separator:a8412d93d20efd8ea25cce28378d2c1be"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,36 +173,36 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>gatewaysDir</b
 <tr class="memitem:a91ac3fb07a51a6543afd9ab679781f98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91ac3fb07a51a6543afd9ab679781f98"></a>
 const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rootFS</b> () const </td></tr>
 <tr class="separator:a91ac3fb07a51a6543afd9ab679781f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad17d07c898e997578fffcc24e37e06ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad17d07c898e997578fffcc24e37e06ba"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironmentVariable</b> (const std::string &amp;var, const std::string &amp;val)</td></tr>
-<tr class="separator:ad17d07c898e997578fffcc24e37e06ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1339aed81241f074c77e9de0456da4da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1339aed81241f074c77e9de0456da4da"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>setEnvironmentVariable</b> (const std::string &amp;var, const std::string &amp;val)</td></tr>
+<tr class="separator:a1339aed81241f074c77e9de0456da4da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a33c6fa5ecfb8e370ae8bb6aedf568336"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a33c6fa5ecfb8e370ae8bb6aedf568336">bindMount</a> (const std::string &amp;src, const std::string &amp;dst, bool readOnly, bool enableWriteBuffer=false)</td></tr>
-<tr class="memdesc:a33c6fa5ecfb8e370ae8bb6aedf568336"><td class="mdescLeft">&#160;</td><td class="mdescRight">bindMount Bind mount a src directory to another position dst.  <a href="#a33c6fa5ecfb8e370ae8bb6aedf568336">More...</a><br /></td></tr>
-<tr class="separator:a33c6fa5ecfb8e370ae8bb6aedf568336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f6b5cda214c9e412ab73313bc95d785"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a8f6b5cda214c9e412ab73313bc95d785">bindMount</a> (const std::string &amp;src, const std::string &amp;dst, bool readOnly, bool enableWriteBuffer=false)</td></tr>
+<tr class="memdesc:a8f6b5cda214c9e412ab73313bc95d785"><td class="mdescLeft">&#160;</td><td class="mdescRight">bindMount Bind mount a src directory to another position dst.  <a href="#a8f6b5cda214c9e412ab73313bc95d785">More...</a><br /></td></tr>
+<tr class="separator:a8f6b5cda214c9e412ab73313bc95d785"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a649391903bf1a0eec92c829713117a74"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74">tempDir</a> (std::string templatePath)</td></tr>
 <tr class="memdesc:a649391903bf1a0eec92c829713117a74"><td class="mdescLeft">&#160;</td><td class="mdescRight">tempDir Creates a temporary directory at templatePath.  <a href="#a649391903bf1a0eec92c829713117a74">More...</a><br /></td></tr>
 <tr class="separator:a649391903bf1a0eec92c829713117a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a465268b278d7aa59bb87f77f5ff6b3b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a465268b278d7aa59bb87f77f5ff6b3b4"></a>
-<a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>writeToFile</b> (const std::string &amp;path, const std::string &amp;content)</td></tr>
-<tr class="separator:a465268b278d7aa59bb87f77f5ff6b3b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31487a18f405c40a587b02d1aa96016"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac31487a18f405c40a587b02d1aa96016"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>writeToFile</b> (const std::string &amp;path, const std::string &amp;content)</td></tr>
+<tr class="separator:ac31487a18f405c40a587b02d1aa96016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7252747de3ba727e34bc4211733f90a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7252747de3ba727e34bc4211733f90a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>markFileForDeletion</b> (const std::string &amp;path)</td></tr>
 <tr class="separator:ac7252747de3ba727e34bc4211733f90a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab46eccba563b861f100d9ce7fa9ca4d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6">overlayMount</a> (const std::string &amp;lower, const std::string &amp;upper, const std::string &amp;work, const std::string &amp;dst)</td></tr>
-<tr class="memdesc:ab46eccba563b861f100d9ce7fa9ca4d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">overlayMount Mount a directory with an overlay on top of it.  <a href="#ab46eccba563b861f100d9ce7fa9ca4d6">More...</a><br /></td></tr>
-<tr class="separator:ab46eccba563b861f100d9ce7fa9ca4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a011797b9d1387882a5b013d0c97ccbfd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a011797b9d1387882a5b013d0c97ccbfd">syncOverlayMount</a> (const std::string &amp;lower, const std::string &amp;upper)</td></tr>
-<tr class="memdesc:a011797b9d1387882a5b013d0c97ccbfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">syncOverlayMount Copy the directory structure from upper layer to the lower layer  <a href="#a011797b9d1387882a5b013d0c97ccbfd">More...</a><br /></td></tr>
-<tr class="separator:a011797b9d1387882a5b013d0c97ccbfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab74e5ec0784b2aa597d54f28f44f7112"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab74e5ec0784b2aa597d54f28f44f7112">createSharedMountPoint</a> (const std::string &amp;path)</td></tr>
-<tr class="memdesc:ab74e5ec0784b2aa597d54f28f44f7112"><td class="mdescLeft">&#160;</td><td class="mdescRight">createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount will also be created in the other mount point.  <a href="#ab74e5ec0784b2aa597d54f28f44f7112">More...</a><br /></td></tr>
-<tr class="separator:ab74e5ec0784b2aa597d54f28f44f7112"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff5073fb683649d6753baae354d202b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">createDirectory</a> (const std::string &amp;path)</td></tr>
-<tr class="memdesc:aff5073fb683649d6753baae354d202b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in the dtor.  <a href="#aff5073fb683649d6753baae354d202b9">More...</a><br /></td></tr>
-<tr class="separator:aff5073fb683649d6753baae354d202b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14711e649249d7f0b7e264c7d426ea23"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23">overlayMount</a> (const std::string &amp;lower, const std::string &amp;upper, const std::string &amp;work, const std::string &amp;dst)</td></tr>
+<tr class="memdesc:a14711e649249d7f0b7e264c7d426ea23"><td class="mdescLeft">&#160;</td><td class="mdescRight">overlayMount Mount a directory with an overlay on top of it.  <a href="#a14711e649249d7f0b7e264c7d426ea23">More...</a><br /></td></tr>
+<tr class="separator:a14711e649249d7f0b7e264c7d426ea23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abeb68314f1bd0f8f19eacf66c6b5cc88"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#abeb68314f1bd0f8f19eacf66c6b5cc88">syncOverlayMount</a> (const std::string &amp;lower, const std::string &amp;upper)</td></tr>
+<tr class="memdesc:abeb68314f1bd0f8f19eacf66c6b5cc88"><td class="mdescLeft">&#160;</td><td class="mdescRight">syncOverlayMount Copy the directory structure from upper layer to the lower layer  <a href="#abeb68314f1bd0f8f19eacf66c6b5cc88">More...</a><br /></td></tr>
+<tr class="separator:abeb68314f1bd0f8f19eacf66c6b5cc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae175c6d1e33a358cb015c851590518d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5">createSharedMountPoint</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:ae175c6d1e33a358cb015c851590518d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount will also be created in the other mount point.  <a href="#ae175c6d1e33a358cb015c851590518d5">More...</a><br /></td></tr>
+<tr class="separator:ae175c6d1e33a358cb015c851590518d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35eb42bdace2695fb3e96cb84a535213"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213">createDirectory</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:a35eb42bdace2695fb3e96cb84a535213"><td class="mdescLeft">&#160;</td><td class="mdescRight">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in the dtor.  <a href="#a35eb42bdace2695fb3e96cb84a535213">More...</a><br /></td></tr>
+<tr class="separator:a35eb42bdace2695fb3e96cb84a535213"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44a19890b72a635b3134cb2a07fc0875"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875">pathInList</a> (const std::string path)</td></tr>
 <tr class="memdesc:a44a19890b72a635b3134cb2a07fc0875"><td class="mdescLeft">&#160;</td><td class="mdescRight">checks whether given path is already added to clean up handlers or not  <a href="#a44a19890b72a635b3134cb2a07fc0875">More...</a><br /></td></tr>
 <tr class="separator:a44a19890b72a635b3134cb2a07fc0875"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -288,7 +288,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6c57689a4a21b8c9342c53c7e8743203"></a>
+<a class="anchor" id="a67f48ee29e9294f4f42436e1297d34c7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -296,7 +296,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::create </td>
+          <td class="memname">bool softwarecontainer::Container::create </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -310,7 +310,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>create Creates a new lxc_container and creates it with all the initialization. </p>
-<dl class="section return"><dt>Returns</dt><dd>ReturnCode::FAILURE on failed creation and ReturnCode::SUCCESS on a successful creation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>false on failed creation and true on a successful creation. </dd></dl>
 
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
@@ -320,7 +320,7 @@ Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;{</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordflow">if</span> (m_state &gt;= ContainerState::CREATED) {</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Container already created&quot;</span>;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    }</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Creating container &quot;</span> &lt;&lt; toString();</div>
@@ -328,7 +328,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> *containerID = id();</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordflow">if</span> (strlen(containerID) == 0) {</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;ContainerID cannot be empty&quot;</span>;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    }</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    setenv(<span class="stringliteral">&quot;GATEWAY_DIR&quot;</span>, gatewaysDir().c_str(), <span class="keyword">true</span>);</div>
@@ -368,7 +368,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keyword">const</span> std::string rootFSPathUpper = m_rootFSPath + <span class="stringliteral">&quot;-upper&quot;</span>;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keyword">const</span> std::string rootFSPathWork  = m_rootFSPath + <span class="stringliteral">&quot;-work&quot;</span>;</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6">overlayMount</a>(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23">overlayMount</a>(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Write buffer enabled, lower=&quot;</span> &lt;&lt; rootFSPathLower</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                    &lt;&lt; <span class="stringliteral">&quot;, upper=&quot;</span> &lt;&lt; rootFSPathUpper</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                    &lt;&lt; <span class="stringliteral">&quot;, work=&quot;</span> &lt;&lt; rootFSPathWork</div>
@@ -390,21 +390,21 @@ Private Attributes</h2></td></tr>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    m_state = ContainerState::CREATED;</div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Container created. RootFS: &quot;</span> &lt;&lt; m_rootFSPath;</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_ab46eccba563b861f100d9ce7fa9ca4d6"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6">softwarecontainer::FileToolkitWithUndo::overlayMount</a></div><div class="ttdeci">ReturnCode overlayMount(const std::string &amp;lower, const std::string &amp;upper, const std::string &amp;work, const std::string &amp;dst)</div><div class="ttdoc">overlayMount Mount a directory with an overlay on top of it. </div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00167">filetoolkitwithundo.cpp:167</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_a14711e649249d7f0b7e264c7d426ea23"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23">softwarecontainer::FileToolkitWithUndo::overlayMount</a></div><div class="ttdeci">bool overlayMount(const std::string &amp;lower, const std::string &amp;upper, const std::string &amp;work, const std::string &amp;dst)</div><div class="ttdoc">overlayMount Mount a directory with an overlay on top of it. </div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00167">filetoolkitwithundo.cpp:167</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a6c57689a4a21b8c9342c53c7e8743203_cgraph.svg" width="708" height="198"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a67f48ee29e9294f4f42436e1297d34c7_cgraph.svg" width="708" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="a33340235226849d1f178e2f1d7efabe2"></a>
+<a class="anchor" id="a2a2c5ebcba14be130e23d92f5b742bc6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -412,7 +412,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::start </td>
+          <td class="memname">bool softwarecontainer::Container::start </td>
           <td>(</td>
           <td class="paramtype">pid_t *&#160;</td>
           <td class="paramname"><em>pid</em></td><td>)</td>
@@ -432,17 +432,15 @@ Here is the call graph for this function:</div>
 <p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00264">264</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;{</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keywordflow">if</span> (m_state &lt; ContainerState::CREATED) {</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Trying to start container that isn&#39;t created. Please create the container first&quot;</span>;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    }</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    }</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="comment">// For some reason the LXC start function does not work out</span></div>
@@ -455,34 +453,25 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keywordflow">if</span> (!m_container-&gt;start(m_container, <span class="keyword">false</span>, args)) {</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Error starting container&quot;</span>;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    }</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Container started: &quot;</span> &lt;&lt; toString();</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    *pid = m_container-&gt;init_pid(m_container);</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    m_state = ContainerState::STARTED;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(ensureContainerRunning())) {</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordflow">if</span> (!ensureContainerRunning()) {</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container started but is not running&quot;</span>;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    }</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    log_info() &lt;&lt; <span class="stringliteral">&quot;To connect to this container : lxc-attach -n &quot;</span> &lt;&lt; id();</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a33340235226849d1f178e2f1d7efabe2_cgraph.svg" width="326" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="a83a367840850c0bfb6da2587f2b246de"></a>
+<a class="anchor" id="ae18efbb5f1588ed2211d7e876ede84ab"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -490,7 +479,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::execute </td>
+          <td class="memname">bool softwarecontainer::Container::execute </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>commandLine</em>, </td>
@@ -546,68 +535,57 @@ Here is the call graph for this function:</div>
 
 <p>Start a process from the given command line, with an environment consisting of the variables previously set by the gateways, plus the ones passed as parameters here. </p>
 
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_executable.html#a24bd4798807cfd758cb0cde5662c0ca9">softwarecontainer::Executable</a>.</p>
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_executable.html#ab19faf190dac61bef4c6f386799e5ff1">softwarecontainer::Executable</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00411">411</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;{</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(ensureContainerRunning())) {</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t attach&quot;</span>;</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    }</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    }</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Attach &quot;</span> &lt;&lt; commandLine ;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    std::vector&lt;std::string&gt; executeCommandVec = Glib::shell_parse_argv(commandLine);</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    std::vector&lt;char *&gt; args;</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; executeCommandVec.size(); i++) {</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        executeCommandVec[i].c_str(); <span class="comment">// ensure the string is null-terminated. not sure thas is required.</span></div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        <span class="keyword">auto</span> s = &amp;executeCommandVec[i][0];</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        args.push_back(s);</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    }</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    <span class="comment">// We need a null terminated array</span></div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    args.push_back(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> result = <a class="code" href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">execute</a>([&amp;] () {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;                <span class="keywordflow">if</span> (workingDirectory.length() != 0) {</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;                    <span class="keyword">auto</span> ret = chdir(workingDirectory.c_str());</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;                    <span class="keywordflow">if</span> (ret != 0) {</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;                        log_error() &lt;&lt; <span class="stringliteral">&quot;Error when changing current directory : &quot;</span> &lt;&lt; strerror(errno);</div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00410">410</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;{</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keywordflow">if</span> (!ensureContainerRunning()) {</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t attach&quot;</span>;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    }</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    }</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Attach &quot;</span> &lt;&lt; commandLine ;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    std::vector&lt;std::string&gt; executeCommandVec = Glib::shell_parse_argv(commandLine);</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    std::vector&lt;char *&gt; args;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; executeCommandVec.size(); i++) {</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        executeCommandVec[i].c_str(); <span class="comment">// ensure the string is null-terminated. not sure thas is required.</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        <span class="keyword">auto</span> s = &amp;executeCommandVec[i][0];</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        args.push_back(s);</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    }</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="comment">// We need a null terminated array</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    args.push_back(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keywordtype">bool</span> result = <a class="code" href="classsoftwarecontainer_1_1_container.html#ae18efbb5f1588ed2211d7e876ede84ab">execute</a>([&amp;] () {</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;                <span class="keywordflow">if</span> (workingDirectory.length() != 0) {</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;                    <span class="keyword">auto</span> ret = chdir(workingDirectory.c_str());</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;                    <span class="keywordflow">if</span> (ret != 0) {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;                        log_error() &lt;&lt; <span class="stringliteral">&quot;Error when changing current directory : &quot;</span></div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;                                    &lt;&lt; strerror(errno);</div>
 <div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;                    }</div>
 <div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                }</div>
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;                execvp(args[0], args.data());</div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;                <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;            }, pid, variables, stdin, stdout, stderr);</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(result)) {</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    <span class="keywordflow">if</span> (!result) {</div>
 <div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Could not execute in container&quot;</span>;</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    }</div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a83a367840850c0bfb6da2587f2b246de"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a83a367840850c0bfb6da2587f2b246de">softwarecontainer::Container::execute</a></div><div class="ttdeci">ReturnCode execute(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00411">container.cpp:411</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_ae18efbb5f1588ed2211d7e876ede84ab"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#ae18efbb5f1588ed2211d7e876ede84ab">softwarecontainer::Container::execute</a></div><div class="ttdeci">bool execute(const std::string &amp;commandLine, pid_t *pid, const EnvironmentVariables &amp;variables, const std::string &amp;workingDirectory=&quot;/&quot;, int stdin=-1, int stdout=1, int stderr=2)</div><div class="ttdoc">Start a process from the given command line, with an environment consisting of the variables previous...</div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00410">container.cpp:410</a></div></div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a83a367840850c0bfb6da2587f2b246de_cgraph.svg" width="326" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="aaff4ed1ad7fbbe7e34b047fd9e80fdb7"></a>
+<a class="anchor" id="a140cd2747557097e0cb6a76965b914cc"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -615,7 +593,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::execute </td>
+          <td class="memname">bool softwarecontainer::Container::execute </td>
           <td>(</td>
           <td class="paramtype">ExecFunction&#160;</td>
           <td class="paramname"><em>function</em>, </td>
@@ -665,93 +643,82 @@ Here is the call graph for this function:</div>
 
 <p>Executes a commandline. </p>
 
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_executable.html#ac804538b1fe087ee7ddc65520acb1ae9">softwarecontainer::Executable</a>.</p>
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_executable.html#ac84b538f37297e9f5406bba8ba1bc050">softwarecontainer::Executable</a>.</p>
 
-<p>Definition at line <a class="el" href="container_8cpp_source.html#l00335">335</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
-
-<p>References <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;{</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(ensureContainerRunning())) {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t execute&quot;</span>;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    options.stdin_fd = stdin;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    options.stdout_fd = stdout;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    options.stderr_fd = stderr;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    options.uid = ROOT_UID;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    options.gid = ROOT_UID;</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="comment">// List of vars to use when executing the function</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    EnvironmentVariables actualVariables = variables;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="comment">// Add the variables set by gateways, variables passed with the &#39;variables&#39; argument</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment">// will take precedence over previously set variables.</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;var : m_gatewayEnvironmentVariables) {</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        <span class="keywordflow">if</span> (variables.count(var.first) != 0) {</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            <span class="keywordflow">if</span> (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                <span class="comment">// Inform user that GW config will be overridden, it might be unintentionally done</span></div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                log_info() &lt;&lt; <span class="stringliteral">&quot;Variable \&quot;&quot;</span> &lt;&lt; var.first</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                           &lt;&lt; <span class="stringliteral">&quot;\&quot; set by gateway will be overwritten with the value: \&quot;&quot;</span></div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                           &lt;&lt; variables.at(var.first) &lt;&lt; <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            actualVariables[var.first] = variables.at(var.first);</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <span class="comment">// The variable was not set again, just keep the original value set by GW</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            actualVariables[var.first] = var.second;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        }</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="comment">// prepare array of env variable strings to be set when launching the process in the container</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    std::vector&lt;std::string&gt; strings;</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;var : actualVariables) {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        strings.push_back(var.first + <span class="stringliteral">&quot;=&quot;</span> + var.second);</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> stringCount = strings.size() + 1;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> **envVariablesArray = <span class="keyword">new</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* [stringCount];</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; strings.size(); i++) {</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        envVariablesArray[i] = strings[i].c_str();</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    }</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    envVariablesArray[strings.size()] = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    options.extra_env_vars = (<span class="keywordtype">char</span> * *) envVariablesArray;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Starting function in container &quot;</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;                &lt;&lt; toString() &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot; Env variables : &quot;</span> &lt;&lt; strings;</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordtype">int</span> attach_res = m_container-&gt;attach(m_container,</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;                                         &amp;Container::executeInContainerEntryFunction,</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                                         &amp;<span class="keyword">function</span>, &amp;options, pid);</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="keyword">delete</span>[] envVariablesArray;</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">if</span> (attach_res == 0) {</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot; Attached PID: &quot;</span> &lt;&lt; *pid;</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    } <span class="keywordflow">else</span>  {</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Attach call to LXC container failed: &quot;</span> &lt;&lt; std::string(strerror(errno));</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    }</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
+<p>Definition at line <a class="el" href="container_8cpp_source.html#l00334">334</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;{</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keywordflow">if</span> (pid == <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Supplied pid argument is nullptr&quot;</span>;</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="keywordflow">if</span> (!ensureContainerRunning()) {</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Container is not running or in bad state, can&#39;t execute&quot;</span>;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    }</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    lxc_attach_options_t options = LXC_ATTACH_OPTIONS_DEFAULT;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    options.stdin_fd = stdin;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    options.stdout_fd = stdout;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    options.stderr_fd = stderr;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    options.uid = ROOT_UID;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    options.gid = ROOT_UID;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment">// List of vars to use when executing the function</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    EnvironmentVariables actualVariables = variables;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="comment">// Add the variables set by gateways, variables passed with the &#39;variables&#39; argument</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="comment">// will take precedence over previously set variables.</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;var : m_gatewayEnvironmentVariables) {</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="keywordflow">if</span> (variables.count(var.first) != 0) {</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            <span class="keywordflow">if</span> (m_gatewayEnvironmentVariables.at(var.first) != variables.at(var.first)) {</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                <span class="comment">// Inform user that GW config will be overridden, it might be unintentionally done</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                log_info() &lt;&lt; <span class="stringliteral">&quot;Variable \&quot;&quot;</span> &lt;&lt; var.first</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                           &lt;&lt; <span class="stringliteral">&quot;\&quot; set by gateway will be overwritten with the value: \&quot;&quot;</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                           &lt;&lt; variables.at(var.first) &lt;&lt; <span class="stringliteral">&quot;\&quot;&quot;</span>;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            }</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            actualVariables[var.first] = variables.at(var.first);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <span class="comment">// The variable was not set again, just keep the original value set by GW</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            actualVariables[var.first] = var.second;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        }</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    }</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="comment">// prepare array of env variable strings to be set when launching the process in the container</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    std::vector&lt;std::string&gt; strings;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;var : actualVariables) {</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        strings.push_back(var.first + <span class="stringliteral">&quot;=&quot;</span> + var.second);</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    }</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">size_t</span> stringCount = strings.size() + 1;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span> **envVariablesArray = <span class="keyword">new</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* [stringCount];</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; strings.size(); i++) {</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        envVariablesArray[i] = strings[i].c_str();</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    }</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    envVariablesArray[strings.size()] = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    options.extra_env_vars = (<span class="keywordtype">char</span> * *) envVariablesArray;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    log_debug() &lt;&lt; <span class="stringliteral">&quot;Starting function in container &quot;</span></div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;                &lt;&lt; toString() &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot; Env variables : &quot;</span> &lt;&lt; strings;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    <span class="keywordtype">int</span> attach_res = m_container-&gt;attach(m_container,</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;                                         &amp;Container::executeInContainerEntryFunction,</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;                                         &amp;<span class="keyword">function</span>, &amp;options, pid);</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    <span class="keyword">delete</span>[] envVariablesArray;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="keywordflow">if</span> (attach_res == 0) {</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        log_info() &lt;&lt; <span class="stringliteral">&quot; Attached PID: &quot;</span> &lt;&lt; *pid;</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    } <span class="keywordflow">else</span>  {</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Attach call to LXC container failed: &quot;</span> &lt;&lt; std::string(strerror(errno));</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    }</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;}</div>
 </div><!-- fragment -->
-<p><div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_aaff4ed1ad7fbbe7e34b047fd9e80fdb7_cgraph.svg" width="326" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-</p>
-
-</div>
-</div>
-<a class="anchor" id="a4784a2955ddf87a9f0a58720d7ca918c"></a>
+<a class="anchor" id="ae5445d6a0c4b8b006ed38b3c01bb870c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -759,7 +726,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::bindMountInContainer </td>
+          <td class="memname">bool softwarecontainer::Container::bindMountInContainer </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>pathInHost</em>, </td>
@@ -801,7 +768,7 @@ Here is the call graph for this function:</div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>SUCCESS if everything worked as expected, FAILURE otherwise </dd></dl>
 
-<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a205a540c45ce7e386f122113578abe79">softwarecontainer::ContainerAbstractInterface</a>.</p>
+<p>Implements <a class="el" href="classsoftwarecontainer_1_1_container_abstract_interface.html#a4058ddae7e3013c853f7ee53296dae52">softwarecontainer::ContainerAbstractInterface</a>.</p>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00541">541</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 
@@ -809,7 +776,7 @@ Here is the call graph for this function:</div>
 <div class="fragment"><div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;{</div>
 <div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="namespacesoftwarecontainer.html#ae8835f968ab1d43b4a395b0097490734">existsInFileSystem</a>(pathInHost)) {</div>
 <div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Path on host does not exist: &quot;</span> &lt;&lt; pathInHost;</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;    }</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;</div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;    <span class="comment">// Create a file to mount to in gateways</span></div>
@@ -832,14 +799,14 @@ Here is the call graph for this function:</div>
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a4784a2955ddf87a9f0a58720d7ca918c_cgraph.svg" width="407" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_ae5445d6a0c4b8b006ed38b3c01bb870c_cgraph.svg" width="407" height="118"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
 
 </div>
 </div>
-<a class="anchor" id="a8046973c568f3bd0bcc037af01630638"></a>
+<a class="anchor" id="ad5e7ca390a1783272fbe703f29a791ae"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -847,7 +814,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::destroy </td>
+          <td class="memname">bool softwarecontainer::Container::destroy </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -866,13 +833,13 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00511">511</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 <div class="fragment"><div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;{</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">destroy</a>(m_shutdownTimeout);</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#ad5e7ca390a1783272fbe703f29a791ae">destroy</a>(m_shutdownTimeout);</div>
 <div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a8046973c568f3bd0bcc037af01630638"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a8046973c568f3bd0bcc037af01630638">softwarecontainer::Container::destroy</a></div><div class="ttdeci">ReturnCode destroy()</div><div class="ttdoc">Calls shutdown, and then destroys the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00511">container.cpp:511</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_ad5e7ca390a1783272fbe703f29a791ae"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#ad5e7ca390a1783272fbe703f29a791ae">softwarecontainer::Container::destroy</a></div><div class="ttdeci">bool destroy()</div><div class="ttdoc">Calls shutdown, and then destroys the container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00511">container.cpp:511</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a class="anchor" id="aecaa29e4e21f90c2acd1f7840d20581b"></a>
+<a class="anchor" id="a485f695e1f3afb402ca83d447fdd6acd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -880,7 +847,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::shutdown </td>
+          <td class="memname">bool softwarecontainer::Container::shutdown </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -899,13 +866,13 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00478">478</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 <div class="fragment"><div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;{</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">shutdown</a>(m_shutdownTimeout);</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classsoftwarecontainer_1_1_container.html#a485f695e1f3afb402ca83d447fdd6acd">shutdown</a>(m_shutdownTimeout);</div>
 <div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;}</div>
-<div class="ttc" id="classsoftwarecontainer_1_1_container_html_aecaa29e4e21f90c2acd1f7840d20581b"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#aecaa29e4e21f90c2acd1f7840d20581b">softwarecontainer::Container::shutdown</a></div><div class="ttdeci">ReturnCode shutdown()</div><div class="ttdoc">Calls shutdown on the lxc container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00478">container.cpp:478</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_container_html_a485f695e1f3afb402ca83d447fdd6acd"><div class="ttname"><a href="classsoftwarecontainer_1_1_container.html#a485f695e1f3afb402ca83d447fdd6acd">softwarecontainer::Container::shutdown</a></div><div class="ttdeci">bool shutdown()</div><div class="ttdoc">Calls shutdown on the lxc container. </div><div class="ttdef"><b>Definition:</b> <a href="container_8cpp_source.html#l00478">container.cpp:478</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a class="anchor" id="a5ad5d17e2e896bdae1f453d2ad53b066"></a>
+<a class="anchor" id="a5813e4ebb4ce81f041ead8e76cf5c8ec"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -913,7 +880,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::stop </td>
+          <td class="memname">bool softwarecontainer::Container::stop </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -932,7 +899,7 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00458">458</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 <div class="fragment"><div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;{</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <a class="code" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> ret = ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <span class="keywordtype">bool</span> ret = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    <span class="keywordflow">if</span> (m_state &gt;= ContainerState::STARTED) {</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        log_debug() &lt;&lt; <span class="stringliteral">&quot;Stopping the container&quot;</span>;</div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <span class="keywordflow">if</span> (m_container-&gt;stop(m_container)) {</div>
@@ -940,20 +907,19 @@ Here is the call graph for this function:</div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            waitForState(LXCContainerState::STOPPED);</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Unable to stop container&quot;</span>;</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            ret = ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            ret = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        }</div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Can&#39;t stop container that has not been started&quot;</span>;</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        ret = ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        ret = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    }</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    <span class="keywordflow">return</span> ret;</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a437a5c65c01d8020e55d2a96898d18e4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">softwarecontainer::ReturnCode</a></div><div class="ttdeci">ReturnCode</div><div class="ttdoc">The ReturnCode enum contains common return values. </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00042">softwarecontainer-common.h:42</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a class="anchor" id="a8461f293ef5db5ee5fbdeddd24f36214"></a>
+<a class="anchor" id="a25102e42007fb34a93d982b231ae6c78"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -961,7 +927,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacesoftwarecontainer.html#a437a5c65c01d8020e55d2a96898d18e4">ReturnCode</a> softwarecontainer::Container::initialize </td>
+          <td class="memname">bool softwarecontainer::Container::initialize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -981,33 +947,32 @@ Here is the call graph for this function:</div>
 
 <p>Definition at line <a class="el" href="container_8cpp_source.html#l00109">109</a> of file <a class="el" href="container_8cpp_source.html">container.cpp</a>.</p>
 
-<p>References <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00220">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer::isError()</a>.</p>
+<p>References <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00218">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;{</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordflow">if</span> (m_state &lt; ContainerState::PREPARED) {</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        std::string gatewayDir = gatewaysDir();</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">createDirectory</a>(gatewayDir))) {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213">createDirectory</a>(gatewayDir)) {</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not create gateway directory &quot;</span></div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                        &lt;&lt; gatewayDir &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; strerror(errno);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        }</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">isError</a>(<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab74e5ec0784b2aa597d54f28f44f7112">createSharedMountPoint</a>(gatewayDir))) {</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5">createSharedMountPoint</a>(gatewayDir)) {</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            log_error() &lt;&lt; <span class="stringliteral">&quot;Could not create shared mount point for dir: &quot;</span> &lt;&lt; gatewayDir;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">return</span> ReturnCode::FAILURE;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        }</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        m_state = ContainerState::PREPARED;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordflow">return</span> ReturnCode::SUCCESS;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
-<div class="ttc" id="namespacesoftwarecontainer_html_a51a25e6a54b7bb79fc5b4ce8902a31a4"><div class="ttname"><a href="namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4">softwarecontainer::isError</a></div><div class="ttdeci">bool isError(ReturnCode code)</div><div class="ttdoc">isError Check if ReturnCode indicates Error or not </div><div class="ttdef"><b>Definition:</b> <a href="softwarecontainer-common_8h_source.html#l00064">softwarecontainer-common.h:64</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_aff5073fb683649d6753baae354d202b9"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9">softwarecontainer::FileToolkitWithUndo::createDirectory</a></div><div class="ttdeci">ReturnCode createDirectory(const std::string &amp;path)</div><div class="ttdoc">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00068">filetoolkitwithundo.cpp:68</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_ab74e5ec0784b2aa597d54f28f44f7112"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab74e5ec0784b2aa597d54f28f44f7112">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint</a></div><div class="ttdeci">ReturnCode createSharedMountPoint(const std::string &amp;path)</div><div class="ttdoc">createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount wil...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00220">filetoolkitwithundo.cpp:220</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_a35eb42bdace2695fb3e96cb84a535213"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213">softwarecontainer::FileToolkitWithUndo::createDirectory</a></div><div class="ttdeci">bool createDirectory(const std::string &amp;path)</div><div class="ttdoc">createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00068">filetoolkitwithundo.cpp:68</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_file_toolkit_with_undo_html_ae175c6d1e33a358cb015c851590518d5"><div class="ttname"><a href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5">softwarecontainer::FileToolkitWithUndo::createSharedMountPoint</a></div><div class="ttdeci">bool createSharedMountPoint(const std::string &amp;path)</div><div class="ttdoc">createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount wil...</div><div class="ttdef"><b>Definition:</b> <a href="filetoolkitwithundo_8cpp_source.html#l00218">filetoolkitwithundo.cpp:218</a></div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a8461f293ef5db5ee5fbdeddd24f36214_cgraph.svg" width="554" height="267"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_container_a25102e42007fb34a93d982b231ae6c78_cgraph.svg" width="554" height="176"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -1024,7 +989,7 @@ Here is the call graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_container.html">Container</a></li>
-    <li class="footer">Generated on Fri Feb 10 2017 08:09:54 for softwarecontainer by
+    <li class="footer">Generated on Mon Feb 13 2017 12:50:26 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>

@@ -1,6 +1,5 @@
 <map id="softwarecontainer::SoftwareContainerAgent::execute" name="softwarecontainer::SoftwareContainerAgent::execute">
 <area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#abe759ac0b4bfb58c0dfd87ad9917ec5e" title="addProcessListener Adds a glib child watch for a process. " alt="" coords="231,13,368,54"/>
 <area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_software_container_agent.html#a51595505c72fe46fffb502b2db6ef814" title="Fetches a pointer to a SoftwareContainer matching an ID. " alt="" coords="217,77,381,133"/>
-<area shape="rect" id="node5" href="$namespacesoftwarecontainer.html#a51a25e6a54b7bb79fc5b4ce8902a31a4" title="isError Check if ReturnCode indicates Error or not " alt="" coords="233,157,366,198"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_signal_connections_handler.html#a9e72ea9a472729ed468db79648578675" title="Add a new connection. " alt="" coords="429,5,605,61"/>
 </map>

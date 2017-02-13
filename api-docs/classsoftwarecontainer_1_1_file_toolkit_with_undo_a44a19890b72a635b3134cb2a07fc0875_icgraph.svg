@@ -18,7 +18,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#aff5073fb683649d6753baae354d202b9" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
 <polygon fill="white" stroke="black" points="141,-111.5 141,-152.5 246,-152.5 246,-111.5 141,-111.5"/>
 <text text-anchor="start" x="149" y="-140.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="149" y="-129.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
@@ -33,7 +33,7 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ab46eccba563b861f100d9ce7fa9ca4d6" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
 <polygon fill="white" stroke="black" points="304.5,-60.5 304.5,-101.5 409.5,-101.5 409.5,-60.5 304.5,-60.5"/>
 <text text-anchor="start" x="312.5" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="312.5" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
@@ -78,7 +78,7 @@
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
-<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_container.html#a8461f293ef5db5ee5fbdeddd24f36214" target="_top" xlink:title="Setup the container for startup. ">
+<g id="a_node4"><a xlink:href="classsoftwarecontainer_1_1_container.html#a25102e42007fb34a93d982b231ae6c78" target="_top" xlink:title="Setup the container for startup. ">
 <polygon fill="white" stroke="black" points="307,-120 307,-150 407,-150 407,-120 307,-120"/>
 <text text-anchor="start" x="315" y="-138" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="357" y="-127" font-family="Helvetica,sans-Serif" font-size="10.00">Container::initialize</text>
@@ -97,7 +97,7 @@
 </g>
 <!-- Node6 -->
 <g id="node6" class="node"><title>Node6</title>
-<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_container.html#a6c57689a4a21b8c9342c53c7e8743203" target="_top" xlink:title="create Creates a new lxc_container and creates it with all the initialization. ">
+<g id="a_node6"><a xlink:href="classsoftwarecontainer_1_1_container.html#a67f48ee29e9294f4f42436e1297d34c7" target="_top" xlink:title="create Creates a new lxc_container and creates it with all the initialization. ">
 <polygon fill="white" stroke="black" points="468,-66 468,-96 568,-96 568,-66 468,-66"/>
 <text text-anchor="start" x="476" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="518" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Container::create</text>
@@ -111,7 +111,7 @@
 </g>
 <!-- Node8 -->
 <g id="node8" class="node"><title>Node8</title>
-<g id="a_node8"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a33c6fa5ecfb8e370ae8bb6aedf568336" target="_top" xlink:title="bindMount Bind mount a src directory to another position dst. ">
+<g id="a_node8"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a8f6b5cda214c9e412ab73313bc95d785" target="_top" xlink:title="bindMount Bind mount a src directory to another position dst. ">
 <polygon fill="white" stroke="black" points="304.5,-0.5 304.5,-41.5 409.5,-41.5 409.5,-0.5 304.5,-0.5"/>
 <text text-anchor="start" x="312.5" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="start" x="312.5" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
