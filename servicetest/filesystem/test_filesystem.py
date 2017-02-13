@@ -27,7 +27,12 @@ import platform
 from testframework import Container
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 TESTFILE='testfile.txt'
+
+# This function is used by the test framework to know where test specific files should be stored
+def output_dir():
+    return TESTOUTPUT_DIR
 
 # This function is used by the 'agent' fixture to know where the log should
 # be stored
@@ -41,7 +46,7 @@ DATA = {
     Container.READONLY: False
 }
 
-@pytest.mark.usefixtures("dbus_launch", "agent", "assert_no_proxy")
+@pytest.mark.usefixtures("create_testoutput_dir", "dbus_launch", "agent", "assert_no_proxy")
 class TestFileSystem(object):
     """ This suite should do some basic testing of the Filesystem within the
         containers and that the whole chain is working properly.
@@ -65,7 +70,7 @@ class TestFileSystem(object):
         A nice way of getting process exit value from the container would be
         very nice.
         """
-        absoluteTestFile = os.path.join(CURRENT_DIR, TESTFILE)
+        absoluteTestFile = os.path.join(TESTOUTPUT_DIR, TESTFILE)
 
         if os.path.exists(absoluteTestFile):
             os.remove(absoluteTestFile)

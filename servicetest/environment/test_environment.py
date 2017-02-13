@@ -43,6 +43,10 @@ HOST_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 ##### Provide what the testframework requires #####
+# This function is used by the test framework to know where test specific files should be stored
+def output_dir():
+    return TESTOUTPUT_DIR
+
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
@@ -67,18 +71,6 @@ def clear_env_files(scope="function"):
     file_path = TESTOUTPUT_DIR + EnvironmentHelper.ENV_VARS_FILE_NAME
     if os.path.exists(file_path):
         os.remove(file_path)
-
-
-@pytest.fixture
-def create_testoutput_dir(scope="module"):
-    """ Create a directory for the generated test files.
-
-        This directory is ignored by git but it's nice to have
-        somewhere locally to store test output to support
-        troubleshooting etc.
-    """
-    if not os.path.exists(TESTOUTPUT_DIR):
-        os.makedirs(TESTOUTPUT_DIR)
 
 
 ##### Globals for setup and configuration of SC #####

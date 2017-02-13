@@ -31,6 +31,10 @@ from testframework import StandardManifest
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
+# This function is used by the test framework to know where test specific files should be stored
+def output_dir():
+    return TESTOUTPUT_DIR
+
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
@@ -97,18 +101,6 @@ def service_manifests():
         of StandardManifest and/or DefaultManifest objects.
     """
     return [manifest]
-
-
-@pytest.fixture
-def create_testoutput_dir(scope="module"):
-    """ Create a directory for the generated test files.
-
-        This directory is ignored by git but it's nice to have
-        somewhere locally to store test output to support
-        troubleshooting etc.
-    """
-    if not os.path.exists(TESTOUTPUT_DIR):
-        os.makedirs(TESTOUTPUT_DIR)
 
 
 @pytest.mark.usefixtures("dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
