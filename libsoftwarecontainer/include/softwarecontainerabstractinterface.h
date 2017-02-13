@@ -49,7 +49,7 @@ public:
      * @throws InvalidOperationError If called when state is not 'READY'
      * @throws InvalidContainerError If the container is in state 'INVALID'
      */
-    virtual ReturnCode startGateways(const GatewayConfiguration &configs) = 0;
+    virtual bool startGateways(const GatewayConfiguration &configs) = 0;
 
     /**
      * @brief Create a job that can run a command in a container
@@ -110,9 +110,9 @@ public:
      * @throws InvalidOperationError If called when state is not 'READY'
      * @throws InvalidContainerError If the container is in state 'INVALID'
      */
-    virtual ReturnCode bindMount(const std::string &pathOnHost,
-                         const std::string &pathInContainer,
-                         bool readonly = true) = 0;
+    virtual bool bindMount(const std::string &pathOnHost,
+                           const std::string &pathInContainer,
+                           bool readonly = true) = 0;
 
     /**
      * @brief Indicates if gateways have been configured previously.

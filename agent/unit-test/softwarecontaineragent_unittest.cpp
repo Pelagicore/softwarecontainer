@@ -60,33 +60,14 @@ public:
     }
 };
 
-/*
-class MockSCA :
-    public SoftwareContainerAgent
-{
-public:
-    MockSCA(Glib::RefPtr<Glib::MainContext> mainLoopContext,
-            std::shared_ptr<Config> config) :
-            SoftwareContainerAgent(mainLoopContext, config)
-    {
-
-    }
-
-    MOCK_METHOD2(doCreateHelper, void(ContainerID containerID, const SoftwareContainerConfig *config));
-    void createHelper(ContainerID containerID, std::unique_ptr<const SoftwareContainerConfig> config) {
-        doCreateHelper(containerID, config.get());
-    }
-};
-
-*/
 namespace softwarecontainer {
 class TestContainerInterface : public SoftwareContainerAbstractInterface
 {
     LOG_DECLARE_CLASS_CONTEXT("SCAU", "SoftwareContainerAgent Unit Test");
 public:
-    TestContainerInterface() {};
+    TestContainerInterface() {}
 
-    MOCK_METHOD1(startGateways, ReturnCode(const GatewayConfiguration&));
+    MOCK_METHOD1(startGateways, bool(const GatewayConfiguration&));
 
     MOCK_METHOD1(createCommandJob, std::shared_ptr<CommandJob>(const std::string&));
 
@@ -96,7 +77,7 @@ public:
 
     MOCK_METHOD0(resume, void());
 
-    MOCK_METHOD3(bindMount, ReturnCode(const std::string &, const std::string &, bool readonly));
+    MOCK_METHOD3(bindMount, bool(const std::string &, const std::string &, bool readonly));
 
     bool previouslyConfigured()
     {
@@ -164,7 +145,7 @@ public:
         factory = std::shared_ptr<SoftwareContainerFactory> (new TestFactory(testContainerInterface));
         sca = std::unique_ptr<SoftwareContainerAgent> (new SoftwareContainerAgent(mainContext, config, factory));
 
-        ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
+        ::testing::DefaultValue<bool>::Set(true);
         ::testing::DefaultValue<std::shared_ptr<CommandJob>>::Set(nullptr);
     }
     void TearDown() override
@@ -185,7 +166,7 @@ TEST_F(SoftwareContainerAgentTest, SequenceTest) {
 
         ASSERT_EQ(testContainerInterface, sca->getContainer(id));
         auto containers = sca->listContainers();
-        ASSERT_EQ(unsigned(1), containers.size());
+        ASSERT_EQ(1u, containers.size());
 
         using ::testing::_;
         EXPECT_CALL(*testContainerInterface, bindMount(_, _, _));
