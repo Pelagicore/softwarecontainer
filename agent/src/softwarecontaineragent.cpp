@@ -91,7 +91,6 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
                                                 sharedMountsDir,
                                                 shutdownTimeout);
 
-    log_debug() << "Created SCA instance :" ;
 }
 
 SoftwareContainerAgent::~SoftwareContainerAgent()
@@ -260,7 +259,7 @@ pid_t SoftwareContainerAgent::execute(ContainerID containerID,
     // Set up a CommandJob for this run in the container
     auto job = container->createCommandJob(cmdLine);
     if (nullptr == job) {
-        std::string errorMessage("Could not create job instance");
+        std::string errorMessage("Could not create job instance for " + cmdLine);
         log_error() << errorMessage;
         throw SoftwareContainerAgentError(errorMessage);
     }

@@ -80,48 +80,27 @@ public:
 
 */
 namespace softwarecontainer {
-class TestContainerInterface : public ContainerAgentInterface
+class TestContainerInterface : public SoftwareContainerAbstractInterface
 {
     LOG_DECLARE_CLASS_CONTEXT("SCAU", "SoftwareContainerAgent Unit Test");
 public:
     TestContainerInterface() {};
 
-    ReturnCode startGateways(const GatewayConfiguration &configs __attribute__((unused)))
-    {
-        return ReturnCode::SUCCESS;
-    }
+    MOCK_METHOD1(startGateways, ReturnCode(const GatewayConfiguration&));
 
-    std::shared_ptr<CommandJob> createCommandJob(const std::string &command)
-    {
-        log_debug() << "run command : " << command;
-        return nullptr;
-    }
+    MOCK_METHOD1(createCommandJob, std::shared_ptr<CommandJob>(const std::string&));
 
-    void shutdown(unsigned int timeout __attribute__((unused)))
-    {
-        log_debug() << "Shutting Down.";
-    }
+    MOCK_METHOD1(shutdown, void(unsigned int));
 
-    void suspend()
-    {
-        log_debug() << "Suspending.";
-    }
+    MOCK_METHOD0(suspend, void());
 
-    void resume()
-    {
-        log_debug() << "Resume.";
-    }
+    MOCK_METHOD0(resume, void());
 
-    ReturnCode bindMount(const std::string &pathOnHost __attribute__((unused)),
-                         const std::string &pathInContainer __attribute__((unused)),
-                         bool readonly __attribute__((unused)))
-    {
-        return ReturnCode::SUCCESS;
-    }
+    MOCK_METHOD3(bindMount, ReturnCode(const std::string &, const std::string &, bool readonly));
 
     bool previouslyConfigured()
     {
-        return true;
+        return false;
     }
 
 };
@@ -129,19 +108,26 @@ public:
 class TestFactory: public SoftwareContainerFactory
 {
 public:
-    std::shared_ptr<ContainerAgentInterface> createContainer
-    (const ContainerID id __attribute__((unused)), std::unique_ptr<const SoftwareContainerConfig> config __attribute__((unused)))
+    TestFactory(std::shared_ptr<SoftwareContainerAbstractInterface> testContainerInterface) :
+        m_container(testContainerInterface)
+    { }
+
+    std::shared_ptr<SoftwareContainerAbstractInterface> createContainer(const ContainerID id __attribute__((unused)),
+                                                                        std::unique_ptr<const SoftwareContainerConfig> config __attribute__((unused)))
      {
-        std::shared_ptr<ContainerAgentInterface> container = std::shared_ptr<ContainerAgentInterface> (new TestContainerInterface());
-        return container;
+        return m_container;
      }
+
+    std::shared_ptr<SoftwareContainerAbstractInterface> m_container;
 };
 } //namespace
 
 class SoftwareContainerAgentTest: public ::testing::Test
 {
 public:
-    SoftwareContainerAgent *sca;
+    std::unique_ptr<SoftwareContainerAgent> sca;
+    std::shared_ptr<SoftwareContainerFactory> factory;
+    std::shared_ptr<::testing::NiceMock<TestContainerInterface>> testContainerInterface;
 
     const std::string configString = "[SoftwareContainer]\n"
 #ifdef ENABLE_NETWORKGATEWAY
@@ -174,12 +160,15 @@ public:
                                                                   ConfigDependencies());
 
         Glib::RefPtr<Glib::MainContext> mainContext = Glib::MainContext::get_default();
-        std::shared_ptr<SoftwareContainerFactory> factory = std::shared_ptr<SoftwareContainerFactory> (new TestFactory());
-        sca = new SoftwareContainerAgent(mainContext, config, factory);
+        testContainerInterface = std::shared_ptr<::testing::NiceMock<TestContainerInterface>> (new ::testing::NiceMock<TestContainerInterface>());
+        factory = std::shared_ptr<SoftwareContainerFactory> (new TestFactory(testContainerInterface));
+        sca = std::unique_ptr<SoftwareContainerAgent> (new SoftwareContainerAgent(mainContext, config, factory));
+
+        ::testing::DefaultValue<ReturnCode>::Set(ReturnCode::SUCCESS);
+        ::testing::DefaultValue<std::shared_ptr<CommandJob>>::Set(nullptr);
     }
     void TearDown() override
     {
-        delete sca;
     }
 };
 
@@ -189,23 +178,34 @@ public:
 TEST_F(SoftwareContainerAgentTest, SequenceTest) {
     ASSERT_NO_THROW({
         auto id = sca->createContainer(valid_config);
+        EXPECT_CALL(*testContainerInterface, suspend());
         sca->suspendContainer(id);
+        EXPECT_CALL(*testContainerInterface, resume());
         sca->resumeContainer(id);
-        sca->getContainer(id);
-        auto containers = sca->listContainers();
-        ASSERT_EQ(1, containers.size());
 
+        ASSERT_EQ(testContainerInterface, sca->getContainer(id));
+        auto containers = sca->listContainers();
+        ASSERT_EQ(unsigned(1), containers.size());
+
+        using ::testing::_;
+        EXPECT_CALL(*testContainerInterface, bindMount(_, _, _));
+        sca->bindMount(id, "/test/host/dir", "/test/container/dir", false);
+        EXPECT_CALL(*testContainerInterface, shutdown(_));
         sca->shutdownContainer(id);
     });
 }
 
 TEST_F(SoftwareContainerAgentTest, ExecuteTest) {
     ContainerID id =0;
-    ASSERT_NO_THROW(id = sca->createContainer(valid_config));
-    ASSERT_THROW({
-        EnvironmentVariables var = {};
-        sca->execute(id, "run somecommands", "/root", "stdout", var, [&](pid_t, int){});
-    }, SoftwareContainerAgentError);
+    ASSERT_NO_THROW((id = sca->createContainer(valid_config)));
+
+    EnvironmentVariables var = {};
+    using ::testing::_;
+    EXPECT_CALL(*testContainerInterface, startGateways(_));
+    EXPECT_CALL(*testContainerInterface, createCommandJob(_));
+    ASSERT_THROW((sca->execute(id, "run somecommands", "/root", "stdout", var, [&](pid_t, int){})),
+                  SoftwareContainerAgentError);
+
 }
 
 

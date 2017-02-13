@@ -185,7 +185,6 @@ TEST_F(SoftwareContainerAgentTest, ResumeNonSuspendedContainer) {
     ASSERT_THROW({
         ContainerID id = sca->createContainer(valid_config);
 
-//        sca->getContainer(id);
         sca->resumeContainer(id);
     }, InvalidOperationError);
 }

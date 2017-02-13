@@ -20,11 +20,11 @@
 #include "softwarecontainerfactory.h"
 
 namespace softwarecontainer {
-std::shared_ptr<ContainerAgentInterface>
+std::shared_ptr<SoftwareContainerAbstractInterface>
 SoftwareContainerFactory::createContainer(const ContainerID id,
-                                  std::unique_ptr<const SoftwareContainerConfig> config)
+                                          std::unique_ptr<const SoftwareContainerConfig> config)
 {
-    auto container = std::shared_ptr<ContainerAgentInterface>
+    auto container = std::shared_ptr<SoftwareContainerAbstractInterface>
                                     (new SoftwareContainer(id, std::move(config)));
     return container;
 }

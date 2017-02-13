@@ -18,8 +18,8 @@
  */
 
 /**
- * @file containeragentinterface.h
- * @brief Contains the softwarecontainer::ContainerAbstractInterface class
+ * @file softwarecontainerabstractinterface.h
+ * @brief Contains the softwarecontainer::SoftwareContainerAbstractInterface class
  */
 #pragma once
 
@@ -28,11 +28,11 @@
 
 namespace softwarecontainer {
 
-class ContainerAgentInterface
+class SoftwareContainerAbstractInterface
 {
 public:
 
-    virtual ~ContainerAgentInterface() {};
+    virtual ~SoftwareContainerAbstractInterface() {};
 
     /**
      * @brief Starts the Gateways by setting the gateway configurations
