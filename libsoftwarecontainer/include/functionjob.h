@@ -21,8 +21,8 @@
 
 #include "jobabstract.h"
 
-class ContainerAbstractInterface;
 namespace softwarecontainer {
+class ContainerAbstractInterface;
 
 /**
  * Run a C++ function lambda inside a SoftwareContainer. 
