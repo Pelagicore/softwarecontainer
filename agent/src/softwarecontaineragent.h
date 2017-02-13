@@ -80,7 +80,7 @@ protected:
 class SoftwareContainerAgent
 {
     LOG_DECLARE_CLASS_CONTEXT("SCA", "SoftwareContainerAgent");
-    typedef std::shared_ptr<ContainerAgentInterface> SoftwareContainerPtr;
+    typedef std::shared_ptr<SoftwareContainerAbstractInterface> SoftwareContainerPtr;
 
 public:
     /**
@@ -274,9 +274,6 @@ private:
      */
     ContainerOptionParser m_optionParser;
 
-    /*
-     * Responsible to provide connection to containers.
-     */
     std::shared_ptr<SoftwareContainerFactory> m_factory;
 };
 

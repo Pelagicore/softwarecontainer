@@ -25,7 +25,7 @@
 #include "config/softwarecontainerconfig.h"
 #include "filetoolkitwithundo.h"
 #include "softwarecontainererror.h"
-#include "containeragentinterface.h"
+#include "softwarecontainerabstractinterface.h"
 
 #include <glibmm.h>
 
@@ -164,7 +164,7 @@ public:
  */
 class SoftwareContainer :
     private FileToolkitWithUndo,
-    public ContainerAgentInterface
+    public SoftwareContainerAbstractInterface
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("PCL", "SoftwareContainer library");

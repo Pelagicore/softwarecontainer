@@ -19,7 +19,7 @@
 
 /**
  * @file softwarecontainerfactory.h
- * @brief Contains the softwarecontainer::AgentFactory class
+ * @brief Contains the softwarecontainer::SoftwareContainerFactory class
  */
 #pragma once
 
@@ -30,14 +30,14 @@
 namespace softwarecontainer {
 
 /*
- * This class holds a connection to agent to create containers.
+ * This class creates containers.
  */
 
 class SoftwareContainerFactory {
 public:
     virtual ~SoftwareContainerFactory() {};
 
-    virtual std::shared_ptr<ContainerAgentInterface>
+    virtual std::shared_ptr<SoftwareContainerAbstractInterface>
             createContainer(const ContainerID id,
                             std::unique_ptr<const SoftwareContainerConfig> config);
 };
