@@ -21,9 +21,9 @@
 
 namespace softwarecontainer {
 
-FileGateway::FileGateway()
-    : Gateway(ID)
-    , m_store()
+FileGateway::FileGateway(std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container),
+    m_store()
 {
 }
 

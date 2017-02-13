@@ -17,6 +17,9 @@
  * For further information see LICENSE
  */
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #include "softwarecontainer_test.h"
 
@@ -29,14 +32,12 @@
 #include "functionjob.h"
 #include "commandjob.h"
 
-
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
-class SoftwareContainerApp : public SoftwareContainerTest
+class SoftwareContainerApp : public SoftwareContainerLibTest
 {
 
 public:
-
     void startGateways(const std::string &config, const std::string &gatewayID)
     {
         json_error_t error;

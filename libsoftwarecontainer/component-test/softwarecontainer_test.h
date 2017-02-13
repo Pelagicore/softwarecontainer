@@ -17,12 +17,10 @@
  * For further information see LICENSE
  */
 
-
+/*
 #include <thread>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <stdlib.h>
+*/
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -33,11 +31,38 @@
 
 using namespace softwarecontainer;
 
-class SoftwareContainerTest : public ::testing::Test
+/*
+ * This is the base class for both the LibTest and GatewayTest.
+ *
+ * It contains some utilities and some things that are common
+ * for both test classes.
+ */
+class SoftwareContainerComponentTest : public ::testing::Test
 {
 public:
-    SoftwareContainerTest() { }
-    ~SoftwareContainerTest() { }
+    SoftwareContainerComponentTest() { }
+    ~SoftwareContainerComponentTest() { }
+
+    std::unique_ptr<SoftwareContainerConfig> createConfig();
+    std::string getTempPath(bool directory);
+    std::string createTempFile(const std::string &prefix = "");
+    std::string createTempDir(const std::string &prefix = "");
+
+    void TearDown() override;
+
+private:
+    std::vector<std::string> filesToRemove;
+    std::vector<std::string> dirsToRemove;
+};
+
+/*
+ * Test class to be used for testing the full library
+ */
+class SoftwareContainerLibTest : public SoftwareContainerComponentTest
+{
+public:
+    SoftwareContainerLibTest() { }
+    ~SoftwareContainerLibTest() { }
 
     void SetUp() override;
     void TearDown() override;
@@ -47,27 +72,27 @@ public:
     Glib::RefPtr<Glib::MainContext> m_context = Glib::MainContext::get_default();
     Glib::RefPtr<Glib::MainLoop> m_ml;
     std::unique_ptr<SoftwareContainer> m_sc;
-
-    std::unique_ptr<SoftwareContainerConfig> createConfig();
-    std::string getTempPath(bool directory);
-    std::string createTempFile(const std::string &prefix = "");
-    std::string createTempDir(const std::string &prefix = "");
-
-private:
-    std::vector<std::string> filesToRemove;
-    std::vector<std::string> dirsToRemove;
 };
 
-class SoftwareContainerGatewayTest : public SoftwareContainerTest
+/*
+ * Test class to be used for testing the gateways
+ */
+class SoftwareContainerGatewayTest : public SoftwareContainerComponentTest
 {
 public:
     SoftwareContainerGatewayTest() { }
     ~SoftwareContainerGatewayTest() { }
 
+    // Gateway config
     json_t *jsonConfig = nullptr;
-
-    void TearDown() override;
-
-    void givenContainerIsSet(Gateway *gw);
     void loadConfig(const std::string &config);
+
+    // Container
+    std::shared_ptr<softwarecontainer::ContainerAbstractInterface> m_container;
+    pid_t m_initPid;
+
+    // Test setup / teardown
+    void TearDown() override;
+    void SetUp() override;
+
 };

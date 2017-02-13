@@ -29,8 +29,9 @@ namespace softwarecontainer {
 NetworkGateway::NetworkGateway(const int32_t id,
                                const std::string bridgeDevice,
                                const std::string gateway,
-                               const uint8_t maskBits) :
-    Gateway(ID),
+                               const uint8_t maskBits,
+                               std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container),
     m_netmask(maskBits),
     m_gateway(gateway),
     m_bridgeDevice(bridgeDevice),
@@ -56,11 +57,6 @@ bool NetworkGateway::readConfigElement(const json_t *element)
 
 bool NetworkGateway::activateGateway()
 {
-    if (!hasContainer()) {
-        log_error() << "activate was called on a NetworkGateway which has no associated container";
-        return false;
-    }
-
     if (m_gateway.size() != 0) {
         log_debug() << "Default gateway set to " << m_gateway;
     } else {

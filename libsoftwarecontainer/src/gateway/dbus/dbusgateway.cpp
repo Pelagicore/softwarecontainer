@@ -22,10 +22,11 @@
 
 namespace softwarecontainer {
 
-DBusGateway::DBusGateway(const std::string &gatewayDir, const std::string &name):
-    Gateway(ID),
-    sessionBus(DBusGatewayInstance::ProxyType::SessionProxy, gatewayDir, name),
-    systemBus(DBusGatewayInstance::ProxyType::SystemProxy, gatewayDir, name)
+DBusGateway::DBusGateway(const std::string &gatewayDir,
+                         std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container),
+    sessionBus(DBusGatewayInstance::ProxyType::SessionProxy, gatewayDir, container),
+    systemBus(DBusGatewayInstance::ProxyType::SystemProxy, gatewayDir, container)
 {
 }
 
@@ -99,12 +100,6 @@ bool DBusGateway::teardown()
      }
 
      return true;
-}
-
-void DBusGateway::setContainer(std::shared_ptr<ContainerAbstractInterface> container)
-{
-    sessionBus.setContainer(container);
-    systemBus.setContainer(container);
 }
 
 bool DBusGateway::isConfigured()

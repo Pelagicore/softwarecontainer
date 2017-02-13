@@ -65,10 +65,11 @@ public:
         ACTIVATED = 2,
     };
 
-    Gateway(const char *id)
+    Gateway(const char *id, std::shared_ptr<ContainerAbstractInterface> container)
     {
         m_id = id;
         m_state = GatewayState::CREATED;
+        m_container = container;
     }
 
     virtual ~Gateway()
@@ -121,11 +122,6 @@ public:
     virtual bool teardown();
 
     /**
-     * @brief Set the associated container for this gateway
-     */
-    virtual void setContainer(std::shared_ptr<ContainerAbstractInterface> container);
-
-    /**
      * @brief Is the gateway configured or not?
      */
     virtual bool isConfigured();
@@ -146,17 +142,6 @@ protected:
      * @returns false if an error was encountered while parsing, true otherwise.
      */
     virtual bool readConfigElement(const json_t *element) = 0;
-
-    /**
-     * @brief Check if the gateway has an associated container
-     *
-     * Inheriting gateways calls this method to know if they are safe to assume they
-     * can access a ContainerAbstractInterface instance previously set by SoftwareContainer
-     * calling setContainer()
-     *
-     * @returns true if there is a ContainerAbstractInterface instance set, false if not.
-     */
-    virtual bool hasContainer();
 
     /**
      * @brief Get a handle to the associated container

@@ -31,7 +31,8 @@ class DBusGateway : public Gateway
 public:
 
     static constexpr const char *ID = "dbus";
-    DBusGateway(const std::string &gatewayDir, const std::string &name);
+    DBusGateway(const std::string &gatewayDir,
+                std::shared_ptr<ContainerAbstractInterface> container);
     virtual ~DBusGateway();
 
     /**
@@ -59,7 +60,6 @@ public:
      */
     virtual bool teardownGateway() override { return true; }
 
-    virtual void setContainer(std::shared_ptr<ContainerAbstractInterface> container) override;
     virtual bool teardown() override;
 
     virtual bool isConfigured() override;

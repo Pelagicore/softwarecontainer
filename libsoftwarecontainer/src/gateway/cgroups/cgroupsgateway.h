@@ -37,7 +37,7 @@ class CgroupsGateway: public Gateway
 public:
     static constexpr const char *ID = "cgroups";
 
-    CgroupsGateway();
+    CgroupsGateway(std::shared_ptr<ContainerAbstractInterface> container);
     ~CgroupsGateway() { }
 
     bool readConfigElement(const json_t *element) override;

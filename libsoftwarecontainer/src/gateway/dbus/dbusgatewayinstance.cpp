@@ -22,12 +22,18 @@
 
 namespace softwarecontainer {
 
-DBusGatewayInstance::DBusGatewayInstance(ProxyType type
-                       , const std::string &gatewayDir
-                       , const std::string &name)
-    : Gateway(ID)
-    , m_type(type)
+// These lines are needed in order to define the fields, which otherwise would
+// yield linker errors.
+constexpr const char *DBusGatewayInstance::SESSION_CONFIG;
+constexpr const char *DBusGatewayInstance::SYSTEM_CONFIG;
+
+DBusGatewayInstance::DBusGatewayInstance(ProxyType type,
+                                         const std::string &gatewayDir,
+                                         std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container),
+    m_type(type)
 {
+    std::string name = container->id();
     std::string socketName = (m_type == SessionProxy ? "sess_" : "sys_") + name + ".sock";
     m_socket = buildPath(gatewayDir, socketName);
 

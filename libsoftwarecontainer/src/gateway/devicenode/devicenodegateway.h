@@ -48,7 +48,7 @@ class DeviceNodeGateway :
 public:
     static constexpr const char *ID = "devicenode";
 
-    DeviceNodeGateway();
+    DeviceNodeGateway(std::shared_ptr<ContainerAbstractInterface> container);
 
     ~DeviceNodeGateway()
     {

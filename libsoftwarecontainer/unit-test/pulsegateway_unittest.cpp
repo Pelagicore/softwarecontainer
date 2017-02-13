@@ -28,7 +28,10 @@ class MockPulseGateway :
     public PulseGateway
 {
 public:
-    MockPulseGateway() {}
+    MockPulseGateway() :
+        PulseGateway(nullptr)
+    {
+    }
 
     MOCK_METHOD0(enablePulseAudio, bool());
 };

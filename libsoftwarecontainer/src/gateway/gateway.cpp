@@ -66,11 +66,6 @@ bool Gateway::activate() {
         throw GatewayError("Gateway is not configured");
     }
 
-    if (!hasContainer()) {
-        log_error() << "Activate was called on a gateway which has no associated container: " << id();
-        throw GatewayError("Gateway does not have a container instance");
-    }
-
     if (!activateGateway()) {
         log_error() << "Couldn't activate gateway: " << id();
         return false;
@@ -96,24 +91,10 @@ bool Gateway::teardown() {
     return true;
 }
 
-bool Gateway::hasContainer()
-{
-    return m_container != nullptr;
-}
-
 std::shared_ptr<ContainerAbstractInterface> Gateway::getContainer()
 {
-    if (!hasContainer()) {
-        throw GatewayError("Attempting to get container reference before any container has been assigned.");
-    }
-
     std::shared_ptr<ContainerAbstractInterface> ptrCopy = m_container;
     return ptrCopy;
-}
-
-void Gateway::setContainer(std::shared_ptr<ContainerAbstractInterface> container)
-{
-    m_container = container;
 }
 
 bool Gateway::isConfigured()

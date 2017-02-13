@@ -34,7 +34,7 @@ public:
     static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
     static constexpr const char *ENABLED_FIELD = "enabled";
 
-    WaylandGateway();
+    WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container);
     ~WaylandGateway();
 
     bool readConfigElement(const json_t *element);

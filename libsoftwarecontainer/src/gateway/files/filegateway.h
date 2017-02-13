@@ -40,7 +40,7 @@ class FileGateway :
 public:
     static constexpr const char *ID = "file";
 
-    FileGateway();
+    FileGateway(std::shared_ptr<ContainerAbstractInterface> container);
 
     bool readConfigElement(const json_t *element) override;
     bool activateGateway() override;

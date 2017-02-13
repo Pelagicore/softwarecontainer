@@ -21,8 +21,8 @@
 
 namespace softwarecontainer {
 
-PulseGateway::PulseGateway() :
-    Gateway(ID),
+PulseGateway::PulseGateway(std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container),
     m_enableAudio(false)
 {
 }

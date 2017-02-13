@@ -29,12 +29,13 @@ class FileGatewayTest : public SoftwareContainerGatewayTest
 
 public:
     FileGatewayTest() { }
-    FileGateway *gw;
+    std::unique_ptr<FileGateway> gw;
 
     void SetUp() override
     {
-        gw = new FileGateway();
-        SoftwareContainerTest::SetUp();
+        SoftwareContainerGatewayTest::SetUp();
+
+        gw = std::unique_ptr<FileGateway>(new FileGateway(m_container));
 
         // Create file
         ASSERT_TRUE(writeToFile(FILE_PATH, FILE_CONTENT));
@@ -42,10 +43,10 @@ public:
 
     void TearDown() override
     {
-        SoftwareContainerTest::TearDown();
-
         // Remove file
         unlink(FILE_PATH.c_str());
+
+        SoftwareContainerGatewayTest::TearDown();
     }
 
     const std::string FILE_CONTENT = "ahdkhqweuyreqiwenomndlaskmd";
@@ -57,7 +58,6 @@ public:
  * Test that a minimal conf is accepted and that activate works
  */
 TEST_F(FileGatewayTest, TestActivateWithMinimalValidConf) {
-    givenContainerIsSet(gw);
     const std::string config =
     "["
         "{"

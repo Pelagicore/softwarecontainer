@@ -24,8 +24,8 @@
 
 namespace softwarecontainer {
 
-CgroupsGateway::CgroupsGateway()
-    : Gateway(ID)
+CgroupsGateway::CgroupsGateway(std::shared_ptr<ContainerAbstractInterface> container)
+    : Gateway(ID, container)
     , m_parser()
 {
 }

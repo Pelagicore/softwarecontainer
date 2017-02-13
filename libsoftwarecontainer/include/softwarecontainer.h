@@ -312,13 +312,6 @@ public:
      */
     bool previouslyConfigured();
 
-    /**
-     * @brief Only used for testing, should not be used by e.g. the launcher
-     *
-     * TODO: Remove or change scope of this method if possible.
-     */
-    void addGateway(Gateway *gateway);
-
 private:
     /*
      * Add gateways and create and initialize the underlying container

@@ -28,15 +28,13 @@ using namespace softwarecontainer;
 class MockGateway : public Gateway
 {
 public:
-    MockGateway() : Gateway("mock")
+    MockGateway() : Gateway("mock", nullptr)
     {
     }
 
     MOCK_METHOD1(readConfigElement, bool(const json_t *element));
     MOCK_METHOD0(activateGateway, bool());
     MOCK_METHOD0(teardownGateway, bool());
-    MOCK_METHOD0(hasContainer, bool());
-
 };
 
 using ::testing::_;
@@ -195,23 +193,6 @@ TEST_F(GatewayTest, CantActivateTwice) {
     ASSERT_TRUE(gw.setConfig(jsonConf));
     ASSERT_TRUE(gw.activate());
     ASSERT_THROW(gw.activate(), GatewayError);
-}
-
-/*
- * Test that activate throws an exception if there is no container instance
- * set on gateway.
- */
-TEST_F(GatewayTest, NoContainerSetMeansActivateThrows) {
-
-    loadConfig(validConf);
-    ASSERT_TRUE(gw.setConfig(jsonConf));
-
-    // Make the check for a container instance in activate fail
-    ::testing::DefaultValue<bool>::Set(false);
-    EXPECT_CALL(gw, hasContainer()); // Namely this check
-
-    ASSERT_THROW(gw.activate(), GatewayError);
-    ASSERT_THROW(gw.teardown(), GatewayError);
 }
 
 /*
