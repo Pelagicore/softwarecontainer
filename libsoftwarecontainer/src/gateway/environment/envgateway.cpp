@@ -25,8 +25,8 @@
 
 namespace softwarecontainer {
 
-EnvironmentGateway::EnvironmentGateway() :
-    Gateway(ID)
+EnvironmentGateway::EnvironmentGateway(std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container)
 {
 }
 

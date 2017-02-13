@@ -25,12 +25,13 @@ class DeviceNodeGatewayTest : public SoftwareContainerGatewayTest
 {
 public:
     DeviceNodeGatewayTest() { }
-    DeviceNodeGateway *gw;
+
+    std::unique_ptr<DeviceNodeGateway> gw;
 
     void SetUp() override
     {
-        gw = new DeviceNodeGateway();
-        SoftwareContainerTest::SetUp();
+        SoftwareContainerGatewayTest::SetUp();
+        gw = std::unique_ptr<DeviceNodeGateway>(new DeviceNodeGateway(m_container));
     }
 
     const std::string NEW_DEVICE = "/tmp/thenewfile";
@@ -42,7 +43,6 @@ public:
  * Make sure activation of the gateway works with a valid conf and a container
  */
 TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
-    givenContainerIsSet(gw);
     const std::string config = "[\
                                   {\
                                     \"name\":  \"" + NEW_DEVICE + "\",\
@@ -75,7 +75,6 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
  * Make sure we can't re-create or overwrite a device that already exists in the container
  */
 TEST_F(DeviceNodeGatewayTest, TestOverwriteDeviceFails) {
-    givenContainerIsSet(gw);
     const std::string config = "[\
                                   {\
                                     \"name\": \"" + PRESENT_DEVICE + "\",\

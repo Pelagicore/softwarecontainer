@@ -25,11 +25,13 @@ class MockNetworkGateway :
     public NetworkGateway
 {
 public:
-    MockNetworkGateway(uint32_t containerID) :
+    MockNetworkGateway(uint32_t containerID,
+                       std::shared_ptr<ContainerAbstractInterface> container) :
         NetworkGateway(containerID,
                        std::string(BRIDGE_DEVICE_TESTING),
                        std::string(BRIDGE_IP_TESTING), // bridge ip
-                       std::stoi(BRIDGE_NETMASK_BITLENGTH_TESTING)) // bridge netmask 
+                       std::stoi(BRIDGE_NETMASK_BITLENGTH_TESTING), // bridge netmask
+                       container)
     {
     }
 
@@ -39,17 +41,25 @@ public:
 class NetworkGatewayTest : public SoftwareContainerGatewayTest
 {
 protected:
-    ::testing::NiceMock<MockNetworkGateway> *gw;
+    std::unique_ptr<::testing::NiceMock<MockNetworkGateway>> gw;
 
     void SetUp() override
     {
+        SoftwareContainerGatewayTest::SetUp();
+        ::testing::DefaultValue<bool>::Set(true);
+
+        // Randomize container ID
         srand(time(NULL));
         uint32_t containerID = rand() % 100;
 
-        ::testing::DefaultValue<bool>::Set(true);
+        gw = std::unique_ptr<::testing::NiceMock<MockNetworkGateway>>(
+            new ::testing::NiceMock<MockNetworkGateway>(containerID, m_container));
+    }
 
-        gw = new ::testing::NiceMock<MockNetworkGateway>(containerID);
-        SoftwareContainerTest::SetUp();
+    void TearDown() override
+    {
+        gw.reset();
+        SoftwareContainerGatewayTest::TearDown();
     }
 
     const std::string VALID_FULL_CONFIG =
@@ -84,9 +94,9 @@ protected:
  * @brief Test NetworkGateway::activate is successful.
  */
 TEST_F(NetworkGatewayTest, Activate) {
-    givenContainerIsSet(gw);
     loadConfig(VALID_FULL_CONFIG);
     ASSERT_TRUE(gw->setConfig(jsonConfig));
+
     ASSERT_TRUE(gw->activate());
 }
 
@@ -95,7 +105,6 @@ TEST_F(NetworkGatewayTest, Activate) {
  *        an exception when called and gateway is not configured.
  */
 TEST_F(NetworkGatewayTest, ActivateBadConfig) {
-    givenContainerIsSet(gw);
     const std::string config = "[{\"internet-access\": true}]";
     loadConfig(config);
 
@@ -108,12 +117,11 @@ TEST_F(NetworkGatewayTest, ActivateBadConfig) {
  *  on the host.
  */
 TEST_F(NetworkGatewayTest, ActivateNoBridge) {
-    givenContainerIsSet(gw);
+    loadConfig(VALID_FULL_CONFIG);
+    ASSERT_TRUE(gw->setConfig(jsonConfig));
 
     ::testing::DefaultValue<bool>::Set(false);
     EXPECT_CALL(*gw, isBridgeAvailable());
 
-    loadConfig(VALID_FULL_CONFIG);
-    ASSERT_TRUE(gw->setConfig(jsonConfig));
     ASSERT_FALSE(gw->activate());
 }

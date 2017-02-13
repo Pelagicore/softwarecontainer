@@ -38,7 +38,7 @@
  * Those tests that run in the host are marked as such with a comment
  */
 
-class NetlinkTest : public SoftwareContainerTest
+class NetlinkTest : public SoftwareContainerLibTest
 {
 public:
     NetlinkTest() { }
@@ -46,6 +46,7 @@ public:
     int SUCCESS = 0;
     const char *IFACE = "eth0";
     const char *IFACEADDR = "1.2.3.4";
+
     const char *GWADDR = "1.2.3.1";
     static constexpr int NETMASK = 24;
 };

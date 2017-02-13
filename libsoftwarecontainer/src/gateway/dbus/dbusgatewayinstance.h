@@ -47,7 +47,9 @@ public:
      *
      * @param type SessionProxy or SystemProxy
      */
-    DBusGatewayInstance(ProxyType type, const std::string &gatewayDir, const std::string &name);
+    DBusGatewayInstance(ProxyType type,
+                        const std::string &gatewayDir,
+                        std::shared_ptr<ContainerAbstractInterface> container);
     virtual ~DBusGatewayInstance();
 
     virtual bool readConfigElement(const json_t *element) override;

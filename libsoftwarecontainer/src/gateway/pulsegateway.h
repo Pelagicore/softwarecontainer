@@ -37,7 +37,7 @@ class PulseGateway :
 public:
     static constexpr const char *ID = "pulseaudio";
 
-    PulseGateway();
+    PulseGateway(std::shared_ptr<ContainerAbstractInterface> container);
     ~PulseGateway();
 
     bool readConfigElement(const json_t *element) override;

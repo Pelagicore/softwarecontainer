@@ -29,8 +29,8 @@ constexpr const char *WaylandGateway::ENABLED_FIELD;
 constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
 
-WaylandGateway::WaylandGateway() :
-    Gateway(ID),
+WaylandGateway::WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container),
     m_enabled(false)
 {
 }

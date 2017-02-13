@@ -59,9 +59,10 @@ public:
     NetworkGateway(const int32_t id,
                    const std::string bridgeDevice,
                    const std::string gateway,
-                   const uint8_t maskBits);
+                   const uint8_t maskBits,
+                   std::shared_ptr<ContainerAbstractInterface> container);
 
-    ~NetworkGateway();
+    virtual ~NetworkGateway();
 
     bool readConfigElement(const json_t *element) override;
 

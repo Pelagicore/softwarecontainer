@@ -17,13 +17,38 @@
  * For further information see LICENSE
  */
 
-
 #include "softwarecontainer_test.h"
+#include "container.h"
 
-
-void SoftwareContainerGatewayTest::givenContainerIsSet(Gateway *gw)
+void SoftwareContainerGatewayTest::SetUp()
 {
-    m_sc->addGateway(gw);
+    SoftwareContainerComponentTest::SetUp();
+
+    // Create a container from a test config
+    auto config = createConfig();
+    m_container = std::shared_ptr<ContainerAbstractInterface>(
+        new Container("SC-0",
+                      config->containerConfigPath(),
+                      config->sharedMountsDir(),
+                      config->enableWriteBuffer(),
+                      config->containerShutdownTimeout()
+        )
+    );
+
+    ASSERT_TRUE(m_container->initialize());
+    ASSERT_TRUE(m_container->create());
+    ASSERT_TRUE(m_container->start(&m_initPid));
+}
+
+void SoftwareContainerGatewayTest::TearDown()
+{
+    SoftwareContainerComponentTest::TearDown();
+
+    if (nullptr != jsonConfig) {
+        json_decref(jsonConfig);
+    }
+
+    m_container->shutdown();
 }
 
 void SoftwareContainerGatewayTest::loadConfig(const std::string &config)
@@ -36,28 +61,57 @@ void SoftwareContainerGatewayTest::loadConfig(const std::string &config)
     jsonConfig = json_loads(config.c_str(), 0, &err);
 }
 
-void SoftwareContainerGatewayTest::TearDown()
+void SoftwareContainerLibTest::SetUp()
 {
-    if (nullptr != jsonConfig) {
-        json_decref(jsonConfig);
-    }
+    SoftwareContainerComponentTest::SetUp();
+
+    // Create a config
+    std::unique_ptr<SoftwareContainerConfig> config = createConfig();
+
+    // Create random container id
+    srand(time(NULL));
+    uint32_t containerId =  rand() % 100;
+
+    // Create SC lib instance
+    m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(containerId, std::move(config)));
 }
 
-void SoftwareContainerTest::run()
+void SoftwareContainerLibTest::TearDown()
+{
+    m_sc.reset();
+    SoftwareContainerComponentTest::TearDown();
+}
+
+void SoftwareContainerLibTest::run()
 {
     m_ml = Glib::MainLoop::create(m_context);
     m_ml->run();
 }
 
-void SoftwareContainerTest::exit()
+void SoftwareContainerLibTest::exit()
 {
     m_ml->quit();
+}
+
+void SoftwareContainerComponentTest::TearDown()
+{
+    ::testing::Test::TearDown();
+
+    for (auto &file: filesToRemove) {
+        unlink(file.c_str());
+    }
+    filesToRemove.clear();
+
+    for (auto &dir: dirsToRemove) {
+        rmdir(dir.c_str());
+    }
+    dirsToRemove.clear();
 }
 
 /*
  * Set up the workspace with all the config values it needs.
  */
-std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
+std::unique_ptr<SoftwareContainerConfig> SoftwareContainerComponentTest::createConfig()
 {
     std::unique_ptr<SoftwareContainerConfig> config =
         std::unique_ptr<SoftwareContainerConfig>(new SoftwareContainerConfig(
@@ -79,36 +133,7 @@ std::unique_ptr<SoftwareContainerConfig> SoftwareContainerTest::createConfig()
     return config;
 }
 
-void SoftwareContainerTest::SetUp()
-{
-    ::testing::DefaultValue<bool>::Set(true);
-    ::testing::Test::SetUp();
-
-    std::unique_ptr<SoftwareContainerConfig> config = createConfig();
-
-    srand(time(NULL));
-    uint32_t containerId =  rand() % 100;
-
-    m_sc = std::unique_ptr<SoftwareContainer>(new SoftwareContainer(containerId, std::move(config)));
-}
-
-void SoftwareContainerTest::TearDown()
-{
-    ::testing::Test::TearDown();
-    m_sc.reset();
-
-    for (auto &file: filesToRemove) {
-        unlink(file.c_str());
-    }
-    filesToRemove.clear();
-
-    for (auto &dir: dirsToRemove) {
-        rmdir(dir.c_str());
-    }
-    dirsToRemove.clear();
-}
-
-std::string SoftwareContainerTest::createTempFile(const std::string &prefix)
+std::string SoftwareContainerComponentTest::createTempFile(const std::string &prefix)
 {
     std::string strWithPrefix = "SC-tmpFileXXXXXX";
     if (prefix.empty()) {
@@ -131,7 +156,7 @@ std::string SoftwareContainerTest::createTempFile(const std::string &prefix)
     return filename;
 }
 
-std::string SoftwareContainerTest::createTempDir(const std::string &prefix)
+std::string SoftwareContainerComponentTest::createTempDir(const std::string &prefix)
 {
     std::string strWithPrefix = "SC-tmpDirXXXXXX";
     if (prefix.empty()) {
@@ -157,7 +182,7 @@ std::string SoftwareContainerTest::createTempDir(const std::string &prefix)
  * Create a temporary directory or file, and optionally remove it.
  * Removal is useful if one only wants a unique tmp name
  */
-std::string SoftwareContainerTest::getTempPath(bool directory)
+std::string SoftwareContainerComponentTest::getTempPath(bool directory)
 {
     std::string name;
 

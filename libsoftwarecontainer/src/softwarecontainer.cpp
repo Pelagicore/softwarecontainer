@@ -117,10 +117,13 @@ bool SoftwareContainer::init()
 
 #ifdef ENABLE_NETWORKGATEWAY
     try {
-        addGateway(new NetworkGateway(m_containerID,
-                                      m_config->bridgeDevice(),
-                                      m_config->bridgeIPAddress(),
-                                      m_config->bridgeNetmaskBitLength()));
+        m_gateways.push_back( std::unique_ptr<Gateway>(new NetworkGateway(
+            m_containerID,
+            m_config->bridgeDevice(),
+            m_config->bridgeIPAddress(),
+            m_config->bridgeNetmaskBitLength(),
+            m_container))
+        );
     } catch (SoftwareContainerError &error) {
         log_error() << "Given netmask is not appropriate for creating ip address."
                     << "It should be an unsigned value between 1 and 31";
@@ -129,41 +132,34 @@ bool SoftwareContainer::init()
 #endif
 
 #ifdef ENABLE_PULSEGATEWAY
-    addGateway(new PulseGateway());
+    m_gateways.push_back( std::unique_ptr<Gateway>(new PulseGateway(m_container)) );
 #endif
 
 #ifdef ENABLE_DEVICENODEGATEWAY
-    addGateway(new DeviceNodeGateway());
+    m_gateways.push_back( std::unique_ptr<Gateway>(new DeviceNodeGateway(m_container)) );
 #endif
 
 #ifdef ENABLE_DBUSGATEWAY
-    std::string containerID = std::string(m_container->id());
-    addGateway(new DBusGateway( getGatewayDir(), containerID ));
+    m_gateways.push_back( std::unique_ptr<Gateway>(new DBusGateway( getGatewayDir(), m_container)) );
 #endif
 
 #ifdef ENABLE_CGROUPSGATEWAY
-    addGateway(new CgroupsGateway());
+    m_gateways.push_back( std::unique_ptr<Gateway>(new CgroupsGateway(m_container)) );
 #endif
 
 #ifdef ENABLE_WAYLANDGATEWAY
-    addGateway(new WaylandGateway());
+    m_gateways.push_back( std::unique_ptr<Gateway>(new WaylandGateway(m_container)) );
 #endif
 
 #ifdef ENABLE_ENVGATEWAY
-    addGateway(new EnvironmentGateway());
+    m_gateways.push_back( std::unique_ptr<Gateway>(new EnvironmentGateway(m_container)) );
 #endif
 
 #ifdef ENABLE_FILEGATEWAY
-    addGateway(new FileGateway());
+    m_gateways.push_back( std::unique_ptr<Gateway>(new FileGateway(m_container)) );
 #endif
 
     return true;
-}
-
-void SoftwareContainer::addGateway(Gateway *gateway)
-{
-    gateway->setContainer(m_container);
-    m_gateways.push_back(std::move(std::unique_ptr<Gateway>(gateway)));
 }
 
 bool SoftwareContainer::startGateways(const GatewayConfiguration &gwConfig)

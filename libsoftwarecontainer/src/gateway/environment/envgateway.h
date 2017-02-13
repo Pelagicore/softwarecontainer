@@ -33,7 +33,7 @@ class EnvironmentGateway :
 public:
     static constexpr const char *ID = "env";
 
-    EnvironmentGateway();
+    EnvironmentGateway(std::shared_ptr<ContainerAbstractInterface> container);
     ~EnvironmentGateway();
     bool readConfigElement(const json_t *element);
     bool activateGateway();

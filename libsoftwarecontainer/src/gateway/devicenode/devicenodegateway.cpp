@@ -26,8 +26,8 @@
 
 namespace softwarecontainer {
 
-DeviceNodeGateway::DeviceNodeGateway() :
-    Gateway(ID)
+DeviceNodeGateway::DeviceNodeGateway(std::shared_ptr<ContainerAbstractInterface> container) :
+    Gateway(ID, container)
 {
 }
 

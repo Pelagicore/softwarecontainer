@@ -28,13 +28,14 @@ class CgroupsGatewayTest : public SoftwareContainerGatewayTest
 
 public:
     CgroupsGatewayTest() { }
-    CgroupsGateway *gw;
+    std::unique_ptr<CgroupsGateway> gw;
 
     void SetUp() override
     {
+        SoftwareContainerGatewayTest::SetUp();
+
         ::testing::DefaultValue<bool>::Set(true);
-        gw = new CgroupsGateway();
-        SoftwareContainerTest::SetUp();
+        gw = std::unique_ptr<CgroupsGateway>(new CgroupsGateway(m_container));
     }
 };
 
@@ -42,7 +43,6 @@ public:
  * Test that activating the gateway, given a valid configuration, works.
  */
 TEST_F(CgroupsGatewayTest, ActivateWithValidConf) {
-    givenContainerIsSet(gw);
     const std::string config = "[{\
                                     \"setting\": \"memory.limit_in_bytes\",\
                                     \"value\": \"2000000\"\
