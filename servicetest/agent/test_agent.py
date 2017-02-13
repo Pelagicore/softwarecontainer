@@ -29,6 +29,10 @@ CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
 # Provide what the testframework requires #####
+# This function is used by the test framework to know where test specific files should be stored
+def output_dir():
+    return TESTOUTPUT_DIR
+
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
@@ -47,18 +51,7 @@ DATA = {
     Container.READONLY: False
 }
 
-@pytest.fixture
-def create_testoutput_dir(scope="module"):
-    """ Create a directory for the generated test files.
-
-        This directory is ignored by git but it's nice to have
-        somewhere locally to store test output to support
-        troubleshooting etc.
-    """
-    if not os.path.exists(TESTOUTPUT_DIR):
-        os.makedirs(TESTOUTPUT_DIR)
-
-# Test suites #
+### Test suites ###
 
 
 @pytest.mark.usefixtures("create_testoutput_dir", "agent")

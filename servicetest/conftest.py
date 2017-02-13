@@ -115,3 +115,14 @@ def assert_no_proxy():
     assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouldn't be"
     yield
     assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouldn't be"
+
+
+@pytest.fixture(scope="module")
+def create_testoutput_dir(request):
+    """ Create a directory for storing test output and test files to support
+        troubleshooting etc.
+    """
+    output_dir = request.module.output_dir()
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)

@@ -25,11 +25,15 @@ from testframework import Container
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
 
+# This function is used by the test framework to know where test specific files should be stored
+def output_dir():
+    return TESTOUTPUT_DIR
 
 # This function is used by the 'agent' fixture to know where the log should be stored
 def logfile_path():
-    return CURRENT_DIR + "/test.log"
+    return TESTOUTPUT_DIR + "/test.log"
 
 
 # These default values are used to pass various test specific values and
@@ -55,7 +59,7 @@ def isFileGrowing(filename):
 
     return sizeBefore != sizeAfter
 
-@pytest.mark.usefixtures("agent", "assert_no_proxy")
+@pytest.mark.usefixtures("create_testoutput_dir", "agent", "assert_no_proxy")
 class TestSuspend(object):
     """ This suite tests that suspend/resume can be used with SoftwareContainer with
         expected results.
