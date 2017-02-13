@@ -24,8 +24,8 @@ std::shared_ptr<SoftwareContainerAbstractInterface>
 SoftwareContainerFactory::createContainer(const ContainerID id,
                                           std::unique_ptr<const SoftwareContainerConfig> config)
 {
-    auto container = std::shared_ptr<SoftwareContainerAbstractInterface>
-                                    (new SoftwareContainer(id, std::move(config)));
+    auto container = std::shared_ptr<SoftwareContainerAbstractInterface>(
+                     new SoftwareContainer(id, std::move(config)));
     return container;
 }
 

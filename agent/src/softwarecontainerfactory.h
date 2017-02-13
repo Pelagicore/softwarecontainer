@@ -35,7 +35,7 @@ namespace softwarecontainer {
 
 class SoftwareContainerFactory {
 public:
-    virtual ~SoftwareContainerFactory() {};
+    virtual ~SoftwareContainerFactory() {}
 
     virtual std::shared_ptr<SoftwareContainerAbstractInterface>
             createContainer(const ContainerID id,
