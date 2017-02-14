@@ -187,7 +187,7 @@ class Container():
         return True if result == dbus.Boolean(True) else False
 
 
-    def launch_command(self, binary, stdout="/tmp/stdout", env={"": ""}):
+    def launch_command(self, binary, stdout="/tmp/stdout", env={}):
         """ Calls LaunchCommand on the Agent D-Bus interface.
 
             The user must pass the actual command to run. This is passed as a string argument
