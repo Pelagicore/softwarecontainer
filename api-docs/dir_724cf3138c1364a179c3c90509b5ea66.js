@@ -6,5 +6,9 @@ var dir_724cf3138c1364a179c3c90509b5ea66 =
     [ "dbus", "dir_bb48e7a80dca20d1dd4bed3b8563412d.html", "dir_bb48e7a80dca20d1dd4bed3b8563412d" ],
     [ "main.cpp", "main_8cpp_source.html", null ],
     [ "softwarecontaineragent.cpp", "softwarecontaineragent_8cpp_source.html", null ],
-    [ "softwarecontaineragent.h", "softwarecontaineragent_8h.html", "softwarecontaineragent_8h" ]
+    [ "softwarecontaineragent.h", "softwarecontaineragent_8h.html", "softwarecontaineragent_8h" ],
+    [ "softwarecontainerfactory.cpp", "softwarecontainerfactory_8cpp_source.html", null ],
+    [ "softwarecontainerfactory.h", "softwarecontainerfactory_8h.html", [
+      [ "SoftwareContainerFactory", "classsoftwarecontainer_1_1_software_container_factory.html", "classsoftwarecontainer_1_1_software_container_factory" ]
+    ] ]
 ];

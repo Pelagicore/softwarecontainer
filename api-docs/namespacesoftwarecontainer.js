@@ -78,11 +78,13 @@ var namespacesoftwarecontainer =
     [ "ServiceManifestPathError", "classsoftwarecontainer_1_1_service_manifest_path_error.html", "classsoftwarecontainer_1_1_service_manifest_path_error" ],
     [ "SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", "classsoftwarecontainer_1_1_signal_connections_handler" ],
     [ "SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", "classsoftwarecontainer_1_1_software_container" ],
+    [ "SoftwareContainerAbstractInterface", "classsoftwarecontainer_1_1_software_container_abstract_interface.html", "classsoftwarecontainer_1_1_software_container_abstract_interface" ],
     [ "SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", "classsoftwarecontainer_1_1_software_container_agent" ],
     [ "SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", "classsoftwarecontainer_1_1_software_container_agent_adaptor" ],
     [ "SoftwareContainerAgentError", "classsoftwarecontainer_1_1_software_container_agent_error.html", "classsoftwarecontainer_1_1_software_container_agent_error" ],
     [ "SoftwareContainerConfig", "classsoftwarecontainer_1_1_software_container_config.html", "classsoftwarecontainer_1_1_software_container_config" ],
     [ "SoftwareContainerError", "classsoftwarecontainer_1_1_software_container_error.html", "classsoftwarecontainer_1_1_software_container_error" ],
+    [ "SoftwareContainerFactory", "classsoftwarecontainer_1_1_software_container_factory.html", "classsoftwarecontainer_1_1_software_container_factory" ],
     [ "StringConfig", "classsoftwarecontainer_1_1_string_config.html", "classsoftwarecontainer_1_1_string_config" ],
     [ "WaylandGateway", "classsoftwarecontainer_1_1_wayland_gateway.html", "classsoftwarecontainer_1_1_wayland_gateway" ]
 ];
