@@ -1,5 +1,4 @@
 <map id="softwarecontainer::NetworkGateway::activateGateway" name="softwarecontainer::NetworkGateway::activateGateway">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_network_gateway_functions.html#acd4156881bb546b07867ff8345404558" title="Generate IP address for the container. " alt="" coords="283,5,463,61"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="295,85,451,126"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527" title="Check if the gateway has an associated container. " alt="" coords="511,114,669,155"/>
 </map>

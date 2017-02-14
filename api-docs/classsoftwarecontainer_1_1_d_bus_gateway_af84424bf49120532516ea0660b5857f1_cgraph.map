@@ -1,6 +1,5 @@
 <map id="softwarecontainer::DBusGateway::activate" name="softwarecontainer::DBusGateway::activate">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#abd136fffb30a625ca5ab4abe06adc680" title="Applies any configuration set by setConfig() " alt="" coords="225,37,359,79"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb" title="Is the gateway configured or not? " alt="" coords="215,103,369,144"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#a5e1b860ea7c1ed7b69d2e5dd7021a527" title="Check if the gateway has an associated container. " alt="" coords="417,5,576,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="430,71,563,112"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#abd136fffb30a625ca5ab4abe06adc680" title="Applies any configuration set by setConfig() " alt="" coords="225,5,359,47"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#af61045649376dc8972d236465aa2f8eb" title="Is the gateway configured or not? " alt="" coords="215,71,369,112"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="417,5,551,47"/>
 </map>

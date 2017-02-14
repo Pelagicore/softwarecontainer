@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-23a1c62 2017-02-14</span>
+   &#160;<span id="projectnumber">0.18.0-62cd167 2017-02-14</span>
    </div>
   </td>
  </tr>
@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesoftwarecontainer.html">softwarecontainer</a> {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;CgroupsGateway::CgroupsGateway()</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    : Gateway(ID)</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;CgroupsGateway::CgroupsGateway(std::shared_ptr&lt;ContainerAbstractInterface&gt; container)</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    : Gateway(ID, container)</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    , m_parser()</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace softwarecontainer</span></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_html_ade0f87777e456e5af637a18482a06713"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway.html#ade0f87777e456e5af637a18482a06713">softwarecontainer::CgroupsGateway::readConfigElement</a></div><div class="ttdeci">bool readConfigElement(const json_t *element) override</div><div class="ttdoc">Gateway specific parsing of config elements. </div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8cpp_source.html#l00033">cgroupsgateway.cpp:33</a></div></div>
 <div class="ttc" id="classsoftwarecontainer_1_1_cgroups_gateway_error_html"><div class="ttname"><a href="classsoftwarecontainer_1_1_cgroups_gateway_error.html">softwarecontainer::CgroupsGatewayError</a></div><div class="ttdef"><b>Definition:</b> <a href="cgroupsgateway_8h_source.html#l00051">cgroupsgateway.h:51</a></div></div>
-<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00104">gateway.cpp:104</a></div></div>
+<div class="ttc" id="classsoftwarecontainer_1_1_gateway_html_a6f0a60c9f29ea869916f7524085b3e5f"><div class="ttname"><a href="classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f">softwarecontainer::Gateway::getContainer</a></div><div class="ttdeci">std::shared_ptr&lt; ContainerAbstractInterface &gt; getContainer()</div><div class="ttdoc">Get a handle to the associated container. </div><div class="ttdef"><b>Definition:</b> <a href="gateway_8cpp_source.html#l00094">gateway.cpp:94</a></div></div>
 <div class="ttc" id="namespacesoftwarecontainer_html"><div class="ttname"><a href="namespacesoftwarecontainer.html">softwarecontainer</a></div><div class="ttdoc">Developers guide to adding a config item: </div><div class="ttdef"><b>Definition:</b> <a href="baseconfigstore_8cpp_source.html#l00022">baseconfigstore.cpp:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -143,7 +143,7 @@ $(document).ready(function(){initNavTree('cgroupsgateway_8cpp_source.html','');}
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_78035595f3e97b7ab7dd9b7dc26bcae3.html">libsoftwarecontainer</a></li><li class="navelem"><a class="el" href="dir_dd2ca9362a6a20c7dd07ad4af02f7410.html">src</a></li><li class="navelem"><a class="el" href="dir_615a625f06d0029b31ecf0aaf0ab070e.html">gateway</a></li><li class="navelem"><a class="el" href="dir_646af10687434ab6c31bea5c882c000e.html">cgroups</a></li><li class="navelem"><b>cgroupsgateway.cpp</b></li>
-    <li class="footer">Generated on Tue Feb 14 2017 11:16:30 for softwarecontainer by
+    <li class="footer">Generated on Tue Feb 14 2017 11:26:54 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.8 </li>
   </ul>
