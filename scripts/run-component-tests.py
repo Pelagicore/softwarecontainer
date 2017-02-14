@@ -119,7 +119,7 @@ shutil.rmtree(xdg_path);
 retval = 0
 for name,exitCode in testSuites.items():
     if exitCode is not 0:
-        retval += exitCode
+        retval = -1
         red = "\033[1;31m"
         reset = "\033[0;0m"
         errorString = "*** The {} failed with exit code {} ***".format(name, exitCode)
