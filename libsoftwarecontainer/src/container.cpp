@@ -376,6 +376,8 @@ bool Container::execute(ExecFunction function,
         }
     }
 
+    log_debug() << "Starting function in container " << toString();
+
     // prepare array of env variable strings to be set when launching the process in the container
     std::vector<std::string> strings;
     for (auto &var : actualVariables) {
@@ -386,16 +388,18 @@ bool Container::execute(ExecFunction function,
     const char **envVariablesArray = new const char* [stringCount];
     for (size_t i = 0; i < strings.size(); i++) {
         envVariablesArray[i] = strings[i].c_str();
+        log_debug() << "Passing env variable: " << strings[i];
     }
+    // Null terminate
     envVariablesArray[strings.size()] = nullptr;
-    options.extra_env_vars = (char * *) envVariablesArray;
+    options.extra_env_vars = (char **)envVariablesArray;
 
-    log_debug() << "Starting function in container "
-                << toString() << std::endl << " Env variables : " << strings;
-
+    // Do the actual attach call to the container
     int attach_res = m_container->attach(m_container,
                                          &Container::executeInContainerEntryFunction,
-                                         &function, &options, pid);
+                                         &function,
+                                         &options,
+                                         pid);
 
     delete[] envVariablesArray;
     if (attach_res == 0) {
