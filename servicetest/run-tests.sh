@@ -25,7 +25,9 @@ fi
 # cd to the directory of this script.
 cd "$(dirname "$0")"
 
-DIRECTORIES=(suspend dbus timingprofiling filesystem capabilities environment networkgateway queries cgroups agent)
+# The reason for breaking alphabetic ordering is that the
+# cgroups test suite  has intermittent failures that are not yet fixed
+DIRECTORIES=(cgroups agent capabilities coredump dbus environment filesystem networkgateway queries suspend timingprofiling)
 
 # We want to exit with bad status in case some test fail. Mostly so that any
 # CI system will notice that not everything was good.
