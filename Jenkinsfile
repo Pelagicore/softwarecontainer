@@ -97,7 +97,9 @@ node {
         }
 
         stage('UnitTest') {
-            runInVagrant("./build/run-unit-tests.py")
+            // TODO: We should not run these tests as root, but while waiting for a fix in the
+            //       agent implementation, we currently have to.
+            runInVagrant("sudo ./build/run-unit-tests.py")
         }
 
         stage('ComponentTest') {
