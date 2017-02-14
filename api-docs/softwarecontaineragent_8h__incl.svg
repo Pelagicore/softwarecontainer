@@ -604,7 +604,7 @@
 </g>
 <!-- Node37 -->
 <g id="node37" class="node"><title>Node37</title>
-<g id="a_node37"><a xlink:href="baseconfigstore_8h_source.html" target="_top" xlink:title="baseconfigstore.h">
+<g id="a_node37"><a xlink:href="baseconfigstore_8h.html" target="_top" xlink:title="Contains the softwarecontainer::BaseConfigStore class. ">
 <polygon fill="white" stroke="black" points="1573.44,-280.5 1573.44,-299.5 1667.44,-299.5 1667.44,-280.5 1573.44,-280.5"/>
 <text text-anchor="middle" x="1620.44" y="-287.5" font-family="Helvetica,sans-Serif" font-size="10.00">baseconfigstore.h</text>
 </a>

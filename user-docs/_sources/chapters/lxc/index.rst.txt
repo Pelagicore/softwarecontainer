@@ -49,6 +49,7 @@ Full example
 ^^^^^^^^^^^^
 This is the full template used.
 
+.. TODO: Replace this with something using the cmake directory variables
 .. literalinclude:: ../../../libsoftwarecontainer/lxc-softwarecontainer.in
     :language: bash
 
@@ -76,7 +77,8 @@ into the container. These are then amended by the template when run.
 
 Full example:
 ^^^^^^^^^^^^^
-.. literalinclude:: ../../../libsoftwarecontainer/softwarecontainer.conf
+.. TODO: Replace this with something using the cmake directory variables
+.. literalinclude:: ../../../build/libsoftwarecontainer/softwarecontainer.conf
     :language: bash
 
 LXC API

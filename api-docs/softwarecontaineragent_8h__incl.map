@@ -20,7 +20,7 @@
 <area shape="rect" id="node28" href="$softwarecontainerabstractinterface_8h.html" title="Contains the softwarecontainer::SoftwareContainerAbstractInterface class. " alt="" coords="1427,229,1660,256"/>
 <area shape="rect" id="node35" href="$functionjob_8h_source.html" title="functionjob.h" alt="" coords="1205,229,1301,256"/>
 <area shape="rect" id="node30" href="$jobabstract_8h_source.html" title="jobabstract.h" alt="" coords="1277,379,1375,405"/>
-<area shape="rect" id="node37" href="$baseconfigstore_8h_source.html" title="baseconfigstore.h" alt="" coords="2103,229,2229,256"/>
+<area shape="rect" id="node37" href="$baseconfigstore_8h.html" title="Contains the softwarecontainer::BaseConfigStore class. " alt="" coords="2103,229,2229,256"/>
 <area shape="rect" id="node38" href="$configstoreerror_8h_source.html" title="configstoreerror.h" alt="" coords="2225,304,2347,331"/>
 <area shape="rect" id="node42" href="$configloader_8h_source.html" title="configloader.h" alt="" coords="1687,304,1789,331"/>
 <area shape="rect" id="node43" href="$configsource_8h_source.html" title="configsource.h" alt="" coords="1505,304,1611,331"/>

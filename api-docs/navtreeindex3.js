@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classsoftwarecontainer_1_1_pulse_gateway.html#af61045649376dc8972d236465aa2f8eb":[1,0,1,72,11],
 "classsoftwarecontainer_1_1_recursive_copy.html":[1,0,1,73],
 "classsoftwarecontainer_1_1_recursive_copy.html#a8b4137067b18ba06764435c86dbf1d51":[1,0,1,73,1],
 "classsoftwarecontainer_1_1_recursive_copy.html#adcbe2b9294d3791548d5aeec6d266aa2":[1,0,1,73,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "netlink_8h_source.html":[2,0,2,1,1,5,3],
 "networkgateway_8cpp_source.html":[2,0,2,1,1,5,4],
 "networkgateway_8h_source.html":[2,0,2,1,1,5,5],
-"networkgatewayfunctions_8cpp_source.html":[2,0,2,1,1,5,6],
-"networkgatewayfunctions_8h_source.html":[2,0,2,1,1,5,7]
+"networkgatewayfunctions_8cpp_source.html":[2,0,2,1,1,5,6]
 };

@@ -4,6 +4,7 @@ var NAVTREEINDEX0 =
 ".html":[1,0,0,0],
 "annotated.html":[1,0],
 "baseconfigstore_8cpp_source.html":[2,0,0,0,0,0],
+"baseconfigstore_8h.html":[2,0,0,0,0,1],
 "baseconfigstore_8h_source.html":[2,0,0,0,0,1],
 "cgroupsgateway_8cpp_source.html":[2,0,2,1,1,0,0],
 "cgroupsgateway_8h_source.html":[2,0,2,1,1,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classsoftwarecontainer_1_1_container.html#a1339aed81241f074c77e9de0456da4da":[1,0,1,24,26],
 "classsoftwarecontainer_1_1_container.html#a140cd2747557097e0cb6a76965b914cc":[1,0,1,24,7],
 "classsoftwarecontainer_1_1_container.html#a1a9ff31e4ea80e228928db3973cc762e":[1,0,1,24,14],
-"classsoftwarecontainer_1_1_container.html#a1f9442e4ed941bff87de466a619e2d22":[1,0,1,24,16],
-"classsoftwarecontainer_1_1_container.html#a25102e42007fb34a93d982b231ae6c78":[1,0,1,24,20]
+"classsoftwarecontainer_1_1_container.html#a1f9442e4ed941bff87de466a619e2d22":[1,0,1,24,16]
 };
