@@ -3,17 +3,13 @@ PulseAudio gateway
 
 The PulseAudio Gateway is used to provide access to the host system PulseAudio server.
 
-This gateway is responsible for setting up a connection to the
-PulseAudio server running on the host system. The gateway decides whether to
-connect to the PulseAudio server or not based on the configuration.
+The gateway looks for the ``PULSE_SERVER`` environment variable, which is assumed
+to be a socket, mounts the socket into the container, and sets the ``PULSE_SERVER`` variable inside
+the container to the location of the mounted socket.
 
-When configured to enable audio, the gateway sets up a mainloop and then connects
-to the default PulseAudio server by calling ``pa_context_connect()``. This is done
-during the ``activate()`` phase.
-
-Once ``activate`` has been initiated, the gateway listens to changes in the connection
-through the ``stateCallback`` function and, once the connection has been successfully
-set up, loads the ``module-native-protocol-unix`` PulseAudio module.
+If the pulseaudio server is not on a socket but on a network, then one should not use this gateway,
+but rather a combination of the network gateway (for access to the network resource) and the
+environment gateway (for setting ``PULSE_SERVER`` to the appropriate URI).
 
 ID
 --
