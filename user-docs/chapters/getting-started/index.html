@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.18.0-4411bc8 2017-02-15 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.18.0-faff34c 2017-02-15 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-4411bc8 2017-02-15',
+        VERSION:     '0.18.0-faff34c 2017-02-15',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -197,7 +197,7 @@ container.</p>
 </dd>
 </dl>
 <p>From the build directory, run the agent:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">./</span><span class="n">agent</span><span class="o">/</span><span class="n">softwarecontainer</span><span class="o">-</span><span class="n">agent</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">softwarecontainer</span><span class="o">-</span><span class="n">agent</span> 
 </pre></div>
 </div>
 <p>Note that we are running this command with <code class="docutils literal"><span class="pre">sudo</span></code>, the Agent needs to be started with root privileges.</p>
@@ -214,6 +214,7 @@ container.</p>
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Create</span> \
 <span class="s">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
+
 </pre></div>
 </div>
 <p>The JSON string passed as argument to the <code class="docutils literal"><span class="pre">config</span></code> parameter is documented in the Container config section.</p>
@@ -275,6 +276,7 @@ also be seen in the bind mounted location <code class="docutils literal"><span c
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Suspend</span> \
 <span class="mi">0</span>
+
 </pre></div>
 </div>
 <p>This will suspend execution inside the container. The value passed as the <cite>containerID</cite> parameter
@@ -295,6 +297,7 @@ should be the same value that was returned from the call to <cite>Create</cite>.
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">ListCapabilities</span>
+
 </pre></div>
 </div>
 <p>This will list all the capabilities that are available and possible to set on
@@ -305,7 +308,9 @@ containers.</p>
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetCapabilities</span> \
 <span class="mi">0</span> \
-<span class="s">&quot;{&#39;capability1&#39;, &#39;capability2&#39;}&quot;</span>
+<span class="s">&quot;[&#39;com.pelagicore.temperatureservice.gettemperature&#39;,</span>
+<span class="s">&#39;com.pelagicore.temperatureservice.settemperature&#39;</span><span class="p">]</span><span class="s">&quot;</span>
+
 </pre></div>
 </div>
 <p>This will set the capabilities listed in the last argument to the container
