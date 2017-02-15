@@ -56,6 +56,7 @@ create_rootfs()
         $rootfs/usr/lib \
         $rootfs/usr/lib64 \
         $rootfs/usr/sbin \
+        $rootfs/sys \
         $rootfs/tmp \
         $rootfs/gateways \
         $rootfs/${CMAKE_INSTALL_PREFIX} \
