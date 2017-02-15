@@ -101,6 +101,14 @@ public:
 
     std::shared_ptr<SoftwareContainerAbstractInterface> m_container;
 };
+
+class MockUtility : public ContainerUtilityInterface
+{
+public:
+
+    MOCK_METHOD0(removeOldContainers, void());
+};
+
 } //namespace
 
 class SoftwareContainerAgentTest: public ::testing::Test
@@ -109,6 +117,7 @@ public:
     std::unique_ptr<SoftwareContainerAgent> sca;
     std::shared_ptr<SoftwareContainerFactory> factory;
     std::shared_ptr<::testing::NiceMock<TestContainerInterface>> testContainerInterface;
+    std::shared_ptr<::testing::NiceMock<MockUtility>> containerUtility;
 
     const std::string configString = "[SoftwareContainer]\n"
 #ifdef ENABLE_NETWORKGATEWAY
@@ -143,7 +152,9 @@ public:
         Glib::RefPtr<Glib::MainContext> mainContext = Glib::MainContext::get_default();
         testContainerInterface = std::shared_ptr<::testing::NiceMock<TestContainerInterface>> (new ::testing::NiceMock<TestContainerInterface>());
         factory = std::shared_ptr<SoftwareContainerFactory> (new TestFactory(testContainerInterface));
-        sca = std::unique_ptr<SoftwareContainerAgent> (new SoftwareContainerAgent(mainContext, config, factory));
+        containerUtility = std::shared_ptr<::testing::NiceMock<MockUtility>> (new ::testing::NiceMock<MockUtility>());
+
+        sca = std::unique_ptr<SoftwareContainerAgent> (new SoftwareContainerAgent(mainContext, config, factory, containerUtility));
 
         ::testing::DefaultValue<bool>::Set(true);
         ::testing::DefaultValue<std::shared_ptr<CommandJob>>::Set(nullptr);

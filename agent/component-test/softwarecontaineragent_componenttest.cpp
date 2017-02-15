@@ -24,6 +24,7 @@
 #include "config/mainconfigsource.h"
 #include "config/configdefinition.h"
 #include "softwarecontainerfactory.h"
+#include "containerutilityinterface.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -104,7 +105,8 @@ public:
 
         try {
             std::shared_ptr<SoftwareContainerFactory> factory = std::shared_ptr<SoftwareContainerFactory> (new SoftwareContainerFactory());
-            sca = std::make_shared<SoftwareContainerAgent>(m_context, config, factory);
+            std::shared_ptr<ContainerUtilityInterface> utility = std::shared_ptr<ContainerUtilityInterface> (new ContainerUtilityInterface());
+            sca = std::make_shared<SoftwareContainerAgent>(m_context, config, factory, utility);
         }  catch(SoftwareContainerError &err) {
             log_error() << "Exception in software agent constructor";
             ASSERT_TRUE(false);

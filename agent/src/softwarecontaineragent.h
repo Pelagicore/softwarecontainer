@@ -38,6 +38,7 @@
 #include "config/config.h"
 #include "containeroptions/containeroptionparser.h"
 #include "softwarecontainerfactory.h"
+#include "containerutilityinterface.h"
 
 #include <jsonparser.h>
 #include "commandjob.h"
@@ -100,7 +101,8 @@ public:
      */
     SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
                            std::shared_ptr<Config> config,
-                           std::shared_ptr<SoftwareContainerFactory> factory);
+                           std::shared_ptr<SoftwareContainerFactory> factory,
+                           std::shared_ptr<ContainerUtilityInterface> utility);
 
     ~SoftwareContainerAgent();
 
@@ -220,7 +222,6 @@ public:
     */
     void setCapabilities(const ContainerID &containerID,
                          const std::vector<std::string> &capabilities);
-
 private:
     /**
      * @brief Update gateway configurations for the container
@@ -232,12 +233,6 @@ private:
      */
     bool updateGatewayConfigs(const ContainerID &containerID,
                               const GatewayConfiguration &configs);
-
-    /**
-     * @brief This method cleans unused old containers before agent starts up
-     */
-    void removeOldContainers(void);
-
 
     // Find a job given a pid
     std::shared_ptr<CommandJob> getJob(pid_t pid);
@@ -275,6 +270,7 @@ private:
     ContainerOptionParser m_optionParser;
 
     std::shared_ptr<SoftwareContainerFactory> m_factory;
+    std::shared_ptr<ContainerUtilityInterface> m_containerUtility;
 };
 
 } // namespace softwarecontainer

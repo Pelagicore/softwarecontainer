@@ -34,6 +34,7 @@ set(CONFIGSTORE_TEST_FILES
     softwarecontaineragent_unittest.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontaineragent.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/softwarecontainerfactory.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/containerutilityinterface.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp

@@ -18,8 +18,6 @@
  */
 
 #include <cstdint>
-#include <lxc/lxccontainer.h>
-
 #include "softwarecontaineragent.h"
 
 #include "softwarecontainererror.h"
@@ -32,10 +30,12 @@ namespace softwarecontainer {
 
 SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> mainLoopContext,
                                                std::shared_ptr<Config> config,
-                                               std::shared_ptr<SoftwareContainerFactory> factory):
+                                               std::shared_ptr<SoftwareContainerFactory> factory,
+                                               std::shared_ptr<ContainerUtilityInterface> utility):
     m_mainLoopContext(mainLoopContext),
     m_config(config),
-    m_factory(factory)
+    m_factory(factory),
+    m_containerUtility(utility)
 {
     m_containerIdPool.push_back(0);
 
@@ -76,7 +76,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
     m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
     m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
 
-    removeOldContainers();
+    m_containerUtility->removeOldContainers();
 
     m_containerConfig = SoftwareContainerConfig(
 #ifdef ENABLE_NETWORKGATEWAY
@@ -96,56 +96,6 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
 SoftwareContainerAgent::~SoftwareContainerAgent()
 {
 }
-
-/* we are fetching lxcpath from config now. But in near future we should use lxcConfigPath instead
- * */
-void SoftwareContainerAgent::removeOldContainers()
-{
-    char **containerNames = nullptr;
-    struct lxc_container **containerList = nullptr;
-
-    const char *basePath = lxc_get_global_config_item("lxc.lxcpath");
-    auto num = list_all_containers(basePath, &containerNames, &containerList);
-
-    if (0 == num) {
-        // there are no container residue. No need to run more.
-        delete containerList;
-        delete containerNames;
-        return;
-    } else if (-1 == num) {
-        log_error() << "An error is occurred while trying to get deprecated container list";
-        throw SoftwareContainerAgentError("An error is occurred while trying to get container list");
-    }
-
-    log_warning() << num << " unused deprecated containers found";
-    for (auto i = 0; i < num; i++) {
-        struct lxc_container *container = containerList[i];
-        log_debug() << "Deprecated container named " << containerNames[i] << " will be deleted";
-
-        if (container->is_running(container)) {
-            bool success = container->stop(container);
-            if (!success) {
-                std::string errorMsg = "Unable to stop deprecated container " +
-                                       std::string(containerNames[i]);
-                throw SoftwareContainerAgentError(errorMsg);
-            }
-        }
-
-        bool success = container->destroy(container);
-        if (!success) {
-            std::string errorMsg = "Unable to destroy deprecated container " +
-                                   std::string(containerNames[i]);
-            throw SoftwareContainerAgentError(errorMsg);
-        }
-
-        log_debug() << "Deprecated container " << containerNames[i] << " is successfully destroyed";
-        delete container;
-        delete containerNames[i];
-    }
-    delete containerList;
-    delete containerNames;
-}
-
 
 void SoftwareContainerAgent::assertContainerExists(ContainerID containerID)
 {

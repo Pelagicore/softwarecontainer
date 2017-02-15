@@ -30,6 +30,7 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontaineragent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/softwarecontainerfactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/containerutilityinterface.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dbus/softwarecontaineragent_dbus_common.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dbus/softwarecontaineragent_dbus_stub.cpp
