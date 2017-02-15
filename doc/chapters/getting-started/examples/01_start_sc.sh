@@ -1,1 +1,1 @@
-sudo softwarecontainer-agent 
+sudo -E softwarecontainer-agent
