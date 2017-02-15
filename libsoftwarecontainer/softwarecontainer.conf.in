@@ -12,15 +12,13 @@ lxc.haltsignal = SIGKILL
 @NETWORK_LXC_CONF@
 
 lxc.mount.entry = /sbin sbin none ro,bind 0 0
+# Auto-mount /proc and /sys with reasonable settings
+lxc.mount.auto = proc sys
+
+# Note: mounting all of /usr includes /usr/bin, /usr/lib64 and /usr/local.
 lxc.mount.entry = /usr usr none ro,bind 0 0
 lxc.mount.entry = /lib lib none ro,bind 0 0
-lxc.mount.entry = /usr/lib usr/lib none ro,bind 0 0
-lxc.mount.entry = /proc proc proc nosuid,nodev,noexec 0 0
 
 # These are optional, as they may not exist in the host. If they exist
 # they will be bind mounted from host to container.
 lxc.mount.entry = /lib64 lib64 none ro,bind,optional 0 0
-lxc.mount.entry = /usr/lib64 usr/lib64 none ro,bind,optional 0 0
-
-lxc.mount.entry = /usr/local/lib usr/local/lib none ro,bind,optional 0 0
-lxc.mount.entry = /usr/local/lib64 usr/local/lib64 none ro,bind,optional 0 0
