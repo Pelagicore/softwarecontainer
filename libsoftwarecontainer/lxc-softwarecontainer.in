@@ -70,38 +70,53 @@ create_rootfs()
     echo "root:x:0:0:root:/root:/bin/sh" >> $rootfs/etc/passwd
     echo "root:x:0:root" >> $rootfs/etc/group
 
-    # We don't have an shm fs mounted, so tell pulse not to use it.
+    # We may not have a shm fs mounted, so tell pulse not to use it.
     echo "disable-shm=yes" >> $rootfs/etc/pulse/client.conf
+
     # We generate a unique machine id for D-Bus.
     dbus-uuidgen --ensure=$rootfs/etc/machine-id
+
     # Copy DNS info into the guest, if available
     if [ -e /etc/resolv.conf ]; then
         cp /etc/resolv.conf $rootfs/etc/resolv.conf
     fi
 
-    return $res
-}
-
-configure_busybox()
-{
-    rootfs=$1
-
-    which busybox >/dev/null 2>&1
+    BUSYBOX=$(which busybox)
     if [ $? -ne 0 ]; then
         echo "busybox executable is not accessible"
         return 1
     fi
 
-    # Copy the busybox binary into the rootfs
-    cp $(which busybox) $rootfs/bin
+    # We will bind-mount busybox to this location in the container later
+    touch $rootfs/bin/busybox
+    chmod 755 $rootfs/bin/busybox
+
+    cd $rootfs/bin || return 1
+    COMMANDS=$($BUSYBOX --list)
+    for COMMAND in $COMMANDS; do
+        ln -s busybox $COMMAND
+    done
+
+    INITLXCFILE=$(which init.lxc)
     if [ $? -ne 0 ]; then
-        echo "failed to copy busybox in the rootfs"
+        echo "init.lxc not found"
         return 1
     fi
+    touch $rootfs/bin/init.lxc
+    chmod 755 $rootfs/bin/init.lxc
 
-    # Symlink to busybox for the commands it supports
-    cd $rootfs/bin || return 1
-    ./busybox --list | xargs -n1 ln -s busybox
+    # If we have network enabled, we need iptables
+    if [ ${ENABLE_NETWORKGATEWAY} = "ON" ]; then
+        IPTABLES=$(which iptables)
+        if [ $? -ne 0 ]; then
+            echo "iptables executable is not accessible"
+            return 1
+        fi
+
+        # We will bind-mount iptables to this location in the container later
+        touch $rootfs/bin/iptables
+        chmod 755 $rootfs/bin/busybox
+    fi
 
     return 0
 }
@@ -110,28 +125,23 @@ copy_configuration()
 {
     path=$1
     rootfs=$2
-    name=$3
 
     # Set some non-static mount points, the rest are already in the config file
     echo "lxc.rootfs = $rootfs" >> $path/config
     echo "lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0" >> $path/config
 
-    # Bind-mount the directory containing init.lxc to /usr/sbin. This is typically
-    # /usr/sbin on the host as well.
-    INITLXCFILE=`which init.lxc`
-    if [ $? -ne 0 ]; then
-        echo "Error in template: init.lxc not found, unable to mount containing directory to /usr/sbin in container"
-        return 1
+    # Bind-mount the necessary binaries into the container
+    echo "lxc.mount.entry = $(which init.lxc) bin/init.lxc none ro,bind 0 0" >> $path/config
+    echo "lxc.mount.entry = $(which busybox) bin/busybox none ro,bind 0 0" >> $path/config
+
+    if [ ${ENABLE_NETWORKGATEWAY} = "ON" ]; then
+        echo "lxc.mount.entry = $(which iptables) bin/iptables none ro,bind 0 0" >> $path/config
     fi
-    echo "lxc.mount.entry = $(dirname $INITLXCFILE) $rootfs/usr/sbin none ro,bind 0 0" >> $path/config
 
     # If the gateway dir variable is set, add a mount entry for that one also.
-    # The gateway folder needs to be writable since wayland requires some extra
-    # files to be created by the client in the folder where the wayland socket
-    # is located
     if [ -n "$GATEWAY_DIR" ]; then
         echo "lxc.mount.entry = $GATEWAY_DIR gateways none rw,bind 0 0" >> $path/config
-        chmod go+rwx $GATEWAY_DIR
+        chmod 777 $GATEWAY_DIR
     fi
 }
 
@@ -180,19 +190,13 @@ if [ -z "$rootfs" ]; then
     fi
 fi
 
-create_rootfs $rootfs $name
+create_rootfs $rootfs
 if [ $? -ne 0 ]; then
-    echo "failed to create softwarecontainer rootfs"
+    echo "failed to set up softwarecontainer rootfs"
     exit 1
 fi
 
-configure_busybox $rootfs
-if [ $? -ne 0 ]; then
-    echo "failed to configure busybox in the rootfs"
-    exit 1
-fi
-
-copy_configuration $path $rootfs $name
+copy_configuration $path $rootfs
 if [ $? -ne 0 ]; then
     echo "failed to write configuration file"
     exit 1
