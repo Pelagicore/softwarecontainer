@@ -34,8 +34,6 @@
 create_rootfs()
 {
     rootfs=$1
-    name=$2
-    res=0
 
     # This is the rootfs tree in the container. Apart from the files we
     # create below, this will be empty, and most directories will be bind
@@ -59,8 +57,7 @@ create_rootfs()
         $rootfs/sys \
         $rootfs/tmp \
         $rootfs/gateways \
-        $rootfs/${CMAKE_INSTALL_PREFIX} \
-        ${ADDITIONAL_FOLDER_MOUNTS}"
+        $rootfs/${CMAKE_INSTALL_PREFIX}"
 
     # The tree needs to be writeable for the owner and read/execute for all
     mkdir -p $tree || return 1
@@ -145,15 +142,9 @@ copy_configuration()
     fi
 }
 
-usage()
-{
-    echo "$1 -h|--help -b|--buffer -p|--path=<path>|--rootfs=<path>"
-    return 0
-}
-
-options=$(getopt -o hp:n: -l help,path:,name:,rootfs: -- "$@")
+options=$(getopt -o p:n: -l path:,name:,rootfs: -- "$@")
 if [ $? -ne 0 ]; then
-    usage $(basename $0)
+    echo "Usage: $(basename $0) -p|--path=<path> --rootfs=<path>"
     exit 1
 fi
 eval set -- "$options"
@@ -161,9 +152,7 @@ eval set -- "$options"
 while true
 do
     case "$1" in
-        -h|--help)      usage $0 && exit 0;;
         -p|--path)      path=$2; shift 2;;
-        -n|--name)      name=$2; shift 2;;
         --rootfs)       rootfs=$2; shift 2;;
         --)             shift 1; break ;;
         *)              break ;;
