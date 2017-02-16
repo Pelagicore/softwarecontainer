@@ -114,6 +114,11 @@ public:
                  int stdout = 1,
                  int stderr = 2);
 
+    /*
+     * @brief Start a function inside the container.
+     *
+     * The function executes as a separate process.
+     */
     bool execute(ExecFunction function,
                  pid_t *pid,
                  const EnvironmentVariables &variables = EnvironmentVariables(),
@@ -121,6 +126,15 @@ public:
                  int stdout = 1,
                  int stderr = 2);
 
+    /**
+     * @brief synchronous version of execute
+     */
+    bool executeSync(ExecFunction function,
+                     pid_t *pid,
+                     const EnvironmentVariables &variables = EnvironmentVariables(),
+                     int stdin = -1,
+                     int stdout = 1,
+                     int stderr = 2);
 
     /**
      * @brief Tries to bind mount a path from host to container
@@ -220,37 +234,8 @@ private:
     static int executeInContainerEntryFunction(void *param);
 
     /**
-     * @brief Tries to bind mount a file in the container
-     *
-     * Any missing parent paths will be created.
-     *
-     * @param pathInHost The path to the file that shall be bind mounted on the host system.
-     * @param pathInContainer Where to mount the file in the container.
-     * @param readonly Sets if the mount should be read only or read write
-     *
-     * @return SUCCESS if everything worked as expected, FAILURE otherwise.
+     * Handles bind-mounting
      */
-    bool bindMountFileInContainer(const std::string &pathInHost,
-                                  const std::string &pathInContainer,
-                                  const std::string &tempFile,
-                                  bool readonly = true);
-
-    /**
-     * @brief Tries to bind mount a directory in the container
-     *
-     * Any missing parent paths will be created.
-     *
-     * @param pathInHost The path to the directory that shall be bind mounted on the host system.
-     * @param pathInContainer Where to mount the file in the container.
-     * @param readonly Sets if the mount should be read only or read write
-     *
-     * @return true if everything worked as expected, false otherwise.
-     */
-    bool bindMountDirectoryInContainer(const std::string &pathInHost,
-                                       const std::string &pathInContainer,
-                                       const std::string &tempDir,
-                                       bool readonly = true);
-
     bool bindMountCore(const std::string &pathInHost,
                        const std::string &pathInContainer,
                        const std::string &tempDir,

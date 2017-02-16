@@ -315,6 +315,11 @@ int Container::unlimitCoreDump()
     return 0;
 }
 
+bool Container::setCgroupItem(std::string subsys, std::string value)
+{
+    return m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
+}
+
 int Container::executeInContainerEntryFunction(void *param)
 {
     int canCoreDump = unlimitCoreDump();
@@ -326,9 +331,18 @@ int Container::executeInContainerEntryFunction(void *param)
     return (*function)();
 }
 
-bool Container::setCgroupItem(std::string subsys, std::string value)
+bool Container::executeSync(ExecFunction function,
+                            pid_t *pid,
+                            const EnvironmentVariables &variables,
+                            int stdin_var,
+                            int stdout_var,
+                            int stderr_var)
 {
-    return m_container->set_cgroup_item(m_container, subsys.c_str(), value.c_str());
+    bool execResult = execute(function, pid, variables, stdin_var, stdout_var, stderr_var);
+
+    // Make sure the container execution finishes and was successful
+    int status = waitForProcessTermination(*pid);
+    return execResult && (0 == status);
 }
 
 bool Container::execute(ExecFunction function,
@@ -551,74 +565,64 @@ bool Container::bindMountInContainer(const std::string &pathInHost,
         return false;
     }
 
-    // Create a file to mount to in gateways
-    std::string filePart = baseName(pathInContainer);
-    std::string tempPath = buildPath(gatewaysDir(), filePart);
-
-    if (isDirectory(pathInHost)) {
-        log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
-        return bindMountDirectoryInContainer(pathInHost, pathInContainer, tempPath, readOnly);
-    } else {
-        // This goes for sockets, fifos etc as well.
-        log_debug() << "Path on host (" << pathInHost << ") is not a directory, "
-                    << "mounting assuming it behaves like a file";
-        return bindMountFileInContainer(pathInHost, pathInContainer, tempPath, readOnly);
-    }
-}
-
-bool Container::bindMountFileInContainer(const std::string &pathInHost,
-                                               const std::string &pathInContainer,
-                                               const std::string &tempFile,
-                                               bool readonly)
-{
-    if (!pathInList(tempFile)) {
-        if (!touch(tempFile)) {
-            log_error() << "Could not create file " << tempFile;
-            return false;
-        }
-        m_cleanupHandlers.push_back(new FileCleanUpHandler(tempFile));
-    }
-
-    return bindMountCore(pathInHost, pathInContainer, tempFile, readonly);
-}
-
-bool Container::bindMountDirectoryInContainer(const std::string &pathInHost,
-                                                    const std::string &pathInContainer,
-                                                    const std::string &tempDir,
-                                                    bool readonly)
-{
-    // Check that the target is not already mounted
+    // Check that there is nothing already mounted on the target path
     pid_t pid = INVALID_PID;
-    bool checkIfAlreadyMountpoint = execute([pathInContainer] () {
+    bool checkIfAlreadyMountpoint = executeSync([pathInContainer] () {
         FILE *mountsfile = setmntent("/proc/mounts", "r");
         struct mntent *mounts;
         while ((mounts = getmntent(mountsfile)) != nullptr) {
             std::string mountDir(mounts->mnt_dir);
-            if ((mountDir).compare(pathInContainer) == 0) {
+            if (0 == mountDir.compare(pathInContainer)) {
                 return -1;
             }
         }
         return 0;
     }, &pid);
 
-    if (!checkIfAlreadyMountpoint || waitForProcessTermination(pid) != 0) {
+    if (!checkIfAlreadyMountpoint) {
         log_error() << pathInContainer << " is already mounted to.";
         return false;
     }
 
-    log_debug() << "Creating folder : " << tempDir;
-    if (!createDirectory(tempDir)) {
-        log_error() << "Could not create folder " << tempDir;
-        return false;
+    // Create a file to mount to in gateways
+    std::string filePart = baseName(pathInContainer);
+    std::string tempPath = buildPath(gatewaysDir(), filePart);
+
+    //
+    // If the path is a directory, we create the tempPath (which adds a cleanup handler).
+    //
+    // If it is a file, we touch the file and add a cleanup handler for it.
+    //
+    if (isDirectory(pathInHost)) {
+        log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
+
+        log_debug() << "Creating folder : " << tempPath;
+        if (!createDirectory(tempPath)) {
+            log_error() << "Could not create folder " << tempPath;
+            return false;
+        }
+    } else {
+        // This goes for sockets, fifos etc as well.
+        log_debug() << "Path on host (" << pathInHost << ") is not a directory, "
+                    << "mounting assuming it behaves like a file";
+
+        if (!pathInList(tempPath)) {
+            if (!touch(tempPath)) {
+                log_error() << "Could not create file " << tempPath;
+                return false;
+            }
+            m_cleanupHandlers.push_back(new FileCleanUpHandler(tempPath));
+        }
     }
 
-    return bindMountCore(pathInHost, pathInContainer, tempDir, readonly);
+    return bindMountCore(pathInHost, pathInContainer, tempPath, readOnly);
+
 }
 
 bool Container::bindMountCore(const std::string &pathInHost,
-                                    const std::string &pathInContainer,
-                                    const std::string &tempDirInContainerOnHost,
-                                    bool readonly)
+                              const std::string &pathInContainer,
+                              const std::string &tempDirInContainerOnHost,
+                              bool readonly)
 {
     if (!ensureContainerRunning()) {
         log_error() << "Container is not running or in bad state, can't bind-mount folder";
@@ -626,7 +630,7 @@ bool Container::bindMountCore(const std::string &pathInHost,
     }
 
     if (pathInContainer.front() != '/') {
-        log_error() << "Provided path '" << pathInContainer<< "' is not absolute!";
+        log_error() << "Provided path '" << pathInContainer << "' is not absolute!";
         return false;
     }
 
@@ -640,8 +644,27 @@ bool Container::bindMountCore(const std::string &pathInHost,
     std::string filePart = baseName(pathInContainer);
     std::string tempDirInContainer = buildPath(gatewaysDirInContainer(), filePart);
 
-    // The same paths on the host
-    std::string pathInContainerOnHost = buildPath(rootFS(), pathInContainer);
+    pid_t pid = INVALID_PID;
+
+    // Utility lambda function to create parent paths of a given path
+    auto createParentDirectories = [this] (std::string path) {
+        std::stack<std::string> paths;
+        std::string currentPath = path;
+        while(!isDirectory(currentPath)) {
+            paths.push(currentPath);
+            currentPath = parentPath(currentPath);
+        }
+
+        while(!paths.empty()) {
+            std::string path = paths.top();
+            if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
+                return 1;
+            }
+
+            paths.pop();
+        }
+        return 0;
+    };
 
     // Move the mount in the container if the tempdir is not the desired dir
     if (tempDirInContainer.compare(pathInContainer) != 0) {
@@ -649,31 +672,44 @@ bool Container::bindMountCore(const std::string &pathInHost,
         // First, optionally create any parent directories to the targets
         // We do this on the host to avoid working too much inside the container
         //
+        std::string parentPathInContainer = parentPath(pathInContainer);
+        ExecFunction createParent = std::bind(createParentDirectories, parentPathInContainer);
+
+        if (!executeSync(createParent, &pid)) {
+            log_error() << "Could not create parent directory " << parentPathInContainer
+                        << " in container";
+            return false;
+        }
+
+        //
+        // Then, create the actual directory / file to mount to.
+        //
         if (isDirectory(tempDirInContainerOnHost)) {
-            log_debug() << "Creating " << pathInContainerOnHost;
-            if (!createDirectory(pathInContainerOnHost)) {
-                log_error() << "Could not create target directory " << pathInContainerOnHost;
+            ExecFunction createDir = std::bind(createParentDirectories, pathInContainer);
+
+            if (!executeSync(createDir, &pid)) {
+                log_error() << "Could not create target directory " << pathInContainer
+                            << " in the container";
                 return false;
             }
         } else {
-            std::string fileParentOnHost = parentPath(pathInContainerOnHost);
-            log_debug() << "Creating parent paths " << fileParentOnHost;
-            if (!createDirectory(fileParentOnHost)) {
-                log_error() << "Could not create parent(s) to target directory "
-                            << pathInContainerOnHost;
-                return false;
-            }
+            log_debug() << "Touching file in container: " << pathInContainer;
+            bool touchResult = executeSync([pathInContainer] () {
+                return touch(pathInContainer) ? 0 : 1;
+            }, &pid);
 
-            log_debug() << "Touching file: " << pathInContainerOnHost;
-            if (!touch(pathInContainerOnHost)) {
-                log_error() << "Could not touch target file: " << pathInContainerOnHost;
+            if (!touchResult) {
+                log_error() << "Could not touch target file " << pathInContainer
+                            << " in the container";
                 return false;
             }
         }
 
-        // Move the mount inside the container.
-        pid_t pid = INVALID_PID;
-        bool mountMoveResult = execute([tempDirInContainer, pathInContainer] () {
+        //
+        // And move the mount from /gateways to the desired location
+        //
+
+        bool mountMoveResult = executeSync([tempDirInContainer, pathInContainer] () {
             unsigned long flags = MS_MOVE;
             int ret = mount(tempDirInContainer.c_str(), pathInContainer.c_str(), nullptr, flags, nullptr);
             if (ret != 0) {
@@ -685,8 +721,7 @@ bool Container::bindMountCore(const std::string &pathInHost,
             return ret;
         }, &pid);
 
-        int status = waitForProcessTermination(pid);
-        if (!mountMoveResult || status != 0) {
+        if (!mountMoveResult) {
             log_error() << "Could not move the mount inside the container: "
                         << tempDirInContainer << " to " << pathInContainer;
             return false;
@@ -706,18 +741,17 @@ bool Container::remountReadOnlyInContainer(const std::string &path)
 {
     pid_t pid = INVALID_PID;
 
-    bool ret = execute([path] () {
+    bool ret = executeSync([path] () {
         unsigned long flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
         return mount(path.c_str(), path.c_str(), "", flags, nullptr);
     }, &pid);
 
-    int status = waitForProcessTermination(pid);
-    if (!ret || status != 0) {
+    if (!ret) {
         log_error() << "Could not remount " << path << " read-only in container";
         return false;
     }
 
-    return status == 0;
+    return true;
 }
 
 bool Container::mountDevice(const std::string &pathInHost)
