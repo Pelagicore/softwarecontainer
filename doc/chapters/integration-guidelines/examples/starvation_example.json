@@ -1,0 +1,60 @@
+{
+    "capabilities": [
+        {
+            "name": "test.cap.netcls",
+            "gateways": [
+                {
+                    "config": [
+                        {
+                            "setting": "net_cls.classid",
+                            "value": "0x100001"
+                        }
+                    ],
+                    "id": "cgroups"
+                }
+            ]
+        },
+        {
+            "name": "network.accept-ping",
+            "gateways": [
+                {
+                    "config": [
+                        {
+                            "direction": "OUTGOING",
+                            "allow": [
+                                {
+                                    "host": "*",
+                                    "protocols": "icmp"
+                                },
+                                {
+                                    "host": "*",
+                                    "protocols": [
+                                        "udp",
+                                        "tcp"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "direction": "INCOMING",
+                            "allow": [
+                                {
+                                    "host": "*",
+                                    "protocols": "icmp"
+                                },
+                                {
+                                    "host": "*",
+                                    "protocols": [
+                                        "udp",
+                                        "tcp"
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "id": "network"
+                }
+            ]
+        }
+    ]
+}
