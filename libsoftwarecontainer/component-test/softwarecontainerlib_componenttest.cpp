@@ -270,6 +270,15 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     // Now file should be available
     job->start();
     ASSERT_EQ(job->wait(), EXISTENT);
+
+    // Test that we can mount to some place where there is something else
+    // mounted higher up in the hierarchy (in this case, /dev)
+    ASSERT_TRUE(bindMountInContainer("/dev/shm", "/dev/shm", false));
+    auto jobShm = getSc().createFunctionJob([&] () {
+        return isDirectory("/dev/shm") ? EXISTENT : NON_EXISTENT;
+    });
+    jobShm->start();
+    ASSERT_EQ(jobShm->wait(), EXISTENT);
 }
 
 /**
