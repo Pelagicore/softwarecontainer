@@ -125,6 +125,7 @@ node {
 
         stage('Examples') {
             runInVagrant("cd examples && sudo ./run-tests.sh")
+            runInVagrant("cd doc && sudo ./run_examples.sh")
         }
 
         stage('Artifacts') {
