@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SoftwareContainer using LXC &#8212; softwarecontainer 0.18.0-11a8e6f 2017-02-15 documentation</title>
+    <title>SoftwareContainer using LXC &#8212; softwarecontainer 0.18.0-31a316c 2017-02-16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-11a8e6f 2017-02-15',
+        VERSION:     '0.18.0-31a316c 2017-02-16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -59,9 +59,9 @@ The LXC template <code class="docutils literal"><span class="pre">SoftwareContai
 <h3>Create basic rootfs<a class="headerlink" href="#create-basic-rootfs" title="Permalink to this headline">¶</a></h3>
 <p>The rootfs created is a basic FHS-like (<a class="reference external" href="https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard">FHS</a>)
 structure, although stripped down, with the added <code class="docutils literal"><span class="pre">/gateways</span></code> directory. LXC template will also
-create two paths, that will be substituted by CMake - <code class="docutils literal"><span class="pre">${CMAKE_INSTALL_PREFIX}</span></code> and
-<code class="docutils literal"><span class="pre">${ADDITIONAL_FOLDER_MOUNTS}</span></code>. Furthermore, a root user and group will be created, and some
-configuration options will be set in the following three areas:</p>
+create the path pointed by CMake with the variable <code class="docutils literal"><span class="pre">${CMAKE_INSTALL_PREFIX}</span></code>.  Furthermore, a root
+user and group will be created, and some configuration options will be set in the following three
+areas:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">/etc/pulse/client.conf</span></code> - tell pulse not to use shm</li>
 <li><code class="docutils literal"><span class="pre">/etc/machine-id</span></code> - populated with a dbus-uuid</li>
@@ -126,8 +126,6 @@ namely the following:</p>
 create_rootfs<span class="o">()</span>
 <span class="o">{</span>
     <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$1</span>
-    <span class="nv">name</span><span class="o">=</span><span class="nv">$2</span>
-    <span class="nv">res</span><span class="o">=</span>0
 
     <span class="c"># This is the rootfs tree in the container. Apart from the files we</span>
     <span class="c"># create below, this will be empty, and most directories will be bind</span>
@@ -148,10 +146,10 @@ create_rootfs<span class="o">()</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/usr/lib \</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/usr/lib64 \</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/usr/sbin \</span>
+<span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/sys \</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/tmp \</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/gateways \</span>
-<span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/</span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2"> \</span>
-<span class="s2">        </span><span class="si">${</span><span class="nv">ADDITIONAL_FOLDER_MOUNTS</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/</span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="c"># The tree needs to be writeable for the owner and read/execute for all</span>
     mkdir -p <span class="nv">$tree</span> <span class="o">||</span> <span class="k">return</span> 1
@@ -161,38 +159,53 @@ create_rootfs<span class="o">()</span>
     <span class="nb">echo</span> <span class="s2">&quot;root:x:0:0:root:/root:/bin/sh&quot;</span> &gt;&gt; <span class="nv">$rootfs</span>/etc/passwd
     <span class="nb">echo</span> <span class="s2">&quot;root:x:0:root&quot;</span> &gt;&gt; <span class="nv">$rootfs</span>/etc/group
 
-    <span class="c"># We don&#39;t have an shm fs mounted, so tell pulse not to use it.</span>
+    <span class="c"># We may not have a shm fs mounted, so tell pulse not to use it.</span>
     <span class="nb">echo</span> <span class="s2">&quot;disable-shm=yes&quot;</span> &gt;&gt; <span class="nv">$rootfs</span>/etc/pulse/client.conf
+
     <span class="c"># We generate a unique machine id for D-Bus.</span>
     dbus-uuidgen --ensure<span class="o">=</span><span class="nv">$rootfs</span>/etc/machine-id
+
     <span class="c"># Copy DNS info into the guest, if available</span>
     <span class="k">if</span> <span class="o">[</span> -e /etc/resolv.conf <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         cp /etc/resolv.conf <span class="nv">$rootfs</span>/etc/resolv.conf
     <span class="k">fi</span>
 
-    <span class="k">return</span> <span class="nv">$res</span>
-<span class="o">}</span>
-
-configure_busybox<span class="o">()</span>
-<span class="o">{</span>
-    <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$1</span>
-
-    which busybox &gt;/dev/null 2&gt;<span class="p">&amp;</span>1
+    <span class="nv">BUSYBOX</span><span class="o">=</span><span class="k">$(</span>which busybox<span class="k">)</span>
     <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         <span class="nb">echo</span> <span class="s2">&quot;busybox executable is not accessible&quot;</span>
         <span class="k">return</span> 1
     <span class="k">fi</span>
 
-    <span class="c"># Copy the busybox binary into the rootfs</span>
-    cp <span class="k">$(</span>which busybox<span class="k">)</span> <span class="nv">$rootfs</span>/bin
+    <span class="c"># We will bind-mount busybox to this location in the container later</span>
+    touch <span class="nv">$rootfs</span>/bin/busybox
+    chmod <span class="m">755</span> <span class="nv">$rootfs</span>/bin/busybox
+
+    <span class="nb">cd</span> <span class="nv">$rootfs</span>/bin <span class="o">||</span> <span class="k">return</span> 1
+    <span class="nv">COMMANDS</span><span class="o">=</span><span class="k">$(</span><span class="nv">$BUSYBOX</span> --list<span class="k">)</span>
+    <span class="k">for</span> COMMAND in <span class="nv">$COMMANDS</span><span class="p">;</span> <span class="k">do</span>
+        ln -s busybox <span class="nv">$COMMAND</span>
+    <span class="k">done</span>
+
+    <span class="nv">INITLXCFILE</span><span class="o">=</span><span class="k">$(</span>which init.lxc<span class="k">)</span>
     <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="nb">echo</span> <span class="s2">&quot;failed to copy busybox in the rootfs&quot;</span>
+        <span class="nb">echo</span> <span class="s2">&quot;init.lxc not found&quot;</span>
         <span class="k">return</span> 1
     <span class="k">fi</span>
+    touch <span class="nv">$rootfs</span>/bin/init.lxc
+    chmod <span class="m">755</span> <span class="nv">$rootfs</span>/bin/init.lxc
 
-    <span class="c"># Symlink to busybox for the commands it supports</span>
-    <span class="nb">cd</span> <span class="nv">$rootfs</span>/bin <span class="o">||</span> <span class="k">return</span> 1
-    ./busybox --list <span class="p">|</span> xargs -n1 ln -s busybox
+    <span class="c"># If we have network enabled, we need iptables</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="si">${</span><span class="nv">ENABLE_NETWORKGATEWAY</span><span class="si">}</span> <span class="o">=</span> <span class="s2">&quot;ON&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nv">IPTABLES</span><span class="o">=</span><span class="k">$(</span>which iptables<span class="k">)</span>
+        <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="nb">echo</span> <span class="s2">&quot;iptables executable is not accessible&quot;</span>
+            <span class="k">return</span> 1
+        <span class="k">fi</span>
+
+        <span class="c"># We will bind-mount iptables to this location in the container later</span>
+        touch <span class="nv">$rootfs</span>/bin/iptables
+        chmod <span class="m">755</span> <span class="nv">$rootfs</span>/bin/busybox
+    <span class="k">fi</span>
 
     <span class="k">return</span> 0
 <span class="o">}</span>
@@ -201,40 +214,29 @@ copy_configuration<span class="o">()</span>
 <span class="o">{</span>
     <span class="nv">path</span><span class="o">=</span><span class="nv">$1</span>
     <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$2</span>
-    <span class="nv">name</span><span class="o">=</span><span class="nv">$3</span>
 
     <span class="c"># Set some non-static mount points, the rest are already in the config file</span>
     <span class="nb">echo</span> <span class="s2">&quot;lxc.rootfs = </span><span class="nv">$rootfs</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
     <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2"> </span><span class="nv">$rootfs</span><span class="s2">/</span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2"> none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
 
-    <span class="c"># Bind-mount the directory containing init.lxc to /usr/sbin. This is typically</span>
-    <span class="c"># /usr/sbin on the host as well.</span>
-    <span class="nv">INITLXCFILE</span><span class="o">=</span><span class="sb">`</span>which init.lxc<span class="sb">`</span>
-    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="nb">echo</span> <span class="s2">&quot;Error in template: init.lxc not found, unable to mount containing directory to /usr/sbin in container&quot;</span>
-        <span class="k">return</span> 1
+    <span class="c"># Bind-mount the necessary binaries into the container</span>
+    <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>which init.lxc<span class="k">)</span><span class="s2"> bin/init.lxc none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
+    <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>which busybox<span class="k">)</span><span class="s2"> bin/busybox none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
+
+    <span class="k">if</span> <span class="o">[</span> <span class="si">${</span><span class="nv">ENABLE_NETWORKGATEWAY</span><span class="si">}</span> <span class="o">=</span> <span class="s2">&quot;ON&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>which iptables<span class="k">)</span><span class="s2"> bin/iptables none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
     <span class="k">fi</span>
-    <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>dirname <span class="nv">$INITLXCFILE</span><span class="k">)</span><span class="s2"> </span><span class="nv">$rootfs</span><span class="s2">/usr/sbin none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
 
     <span class="c"># If the gateway dir variable is set, add a mount entry for that one also.</span>
-    <span class="c"># The gateway folder needs to be writable since wayland requires some extra</span>
-    <span class="c"># files to be created by the client in the folder where the wayland socket</span>
-    <span class="c"># is located</span>
     <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;</span><span class="nv">$GATEWAY_DIR</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="nv">$GATEWAY_DIR</span><span class="s2"> gateways none rw,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
-        chmod go+rwx <span class="nv">$GATEWAY_DIR</span>
+        chmod <span class="m">777</span> <span class="nv">$GATEWAY_DIR</span>
     <span class="k">fi</span>
 <span class="o">}</span>
 
-usage<span class="o">()</span>
-<span class="o">{</span>
-    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2"> -h|--help -b|--buffer -p|--path=&lt;path&gt;|--rootfs=&lt;path&gt;&quot;</span>
-    <span class="k">return</span> 0
-<span class="o">}</span>
-
-<span class="nv">options</span><span class="o">=</span><span class="k">$(</span>getopt -o hp:n: -l <span class="nb">help</span>,path:,name:,rootfs: -- <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="nv">options</span><span class="o">=</span><span class="k">$(</span>getopt -o p:n: -l path:,name:,rootfs: -- <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="k">)</span>
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    usage <span class="k">$(</span>basename <span class="nv">$0</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Usage: </span><span class="k">$(</span>basename <span class="nv">$0</span><span class="k">)</span><span class="s2"> -p|--path=&lt;path&gt; --rootfs=&lt;path&gt;&quot;</span>
     <span class="nb">exit </span>1
 <span class="k">fi</span>
 <span class="nb">eval set</span> -- <span class="s2">&quot;</span><span class="nv">$options</span><span class="s2">&quot;</span>
@@ -242,9 +244,7 @@ usage<span class="o">()</span>
 <span class="k">while</span> <span class="nb">true</span>
 <span class="k">do</span>
     <span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> in
-        -h<span class="p">|</span>--help<span class="o">)</span>      usage <span class="nv">$0</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0<span class="p">;;</span>
         -p<span class="p">|</span>--path<span class="o">)</span>      <span class="nv">path</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift </span>2<span class="p">;;</span>
-        -n<span class="p">|</span>--name<span class="o">)</span>      <span class="nv">name</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift </span>2<span class="p">;;</span>
         --rootfs<span class="o">)</span>       <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift </span>2<span class="p">;;</span>
         --<span class="o">)</span>             <span class="nb">shift </span>1<span class="p">;</span> <span class="nb">break</span> <span class="p">;;</span>
         *<span class="o">)</span>              <span class="nb">break</span> <span class="p">;;</span>
@@ -271,19 +271,13 @@ usage<span class="o">()</span>
     <span class="k">fi</span>
 <span class="k">fi</span>
 
-create_rootfs <span class="nv">$rootfs</span> <span class="nv">$name</span>
+create_rootfs <span class="nv">$rootfs</span>
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;failed to create softwarecontainer rootfs&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;failed to set up softwarecontainer rootfs&quot;</span>
     <span class="nb">exit </span>1
 <span class="k">fi</span>
 
-configure_busybox <span class="nv">$rootfs</span>
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;failed to configure busybox in the rootfs&quot;</span>
-    <span class="nb">exit </span>1
-<span class="k">fi</span>
-
-copy_configuration <span class="nv">$path</span> <span class="nv">$rootfs</span> <span class="nv">$name</span>
+copy_configuration <span class="nv">$path</span> <span class="nv">$rootfs</span>
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nb">echo</span> <span class="s2">&quot;failed to write configuration file&quot;</span>
     <span class="nb">exit </span>1
@@ -328,19 +322,16 @@ lxc.network.link <span class="o">=</span> lxcbr0
 lxc.network.name <span class="o">=</span> eth0
 
 
-lxc.mount.entry <span class="o">=</span> /sbin sbin none ro,bind <span class="m">0</span> 0
+<span class="c"># Auto-mount /proc and /sys with reasonable settings</span>
+lxc.mount.auto <span class="o">=</span> proc sys
+
+<span class="c"># Note: mounting all of /usr includes /usr/bin, /usr/lib64 and /usr/local.</span>
 lxc.mount.entry <span class="o">=</span> /usr usr none ro,bind <span class="m">0</span> 0
 lxc.mount.entry <span class="o">=</span> /lib lib none ro,bind <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /usr/lib usr/lib none ro,bind <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /proc proc proc nosuid,nodev,noexec <span class="m">0</span> 0
 
 <span class="c"># These are optional, as they may not exist in the host. If they exist</span>
 <span class="c"># they will be bind mounted from host to container.</span>
 lxc.mount.entry <span class="o">=</span> /lib64 lib64 none ro,bind,optional <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /usr/lib64 usr/lib64 none ro,bind,optional <span class="m">0</span> 0
-
-lxc.mount.entry <span class="o">=</span> /usr/local/lib usr/local/lib none ro,bind,optional <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /usr/local/lib64 usr/local/lib64 none ro,bind,optional <span class="m">0</span> 0
 </pre></div>
 </div>
 </div>

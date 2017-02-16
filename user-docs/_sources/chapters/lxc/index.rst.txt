@@ -17,9 +17,9 @@ Create basic rootfs
 ^^^^^^^^^^^^^^^^^^^
 The rootfs created is a basic FHS-like (`FHS <https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard>`_)
 structure, although stripped down, with the added ``/gateways`` directory. LXC template will also
-create two paths, that will be substituted by CMake - ``${CMAKE_INSTALL_PREFIX}`` and
-``${ADDITIONAL_FOLDER_MOUNTS}``. Furthermore, a root user and group will be created, and some
-configuration options will be set in the following three areas:
+create the path pointed by CMake with the variable ``${CMAKE_INSTALL_PREFIX}``.  Furthermore, a root
+user and group will be created, and some configuration options will be set in the following three
+areas:
 
 * ``/etc/pulse/client.conf`` - tell pulse not to use shm
 * ``/etc/machine-id`` - populated with a dbus-uuid
