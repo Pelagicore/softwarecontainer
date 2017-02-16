@@ -20,6 +20,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <sys/mman.h>
+#include <stdlib.h>
 
 #include "softwarecontainer_test.h"
 
@@ -135,8 +137,8 @@ TEST_F(SoftwareContainerApp, EnvVarsSet) {
     ASSERT_TRUE(job->isSuccess());
 }
 
-static constexpr int EXISTENT = 1;
-static constexpr int NON_EXISTENT = 0;
+static constexpr int EXISTENT = 0;
+static constexpr int NON_EXISTENT = 1;
 
 TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
@@ -365,9 +367,86 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     job3->start();
     ASSERT_EQ(job3->wait(), EXISTENT);
 
+    // Test that we can mount to some place where there is something else
+    // mounted higher up in the hierarchy (in this case, /dev)
+    ASSERT_TRUE(bindMountInContainer("/dev/shm", "/dev/shm", false));
+    auto jobShm = getSc().createFunctionJob([&] () {
+        return isDirectory("/dev/shm") ? EXISTENT : NON_EXISTENT;
+    });
+    jobShm->start();
+    jobShm->wait();
+    ASSERT_TRUE(jobShm->isSuccess());
 }
 
-#include <stdlib.h>
+/*
+ * Test that POSIX SHM can be mounted into a container, and that objects created on the host
+ * are accessible in the container after mounting, but only then.
+ */
+TEST_F(SoftwareContainerApp, TestPOSIXSHM) {
+    std::string testData1 = "test data to be read";
+    std::string testData2 = "read be to data test";
+    std::string objName1 = "/testObject1";
+    std::string objName2 = "/testObject2";
+
+    // Create a first object
+    int fd = shm_open(objName1.c_str(), O_CREAT | O_RDWR, 0666);
+    ASSERT_NE(fd, -1);
+    ASSERT_NE(write(fd, testData1.c_str(), testData1.length()), -1);
+    ASSERT_EQ(close(fd), 0);
+
+    // And create a second object
+    fd = shm_open(objName2.c_str(), O_CREAT | O_RDWR, 0666);
+    ASSERT_NE(fd, -1);
+    ASSERT_NE(write(fd, testData2.c_str(), testData2.length()), -1);
+    ASSERT_EQ(close(fd), 0);
+
+    /*
+     * Lambda function to read a shm object and compare it with some expected
+     * test data.
+     *
+     * This returns true if the object exists and its content is equal to what was expected,
+     * and returns false otherwise.
+     */
+    auto readMatchObject = [] (std::string objName, std::string testData) {
+        int dataLength = testData.length();
+        int fd = shm_open(objName.c_str(), O_RDONLY, 0666);
+        if (fd == -1) {
+            return false;
+        }
+        bool retval = true;
+        char *buf = new char[dataLength];
+        int bytes = read(fd, buf, dataLength);
+        close(fd);
+
+        retval = (bytes == dataLength) && strncmp(buf, testData.c_str(), dataLength) == 0;
+        delete[] buf;
+        return retval;
+    };
+
+    // Mount the first one, and check that it can be found
+    ASSERT_TRUE(bindMountInContainer("/dev/shm/testObject1", "/dev/shm/testObject1", false));
+    auto jobShm1 = getSc().createFunctionJob([objName1, testData1, readMatchObject] () {
+        return readMatchObject(objName1, testData1) ? EXISTENT : NON_EXISTENT;
+    });
+    jobShm1->start();
+    jobShm1->wait();
+    ASSERT_TRUE(jobShm1->isSuccess());
+
+    // Since the second one is not mounted, it should not be found.
+    auto jobShm2 = getSc().createFunctionJob([objName2, testData2, readMatchObject] () {
+        return readMatchObject(objName2, testData2) ? EXISTENT : NON_EXISTENT;
+    });
+    jobShm2->start();
+    jobShm2->wait();
+    ASSERT_TRUE(jobShm2->isError());
+
+    // Then we mount the second object, and makes sure we find it.
+    ASSERT_TRUE(bindMountInContainer("/dev/shm/testObject2", "/dev/shm/testObject2", false));
+    jobShm2->start();
+    jobShm2->wait();
+    ASSERT_TRUE(jobShm2->isSuccess());
+}
+
 
 /**
  * Test whether the mounting of sockets works properly

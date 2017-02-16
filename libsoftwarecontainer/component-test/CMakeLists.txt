@@ -26,6 +26,7 @@ include_directories(
 
 set(TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
+    rt # For SHM tests to work
     softwarecontainer
 )
 
