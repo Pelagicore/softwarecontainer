@@ -21,4 +21,5 @@ IPC mechanisms and examples of configuration and usage.
 .. include:: 10-network-setup.rst
 .. include:: 10-wayland-setup.rst
 .. include:: 10-the-launcher.rst
+.. include:: 10-traffic-shaping.rst
 

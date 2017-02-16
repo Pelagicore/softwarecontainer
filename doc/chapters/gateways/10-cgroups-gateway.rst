@@ -1,3 +1,5 @@
+.. _cgroups-gateway:
+
 CGroups gateway
 ===============
 
