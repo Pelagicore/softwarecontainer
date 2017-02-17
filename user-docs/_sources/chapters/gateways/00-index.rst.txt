@@ -31,11 +31,26 @@ All gateway configurations are JSON arrays containing valid JSON elements, and S
 requires this.  Beyond that, the structure and content of this JSON is the responsibility of the
 respective gateway.
 
+.. _cgroups-gateway:
 .. include:: 10-cgroups-gateway.rst
+
+.. _device-node-gateway:
 .. include:: 10-device-node-gateway.rst
+
+.. _dbus-gateway:
 .. include:: 10-dbus-gateway.rst
+
+.. _environment-gateway:
 .. include:: 10-environment-gateway.rst
+
+.. _file-gateway:
 .. include:: 10-file-gateway.rst
+
+.. _network-gateway:
 .. include:: 10-network-gateway.rst
+
+.. _pulse-gateway:
 .. include:: 10-pulse-gateway.rst
+
+.. _wayland-gateway:
 .. include:: 10-wayland-gateway.rst
