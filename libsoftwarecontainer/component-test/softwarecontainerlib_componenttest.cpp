@@ -36,10 +36,14 @@
 
 LOG_DECLARE_DEFAULT_CONTEXT(defaultContext, "ff", "dd");
 
+static constexpr const int SUCCESS = 0;
+static constexpr const int FAILURE = 1;
+
 class SoftwareContainerApp : public SoftwareContainerLibTest
 {
 
 public:
+
     void startGateways(const std::string &config, const std::string &gatewayID)
     {
         json_error_t error;
@@ -107,7 +111,6 @@ TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
     westonJob->start();
     westonJob->wait();
     ASSERT_TRUE(westonJob->isSuccess());
-
 }
 
 /*
@@ -137,9 +140,6 @@ TEST_F(SoftwareContainerApp, EnvVarsSet) {
     ASSERT_TRUE(job->isSuccess());
 }
 
-static constexpr int EXISTENT = 0;
-static constexpr int NON_EXISTENT = 1;
-
 TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
 
     std::string tempFilename1 = createTempFile();
@@ -147,10 +147,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     // They will be mapped to these files, which should not yet exist
     std::string containerPath1 = "/tmp/testFile1";
     auto jobMounted = getSc().createFunctionJob([&] () {
-        return isFile(containerPath1) ? EXISTENT : NON_EXISTENT;
+        return isFile(containerPath1) ? SUCCESS : FAILURE;
     });
     jobMounted->start();
-    ASSERT_EQ(jobMounted->wait(), NON_EXISTENT);
+    jobMounted->wait();
+    ASSERT_TRUE(jobMounted->isError());
 
     // Let's configure the env gateway
     std::string configStr =
@@ -164,7 +165,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadOnly) {
     startGateways(configStr, FileGateway::ID);
 
     jobMounted->start();
-    ASSERT_EQ(jobMounted->wait(), EXISTENT);
+    jobMounted->wait();
+    ASSERT_TRUE(jobMounted->isSuccess());
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
@@ -202,10 +204,11 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     // They will be mapped to these files
     std::string containerPath1 = "/tmp/testFile1";
     auto jobMounted = getSc().createFunctionJob([&] () {
-        return isFile(containerPath1) ? EXISTENT : NON_EXISTENT;
+        return isFile(containerPath1) ? SUCCESS : FAILURE;
     });
     jobMounted->start();
-    ASSERT_EQ(jobMounted->wait(), NON_EXISTENT);
+    jobMounted->wait();
+    ASSERT_TRUE(jobMounted->isError());
 
     std::string configStr =
     "["
@@ -218,7 +221,8 @@ TEST_F(SoftwareContainerApp, FileGatewayReadWrite) {
     startGateways(configStr, FileGateway::ID);
 
     jobMounted->start();
-    ASSERT_EQ(jobMounted->wait(), EXISTENT);
+    jobMounted->wait();
+    ASSERT_TRUE(jobMounted->isSuccess());
 
     // Write some data to the files outside the container and make sure we can
     // read it inside the container
@@ -260,27 +264,30 @@ TEST_F(SoftwareContainerApp, TestFileMounting) {
     writeToFile(tempFilename, content);
 
     auto job = getSc().createFunctionJob([&] () {
-        return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
+        return isFile(tempFilename) ? SUCCESS : FAILURE;
     });
     job->start();
+    job->wait();
 
     // File should not be available
-    ASSERT_EQ(job->wait(), NON_EXISTENT);
+    ASSERT_TRUE(job->isError());
 
     ASSERT_TRUE(bindMountInContainer(tempFilename, tempFilename, true));
 
     // Now file should be available
     job->start();
-    ASSERT_EQ(job->wait(), EXISTENT);
+    job->wait();
+    ASSERT_TRUE(job->isSuccess());
 
     // Test that we can mount to some place where there is something else
     // mounted higher up in the hierarchy (in this case, /dev)
     ASSERT_TRUE(bindMountInContainer("/dev/shm", "/dev/shm", false));
     auto jobShm = getSc().createFunctionJob([&] () {
-        return isDirectory("/dev/shm") ? EXISTENT : NON_EXISTENT;
+        return isDirectory("/dev/shm") ? SUCCESS : FAILURE;
     });
     jobShm->start();
-    ASSERT_EQ(jobShm->wait(), EXISTENT);
+    jobShm->wait();
+    ASSERT_TRUE(jobShm->isSuccess());
 }
 
 /**
@@ -296,28 +303,31 @@ TEST_F(SoftwareContainerApp, TestDoubleMounting) {
 
     // Make sure that the file is not already in the container
     auto job = getSc().createFunctionJob([&] () {
-        return isFile(tempFilename) ? EXISTENT : NON_EXISTENT;
+        return isFile(tempFilename) ? SUCCESS : FAILURE;
     });
     job->start();
-    ASSERT_EQ(job->wait(), NON_EXISTENT);
+    job->wait();
+    ASSERT_TRUE(job->isError());
 
     // Bind mount the file
     ASSERT_TRUE(bindMountInContainer(tempFilename, tempFilename, true));
 
     // Check that the file is now in the container
     job->start();
-    ASSERT_EQ(job->wait(), EXISTENT);
+    job->wait();
+    ASSERT_TRUE(job->isSuccess());
 
     // Try to bind mount again. This should fail!
     ASSERT_FALSE(bindMountInContainer(tempFilename, tempFilename, true));
 
     // Check that the file is still in the container
     job->start();
-    ASSERT_EQ(job->wait(), EXISTENT);
+    job->wait();
+    ASSERT_TRUE(job->isSuccess());
 }
 
 /**
- * Test whether it should not be possible to mount over LXC mounts
+ * Test whether it should not be possible to mount over existing mounts
  */
 TEST_F(SoftwareContainerApp, TestMountingOverRoot) {
 
@@ -336,24 +346,27 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     std::string tempDirname = createTempDir();
 
     auto job1 = getSc().createFunctionJob([&] () {
-        return isDirectory(tempDirname) ? EXISTENT : NON_EXISTENT;
+        return isDirectory(tempDirname) ? SUCCESS : FAILURE;
     });
     job1->start();
-    ASSERT_EQ(job1->wait(), NON_EXISTENT);
+    job1->wait();
+    ASSERT_TRUE(job1->isError());
 
     ASSERT_TRUE(bindMountInContainer(tempDirname, tempDirname, false));
 
     job1->start();
-    ASSERT_EQ(job1->wait(), EXISTENT);
+    job1->wait();
+    ASSERT_TRUE(job1->isSuccess());
 
     // Test that an unexisting path is created when you mount to it
     std::string longUnexistingPath = "/var/apa/bepa/cepa";
     ASSERT_TRUE(bindMountInContainer(tempDirname, longUnexistingPath, false));
     auto job2 = getSc().createFunctionJob([&] () {
-        return isDirectory(longUnexistingPath) ? EXISTENT : NON_EXISTENT;
+        return isDirectory(longUnexistingPath) ? SUCCESS : FAILURE;
     });
     job2->start();
-    ASSERT_EQ(job2->wait(), EXISTENT);
+    job2->wait();
+    ASSERT_TRUE(job2->isSuccess());
 
     // Write some data to a file inside the directory
     std::string tempFilename = createTempFile(tempDirname);
@@ -362,16 +375,17 @@ TEST_F(SoftwareContainerApp, TestFolderMounting) {
     writeToFile(tempFilename, content);
 
     auto job3 = getSc().createFunctionJob([&] () {
-        return isFile(std::string(tempFilename)) ? EXISTENT : NON_EXISTENT;
+        return isFile(std::string(tempFilename)) ? SUCCESS : FAILURE;
     });
     job3->start();
-    ASSERT_EQ(job3->wait(), EXISTENT);
+    job3->wait();
+    ASSERT_TRUE(job3->isSuccess());
 
     // Test that we can mount to some place where there is something else
     // mounted higher up in the hierarchy (in this case, /dev)
     ASSERT_TRUE(bindMountInContainer("/dev/shm", "/dev/shm", false));
     auto jobShm = getSc().createFunctionJob([&] () {
-        return isDirectory("/dev/shm") ? EXISTENT : NON_EXISTENT;
+        return isDirectory("/dev/shm") ? SUCCESS : FAILURE;
     });
     jobShm->start();
     jobShm->wait();
@@ -426,7 +440,7 @@ TEST_F(SoftwareContainerApp, TestPOSIXSHM) {
     // Mount the first one, and check that it can be found
     ASSERT_TRUE(bindMountInContainer("/dev/shm/testObject1", "/dev/shm/testObject1", false));
     auto jobShm1 = getSc().createFunctionJob([objName1, testData1, readMatchObject] () {
-        return readMatchObject(objName1, testData1) ? EXISTENT : NON_EXISTENT;
+        return readMatchObject(objName1, testData1) ? SUCCESS : FAILURE;
     });
     jobShm1->start();
     jobShm1->wait();
@@ -434,7 +448,7 @@ TEST_F(SoftwareContainerApp, TestPOSIXSHM) {
 
     // Since the second one is not mounted, it should not be found.
     auto jobShm2 = getSc().createFunctionJob([objName2, testData2, readMatchObject] () {
-        return readMatchObject(objName2, testData2) ? EXISTENT : NON_EXISTENT;
+        return readMatchObject(objName2, testData2) ? SUCCESS : FAILURE;
     });
     jobShm2->start();
     jobShm2->wait();
@@ -487,7 +501,7 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
 
                 close(fd2);
 
-                return done == 1 ? EXISTENT : NON_EXISTENT;
+                return done == 1 ? SUCCESS : FAILURE;
             });
 
 
@@ -508,28 +522,29 @@ TEST_F(SoftwareContainerApp, TestUnixSocket) {
         sleep(1);
 
         if ((s = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
-            _exit(NON_EXISTENT);
+            _exit(FAILURE);
         }
 
         remote.sun_family = AF_UNIX;
         strncpy(remote.sun_path, tempUnixSocket, strlen(tempUnixSocket) + 1);
         len = strlen(remote.sun_path) + sizeof(remote.sun_family);
         if (connect(s, (struct sockaddr *)&remote, len) == -1) {
-            _exit(NON_EXISTENT);
+            _exit(FAILURE);
         }
 
 
         if (send(s, str, strlen(str), 0) == -1) {
-            _exit(NON_EXISTENT);
+            _exit(FAILURE);
         }
 
         close(s);
-        _exit(EXISTENT);
+        _exit(SUCCESS);
     }
     else //Parent process
     {
         job1->start();
-        ASSERT_EQ(job1->wait(), EXISTENT);
+        job1->wait();
+        ASSERT_TRUE(job1->isSuccess());
     }
 }
 
@@ -545,10 +560,11 @@ TEST_F(SoftwareContainerApp, DISABLED_TestPulseAudioEnabled) {
 
     // Make sure the file is there
     auto job1 = getSc().createFunctionJob([&] () {
-        return isFile(soundFile) ? EXISTENT : NON_EXISTENT;
+        return isFile(soundFile) ? SUCCESS : FAILURE;
     });
     job1->start();
-    ASSERT_EQ(job1->wait(), EXISTENT);
+    job1->wait();
+    ASSERT_TRUE(job1->isSuccess());
 
     auto job2 = getSc().createCommandJob("/usr/bin/paplay " + soundFile);
     job2->start();
