@@ -73,10 +73,11 @@ Command line options
 ====================
 It is possible to configure SoftwareContainer with command line options.
 
-**-c or --config <path>** Path to SoftwareContainer configuration file, defaults to |sc-config-file-code|
+**-c or --config <path>** Path to SoftwareContainer configuration file,
+defaults to |sc-config-file-code|
 
-**-u or --user <uid>** Default user id to be used when starting processes in the container, defaults to ``0``.
-This option is deprecated.
+**-u or --user <uid>** Default user id to be used when starting processes in the container,
+defaults to ``0``. This option is deprecated.
 
 **-t or --timeout <seconds>** Timeout in seconds to wait for containers to shutdown,
 defaults to |shutdown-timeout-code|
@@ -84,10 +85,11 @@ defaults to |shutdown-timeout-code|
 **-m or --manifest-dir <path>** Path to a file or directory where service manifest(s) exist,
 defaults to |service-manifest-dir-code|
 
-**-d or --default-manifest-dir <path>** Path to a file or directory where default service manifest(s) exist,
-defaults to |default-service-manifest-dir-code|
+**-d or --default-manifest-dir <path>** Path to a file or directory where default
+service manifest(s) exist, defaults to |default-service-manifest-dir-code|
 
-**-b or --session-bus** To use the session bus on D-Bus, instead of the system bus. Defaults to |use-session-bus-code|
+**-b or --session-bus** To use the session bus on D-Bus, instead of the system bus.
+Defaults to |use-session-bus-code|
 
 **-h or --help** Display usage and exit
 
@@ -95,18 +97,31 @@ defaults to |default-service-manifest-dir-code|
 LXC config
 ==========
 
-LXC is configured partly by the LXC template ``libsoftwarecontainer/lxc-softwarecontainer.in`` which is configured
-and installed by CMake. This is passed to LXC by SC.
+LXC is configured partly by the LXC template ``libsoftwarecontainer/lxc-softwarecontainer.in`` which
+is configured and installed by CMake. This is passed to LXC by SC.
 
-The other source of LXC specific configuration is in ``libsoftwarecontainer/softwarecontainer.conf.in`` which is
-configured and installed by CMake to |lxc-config-path-code|.
+Another source of LXC specific configuration is in ``libsoftwarecontainer/softwarecontainer.conf.in``
+which is configured and installed by CMake to |lxc-config-path-code|.
+
+A third source is the LXC config file, typically found in ``/etc/lxc/lxc.conf`` or
+``/usr/etc/lxc/lxc.conf``.
+The following is a list of LXC config items which are currently relevant for SoftwareContainer.
+
+======================   =================================================================
+LXC config item key      Description
+======================   =================================================================
+| lxc.lxcpath            | Sets the path where the rootfs:s for all containers are stored.
+----------------------   -----------------------------------------------------------------
+
+======================   =================================================================
+
 
 
 Gateway configuration
 =====================
 
-Gateways (that are configured to be built) are configured by means of gateway configs. For details about
-these configs, their content and format, and how they are applied, see :ref:`Design <design>`,
+Gateways (that are configured to be built) are configured by means of gateway configs. For details
+about these configs, their content and format, and how they are applied, see :ref:`Design <design>`,
 :ref:`Integration guidelines <integration-guidelines>`, and :ref:`Gateways <gateways>`.
 
 
