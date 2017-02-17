@@ -51,10 +51,11 @@ Below is an example of the major entities involved in a call to create a contain
 Container config
 ================
 
-This section is about the config used when a container is created using the D-Bus interface. This config is only one
-pice of the overall configuration, for more info see :ref:`Configuration <configuration>`
+This section is about the config used when a container is created using the D-Bus interface. This
+config is only one pice of the overall configuration, for more info see :ref:`Configuration <configuration>`
 
-When creating containers, a configuration is passed as a JSON string. The string is an array with objects, in the JSON sense.
+When creating containers, a configuration is passed as a JSON string. The string is an array with
+objects, in the JSON sense.
 The currently supported configs are:
 
   * Disk writing buffer - on or off. Key: "enableWriteBuffer", value: ``true`` for on or ``false`` for off.
@@ -65,21 +66,24 @@ Example config JSON::
         "enableWriteBuffer": true
     }]
 
-The main reason this config is passed as raw JSON is to support additions in supported config options without breaking the API.
+The main reason this config is passed as raw JSON is to support additions in supported config
+options without breaking the API.
 
 Write buffer configuration
 --------------------------
 
-The ``enableWriteBuffer`` is used to enable or disable write buffers on the mounted :ref:`filesystems <filesystems>` in the container. These
-buffers consists of a RAM overlay on top of the existing :ref:`filesystem <filesystems>`, and are synced to the underlying :ref:`filesystem <filesystems>` on
+The ``enableWriteBuffer`` is used to enable or disable write buffers on the mounted
+:ref:`filesystems <filesystems>` in the container. These
+buffers consists of a RAM overlay on top of the existing :ref:`filesystem <filesystems>`, and are
+synced to the underlying :ref:`filesystem <filesystems>` on
 shutdown of the container.
 
 
 Working with containers
 =======================
 
-This section describes how to work with the Agent D-Bus API and how to configure gateways to make the container useful for
-specific application and platform needs.
+This section describes how to work with the Agent D-Bus API and how to configure gateways to make
+the container useful for specific application and platform needs.
 
 
 Running a command in a container
@@ -120,9 +124,11 @@ Bind mount a directory inside the container:
 
 Parameters:
  * ``containerID`` - a int32 with the ID of the created container, as returned by the ``Create`` method.
- * ``pathInHost`` - a string with the host path of the directory to be bind mounted into the container. The host path must exist before running the command.
+ * ``pathInHost`` - a string with the host path of the directory to be bind mounted into the
+   container. The host path must exist before running the command.
  * ``pathInContainer`` - a string representing the absolute mount path inside the container.
- * ``readOnly`` - a boolean with a flag to set the bind mounted directory to read only or not. This is currently not supported.
+ * ``readOnly`` - a boolean with a flag to set the bind mounted directory to read only or not.
+   This is currently not supported.
 
 The method assumes the path ``pathInHost`` exists, so choose another path if it is more convenient.
 The result of the method is that the content of '/home/vagrant/softwarecontainer' will be
