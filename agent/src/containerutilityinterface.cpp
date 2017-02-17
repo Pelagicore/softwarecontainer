@@ -22,8 +22,7 @@
 #include <lxc/lxccontainer.h>
 
 namespace softwarecontainer {
-/* we are fetching lxcpath from config now. But in near future we should use lxcConfigPath instead
- * */
+
 void ContainerUtilityInterface::removeOldContainers()
 {
     char **containerNames = nullptr;
