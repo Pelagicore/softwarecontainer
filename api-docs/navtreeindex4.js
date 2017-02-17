@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"recursivecopy_8cpp_source.html":[2,0,1,16],
 "recursivecopy_8h_source.html":[2,0,1,17],
 "signalconnectionshandler_8cpp_source.html":[2,0,1,18],
 "signalconnectionshandler_8h_source.html":[2,0,1,19],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classsoftwarecontainer_1_1_service_manifest_parse_error.html#a9ea9cfb5a2a55a84b0c9d4e9b755a07c":[1,0,1,76,0],
 "classsoftwarecontainer_1_1_service_manifest_parse_error.html#ac2ccd6259d40b4bbfe3c44feff072e9d":[1,0,1,76,2],
 "classsoftwarecontainer_1_1_service_manifest_path_error.html":[1,0,1,77],
 "classsoftwarecontainer_1_1_service_manifest_path_error.html#a4a8c3836a69642b0dbc0c84f87ede137":[1,0,1,77,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "overlaysynccleanuphandler_8h_source.html":[2,0,1,15],
 "pages.html":[],
 "pulsegateway_8cpp_source.html":[2,0,2,1,1,9],
-"pulsegateway_8h_source.html":[2,0,2,1,1,10],
-"recursivecopy_8cpp_source.html":[2,0,1,16]
+"pulsegateway_8h_source.html":[2,0,2,1,1,10]
 };

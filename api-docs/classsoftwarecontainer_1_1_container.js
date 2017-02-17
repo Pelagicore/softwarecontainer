@@ -8,6 +8,7 @@ var classsoftwarecontainer_1_1_container =
     [ "setCgroupItem", "classsoftwarecontainer_1_1_container.html#abd17f341b23f5089b6c6177419c41c16", null ],
     [ "execute", "classsoftwarecontainer_1_1_container.html#ae18efbb5f1588ed2211d7e876ede84ab", null ],
     [ "execute", "classsoftwarecontainer_1_1_container.html#a140cd2747557097e0cb6a76965b914cc", null ],
+    [ "executeSync", "classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59", null ],
     [ "bindMountInContainer", "classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c", null ],
     [ "mountDevice", "classsoftwarecontainer_1_1_container.html#ac7f129fd56c1c02e1bb586f111e19971", null ],
     [ "createSymLink", "classsoftwarecontainer_1_1_container.html#ae975f01e5293bf7d9ac2226adeec363b", null ],
