@@ -188,7 +188,7 @@ class TestCaps(object):
         try:
             sc.start(DATA)
             with pytest.raises(DBusException) as err:
-               sc.set_capabilities(["test.cap.broken-gw-config"])
+                sc.set_capabilities(["test.cap.broken-gw-config"])
 
         finally:
             sc.terminate()
@@ -228,5 +228,27 @@ class TestCaps(object):
             helper = EnvironmentHelper(TESTOUTPUT_DIR)
             my_env_var = helper.env_var("TEST_ENV_VAR")
             assert my_env_var == "TEST_ENV_VALUE"
+        finally:
+            sc.terminate()
+
+    def test_set_same_cap_twice(self, agent):
+        """ Test that setting the same capability, when the gateway is already activated,
+            results in the expected exception and that the Agent is still alive after
+            the command has been run (no crash).
+        """
+        sc = Container()
+        try:
+            sc.start(DATA)
+            sc.set_capabilities(["test.cap.valid-dbus"])
+
+            with pytest.raises(DBusException) as err:
+                # Set the same capability again
+                sc.set_capabilities(["test.cap.valid-dbus"])
+            # The expected failure is 'Failed', not 'NoReply'
+            assert err.value.get_dbus_name() == "org.freedesktop.DBus.Error.Failed"
+
+            # Verify that the Agent is still alive
+            assert agent.is_alive()
+
         finally:
             sc.terminate()
