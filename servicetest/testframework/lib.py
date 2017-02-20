@@ -308,6 +308,9 @@ class SoftwareContainerAgentHandler():
             self.__rec.terminate()
             raise Exception("SoftwareContainer-agent has died for some reason")
 
+    def is_alive(self):
+        return self.__agent.poll() is None
+
     def terminate(self):
         self.__agent.terminate()
         self.__rec.terminate()
