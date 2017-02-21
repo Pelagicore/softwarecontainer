@@ -19,3 +19,4 @@ clang/
 testfile.txt
 *servicetest_result.xml
 *unittest_result.xml
+ubuntu-*.log
