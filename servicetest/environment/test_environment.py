@@ -247,8 +247,9 @@ class TestEnvironment(object):
         try:
             sc.start(DATA)
 
-            with pytest.raises(DBusException):
+            with pytest.raises(DBusException) as err:
                sc.set_capabilities(["environment.test.cap.1"])
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
         finally:
             sc.terminate()

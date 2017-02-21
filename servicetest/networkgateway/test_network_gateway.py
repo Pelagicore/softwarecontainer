@@ -172,8 +172,9 @@ class TestNetworkRules(object):
             sc = Container()
             sc.start(DATA)
 
-            with pytest.raises(DBusException):
+            with pytest.raises(DBusException) as err:
                 sc.set_capabilities(["test.cap.empty"])
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
             sc.launch_command("python " +
                               sc.get_bind_dir() +
@@ -199,8 +200,9 @@ class TestNetworkRules(object):
 
             sc.set_capabilities(["test.cap.policy-drop"])
 
-            with pytest.raises(DBusException):
+            with pytest.raises(DBusException) as err:
                sc.set_capabilities(["test.cap.policy-drop"])
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
         finally:
             sc.terminate()

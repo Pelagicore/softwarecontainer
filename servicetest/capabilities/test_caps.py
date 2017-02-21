@@ -173,6 +173,7 @@ class TestCaps(object):
             sc.start(DATA)
             with pytest.raises(DBusException) as err:
                 sc.set_capabilities(["does.not.exist"])
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
         finally:
             sc.terminate()
@@ -186,6 +187,7 @@ class TestCaps(object):
             sc.start(DATA)
             with pytest.raises(DBusException) as err:
                sc.set_capabilities(["test.cap"])
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
         finally:
             sc.terminate()
@@ -199,6 +201,7 @@ class TestCaps(object):
             sc.start(DATA)
             with pytest.raises(DBusException) as err:
                 sc.set_capabilities(["test.cap.broken-gw-config"])
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
         finally:
             sc.terminate()
@@ -255,7 +258,7 @@ class TestCaps(object):
                 # Set the same capability again
                 sc.set_capabilities(["test.cap.valid-dbus"])
             # The expected failure is 'Failed', not 'NoReply'
-            assert err.value.get_dbus_name() == "org.freedesktop.DBus.Error.Failed"
+            assert err.value.get_dbus_name() == Container.DBUS_EXCEPTION_FAILED
 
             # Verify that the Agent is still alive
             assert agent.is_alive()
