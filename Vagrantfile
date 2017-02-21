@@ -25,7 +25,7 @@ thisDir = File.dirname(__FILE__)
 require File.join(thisDir, 'cookbook/host-system-config/vagrant-reload/plugin.rb')
 
 Vagrant.configure(2) do |config|
-    config.vm.box = "debian/contrib-jessie64"
+    config.vm.box = "ubuntu/xenial64"
 
     # Common names for network adapters
     config.vm.network "public_network", bridge: [ "eth0", "eth1", "em1" ]
@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
     end
 
     # Sync the repo root with this path in the VM
-    config.vm.synced_folder "./", "/home/vagrant/softwarecontainer/", create: true
+    config.vm.synced_folder "./", "/home/ubuntu/softwarecontainer/", create: true
 
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh"
