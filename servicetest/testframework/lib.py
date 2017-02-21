@@ -260,6 +260,10 @@ class Container():
     HOST_PATH = "host-path"
     READONLY = False
 
+    # Static class member used by tests to match DBusException type
+    # The "Failed" DBusException type is used by SC to indicate errors from method calls
+    DBUS_EXCEPTION_FAILED = "org.freedesktop.DBus.Error.Failed"
+
     def __init__(self):
         bus = dbus.SystemBus()
         pca_obj = bus.get_object("com.pelagicore.SoftwareContainerAgent",
