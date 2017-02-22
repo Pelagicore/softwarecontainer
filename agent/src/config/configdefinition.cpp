@@ -57,7 +57,7 @@ const bool ConfigDefinition::USE_SESSION_BUS_INITIAL_VALUE = false;
 const std::string ConfigDefinition::SC_GROUP = "SoftwareContainer";
 
 // Config keys for SoftwareContainer group
-const std::string ConfigDefinition::SC_USE_SESSION_BUS_KEY = "session-bus";
+const std::string ConfigDefinition::SC_USE_SESSION_BUS_KEY = "use-session-bus";
 const std::string ConfigDefinition::SC_SHUTDOWN_TIMEOUT_KEY = "shutdown-timeout";
 const std::string ConfigDefinition::SC_SHARED_MOUNTS_DIR_KEY = "shared-mounts-dir";
 const std::string ConfigDefinition::SC_LXC_CONFIG_PATH_KEY = "deprecated-lxc-config-path";
