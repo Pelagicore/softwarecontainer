@@ -72,7 +72,17 @@ if(ENABLE_NETWORKGATEWAY)
 endif()
 
 # Configure and install the general config file
-configure_file(softwarecontainer-config.in softwarecontainer-config @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/softwarecontainer-config.in
+               ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config
+               @ONLY)
+
+# Copy the configuration to the service test directory, so that we can use that
+# as a base for when we test with different configs.
+configure_file(${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config
+               ${CMAKE_SOURCE_DIR}/servicetest/testframework/softwarecontainer-config
+               @ONLY)
+
+# Install the configuration file
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-config" DESTINATION ${SYS_CONFIG_DIR})
 
 #

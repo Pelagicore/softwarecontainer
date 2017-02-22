@@ -32,8 +32,108 @@ import thread
 import Queue
 import subprocess
 import dbus.mainloop.glib
+import os.path
 from gi.repository import GObject
 
+
+class ConfigFile(object):
+    """ Represents the configuration file for SoftwareContainer
+        All keys and values have to be strings.
+
+        The format of a config file is as follows:
+
+        [Group1]
+        item1 = value1
+        item2 = value2
+
+        [Group2]
+        item1 = value1
+        item2 = value2
+
+        Initialization is done as follows:
+
+        config = ConfigFile("/where/to/save/me", {
+            "Group1": {
+                "item1": "value1",
+                "item2": "value2"
+            },
+
+            "Group2": {
+                "item1": "value1",
+                "item2": "value2"
+            }
+        })
+    """
+
+    def __init__(self, location, full_config):
+        """ Create a config object from a given dict of dicts.
+        """
+        self.__path = location
+        self.__groups = full_config
+
+    def path(self):
+        return self.__path
+
+    def config_as_string(self):
+        """ Convert this object into a string that can be written to a config file
+        """
+
+        # Copy the values from the defaults to the given config
+        # Only add them if there is no matching value already in the given config.
+        defaults = self.__default_config()
+        for group in defaults:
+            if group not in self.__groups:
+                self.__groups[group] = defaults[group]
+            else:
+                for item in defaults[group]:
+                    if item not in self.__groups[group]:
+                        self.__groups[group][item] = defaults[group][item]
+
+        result = ""
+        for group in self.__groups:
+            result += "[" + group + "]\n"
+            for item in self.__groups[group]:
+                result += item + " = " + self.__groups[group][item] + "\n"
+
+        return result
+
+    def __default_config(self):
+        """ Read the softwarecontainer-config prepared by cmake, and return its values as a dict.
+            This expects the file to be available in the same directory as this file.
+
+            The file, and the dict, will only contain values that are mandatory options, and as
+            such has no default values within SoftwareContainer. These are the values that one
+            has to have in a config file for the agent to start at all. Any other config values
+            have reasonable defaults and are therefore commented out in the config file.
+        """
+        config_path = os.path.join(os.path.dirname(__file__), "softwarecontainer-config")
+
+        # Open the file, read it and close it
+        with open(config_path, "r") as fh:
+            file_contents = fh.read()
+
+        conf = dict()
+        group = None # Active group
+
+        # Go through the file, line by line
+        lines = file_contents.split("\n")
+        for line in lines:
+            line = line.strip()
+            # Skip empty lines and comments
+            if len(line) == 0 or line[0] == '#':
+                pass
+            elif line[0] == "[":
+                group = line[1:-1] # Remove [ and ]
+                conf[group] = dict()
+            elif group is None:
+                raise # This should not happen
+            else:
+                keyval = line.split('=',1)
+                key = keyval[0].strip()
+                value = keyval[1].strip()
+                conf[group][key] = value
+
+        return conf
 
 class Capability(object):
     """ Represents a capability
@@ -270,7 +370,7 @@ class SoftwareContainerAgentHandler():
         Used by e.g. ContainerApp over D-Bus.
     """
 
-    def __init__(self, log_file_path=None, caps_dir=None, default_caps_dir=None):
+    def __init__(self, log_file_path=None, config_path=None, caps_dir=None, default_caps_dir=None):
         if log_file_path is None:
             self.__log_file = subprocess.STDOUT
         else:
@@ -282,6 +382,8 @@ class SoftwareContainerAgentHandler():
             cmd += ['--manifest-dir', caps_dir]
         if default_caps_dir is not None:
             cmd += ['--default-manifest-dir', default_caps_dir]
+        if config_path is not None:
+            cmd += ['--config', config_path]
 
         self.__rec = Receiver()
         self.__rec.start()

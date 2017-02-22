@@ -17,6 +17,7 @@
 # For further information see LICENSE
 
 
+from lib import ConfigFile
 from lib import Capability
 from lib import StandardManifest
 from lib import DefaultManifest

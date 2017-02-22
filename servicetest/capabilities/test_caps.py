@@ -26,6 +26,7 @@ from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
 from testframework import DefaultManifest
+from testframework import ConfigFile
 
 from dbus.exceptions import DBusException
 
@@ -118,6 +119,15 @@ def service_manifests():
 def mounted_path_in_host():
     return CURRENT_DIR
 
+def agent_config():
+    """ The agent fixture calls this function when it creates the config file to be
+        used in this module. It expects a ConfigFile object.
+    """
+    return ConfigFile(TESTOUTPUT_DIR + "/agent-config",
+            {
+                "SoftwareContainer": {"use-session-bus": "true"}
+            }
+    )
 
 @pytest.mark.usefixtures("testhelper", "dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
 class TestCaps(object):
