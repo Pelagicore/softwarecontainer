@@ -136,9 +136,6 @@ add_feature_info("Coverage support" ENABLE_COVERAGE "Build with coverage support
 option(ENABLE_EXAMPLES "Enable building and installation of examples" OFF)
 add_feature_info("Examples" ENABLE_EXAMPLES "Enable building and installation of examples")
 
-option(CREATE_BRIDGE "SoftwareContainer will create network bridge if missing" ON)
-add_feature_info("Network Bridge" CREATE_BRIDGE "SoftwareContainer will create network bridge if missing")
-
 option(ENABLE_SYSTEM_BUS "Enables the SoftwareContainerAgent to communicate over the system bus" ON)
 add_feature_info("System D-Bus" ENABLE_SYSTEM_BUS "Install policy file for the D-Bus system bus")
 
@@ -257,8 +254,6 @@ if(ENABLE_NETWORKGATEWAY)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETADDR)
     make_config_mandatory(${SC_CONFIG_GROUP} BRIDGE_NETMASK)
 
-    add_feature_info("Network Bridge Device" TRUE "Network bridge defined as ${${SC_CONFIG_GROUP}_BRIDGE_DEVICE}")
-
     # NOTE: These definitons are only set because the "middle layer" tests currently need to create
     # a Workspace with valid values, see the setup code of SoftwareContainerTest test class.
     add_definitions(-DENABLE_NETWORKGATEWAY)
@@ -284,7 +279,7 @@ add_subdirectory(libsoftwarecontainer)
 add_subdirectory(agent)
 add_subdirectory(doc)
 
-if (ENABLE_EXAMPLES)
+if(ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
