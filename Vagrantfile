@@ -86,18 +86,21 @@ Vagrant.configure(2) do |config|
     # Install dependencies via git
     config.vm.provision "shell", privileged: false,
         env: {"SRC_DIR" => "dlt-daemon", 
+              "WIPE_SRC_DIR" => "yes",
               "GIT_REPO" => "https://github.com/GENIVI/dlt-daemon.git"},
         path: "cookbook/build/cmake-git-builder.sh"
 
     config.vm.provision "shell", privileged: false,
         #args: ["ivi-logging", "https://github.com/Pelagicore/ivi-logging.git", "-DENABLE_DLT_BACKEND=1"],
         env: {"SRC_DIR" => "ivi-logging", 
+              "WIPE_SRC_DIR" => "yes",
               "GIT_REPO" => "https://github.com/Pelagicore/ivi-logging.git"},
         path: "cookbook/build/cmake-git-builder.sh"
 
     config.vm.provision "shell", privileged: false,
         env: {"SRC_DIR" => "dbus-proxy",
-              "GIT_REPO" => "https://github.com/Pelagicore/dbus-proxy.git"},
+              "GIT_REPO" => "https://github.com/Pelagicore/dbus-proxy.git",
+              "WIPE_SRC_DIR" => "yes"},
         path: "cookbook/build/cmake-git-builder.sh"
 
 end
