@@ -59,6 +59,20 @@ def agent(request):
     # and thus the path should be defined on the module level.
     logfile_path = request.module.logfile_path()
 
+    # Set up and use a config file, if one is given in the test module
+    config_file_location = None
+    if "agent_config" in request.module.__dict__:
+        config_file = request.module.agent_config()
+
+        config_file_location = config_file.path()
+        config_parent_dir = os.path.dirname(config_file_location)
+
+        if not os.path.exists(config_parent_dir):
+            os.makedirs(config_parent_dir)
+
+        with open(config_file_location, "w") as fh:
+            fh.write(config_file.config_as_string())
+
     # Set up and create the service manifests to be used with the calling test module
     standard_manifest_location = None
     default_manifest_location = None
@@ -80,7 +94,10 @@ def agent(request):
             with open(service_manifest_file, "w") as fh:
                 fh.write(manifest.json_as_string())
 
-    agent_handler = SoftwareContainerAgentHandler(logfile_path, standard_manifest_location, default_manifest_location)
+    agent_handler = SoftwareContainerAgentHandler(logfile_path,
+                                                  config_file_location,
+                                                  standard_manifest_location,
+                                                  default_manifest_location)
 
     # Return the setup agent to the consuming test
     yield agent_handler
