@@ -52,7 +52,7 @@ class TestFileSystem(object):
         containers and that the whole chain is working properly.
     """
 
-    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
+    @pytest.mark.xfail("platform.release() <= \"4.6.0\"")
     @pytest.mark.parametrize("flag", [True, False])
     def test_write_buffer_flag(self, flag):
         """
