@@ -1,4 +1,4 @@
-#!/bin/sh -xe 
+#!/bin/sh -xe
 # 
 # Prerequisites:
 #  * softwarecontainer is installed together with examples
@@ -32,8 +32,8 @@ sleep 1
 ./09_setcapabilities.sh
 ./10_destroy.sh
 
+sudo pkill -f "softwarecontainer-agent"
+
 # Remove copied files
 sudo rm /usr/local/etc/softwarecontainer/service-manifest.d/temperature-service.json
-
-sudo pkill -P $sc_pid
 

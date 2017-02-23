@@ -3,6 +3,6 @@ gdbus call --system \
 --object-path /com/pelagicore/SoftwareContainerAgent \
 --method com.pelagicore.SoftwareContainerAgent.BindMount \
 0 \
-"/home/vagrant/softwarecontainer" \
+"$HOME/softwarecontainer" \
 "/app" \
 false
