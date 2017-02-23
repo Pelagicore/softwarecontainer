@@ -56,7 +56,7 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", inline: "apt-get update"
 
     # Install build dependencies
-    config.vm.provision "shell", path: "cookbook/system-config/setup-ccache-and-icecc.sh"
+#    config.vm.provision "shell", path: "cookbook/system-config/setup-ccache-and-icecc.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-build-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/softwarecontainer-dependencies.sh"
     config.vm.provision "shell", path: "cookbook/deps/common-run-dependencies.sh"
