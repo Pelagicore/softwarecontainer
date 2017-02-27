@@ -37,6 +37,8 @@ node {
 
         // Stages are subtasks that will be shown as subsections of the finiished build in Jenkins.
         stage('Download') {
+            // Delete old files
+            sh 'rm -rf .[^.] .??* *'
             // Checkout the git repository and refspec pointed to by jenkins
             checkout scm
             // Update the submodules in the repository.
