@@ -33,7 +33,7 @@ macro(add_gmock)
     endif()
 
     if(IS_DIRECTORY ${MOCKDIR})
-        add_subdirectory(${MOCKDIR} EXCLUDE_FROM_ALL)
+        add_subdirectory(${MOCKDIR} ${CMAKE_CURRENT_BINARY_DIR}/gmock EXCLUDE_FROM_ALL)
     else()
         message(FATAL_ERROR "No ${MOCKDIR} found, can't add googletest")
     endif()
