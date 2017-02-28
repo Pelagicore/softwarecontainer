@@ -52,10 +52,15 @@ add_gateway_test(ENABLE_NETWORKGATEWAY networkgatewayfunctions_unittest.cpp)
 
 add_gateway_test(ENABLE_PULSEGATEWAY pulsegateway_unittest.cpp)
 
+# We already add libsoftwarecontainer as a dependency above but some
+# tests need to build towards to code directly so some cpp files
+# are added here as well, even if libsoftwarecontainer already is
+# built with them.
 set(TEST_FILES
     gateway_unittest.cpp
     main.cpp
     ${GATEWAY_TEST_FILES}
+    ${CMAKE_SOURCE_DIR}/libsoftwarecontainer/src/gateway/gateway.cpp
 )
 
 add_gtest_test(softwarecontainer-unit-test

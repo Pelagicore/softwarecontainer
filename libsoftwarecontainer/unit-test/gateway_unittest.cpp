@@ -28,7 +28,21 @@ using namespace softwarecontainer;
 class MockGateway : public Gateway
 {
 public:
-    MockGateway() : Gateway("mock", nullptr)
+    MockGateway() :
+        Gateway(std::string("mock"), nullptr, false)
+    {
+    }
+
+    MOCK_METHOD1(readConfigElement, bool(const json_t *element));
+    MOCK_METHOD0(activateGateway, bool());
+    MOCK_METHOD0(teardownGateway, bool());
+};
+
+class MockDynamicGateway : public Gateway
+{
+public:
+    MockDynamicGateway() :
+        Gateway(std::string("dynamic-gateway-mock"), nullptr, true)
     {
     }
 
@@ -43,7 +57,9 @@ class GatewayTest : public ::testing::Test
 {
 public:
     ::testing::NiceMock<MockGateway> gw;
-    std::string validConf = "[{ }]";
+    ::testing::NiceMock<MockDynamicGateway> dynamicGW;
+
+    std::string validConf = "[{}]";
     std::string validEmptyConf = "[]";
 
     json_t *jsonConf = nullptr;
@@ -186,13 +202,49 @@ TEST_F(GatewayTest, ConfigEnablesActivateEnablesTeardown) {
 }
 
 /*
- * Test that double activation is not possible
+ * Test that double activation is not possible for gatways that are
+ * not dynamic
  */
-TEST_F(GatewayTest, CantActivateTwice) {
+TEST_F(GatewayTest, CanNotActivateTwiceWhenNotDynamic) {
     loadConfig(validConf);
     ASSERT_TRUE(gw.setConfig(jsonConf));
     ASSERT_TRUE(gw.activate());
     ASSERT_THROW(gw.activate(), GatewayError);
+}
+
+/*
+ * Test that two activations without any configure between is not possible for gatways
+ * that are dynamic.
+ */
+TEST_F(GatewayTest, CanNotActivateTwiceWithoutConfigureBetweenWhenIsDynamic) {
+    loadConfig(validConf);
+    ASSERT_TRUE(dynamicGW.setConfig(jsonConf));
+    ASSERT_TRUE(dynamicGW.activate());
+    ASSERT_THROW(dynamicGW.activate(), GatewayError);
+}
+
+/*
+ * Test that double configuration and activation is not possible for
+ * gatways that are not dynamic.
+ */
+TEST_F(GatewayTest, CanNotConfigureAndActivateTwiceWhenNotDynamic) {
+    loadConfig(validConf);
+    ASSERT_TRUE(gw.setConfig(jsonConf));
+    ASSERT_TRUE(gw.activate());
+    ASSERT_THROW(gw.setConfig(jsonConf), GatewayError);
+    ASSERT_THROW(gw.activate(), GatewayError);
+}
+
+/*
+ * Test that double configuration and activation is possible for
+ * dynamic gateways.
+ */
+TEST_F(GatewayTest, CanConfigureAndActivateTwiceWhenIsDynamic) {
+    loadConfig(validConf);
+    ASSERT_TRUE(dynamicGW.setConfig(jsonConf));
+    ASSERT_TRUE(dynamicGW.activate());
+    ASSERT_NO_THROW(dynamicGW.setConfig(jsonConf));
+    ASSERT_NO_THROW(dynamicGW.activate());
 }
 
 /*
