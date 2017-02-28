@@ -44,6 +44,9 @@ Vagrant.configure(2) do |config|
 
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh"
+    
+    # Workaround for systemd timeout on network startup"
+    config.vm.provision "shell", path: "cookbook/system-config/systemd-network-startup-timeout.sh"
 
     # Use apt-cacher on our apt cache server
     if ENV['APT_CACHE_SERVER'] then
