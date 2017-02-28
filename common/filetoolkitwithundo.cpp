@@ -121,6 +121,11 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         return false;
     }
 
+    if (!existsInFileSystem(dst)) {
+        log_error() << src << " does not exist on the host, can not bindMount";
+        return false;
+    }
+
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
     if(enableWriteBuffer) {
