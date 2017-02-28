@@ -53,6 +53,10 @@ public:
  *
  * The complete gateway config is passed as a JSON array and all
  * gateways then provide their specific parsing of the items in the array.
+ *
+ * Gateways can specify if they are 'dynamic' or not when initializing this
+ * base class. A dynamic gateway supports multiple calls to setConfig and
+ * activate.
  */
 class Gateway
 {
@@ -65,25 +69,32 @@ public:
         ACTIVATED = 2,
     };
 
-    Gateway(const char *id, std::shared_ptr<ContainerAbstractInterface> container)
-    {
-        m_id = id;
-        m_state = GatewayState::CREATED;
-        m_container = container;
-    }
+    /**
+     * @brief Constructor for inheriting classes to initilize
+     *
+     * Gateways that supports quick-launch should flag for this when
+     * initializing this base class.
+     *
+     * @param id Specific gateway ID used to match with configurations.
+     *
+     * @param container An interface to the Container that this gateway is
+     *                  part of.
+     *
+     * @param isDynamic Set to 'true' to indicate the inheriting
+     *                  class supports re-configuration and re-activation
+     */
+    Gateway(const std::string &id,
+            std::shared_ptr<ContainerAbstractInterface> container,
+            bool isDynamic = false);
 
-    virtual ~Gateway()
-    {
-    }
+    virtual ~Gateway() {}
 
     /**
-     * @brief
-     * @return Returns the ID of the gateway
+     * @brief Returns the ID of the gateway
+     *
+     * @return Returns the ID of the gateway as a string
      */
-    virtual const char *id()
-    {
-        return m_id;
-    }
+    virtual std::string id() const;
 
     /**
      * @brief Configure this gateway according to the supplied JSON configuration
@@ -159,9 +170,10 @@ protected:
     virtual bool teardownGateway() = 0;
 
 private:
+    std::string m_id;
     std::shared_ptr<ContainerAbstractInterface> m_container;
-    const char *m_id = nullptr;
-    GatewayState m_state = GatewayState::CREATED;
+    bool m_isDynamic;
+    GatewayState m_state;
 
 };
 
