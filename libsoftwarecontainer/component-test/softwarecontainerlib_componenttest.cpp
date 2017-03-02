@@ -22,6 +22,7 @@
 #include <sys/un.h>
 #include <sys/mman.h>
 #include <stdlib.h>
+#include <cassert>
 
 #include "softwarecontainer_test.h"
 
@@ -44,18 +45,20 @@ class SoftwareContainerApp : public SoftwareContainerLibTest
 
 public:
 
-    void startGateways(const std::string &config, const std::string &gatewayID)
+    bool startGateways(const std::string &config, const std::string &gatewayID)
     {
         json_error_t error;
         json_t *configJson = json_loads(config.c_str(), 0, &error);
-        ASSERT_FALSE(configJson == nullptr);
+        assert(configJson != nullptr);
 
         GatewayConfiguration gwConf;
         gwConf.append(gatewayID, configJson);
 
-        getSc().startGateways(gwConf);
+        bool result = getSc().startGateways(gwConf);
 
         json_decref(configJson);
+
+        return result;
     }
 
     bool bindMountInContainer(const std::string src, const std::string dst, bool readOnly)
@@ -73,44 +76,133 @@ public:
         return *m_sc;
     }
 
+    /*
+     * Wayland gateway tests use this as a helper to assert that:
+     *
+     *  * There is the expected environment variable set inside the container.
+     *  * There is a wayland socket inside the container.
+     */
+    std::shared_ptr<FunctionJob> waylandTestHelperFunctionJob()
+    {
+        auto jobTrue = getSc().createFunctionJob([] () {
+            int ERROR = 1;
+            int SUCCESS = 0;
+
+            bool hasWayland = false;
+            std::string waylandDir = Glib::getenv(WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME,
+                                                  hasWayland);
+            if (!hasWayland) {
+                log_error() << "No wayland dir";
+                return ERROR;
+            }
+
+            log_debug() << "Wayland dir : " << waylandDir;
+
+            std::string socketPath = buildPath(waylandDir, WaylandGateway::SOCKET_FILE_NAME);
+            log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
+
+            if (!isSocket(socketPath)) {
+                return ERROR;
+            }
+
+            return SUCCESS;
+        });
+
+        return jobTrue;
+    }
 };
 
-TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
 
-    GatewayConfiguration config;
-    std::string configStr = "[ { \"enabled\" : true },\
-                               { \"enabled\" : false } ]";
+/*
+ * Wayland gateway test
+ *
+ * Test that a GW configuration that first applies a permissive config and then
+ * a less permissive config results in the most permissive config being kept.
+ *
+ * The test asserts that:
+ *  * An expected environment variable is set inside the container.
+ *  * There is an expected socket created inside the container.
+ *  * A call to weston-info inside the container is successful
+ */
+TEST_F(SoftwareContainerApp, TestWaylandWhitelist) {
+    std::string configStr = "[{ \"enabled\" : true },\
+                              { \"enabled\" : false }]";
     startGateways(configStr, WaylandGateway::ID);
 
-    auto jobTrue = getSc().createFunctionJob([] (){
-        int ERROR = 1;
-        int SUCCESS = 0;
+    auto helperJob = waylandTestHelperFunctionJob();
 
-        bool hasWayland = false;
-        std::string waylandDir = Glib::getenv(WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME,
-                                              hasWayland);
-        if (!hasWayland) {
-            log_error() << "No wayland dir";
-            return ERROR;
-        }
-        log_debug() << "Wayland dir : " << waylandDir;
-        std::string socketPath = buildPath(waylandDir, WaylandGateway::SOCKET_FILE_NAME);
-        log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
-        if ( !isSocket(socketPath) ) {
-            return ERROR;
-        }
+    helperJob->start();
+    helperJob->wait();
 
-        return SUCCESS;
-
-    });
-    jobTrue->start();
-    jobTrue->wait();
-    ASSERT_TRUE(jobTrue->isSuccess());
+    ASSERT_TRUE(helperJob->isSuccess());
 
     auto westonJob = getSc().createCommandJob("/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
+
     westonJob->start();
     westonJob->wait();
+
     ASSERT_TRUE(westonJob->isSuccess());
+}
+
+/*
+ * Wayland gateway test
+ *
+ * Similar test to the whitelisting test for non dynamic behavior, but this test
+ * applies the configs in separate call sequences to setConfig and activate, i.e
+ * the whitelisting behavior is tested when the gateway is reconfigured and reactivated
+ * compared to whitelisting behavior when configuraion and activation happens just
+ * once.
+ */
+TEST_F(SoftwareContainerApp, TestWaylandWhitelistingForDynamicBehavior) {
+    std::string configStr = "[{ \"enabled\" : false}]";
+
+    startGateways(configStr, WaylandGateway::ID);
+
+    auto helperJob = waylandTestHelperFunctionJob();
+
+    helperJob->start();
+    helperJob->wait();
+
+    // The gateway has not been enabled so this should not be a success
+    ASSERT_FALSE(helperJob->isSuccess());
+
+    auto westonJob = getSc().createCommandJob("/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
+
+    westonJob->start();
+    westonJob->wait();
+
+    // The gateway has not been enabled so this should not be a success
+    ASSERT_FALSE(westonJob->isSuccess());
+
+
+    // Second part of the test, apply configs, activate, and to everything again...
+    configStr = "[{ \"enabled\" : true }]";
+
+    startGateways(configStr, WaylandGateway::ID);
+
+    helperJob->start();
+    helperJob->wait();
+
+    ASSERT_TRUE(helperJob->isSuccess());
+
+    westonJob = getSc().createCommandJob("/bin/sh -c \"/usr/bin/weston-info > /dev/null\"");
+
+    westonJob->start();
+    westonJob->wait();
+
+    ASSERT_TRUE(westonJob->isSuccess());
+}
+
+/*
+ * Wayland gateway test
+ *
+ * Test that the gateway can be configured and activated twice, i.e. the 'dynamic' behavior.
+ * A call to startGateways leads to one call to setConfig() and to activate().
+ */
+TEST_F(SoftwareContainerApp, TestWaylandDynamicBehavior) {
+    std::string configStr = "[{ \"enabled\" : true }]";
+    ASSERT_TRUE(startGateways(configStr, WaylandGateway::ID));
+    ASSERT_TRUE(startGateways(configStr, WaylandGateway::ID));
 }
 
 /*
