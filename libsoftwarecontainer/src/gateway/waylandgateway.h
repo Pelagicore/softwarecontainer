@@ -26,7 +26,7 @@ namespace softwarecontainer {
 class WaylandGateway :
     public Gateway
 {
-    LOG_DECLARE_CLASS_CONTEXT("Wayl", "Wayland gateway");
+    LOG_DECLARE_CLASS_CONTEXT("WAGW", "Wayland gateway");
 
 public:
     static constexpr const char *ID = "wayland";
@@ -43,6 +43,7 @@ public:
 
 private:
     bool m_enabled;
+    bool m_activatedOnce;
 };
 
 } // namespace softwarecontainer
