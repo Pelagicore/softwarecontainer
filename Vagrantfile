@@ -26,6 +26,7 @@ require File.join(thisDir, 'cookbook/host-system-config/vagrant-reload/plugin.rb
 
 Vagrant.configure(2) do |config|
     config.vm.box = "ubuntu/xenial64"
+    config.vm.boot_timeout = 1200
 
     # Common names for network adapters
     config.vm.network "public_network", bridge: [ "eth0", "eth1", "em1" ]
