@@ -27,3 +27,9 @@ FAQ
       is started. This is the case because when softwarecontainer sets up the container it will look
       for the socket pointed out by ``PULSE_SERVER``, and mount it into the container, so that
       socket has to exist.
+
+* How can I check the CPU usage of an application?
+
+    * When a command is executed in the container via the D-Bus API the return value contains
+      the process ID, see :ref:`D-Bus execute <dbus-execute>`. This is the host pid of the
+      process and can be used (e.g. with ``ps``) from outside the container.
