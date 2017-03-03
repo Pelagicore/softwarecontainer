@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Debugging &#8212; softwarecontainer 0.18.0-f56521e 2017-02-23 documentation</title>
+    <title>Debugging &#8212; softwarecontainer 0.18.0-2487754 2017-03-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-f56521e 2017-02-23',
+        VERSION:     '0.18.0-2487754 2017-03-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -90,16 +90,16 @@ need to solve.</p>
 need to change any paths etc to find the correct libraries etc. You will need
 to have the <cite>PID</cite> from inside the container available to connect to however. this
 can be found out by running:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="n">ps</span> <span class="n">aux</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="n">ps</span> <span class="n">aux</span>
 </pre></div>
 </div>
 <p>Then running:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="o">--</span> <span class="n">gdb</span> <span class="o">--</span><span class="n">pid</span> <span class="n">YY</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="o">--</span> <span class="n">gdb</span> <span class="o">--</span><span class="n">pid</span> <span class="n">YY</span>
 </pre></div>
 </div>
 <p>Replace YY with the <cite>PID</cite> as seen inside the container. You can also run the
 application directly inside the container and start it with gdb directly:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="o">--</span> <span class="n">gdb</span> <span class="o">--</span><span class="n">args</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">ls</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lxc</span><span class="o">-</span><span class="n">attach</span> <span class="o">--</span><span class="n">name</span> <span class="n">SC</span><span class="o">-</span><span class="n">X</span> <span class="o">--</span> <span class="n">gdb</span> <span class="o">--</span><span class="n">args</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">ls</span>
 </pre></div>
 </div>
 <p>TODO: Uncertain why, but this fails with unable to find executable.</p>
@@ -111,8 +111,8 @@ paths as the application is executing inside a <cite>chroot</cite> and <cite>gdb
 outside of it, this is fairly easily fixed however. First off you need to
 provide <cite>gdb</cite> with the path of the executable as the path provided by the system
 is inside the chroot:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="c"># ps aux |grep main</span>
-<span class="c"># sudo gdb --pid XXX /tmp/container//SC-0/gateways/app/main</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># ps aux |grep main</span>
+<span class="c1"># sudo gdb --pid XXX /tmp/container//SC-0/gateways/app/main</span>
 </pre></div>
 </div>
 <p>Begin with finding the global namespace <cite>PID</cite> of the application you are
@@ -205,13 +205,13 @@ as of this writing.</p>
 <p>The <cite>LXC</cite> logs are controlled separately using two configuration options that
 needs to be added to the <cite>LXC</cite> configuration, available in
 <em>$CMAKE_INSTALL_PREFIX/etc/softwarecontainer.conf</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">lxc</span><span class="o">.</span><span class="n">logfile</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lxc</span><span class="o">.</span><span class="n">logfile</span>
 <span class="n">lxc</span><span class="o">.</span><span class="n">loglevel</span>
 </pre></div>
 </div>
 <p>The <cite>logfile</cite> is a pointer to the file which the log will be stored in. The
 valid <cite>loglevels</cite> are:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">FATAL</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">FATAL</span>
 <span class="n">ALERT</span>
 <span class="n">CRIT</span>
 <span class="n">ERROR</span>
@@ -309,8 +309,8 @@ to run <cite>GDB</cite> as root however, as already mentioned.</p>
       &copy;2016, Pelagicore AB.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../../_sources/chapters/debugging/index.rst.txt"

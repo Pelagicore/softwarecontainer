@@ -17,7 +17,7 @@
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" target="_top" xlink:title="softwarecontainer::\lGateway::id">
+<g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_gateway.html#ab36bbea283733b3714fa07d8c9d68c87" target="_top" xlink:title="Returns the ID of the gateway. ">
 <polygon fill="white" stroke="black" points="137,-0.5 137,-30.5 237,-30.5 237,-0.5 137,-0.5"/>
 <text text-anchor="start" x="145" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
 <text text-anchor="middle" x="187" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Gateway::id</text>

@@ -1,0 +1,6 @@
+<map id="softwarecontainer::Gateway::id" name="softwarecontainer::Gateway::id">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#abd136fffb30a625ca5ab4abe06adc680" title="Applies any configuration set by setConfig() " alt="" coords="189,5,323,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a989f08074e0f55b7af0f81815cae18ad" title="Spawn the proxy and use the supplied path for the socket. " alt="" coords="373,119,539,175"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#ae32068e630d51cb3e641e974eed2614c" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="187,123,325,164"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#af38a5c8ee0ff839a0134eefce61ba7a3" title="Restore system to the state prior to launching of gateway. " alt="" coords="189,188,323,229"/>
+</map>

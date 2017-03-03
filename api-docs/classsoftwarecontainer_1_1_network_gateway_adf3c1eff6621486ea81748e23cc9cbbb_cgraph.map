@@ -1,0 +1,12 @@
+<map id="softwarecontainer::NetworkGateway::teardownGateway" name="softwarecontainer::NetworkGateway::teardownGateway">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_netlink.html#a3255285a947564b8c8cd62b395fd9345" title="Get all addresses associated with the given interface index. " alt="" coords="303,5,458,47"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_netlink.html#aae62bee733a83c519d94b8abe4495319" title="Check that the device given is a network bridge. " alt="" coords="314,71,447,112"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="303,136,459,177"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_netlink.html#aefff579caa3b1a56a33993daeb310d5f" title="checks if an address is present in the given list " alt="" coords="311,201,451,243"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_netlink.html#a8cbb4583356449b812c4e7e70e54efdd" title="Bring a given interface down. " alt="" coords="314,267,447,308"/>
+<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_netlink.html#a2b2c0295e9735db64d82d9ed911bdfc7" title="Bring the given interface up. " alt="" coords="314,332,447,373"/>
+<area shape="rect" id="node10" href="$classsoftwarecontainer_1_1_netlink.html#aa71449f361a756717daadc81dd1a6ceb" title="Sets an ip address as the default gateway. " alt="" coords="289,397,472,439"/>
+<area shape="rect" id="node11" href="$classsoftwarecontainer_1_1_netlink.html#a17579e4a28ddbc007bc4108510a79656" title="Sets an IP address for a network link. " alt="" coords="314,463,447,504"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_netlink.html#a04e7cfff31da1e4c4576a052346ea598" title="check for a kernel dump, and if not present, try to get one " alt="" coords="520,71,699,112"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_netlink.html#ade23853f3df53186bd2601b3749db5e4" title="get a dump of all links, addresses and routes from the kernel. " alt="" coords="747,71,908,112"/>
+</map>

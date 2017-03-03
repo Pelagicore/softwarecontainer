@@ -1,3 +1,4 @@
 <map id="softwarecontainer::FileToolkitWithUndo::tempDir" name="softwarecontainer::FileToolkitWithUndo::tempDir">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a8f6b5cda214c9e412ab73313bc95d785" title="bindMount Bind mount a src directory to another position dst. " alt="" coords="193,5,333,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="381,13,595,54"/>
 </map>

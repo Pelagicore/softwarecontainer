@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-f56521e 2017-02-23 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-2487754 2017-03-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-f56521e 2017-02-23',
+        VERSION:     '0.18.0-2487754 2017-03-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -79,60 +79,60 @@ be in a bad state.</p>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example service manifest, with the capabilities for getting and setting temperature:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-  <span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
-  <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[{</span>
-      <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.temperatureservice.gettemperature&quot;</span><span class="p">,</span>
-      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
-          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dbus&quot;</span><span class="p">,</span>
-          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
-              <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.temperatureservice.gettemperature&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
+          <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;dbus&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
+              <span class="s2">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[]</span>
           <span class="p">},</span> <span class="p">{</span>
-              <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Introspect&quot;</span>
+              <span class="s2">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[{</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;outgoing&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;Introspect&quot;</span>
               <span class="p">},</span> <span class="p">{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Echo&quot;</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;outgoing&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;Echo&quot;</span>
               <span class="p">},</span> <span class="p">{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;GetTemperature&quot;</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;outgoing&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GetTemperature&quot;</span>
               <span class="p">},</span> <span class="p">{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;incoming&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;TemperatureChanged&quot;</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;incoming&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;TemperatureChanged&quot;</span>
               <span class="p">}]</span>
           <span class="p">}]</span>
       <span class="p">}]</span>
   <span class="p">},</span> <span class="p">{</span>
-      <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.temperatureservice.settemperature&quot;</span><span class="p">,</span>
-      <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
-          <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;dbus&quot;</span><span class="p">,</span>
-          <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
-              <span class="s">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[]</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.temperatureservice.settemperature&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
+          <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;dbus&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
+              <span class="s2">&quot;dbus-gateway-config-session&quot;</span><span class="p">:</span> <span class="p">[]</span>
           <span class="p">},</span> <span class="p">{</span>
-              <span class="s">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Introspect&quot;</span>
+              <span class="s2">&quot;dbus-gateway-config-system&quot;</span><span class="p">:</span> <span class="p">[{</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;outgoing&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;org.freedesktop.DBus.Introspectable&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;Introspect&quot;</span>
               <span class="p">},</span> <span class="p">{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;Echo&quot;</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;outgoing&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;Echo&quot;</span>
               <span class="p">},</span> <span class="p">{</span>
-                  <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;outgoing&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;interface&quot;</span><span class="p">:</span> <span class="s">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;object-path&quot;</span><span class="p">:</span> <span class="s">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
-                  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;SetTemperature&quot;</span>
+                  <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;outgoing&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="s2">&quot;com.pelagicore.TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;object-path&quot;</span><span class="p">:</span> <span class="s2">&quot;/com/pelagicore/TemperatureService&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;SetTemperature&quot;</span>
               <span class="p">}]</span>
           <span class="p">}]</span>
       <span class="p">}]</span>
@@ -406,19 +406,19 @@ gateway for any graphics hardware access needed.</p>
 <div class="section" id="id2">
 <h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example manifest defining Wayland access:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
-    <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[{</span>
-        <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.example.wayland-access&quot;</span><span class="p">,</span>
-        <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
-            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;wayland&quot;</span><span class="p">,</span>
-            <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
-                <span class="s">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.example.wayland-access&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;wayland&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
+                <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="n">true</span>
             <span class="p">}]</span>
         <span class="p">},</span> <span class="p">{</span>
-            <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;devicenode&quot;</span><span class="p">,</span>
-            <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
-                <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;/dev/dri/card0&quot;</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;devicenode&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;/dev/dri/card0&quot;</span>
             <span class="p">}]</span>
         <span class="p">}]</span>
     <span class="p">}]</span>
@@ -476,61 +476,61 @@ a SoftwareContainer, configure its related gateways to mark packages and finally
 about shaping traffic on host.</p>
 <p>Create a service manifest to let container send/receive files on network and mark network classifier
 cgroup. Then add this manifest to default manifest folder :</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test.cap.netcls&quot;</span><span class="p">,</span>
-            <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test.cap.netcls&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
-                            <span class="s">&quot;setting&quot;</span><span class="p">:</span> <span class="s">&quot;net_cls.classid&quot;</span><span class="p">,</span>
-                            <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="s">&quot;0x100001&quot;</span>
+                            <span class="s2">&quot;setting&quot;</span><span class="p">:</span> <span class="s2">&quot;net_cls.classid&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0x100001&quot;</span>
                         <span class="p">}</span>
                     <span class="p">],</span>
-                    <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;cgroups&quot;</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;cgroups&quot;</span>
                 <span class="p">}</span>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;network.accept-ping&quot;</span><span class="p">,</span>
-            <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;network.accept-ping&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
-                            <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;OUTGOING&quot;</span><span class="p">,</span>
-                            <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;OUTGOING&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
                                 <span class="p">{</span>
-                                    <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
-                                    <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;icmp&quot;</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="s2">&quot;icmp&quot;</span>
                                 <span class="p">},</span>
                                 <span class="p">{</span>
-                                    <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
-                                    <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                        <span class="s">&quot;udp&quot;</span><span class="p">,</span>
-                                        <span class="s">&quot;tcp&quot;</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                        <span class="s2">&quot;udp&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;tcp&quot;</span>
                                     <span class="p">]</span>
                                 <span class="p">}</span>
                             <span class="p">]</span>
                         <span class="p">},</span>
                         <span class="p">{</span>
-                            <span class="s">&quot;direction&quot;</span><span class="p">:</span> <span class="s">&quot;INCOMING&quot;</span><span class="p">,</span>
-                            <span class="s">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;INCOMING&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
                                 <span class="p">{</span>
-                                    <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
-                                    <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="s">&quot;icmp&quot;</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="s2">&quot;icmp&quot;</span>
                                 <span class="p">},</span>
                                 <span class="p">{</span>
-                                    <span class="s">&quot;host&quot;</span><span class="p">:</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
-                                    <span class="s">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                        <span class="s">&quot;udp&quot;</span><span class="p">,</span>
-                                        <span class="s">&quot;tcp&quot;</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                        <span class="s2">&quot;udp&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;tcp&quot;</span>
                                     <span class="p">]</span>
                                 <span class="p">}</span>
                             <span class="p">]</span>
                         <span class="p">}</span>
                     <span class="p">],</span>
-                    <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;network&quot;</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;network&quot;</span>
                 <span class="p">}</span>
             <span class="p">]</span>
         <span class="p">}</span>
@@ -539,26 +539,26 @@ cgroup. Then add this manifest to default manifest folder :</p>
 </pre></div>
 </div>
 <p>Then, from the build directory, run the agent:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">-</span><span class="n">E</span> <span class="n">softwarecontainer</span><span class="o">-</span><span class="n">agent</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">E</span> <span class="n">softwarecontainer</span><span class="o">-</span><span class="n">agent</span>
 </pre></div>
 </div>
 <p>Next, we will start a new container:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Create</span> \
-<span class="s">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
+<span class="s1">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
 
 </pre></div>
 </div>
 <p>Now we can set our prepared capabilities to mark network packages :</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
 <span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetCapabilities</span> \
 <span class="mi">0</span> \
-<span class="s">&quot;[&#39;network.accept-ping&#39;,</span>
-<span class="s">&#39;test.cap.netcls&#39;</span><span class="p">]</span><span class="s">&quot;</span>
+<span class="s2">&quot;[&#39;network.accept-ping&#39;,</span>
+<span class="s1">&#39;test.cap.netcls&#39;</span><span class="p">]</span><span class="s2">&quot;</span>
 
 </pre></div>
 </div>
@@ -566,7 +566,7 @@ cgroup. Then add this manifest to default manifest folder :</p>
 means every network package from this container will be marked with major class ID value 10 and minor
 class ID value 1. So it is wise to configure traffic shaping with <code class="docutils literal"><span class="pre">tc</span></code> (please check <a class="reference external" href="http://www.tldp.org/HOWTO/html_single/Traffic-Control-HOWTO/#components">tc components</a>
 for more information about tc) according to indicated class IDs in the host :</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">tc</span> <span class="n">qdisc</span> <span class="n">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">root</span> <span class="n">handle</span> <span class="mi">10</span><span class="p">:</span> <span class="n">htb</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">tc</span> <span class="n">qdisc</span> <span class="n">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">root</span> <span class="n">handle</span> <span class="mi">10</span><span class="p">:</span> <span class="n">htb</span>
 <span class="n">sudo</span> <span class="n">tc</span> <span class="k">class</span> <span class="nc">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">parent</span> <span class="mi">10</span><span class="p">:</span> <span class="n">classid</span> <span class="mi">10</span><span class="p">:</span><span class="mi">1</span> <span class="n">htb</span> <span class="n">rate</span> <span class="mi">1</span><span class="n">mbit</span>
 <span class="n">sudo</span> <span class="n">tc</span> <span class="nb">filter</span> <span class="n">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">parent</span> <span class="mi">10</span><span class="p">:</span> <span class="n">protocol</span> <span class="n">ip</span> <span class="n">prio</span> <span class="mi">10</span> <span class="n">handle</span> <span class="mi">1</span><span class="p">:</span> <span class="n">cgroup</span>
 </pre></div>
@@ -687,8 +687,8 @@ default behavior in LXC.</p>
       &copy;2016, Pelagicore AB.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../../_sources/chapters/integration-guidelines/00-index.rst.txt"

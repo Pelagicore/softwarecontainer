@@ -1,0 +1,8 @@
+<map id="softwarecontainer::waitForProcessTermination" name="softwarecontainer::waitForProcessTermination">
+<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#ae8835f968ab1d43b4a395b0097490734" title="existsInFileSystem Check if path exists " alt="" coords="235,5,369,47"/>
+<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="235,71,369,112"/>
+<area shape="rect" id="node4" href="$namespacesoftwarecontainer.html#acaa3372166baaae42d0d55577b99308e" title="isDirectoryEmpty Check if path is empty " alt="" coords="235,136,369,177"/>
+<area shape="rect" id="node5" href="$namespacesoftwarecontainer.html#a3a71c6d06c86e4f62e7f2b6d7c926f66" title="isFile Check if path is a file " alt="" coords="235,201,369,243"/>
+<area shape="rect" id="node6" href="$namespacesoftwarecontainer.html#acd78c8c457ea2f848b546ec21db98285" title="isPipe Check if path is a pipe " alt="" coords="235,267,369,308"/>
+<area shape="rect" id="node7" href="$namespacesoftwarecontainer.html#a21a5de23f41d3f27cf7d31994f518cc0" title="isSocket Check if path is a socket " alt="" coords="235,332,369,373"/>
+</map>

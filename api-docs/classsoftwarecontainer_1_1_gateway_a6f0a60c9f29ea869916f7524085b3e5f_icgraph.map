@@ -1,5 +1,6 @@
 <map id="softwarecontainer::Gateway::getContainer" name="softwarecontainer::Gateway::getContainer">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_device_node_gateway.html#a9e912027cad4fff3ed4d9a9581f45227" title="Implements Gateway::activateGateway. " alt="" coords="224,5,424,61"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21" title="Implements Gateway::activateGateway. " alt="" coords="209,85,439,126"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129" title="Implements Gateway::activateGateway. " alt="" coords="245,149,403,205"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_network_gateway.html#a8a08792ecd43b1694222ca286514ee21" title="Implements Gateway::activateGateway. " alt="" coords="213,5,442,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a8dc149286b57b259c95d53c130b9a129" title="Implements Gateway::activateGateway. " alt="" coords="249,70,406,126"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_wayland_gateway.html#a8d94bc12193d9066eaa851c749840d82" title="Gateway specific parsing of config elements. " alt="" coords="229,150,425,206"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_network_gateway.html#adf3c1eff6621486ea81748e23cc9cbbb" title="Implements Gateway::teardownGateway. " alt="" coords="209,229,445,271"/>
 </map>

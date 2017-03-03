@@ -1,4 +1,4 @@
 <map id="softwarecontainer::Gateway::setConfig" name="softwarecontainer::Gateway::setConfig">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="222,5,355,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#ab36bbea283733b3714fa07d8c9d68c87" title="Returns the ID of the gateway. " alt="" coords="222,5,355,47"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#a6f4192f75bcf7bace251112406d58451" title="Gateway specific parsing of config elements. " alt="" coords="192,71,385,112"/>
 </map>

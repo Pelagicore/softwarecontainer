@@ -1,3 +1,5 @@
 <map id="softwarecontainer::DBusGatewayInstance::DBusGatewayInstance" name="softwarecontainer::DBusGatewayInstance::DBusGatewayInstance">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#af421b6ffb3db76240a491b2302e78699" title="softwarecontainer::\lGateway::id" alt="" coords="219,13,352,54"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#ab36bbea283733b3714fa07d8c9d68c87" title="Returns the ID of the gateway. " alt="" coords="413,29,547,71"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5" title="Is the gateway activated or not? " alt="" coords="219,25,365,67"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_gateway.html#af38a5c8ee0ff839a0134eefce61ba7a3" title="Restore system to the state prior to launching of gateway. " alt="" coords="225,91,359,132"/>
 </map>

@@ -1,7 +1,4 @@
 <map id="softwarecontainer::DeviceNodeGateway::activateGateway" name="softwarecontainer::DeviceNodeGateway::activateGateway">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="261,63,401,119"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="461,5,594,47"/>
-<area shape="rect" id="node5" href="$namespacesoftwarecontainer.html#ae8835f968ab1d43b4a395b0097490734" title="existsInFileSystem Check if path exists " alt="" coords="264,143,399,184"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="253,208,409,249"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="457,70,597,126"/>
+<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#ae8835f968ab1d43b4a395b0097490734" title="existsInFileSystem Check if path exists " alt="" coords="253,5,388,47"/>
+<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="254,71,387,112"/>
 </map>

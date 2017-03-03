@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SoftwareContainer using LXC &#8212; softwarecontainer 0.18.0-f56521e 2017-02-23 documentation</title>
+    <title>SoftwareContainer using LXC &#8212; softwarecontainer 0.18.0-2487754 2017-03-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-f56521e 2017-02-23',
+        VERSION:     '0.18.0-2487754 2017-03-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -90,47 +90,47 @@ namely the following:</p>
 <div class="section" id="full-example">
 <h3>Full example<a class="headerlink" href="#full-example" title="Permalink to this headline">¶</a></h3>
 <p>This is the full template used.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/bin/sh -e</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -e</span>
 
-<span class="c">#</span>
-<span class="c"># Copyright (C) 2016-2017 Pelagicore AB</span>
-<span class="c">#</span>
-<span class="c"># Permission to use, copy, modify, and/or distribute this software for</span>
-<span class="c"># any purpose with or without fee is hereby granted, provided that the</span>
-<span class="c"># above copyright notice and this permission notice appear in all copies.</span>
-<span class="c">#</span>
-<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span>
-<span class="c"># WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span>
-<span class="c"># WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span>
-<span class="c"># BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span>
-<span class="c"># OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span>
-<span class="c"># WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span>
-<span class="c"># ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span>
-<span class="c"># SOFTWARE.</span>
-<span class="c">#</span>
-<span class="c"># For further information see LICENSE</span>
-<span class="c">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2016-2017 Pelagicore AB</span>
+<span class="c1">#</span>
+<span class="c1"># Permission to use, copy, modify, and/or distribute this software for</span>
+<span class="c1"># any purpose with or without fee is hereby granted, provided that the</span>
+<span class="c1"># above copyright notice and this permission notice appear in all copies.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL</span>
+<span class="c1"># WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED</span>
+<span class="c1"># WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR</span>
+<span class="c1"># BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES</span>
+<span class="c1"># OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,</span>
+<span class="c1"># WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,</span>
+<span class="c1"># ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS</span>
+<span class="c1"># SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># For further information see LICENSE</span>
+<span class="c1">#</span>
 
-<span class="c">#</span>
-<span class="c"># This LXC template is based on the busybox one shipped with LXC.</span>
-<span class="c"># Original author: Daniel Lezcano &lt;daniel.lezcano@free.fr&gt;</span>
-<span class="c">#</span>
-<span class="c"># LXC is free software, released under GNU LGPL 2.1</span>
-<span class="c">#</span>
-<span class="c"># Reader&#39;s guide: to get the full understanding of how the containers are</span>
-<span class="c"># set up in this system, make sure to read the lxc configuration file</span>
-<span class="c"># for this project (softwarecontainer.conf) where pty allocation, and some</span>
-<span class="c"># further mount points, as well as networking set up, is listed.</span>
-<span class="c">#</span>
+<span class="c1">#</span>
+<span class="c1"># This LXC template is based on the busybox one shipped with LXC.</span>
+<span class="c1"># Original author: Daniel Lezcano &lt;daniel.lezcano@free.fr&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># LXC is free software, released under GNU LGPL 2.1</span>
+<span class="c1">#</span>
+<span class="c1"># Reader&#39;s guide: to get the full understanding of how the containers are</span>
+<span class="c1"># set up in this system, make sure to read the lxc configuration file</span>
+<span class="c1"># for this project (softwarecontainer.conf) where pty allocation, and some</span>
+<span class="c1"># further mount points, as well as networking set up, is listed.</span>
+<span class="c1">#</span>
 
 create_rootfs<span class="o">()</span>
 <span class="o">{</span>
     <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$1</span>
 
-    <span class="c"># This is the rootfs tree in the container. Apart from the files we</span>
-    <span class="c"># create below, this will be empty, and most directories will be bind</span>
-    <span class="c"># mounted from the host into the container (/lib etc, see below and</span>
-    <span class="c"># the configuration file).</span>
+    <span class="c1"># This is the rootfs tree in the container. Apart from the files we</span>
+    <span class="c1"># create below, this will be empty, and most directories will be bind</span>
+    <span class="c1"># mounted from the host into the container (/lib etc, see below and</span>
+    <span class="c1"># the configuration file).</span>
 
     <span class="nv">tree</span><span class="o">=</span><span class="s2">&quot;\</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/bin \</span>
@@ -151,21 +151,21 @@ create_rootfs<span class="o">()</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/gateways \</span>
 <span class="s2">        </span><span class="nv">$rootfs</span><span class="s2">/</span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="c"># The tree needs to be writeable for the owner and read/execute for all</span>
-    mkdir -p <span class="nv">$tree</span> <span class="o">||</span> <span class="k">return</span> 1
-    chmod <span class="m">755</span> <span class="nv">$tree</span> <span class="o">||</span> <span class="k">return</span> 1
+    <span class="c1"># The tree needs to be writeable for the owner and read/execute for all</span>
+    mkdir -p <span class="nv">$tree</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+    chmod <span class="m">755</span> <span class="nv">$tree</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
 
-    <span class="c"># Create entry for root user in /etc/passwd and /etc/group</span>
+    <span class="c1"># Create entry for root user in /etc/passwd and /etc/group</span>
     <span class="nb">echo</span> <span class="s2">&quot;root:x:0:0:root:/root:/bin/sh&quot;</span> &gt;&gt; <span class="nv">$rootfs</span>/etc/passwd
     <span class="nb">echo</span> <span class="s2">&quot;root:x:0:root&quot;</span> &gt;&gt; <span class="nv">$rootfs</span>/etc/group
 
-    <span class="c"># We may not have a shm fs mounted, so tell pulse not to use it.</span>
+    <span class="c1"># We may not have a shm fs mounted, so tell pulse not to use it.</span>
     <span class="nb">echo</span> <span class="s2">&quot;disable-shm=yes&quot;</span> &gt;&gt; <span class="nv">$rootfs</span>/etc/pulse/client.conf
 
-    <span class="c"># We generate a unique machine id for D-Bus.</span>
+    <span class="c1"># We generate a unique machine id for D-Bus.</span>
     dbus-uuidgen --ensure<span class="o">=</span><span class="nv">$rootfs</span>/etc/machine-id
 
-    <span class="c"># Copy DNS info into the guest, if available</span>
+    <span class="c1"># Copy DNS info into the guest, if available</span>
     <span class="k">if</span> <span class="o">[</span> -e /etc/resolv.conf <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         cp /etc/resolv.conf <span class="nv">$rootfs</span>/etc/resolv.conf
     <span class="k">fi</span>
@@ -173,14 +173,14 @@ create_rootfs<span class="o">()</span>
     <span class="nv">BUSYBOX</span><span class="o">=</span><span class="k">$(</span>which busybox<span class="k">)</span>
     <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         <span class="nb">echo</span> <span class="s2">&quot;busybox executable is not accessible&quot;</span>
-        <span class="k">return</span> 1
+        <span class="k">return</span> <span class="m">1</span>
     <span class="k">fi</span>
 
-    <span class="c"># We will bind-mount busybox to this location in the container later</span>
+    <span class="c1"># We will bind-mount busybox to this location in the container later</span>
     touch <span class="nv">$rootfs</span>/bin/busybox
     chmod <span class="m">755</span> <span class="nv">$rootfs</span>/bin/busybox
 
-    <span class="nb">cd</span> <span class="nv">$rootfs</span>/bin <span class="o">||</span> <span class="k">return</span> 1
+    <span class="nb">cd</span> <span class="nv">$rootfs</span>/bin <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
     <span class="nv">COMMANDS</span><span class="o">=</span><span class="k">$(</span><span class="nv">$BUSYBOX</span> --list<span class="k">)</span>
     <span class="k">for</span> COMMAND in <span class="nv">$COMMANDS</span><span class="p">;</span> <span class="k">do</span>
         ln -s busybox <span class="nv">$COMMAND</span>
@@ -189,25 +189,25 @@ create_rootfs<span class="o">()</span>
     <span class="nv">INITLXCFILE</span><span class="o">=</span><span class="k">$(</span>which init.lxc<span class="k">)</span>
     <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         <span class="nb">echo</span> <span class="s2">&quot;init.lxc not found&quot;</span>
-        <span class="k">return</span> 1
+        <span class="k">return</span> <span class="m">1</span>
     <span class="k">fi</span>
     touch <span class="nv">$rootfs</span>/bin/init.lxc
     chmod <span class="m">755</span> <span class="nv">$rootfs</span>/bin/init.lxc
 
-    <span class="c"># If we have network enabled, we need iptables</span>
+    <span class="c1"># If we have network enabled, we need iptables</span>
     <span class="k">if</span> <span class="o">[</span> <span class="si">${</span><span class="nv">ENABLE_NETWORKGATEWAY</span><span class="si">}</span> <span class="o">=</span> <span class="s2">&quot;ON&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         <span class="nv">IPTABLES</span><span class="o">=</span><span class="k">$(</span>which iptables<span class="k">)</span>
         <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
             <span class="nb">echo</span> <span class="s2">&quot;iptables executable is not accessible&quot;</span>
-            <span class="k">return</span> 1
+            <span class="k">return</span> <span class="m">1</span>
         <span class="k">fi</span>
 
-        <span class="c"># We will bind-mount iptables to this location in the container later</span>
+        <span class="c1"># We will bind-mount iptables to this location in the container later</span>
         touch <span class="nv">$rootfs</span>/bin/iptables
         chmod <span class="m">755</span> <span class="nv">$rootfs</span>/bin/busybox
     <span class="k">fi</span>
 
-    <span class="k">return</span> 0
+    <span class="k">return</span> <span class="m">0</span>
 <span class="o">}</span>
 
 copy_configuration<span class="o">()</span>
@@ -215,11 +215,11 @@ copy_configuration<span class="o">()</span>
     <span class="nv">path</span><span class="o">=</span><span class="nv">$1</span>
     <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$2</span>
 
-    <span class="c"># Set some non-static mount points, the rest are already in the config file</span>
+    <span class="c1"># Set some non-static mount points, the rest are already in the config file</span>
     <span class="nb">echo</span> <span class="s2">&quot;lxc.rootfs = </span><span class="nv">$rootfs</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
     <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2"> </span><span class="nv">$rootfs</span><span class="s2">/</span><span class="si">${</span><span class="nv">CMAKE_INSTALL_PREFIX</span><span class="si">}</span><span class="s2"> none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
 
-    <span class="c"># Bind-mount the necessary binaries into the container</span>
+    <span class="c1"># Bind-mount the necessary binaries into the container</span>
     <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>which init.lxc<span class="k">)</span><span class="s2"> bin/init.lxc none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
     <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>which busybox<span class="k">)</span><span class="s2"> bin/busybox none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
 
@@ -227,7 +227,7 @@ copy_configuration<span class="o">()</span>
         <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="k">$(</span>which iptables<span class="k">)</span><span class="s2"> bin/iptables none ro,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
     <span class="k">fi</span>
 
-    <span class="c"># If the gateway dir variable is set, add a mount entry for that one also.</span>
+    <span class="c1"># If the gateway dir variable is set, add a mount entry for that one also.</span>
     <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;</span><span class="nv">$GATEWAY_DIR</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
         <span class="nb">echo</span> <span class="s2">&quot;lxc.mount.entry = </span><span class="nv">$GATEWAY_DIR</span><span class="s2"> gateways none rw,bind 0 0&quot;</span> &gt;&gt; <span class="nv">$path</span>/config
         chmod <span class="m">777</span> <span class="nv">$GATEWAY_DIR</span>
@@ -237,34 +237,34 @@ copy_configuration<span class="o">()</span>
 <span class="nv">options</span><span class="o">=</span><span class="k">$(</span>getopt -o p:n: -l path:,name:,rootfs: -- <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="k">)</span>
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nb">echo</span> <span class="s2">&quot;Usage: </span><span class="k">$(</span>basename <span class="nv">$0</span><span class="k">)</span><span class="s2"> -p|--path=&lt;path&gt; --rootfs=&lt;path&gt;&quot;</span>
-    <span class="nb">exit </span>1
+    <span class="nb">exit</span> <span class="m">1</span>
 <span class="k">fi</span>
-<span class="nb">eval set</span> -- <span class="s2">&quot;</span><span class="nv">$options</span><span class="s2">&quot;</span>
+<span class="nb">eval</span> <span class="nb">set</span> -- <span class="s2">&quot;</span><span class="nv">$options</span><span class="s2">&quot;</span>
 
 <span class="k">while</span> <span class="nb">true</span>
 <span class="k">do</span>
     <span class="k">case</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> in
-        -p<span class="p">|</span>--path<span class="o">)</span>      <span class="nv">path</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift </span>2<span class="p">;;</span>
-        --rootfs<span class="o">)</span>       <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift </span>2<span class="p">;;</span>
-        --<span class="o">)</span>             <span class="nb">shift </span>1<span class="p">;</span> <span class="nb">break</span> <span class="p">;;</span>
+        -p<span class="p">|</span>--path<span class="o">)</span>      <span class="nv">path</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift</span> <span class="m">2</span><span class="p">;;</span>
+        --rootfs<span class="o">)</span>       <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$2</span><span class="p">;</span> <span class="nb">shift</span> <span class="m">2</span><span class="p">;;</span>
+        --<span class="o">)</span>             <span class="nb">shift</span> <span class="m">1</span><span class="p">;</span> <span class="nb">break</span> <span class="p">;;</span>
         *<span class="o">)</span>              <span class="nb">break</span> <span class="p">;;</span>
     <span class="k">esac</span>
 <span class="k">done</span>
 
 <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">&quot;</span> !<span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nb">echo</span> <span class="s2">&quot;This script should be run as &#39;root&#39;&quot;</span>
-    <span class="nb">exit </span>1
+    <span class="nb">exit</span> <span class="m">1</span>
 <span class="k">fi</span>
 
 <span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;</span><span class="nv">$path</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nb">echo</span> <span class="s2">&quot;&#39;path&#39; parameter is required&quot;</span>
-    <span class="nb">exit </span>1
+    <span class="nb">exit</span> <span class="m">1</span>
 <span class="k">fi</span>
 
-<span class="c"># detect rootfs (either from contents in config, or by using $path</span>
+<span class="c1"># detect rootfs (either from contents in config, or by using $path</span>
 <span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;</span><span class="nv">$rootfs</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nv">config</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$path</span><span class="s2">/config&quot;</span>
-    <span class="k">if</span> grep -q <span class="s1">&#39;^lxc.rootfs&#39;</span> <span class="nv">$config</span> 2&gt;/dev/null <span class="p">;</span> <span class="k">then</span>
+    <span class="k">if</span> grep -q <span class="s1">&#39;^lxc.rootfs&#39;</span> <span class="nv">$config</span> <span class="m">2</span>&gt;/dev/null <span class="p">;</span> <span class="k">then</span>
         <span class="nv">rootfs</span><span class="o">=</span><span class="sb">`</span>grep <span class="s1">&#39;lxc.rootfs =&#39;</span> <span class="nv">$config</span> <span class="p">|</span> awk -F<span class="o">=</span> <span class="s1">&#39;{ print $2 }&#39;</span><span class="sb">`</span>
     <span class="k">else</span>
         <span class="nv">rootfs</span><span class="o">=</span><span class="nv">$path</span>/rootfs
@@ -274,13 +274,13 @@ copy_configuration<span class="o">()</span>
 create_rootfs <span class="nv">$rootfs</span>
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nb">echo</span> <span class="s2">&quot;failed to set up softwarecontainer rootfs&quot;</span>
-    <span class="nb">exit </span>1
+    <span class="nb">exit</span> <span class="m">1</span>
 <span class="k">fi</span>
 
 copy_configuration <span class="nv">$path</span> <span class="nv">$rootfs</span>
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
     <span class="nb">echo</span> <span class="s2">&quot;failed to write configuration file&quot;</span>
-    <span class="nb">exit </span>1
+    <span class="nb">exit</span> <span class="m">1</span>
 <span class="k">fi</span>
 </pre></div>
 </div>
@@ -306,15 +306,15 @@ into the container. These are then amended by the template when run.</p>
 </div>
 <div class="section" id="id1">
 <h3>Full example:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash"><div class="highlight"><pre>lxc.utsname<span class="o">=</span>contained
+<div class="highlight-bash"><div class="highlight"><pre><span></span>lxc.utsname<span class="o">=</span>contained
 
-lxc.autodev <span class="o">=</span> 1
-lxc.tty <span class="o">=</span> 1
-lxc.pts <span class="o">=</span> 1
+lxc.autodev <span class="o">=</span> <span class="m">1</span>
+lxc.tty <span class="o">=</span> <span class="m">1</span>
+lxc.pts <span class="o">=</span> <span class="m">1</span>
 
-<span class="c">#</span>
-<span class="c"># TODO: Remove this when we get the shutdown timeout issue fixed.</span>
-<span class="c">#</span>
+<span class="c1">#</span>
+<span class="c1"># TODO: Remove this when we get the shutdown timeout issue fixed.</span>
+<span class="c1">#</span>
 lxc.haltsignal <span class="o">=</span> SIGKILL
 
 lxc.network.type <span class="o">=</span> veth
@@ -322,16 +322,16 @@ lxc.network.link <span class="o">=</span> lxcbr0
 lxc.network.name <span class="o">=</span> eth0
 
 
-<span class="c"># Auto-mount /proc and /sys with reasonable settings</span>
+<span class="c1"># Auto-mount /proc and /sys with reasonable settings</span>
 lxc.mount.auto <span class="o">=</span> proc sys
 
-<span class="c"># Note: mounting all of /usr includes /usr/bin, /usr/lib64 and /usr/local.</span>
-lxc.mount.entry <span class="o">=</span> /usr usr none ro,bind <span class="m">0</span> 0
-lxc.mount.entry <span class="o">=</span> /lib lib none ro,bind <span class="m">0</span> 0
+<span class="c1"># Note: mounting all of /usr includes /usr/bin, /usr/lib64 and /usr/local.</span>
+lxc.mount.entry <span class="o">=</span> /usr usr none ro,bind <span class="m">0</span> <span class="m">0</span>
+lxc.mount.entry <span class="o">=</span> /lib lib none ro,bind <span class="m">0</span> <span class="m">0</span>
 
-<span class="c"># These are optional, as they may not exist in the host. If they exist</span>
-<span class="c"># they will be bind mounted from host to container.</span>
-lxc.mount.entry <span class="o">=</span> /lib64 lib64 none ro,bind,optional <span class="m">0</span> 0
+<span class="c1"># These are optional, as they may not exist in the host. If they exist</span>
+<span class="c1"># they will be bind mounted from host to container.</span>
+lxc.mount.entry <span class="o">=</span> /lib64 lib64 none ro,bind,optional <span class="m">0</span> <span class="m">0</span>
 </pre></div>
 </div>
 </div>
@@ -402,8 +402,8 @@ lxc.mount.entry <span class="o">=</span> /lib64 lib64 none ro,bind,optional <spa
       &copy;2016, Pelagicore AB.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../../_sources/chapters/lxc/index.rst.txt"

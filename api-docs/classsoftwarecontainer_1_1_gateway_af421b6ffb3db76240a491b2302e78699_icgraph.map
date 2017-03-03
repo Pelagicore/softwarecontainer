@@ -1,9 +1,0 @@
-<map id="softwarecontainer::Gateway::id" name="softwarecontainer::Gateway::id">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#abd136fffb30a625ca5ab4abe06adc680" title="Applies any configuration set by setConfig() " alt="" coords="203,5,336,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a989f08074e0f55b7af0f81815cae18ad" title="Spawn the proxy and use the supplied path for the socket. " alt="" coords="187,70,352,126"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_gateway.html#ae32068e630d51cb3e641e974eed2614c" title="Configure this gateway according to the supplied JSON configuration string. " alt="" coords="200,149,339,191"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_gateway.html#af38a5c8ee0ff839a0134eefce61ba7a3" title="Restore system to the state prior to launching of gateway. " alt="" coords="202,215,337,256"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#af84424bf49120532516ea0660b5857f1" title="Activates both dbus session instances. " alt="" coords="405,5,566,47"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#aba926ebbabc356d598ee8d32f37d7f6b" title="Sets config for both dbus session instances. " alt="" coords="400,149,571,191"/>
-<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_d_bus_gateway.html#acc3278f8b78471a72c908f16b7aa36c6" title="Restore system to the state prior to launching of gateway. " alt="" coords="401,215,569,256"/>
-</map>

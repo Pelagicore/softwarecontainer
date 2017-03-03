@@ -1,3 +1,4 @@
 <map id="softwarecontainer::WaylandGateway::readConfigElement" name="softwarecontainer::WaylandGateway::readConfigElement">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="249,13,383,54"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f" title="Get a handle to the associated container. " alt="" coords="249,5,405,47"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_j_s_o_n_parser.html#a7ea50df505b43684c4a1d82ca6cb6e82" title="Reads a string from a JSON Object. " alt="" coords="261,71,394,112"/>
 </map>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Service manifests &#8212; softwarecontainer 0.18.0-f56521e 2017-02-23 documentation</title>
+    <title>Service manifests &#8212; softwarecontainer 0.18.0-2487754 2017-03-03 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-f56521e 2017-02-23',
+        VERSION:     '0.18.0-2487754 2017-03-03',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -86,42 +86,42 @@ separately in more detail.</p>
 <div class="section" id="full-manifest">
 <h4>Full manifest<a class="headerlink" href="#full-manifest" title="Permalink to this headline">¶</a></h4>
 <p>Below is an example of a service manifest:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-   <span class="s">&quot;version&quot;</span><span class="p">:</span> <span class="s">&quot;1&quot;</span><span class="p">,</span>
-   <span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
        <span class="p">{</span>
-           <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
-           <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
                <span class="p">{</span>
-                   <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
-                   <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+                   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
                        <span class="p">{</span>
-                           <span class="s">&quot;config-part1&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                           <span class="s2">&quot;config-part1&quot;</span><span class="p">:</span> <span class="p">[]</span>
                        <span class="p">},</span>
                        <span class="p">{</span>
-                           <span class="s">&quot;config-part2&quot;</span><span class="p">:</span> <span class="p">[</span>
+                           <span class="s2">&quot;config-part2&quot;</span><span class="p">:</span> <span class="p">[</span>
                                <span class="p">{</span>
-                                   <span class="s">&quot;config-element1&quot;</span><span class="p">:</span> <span class="s">&quot;on&quot;</span><span class="p">,</span>
-                                   <span class="s">&quot;config-element2&quot;</span><span class="p">:</span> <span class="s">&quot;off&quot;</span><span class="p">,</span>
-                                   <span class="s">&quot;config-element3&quot;</span><span class="p">:</span> <span class="s">&quot;optionA&quot;</span><span class="p">,</span>
-                                   <span class="s">&quot;config-element4&quot;</span><span class="p">:</span> <span class="s">&quot;optionB&quot;</span>
+                                   <span class="s2">&quot;config-element1&quot;</span><span class="p">:</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span>
+                                   <span class="s2">&quot;config-element2&quot;</span><span class="p">:</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span>
+                                   <span class="s2">&quot;config-element3&quot;</span><span class="p">:</span> <span class="s2">&quot;optionA&quot;</span><span class="p">,</span>
+                                   <span class="s2">&quot;config-element4&quot;</span><span class="p">:</span> <span class="s2">&quot;optionB&quot;</span>
                                <span class="p">}</span>
                            <span class="p">]</span>
                        <span class="p">}</span>
                    <span class="p">]</span>
                <span class="p">},</span>
                <span class="p">{</span>
-                   <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-2&quot;</span><span class="p">,</span>
-                   <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-2&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
                <span class="p">}</span>
            <span class="p">]</span>
        <span class="p">},</span>
        <span class="p">{</span>
-           <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.AnotherResource&quot;</span><span class="p">,</span>
-           <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.acme.AnotherResource&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
                <span class="p">{</span>
-                   <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
-                   <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
                <span class="p">}</span>
            <span class="p">]</span>
        <span class="p">}</span>
@@ -133,15 +133,15 @@ separately in more detail.</p>
 <div class="section" id="breakdown-into-parts">
 <h4>Breakdown into parts<a class="headerlink" href="#breakdown-into-parts" title="Permalink to this headline">¶</a></h4>
 <p>In the above manifest, there is a list of <cite>capabilities</cite> objects defined by the <code class="docutils literal"><span class="pre">capabilities</span></code> key:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="s">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="o">...</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 <p>Each <cite>capability</cite> object has the keys <code class="docutils literal"><span class="pre">name</span></code> and <code class="docutils literal"><span class="pre">gateways</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
-    <span class="s">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="o">...</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -149,9 +149,9 @@ separately in more detail.</p>
 </div>
 <p>Where the <code class="docutils literal"><span class="pre">name</span></code> key has the capability name as value, and the <code class="docutils literal"><span class="pre">gateways</span></code> key has a list of objects
 associating gateway IDs with gateway configs:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="s">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="o">...</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -219,8 +219,8 @@ is described for each gateway, see <a class="reference internal" href="../gatewa
       &copy;2016, Pelagicore AB.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../../_sources/chapters/service-manifests/index.rst.txt"

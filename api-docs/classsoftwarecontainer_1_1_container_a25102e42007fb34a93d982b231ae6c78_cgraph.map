@@ -1,6 +1,6 @@
 <map id="softwarecontainer::Container::initialize" name="softwarecontainer::Container::initialize">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="203,34,343,90"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5" title="createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount wil..." alt="" coords="187,114,360,170"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="203,70,343,126"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5" title="createSharedMountPoint Make the mount point shared, ie new mount points created in one bind mount wil..." alt="" coords="187,150,360,206"/>
 <area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="411,5,545,47"/>
 <area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a44a19890b72a635b3134cb2a07fc0875" title="checks whether given path is already added to clean up handlers or not " alt="" coords="408,70,548,126"/>
 </map>
