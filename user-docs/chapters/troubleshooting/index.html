@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Troubleshooting &#8212; softwarecontainer 0.18.0-2487754 2017-03-03 documentation</title>
+    <title>Troubleshooting &#8212; softwarecontainer 0.18.0-cfffea9 2017-03-06 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-2487754 2017-03-03',
+        VERSION:     '0.18.0-cfffea9 2017-03-06',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -74,6 +74,15 @@ session bus instead.</li>
 is started. This is the case because when softwarecontainer sets up the container it will look
 for the socket pointed out by <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code>, and mount it into the container, so that
 socket has to exist.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">How can I check the CPU usage of an application?</p>
+<blockquote>
+<div><ul class="simple">
+<li>When a command is executed in the container via the D-Bus API the return value contains
+the process ID, see <a class="reference internal" href="../api/index.html#dbus-execute"><span class="std std-ref">D-Bus execute</span></a>. This is the host pid of the
+process and can be used (e.g. with <code class="docutils literal"><span class="pre">ps</span></code>) from outside the container.</li>
 </ul>
 </div></blockquote>
 </li>

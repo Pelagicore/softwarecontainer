@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-2487754 2017-03-03 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-cfffea9 2017-03-06 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-2487754 2017-03-03',
+        VERSION:     '0.18.0-cfffea9 2017-03-06',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -468,7 +468,7 @@ network starvation scenarios.</p>
 to tag network packets with a class identifier. It is possible to make each SoftwareContainer produce
 network packages with different class id using different capabilities to set network classifier cgroup.
 This way <code class="docutils literal"><span class="pre">tc</span></code> can be used to assign different priorities to packets from different cgroups.</p>
-<p>The network classifier cgroup is supported to mark network packages by the <a class="reference internal" href="../gateways/10-cgroups-gateway.html#cgroups-gateway"><span class="std std-ref">CGroups gateway</span></a>.</p>
+<p>The network classifier cgroup is supported to mark network packages by the <a class="reference internal" href="../gateways/00-index.html#cgroups-gateway"><span class="std std-ref">CGroups gateway</span></a>.</p>
 <div class="section" id="id3">
 <h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example way of marking network packages belonging to a container. The example aims to create

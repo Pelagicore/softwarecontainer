@@ -22,7 +22,7 @@ Error Handling
 All methods in this API can and will return D-Bus errors on failure. All calls
 that don't return a D-Bus error have worked successfully. Any call that returns
 a D-Bus error has failed. All calls that change a state and raise a D-Bus error
-shall have their side effects documented in this chapter. 
+shall have their side effects documented in this chapter.
 
 Methods
 -------
@@ -66,6 +66,8 @@ container with all reserved sources.
 
 |
 
+.. _dbus-execute:
+
 Execute
 -------
 Launches the specified application/code in the container.
@@ -80,7 +82,7 @@ Launches the specified application/code in the container.
 |
 
 :Return Values:
-        :pid: ``int32`` PID of the process run inside the container.
+        :pid: ``int32`` PID of process running in the container, as seen by the host.
 
 List
 ----
@@ -148,5 +150,3 @@ Introspection
 
 Using ``org.freedesktop.DBus.Introspectable.Introspect`` interface, methods of
 SoftwareContainerAgent D-Bus API can be observed.
-
-
