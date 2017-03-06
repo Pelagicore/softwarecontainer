@@ -155,7 +155,10 @@ class EnvironmentHelper(Helper):
     # Below methods are executed on the host (in the tests)
     def env_var(self, name):
         all_vars = self.__all_env_vars(self._base_path)
-        return all_vars[name]
+        if name in all_vars:
+            return all_vars[name]
+        else:
+            return None
 
     # Private methods - helpers etc.
     def __all_env_vars(self, base_path):

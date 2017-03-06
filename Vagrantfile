@@ -50,11 +50,11 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/system-config/systemd-network-startup-timeout.sh"
 
     # Use apt-cacher on our apt cache server
-    if ENV['APT_CACHE_SERVER'] then
-        config.vm.provision "shell",
-            args: [ENV['APT_CACHE_SERVER']],
-            path: "cookbook/system-config/apt-cacher.sh"
-    end
+#    if ENV['APT_CACHE_SERVER'] then
+#        config.vm.provision "shell",
+#            args: [ENV['APT_CACHE_SERVER']],
+#            path: "cookbook/system-config/apt-cacher.sh"
+#    end
 
     # Make sure we have a fresh list from the package server
     config.vm.provision "shell", inline: "apt-get update"
