@@ -32,8 +32,6 @@ public:
     struct Device
     {
         std::string name;
-        int major;
-        int minor;
         int mode;
     };
 

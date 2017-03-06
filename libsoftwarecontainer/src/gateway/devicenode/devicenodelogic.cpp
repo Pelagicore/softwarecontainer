@@ -38,12 +38,7 @@ bool DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
     if (item == std::end(m_devList)) {
         m_devList.push_back(dev);
     } else {
-        if ((item->major == dev.major) && (item->major == dev.minor)) {
-            item->mode = calculateDeviceMode(item->mode, dev.mode);
-        } else {
-            //Unexpected behavior : a device has found with same name.
-            return false;
-        }
+        item->mode = calculateDeviceMode(item->mode, dev.mode);
     }
 
     return true;

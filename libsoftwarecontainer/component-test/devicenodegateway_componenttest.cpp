@@ -17,9 +17,12 @@
  * For further information see LICENSE
  */
 
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include "functionjob.h"
 #include "softwarecontainer_test.h"
 #include "gateway/devicenode/devicenodegateway.h"
-#include <unistd.h>
 
 class DeviceNodeGatewayTest : public SoftwareContainerGatewayTest
 {
@@ -34,8 +37,6 @@ public:
         gw = std::unique_ptr<DeviceNodeGateway>(new DeviceNodeGateway(m_container));
     }
 
-    const std::string NEW_DEVICE = "/tmp/thenewfile";
-    const std::string NEW_DEEP_DEVICE = "/tmp/devices/thenewfile";
     const std::string PRESENT_DEVICE = "/dev/random";
 };
 
@@ -45,24 +46,8 @@ public:
 TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
     const std::string config = "[\
                                   {\
-                                    \"name\":  \"" + NEW_DEVICE + "\",\
-                                    \"major\": 4,\
-                                    \"minor\": 32,\
-                                    \"mode\":  644\
-                                  },\
-                                  {\
-                                    \"name\":  \"" + NEW_DEEP_DEVICE + "\",\
-                                    \"major\": 4,\
-                                    \"minor\": 32,\
-                                    \"mode\":  644\
-                                  },\
-                                  {\
                                     \"name\": \"" + PRESENT_DEVICE + "\",\
-                                    \"mode\":  \"654\"\
-                                  },\
-                                  {\
-                                    \"name\": \"" + PRESENT_DEVICE + "\",\
-                                    \"mode\":  \"645\"\
+                                    \"mode\":  654\
                                   }\
                                 ]";
 
@@ -72,21 +57,43 @@ TEST_F(DeviceNodeGatewayTest, TestActivateWithValidConf) {
 }
 
 /*
- * Make sure we can't re-create or overwrite a device that already exists in the container
+ * Make sure we overwrite a device that already exists in the container with a more premissive mode
  */
 TEST_F(DeviceNodeGatewayTest, TestOverwriteDeviceFails) {
+
+    const std::string device = PRESENT_DEVICE;
     const std::string config = "[\
                                   {\
-                                    \"name\": \"" + PRESENT_DEVICE + "\",\
-                                    \"mode\":  \"645\",\
-                                    \"major\": 2,\
-                                    \"minor\": 75,\
+                                    \"name\": \"" + device + "\",\
                                     \"mode\":  644\
+                                  },\
+                                  {\
+                                    \"name\": \"" + device + "\",\
+                                    \"mode\":  622\
+                                  },\
+                                  {\
+                                    \"name\": \"" + device + "\",\
+                                    \"mode\":  777\
                                   }\
                                 ]";
 
     loadConfig(config);
     ASSERT_TRUE(gw->setConfig(jsonConfig));
-    ASSERT_FALSE(gw->activate());
+    ASSERT_TRUE(gw->activate());
 
+    auto checkMode = FunctionJob(m_container, [device] () {
+        struct stat st;
+        const int readResult = stat(device.c_str(), &st);
+
+        if (0 != readResult) {
+            printf("Could not stat %s, %s\n", device.c_str(), strerror(errno));
+            return readResult;
+        }
+
+        return st.st_mode & 777 ? 0 : 1;
+    });
+
+    checkMode.start();
+    checkMode.wait();
+    ASSERT_TRUE(checkMode.isSuccess());
 }

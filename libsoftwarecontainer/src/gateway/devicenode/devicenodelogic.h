@@ -55,7 +55,6 @@ public:
     /*
      * @brief Update the device node list due to white-listing policy
      * i.e. if the device name does not exist new device node will be added
-     *      if the device name exist and major and minor minor device IDs are also matched
      *      then update the  mode of device node
      *
      * @return either true or false due to state of operation

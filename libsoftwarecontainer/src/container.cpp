@@ -757,7 +757,7 @@ bool Container::remountReadOnlyInContainer(const std::string &path)
 bool Container::mountDevice(const std::string &pathInHost)
 {
     if(!ensureContainerRunning()) {
-        log_error() << "Container is not running or in bad state, can't mount device";
+        log_error() << "Container is not running or in bad state, can't mount device: " << pathInHost;
         return false;
     }
     log_debug() << "Mounting device in container : " << pathInHost;

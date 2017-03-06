@@ -30,27 +30,16 @@ bool DeviceNodeParser::parseDeviceNodeGatewayConfiguration(const json_t *element
         return false;
     }
 
-    result.major = -1;
-    result.minor = -1;
     result.mode = -1;
-    const bool majorSpecified = JSONParser::read(element, "major", result.major);
-    const bool minorSpecified = JSONParser::read(element, "minor", result.minor);
-    const bool modeSpecified = JSONParser::read(element, "mode",  result.mode);
 
-    if (majorSpecified | minorSpecified) {
-        return checkBoolSet(majorSpecified, "Major has to be specified when Minor is specified")
-            && checkBoolSet(minorSpecified, "Minor has to be specified when Major is specified")
-            && checkBoolSet(modeSpecified, "Mode has to be specified when "
-                            "Major and Minor are specified");
-    }
-    return true;
-}
+    // Mode is optional, i.e. do not do anything if it is not specified.
+    if (nullptr != json_object_get(element, "mode")) {
+        const bool modeParses = JSONParser::read(element, "mode", result.mode);
 
-bool DeviceNodeParser::checkBoolSet(const bool &value, std::string errorMessage)
-{
-    if (!value) {
-        log_error() << errorMessage;
-        return false;
+        if (!modeParses) {
+            log_error() << "Mode specified with bad format";
+            return false;
+        }
     }
 
     return true;
