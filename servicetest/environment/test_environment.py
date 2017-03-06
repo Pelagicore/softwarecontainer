@@ -176,6 +176,37 @@ test_cap_5 = Capability("environment.test.cap.5",
                             {"id": "env", "config": GW_CONFIG_PREPEND}
                         ])
 
+
+""" The below two GW configs and caps are used in the test for behavior
+    when caps are set in the context of multiple containers. The
+    setup is two caps that just configure one variable each.
+"""
+GW_CONFIG_SINGLE_VAR_VARIATION_1 = [
+    {
+        "name": "MY_ENV_VAR_1",
+        "value": "1"
+    }
+]
+
+GW_CONFIG_SINGLE_VAR_VARIATION_2 = [
+    {
+        "name": "MY_ENV_VAR_2",
+        "value": "2"
+    }
+]
+
+test_cap_7 = Capability("environment.test.cap.7",
+                        [
+                            {"id": "env", "config": GW_CONFIG_SINGLE_VAR_VARIATION_1}
+                        ])
+
+test_cap_8 = Capability("environment.test.cap.8",
+                        [
+                            {"id": "env", "config": GW_CONFIG_SINGLE_VAR_VARIATION_2}
+                        ])
+
+
+""" Define the manifest so it can be used by the testframework  """
 manifest = StandardManifest(TESTOUTPUT_DIR,
                             "environment-test-manifest.json",
                             [
@@ -184,7 +215,9 @@ manifest = StandardManifest(TESTOUTPUT_DIR,
                                 test_cap_3,
                                 test_cap_4,
                                 test_cap_5,
-                                test_cap_6
+                                test_cap_6,
+                                test_cap_7,
+                                test_cap_8
                             ])
 
 
@@ -197,6 +230,74 @@ def service_manifests():
 
 
 ##### Test suites #####
+
+@pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent", "clear_env_files")
+class TestCapsBehaviorMultipleContainers(object):
+    """ This suite tests how behavior is with regards to capabilities in the
+        context of multiple containers. It uses the Environment GW to assert
+        behavior.
+    """
+
+    @pytest.mark.skip()
+    def test_caps_for_one_container_does_not_affect_another_container(self):
+        """ Test that setting caps for one containers does not have an impact
+            on another container.
+
+            Test steps:
+                * Create two containers, sc1 and sc2
+                * Set cap A and B on sc1
+                * Assert the two expected variables are set, one from cap A and one from B
+                * Set cap A on sc2
+                * Assert ony the one expected variable is set, the one from cap A, and
+                  that the one from cap B is not set.
+        """
+        sc1 = Container()
+        sc2 = Container()
+
+        try:
+            sc1.start(DATA)
+            sc2.start(DATA)
+
+            # These caps should set two different env vars in the container
+            sc1.set_capabilities(["environment.test.cap.7", "environment.test.cap.8"])
+
+            sc1.launch_command("python " +
+                               sc1.get_bind_dir() +
+                               "/testhelper.py --test-dir " +
+                               sc1.get_bind_dir() + "/testoutput" +
+                               " --do-get-env-vars")
+
+            # The D-Bus LaunchCommand is asynch so let it take effect before assert
+            time.sleep(0.5)
+
+            helper = EnvironmentHelper(TESTOUTPUT_DIR)
+
+            my_env_var_1 = helper.env_var("MY_ENV_VAR_1")
+            my_env_var_2 = helper.env_var("MY_ENV_VAR_2")
+
+            assert my_env_var_1 == "1" and my_env_var_2 == "2"
+
+            # This cap should set only one env var in the container
+            sc2.set_capabilities(["environment.test.cap.7"])
+
+            sc2.launch_command("python " +
+                               sc2.get_bind_dir() +
+                               "/testhelper.py --test-dir " +
+                               sc2.get_bind_dir() + "/testoutput" +
+                               " --do-get-env-vars")
+
+            # The D-Bus LaunchCommand is asynch so let it take effect before assert
+            time.sleep(0.5)
+
+            my_env_var_1 = helper.env_var("MY_ENV_VAR_1")
+            my_env_var_2 = helper.env_var("MY_ENV_VAR_2")
+
+            assert my_env_var_1 == "1" and my_env_var_2 == None
+
+        finally:
+            sc1.terminate()
+            sc2.terminate()
+
 
 @pytest.mark.usefixtures("testhelper", "create_testoutput_dir", "agent", "clear_env_files")
 class TestInteractionGatewayAndAPI(object):
