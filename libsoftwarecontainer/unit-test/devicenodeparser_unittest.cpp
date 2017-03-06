@@ -39,8 +39,6 @@ TEST_F(DeviceNodeParserTest, TestConfigJustName) {
 
     ASSERT_TRUE(parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
     ASSERT_FALSE(dev.name.empty());
-    ASSERT_EQ(dev.major, -1);
-    ASSERT_EQ(dev.minor, -1);
     ASSERT_EQ(dev.mode, -1);
 }
 
@@ -50,8 +48,6 @@ TEST_F(DeviceNodeParserTest, TestConfigJustName) {
 TEST_F(DeviceNodeParserTest, TestFullConfig) {
     const std::string config1 = "{\
                                     \"name\":  \"/dev/new_device\",\
-                                    \"major\": 1,\
-                                    \"minor\": 0,\
                                     \"mode\":  644\
                                 }";
     json_t *configJSON1 = convertToJSON(config1);
@@ -59,8 +55,6 @@ TEST_F(DeviceNodeParserTest, TestFullConfig) {
 
     const std::string config2 = "{\
                                     \"name\":  \"/dev/new_device\",\
-                                    \"major\": 1,\
-                                    \"minor\": 0,\
                                     \"mode\":  764\
                                 }";
 
@@ -69,20 +63,16 @@ TEST_F(DeviceNodeParserTest, TestFullConfig) {
     json_t *configJSON2 = convertToJSON(config2);
     ASSERT_TRUE(parser.parseDeviceNodeGatewayConfiguration(configJSON2, dev));
     ASSERT_FALSE(dev.name.empty());
-    ASSERT_NE(dev.major, -1);
-    ASSERT_NE(dev.minor, -1);
     ASSERT_NE(dev.mode, -1);
     ASSERT_EQ(dev.mode, 764);
 }
 
 /*
- * Test that setting major/minor/mode fails if name is missing
+ * Test that setting mode fails if name is missing
  */
 TEST_F(DeviceNodeParserTest, TestConfigNoName) {
-    const std::string config = "{ \"major\": 2,\
-                                  \"minor\": 0,\
-                                  \"mode\": 644\
-                                }";
+    const std::string config = "{ \"mode\": 644 }";
+
     json_t *configJSON = convertToJSON(config);
     DeviceNodeParser::Device dev;
 
@@ -91,89 +81,10 @@ TEST_F(DeviceNodeParserTest, TestConfigNoName) {
 }
 
 /*
- * Test that setting minor/mode fails of major is missing
- */
-TEST_F(DeviceNodeParserTest, TestConfigNoMajor) {
-    const std::string config = "{ \"name\": \"TEST_DEVICE\", \
-                                  \"minor\": 0,\
-                                  \"mode\": 644\
-                                }";
-    json_t *configJSON = convertToJSON(config);
-    DeviceNodeParser::Device dev;
-
-    ASSERT_FALSE(parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
-    ASSERT_EQ(dev.major, -1);
-}
-
-/*
- * Test that setting major/mode fails if minor is missing
- */
-TEST_F(DeviceNodeParserTest, TestConfigNoMinor) {
-    const std::string config = "{ \"name\": \"TEST_DEVICE\", \
-                                  \"major\": 0,\
-                                  \"mode\": 644\
-                                }";
-    json_t *configJSON = convertToJSON(config);
-    DeviceNodeParser::Device dev;
-
-    ASSERT_FALSE(parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
-    ASSERT_EQ(dev.minor, -1);
-}
-
-/*
- * Test that setting major/minor fails if no mode is set.
- */
-TEST_F(DeviceNodeParserTest, TestConfigNoMode) {
-    const std::string config = "{ \"name\": \"TEST_DEVICE\", \
-                                  \"major\": 0,\
-                                  \"minor\": 6\
-                                }";
-    json_t *configJSON = convertToJSON(config);
-    DeviceNodeParser::Device dev;
-
-    ASSERT_FALSE(parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
-    ASSERT_EQ(dev.mode, -1);
-}
-
-/*
- * Test that setting major of bad type fails
- */
-TEST_F(DeviceNodeParserTest, TestConfigBadMajor) {
-    const std::string config = "{ \"name\": \"TEST_DEVICE\", \
-                                  \"major\": \"A\",\
-                                  \"minor\": 6,\
-                                  \"mode\": 644\
-                                }";
-    json_t *configJSON = convertToJSON(config);
-    DeviceNodeParser::Device dev;
-
-    ASSERT_FALSE(parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
-    ASSERT_EQ(dev.major, -1);
-}
-
-/*
- * Test that setting minor of bad type fails
- */
-TEST_F(DeviceNodeParserTest, TestConfigBadMainor) {
-    const std::string config = "{ \"name\": \"TEST_DEVICE\", \
-                                  \"major\": 2,\
-                                  \"minor\": \"B\",\
-                                  \"mode\": 644\
-                                }";
-    json_t *configJSON = convertToJSON(config);
-    DeviceNodeParser::Device dev;
-
-    ASSERT_FALSE(parser.parseDeviceNodeGatewayConfiguration(configJSON, dev));
-    ASSERT_EQ(dev.minor, -1);
-}
-
-/*
  * Test that setting mode of bad type fails
  */
 TEST_F(DeviceNodeParserTest, TestConfigBadMode) {
     const std::string config = "{ \"name\": \"TEST_DEVICE\", \
-                                  \"major\": 2,\
-                                  \"minor\": 6,\
                                   \"mode\": \"C\"\
                                 }";
     json_t *configJSON = convertToJSON(config);

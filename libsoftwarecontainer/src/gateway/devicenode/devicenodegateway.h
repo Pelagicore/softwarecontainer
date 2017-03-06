@@ -32,8 +32,7 @@ namespace softwarecontainer {
  * @brief This gateway is responsible for exposing device nodes in an LXC container.
  * The basic operation looks as follows:
  * - DeviceNodeGateway (DNG) is loaded with a JSON configuration detailing a
- *   list of devices to create, with device names (mandatory), permission modes (optional),
- *   major  (optional) and minor numbers  (optional).
+ *   list of devices to create, with device names (mandatory) and permission modes (optional)
  *
  * Notes:
  * - activate() will stop creating devices in the container upon first failure

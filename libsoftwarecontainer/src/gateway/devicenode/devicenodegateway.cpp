@@ -16,9 +16,7 @@
  *
  * For further information see LICENSE
  */
-
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <libgen.h>
 
 #include "gateway/devicenode/devicenodegateway.h"
@@ -70,53 +68,20 @@ bool DeviceNodeGateway::activateGateway()
             return false;
         }
 
-        if (dev.major != -1) {
-            log_error() << "Device path for container on host: " << devicePathInContainerOnHost;
-            if (existsInFileSystem(devicePathInContainerOnHost)) {
-                log_error() << "The device " << dev.name << " already exists";
-                return false;
-            }
+        // Mount device in container
+        getContainer()->mountDevice(dev.name);
 
-            // mknod dev.name c dev.major dev.minor
+        // If mode is specified, try to set mode for the mounted device.
+        if (dev.mode != -1) {
             FunctionJob job(getContainer(), [&] () {
-                if (existsInFileSystem(dev.name)) {
-                    log_error() << "Device already exists";
-                    return -1;
-                }
-
-                int err = mknod(dev.name.c_str(), S_IFCHR | dev.mode, makedev(dev.major, dev.minor));
-                if (err != 0) {
-                    log_error() << "Error happened while trying to run mknod " << dev.name
-                                << " in container: " << err << " - " << strerror(errno);
-                }
-                return err;
+                return chmod(dev.name.c_str(), dev.mode);
             });
-
             job.start();
             job.wait();
             if (job.isError()) {
-                log_error() << "Failed to create device " << dev.name;
+                log_error() << "Could not 'chmod " << dev.mode
+                            << "' the mounted device " << dev.name;
                 return false;
-            } else {
-                // Make sure the path gets deleted when we destroy this object
-                markFileForDeletion(devicePathInContainerOnHost);
-            }
-        } else {
-            // No major & minor numbers specified => simply map the device from
-            // the host into the container
-            getContainer()->mountDevice(dev.name);
-
-            if (dev.mode != -1) {
-                FunctionJob job(getContainer(), [&] () {
-                    return chmod(dev.name.c_str(), dev.mode);
-                });
-                job.start();
-                job.wait();
-                if (job.isError()) {
-                    log_error() << "Could not 'chmod " << dev.mode
-                                << "' the mounted device " << dev.name;
-                    return false;
-                }
             }
         }
     }
