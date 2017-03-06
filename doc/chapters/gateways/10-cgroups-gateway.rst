@@ -1,5 +1,3 @@
-.. _cgroups-gateway:
-
 CGroups gateway
 ===============
 
@@ -27,7 +25,7 @@ To be able to limit memory usage with cgroups, ``CONFIG_CGROUPS``, ``CONFIG_MEMC
 advised to check if the cgroup option is enabled with swapaccount=1 feauture in the system's
 kernel. The Following command will list available cgroup options::
 
-	cat /proc/1/cgroup
+    cat /proc/1/cgroup
 
 Limiting Memory
 ---------------
