@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Device node gateway &#8212; softwarecontainer 0.18.0-54852d9 2017-03-06 documentation</title>
+    <title>Device node gateway &#8212; softwarecontainer 0.18.0-4c3baa2 2017-03-07 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-54852d9 2017-03-06',
+        VERSION:     '0.18.0-4c3baa2 2017-03-07',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -54,8 +54,6 @@
 following fields:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">name</span></code> The name of the device, with or without path. This is passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
-<li><code class="docutils literal"><span class="pre">major</span></code> The major device number, as an integer, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
-<li><code class="docutils literal"><span class="pre">minor</span></code> The minor device number, as an integer, passed verbatim to <code class="docutils literal"><span class="pre">mknod</span></code></li>
 <li><code class="docutils literal"><span class="pre">mode</span></code> Permission mode, passed verbatim to <code class="docutils literal"><span class="pre">chmod</span></code></li>
 </ul>
 <p>In the case where the same device node is configured more than once, the most permissive mode
@@ -69,33 +67,17 @@ is chosen per user type.</p>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span>  <span class="s2">&quot;/dev/dri/card0&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span>  <span class="s2">&quot;tty0&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="s2">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;mode&quot;</span><span class="p">:</span>  <span class="s2">&quot;644&quot;</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span>  <span class="s2">&quot;tty1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="s2">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;mode&quot;</span><span class="p">:</span>  <span class="s2">&quot;400&quot;</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span>  <span class="s2">&quot;/dev/galcore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span>
-        <span class="s2">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s2">&quot;mode&quot;</span><span class="p">:</span>  <span class="s2">&quot;722&quot;</span>
     <span class="p">},</span>
     <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span>  <span class="s2">&quot;/dev/galcore&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;major&quot;</span><span class="p">:</span> <span class="mi">199</span><span class="p">,</span>
-        <span class="s2">&quot;minor&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;mode&quot;</span><span class="p">:</span>  <span class="s2">&quot;466&quot;</span>
+        <span class="s2">&quot;mode&quot;</span><span class="p">:</span>  <span class="s2">&quot;600&quot;</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
 </div>
-<p>In the last example shown above the mode for <code class="docutils literal"><span class="pre">/dev/galcore</span></code> will be set to 766.</p>
+<p>In the last example shown above the mode for <code class="docutils literal"><span class="pre">/dev/galcore</span></code> will be set to 600.</p>
 </div>
 </div>
 
