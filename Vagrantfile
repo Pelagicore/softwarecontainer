@@ -101,10 +101,4 @@ Vagrant.configure(2) do |config|
               "GIT_REPO" => "https://github.com/Pelagicore/ivi-logging.git"},
         path: "cookbook/build/cmake-git-builder.sh"
 
-    config.vm.provision "shell", privileged: false,
-        env: {"SRC_DIR" => "dbus-proxy",
-              "GIT_REPO" => "https://github.com/Pelagicore/dbus-proxy.git",
-              "WIPE_SRC_DIR" => "yes"},
-        path: "cookbook/build/cmake-git-builder.sh"
-
 end

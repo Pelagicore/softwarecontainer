@@ -34,14 +34,6 @@ if(NOT busybox_binary)
     message(WARNING "'busybox' binary was not found.")
 endif(NOT busybox_binary)
 
-if(ENABLE_DBUSGATEWAY)
-    # dbus-proxy binary needs to be available if the D-Bus gateway is enabled
-    find_program(dbus-proxy_binary dbus-proxy)
-    if(NOT dbus-proxy_binary)
-        message(WARNING "'dbus-proxy' binary was not found. This is needed when D-Bus gateway is enabled.")
-    endif(NOT dbus-proxy_binary)
-endif(ENABLE_DBUSGATEWAY)
-
 if(ENABLE_NETWORKGATEWAY)
     # brctl binary needs to be available at runtime if the network gateway is enabled
     find_program(brctl_binary brctl)

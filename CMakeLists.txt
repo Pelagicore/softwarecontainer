@@ -236,6 +236,14 @@ if(ENABLE_COVERAGE)
 endif(ENABLE_COVERAGE)
 
 #
+# Build dbus-proxy if D-Bus Gateway is enabled
+#
+if(ENABLE_DBUSGATEWAY)
+    add_subdirectory(dbus-proxy)
+endif()
+
+
+#
 # Network related options
 #
 if(ENABLE_NETWORKGATEWAY)
@@ -289,4 +297,3 @@ message(STATUS "SUMMARY OF CONFIGURATION")
 message("")
 feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features")
 feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features and options")
-
