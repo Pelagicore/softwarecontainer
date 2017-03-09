@@ -26,6 +26,8 @@
 #include <unistd.h>
 #include <fstream>
 
+#include "unittest_common_helpers.h"
+
 using namespace softwarecontainer;
 
 class RecursiveCopyTest: public ::testing::Test
@@ -43,24 +45,6 @@ public:
     std::string srcdir;
     std::string dstdir;
 };
-
-void createFile(std::string dst, std::string val="abcdefg123")
-{
-    std::ofstream f;
-    f.open(dst);
-    f << val;
-    f.close();
-}
-
-bool checkContent(std::string dst, std::string val)
-{
-    std::string content;
-    std::ifstream f;
-    f.open(dst);
-    f >> content;
-    f.close();
-    return(content == val);
-}
 
 TEST_F(RecursiveCopyTest, copyDirEmptyToEmpty)
 {

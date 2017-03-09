@@ -111,7 +111,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
                                     bool readOnly,
                                     bool enableWriteBuffer)
 {
-    unsigned long flags =  0; //MS_BIND;
+    unsigned long flags =  0;
     std::string fstype;
     int mountRes;
 
@@ -121,7 +121,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
     }
 
     if (!existsInFileSystem(dst)) {
-        log_error() << src << " does not exist on the host, can not bindMount";
+        log_error() << dst << " does not exist on the host, can not bindMount";
         return false;
     }
 
@@ -178,7 +178,7 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
                                        const std::string &dst)
 {
     std::string fstype = "overlay";
-    unsigned long flags = 0; //MS_BIND;
+    unsigned long flags = 0;
 
     if (!createDirectory(lower)
         || !createDirectory(upper)

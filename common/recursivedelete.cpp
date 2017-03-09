@@ -28,27 +28,21 @@
 
 namespace softwarecontainer {
 
-std::string deleteRoot;
-
-extern "C" int deleteFile(const char*, const struct stat, int);
+extern "C" int deleteFile(const char*, const struct stat, int, struct FTW *ftwbuf);
 
 /**
  * @brief deleteFile Delete files from the directory
  *
- * This function is wrapped and hidden in this separate code unit because of it's side effects
- * and used by the RecursiveDelete::delete() function.
  * @param deletePath The path of the file to delete
  * @param sb not used in this function
  * @param typeflag Points to what type of node is traversed by ftw().
- * @sideeffect Uses the global variables dst_root and src_root to know the root directories
- * being copied to and from. These must not be changed while ftw is running or the function will
- * misbehave.
  * @return always 0 for now.
  */
-int deleteFile(const char* deletePath, const struct stat* sb, int typeflag)
+int deleteFile(const char* deletePath, const struct stat* sb, int typeflag, struct FTW *ftwbuf)
 {
     (void)sb;
     (void)typeflag;
+    (void)ftwbuf;
 
     remove(deletePath);
     return 0;
@@ -63,13 +57,10 @@ RecursiveDelete &RecursiveDelete::getInstance()
 bool RecursiveDelete::del(std::string dir)
 {
     bool retval = true;
-    m_deleteLock.lock();
-    deleteRoot.assign(dir);
-    if (ftw(dir.c_str(), deleteFile, 20) != 0) {
+    if (nftw(dir.c_str(), deleteFile, 20, FTW_DEPTH) != 0) {
         log_error() << "Failed to recursively delete " << dir;
         retval = false;
     }
-    m_deleteLock.unlock();
 
     return retval;
 }
