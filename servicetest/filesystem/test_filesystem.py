@@ -28,7 +28,7 @@ from testframework import Container
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 TESTOUTPUT_DIR = CURRENT_DIR + "/testoutput"
-TESTFILE='testfile.txt'
+TESTFILE = 'testfile.txt'
 
 # This function is used by the test framework to know where test specific files should be stored
 def output_dir():
@@ -70,7 +70,7 @@ class TestFileSystem(object):
         A nice way of getting process exit value from the container would be
         very nice.
         """
-        absoluteTestFile = os.path.join(TESTOUTPUT_DIR, TESTFILE)
+        absoluteTestFile = os.path.join(CURRENT_DIR, TESTFILE)
 
         if os.path.exists(absoluteTestFile):
             os.remove(absoluteTestFile)
@@ -83,10 +83,10 @@ class TestFileSystem(object):
         try:
             success = ca.start(DATA)
             ca.launch_command('{}/fileapp.py create {}'
-                              .format(ca.get_bind_dir()), TESTFILE)
+                              .format(ca.get_bind_dir(), TESTFILE))
 
             ca.launch_command('{}/fileapp.py check {}'
-                              .format(ca.get_bind_dir()), TESTFILE)
+                              .format(ca.get_bind_dir(), TESTFILE))
             # Give the command time to run inside the container
             time.sleep(0.5)
             # lala.txt should be available in the upper dir, not the lower.
@@ -95,7 +95,7 @@ class TestFileSystem(object):
             else:
                 assert os.path.exists(absoluteTestFile) is True
             ca.launch_command('{}/fileapp.py delete {}'
-                              .format(ca.get_bind_dir()), TESTFILE)
+                              .format(ca.get_bind_dir(), TESTFILE))
             # lala.txt should be deleted from both the upper and lower dir
             time.sleep(0.5)
             assert os.path.exists(absoluteTestFile) is False
