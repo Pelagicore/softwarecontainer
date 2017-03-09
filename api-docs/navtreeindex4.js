@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"pages.html":[],
 "proxy_8c_source.html":[2,0,2,0,0],
 "proxy_8h_source.html":[2,0,2,0,1],
 "pulsegateway_8cpp_source.html":[2,0,3,1,1,9],
