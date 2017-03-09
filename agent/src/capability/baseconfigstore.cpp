@@ -105,6 +105,7 @@ void BaseConfigStore::readCapsFromFile(const std::string &filePath)
     }
 
     // Can't use json_decref on fileroot, it removes objects too early
+    // TODO: So when do we actually do decref on this?
     parseCapabilities(capabilities);
 }
 
@@ -142,7 +143,7 @@ void BaseConfigStore::parseCapabilities(json_t *capabilities)
             throw CapabilityParseError(errorMessage);
         }
 
-        log_debug() << "Found capability \"" << capName << "\", parsing gateways...";
+        log_debug() << "Found capability \"" << capName << "\"";
 
         parseGatewayConfigs(capName, gateways);
     }
