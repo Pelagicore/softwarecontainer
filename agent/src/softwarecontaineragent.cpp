@@ -305,6 +305,13 @@ void SoftwareContainerAgent::setCapabilities(const ContainerID &containerID,
         return;
     }
 
+    // Log a list of all caps that were provided
+    std::string caps = "";
+    for (const std::string &capName : capabilities) {
+        caps += " " + capName;
+    }
+    log_debug() << "Will attempt to set capabilities:" + caps;
+
     GatewayConfiguration gatewayConfigs = m_defaultConfigStore->configs();
     GatewayConfiguration filteredConfigs = m_filteredConfigStore->configsByID(capabilities);
 
