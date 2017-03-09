@@ -39,6 +39,8 @@ public:
 
     GatewayConfiguration(const GatewayConfiguration &gwConf);
 
+    GatewayConfiguration& operator=(const GatewayConfiguration &gwConf);
+
     ~GatewayConfiguration();
 
     bool append(const std::string &id, const std::string &jsonConf);
