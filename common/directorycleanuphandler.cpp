@@ -19,6 +19,8 @@
 
 #include "directorycleanuphandler.h"
 
+#include "recursivedelete.h"
+
 namespace softwarecontainer {
 
 DirectoryCleanUpHandler::DirectoryCleanUpHandler(const std::string &path)
@@ -33,7 +35,7 @@ bool DirectoryCleanUpHandler::clean()
         return true;
     }
 
-    if (rmdir(m_path.c_str()) == 0) {
+    if (RecursiveDelete::getInstance().del(m_path) == true) {
         log_debug() << "rmdir'd " << m_path;
         return true;
     } else {
