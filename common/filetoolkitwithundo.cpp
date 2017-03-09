@@ -111,9 +111,8 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
                                     bool readOnly,
                                     bool enableWriteBuffer)
 {
-    unsigned long flags = MS_BIND;
+    unsigned long flags =  0; //MS_BIND;
     std::string fstype;
-    const void *data = nullptr;
     int mountRes;
 
     if (!existsInFileSystem(src)) {
@@ -135,12 +134,14 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
 
         std::ostringstream os;
         os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
-        data = os.str().c_str();
 
         log_debug() << "enableWriteBuffer, config: " << os.str();
 
-        mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
+        mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, os.str().c_str());
+        log_debug() << "mountRes: " << mountRes;
     } else {
+        const void *data = nullptr;
+        flags = MS_BIND;
         mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
     }
 
@@ -153,7 +154,9 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         return false;
     }
 
-    if (readOnly) {
+    if (readOnly && !enableWriteBuffer) {
+        const void *data = nullptr;
+
         flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
 
         log_debug() << "Re-mounting read-only" << src << " in "
@@ -175,15 +178,15 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
                                        const std::string &dst)
 {
     std::string fstype = "overlay";
-    unsigned long flags = MS_BIND;
+    unsigned long flags = 0; //MS_BIND;
 
     if (!createDirectory(lower)
         || !createDirectory(upper)
         || !createDirectory(work)
         || !createDirectory(dst))
     {
-        log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
-                       lower << ", upper=" << upper << ", work=" << work;
+        log_error() << "Failed to create lower/upper/work directory for overlayMount. lowerdir=" <<
+                       lower << ", upperdir=" << upper << ", workdir=" << work;
         return false;
     }
 
