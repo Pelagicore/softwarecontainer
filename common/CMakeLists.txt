@@ -23,6 +23,8 @@ set(HEADERS
     jsonparser.h
     cleanuphandler.h
     overlaysynccleanuphandler.h
+    recursivecopy.h
+    recursivedelete.h
     directorycleanuphandler.h
     filecleanuphandler.h
     mountcleanuphandler.h
@@ -40,6 +42,7 @@ add_library(softwarecontainercommon SHARED
     overlaysynccleanuphandler.cpp
     softwarecontainer-common.cpp
     recursivecopy.cpp
+    recursivedelete.cpp
     gatewayconfig.cpp
     signalconnectionshandler.cpp
 )
