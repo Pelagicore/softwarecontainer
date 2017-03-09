@@ -189,14 +189,14 @@ bool Container::create()
     m_rootFSPath = buildPath(s_LXCRoot, containerID, "rootfs");
 
     if (m_enableWriteBuffer) {
-        const std::string rootFSPathLower = m_rootFSPath + "-lower";
-        const std::string rootFSPathUpper = m_rootFSPath + "-upper";
-        const std::string rootFSPathWork  = m_rootFSPath + "-work";
+        const std::string rootFSPathLower = m_containerRoot + m_id + "-lower";
+        const std::string rootFSPathUpper = m_containerRoot + m_id + "-upper";
+        const std::string rootFSPathWork  = m_containerRoot + m_id + "-work";
 
         overlayMount(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);
-        log_debug() << "Write buffer enabled, lower=" << rootFSPathLower
-                    << ", upper=" << rootFSPathUpper
-                    << ", work=" << rootFSPathWork
+        log_debug() << "Write buffer enabled, lowerdir=" << rootFSPathLower
+                    << ", upperdir=" << rootFSPathUpper
+                    << ", workdir=" << rootFSPathWork
                     << ", dst=" << m_rootFSPath;
     } else {
         log_debug() << "WriteBuffer disabled, dst=" << m_rootFSPath;
@@ -539,10 +539,18 @@ bool Container::destroy(unsigned int timeout)
     }
 
     if (m_state >= ContainerState::STARTED) {
-        if(!shutdown(timeout)) {
+        if (!shutdown(timeout)) {
             log_error() << "Could not shutdown container. Aborting destroy";
             return false;
         }
+    }
+
+
+    // The container can not be destroyed unless the rootfs is unmounted
+    if (m_enableWriteBuffer)
+    {
+        log_debug() << "Unmounting the overlay rootfs";
+        umount(m_rootFSPath.c_str());
     }
 
     // Destroy it!
