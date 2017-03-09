@@ -45,7 +45,6 @@ public:
     /**
      * @brief delete Delete files from directory
      *
-     * The function is protected by a mutex because it uses some non thread-safe C functions.
      * @param dir The source path to deletefrom
      * @return true on success
      * @return false on failure
@@ -55,11 +54,6 @@ public:
 private:
     RecursiveDelete();
     ~RecursiveDelete();
-
-    /**
-     * @brief m_deleteLock lock used to protect global variables in the delete() method.
-     */
-    std::mutex m_deleteLock;
 };
 
 } // namespace softwarecontainer
