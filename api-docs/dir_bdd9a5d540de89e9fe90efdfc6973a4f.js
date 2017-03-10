@@ -18,6 +18,8 @@ var dir_bdd9a5d540de89e9fe90efdfc6973a4f =
     [ "overlaysynccleanuphandler.h", "overlaysynccleanuphandler_8h_source.html", null ],
     [ "recursivecopy.cpp", "recursivecopy_8cpp_source.html", null ],
     [ "recursivecopy.h", "recursivecopy_8h_source.html", null ],
+    [ "recursivedelete.cpp", "recursivedelete_8cpp_source.html", null ],
+    [ "recursivedelete.h", "recursivedelete_8h_source.html", null ],
     [ "signalconnectionshandler.cpp", "signalconnectionshandler_8cpp_source.html", null ],
     [ "signalconnectionshandler.h", "signalconnectionshandler_8h_source.html", null ],
     [ "softwarecontainer-common.cpp", "softwarecontainer-common_8cpp_source.html", null ],

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-b236e19 2017-03-09</span>
+   &#160;<span id="projectnumber">0.18.0-78f6c3a 2017-03-10</span>
    </div>
   </td>
  </tr>
@@ -269,6 +269,9 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html">RecursiveCopy</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html" title="The RecursiveCopy class is a singleton class used to copy files recursively from a source to a destin...">RecursiveCopy</a> class is a singleton class used to copy files recursively from a source to a destination.  <a href="classsoftwarecontainer_1_1_recursive_copy.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_recursive_delete.html">RecursiveDelete</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classsoftwarecontainer_1_1_recursive_delete.html" title="The RecursiveDelete class is a singleton class used to delete files recursively in a directory...">RecursiveDelete</a> class is a singleton class used to delete files recursively in a directory.  <a href="classsoftwarecontainer_1_1_recursive_delete.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_service_manifest_parse_error.html">ServiceManifestParseError</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An error occured in ConfigStore when parsing a Service Manifest.  <a href="classsoftwarecontainer_1_1_service_manifest_parse_error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -367,6 +370,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>copyFile</b> (const ch
 <tr class="memitem:a31aa829f1a38c3755729c1c573c9d6b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesoftwarecontainer.html#a31aa829f1a38c3755729c1c573c9d6b8">copyFile</a> (const char *srcPath, const struct stat *sb, int typeflag)</td></tr>
 <tr class="memdesc:a31aa829f1a38c3755729c1c573c9d6b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy_file Copy files from src_path to dst_root global path  <a href="#a31aa829f1a38c3755729c1c573c9d6b8">More...</a><br /></td></tr>
 <tr class="separator:a31aa829f1a38c3755729c1c573c9d6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0cf42e5368e2e6d517444ca5d27fadd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0cf42e5368e2e6d517444ca5d27fadd"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>deleteFile</b> (const char *, const struct stat, int, struct FTW *ftwbuf)</td></tr>
+<tr class="separator:ab0cf42e5368e2e6d517444ca5d27fadd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6deede1bc098be2bced82ad2d02d2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesoftwarecontainer.html#a9c6deede1bc098be2bced82ad2d02d2a">deleteFile</a> (const char *deletePath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)</td></tr>
+<tr class="memdesc:a9c6deede1bc098be2bced82ad2d02d2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">deleteFile Delete files from the directory  <a href="#a9c6deede1bc098be2bced82ad2d02d2a">More...</a><br /></td></tr>
+<tr class="separator:a9c6deede1bc098be2bced82ad2d02d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe759ac0b4bfb58c0dfd87ad9917ec5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesoftwarecontainer.html#abe759ac0b4bfb58c0dfd87ad9917ec5e">addProcessListener</a> (<a class="el" href="classsoftwarecontainer_1_1_signal_connections_handler.html">SignalConnectionsHandler</a> &amp;connections, pid_t pid, std::function&lt; void(pid_t, int)&gt; function, Glib::RefPtr&lt; Glib::MainContext &gt; context)</td></tr>
 <tr class="memdesc:abe759ac0b4bfb58c0dfd87ad9917ec5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">addProcessListener Adds a glib child watch for a process.  <a href="#abe759ac0b4bfb58c0dfd87ad9917ec5e">More...</a><br /></td></tr>
 <tr class="separator:abe759ac0b4bfb58c0dfd87ad9917ec5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -546,6 +555,57 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 <div class="fragment"><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    std::string dstPath;</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    std::string src(srcPath);</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">if</span> (src.find(srcRoot) != std::string::npos) {</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        dstPath = buildPath(dstRoot, src.erase(0, srcRoot.length()));</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    } <span class="keywordflow">else</span> {</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        dstPath = buildPath(dstRoot, src);</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">switch</span>(typeflag) {</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">case</span> FTW_D:</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        mkdir(dstPath.c_str(), sb-&gt;st_mode);</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">break</span>;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">case</span> FTW_F:</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::ifstream src(srcPath, std::ios::binary);</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        std::ofstream dst(dstPath, std::ios::binary);</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        dst &lt;&lt; src.rdbuf();</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> 0;</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
+<a class="anchor" id="a9c6deede1bc098be2bced82ad2d02d2a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int softwarecontainer::deleteFile </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>deletePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const struct stat *&#160;</td>
+          <td class="paramname"><em>sb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>typeflag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct FTW *&#160;</td>
+          <td class="paramname"><em>ftwbuf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>deleteFile Delete files from the directory </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">deletePath</td><td>The path of the file to delete </td></tr>
+    <tr><td class="paramname">sb</td><td>not used in this function </td></tr>
+    <tr><td class="paramname">typeflag</td><td>Points to what type of node is traversed by ftw(). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>always 0 for now. </dd></dl>
+
+<p>Definition at line <a class="el" href="recursivedelete_8cpp_source.html#l00041">41</a> of file <a class="el" href="recursivedelete_8cpp_source.html">recursivedelete.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    (void)sb;</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    (void)typeflag;</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    (void)ftwbuf;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">remove</span>(deletePath);</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> 0;</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
 <a class="anchor" id="abe759ac0b4bfb58c0dfd87ad9917ec5e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -651,7 +711,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00043">43</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00045">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="container_8cpp_source.html#l00559">softwarecontainer::Container::bindMountInContainer()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00433">softwarecontainer::SoftwareContainer::previouslyConfigured()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00045">waitForProcessTermination()</a>.</p>
+<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00045">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="container_8cpp_source.html#l00567">softwarecontainer::Container::bindMountInContainer()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00068">softwarecontainer::FileToolkitWithUndo::createDirectory()</a>, <a class="el" href="softwarecontainer_8cpp_source.html#l00433">softwarecontainer::SoftwareContainer::previouslyConfigured()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00045">waitForProcessTermination()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">struct </span>stat st;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">if</span> (getStat(path, st)) {</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordflow">return</span> S_ISDIR(st.st_mode);</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div></div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -840,7 +900,7 @@ Here is the caller graph for this function:</div>
 
 <p>Definition at line <a class="el" href="softwarecontainer-common_8cpp_source.html#l00105">105</a> of file <a class="el" href="softwarecontainer-common_8cpp_source.html">softwarecontainer-common.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00045">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00109">softwarecontainer::FileToolkitWithUndo::bindMount()</a>, <a class="el" href="container_8cpp_source.html#l00559">softwarecontainer::Container::bindMountInContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00045">waitForProcessTermination()</a>.</p>
+<p>Referenced by <a class="el" href="devicenodegateway_8cpp_source.html#l00045">softwarecontainer::DeviceNodeGateway::activateGateway()</a>, <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00109">softwarecontainer::FileToolkitWithUndo::bindMount()</a>, <a class="el" href="container_8cpp_source.html#l00567">softwarecontainer::Container::bindMountInContainer()</a>, and <a class="el" href="softwarecontainer-common_8h_source.html#l00045">waitForProcessTermination()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;{</div><div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">struct </span>stat st;</div><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">return</span> getStat(path, st);</div><div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;}</div></div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -913,7 +973,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li>
-    <li class="footer">Generated on Thu Mar 9 2017 14:56:44 for softwarecontainer by
+    <li class="footer">Generated on Fri Mar 10 2017 08:31:46 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

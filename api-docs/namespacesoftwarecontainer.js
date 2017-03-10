@@ -76,6 +76,7 @@ var namespacesoftwarecontainer =
     [ "OverlaySyncCleanupHandler", "classsoftwarecontainer_1_1_overlay_sync_cleanup_handler.html", "classsoftwarecontainer_1_1_overlay_sync_cleanup_handler" ],
     [ "PulseGateway", "classsoftwarecontainer_1_1_pulse_gateway.html", "classsoftwarecontainer_1_1_pulse_gateway" ],
     [ "RecursiveCopy", "classsoftwarecontainer_1_1_recursive_copy.html", "classsoftwarecontainer_1_1_recursive_copy" ],
+    [ "RecursiveDelete", "classsoftwarecontainer_1_1_recursive_delete.html", "classsoftwarecontainer_1_1_recursive_delete" ],
     [ "ServiceManifestParseError", "classsoftwarecontainer_1_1_service_manifest_parse_error.html", "classsoftwarecontainer_1_1_service_manifest_parse_error" ],
     [ "ServiceManifestPathError", "classsoftwarecontainer_1_1_service_manifest_path_error.html", "classsoftwarecontainer_1_1_service_manifest_path_error" ],
     [ "SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", "classsoftwarecontainer_1_1_signal_connections_handler" ],

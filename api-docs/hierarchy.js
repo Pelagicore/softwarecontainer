@@ -112,15 +112,16 @@ var hierarchy =
     [ "softwarecontainer::IPTableEntry::portFilter", "structsoftwarecontainer_1_1_i_p_table_entry_1_1port_filter.html", null ],
     [ "PProfiler", "class_p_profiler.html", null ],
     [ "softwarecontainer::RecursiveCopy", "classsoftwarecontainer_1_1_recursive_copy.html", null ],
+    [ "softwarecontainer::RecursiveDelete", "classsoftwarecontainer_1_1_recursive_delete.html", null ],
     [ "softwarecontainer::IPTableEntry::Rule", "structsoftwarecontainer_1_1_i_p_table_entry_1_1_rule.html", null ],
     [ "softwarecontainer::SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", null ],
     [ "softwarecontainer::SoftwareContainerAbstractInterface", "classsoftwarecontainer_1_1_software_container_abstract_interface.html", [
       [ "softwarecontainer::SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", null ]
     ] ],
+    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "com::pelagicore::SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
     ] ],
-    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
     [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ],
     [ "softwarecontainer::SoftwareContainerConfig", "classsoftwarecontainer_1_1_software_container_config.html", null ],
