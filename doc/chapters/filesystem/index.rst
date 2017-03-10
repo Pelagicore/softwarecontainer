@@ -85,7 +85,7 @@ protection for the filesystem by only allowing a final write of the changes in
 the upper layer when the container is shutting down.
 
 To enable the write buffer, set the ``enableWriteBuffer`` option in the
-``com.pelagicore.SoftwareContainerAgent.CreateContainer(config)`` call.
+``com.pelagicore.SoftwareContainerAgent.Create(config)`` call.
 This is done using the config parameter in specific, for example, this JSON
 config::
 
@@ -101,13 +101,21 @@ the ``lower`` directory. If a file from the ``lower`` filesystem is opened and
 then edited, it will be written in the ``upper`` directory and the user of the
 mountpoint will see only the changed file.
 
+.. note:: Enabling the write buffer will enable write buffers for all
+          filesystems, both the rootfs and the all bindmounted filesystems
+          inside the container. Also, the filesystems will no longer be
+          bindmounted technically, as bindmounting and overlayfs are mutually
+          exclusive.
+
 If a file is created in the ``lower`` filesystem, the file will be visible in
 the merged filesystem, but it will not be part of the ``upper`` or ``work``
 filesystems unless someone opens it from the ``merged`` filesystem, edits and
 saves it.
 
 Opening a file in ``upper`` or ``work`` does not create a file in the
-``lower`` filesystem until it is synced to the lower filesystem.
+``lower`` filesystem until it is synced to the lower filesystem. Syncing is
+performed when a container is destroyed using the
+``com.pelagicore.SoftwareContainerAgent.Destroy(id)`` call.
 
 The ``upper`` directory is a temporarily created directory in the ``/tmp``
 filesystem. The ``work`` is also a temporary filesystem.
