@@ -7,8 +7,10 @@ interfaces.
 The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
-to use this socket when communicating with the outside D-Bus system. The gateway uses an external
-program ``dbus-proxy`` for creation and communication over the proxied bus connection.
+to use this socket when communicating with the outside D-Bus system.
+The gateway uses uses an external program ``dbus-proxy``, which is included
+in SoftwareContainer as a submodule, for creation and communication over
+the proxied bus connection.
 
 The gateway will also set the ``DBUS_SESSION_BUS_ADDRESS`` or
 ``DBUS_SYSTEM_BUS_ADDRESS`` for the session and system bus, respectively.
