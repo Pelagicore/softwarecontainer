@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>D-Bus gateway &#8212; softwarecontainer 0.18.0-dca5764 2017-03-10 documentation</title>
+    <title>D-Bus gateway &#8212; softwarecontainer 0.18.0-d0afb3e 2017-03-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-dca5764 2017-03-10',
+        VERSION:     '0.18.0-d0afb3e 2017-03-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -48,8 +48,10 @@ interfaces.</p>
 <p>The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
-to use this socket when communicating with the outside D-Bus system. The gateway uses an external
-program <code class="docutils literal"><span class="pre">dbus-proxy</span></code> for creation and communication over the proxied bus connection.</p>
+to use this socket when communicating with the outside D-Bus system.
+The gateway uses uses an external program <code class="docutils literal"><span class="pre">dbus-proxy</span></code>, which is included
+in SoftwareContainer as a submodule, for creation and communication over
+the proxied bus connection.</p>
 <p>The gateway will also set the <code class="docutils literal"><span class="pre">DBUS_SESSION_BUS_ADDRESS</span></code> or
 <code class="docutils literal"><span class="pre">DBUS_SYSTEM_BUS_ADDRESS</span></code> for the session and system bus, respectively.
 libdbus uses these variables to find the socket to use for D-Bus
