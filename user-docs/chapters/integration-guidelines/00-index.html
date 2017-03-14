@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-0b1e25f 2017-03-14 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-0f082c3 2017-03-14 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-0b1e25f 2017-03-14',
+        VERSION:     '0.18.0-0f082c3 2017-03-14',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -611,6 +611,30 @@ default behavior in LXC.</p>
 </div>
 </div>
 </div>
+<div class="section" id="write-buffered-filesystems">
+<h2>Write buffered filesystems<a class="headerlink" href="#write-buffered-filesystems" title="Permalink to this headline">¶</a></h2>
+<p>To enable the write buffers for the filesystems of an app, you need to specify
+a short json object that is sent to the <code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.Create(id)</span></code>
+method. What will happen is described in detail in the <a class="reference internal" href="../filesystem/index.html#filesystems"><span class="std std-ref">Filesystem</span></a>
+chapter.</p>
+<div class="section" id="id4">
+<h3>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>The following snippet will create a container where a write buffer will be
+created for all filesystems in that container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+<p>The following example will disable write buffers for all filesystems within
+the container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -648,6 +672,10 @@ default behavior in LXC.</p>
 <li><a class="reference internal" href="#sysv-ipc">SysV IPC</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#write-buffered-filesystems">Write buffered filesystems</a><ul>
+<li><a class="reference internal" href="#id4">Example</a></li>
 </ul>
 </li>
 </ul>

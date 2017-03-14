@@ -23,4 +23,5 @@ IPC mechanisms and examples of configuration and usage.
 .. include:: 10-the-launcher.rst
 .. include:: 10-traffic-shaping.rst
 .. include:: 10-shared-memory.rst
+.. include:: 10-write-buffers.rst
 

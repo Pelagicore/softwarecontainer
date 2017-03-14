@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The role of a launcher &#8212; softwarecontainer 0.18.0-0f082c3 2017-03-14 documentation</title>
+    <title>Write buffered filesystems &#8212; softwarecontainer 0.18.0-0f082c3 2017-03-14 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -41,28 +41,28 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="the-role-of-a-launcher">
-<h1>The role of a launcher<a class="headerlink" href="#the-role-of-a-launcher" title="Permalink to this headline">¶</a></h1>
-<p>This section describes what typical integration actions are needed to integrate SoftwareContainer with
-a launcher. For an overview of the general architecture involving a launcher and SoftwareContainer, see
-<a class="reference internal" href="../design/index.html#design"><span class="std std-ref">Design</span></a>.</p>
-<p>The assumed scenario in this section is that a launcher want to start an application inside the container.</p>
-<p>The launcher should do the following:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Make the app home directory available inside the container.</li>
-<li>Set the HOME environment variable in the container point to the above directory.</li>
-</ul>
-</div></blockquote>
-<p>The above actions are performed by interacting with the SoftwareContainerAgent <a class="reference internal" href="../api/index.html#api"><span class="std std-ref">D-Bus API</span></a>.</p>
-<div class="section" id="setting-up-a-home-directory-and-home">
-<h2>Setting up a home directory and HOME<a class="headerlink" href="#setting-up-a-home-directory-and-home" title="Permalink to this headline">¶</a></h2>
-<p>By calling <code class="docutils literal"><span class="pre">BindMount</span></code> and passing a path on the host that will be mounted inside
-the container at the location specified as the <code class="docutils literal"><span class="pre">pathInContainer</span></code> argument, a directory is
-made available to any application started in the container later.</p>
-<p>The path inside the container is intended to be set as the <code class="docutils literal"><span class="pre">HOME</span></code> environment variable inside the
-container. The variable is set when calling <code class="docutils literal"><span class="pre">Execute</span></code> with an appropriate dictionary passed as
-the  <code class="docutils literal"><span class="pre">env</span></code> argument.</p>
+  <div class="section" id="write-buffered-filesystems">
+<h1>Write buffered filesystems<a class="headerlink" href="#write-buffered-filesystems" title="Permalink to this headline">¶</a></h1>
+<p>To enable the write buffers for the filesystems of an app, you need to specify
+a short json object that is sent to the <code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.Create(id)</span></code>
+method. What will happen is described in detail in the <a class="reference internal" href="../filesystem/index.html#filesystems"><span class="std std-ref">Filesystem</span></a>
+chapter.</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following snippet will create a container where a write buffer will be
+created for all filesystems in that container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+<p>The following example will disable write buffers for all filesystems within
+the container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -74,8 +74,8 @@ the  <code class="docutils literal"><span class="pre">env</span></code> argument
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The role of a launcher</a><ul>
-<li><a class="reference internal" href="#setting-up-a-home-directory-and-home">Setting up a home directory and HOME</a></li>
+<li><a class="reference internal" href="#">Write buffered filesystems</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
 </ul>
@@ -89,7 +89,7 @@ the  <code class="docutils literal"><span class="pre">env</span></code> argument
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/chapters/integration-guidelines/10-the-launcher.rst.txt"
+      <li><a href="../../_sources/chapters/integration-guidelines/10-write-buffers.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -115,7 +115,7 @@ the  <code class="docutils literal"><span class="pre">env</span></code> argument
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="../../_sources/chapters/integration-guidelines/10-the-launcher.rst.txt"
+      <a href="../../_sources/chapters/integration-guidelines/10-write-buffers.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

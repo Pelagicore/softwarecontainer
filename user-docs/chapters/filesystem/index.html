@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filesystems &#8212; softwarecontainer 0.18.0-0b1e25f 2017-03-14 documentation</title>
+    <title>Filesystems &#8212; softwarecontainer 0.18.0-0f082c3 2017-03-14 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-0b1e25f 2017-03-14',
+        VERSION:     '0.18.0-0f082c3 2017-03-14',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -119,7 +119,7 @@ for example. Enabling the write buffer will provide a layer of
 protection for the filesystem by only allowing a final write of the changes in
 the upper layer when the container is shutting down.</p>
 <p>To enable the write buffer, set the <code class="docutils literal"><span class="pre">enableWriteBuffer</span></code> option in the
-<code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.CreateContainer(config)</span></code> call.
+<code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.Create(config)</span></code> call.
 This is done using the config parameter in specific, for example, this JSON
 config:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
@@ -134,12 +134,22 @@ then into the <code class="docutils literal"><span class="pre">upper</span></cod
 the <code class="docutils literal"><span class="pre">lower</span></code> directory. If a file from the <code class="docutils literal"><span class="pre">lower</span></code> filesystem is opened and
 then edited, it will be written in the <code class="docutils literal"><span class="pre">upper</span></code> directory and the user of the
 mountpoint will see only the changed file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Enabling the write buffer will enable write buffers for all
+filesystems, both the rootfs and the all bindmounted filesystems
+inside the container. Also, the filesystems will no longer be
+bindmounted technically, as bindmounting and overlayfs are mutually
+exclusive.</p>
+</div>
 <p>If a file is created in the <code class="docutils literal"><span class="pre">lower</span></code> filesystem, the file will be visible in
 the merged filesystem, but it will not be part of the <code class="docutils literal"><span class="pre">upper</span></code> or <code class="docutils literal"><span class="pre">work</span></code>
 filesystems unless someone opens it from the <code class="docutils literal"><span class="pre">merged</span></code> filesystem, edits and
 saves it.</p>
 <p>Opening a file in <code class="docutils literal"><span class="pre">upper</span></code> or <code class="docutils literal"><span class="pre">work</span></code> does not create a file in the
-<code class="docutils literal"><span class="pre">lower</span></code> filesystem until it is synced to the lower filesystem.</p>
+<code class="docutils literal"><span class="pre">lower</span></code> filesystem until it is synced to the lower filesystem. Syncing is
+performed when a container is destroyed using the
+<code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.Destroy(id)</span></code> call.</p>
 <p>The <code class="docutils literal"><span class="pre">upper</span></code> directory is a temporarily created directory in the <code class="docutils literal"><span class="pre">/tmp</span></code>
 filesystem. The <code class="docutils literal"><span class="pre">work</span></code> is also a temporary filesystem.</p>
 <div><img alt="&quot;Description of OverlayFS layering&quot;" height="280" src="../../_images/blockdiag-c7e3f81b40a1869963a11505b1406f5478e6ef64.png" width="256" /></div><p>When the container is shutdown and the mountpoints are cleaned up, the
