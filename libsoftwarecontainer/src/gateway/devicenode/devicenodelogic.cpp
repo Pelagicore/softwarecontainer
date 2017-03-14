@@ -18,6 +18,7 @@
  */
 
 #include "devicenodelogic.h"
+#include "devicenodegateway.h"
 
 namespace softwarecontainer {
 
@@ -36,9 +37,14 @@ bool DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
     auto item = findDeviceByName(dev.name);
 
     if (item == std::end(m_devList)) {
+        dev.isConfigured = false;
         m_devList.push_back(dev);
     } else {
-        item->mode = calculateDeviceMode(item->mode, dev.mode);
+        auto mode = calculateDeviceMode(item->mode, dev.mode);
+        if (mode != item->mode) {
+            item->isConfigured = false;
+            item->mode = mode;
+        }
     }
 
     return true;
@@ -68,6 +74,20 @@ int DeviceNodeLogic::calculateDeviceMode(const int storedMode, const int applied
     }
 
     return mode;
+}
+
+void DeviceNodeLogic::deviceConfigured(const std::string name)
+{
+    auto item = findDeviceByName(name);
+
+    if (item == std::end(m_devList)) {
+        std::string message =  "Device node " + name + "couldn't found while it is trying to set" +
+                               "as configured.";
+        log_error() << message;
+        throw DeviceNodeGatewayError(message);
+    }
+
+    item->isConfigured = true;
 }
 
 } // namespace softwarecontainer

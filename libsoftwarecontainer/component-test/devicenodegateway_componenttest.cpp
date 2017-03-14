@@ -97,3 +97,70 @@ TEST_F(DeviceNodeGatewayTest, TestOverwriteDeviceFails) {
     checkMode.wait();
     ASSERT_TRUE(checkMode.isSuccess());
 }
+
+struct testSetup
+{
+    const std::string firstConfiguration;
+    const std::string secondConfiguration;
+    const std::string deviceNameToExamine;
+    bool  shouldReconfigure;
+};
+
+class DynamicConfigurationTests :
+        public SoftwareContainerGatewayTest,
+        public  ::testing::WithParamInterface<testSetup>
+{
+public:
+    std::unique_ptr<DeviceNodeGateway> gw;
+
+    void SetUp() override
+    {
+        SoftwareContainerGatewayTest::SetUp();
+        gw = std::unique_ptr<DeviceNodeGateway>(new DeviceNodeGateway(m_container));
+    }
+};
+
+/*
+ * This data is fed to the DynamicConfiguration tests
+ *
+ * The first set examines the case when new mode is configured for same device
+ * The second set examines when a new device is added to configuration
+ * The third set examines when exactly same device with same mode is added
+ */
+INSTANTIATE_TEST_CASE_P(DeviceModeConfigurations, DynamicConfigurationTests, ::testing::Values(
+        testSetup{
+            "[{\"name\": \"/dev/tty0\", \"mode\":  622}]",
+            "[{\"name\": \"/dev/tty0\", \"mode\":  755}]",
+            "/dev/tty0",
+            false
+        },
+        testSetup{
+            "[{\"name\": \"/dev/tty0\", \"mode\":  622}]",
+            "[{\"name\": \"/dev/tty1\", \"mode\":  652}]",
+            "/dev/tty0",
+            true
+        },
+        testSetup{
+            "[{\"name\": \"/dev/tty1\", \"mode\":  622}]",
+            "[{\"name\": \"/dev/tty1\", \"mode\":  622}]",
+            "/dev/tty1",
+            true
+        }
+));
+/*
+ * This tests stands for examining multiple activation feature of DeviceNodeGateway
+ *
+ */
+TEST_P(DynamicConfigurationTests, DynamicDeviceNodeConfiguration) {
+
+    testSetup testparams = GetParam();
+
+    loadConfig(testparams.firstConfiguration);
+    ASSERT_TRUE(gw->setConfig(jsonConfig));
+    ASSERT_TRUE(gw->activate());
+
+    loadConfig(testparams.secondConfiguration);
+    ASSERT_TRUE(gw->setConfig(jsonConfig));
+    ASSERT_EQ(testparams.shouldReconfigure, gw->isDeviceConfigured(testparams.deviceNameToExamine));
+    ASSERT_TRUE(gw->activate());
+}

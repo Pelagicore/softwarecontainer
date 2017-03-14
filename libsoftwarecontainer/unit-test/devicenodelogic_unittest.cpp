@@ -84,7 +84,7 @@ public:
  * Verify updateDeviceList and findDeviceByName functions working as expected
  */
 TEST_F(DeviceModeLogicFunctionsTests, findDeviceByNameFunction) {
-    DeviceNodeParser::Device testDevice{"testDevice", 753};
+    DeviceNodeParser::Device testDevice{"testDevice", 753, false};
     ASSERT_TRUE(dnl->updateDeviceList(testDevice));
 
     testDevice.name = "anotherTestDevice";
@@ -115,7 +115,7 @@ public:
  * This data is fed to the DeviceMode tests
  */
 INSTANTIATE_TEST_CASE_P(DeviceParameters, UpdateDeviceListFailureTests, ::testing::Values(
-        DeviceNodeParser::Device{"testDevice", 777},
-        DeviceNodeParser::Device{"testDevice", 666},
-        DeviceNodeParser::Device{"testDevice", 555}
+        DeviceNodeParser::Device{"testDevice", 777, false},
+        DeviceNodeParser::Device{"testDevice", 666, false},
+        DeviceNodeParser::Device{"testDevice", 555, false}
 ));

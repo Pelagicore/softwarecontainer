@@ -68,6 +68,12 @@ public:
      */
     const std::vector<DeviceNodeParser::Device> &getDevList();
 
+    /*
+     * @brief Set device node as configured
+     *
+     * @throws DeviceNodeGatewayError if there is no device match
+     */
+    void deviceConfigured(const std::string name);
 private:
     std::vector<DeviceNodeParser::Device> m_devList;
 };
