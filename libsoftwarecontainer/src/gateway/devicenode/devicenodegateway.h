@@ -70,9 +70,38 @@ public:
      */
     virtual bool teardownGateway() override;
 
+    /**
+     * @brief Questions whether the device is configured or not
+     *
+     * return true or false regarding configuration status
+     */
+    virtual bool isDeviceConfigured(const std::string deviceName);
+
 private:
 
     DeviceNodeLogic m_logic;
+};
+
+class DeviceNodeGatewayError : public SoftwareContainerError
+{
+public:
+    DeviceNodeGatewayError():
+        m_message("DeviceNodeGateway exception")
+    {
+    }
+
+    DeviceNodeGatewayError(const std::string &message):
+        m_message(message)
+    {
+    }
+
+    virtual const char *what() const throw()
+    {
+        return m_message.c_str();
+    }
+
+protected:
+    std::string m_message;
 };
 
 } // namespace softwarecontainer

@@ -25,7 +25,7 @@
 namespace softwarecontainer {
 
 DeviceNodeGateway::DeviceNodeGateway(std::shared_ptr<ContainerAbstractInterface> container) :
-    Gateway(ID, container)
+    Gateway(ID, container, true /*this GW is dynamic*/)
 {
 }
 
@@ -51,38 +51,45 @@ bool DeviceNodeGateway::activateGateway()
     }
 
     for (auto &dev : devlist) {
-        log_info() << "Mapping device " << dev.name;
+        if (!dev.isConfigured) {
+            log_info() << "Mapping device " << dev.name;
 
-        std::string devicePathInContainerOnHost = buildPath(getContainer()->rootFS(), dev.name);
-        std::string deviceParent = parentPath(devicePathInContainerOnHost);
+            std::string devicePathInContainerOnHost = buildPath(getContainer()->rootFS(), dev.name);
+            std::string deviceParent = parentPath(devicePathInContainerOnHost);
 
-        // Already existing files can't be converted into directories
-        if (existsInFileSystem(deviceParent) && !isDirectory(deviceParent)) {
-            log_error() << "Parent path of " << dev.name << " already exist and is not a directory";
-            return false;
-        }
-
-        // If the parent directory does not already exist, we create it.
-        if (!isDirectory(deviceParent) && !createDirectory(deviceParent)) {
-            log_error() << "Could not create parent directory for device " << deviceParent;
-            return false;
-        }
-
-        // Mount device in container
-        getContainer()->mountDevice(dev.name);
-
-        // If mode is specified, try to set mode for the mounted device.
-        if (dev.mode != -1) {
-            FunctionJob job(getContainer(), [&] () {
-                return chmod(dev.name.c_str(), dev.mode);
-            });
-            job.start();
-            job.wait();
-            if (job.isError()) {
-                log_error() << "Could not 'chmod " << dev.mode
-                            << "' the mounted device " << dev.name;
+            // Already existing files can't be converted into directories
+            if (existsInFileSystem(deviceParent) && !isDirectory(deviceParent)) {
+                log_error() << "Parent path of " << dev.name << " already exist and is not a directory";
                 return false;
             }
+
+            // If the parent directory does not already exist, we create it.
+            if (!isDirectory(deviceParent) && !createDirectory(deviceParent)) {
+                log_error() << "Could not create parent directory for device " << deviceParent;
+                return false;
+            }
+
+            // Mount device in container
+            if (!getContainer()->mountDevice(dev.name)) {
+                log_error() << "Unable to mount device " << dev.name;
+                return false;
+            }
+
+
+            // If mode is specified, try to set mode for the mounted device.
+            if (dev.mode != -1) {
+                FunctionJob job(getContainer(), [&] () {
+                    return chmod(dev.name.c_str(), dev.mode);
+                });
+                job.start();
+                job.wait();
+                if (job.isError()) {
+                    log_error() << "Could not 'chmod " << dev.mode
+                                << "' the mounted device " << dev.name;
+                    return false;
+                }
+            }
+            m_logic.deviceConfigured(dev.name);
         }
     }
     return true;
@@ -91,6 +98,12 @@ bool DeviceNodeGateway::activateGateway()
 bool DeviceNodeGateway::teardownGateway()
 {
     return true;
+}
+
+bool DeviceNodeGateway::isDeviceConfigured(const std::string deviceName)
+{
+    auto device = m_logic.findDeviceByName(deviceName);
+    return device->isConfigured;
 }
 
 } // namespace softwarecontainer

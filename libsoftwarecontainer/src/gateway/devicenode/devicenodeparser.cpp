@@ -42,6 +42,7 @@ bool DeviceNodeParser::parseDeviceNodeGatewayConfiguration(const json_t *element
         }
     }
 
+    result.isConfigured = false;
     return true;
 }
 
