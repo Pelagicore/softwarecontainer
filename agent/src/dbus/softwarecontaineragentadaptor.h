@@ -32,7 +32,10 @@ class SoftwareContainerAgentAdaptor :
 public:
     virtual ~SoftwareContainerAgentAdaptor();
 
-    SoftwareContainerAgentAdaptor(::softwarecontainer::SoftwareContainerAgent &agent, bool useSessionBus);
+    SoftwareContainerAgentAdaptor(
+        Glib::RefPtr<Glib::MainLoop> &mainLoop,
+        ::softwarecontainer::SoftwareContainerAgent &agent,
+        bool useSessionBus);
 
     void List(SoftwareContainerAgentMessageHelper msg) override;
     void ListCapabilities(SoftwareContainerAgentMessageHelper msg) override;
@@ -62,6 +65,12 @@ public:
 
     void Create(const std::string config, SoftwareContainerAgentMessageHelper msg) override;
 
+private:
+    // Slots to be invoked to notify on error or success in dbus setup
+    void onDBusError(std::string message);
+    void onDBusNameAcquired(std::string message);
+
+    Glib::RefPtr<Glib::MainLoop> m_mainLoop;
     ::softwarecontainer::SoftwareContainerAgent &m_agent;
 
 };
