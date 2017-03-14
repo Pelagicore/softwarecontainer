@@ -43,6 +43,9 @@ Vagrant.configure(2) do |config|
     # Sync the repo root with this path in the VM
     config.vm.synced_folder "./", "/home/ubuntu/softwarecontainer/", create: true
 
+    # Fix the tty for the root user
+    config.vm.provision "shell", privileged: true, path: "cookbook/system-config/fix-tty.sh"
+
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh"
     
