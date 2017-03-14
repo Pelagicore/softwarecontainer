@@ -216,11 +216,17 @@ int main(int argc, char **argv)
         std::shared_ptr<Config> config = std::make_shared<Config>(std::move(configSources),
                                                                   ConfigDefinition::mandatory(),
                                                                   ConfigDependencies());
-        std::shared_ptr<SoftwareContainerFactory> factory = std::shared_ptr<SoftwareContainerFactory> (new SoftwareContainerFactory());
-        std::shared_ptr<ContainerUtilityInterface> utility = std::shared_ptr<ContainerUtilityInterface> (new ContainerUtilityInterface());
+        std::shared_ptr<SoftwareContainerFactory> factory =
+            std::shared_ptr<SoftwareContainerFactory> (new SoftwareContainerFactory());
+        std::shared_ptr<ContainerUtilityInterface> utility =
+            std::shared_ptr<ContainerUtilityInterface> (new ContainerUtilityInterface());
 
         ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config, factory, utility);
-        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor(new SoftwareContainerAgentAdaptor(agent, useSessionBus));
+        std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor(
+            // The adaptor needs access to the mainloop in order to be able to exit the 
+            // loop in case dbus setup fails.
+            new SoftwareContainerAgentAdaptor(ml, agent, useSessionBus)
+        );
 
         // Register UNIX signal handler
         g_unix_signal_add(SIGINT, &signalHandler, &ml);
