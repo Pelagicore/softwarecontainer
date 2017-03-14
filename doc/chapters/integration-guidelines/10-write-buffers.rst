@@ -9,7 +9,7 @@ chapter.
 Example
 -------
 The following snippet will create a container where a write buffer will be
-created for all filesystems in that container:
+created for all filesystems in that container::
 
     [{
         "enableWriteBuffer": true
