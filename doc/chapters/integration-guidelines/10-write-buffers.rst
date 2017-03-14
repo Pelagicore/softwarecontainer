@@ -16,7 +16,7 @@ created for all filesystems in that container::
     }]
 
 The following example will disable write buffers for all filesystems within 
-the container: 
+the container::
 
     [{
         "enableWriteBuffer": false
