@@ -1,0 +1,7 @@
+{
+    "version": "1",
+    "capabilities": [{
+        "name": "test.cap",
+        "gateways": "This is not a json array"
+        }]
+}

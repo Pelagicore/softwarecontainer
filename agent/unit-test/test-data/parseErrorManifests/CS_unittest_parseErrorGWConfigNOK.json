@@ -1,0 +1,9 @@
+{
+    "version": "1",
+    "capabilities": [{
+        "name": "com.pelagicore.temperatureservice.gettemperature",
+        "gateways": [{
+            "id": "dbus"
+        }]
+    }]
+}
