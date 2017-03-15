@@ -20,6 +20,7 @@
 #include "capability/baseconfigstore.h"
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
+#include "capability/servicemanifestloader.h"
 
 #include <glibmm.h>
 
@@ -30,89 +31,162 @@
 
 using namespace softwarecontainer;
 
+/*
+ * Test stub - ServiceManifestStringLoader
+ *
+ * Loads a service manifests from a string, as opposed to the non-test loader
+ * which reads from file.
+ */
+class ServiceManifestStringLoader : public ServiceManifestLoader
+{
+LOG_DECLARE_CLASS_CONTEXT("SMSL", "SoftwareContainer service manifest loader");
+
+public:
+    // Constructor needs to init parent with the service manifest source string
+    ServiceManifestStringLoader(const std::string &source) :
+        ServiceManifestLoader(source)
+    {}
+
+    std::vector<json_t *> loadContent() override
+    {
+        if (m_source.empty()) {
+            log_debug() << "Service manifests (m_source) is empty";
+            return m_content;
+        }
+        return addContent(m_source);
+    }
+
+    std::vector<json_t *> addContent(const std::string &sourceString)
+    {
+        std::string errorMessage;
+        json_error_t error;
+        json_t *content = json_loads(sourceString.c_str(), 0, &error);
+
+        if (nullptr == content) {
+            errorMessage = "Could not parse the Service Manifest string: "
+                + std::to_string(error.line) + " : " + std::string(error.text);
+            log_error() << errorMessage;
+            throw ServiceManifestParseError(errorMessage);
+        } else if (!json_is_object(content)) {
+            errorMessage = "The Service Manifest string does not contain a json object: "
+                + std::to_string(error.line) + " : " + std::string(error.text);
+            log_error() << errorMessage;
+            throw ServiceManifestParseError(errorMessage);
+        }
+
+        m_content.push_back(content);
+
+        return m_content;
+    }
+};
+
+
 class ConfigStoreTest: public ::testing::Test
 {
 public:
     LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
     ConfigStoreTest() {}
 
-    std::string capNameA = "com.pelagicore.temperatureservice.gettemperature";
-    std::string capNameB = "com.pelagicore.temperatureservice.settemperature";
-    std::string capNameC = "dummyCapC";
-    std::string capNameD = "dummyCapD";
+    const std::string capNameGetTemp = "com.pelagicore.temperatureservice.gettemperature";
+    const std::string capNameSetTemp = "com.pelagicore.temperatureservice.settemperature";
+    const std::string capNameC = "dummyCapC";
+    const std::string capNameD = "dummyCapD";
 
-    /* The Service Manifests' (relative) file paths */
-    const std::string testDataDir   = std::string(TEST_DATA_DIR);
-    const std::string dirPath       = buildPath(testDataDir, "testDirectory");
-    const std::string errorDir      = buildPath(testDataDir, "fileErrorManifests");
-    const std::string onlyValidDir  = buildPath(testDataDir, "onlyValidManifests");
-    const std::string manifestPath       = "CS_unittest_ServiceManifest.json";
-    const std::string shortManifestPath  = "CS_unittest_short_ServiceManifest.json";
-    const std::string evilManifest       = "CS_unittest_parseError.json";
-    const std::string notJSONManifest    = "CS_unittest_fileExtensionIsNotJson.txt";
-    const std::string notJSONManifest2   = "CS_unittest_fileIsNotJson.json";
-    const std::string nonExistingPath    = "/home/aiuaiai/iuatxia";
+    /* The building blocks for making service manifests */
+    const std::string serviceManifestStart = "\"version\": \"1\",\"capabilities\": ";
+
+    const std::string capGetTempStart =
+        "\"name\": \"" + capNameGetTemp + "\",\"gateways\": ";
+    const std::string capSetTempStart =
+        "\"name\": \"" + capNameSetTemp + "\",\"gateways\": ";
+
+    const std::string gwDbusStart = "\"id\": \"dbus\",\"config\": ";
+    const std::string gwCfgSessionEmpty = "{\"dbus-gateway-config-session\": []}";
+    const std::string gwCfgDbusSystemStart = "\"dbus-gateway-config-system\": ";
+    const std::string gwCfgDbusIntrospect =
+        "{\"direction\": \"outgoing\","
+         "\"interface\": \"org.freedesktop.DBus.Introspectable\","
+         "\"object-path\": \"/com/pelagicore/TemperatureService\","
+         "\"method\": \"Introspect\"}";
+
+    const std::string gwCfgDbusEcho =
+        "{\"direction\": \"outgoing\","
+         "\"interface\": \"com.pelagicore.TemperatureService\","
+         "\"object-path\": \"/com/pelagicore/TemperatureService\","
+         "\"method\": \"Echo\"}";
+    const std::string gwCfgDbusGetTemp =
+        "{\"direction\": \"outgoing\","
+         "\"interface\": \"com.pelagicore.TemperatureService\","
+         "\"object-path\": \"/com/pelagicore/TemperatureService\","
+         "\"method\": \"GetTemperature\""
+        "}, {\"direction\": \"incoming\","
+         "\"interface\": \"com.pelagicore.TemperatureService\","
+         "\"object-path\": \"/com/pelagicore/TemperatureService\","
+         "\"method\": \"TemperatureChanged\"}";
+    const std::string gwCfgDbusSetTemp =
+        "{\"direction\": \"outgoing\","
+          "\"interface\": \"com.pelagicore.TemperatureService\","
+          "\"object-path\": \"/com/pelagicore/TemperatureService\","
+          "\"method\": \"SetTemperature\"}";
+    const std::string gwCfgDummy = "{\"id\": \"dummy-gw2\", \"config\": []}";
+
+    /* Valid capability objects */
+    const std::string capDummyC =
+        "{\"name\": \"" + capNameC + "\","
+         "\"gateways\": [{\"id\": \"dbus\",\"config\": []}, "
+                        "{\"id\": \"dummy-gw2\",\"config\": []}]}";
+    const std::string capDummyD =
+        "{\"name\": \"" + capNameD + "\","
+         "\"gateways\": [{\"id\": \"dummy-gw1\",\"config\": []}, "
+                        "{\"id\": \"dummy-gw2\",\"config\": []}]}";
+    const std::string capGetTempShort =
+        "{" + capGetTempStart + "[{" + gwDbusStart + "[" + gwCfgSessionEmpty + ","
+        + "{" + gwCfgDbusSystemStart + "[" + gwCfgDbusIntrospect +"]}"
+        + "]}]}";
+    const std::string capGetTempLong =
+        "{" + capGetTempStart + "[{" + gwDbusStart + "[" + gwCfgSessionEmpty + ","
+        + "{" + gwCfgDbusSystemStart  + "[" + gwCfgDbusIntrospect + ","
+              + gwCfgDbusEcho + "," + gwCfgDbusGetTemp + "]}]}"
+        + "," + gwCfgDummy + "]}";
+    const std::string capSetTempLong =
+        "{" + capSetTempStart + "[{" + gwDbusStart + "[" + gwCfgSessionEmpty + ","
+        + "{" + gwCfgDbusSystemStart  + "[" + gwCfgDbusIntrospect
+        + "," + gwCfgDbusSetTemp + "]}]}]}";
+
+    /* Valid service manifests */
+    const std::string shortManifest =
+        "{" + serviceManifestStart + "[" + capGetTempShort + "]}";
+    const std::string longManifest =
+        "{" + serviceManifestStart + "[" + capGetTempLong + "," + capSetTempLong + ","
+        + capDummyC + "," + capDummyD + "]}";
+
 };
 
 /* Constructing a BaseConfigStore with an empty file path should not throw an exception.
  */
+
 TEST_F(ConfigStoreTest, constructorEmptyStrOk) {
-    ASSERT_NO_THROW(BaseConfigStore(""));
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(""));
+    ASSERT_NO_THROW(BaseConfigStore(std::move(loader)));
 }
 
 /* Constructing a BaseConfigStore with a file path,
  * pointing at a parsable json file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk) {
-    ASSERT_NO_THROW(BaseConfigStore(buildPath(testDataDir, shortManifestPath)));
+    // log_debug() << shortManifest;
+
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(shortManifest));
+    ASSERT_NO_THROW(BaseConfigStore(std::move(loader)));
 }
 
 /* Constructing a BaseConfigStore with a file path,
  * pointing at a parsable file, should not throw an exception.
  */
 TEST_F(ConfigStoreTest, constructorFileOk2) {
-    ASSERT_NO_THROW(BaseConfigStore(buildPath(testDataDir, manifestPath)));
-}
-
-/* Constructing a FilteredConfigStore with a directory path,
- * even if all files can not be parsed, should not throw an exception.
- */
-TEST_F(ConfigStoreTest, constructorDirNoJsonFiles) {
-    // No Service Manifests, but ok dir
-    // TODO: Get rid of this + ""
-    ASSERT_NO_THROW(FilteredConfigStore(dirPath + ""));
-}
-
-/* Constructing a BaseConfigStore with a directory path,
- * when the directory does not exist, should throw an exception of type ServiceManifestPathError.
- */
-TEST_F(ConfigStoreTest, dirDoesNotExist) {
-    // TODO: Get rid of this + ""
-    ASSERT_THROW(BaseConfigStore(nonExistingPath + ""), ServiceManifestPathError);
-}
-
-/* Constructing a FilteredConfigStore with a directory path,
- * when the directory is "/", should throw an exception of type ServiceManifestPathError.
- */
-TEST_F(ConfigStoreTest, rootDirNotAllowed) {
-    ASSERT_THROW(FilteredConfigStore("/"), ServiceManifestPathError);
-}
-
-/* Constructing a BaseConfigStore with a file path
- * pointing at a Service Manifest which doesn't have the file extension "json"
- * should throw an exception of type ServiceManifestParseError.
- */
-TEST_F(ConfigStoreTest, fileExtensionIsNotJson) {
-    ASSERT_THROW(BaseConfigStore(buildPath(errorDir, notJSONManifest)), ServiceManifestParseError);
-}
-
-/* Constructing a BaseConfigStore with a file path
- * pointing at a Service Manifest which can not be parsed
- * due to that the file is not a json file
- * should throw an exception of type ServiceManifestParseError.
- */
-TEST_F(ConfigStoreTest, fileIsNotJsonFile) {
-    ASSERT_THROW(BaseConfigStore(buildPath(errorDir, notJSONManifest2)), ServiceManifestParseError);
+    // log_debug() << longManifest;
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(longManifest));
+    ASSERT_NO_THROW(BaseConfigStore(std::move(loader)));
 }
 
 /* Constructing a BaseConfigStore with a file path,
@@ -121,15 +195,11 @@ TEST_F(ConfigStoreTest, fileIsNotJsonFile) {
  * should throw an exception of type CapabilityParseError.
  */
 TEST_F(ConfigStoreTest, capabilitiesIsNotAJsonArray) {
-    ASSERT_THROW(BaseConfigStore(buildPath(testDataDir, evilManifest)), CapabilityParseError);
-}
+    const std::string capIsNotArray =
+        "{" + serviceManifestStart + "1234 }";
 
-/* Constructing a BaseConfigStore with a directory path,
- * that contains a file that can't be parsed results in an exception.
- */
-TEST_F(ConfigStoreTest, dirOneFileNotOk) {
-    // TODO: Get rid of this + ""
-    ASSERT_THROW(BaseConfigStore(testDataDir + ""), CapabilityParseError);
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(capIsNotArray));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
 }
 
 /* Reading gateway configurations from a Service Manifest file
@@ -137,9 +207,10 @@ TEST_F(ConfigStoreTest, dirOneFileNotOk) {
  * should result in a non-empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
-    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, manifestPath));
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(longManifest));
+    FilteredConfigStore cs = FilteredConfigStore(std::move(loader));
 
-    GatewayConfiguration retGWs = cs.configByID(capNameA);
+    GatewayConfiguration retGWs = cs.configByID(capNameGetTemp);
     ASSERT_FALSE(retGWs.empty());
 }
 
@@ -147,12 +218,13 @@ TEST_F(ConfigStoreTest, readConfigFetchOneCap) {
  * result in getting all those names that are listed in the manifest file.
  */
 TEST_F(ConfigStoreTest, readConfigFetchAllCaps) {
-    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, manifestPath));
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(longManifest));
+    FilteredConfigStore cs = FilteredConfigStore(std::move(loader));
 
     std::vector<std::string> ids = cs.IDs();
     ASSERT_FALSE(ids.empty());
-    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameA), ids.end());
-    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameB), ids.end());
+    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameGetTemp), ids.end());
+    ASSERT_NE(std::find(ids.begin(), ids.end(), capNameSetTemp), ids.end());
     ASSERT_NE(std::find(ids.begin(), ids.end(), capNameC), ids.end());
     ASSERT_NE(std::find(ids.begin(), ids.end(), capNameD), ids.end());
 }
@@ -162,7 +234,8 @@ TEST_F(ConfigStoreTest, readConfigFetchAllCaps) {
  * should result in an empty result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
-    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, manifestPath));
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(longManifest));
+    FilteredConfigStore cs = FilteredConfigStore(std::move(loader));
     GatewayConfiguration retGWs = cs.configByID("EvilCapName");
     ASSERT_TRUE(retGWs.empty());
 }
@@ -172,21 +245,13 @@ TEST_F(ConfigStoreTest, readConfigFetchEvilCap) {
  * should result in a non-empty result. Match result.
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
-    FilteredConfigStore cs = FilteredConfigStore(buildPath(testDataDir, shortManifestPath));
-    GatewayConfiguration retGWs = cs.configByID(capNameA);
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(shortManifest));
+    FilteredConfigStore cs = FilteredConfigStore(std::move(loader));
+    GatewayConfiguration retGWs = cs.configByID(capNameGetTemp);
     EXPECT_FALSE(retGWs.empty());
 
-    std::string configStr =
-        "[{"
-                "\"dbus-gateway-config-session\": []"
-            "}, {"
-                "\"dbus-gateway-config-system\": [{"
-                    "\"direction\": \"outgoing\","
-                    "\"interface\": \"org.freedesktop.DBus.Introspectable\","
-                    "\"object-path\": \"/com/pelagicore/TemperatureService\","
-                    "\"method\": \"Introspect\""
-                "}]"
-            "}]";
+    std::string configStr = "[" + gwCfgSessionEmpty + ", {"
+        + gwCfgDbusSystemStart  + "[" + gwCfgDbusIntrospect + "]}]";
     json_error_t error;
     json_t *expectedJson = json_loads(configStr.c_str(), 0, &error);
     EXPECT_FALSE(nullptr == expectedJson);
@@ -200,7 +265,7 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
     json_decref(retGWConfigs);
 }
 
-/* Reading gateway configurations from several Service Manifest files,
+/* Reading gateway configurations from several Service Manifests,
  * which contain gateways with the same IDs, should result in a merged result
  * when fetching the gateway configuration for an existing capability.
  * Match result.
@@ -208,8 +273,13 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchConfig) {
  * reading of file results in a warning (for the "parseError" file).
  */
 TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
-    FilteredConfigStore cs = FilteredConfigStore(onlyValidDir);
-    GatewayConfiguration retGWs = cs.configByID(capNameA);
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(shortManifest));
+    // This is used to simulate the behavior of ConfigStore when several service manifests
+    // and combining the gateway objects
+    loader->addContent(longManifest);
+
+    FilteredConfigStore cs = FilteredConfigStore(std::move(loader));
+    GatewayConfiguration retGWs = cs.configByID(capNameGetTemp);
     EXPECT_FALSE(retGWs.empty());
     std::vector<json_t *> expectedDbusConfigs;
 

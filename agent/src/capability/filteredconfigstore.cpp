@@ -21,7 +21,8 @@
 
 namespace softwarecontainer {
 
-FilteredConfigStore::FilteredConfigStore(const std::string &path): BaseConfigStore(path)
+FilteredConfigStore::FilteredConfigStore(std::unique_ptr<ServiceManifestLoader> loader):
+    BaseConfigStore(std::move(loader))
 {
 }
 

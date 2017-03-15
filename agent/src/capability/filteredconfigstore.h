@@ -26,7 +26,7 @@ class FilteredConfigStore : public BaseConfigStore
 {
     LOG_DECLARE_CLASS_CONTEXT("FCS", "FilteredConfigStore");
 public:
-    FilteredConfigStore(const std::string &path);
+    FilteredConfigStore(std::unique_ptr<ServiceManifestLoader> loader);
 
     /**
      * @brief Returns all capability IDs

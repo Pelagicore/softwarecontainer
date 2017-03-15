@@ -21,7 +21,8 @@
 
 namespace softwarecontainer {
 
-DefaultConfigStore::DefaultConfigStore(const std::string &path):BaseConfigStore(path)
+DefaultConfigStore::DefaultConfigStore(std::unique_ptr<ServiceManifestLoader> loader):
+    BaseConfigStore(std::move(loader))
 {
 }
 

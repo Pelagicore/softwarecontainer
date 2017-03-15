@@ -20,13 +20,13 @@ include(AddGTestTest)
 set(TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test-data)
 add_definitions(-DTEST_DATA_DIR="${TEST_DATA_DIR}")
 
-set(CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES
+set(SOFTWARECONTAINERAGENT_TEST_LIBRARY_DEPENDENCIES
     ${IVILogging_LIBRARIES}
     softwarecontainer
     softwarecontainercommon
 )
 
-set(CONFIGSTORE_TEST_FILES
+set(SOFTWARECONTAINERAGENT_TEST_FILES
     main.cpp
     configstore_unittest.cpp
     config_unittest.cpp
@@ -38,6 +38,7 @@ set(CONFIGSTORE_TEST_FILES
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/servicemanifestfileloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/mainconfigsource.cpp
@@ -48,6 +49,6 @@ set(CONFIGSTORE_TEST_FILES
 )
 
 add_gtest_test(softwarecontaineragent-unit-test
-    "${CONFIGSTORE_TEST_FILES}"
-    "${CONFIGSTORE_TEST_LIBRARY_DEPENDENCIES}"
+    "${SOFTWARECONTAINERAGENT_TEST_FILES}"
+    "${SOFTWARECONTAINERAGENT_TEST_LIBRARY_DEPENDENCIES}"
 )
