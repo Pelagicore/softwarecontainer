@@ -53,22 +53,6 @@ bool DeviceNodeGateway::activateGateway()
     for (auto &dev : devlist) {
         if (!dev.isConfigured) {
             log_info() << "Mapping device " << dev.name;
-
-            std::string devicePathInContainerOnHost = buildPath(getContainer()->rootFS(), dev.name);
-            std::string deviceParent = parentPath(devicePathInContainerOnHost);
-
-            // Already existing files can't be converted into directories
-            if (existsInFileSystem(deviceParent) && !isDirectory(deviceParent)) {
-                log_error() << "Parent path of " << dev.name << " already exist and is not a directory";
-                return false;
-            }
-
-            // If the parent directory does not already exist, we create it.
-            if (!isDirectory(deviceParent) && !createDirectory(deviceParent)) {
-                log_error() << "Could not create parent directory for device " << deviceParent;
-                return false;
-            }
-
             // Mount device in container
             if (!getContainer()->mountDevice(dev.name)) {
                 log_error() << "Unable to mount device " << dev.name;

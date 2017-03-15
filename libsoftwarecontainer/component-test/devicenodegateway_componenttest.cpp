@@ -129,8 +129,8 @@ public:
  */
 INSTANTIATE_TEST_CASE_P(DeviceModeConfigurations, DynamicConfigurationTests, ::testing::Values(
         testSetup{
-            "[{\"name\": \"/dev/tty0\", \"mode\":  622}]",
-            "[{\"name\": \"/dev/tty0\", \"mode\":  755}]",
+            "[{\"name\": \"/dev/input/mouse0\", \"mode\":  622}]",
+            "[{\"name\": \"/dev/input/mouse0\", \"mode\":  755}]",
             "/dev/tty0",
             false
         },
