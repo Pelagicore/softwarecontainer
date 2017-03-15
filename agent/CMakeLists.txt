@@ -43,6 +43,8 @@ add_executable(softwarecontainer-agent
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/defaultconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/filteredconfigstore.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/configstoreerror.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/servicemanifestloader.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/capability/servicemanifestfileloader.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/config/fileconfigloader.cpp
@@ -55,6 +57,7 @@ add_executable(softwarecontainer-agent
 
 target_link_libraries(softwarecontainer-agent
     ${Giomm_LIBRARIES}
+    ${Glibmm_LIBRARIES}
     ${IVILogging_LIBRARIES}
     ${LXC_LIBRARIES}
     softwarecontainer

@@ -25,6 +25,7 @@
 #include "config/configerror.h"
 #include "config/configdefinition.h"
 #include "config/softwarecontainerconfig.h"
+#include "capability/servicemanifestfileloader.h"
 
 namespace softwarecontainer {
 
@@ -73,8 +74,11 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
         m_config->getStringValue(ConfigDefinition::SC_GROUP,
                                  ConfigDefinition::SC_DEFAULT_SERVICE_MANIFEST_DIR_KEY);
 
-    m_filteredConfigStore = std::make_shared<FilteredConfigStore>(serviceManifestDir);
-    m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(defaultServiceManifestDir);
+    std::unique_ptr<ServiceManifestLoader> defaultLoader(new ServiceManifestFileLoader(defaultServiceManifestDir));
+    std::unique_ptr<ServiceManifestLoader> loader(new ServiceManifestFileLoader(serviceManifestDir));
+
+    m_filteredConfigStore = std::make_shared<FilteredConfigStore>(std::move(loader));
+    m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(std::move(defaultLoader));
 
     m_containerUtility->removeOldContainers();
 
