@@ -96,26 +96,3 @@ TEST_F(DeviceModeLogicFunctionsTests, findDeviceByNameFunction) {
     auto device = dnl->findDeviceByName("anotherTestDevice");
     ASSERT_EQ("anotherTestDevice", device->name);
 }
-
-
-class UpdateDeviceListFailureTests : public  ::testing::TestWithParam<DeviceNodeParser::Device>
-{
-public:
-    DeviceNodeLogic *dnl;
-    DeviceNodeParser::Device testparams;
-
-    void SetUp() override
-    {
-        dnl = new DeviceNodeLogic();
-        testparams = GetParam();
-    }
-};
-
-/*
- * This data is fed to the DeviceMode tests
- */
-INSTANTIATE_TEST_CASE_P(DeviceParameters, UpdateDeviceListFailureTests, ::testing::Values(
-        DeviceNodeParser::Device{"testDevice", 777, false},
-        DeviceNodeParser::Device{"testDevice", 666, false},
-        DeviceNodeParser::Device{"testDevice", 555, false}
-));
