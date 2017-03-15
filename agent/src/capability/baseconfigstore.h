@@ -49,12 +49,17 @@ public:
      * @throws CapabilityParseError if parsing of one or more Capabilities or Gateway
      *         Configurations in a file is unsuccessful
      */
-    BaseConfigStore(const std::string &filePath);
+    BaseConfigStore(const std::string &inputPath);
 
 protected:
     std::map<std::string, GatewayConfiguration> m_capMap;
 
 private:
+    /**
+     * @brief Helper function to pass on the directory of Service Manifests
+     * or Service Manifest file to the correct method.
+     */
+    void parseServiceManifests(const std::string &inputPath);
 
     /**
      * @brief Reads a directory and finds all json Service Manifest files
@@ -65,7 +70,7 @@ private:
      * @throws ServiceManifestPathError if the path to the Service Manifest(s) is not allowed
      *
      */
-    void readCapsFromDir(const std::string &dirPath);
+    void readServiceManifestsFromDir(const std::string &dirPath);
 
     /**
      * @brief Reads a Service Manifest file, of type json, and adds the
@@ -78,7 +83,7 @@ private:
      * is unsuccessful
      *
      */
-    void readCapsFromFile(const std::string &filePath);
+    void readJsonFromFile(const std::string &filePath);
 
     /**
      * @brief Parse a JSON object, which should be a JSON array, of capabilities

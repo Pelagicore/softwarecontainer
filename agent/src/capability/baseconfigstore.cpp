@@ -27,11 +27,15 @@ BaseConfigStore::BaseConfigStore(const std::string &inputPath)
         //File path is empty, this is ok
         return;
     }
+    parseServiceManifests(inputPath);
+}
 
+void BaseConfigStore::parseServiceManifests(const std::string &inputPath)
+{
     if (isDirectory(inputPath)) {
-        readCapsFromDir(inputPath);
+        readServiceManifestsFromDir(inputPath);
     } else if (isFile(inputPath)) {
-        readCapsFromFile(inputPath);
+        readJsonFromFile(inputPath);
     } else {
         std::string errorMessage = "Path to service manifest does not exist: \"" + inputPath + "\"";
         log_error() << errorMessage;
@@ -39,7 +43,7 @@ BaseConfigStore::BaseConfigStore(const std::string &inputPath)
     }
 }
 
-void BaseConfigStore::readCapsFromDir(const std::string &dirPath)
+void BaseConfigStore::readServiceManifestsFromDir(const std::string &dirPath)
 {
     std::string errorMessage;
 
@@ -63,11 +67,11 @@ void BaseConfigStore::readCapsFromDir(const std::string &dirPath)
     for (std::string file : files) {
         std::string filePath = buildPath(dirPath, file);
 
-        readCapsFromFile(filePath);
+        readJsonFromFile(filePath);
     }
 }
 
-void BaseConfigStore::readCapsFromFile(const std::string &filePath)
+void BaseConfigStore::readJsonFromFile(const std::string &filePath)
 {
     std::string errorMessage;
 
@@ -92,28 +96,30 @@ void BaseConfigStore::readCapsFromFile(const std::string &filePath)
         throw ServiceManifestParseError(errorMessage);
     }
 
-    json_t *capabilities = json_object_get(fileroot, "capabilities");
-    if (nullptr == capabilities) {
-        errorMessage = "Could not parse the \"capability\" object in file: " + filePath;
-        log_error() << errorMessage;
-        throw CapabilityParseError(errorMessage);
-    }
-    if (!json_is_array(capabilities)) {
-        errorMessage = "The \"capability\" object is not an array, in file: " + filePath;
-        log_error() << errorMessage;
-        throw CapabilityParseError(errorMessage);
-    }
+    log_debug() << "Parsing Service Manifest: " << filePath;
 
     // Can't use json_decref on fileroot, it removes objects too early
     // TODO: So when do we actually do decref on this?
-    parseCapabilities(capabilities);
+    parseCapabilities(fileroot);
 }
 
-void BaseConfigStore::parseCapabilities(json_t *capabilities)
+void BaseConfigStore::parseCapabilities(json_t *fileroot)
 {
     size_t i;
     json_t *capability;
     std::string errorMessage;
+
+    json_t *capabilities = json_object_get(fileroot, "capabilities");
+    if (nullptr == capabilities) {
+        errorMessage = "Could not parse the \"capability\" object";
+        log_error() << errorMessage;
+        throw CapabilityParseError(errorMessage);
+    }
+    if (!json_is_array(capabilities)) {
+        errorMessage = "The \"capability\" object is not an array";
+        log_error() << errorMessage;
+        throw CapabilityParseError(errorMessage);
+    }
 
     log_debug() << "Size of capabilities is " << std::to_string(json_array_size(capabilities));
 
