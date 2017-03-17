@@ -69,14 +69,6 @@ public:
      * @brief Implements Gateway::teardownGateway
      */
     virtual bool teardownGateway() override;
-
-    /**
-     * @brief Questions whether the device is configured or not
-     *
-     * return true or false regarding configuration status
-     */
-    virtual bool isDeviceConfigured(const std::string deviceName);
-
 private:
 
     DeviceNodeLogic m_logic;

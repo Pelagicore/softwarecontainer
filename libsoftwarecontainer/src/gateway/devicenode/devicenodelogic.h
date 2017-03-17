@@ -20,7 +20,7 @@
 #pragma once
 
 #include "softwarecontainer-common.h"
-#include "devicenodeparser.h"
+#include "devicenode.h"
 
 namespace softwarecontainer {
 
@@ -36,21 +36,12 @@ public:
     DeviceNodeLogic() {};
 
     /*
-     * @brief Calculate the device node mode after applying white-listing policy
-     * i.e. if the appliedMode is 706 and storedMode is 622 then
-     *      the calculated mode will be 726
-     *
-     * @return integer value representing new device mode
-     */
-    int calculateDeviceMode(int storedMode, int appliedMode);
-
-    /*
      * @brief Find device node which has the same name with the argument
      *
      * @return Iterator to the founded device node element or end of the list
      * if no such element is found.
      */
-    std::vector<DeviceNodeParser::Device>::iterator findDeviceByName(const std::string name);
+    std::shared_ptr<Device> findDeviceByName(const std::string name);
 
     /*
      * @brief Update the device node list due to white-listing policy
@@ -59,23 +50,17 @@ public:
      *
      * @return either true or false due to state of operation
      */
-    bool updateDeviceList(DeviceNodeParser::Device dev);
+    bool updateDeviceList(Device &dev);
 
     /*
      * @brief Get the list of device nodes
      *
      * @return A list of well-formed device nodes ready to be applied
      */
-    const std::vector<DeviceNodeParser::Device> &getDevList();
+    const std::vector<std::shared_ptr<Device>> &getDevList();
 
-    /*
-     * @brief Set device node as configured
-     *
-     * @throws DeviceNodeGatewayError if there is no device match
-     */
-    void deviceConfigured(const std::string name);
 private:
-    std::vector<DeviceNodeParser::Device> m_devList;
+    std::vector<std::shared_ptr<Device>> m_devList;
 };
 
 } // namespace softwarecontainer

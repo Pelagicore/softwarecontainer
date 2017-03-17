@@ -102,8 +102,6 @@ struct testSetup
 {
     const std::string firstConfiguration;
     const std::string secondConfiguration;
-    const std::string deviceNameToExamine;
-    bool  shouldReconfigure;
 };
 
 class DynamicConfigurationTests :
@@ -130,21 +128,15 @@ public:
 INSTANTIATE_TEST_CASE_P(DeviceModeConfigurations, DynamicConfigurationTests, ::testing::Values(
         testSetup{
             "[{\"name\": \"/dev/input/mouse0\", \"mode\":  622}]",
-            "[{\"name\": \"/dev/input/mouse0\", \"mode\":  755}]",
-            "/dev/tty0",
-            false
+            "[{\"name\": \"/dev/input/mouse0\", \"mode\":  755}]"
         },
         testSetup{
             "[{\"name\": \"/dev/tty0\", \"mode\":  622}]",
-            "[{\"name\": \"/dev/tty1\", \"mode\":  652}]",
-            "/dev/tty0",
-            true
+            "[{\"name\": \"/dev/tty1\", \"mode\":  652}]"
         },
         testSetup{
             "[{\"name\": \"/dev/tty1\", \"mode\":  622}]",
-            "[{\"name\": \"/dev/tty1\", \"mode\":  622}]",
-            "/dev/tty1",
-            true
+            "[{\"name\": \"/dev/tty1\", \"mode\":  622}]"
         }
 ));
 /*
@@ -161,6 +153,5 @@ TEST_P(DynamicConfigurationTests, DynamicDeviceNodeConfiguration) {
 
     loadConfig(testparams.secondConfiguration);
     ASSERT_TRUE(gw->setConfig(jsonConfig));
-    ASSERT_EQ(testparams.shouldReconfigure, gw->isDeviceConfigured(testparams.deviceNameToExamine));
     ASSERT_TRUE(gw->activate());
 }
