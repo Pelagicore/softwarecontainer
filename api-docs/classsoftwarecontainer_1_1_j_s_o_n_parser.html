@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-1c2caff 2017-03-17</span>
+   &#160;<span id="projectnumber">0.18.0-ac179ac 2017-03-17</span>
    </div>
   </td>
  </tr>
@@ -215,12 +215,12 @@ False: If the string could not be read. </dd></dl>
 
 <p>Definition at line <a class="el" href="jsonparser_8cpp_source.html#l00051">51</a> of file <a class="el" href="jsonparser_8cpp_source.html">jsonparser.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="waylandgateway_8cpp_source.html#l00043">softwarecontainer::WaylandGateway::readConfigElement()</a>, <a class="el" href="pulsegateway_8cpp_source.html#l00034">softwarecontainer::PulseGateway::readConfigElement()</a>, and <a class="el" href="jsonparser_8cpp_source.html#l00024">readOptional()</a>.</p>
+<p>Referenced by <a class="el" href="devicenode_8cpp_source.html#l00039">softwarecontainer::Device::parse()</a>, <a class="el" href="networkgatewayparser_8cpp_source.html#l00023">softwarecontainer::NetworkGatewayParser::parseNetworkGatewayConfiguration()</a>, <a class="el" href="waylandgateway_8cpp_source.html#l00043">softwarecontainer::WaylandGateway::readConfigElement()</a>, <a class="el" href="pulsegateway_8cpp_source.html#l00034">softwarecontainer::PulseGateway::readConfigElement()</a>, and <a class="el" href="jsonparser_8cpp_source.html#l00024">readOptional()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    json_t *value = json_object_get(element, key);</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">if</span> (!value) {</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        log_warning() &lt;&lt; <span class="stringliteral">&quot;Could not fetch \&quot;&quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot;\&quot; from json element&quot;</span>;</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    }</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">if</span> (!json_is_string(value)) {</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;json element is not a string&quot;</span>;</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    result = json_string_value(value);</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div></div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_j_s_o_n_parser_a7ea50df505b43684c4a1d82ca6cb6e82_icgraph.svg" width="675" height="278"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_j_s_o_n_parser_a7ea50df505b43684c4a1d82ca6cb6e82_icgraph.svg" width="698" height="355"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </p>
@@ -381,7 +381,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_j_s_o_n_parser.html">JSONParser</a></li>
-    <li class="footer">Generated on Fri Mar 17 2017 15:26:09 for softwarecontainer by
+    <li class="footer">Generated on Fri Mar 17 2017 17:05:43 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

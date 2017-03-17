@@ -1,4 +1,0 @@
-<map id="softwarecontainer::DeviceNodeGateway::activateGateway" name="softwarecontainer::DeviceNodeGateway::activateGateway">
-<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#ae8835f968ab1d43b4a395b0097490734" title="existsInFileSystem Check if path exists " alt="" coords="253,5,388,47"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="254,71,387,112"/>
-</map>

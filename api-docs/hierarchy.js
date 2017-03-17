@@ -30,9 +30,8 @@ var hierarchy =
     [ "softwarecontainer::ContainerOptionParser", "classsoftwarecontainer_1_1_container_option_parser.html", null ],
     [ "softwarecontainer::ContainerUtilityInterface", "classsoftwarecontainer_1_1_container_utility_interface.html", null ],
     [ "softwarecontainer::DBusGatewayParser", "classsoftwarecontainer_1_1_d_bus_gateway_parser.html", null ],
-    [ "softwarecontainer::DeviceNodeParser::Device", "structsoftwarecontainer_1_1_device_node_parser_1_1_device.html", null ],
+    [ "softwarecontainer::Device", "classsoftwarecontainer_1_1_device.html", null ],
     [ "softwarecontainer::DeviceNodeLogic", "classsoftwarecontainer_1_1_device_node_logic.html", null ],
-    [ "softwarecontainer::DeviceNodeParser", "classsoftwarecontainer_1_1_device_node_parser.html", null ],
     [ "softwarecontainer::DynamicContainerOptions", "classsoftwarecontainer_1_1_dynamic_container_options.html", null ],
     [ "softwarecontainer::EnvironmentGatewayParser", "classsoftwarecontainer_1_1_environment_gateway_parser.html", null ],
     [ "exception", null, [
@@ -60,6 +59,7 @@ var hierarchy =
         [ "softwarecontainer::ContainerError", "classsoftwarecontainer_1_1_container_error.html", null ],
         [ "softwarecontainer::ContainerOptionParseError", "classsoftwarecontainer_1_1_container_option_parse_error.html", null ],
         [ "softwarecontainer::ContainerUtilityInterfaceError", "classsoftwarecontainer_1_1_container_utility_interface_error.html", null ],
+        [ "softwarecontainer::DeviceNodeGatewayError", "classsoftwarecontainer_1_1_device_node_gateway_error.html", null ],
         [ "softwarecontainer::GatewayError", "classsoftwarecontainer_1_1_gateway_error.html", null ],
         [ "softwarecontainer::InvalidContainerError", "classsoftwarecontainer_1_1_invalid_container_error.html", null ],
         [ "softwarecontainer::InvalidOperationError", "classsoftwarecontainer_1_1_invalid_operation_error.html", null ],
@@ -118,10 +118,10 @@ var hierarchy =
     [ "softwarecontainer::SoftwareContainerAbstractInterface", "classsoftwarecontainer_1_1_software_container_abstract_interface.html", [
       [ "softwarecontainer::SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", null ]
     ] ],
-    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "com::pelagicore::SoftwareContainerAgent", "classcom_1_1pelagicore_1_1_software_container_agent.html", [
       [ "softwarecontainer::SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html", null ]
     ] ],
+    [ "softwarecontainer::SoftwareContainerAgent", "classsoftwarecontainer_1_1_software_container_agent.html", null ],
     [ "SoftwareContainerAgentCommon", "class_software_container_agent_common.html", null ],
     [ "SoftwareContainerAgentMessageHelper", "class_software_container_agent_message_helper.html", null ],
     [ "softwarecontainer::SoftwareContainerConfig", "classsoftwarecontainer_1_1_software_container_config.html", null ],

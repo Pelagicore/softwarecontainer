@@ -1,8 +1,7 @@
 var classsoftwarecontainer_1_1_device_node_logic =
 [
     [ "DeviceNodeLogic", "classsoftwarecontainer_1_1_device_node_logic.html#af24c568def79755d54581fe450d7b67d", null ],
-    [ "calculateDeviceMode", "classsoftwarecontainer_1_1_device_node_logic.html#a75cdc8bb23aeb25447da091a8cda16f4", null ],
-    [ "findDeviceByName", "classsoftwarecontainer_1_1_device_node_logic.html#a3f84cdea3f0e78f2f8202da33684ee11", null ],
-    [ "updateDeviceList", "classsoftwarecontainer_1_1_device_node_logic.html#a563082ef2708f5d90410763c8edad7cd", null ],
-    [ "getDevList", "classsoftwarecontainer_1_1_device_node_logic.html#ad0146066a6069b0153688e7243d416f0", null ]
+    [ "findDeviceByName", "classsoftwarecontainer_1_1_device_node_logic.html#a2c4f2777bfc84f5844e4bad854904107", null ],
+    [ "updateDeviceList", "classsoftwarecontainer_1_1_device_node_logic.html#a2a6203266a200ef5d1a4949621428b33", null ],
+    [ "getDevList", "classsoftwarecontainer_1_1_device_node_logic.html#a537fc50c264a1956e96fb723e48698e9", null ]
 ];
