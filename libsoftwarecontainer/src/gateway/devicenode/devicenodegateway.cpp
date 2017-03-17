@@ -31,10 +31,9 @@ DeviceNodeGateway::DeviceNodeGateway(std::shared_ptr<ContainerAbstractInterface>
 
 bool DeviceNodeGateway::readConfigElement(const json_t *element)
 {
-    DeviceNodeParser parser;
-    DeviceNodeParser::Device dev;
+    Device dev;
 
-    if (!parser.parseDeviceNodeGatewayConfiguration(element, dev)) {
+    if (!dev.parse(element)) {
         log_error() << "Could not parse device node configuration";
         return false;
     }
@@ -51,29 +50,8 @@ bool DeviceNodeGateway::activateGateway()
     }
 
     for (auto &dev : devlist) {
-        if (!dev.isConfigured) {
-            log_info() << "Mapping device " << dev.name;
-            // Mount device in container
-            if (!getContainer()->mountDevice(dev.name)) {
-                log_error() << "Unable to mount device " << dev.name;
-                return false;
-            }
-
-
-            // If mode is specified, try to set mode for the mounted device.
-            if (dev.mode != -1) {
-                FunctionJob job(getContainer(), [&] () {
-                    return chmod(dev.name.c_str(), dev.mode);
-                });
-                job.start();
-                job.wait();
-                if (job.isError()) {
-                    log_error() << "Could not 'chmod " << dev.mode
-                                << "' the mounted device " << dev.name;
-                    return false;
-                }
-            }
-            m_logic.deviceConfigured(dev.name);
+        if (!dev->activate(getContainer())) {
+            return false;
         }
     }
     return true;
@@ -82,12 +60,6 @@ bool DeviceNodeGateway::activateGateway()
 bool DeviceNodeGateway::teardownGateway()
 {
     return true;
-}
-
-bool DeviceNodeGateway::isDeviceConfigured(const std::string deviceName)
-{
-    auto device = m_logic.findDeviceByName(deviceName);
-    return device->isConfigured;
 }
 
 } // namespace softwarecontainer
