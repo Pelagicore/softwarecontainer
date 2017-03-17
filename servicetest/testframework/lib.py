@@ -374,7 +374,12 @@ class SoftwareContainerAgentHandler():
         Used by e.g. ContainerApp over D-Bus.
     """
 
-    def __init__(self, log_file_path=None, config_path=None, caps_dir=None, default_caps_dir=None):
+    def __init__(self,
+                 log_file_path=None,
+                 config_path=None,
+                 caps_dir=None,
+                 default_caps_dir=None,
+                 check_connection=True):
         if log_file_path is None:
             self.__log_file = subprocess.STDOUT
         else:
@@ -398,27 +403,32 @@ class SoftwareContainerAgentHandler():
         assert log_file_path is not None
         self.__agent = subprocess.Popen(cmd, stdout=self.__log_file, stderr=self.__log_file)
 
+        if check_connection:
+            self.check_connection()
+
+    def check_connection(self):
         try:
             # Wait for the softwarecontainerStarted message to appear on the
             # msgQueue, this is evoked when softwarecontainer-agent is ready to
             # perform work. If we timeout tear down what we have started so far.
-            while self.__rec.msg_queue().get(block=True, timeout=5) != "softwarecontainerStarted":
+            while self.__rec.msg_queue().get(block=True, timeout=3) != "softwarecontainerStarted":
                 pass
         except Queue.Empty as e:
-            self.__agent.terminate()
-            self.__rec.terminate()
+            self.terminate()
             raise Exception("SoftwareContainer DBus interface not seen", e)
 
-        if self.__agent.poll() is not None:
+        if not self.is_alive():
             # Make sure we are not trying to perform anything against a dead softwarecontainer-agent
-            self.__rec.terminate()
+            self.terminate()
             raise Exception("SoftwareContainer-agent has died for some reason")
 
     def is_alive(self):
         return self.__agent.poll() is None
 
     def terminate(self):
-        self.__agent.terminate()
+        if self.is_alive():
+            self.__agent.terminate()
+
         self.__rec.terminate()
         self.__log_file.close()
 

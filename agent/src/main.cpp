@@ -221,7 +221,15 @@ int main(int argc, char **argv)
         std::shared_ptr<ContainerUtilityInterface> utility =
             std::shared_ptr<ContainerUtilityInterface> (new ContainerUtilityInterface());
 
+        // Create the actual agent
         ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config, factory, utility);
+
+        // We may have had a value for this in the config, so we need to check it, to know
+        // what bus we want to connect to on D-Bus.
+        useSessionBus = config->getBoolValue(ConfigDefinition::SC_GROUP,
+                                             ConfigDefinition::SC_USE_SESSION_BUS_KEY);
+
+        // Create the agent adaptor, that connects the agent to D-Bus.
         std::unique_ptr<SoftwareContainerAgentAdaptor> adaptor(
             // The adaptor needs access to the mainloop in order to be able to exit the 
             // loop in case dbus setup fails.

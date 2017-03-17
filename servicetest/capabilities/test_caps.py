@@ -26,7 +26,6 @@ from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
 from testframework import DefaultManifest
-from testframework import ConfigFile
 
 from dbus.exceptions import DBusException
 
@@ -119,16 +118,6 @@ def service_manifests():
 def mounted_path_in_host():
     return CURRENT_DIR
 
-def agent_config():
-    """ The agent fixture calls this function when it creates the config file to be
-        used in this module. It expects a ConfigFile object.
-    """
-    return ConfigFile(TESTOUTPUT_DIR + "/agent-config",
-            {
-                "SoftwareContainer": {"use-session-bus": "true"}
-            }
-    )
-
 @pytest.mark.usefixtures("testhelper", "dbus_launch", "create_testoutput_dir", "agent", "assert_no_proxy")
 class TestCaps(object):
     """ This suite tests that capabilities can be used with SoftwareContainer with
@@ -142,6 +131,7 @@ class TestCaps(object):
         more specific test suites, but rather to make sure the capabilities result
         in the correct gateway configs being applied.
     """
+
 
     def test_set_caps_with_empty_arg_is_allowed(self):
         """ Test that there is no error when passing an empty list of caps, i.e. no caps

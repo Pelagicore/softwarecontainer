@@ -22,7 +22,9 @@ import os
 import time
 # import lxc
 
-from testframework import Container, SoftwareContainerAgentHandler
+from testframework import Container
+from testframework import SoftwareContainerAgentHandler
+from testframework import ConfigFile
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -53,6 +55,28 @@ DATA = {
 
 ### Test suites ###
 
+@pytest.mark.usefixtures("create_testoutput_dir", "assert_no_session_bus", "agent_without_checks")
+class TestNoSessionBus(object):
+    """ This test suite tests that SC properly fails to connect
+        to the session bus when there is no such bus
+    """
+
+    @staticmethod
+    def agent_config():
+        """ The agent fixture calls this function when it creates the config file to be
+            used in this class. It expects a ConfigFile object.
+        """
+        return ConfigFile(TESTOUTPUT_DIR + "/agent-config",
+                {
+                    "SoftwareContainer": {"use-session-bus": "true"}
+                }
+        )
+
+    def test_session_bus_fails(self, agent_without_checks):
+        """ The agent should fail directly, given the above config file
+        """
+        time.sleep(0.5)
+        assert not agent_without_checks.is_alive()
 
 @pytest.mark.usefixtures("create_testoutput_dir", "agent")
 class TestClearOldContainers(object):
