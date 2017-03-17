@@ -1,7 +1,7 @@
 var classsoftwarecontainer_1_1_software_container_agent_adaptor =
 [
     [ "~SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a1ea3abb9979101d038426c9a26217988", null ],
-    [ "SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a5d3f957048153813412e8b59657fc08c", null ],
+    [ "SoftwareContainerAgentAdaptor", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#aa65301fd7466f3d3307beb6c441f0fd9", null ],
     [ "List", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a4a4682a221424ce01882d27145525dad", null ],
     [ "ListCapabilities", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a9819a0b73598f89d6df8a8f5c07b67ef", null ],
     [ "Execute", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a165aeac03e2b21e843d1db1e97b350f1", null ],
@@ -19,6 +19,8 @@ var classsoftwarecontainer_1_1_software_container_agent_adaptor =
     [ "on_method_call", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a2cfc82f00c455d2861cdef5835e04f58", null ],
     [ "on_interface_get_property", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#aa1eaa8773e2d3ba5c8d9e56d820b4363", null ],
     [ "on_interface_set_property", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#ae5c905b573e6f2b7e088bac2e4cf5702", null ],
-    [ "m_agent", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#ab9581b50721b28f6419eb94ea71d56fa", null ],
-    [ "ProcessStateChanged_signal", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#afbecd3b9e012fe66fd8fe8656e2b37d3", null ]
+    [ "ProcessStateChanged_signal", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#afbecd3b9e012fe66fd8fe8656e2b37d3", null ],
+    [ "name_lost", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#aeed6617d812a699beae0470edd223d2e", null ],
+    [ "name_acquired", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#a4f7e10895581c7aab9d5ef85e2c15cee", null ],
+    [ "object_not_registered", "classsoftwarecontainer_1_1_software_container_agent_adaptor.html#ae4f60a217716ea06d2804c75011294fe", null ]
 ];

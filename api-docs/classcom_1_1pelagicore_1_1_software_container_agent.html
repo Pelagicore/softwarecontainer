@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-0f082c3 2017-03-14</span>
+   &#160;<span id="projectnumber">0.18.0-1c2caff 2017-03-17</span>
    </div>
   </td>
  </tr>
@@ -68,7 +68,6 @@ $(document).ready(function(){initNavTree('classcom_1_1pelagicore_1_1_software_co
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
@@ -82,14 +81,11 @@ Inheritance diagram for com::pelagicore::SoftwareContainerAgent:</div>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
 <tr class="memitem:af8b8cd4edb0403524d214ae44d3f8671"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8b8cd4edb0403524d214ae44d3f8671"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>connect</b> (Gio::DBus::BusType, std::string)</td></tr>
 <tr class="separator:af8b8cd4edb0403524d214ae44d3f8671"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
 <tr class="memitem:ab90340c79f5a3e1cf42a709e28a10ee4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab90340c79f5a3e1cf42a709e28a10ee4"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>List</b> (const <a class="el" href="class_software_container_agent_message_helper.html">SoftwareContainerAgentMessageHelper</a> msg)=0</td></tr>
 <tr class="separator:ab90340c79f5a3e1cf42a709e28a10ee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +140,15 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:afbecd3b9e012fe66fd8fe8656e2b37d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbecd3b9e012fe66fd8fe8656e2b37d3"></a>
 sigc::signal&lt; void, gint32, guint32, bool, guint32 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ProcessStateChanged_signal</b></td></tr>
 <tr class="separator:afbecd3b9e012fe66fd8fe8656e2b37d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeed6617d812a699beae0470edd223d2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeed6617d812a699beae0470edd223d2e"></a>
+sigc::signal&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>name_lost</b></td></tr>
+<tr class="separator:aeed6617d812a699beae0470edd223d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7e10895581c7aab9d5ef85e2c15cee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f7e10895581c7aab9d5ef85e2c15cee"></a>
+sigc::signal&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>name_acquired</b></td></tr>
+<tr class="separator:a4f7e10895581c7aab9d5ef85e2c15cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f60a217716ea06d2804c75011294fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4f60a217716ea06d2804c75011294fe"></a>
+sigc::signal&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>object_not_registered</b></td></tr>
+<tr class="separator:ae4f60a217716ea06d2804c75011294fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -158,7 +163,7 @@ sigc::signal&lt; void, gint32, guint32, bool, guint32 &gt;&#160;</td><td class="
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>com</b></li><li class="navelem"><b>pelagicore</b></li><li class="navelem"><a class="el" href="classcom_1_1pelagicore_1_1_software_container_agent.html">SoftwareContainerAgent</a></li>
-    <li class="footer">Generated on Tue Mar 14 2017 15:45:51 for softwarecontainer by
+    <li class="footer">Generated on Fri Mar 17 2017 15:26:09 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

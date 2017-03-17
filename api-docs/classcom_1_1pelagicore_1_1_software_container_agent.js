@@ -18,5 +18,8 @@ var classcom_1_1pelagicore_1_1_software_container_agent =
     [ "on_method_call", "classcom_1_1pelagicore_1_1_software_container_agent.html#a2cfc82f00c455d2861cdef5835e04f58", null ],
     [ "on_interface_get_property", "classcom_1_1pelagicore_1_1_software_container_agent.html#aa1eaa8773e2d3ba5c8d9e56d820b4363", null ],
     [ "on_interface_set_property", "classcom_1_1pelagicore_1_1_software_container_agent.html#ae5c905b573e6f2b7e088bac2e4cf5702", null ],
-    [ "ProcessStateChanged_signal", "classcom_1_1pelagicore_1_1_software_container_agent.html#afbecd3b9e012fe66fd8fe8656e2b37d3", null ]
+    [ "ProcessStateChanged_signal", "classcom_1_1pelagicore_1_1_software_container_agent.html#afbecd3b9e012fe66fd8fe8656e2b37d3", null ],
+    [ "name_lost", "classcom_1_1pelagicore_1_1_software_container_agent.html#aeed6617d812a699beae0470edd223d2e", null ],
+    [ "name_acquired", "classcom_1_1pelagicore_1_1_software_container_agent.html#a4f7e10895581c7aab9d5ef85e2c15cee", null ],
+    [ "object_not_registered", "classcom_1_1pelagicore_1_1_software_container_agent.html#ae4f60a217716ea06d2804c75011294fe", null ]
 ];
