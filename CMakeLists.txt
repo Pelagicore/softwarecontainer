@@ -40,11 +40,6 @@ set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
-execute_process(COMMAND "/usr/bin/git" "rev-parse" "--short" "HEAD" OUTPUT_VARIABLE REVISION_RAW)
-
-string(REPLACE "\n" "" REVISION "${REVISION_RAW}")
-string(TIMESTAMP DATE "%Y-%m-%d")
-
 #
 # Find dependencies, and include them etc
 #

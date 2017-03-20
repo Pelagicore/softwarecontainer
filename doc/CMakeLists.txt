@@ -23,6 +23,16 @@ cmake_minimum_required(VERSION 3.0.2)
 #
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
+find_program(git_binary git)
+if(git_binary)
+    execute_process(COMMAND ${git_binary} "rev-parse" "--short" "HEAD" OUTPUT_VARIABLE REVISION_RAW)
+    string(REPLACE "\n" "" REVISION "${REVISION_RAW}")
+else()
+    set(REVISION "unknown")
+endif()
+
+string(TIMESTAMP DATE "%Y-%m-%d")
+
 add_custom_target(doc ALL)
 
 if(ENABLE_USER_DOC)
