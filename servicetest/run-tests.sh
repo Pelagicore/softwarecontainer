@@ -27,7 +27,7 @@ cd "$(dirname "$0")"
 
 # The reason for breaking alphabetic ordering is that the
 # cgroups test suite  has intermittent failures that are not yet fixed
-DIRECTORIES=(cgroups agent capabilities coredump dbus environment filesystem networkgateway queries suspend timingprofiling)
+DIRECTORIES=(cgroups agent capabilities coredump dbus environment filesystem networkgateway queries suspend timingprofiling devicenode)
 
 # We want to exit with bad status in case some test fail. Mostly so that any
 # CI system will notice that not everything was good.
