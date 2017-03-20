@@ -20,13 +20,11 @@ import pytest
 
 # External utility imports
 import os
-import time
 
 # Test framework and local test helper imports
 from testframework import Capability
 from testframework import StandardManifest
 from testframework import Container
-from dbus.exceptions import DBusException
 
 # Useful globals
 
@@ -163,12 +161,13 @@ def service_manifests():
 @pytest.mark.usefixtures("testhelper", "agent")
 class TestDeviceNode(object):
     """ This suite tests the behavior of DeviceNodeGateway within given set of capabilities.
-        It uses the DeviceNodeGateway to assert behavior.
 
         The tests use the Agent D-Bus interface to enable gateway configurations,
         for a specified list of capabilities.
     """
 
+    """ To see differences and aims of parameters please see comments on capability declaration
+    """
     @pytest.mark.parametrize(("firstcap", "secondcap"), [
         ("double.activation.same.device.0.cap", "double.activation.same.device.1.cap"),
         ("double.activation.new.device.0.cap", "double.activation.new.device.1.cap"),
@@ -177,6 +176,8 @@ class TestDeviceNode(object):
     def test_dynamic_configuration(self, firstcap, secondcap):
         """ This function tests multiple activation of DeviceNodeGateway within given set
             of capabilities.
+
+            The test is excpected to pass if there is no exception thwrown, otherwise it will fail.
         """
         try:
             sc = Container()
