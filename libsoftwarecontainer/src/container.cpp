@@ -550,7 +550,10 @@ bool Container::destroy(unsigned int timeout)
     if (m_enableWriteBuffer)
     {
         log_debug() << "Unmounting the overlay rootfs";
-        umount(m_rootFSPath.c_str());
+        if(-1 == umount(m_rootFSPath.c_str())) {
+            log_error() << "Unmounting the overlay rootfs failed: " << strerror(errno);
+            return false;
+        }
     }
 
     // Destroy it!
