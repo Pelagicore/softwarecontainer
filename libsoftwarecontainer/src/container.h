@@ -210,7 +210,6 @@ public:
     const char *id() const;
     std::string gatewaysDirInContainer() const;
     std::string gatewaysDir() const;
-    const std::string &rootFS() const;
 
     bool setEnvironmentVariable(const std::string &var, const std::string &val);
 

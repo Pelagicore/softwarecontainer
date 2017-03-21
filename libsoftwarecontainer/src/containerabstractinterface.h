@@ -32,7 +32,6 @@ public:
 
     virtual ~ContainerAbstractInterface() {};
     virtual const char *id() const = 0;
-    virtual const std::string &rootFS() const = 0;
 
     virtual bool initialize() = 0;
     virtual bool create() = 0;

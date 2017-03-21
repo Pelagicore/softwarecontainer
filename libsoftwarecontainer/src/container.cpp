@@ -853,9 +853,4 @@ std::string Container::gatewaysDir() const
     return buildPath(m_containerRoot, id(), GATEWAYS_PATH);
 }
 
-const std::string &Container::rootFS() const
-{
-    return m_rootFSPath;
-}
-
 } // namespace softwarecontainer
