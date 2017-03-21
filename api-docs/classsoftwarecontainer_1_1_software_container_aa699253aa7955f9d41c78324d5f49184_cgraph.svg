@@ -11,25 +11,25 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-94.5 434,-94.5 434,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<polygon fill="#bfbfbf" stroke="black" points="0,-26.5 0,-67.5 148,-67.5 148,-26.5 0,-26.5"/>
-<text text-anchor="start" x="8" y="-55.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="8" y="-44.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainer::previously</text>
-<text text-anchor="middle" x="74" y="-33.5" font-family="Helvetica,sans-Serif" font-size="10.00">Configured</text>
+<polygon fill="#bfbfbf" stroke="black" points="0,-29.5 0,-70.5 148,-70.5 148,-29.5 0,-29.5"/>
+<text text-anchor="start" x="8" y="-58.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="8" y="-47.5" font-family="Helvetica,sans-Serif" font-size="10.00">SoftwareContainer::previously</text>
+<text text-anchor="middle" x="74" y="-36.5" font-family="Helvetica,sans-Serif" font-size="10.00">Configured</text>
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
 <g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
-<polygon fill="white" stroke="black" points="184,-1.5 184,-42.5 289,-42.5 289,-1.5 184,-1.5"/>
-<text text-anchor="start" x="192" y="-30.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="192" y="-19.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
-<text text-anchor="middle" x="236.5" y="-8.5" font-family="Helvetica,sans-Serif" font-size="10.00">::createDirectory</text>
+<polygon fill="white" stroke="black" points="184,-5.5 184,-46.5 289,-46.5 289,-5.5 184,-5.5"/>
+<text text-anchor="start" x="192" y="-34.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="192" y="-23.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
+<text text-anchor="middle" x="236.5" y="-12.5" font-family="Helvetica,sans-Serif" font-size="10.00">::createDirectory</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge"><title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M148.205,-35.5974C156.786,-34.2607 165.476,-32.9071 173.878,-31.5985"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="174.614,-35.0261 183.956,-30.0287 173.536,-28.1095 174.614,-35.0261"/>
+<path fill="none" stroke="midnightblue" d="M148.205,-39.0535C156.786,-37.7703 165.476,-36.4708 173.878,-35.2145"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="174.584,-38.648 183.956,-33.7075 173.548,-31.725 174.584,-38.648"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
@@ -41,14 +41,14 @@
 </g>
 </g>
 <!-- Node1&#45;&gt;Node3 -->
-<g id="edge5" class="edge"><title>Node1&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M148.37,-53.8138C200.281,-58.6347 268.988,-65.0154 317.387,-69.5103"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="317.113,-72.9998 327.394,-70.4395 317.76,-66.0297 317.113,-72.9998"/>
+<g id="edge4" class="edge"><title>Node1&#45;&gt;Node3</title>
+<path fill="none" stroke="midnightblue" d="M148.37,-56.0837C200.281,-60.3881 268.988,-66.0852 317.387,-70.0985"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="317.139,-73.5898 327.394,-70.9282 317.717,-66.6137 317.139,-73.5898"/>
 </g>
 <!-- Node2&#45;&gt;Node3 -->
 <g id="edge2" class="edge"><title>Node2&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M289.258,-41.7352C301.683,-46.4727 314.919,-51.5193 327.227,-56.2124"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="326.275,-59.5952 336.866,-59.8877 328.769,-53.0545 326.275,-59.5952"/>
+<path fill="none" stroke="midnightblue" d="M289.258,-44.2458C300.716,-48.2847 312.863,-52.5667 324.336,-56.6113"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="323.191,-59.9186 333.786,-59.9424 325.518,-53.3168 323.191,-59.9186"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
@@ -62,13 +62,8 @@
 </g>
 <!-- Node2&#45;&gt;Node4 -->
 <g id="edge3" class="edge"><title>Node2&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M289.258,-15.077C297.49,-14.829 306.077,-14.7125 314.514,-14.7311"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="314.668,-18.2325 324.698,-14.8211 314.73,-11.2328 314.668,-18.2325"/>
-</g>
-<!-- Node4&#45;&gt;Node2 -->
-<g id="edge4" class="edge"><title>Node4&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M324.698,-27.9243C316.466,-28.1718 307.878,-28.2878 299.441,-28.2688"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="299.289,-24.7674 289.258,-28.1782 299.227,-31.7671 299.289,-24.7674"/>
+<path fill="none" stroke="midnightblue" d="M289.258,-24.1382C297.49,-23.8421 306.077,-23.5332 314.514,-23.2297"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="314.831,-26.7207 324.698,-22.8634 314.579,-19.7252 314.831,-26.7207"/>
 </g>
 </g>
 </svg>

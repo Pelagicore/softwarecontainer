@@ -11,7 +11,6 @@ var classsoftwarecontainer_1_1_container =
     [ "executeSync", "classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59", null ],
     [ "bindMountInContainer", "classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c", null ],
     [ "mountDevice", "classsoftwarecontainer_1_1_container.html#ac7f129fd56c1c02e1bb586f111e19971", null ],
-    [ "createSymLink", "classsoftwarecontainer_1_1_container.html#ae975f01e5293bf7d9ac2226adeec363b", null ],
     [ "destroy", "classsoftwarecontainer_1_1_container.html#ad5e7ca390a1783272fbe703f29a791ae", null ],
     [ "destroy", "classsoftwarecontainer_1_1_container.html#a8f6b307c9beef120fd07123d5932fdca", null ],
     [ "shutdown", "classsoftwarecontainer_1_1_container.html#a485f695e1f3afb402ca83d447fdd6acd", null ],

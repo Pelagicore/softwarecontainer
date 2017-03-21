@@ -1,4 +1,0 @@
-<map id="softwarecontainer::FileToolkitWithUndo::pathInList" name="softwarecontainer::FileToolkitWithUndo::pathInList">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="193,5,333,61"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#a44f64c34c09d1ffdb18428b41f0d9e91" title="isDirectory Check if path is a directory " alt="" coords="381,13,515,54"/>
-</map>

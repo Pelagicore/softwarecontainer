@@ -5,45 +5,45 @@
  -->
 <!-- Title: softwarecontainer::Container::create Pages: 1 -->
 <svg width="531pt" height="99pt"
- viewBox="0.00 0.00 531.00 98.50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 94.5)">
+ viewBox="0.00 0.00 531.00 99.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 95)">
 <title>softwarecontainer::Container::create</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-94.5 527,-94.5 527,4 -4,4"/>
+<polygon fill="white" stroke="none" points="-4,4 -4,-95 527,-95 527,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<polygon fill="#bfbfbf" stroke="black" points="0,-6 0,-36 100,-36 100,-6 0,-6"/>
-<text text-anchor="start" x="8" y="-24" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="50" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00">Container::create</text>
+<polygon fill="#bfbfbf" stroke="black" points="0,-30 0,-60 100,-60 100,-30 0,-30"/>
+<text text-anchor="start" x="8" y="-48" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="middle" x="50" y="-37" font-family="Helvetica,sans-Serif" font-size="10.00">Container::create</text>
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
 <g id="a_node2"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23" target="_top" xlink:title="overlayMount Mount a directory with an overlay on top of it. ">
-<polygon fill="white" stroke="black" points="136,-0.5 136,-41.5 241,-41.5 241,-0.5 136,-0.5"/>
-<text text-anchor="start" x="144" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="144" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
-<text text-anchor="middle" x="188.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::overlayMount</text>
+<polygon fill="white" stroke="black" points="136,-24.5 136,-65.5 241,-65.5 241,-24.5 136,-24.5"/>
+<text text-anchor="start" x="144" y="-53.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="144" y="-42.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
+<text text-anchor="middle" x="188.5" y="-31.5" font-family="Helvetica,sans-Serif" font-size="10.00">::overlayMount</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge"><title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M100.28,-21C108.622,-21 117.376,-21 125.985,-21"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="125.993,-24.5001 135.992,-21 125.992,-17.5001 125.993,-24.5001"/>
+<path fill="none" stroke="midnightblue" d="M100.28,-45C108.622,-45 117.376,-45 125.985,-45"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="125.993,-48.5001 135.992,-45 125.992,-41.5001 125.993,-48.5001"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node"><title>Node3</title>
 <g id="a_node3"><a xlink:href="classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" target="_top" xlink:title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th...">
-<polygon fill="white" stroke="black" points="277,-25.5 277,-66.5 382,-66.5 382,-25.5 277,-25.5"/>
-<text text-anchor="start" x="285" y="-54.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="start" x="285" y="-43.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
-<text text-anchor="middle" x="329.5" y="-32.5" font-family="Helvetica,sans-Serif" font-size="10.00">::createDirectory</text>
+<polygon fill="white" stroke="black" points="277,-49.5 277,-90.5 382,-90.5 382,-49.5 277,-49.5"/>
+<text text-anchor="start" x="285" y="-78.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
+<text text-anchor="start" x="285" y="-67.5" font-family="Helvetica,sans-Serif" font-size="10.00">FileToolkitWithUndo</text>
+<text text-anchor="middle" x="329.5" y="-56.5" font-family="Helvetica,sans-Serif" font-size="10.00">::createDirectory</text>
 </a>
 </g>
 </g>
 <!-- Node2&#45;&gt;Node3 -->
 <g id="edge2" class="edge"><title>Node2&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M241.258,-30.3091C249.58,-31.8058 258.266,-33.3679 266.793,-34.9015"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="266.237,-38.3576 276.698,-36.6831 267.476,-31.4682 266.237,-38.3576"/>
+<path fill="none" stroke="midnightblue" d="M241.258,-54.3091C249.58,-55.8058 258.266,-57.3679 266.793,-58.9015"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="266.237,-62.3576 276.698,-60.6831 267.476,-55.4682 266.237,-62.3576"/>
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
@@ -56,9 +56,9 @@
 </g>
 </g>
 <!-- Node2&#45;&gt;Node5 -->
-<g id="edge6" class="edge"><title>Node2&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M241.299,-17.5498C253.033,-16.9047 265.441,-16.33 277,-16 323.648,-14.6683 335.352,-14.6683 382,-16 390.308,-16.2372 399.055,-16.6008 407.674,-17.0261"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="407.532,-20.5233 417.701,-17.5498 407.897,-13.5329 407.532,-20.5233"/>
+<g id="edge5" class="edge"><title>Node2&#45;&gt;Node5</title>
+<path fill="none" stroke="midnightblue" d="M241.183,-40.5701C288.193,-36.5406 357.659,-30.5864 407.612,-26.3047"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="407.98,-29.786 417.645,-25.4447 407.383,-22.8116 407.98,-29.786"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
@@ -71,18 +71,13 @@
 </g>
 <!-- Node3&#45;&gt;Node4 -->
 <g id="edge3" class="edge"><title>Node3&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M382.258,-56.7985C391.441,-58.7144 401.067,-60.7226 410.434,-62.6769"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="409.959,-66.1531 420.463,-64.7693 411.389,-59.3007 409.959,-66.1531"/>
+<path fill="none" stroke="midnightblue" d="M382.258,-71.8618C391.441,-72.1921 401.067,-72.5384 410.434,-72.8753"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="410.344,-76.3743 420.463,-73.2361 410.596,-69.3788 410.344,-76.3743"/>
 </g>
 <!-- Node3&#45;&gt;Node5 -->
 <g id="edge4" class="edge"><title>Node3&#45;&gt;Node5</title>
-<path fill="none" stroke="midnightblue" d="M382.258,-30.1403C390.58,-28.4528 399.266,-26.8368 407.793,-25.3863"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="408.395,-28.8344 417.698,-23.7653 407.264,-21.9263 408.395,-28.8344"/>
-</g>
-<!-- Node5&#45;&gt;Node3 -->
-<g id="edge5" class="edge"><title>Node5&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M417.698,-36.8684C409.375,-38.5558 400.69,-40.1713 392.163,-41.6212"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="391.562,-38.1729 382.258,-43.2415 392.692,-45.0811 391.562,-38.1729"/>
+<path fill="none" stroke="midnightblue" d="M382.258,-51.7542C390.671,-48.7888 399.454,-45.6923 408.07,-42.655"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="409.431,-45.8867 417.698,-39.261 407.103,-39.2848 409.431,-45.8867"/>
 </g>
 </g>
 </svg>

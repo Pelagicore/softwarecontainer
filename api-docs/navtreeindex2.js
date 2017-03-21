@@ -1,11 +1,7 @@
 var NAVTREEINDEX2 =
 {
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a649391903bf1a0eec92c829713117a74":[1,0,1,50,2],
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a8f6b5cda214c9e412ab73313bc95d785":[1,0,1,50,1],
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#abeb68314f1bd0f8f19eacf66c6b5cc88":[1,0,1,50,7],
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ac31487a18f405c40a587b02d1aa96016":[1,0,1,50,4],
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ac7252747de3ba727e34bc4211733f90a":[1,0,1,50,5],
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5":[1,0,1,50,8],
+"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ac7252747de3ba727e34bc4211733f90a":[1,0,1,50,4],
+"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5":[1,0,1,50,7],
 "classsoftwarecontainer_1_1_filtered_config_store.html":[1,0,1,51],
 "classsoftwarecontainer_1_1_filtered_config_store.html#a217b9dd5178cd1b3bbbc848ca4139e77":[1,0,1,51,0],
 "classsoftwarecontainer_1_1_filtered_config_store.html#a2bfe6c39ed4700809729e2da77902282":[1,0,1,51,3],
@@ -249,5 +245,9 @@ var NAVTREEINDEX2 =
 "classsoftwarecontainer_1_1_pulse_gateway.html#ab36bbea283733b3714fa07d8c9d68c87":[1,0,1,75,6],
 "classsoftwarecontainer_1_1_pulse_gateway.html#abd136fffb30a625ca5ab4abe06adc680":[1,0,1,75,8],
 "classsoftwarecontainer_1_1_pulse_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5":[1,0,1,75,11],
-"classsoftwarecontainer_1_1_pulse_gateway.html#addcf40d76ecd21490b8d21089571fd40":[1,0,1,75,14]
+"classsoftwarecontainer_1_1_pulse_gateway.html#addcf40d76ecd21490b8d21089571fd40":[1,0,1,75,14],
+"classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683de":[1,0,1,75,0],
+"classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea20fcf810003924476c7e0cc1b2393d94":[1,0,1,75,0,2],
+"classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea5e19e4f4c52af8b10f36af4b717266be":[1,0,1,75,0,1],
+"classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea98690bf632c29c17c9e4c5a64069903c":[1,0,1,75,0,0]
 };

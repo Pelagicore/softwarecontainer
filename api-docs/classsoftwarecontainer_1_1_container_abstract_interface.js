@@ -15,7 +15,6 @@ var classsoftwarecontainer_1_1_container_abstract_interface =
     [ "destroy", "classsoftwarecontainer_1_1_container_abstract_interface.html#ac66f0522b92b39c21a0025a00556e141", null ],
     [ "destroy", "classsoftwarecontainer_1_1_container_abstract_interface.html#ae7f399895baf74c2fcbdcf140a7f65e8", null ],
     [ "mountDevice", "classsoftwarecontainer_1_1_container_abstract_interface.html#a2792d07b94dae1bc0436f5aa074e41fc", null ],
-    [ "createSymLink", "classsoftwarecontainer_1_1_container_abstract_interface.html#afbc995951f0e34d5f1d0c5b8fd46225d", null ],
     [ "bindMountInContainer", "classsoftwarecontainer_1_1_container_abstract_interface.html#a4058ddae7e3013c853f7ee53296dae52", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_container_abstract_interface.html#abacd8b6a0524ec5990824d3fdbfc8de2", null ],
     [ "setCgroupItem", "classsoftwarecontainer_1_1_container_abstract_interface.html#a00d22e04f94dd434479a7b2333b79e73", null ],
