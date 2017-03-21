@@ -9,6 +9,9 @@ We are happy to accept contributions. To accept a contribution, we require two t
   https://www.clahub.com/agreements/Pelagicore/softwarecontainer
   - We don't like CLAs but we have to have one. We'll remove it as soon as we can.
 
+We aim to follow the [https://wiki.gnome.org/Git/CommitMessages](GNOME guidelines) for commit
+messages.
+
 Help wanted
 ===========
 If you don't know what to start with, there are some general topics that we want to see more
