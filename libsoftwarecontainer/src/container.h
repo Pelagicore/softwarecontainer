@@ -154,11 +154,6 @@ public:
 
     bool mountDevice(const std::string &pathInHost);
 
-    bool createSymLink(const std::string &source, const std::string &destination)
-    {
-        return FileToolkitWithUndo::createSymLink(source, destination);
-    }
-
     /**
      * @brief Calls shutdown, and then destroys the container
      */
