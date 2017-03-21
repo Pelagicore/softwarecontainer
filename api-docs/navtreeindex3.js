@@ -1,7 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classsoftwarecontainer_1_1_pulse_gateway.html#ae32068e630d51cb3e641e974eed2614c":[1,0,1,75,7],
-"classsoftwarecontainer_1_1_pulse_gateway.html#aec4be160ef9dfa26f9b00ebc55df8a66":[1,0,1,75,2],
 "classsoftwarecontainer_1_1_pulse_gateway.html#af38a5c8ee0ff839a0134eefce61ba7a3":[1,0,1,75,9],
 "classsoftwarecontainer_1_1_pulse_gateway.html#af61045649376dc8972d236465aa2f8eb":[1,0,1,75,10],
 "classsoftwarecontainer_1_1_recursive_copy.html":[1,0,1,76],
@@ -249,5 +247,7 @@ var NAVTREEINDEX3 =
 "main_8cpp_source.html":[2,0,0,0,6],
 "mainconfigsource_8cpp_source.html":[2,0,0,0,1,16],
 "mainconfigsource_8h_source.html":[2,0,0,0,1,17],
-"mountcleanuphandler_8cpp_source.html":[2,0,1,12]
+"mountcleanuphandler_8cpp_source.html":[2,0,1,12],
+"mountcleanuphandler_8h_source.html":[2,0,1,13],
+"namespacemembers.html":[0,1,0]
 };

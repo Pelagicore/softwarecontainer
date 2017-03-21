@@ -3,7 +3,6 @@ var classsoftwarecontainer_1_1_container_abstract_interface =
     [ "ExecFunction", "classsoftwarecontainer_1_1_container_abstract_interface.html#af145d04ea2e9904c64d2cf64afccb50e", null ],
     [ "~ContainerAbstractInterface", "classsoftwarecontainer_1_1_container_abstract_interface.html#a037dfff54eb28cb530bd760d3ea035b6", null ],
     [ "id", "classsoftwarecontainer_1_1_container_abstract_interface.html#a9e339c879b618f605ad223ed96e2a923", null ],
-    [ "rootFS", "classsoftwarecontainer_1_1_container_abstract_interface.html#a83dde1d1c1f6fa59298fdf518922bd03", null ],
     [ "initialize", "classsoftwarecontainer_1_1_container_abstract_interface.html#a7167ecb6cc13b2aa3e85e0f2b3b5eef8", null ],
     [ "create", "classsoftwarecontainer_1_1_container_abstract_interface.html#aabbab87052faebfb4841f4bf5ccc867c", null ],
     [ "start", "classsoftwarecontainer_1_1_container_abstract_interface.html#a232e138a7001ac114334f34e9db81363", null ],

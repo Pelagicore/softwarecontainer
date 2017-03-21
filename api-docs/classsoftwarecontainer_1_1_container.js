@@ -25,6 +25,5 @@ var classsoftwarecontainer_1_1_container =
     [ "id", "classsoftwarecontainer_1_1_container.html#ade005bc24c8c5f55af11e125b6ec5e1a", null ],
     [ "gatewaysDirInContainer", "classsoftwarecontainer_1_1_container.html#a130b411541f14c3449c6763f7fcd7606", null ],
     [ "gatewaysDir", "classsoftwarecontainer_1_1_container.html#a7e2900f919019549ee1c2f69b8545ddd", null ],
-    [ "rootFS", "classsoftwarecontainer_1_1_container.html#a91ac3fb07a51a6543afd9ab679781f98", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_container.html#a1339aed81241f074c77e9de0456da4da", null ]
 ];

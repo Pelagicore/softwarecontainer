@@ -1,7 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ac7252747de3ba727e34bc4211733f90a":[1,0,1,50,4],
-"classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ae175c6d1e33a358cb015c851590518d5":[1,0,1,50,7],
 "classsoftwarecontainer_1_1_filtered_config_store.html":[1,0,1,51],
 "classsoftwarecontainer_1_1_filtered_config_store.html#a217b9dd5178cd1b3bbbc848ca4139e77":[1,0,1,51,0],
 "classsoftwarecontainer_1_1_filtered_config_store.html#a2bfe6c39ed4700809729e2da77902282":[1,0,1,51,3],
@@ -249,5 +247,7 @@ var NAVTREEINDEX2 =
 "classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683de":[1,0,1,75,0],
 "classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea20fcf810003924476c7e0cc1b2393d94":[1,0,1,75,0,2],
 "classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea5e19e4f4c52af8b10f36af4b717266be":[1,0,1,75,0,1],
-"classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea98690bf632c29c17c9e4c5a64069903c":[1,0,1,75,0,0]
+"classsoftwarecontainer_1_1_pulse_gateway.html#adf07cd001c50159267d4a1f1c3e683dea98690bf632c29c17c9e4c5a64069903c":[1,0,1,75,0,0],
+"classsoftwarecontainer_1_1_pulse_gateway.html#ae32068e630d51cb3e641e974eed2614c":[1,0,1,75,7],
+"classsoftwarecontainer_1_1_pulse_gateway.html#aec4be160ef9dfa26f9b00ebc55df8a66":[1,0,1,75,2]
 };
