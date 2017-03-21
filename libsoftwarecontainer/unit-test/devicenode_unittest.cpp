@@ -95,7 +95,6 @@ class MockContainer : public ContainerAbstractInterface
 public :
     MockContainer () {}
     const char *id() const {return "";}
-    const std::string &rootFS() const {return "";}
 
     bool initialize() {return true;}
     bool create() {return true;}
