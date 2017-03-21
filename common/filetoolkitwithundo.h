@@ -55,8 +55,6 @@ public:
      */
     std::string tempDir(std::string templatePath);
 protected:
-    bool createSymLink(const std::string &source, const std::string &destination);
-
     /*
      * @brief Writes to a file (and optionally create it)
      */

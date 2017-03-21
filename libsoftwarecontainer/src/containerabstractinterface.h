@@ -49,7 +49,6 @@ public:
     virtual bool destroy(unsigned int timeout) = 0;
 
     virtual bool mountDevice(const std::string &pathInHost) = 0;
-    virtual bool createSymLink(const std::string &source, const std::string &destination) = 0;
 
     /**
      * @brief Tries to bind mount a path from host to container

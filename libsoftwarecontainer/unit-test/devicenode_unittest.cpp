@@ -112,7 +112,6 @@ public :
     bool destroy(unsigned int) {return true;}
 
     bool mountDevice(const std::string &) {return true;}
-    bool createSymLink(const std::string &, const std::string &) {return true;}
 
     bool bindMountInContainer(const std::string &, const std::string &, bool ) {return true;}
 

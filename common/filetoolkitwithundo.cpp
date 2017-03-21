@@ -279,25 +279,4 @@ void FileToolkitWithUndo::markFileForDeletion(const std::string &path)
     }
 }
 
-bool FileToolkitWithUndo::createSymLink(const std::string &source,
-                                        const std::string &destination)
-{
-    log_debug() << "creating symlink " << source << " pointing to " << destination;
-
-    createDirectory(parentPath(source));
-
-    if (symlink(destination.c_str(), source.c_str()) == 0) {
-        if (!pathInList(source)) {
-            m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
-        }
-        log_debug() << "Successfully created symlink from " << source << " to " << destination;
-    } else {
-        log_error() << "Error creating symlink " << destination
-                    << " pointing to " << source << ". Error: "
-                    << strerror(errno);
-        return false;
-    }
-    return true;
-}
-
 } // namespace softwarecontainer
