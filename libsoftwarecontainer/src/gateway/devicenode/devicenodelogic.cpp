@@ -36,7 +36,7 @@ bool DeviceNodeLogic::updateDeviceList(Device &dev)
     auto item = findDeviceByName(dev.getName());
 
     if (item == nullptr) {
-        std::shared_ptr<Device> newDevice(new Device(dev));
+        auto newDevice = std::make_shared<Device>(dev);
         m_devList.push_back(std::move(newDevice));
     } else {
         item->calculateDeviceMode(dev.getMode());
