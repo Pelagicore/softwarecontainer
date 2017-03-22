@@ -31,12 +31,7 @@ class DeviceModeLogicFunctionsTests : public ::testing::Test
 {
 public:
     DeviceModeLogicFunctionsTests() { };
-    DeviceNodeLogic *dnl;
-
-    void SetUp() override
-    {
-        dnl = new DeviceNodeLogic();
-    }
+    DeviceNodeLogic dnl;
 };
 
 
@@ -45,14 +40,14 @@ public:
  */
 TEST_F(DeviceModeLogicFunctionsTests, findDeviceByNameFunction) {
     Device testDevice{"testDevice", 753};
-    ASSERT_TRUE(dnl->updateDeviceList(testDevice));
+    ASSERT_TRUE(dnl.updateDeviceList(testDevice));
 
     Device testDevice2{"anotherTestDevice", 444};
-    ASSERT_TRUE(dnl->updateDeviceList(testDevice2));
+    ASSERT_TRUE(dnl.updateDeviceList(testDevice2));
 
     Device testDevice3{"yetAnotherTestDevice", 751};
-    ASSERT_TRUE(dnl->updateDeviceList(testDevice3));
+    ASSERT_TRUE(dnl.updateDeviceList(testDevice3));
 
-    auto device = dnl->findDeviceByName("anotherTestDevice");
+    auto device = dnl.findDeviceByName("anotherTestDevice");
     ASSERT_EQ("anotherTestDevice", device->getName());
 }
