@@ -18,6 +18,12 @@ object path and interface.
 * Object Path: /com/pelagicore/SoftwareContainerAgent
 * Interface: com.pelagicore.SoftwareContainerAgent
 
+Prerequisities
+--------------
+The prerequisities for each method describe what state the SoftwareContainer system needs to be in
+for a call to that method to be valid. For most methods, the only prerequisite is a successfully
+created container, which is the same as getting a container ID returned from the Create method.
+
 Error Handling
 --------------
 All methods in this API can and will return D-Bus errors on failure. All calls that don't return a
@@ -39,10 +45,15 @@ created.
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
 * pathInHost: ``string`` absolute path in the host.
 * pathInContainer: ``string`` the absolute path to mount to in the container.
 * readOnly: ``bool`` indicates whether the directory is read-only or not.
+
+Prerequisities
+##############
+* A successful call to Create, such that it returned a container ID.
+* The container is not suspended
 
 Error sources
 #############
@@ -79,6 +90,10 @@ Return Values
 #############
 * containerID: ``int32`` ID of created SoftwareContainer.
 
+Prerequisities
+##############
+None
+
 Error sources
 #############
 * Network setup issues
@@ -102,7 +117,11 @@ sources.
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
+
+Prerequisities
+##############
+* A successful call to Create, such that it returned a container ID.
 
 Error sources
 #############
@@ -127,7 +146,7 @@ Launches the specified application/code in the container.
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
 * commandLine: ``string`` the method to run in container.
 * workDirectory: ``string`` path to working directory.
 * outputFile: ``string`` output file to direct stdout.
@@ -136,6 +155,12 @@ Parameters
 Return value
 ############
 * pid: ``int32`` PID of process running in the container, as seen by the host.
+
+Prerequisities
+##############
+* A successful call to Create, such that it returned a container ID.
+* The container is not suspended
+* The workDirectory path has to exist inside the container.
 
 Error sources
 #############
@@ -158,6 +183,10 @@ Return value
 ############
 * containers: ``array<int32>`` IDs for all containers
 
+Prerequisities
+##############
+None
+
 Error sources
 #############
 None, this method only inspects the current state
@@ -171,6 +200,10 @@ Return value
 ############
 * capabilities: ``array<string>`` all available capability names
 
+Prerequisities
+##############
+None
+
 Error sources
 #############
 None, this method only inspects the current state
@@ -181,7 +214,12 @@ Resumes a suspended container
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
+
+Prerequisities
+##############
+* A successful call to Create, such that it returned a container ID.
+* The container is suspended
 
 Error sources
 #############
@@ -198,8 +236,13 @@ configurations and applied to each gateway for which they map a configuration.
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
 * capabilities: ``array<string>`` of capability names
+
+Prerequisities
+##############
+* A successful call to Create, such that it returned a container ID.
+* That the container is not suspended
 
 Error sources
 #############
@@ -217,7 +260,12 @@ Suspends all execution inside a given container.
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
+
+Prerequisities
+##############
+* A successful call to Create, such that it returned a container ID.
+* That the container is not suspended
 
 Error sources
 #############
@@ -237,7 +285,7 @@ The D-Bus API sends signal when process state is changed. There are four values 
 
 Parameters
 ##########
-* containerID: ``int32`` The ID obtained by CreateContainer method.
+* containerID: ``int32`` The ID obtained by Create method.
 * processID: ``uint32`` Pocess ID of container.
 * isRunning: ``bool`` Whether the process is running or not.
 * exitCode: ``uint32`` exit code of Process.
