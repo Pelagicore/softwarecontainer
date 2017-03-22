@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-3de7a70 2017-03-22 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-1621de3 2017-03-22 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-3de7a70 2017-03-22',
+        VERSION:     '0.18.0-1621de3 2017-03-22',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -143,7 +143,7 @@ be in a bad state.</p>
 </div>
 </div>
 <div class="section" id="network-setup">
-<h2>Network setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>Network setup<a class="headerlink" href="#network-setup" title="Permalink to this headline">¶</a></h2>
 <p>The network setup of SoftwareContainer is dependent on a network bridge being available on the
 host system, if compiled with support for the NetworkGateway. By default, SoftwareContainer will
 create such a bridge on the system if it is not already there. This can be changed, so that
@@ -403,8 +403,8 @@ give access to graphics hardware. Not all applications require direct access to 
 hardware, see <a class="reference internal" href="../examples/index.html#wayland-example"><span class="std std-ref">Wayland example</span></a>. A reasonable capability for a Wayland
 application would therefore include both the Wayland gateway and a configuration of the Device Node
 gateway for any graphics hardware access needed.</p>
-<div class="section" id="id2">
-<h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example manifest defining Wayland access:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
@@ -469,8 +469,8 @@ to tag network packets with a class identifier. It is possible to make each Soft
 network packages with different class id using different capabilities to set network classifier cgroup.
 This way <code class="docutils literal"><span class="pre">tc</span></code> can be used to assign different priorities to packets from different cgroups.</p>
 <p>The network classifier cgroup is supported to mark network packages by the <a class="reference internal" href="../gateways/00-index.html#cgroups-gateway"><span class="std std-ref">CGroups gateway</span></a>.</p>
-<div class="section" id="id3">
-<h3>Example<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Here is an example way of marking network packages belonging to a container. The example aims to create
 a SoftwareContainer, configure its related gateways to mark packages and finally present a small howto
 about shaping traffic on host.</p>
@@ -617,8 +617,8 @@ default behavior in LXC.</p>
 a short json object that is sent to the <code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.Create(id)</span></code>
 method. What will happen is described in detail in the <a class="reference internal" href="../filesystem/index.html#filesystems"><span class="std std-ref">Filesystem</span></a>
 chapter.</p>
-<div class="section" id="id4">
-<h3>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Example<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>The following snippet will create a container where a write buffer will be
 created for all filesystems in that container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
@@ -655,7 +655,7 @@ the container:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#wayland-setup">Wayland setup</a><ul>
-<li><a class="reference internal" href="#id2">Example</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#the-role-of-a-launcher">The role of a launcher</a><ul>
@@ -663,7 +663,7 @@ the container:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#traffic-shaping">Traffic Shaping</a><ul>
-<li><a class="reference internal" href="#id3">Example</a></li>
+<li><a class="reference internal" href="#id4">Example</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#working-with-shared-memory-in-containers">Working with shared memory in containers</a><ul>
@@ -675,7 +675,7 @@ the container:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#write-buffered-filesystems">Write buffered filesystems</a><ul>
-<li><a class="reference internal" href="#id4">Example</a></li>
+<li><a class="reference internal" href="#id5">Example</a></li>
 </ul>
 </li>
 </ul>

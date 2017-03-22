@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.18.0-3de7a70 2017-03-22 documentation</title>
+    <title>API &#8212; softwarecontainer 0.18.0-1621de3 2017-03-22 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-3de7a70 2017-03-22',
+        VERSION:     '0.18.0-1621de3 2017-03-22',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,327 +45,314 @@
             
   <div class="section" id="api">
 <span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<p>This chapter documents the D-Bus API for interacting with the
-SoftwareContainerAgent. This is mostly useful for integrators.</p>
+<p>This chapter documents the D-Bus API for interacting with the SoftwareContainerAgent. This is mostly
+useful for integrators, or anyone writing a launcher for running apps inside SoftwareContainer
+containers.</p>
 <div class="section" id="d-bus-api">
 <span id="dbus-api"></span><h2>D-Bus API<a class="headerlink" href="#d-bus-api" title="Permalink to this headline">¶</a></h2>
-<p>D-Bus API is an IPC interface to call SoftwareContainer agent methods. The API
-provides following object path and interface.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Object Path:</th><td class="field-body">/com/pelagicore/SoftwareContainer</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Interface:</th><td class="field-body">com.pelagicore.SoftwareContainerAgent</td>
-</tr>
-</tbody>
-</table>
+<p>The D-Bus API is an interface to call SoftwareContainerAgent methods. The API provides the following
+object path and interface.</p>
+<ul class="simple">
+<li>Object Path: /com/pelagicore/SoftwareContainerAgent</li>
+<li>Interface: com.pelagicore.SoftwareContainerAgent</li>
+</ul>
 <div class="section" id="error-handling">
 <h3>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h3>
-<p>All methods in this API can and will return D-Bus errors on failure. All calls
-that don&#8217;t return a D-Bus error have worked successfully. Any call that returns
-a D-Bus error has failed. All calls that change a state and raise a D-Bus error
-shall have their side effects documented in this chapter.</p>
+<p>All methods in this API can and will return D-Bus errors on failure. All calls that don&#8217;t return a
+D-Bus error have worked successfully. Any call that returns a D-Bus error has failed. All calls that
+change a state and raise a D-Bus error shall have their side effects documented in this chapter.</p>
+<p>For each method, we describe the various error types and their potential sources. Some of these
+errors have a note saying that they put the container in an <cite>invalid state</cite>. An invalid state means
+that no other operations can be reliably done, and SoftwareContainer will disallow any operations on
+a container that is in an invalid state, except for destroying them.</p>
 </div>
 <div class="section" id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-</div>
 <div class="section" id="bindmount">
-<h3>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h3>
-<p>Binds a path on the host to the container. Any missing parent directories in
-the path will be created.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">pathInHost:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> absolute path in the host.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">pathInContainer:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the absolute path to mount to in the container.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">readOnly:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<h4>BindMount<a class="headerlink" href="#bindmount" title="Permalink to this headline">¶</a></h4>
+<p>Binds a path on the host to the container. Any missing parent directories in the path will be
+created.</p>
+<div class="section" id="parameters">
+<h5>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>pathInHost: <code class="docutils literal"><span class="pre">string</span></code> absolute path in the host.</li>
+<li>pathInContainer: <code class="docutils literal"><span class="pre">string</span></code> the absolute path to mount to in the container.</li>
+<li>readOnly: <code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</li>
+</ul>
+</div>
+<div class="section" id="error-sources">
+<h5>Error sources<a class="headerlink" href="#error-sources" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Invalid ID: No matching container exists.</li>
+<li>Bad state: The container is not started or ready</li>
+<li><dl class="first docutils">
+<dt>Bad path</dt>
+<dd><ul class="first last">
+<li>The host path does not exist</li>
+<li>The destination path is not absolute</li>
+<li>The destination path is already mounted to</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Filesystem issues</dt>
+<dd><ul class="first last">
+<li>Could not create parent directories</li>
+<li>Could not create the target directory (if mounting a directory)</li>
+<li>Could not touch the target file (if mounting a file)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Mount issues</dt>
+<dd><ul class="first last">
+<li>Mount failed (<a class="reference external" href="http://linux.die.net/man/2/mount">mount(2)</a> failed)</li>
+<li>Couldn&#8217;t move the mount</li>
+<li>Failed to re-mount read-only</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Note:</strong> Currently, failing mounts are not rolled back.</p>
 </div>
 </div>
 <div class="section" id="create">
-<h3>Create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h3>
+<h4>Create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h4>
 <p>Creates a container with given configuration.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">config:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">string</span></code> config file in json format.</p>
+<div class="section" id="id2">
+<h5>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>config: <code class="docutils literal"><span class="pre">string</span></code> config file in json format.</li>
+</ul>
 <p>Example config JSON:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}]</span>
 </pre></div>
 </div>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> ID of created SoftwareContainer.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="section" id="return-values">
+<h5>Return Values<a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> ID of created SoftwareContainer.</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h5>Error sources<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Network setup issues</dt>
+<dd><ul class="first last">
+<li>Bridge device not available and unable to set it up</li>
+<li>Given netmask can not be used to assign IP address to container</li>
+<li>See <a class="reference internal" href="../integration-guidelines/00-index.html#network-setup"><span class="std std-ref">Network setup</span></a></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>LXC issues</dt>
+<dd><ul class="first last">
+<li>Couldn&#8217;t prepare file system while initializing container</li>
+<li>Container ID already being in use (caused by lingering old containers)</li>
+<li>LXC config couldn&#8217;t be loaded</li>
+<li>LXC could not create container</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>If the error about ID already being in use shows up, one can try to restart the
+softwarecontainer-agent, since it does a cleanup of old containers on startup.</p>
+</div>
 </div>
 <div class="section" id="destroy">
-<h3>Destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
-<p>Tears down all active gateways related to container and shuts down the
-container with all reserved sources.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<h4>Destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h4>
+<p>Tears down all active gateways related to container and shuts down the container with all reserved
+sources.</p>
+<div class="section" id="id4">
+<h5>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h5>Error sources<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Invalid ID: No matching container exists.</li>
+<li>Invalid state: The container is not ready or is suspended</li>
+<li>Gateway errors: One or more of the gateways might have failed to shut down</li>
+<li><dl class="first docutils">
+<dt>LXC issues:</dt>
+<dd><ul class="first last">
+<li>LXC could not shutdown the container</li>
+<li>LXC could not force stop the container (if shutdown fails)</li>
+<li>LXC could not destroy the container</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Failing to destroy the container leads to it being put into an invalid state. Since destroying an
+invalid container is what one normally does, this is a difficult error to handle. We recommend
+shutting down the SoftwareContainerAgent, since it does some cleanup of old containers on startup.
+If that does not work, one can try to use the LXC userspace tools <cite>lxc-stop</cite> and <cite>lxc-destroy</cite>.</p>
 </div>
 </div>
 <div class="section" id="execute">
-<span id="dbus-execute"></span><h3>Execute<a class="headerlink" href="#execute" title="Permalink to this headline">¶</a></h3>
+<span id="dbus-execute"></span><h4>Execute<a class="headerlink" href="#execute" title="Permalink to this headline">¶</a></h4>
 <p>Launches the specified application/code in the container.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">commandLine:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> the method to run in container.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">workDirectory:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> path to working directory.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">outputFile:</th><td class="field-body"><code class="docutils literal"><span class="pre">string</span></code> output file to direct stdout.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">env:</th><td class="field-body"><code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> environment variables and their values.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<div class="section" id="id6">
+<h5>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>commandLine: <code class="docutils literal"><span class="pre">string</span></code> the method to run in container.</li>
+<li>workDirectory: <code class="docutils literal"><span class="pre">string</span></code> path to working directory.</li>
+<li>outputFile: <code class="docutils literal"><span class="pre">string</span></code> output file to direct stdout.</li>
+<li>env: <code class="docutils literal"><span class="pre">map&lt;string,</span> <span class="pre">string&gt;</span></code> environment variables and their values.</li>
+</ul>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Values:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">pid:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> PID of process running in the container, as seen by the host.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="section" id="return-value">
+<h5>Return value<a class="headerlink" href="#return-value" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>pid: <code class="docutils literal"><span class="pre">int32</span></code> PID of process running in the container, as seen by the host.</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h5>Error sources<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Invalid ID: No matching container exists.</li>
+<li>Bad state: The container is not ready or is suspended</li>
+<li>Capability error: couldn&#8217;t set default capabilities (if <code class="docutils literal"><span class="pre">SetCapabilities</span></code> has not already been
+called)</li>
+<li>LXC error: The underlying LXC method call failed.</li>
+</ul>
+<p><strong>Note:</strong> Even if the <code class="docutils literal"><span class="pre">Execute</span></code> call works fine, that doesn&#8217;t mean the command that is being run
+inside the container runs fine. For example, it is possible to pass command-lines that point to
+non-executables, or non-existing files. One would notice this however, by getting a
+<code class="docutils literal"><span class="pre">ProcessStateChanged</span></code> signal sent when the call exits.</p>
+</div>
 </div>
 <div class="section" id="list">
-<h3>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h3>
+<h4>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h4>
 <p>Returns a list of the current containers</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containers:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="section" id="id8">
+<h5>Return value<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containers: <code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h5>Error sources<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
+<p>None, this method only inspects the current state</p>
+</div>
 </div>
 <div class="section" id="listcapabilities">
-<h3>ListCapabilities<a class="headerlink" href="#listcapabilities" title="Permalink to this headline">¶</a></h3>
-<p>Lists all capabilities that the user can apply. Note that this does not include
-the default capabilities, which are not listable.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return Value:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> all available capability names</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+<h4>ListCapabilities<a class="headerlink" href="#listcapabilities" title="Permalink to this headline">¶</a></h4>
+<p>Lists all capabilities that the user can apply. Note that this does not include the default
+capabilities, which are not listable.</p>
+<div class="section" id="id10">
+<h5>Return value<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>capabilities: <code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> all available capability names</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h5>Error sources<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
+<p>None, this method only inspects the current state</p>
+</div>
 </div>
 <div class="section" id="resume">
-<h3>Resume<a class="headerlink" href="#resume" title="Permalink to this headline">¶</a></h3>
+<h4>Resume<a class="headerlink" href="#resume" title="Permalink to this headline">¶</a></h4>
 <p>Resumes a suspended container</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<div class="section" id="id12">
+<h5>Parameters<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h5>Error sources<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Invalid ID: No matching container exists.</li>
+<li>Bad state: The container is not suspended</li>
+<li>LXC error: Couldn&#8217;t resume the container</li>
+</ul>
+<p><strong>Note:</strong> Failure to resume a container leads to it being put in an invalid state.</p>
 </div>
 </div>
 <div class="section" id="setcapabilities">
-<h3>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h3>
-<p>Applies the given list of capability names to the container. Capabilities are
-mapped to gateway configurations and applied to each gateway for which they
-map a configuration.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">capabilities:</th><td class="field-body"><code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> of capability names</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<h4>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h4>
+<p>Applies the given list of capability names to the container. Capabilities are mapped to gateway
+configurations and applied to each gateway for which they map a configuration.</p>
+<div class="section" id="id14">
+<h5>Parameters<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>capabilities: <code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> of capability names</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h5>Error sources<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Invalid ID: No matching container exists.</li>
+<li>Bad state: The container is not ready</li>
+<li>The given array of capabilities is empty (semantically not an error though)</li>
+<li><dl class="first docutils">
+<dt>Bad capabilities: The capabilities (including any default capabilities) failed to apply</dt>
+<dd><ul class="first last">
+<li>Syntax error: The gateway configs in the capability could be missing keys or be malformed.</li>
+<li>Trying to use an unknown gateway ID</li>
+<li>Gateway error: A gateway failed to apply a specific configuration</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </div>
 </div>
 <div class="section" id="suspend">
-<h3>Suspend<a class="headerlink" href="#suspend" title="Permalink to this headline">¶</a></h3>
+<h4>Suspend<a class="headerlink" href="#suspend" title="Permalink to this headline">¶</a></h4>
 <p>Suspends all execution inside a given container.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<div class="section" id="id16">
+<h5>Parameters<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h5>Error sources<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>Invalid ID: No matching container exists.</li>
+<li>Bad state: The container is not ready, or is already suspended</li>
+<li>LXC error: Couldn&#8217;t suspend the container</li>
+</ul>
+<p><strong>Note:</strong>: Failing to suspend the container, other than it being in a bad state, leads to it being
+put in an invalid state.</p>
+</div>
 </div>
 </div>
 <div class="section" id="signals">
 <h3>Signals<a class="headerlink" href="#signals" title="Permalink to this headline">¶</a></h3>
-</div>
 <div class="section" id="processstatechanged">
-<h3>ProcessStateChanged<a class="headerlink" href="#processstatechanged" title="Permalink to this headline">¶</a></h3>
+<h4>ProcessStateChanged<a class="headerlink" href="#processstatechanged" title="Permalink to this headline">¶</a></h4>
 <p>The D-Bus API sends signal when process state is changed. There are four values to be emitted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">containerID:</th><td class="field-body"><code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">processID:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> Pocess ID of container.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">isRunning:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code> Whether the process is running or not.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">exitCode:</th><td class="field-body"><code class="docutils literal"><span class="pre">uint32</span></code> exit code of Process.</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="line-block">
-<div class="line"><br /></div>
+<div class="section" id="id18">
+<h5>Parameters<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>processID: <code class="docutils literal"><span class="pre">uint32</span></code> Pocess ID of container.</li>
+<li>isRunning: <code class="docutils literal"><span class="pre">bool</span></code> Whether the process is running or not.</li>
+<li>exitCode: <code class="docutils literal"><span class="pre">uint32</span></code> exit code of Process.</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="introspection">
 <h3>Introspection<a class="headerlink" href="#introspection" title="Permalink to this headline">¶</a></h3>
-<p>Using <code class="docutils literal"><span class="pre">org.freedesktop.DBus.Introspectable.Introspect</span></code> interface, methods of
+<p>Using the <code class="docutils literal"><span class="pre">org.freedesktop.DBus.Introspectable.Introspect</span></code> interface, methods of the
 SoftwareContainerAgent D-Bus API can be observed.</p>
 </div>
 </div>
@@ -382,18 +369,63 @@ SoftwareContainerAgent D-Bus API can be observed.</p>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
 <li><a class="reference internal" href="#error-handling">Error Handling</a></li>
-<li><a class="reference internal" href="#methods">Methods</a></li>
-<li><a class="reference internal" href="#bindmount">BindMount</a></li>
-<li><a class="reference internal" href="#create">Create</a></li>
-<li><a class="reference internal" href="#destroy">Destroy</a></li>
-<li><a class="reference internal" href="#execute">Execute</a></li>
-<li><a class="reference internal" href="#list">List</a></li>
-<li><a class="reference internal" href="#listcapabilities">ListCapabilities</a></li>
-<li><a class="reference internal" href="#resume">Resume</a></li>
-<li><a class="reference internal" href="#setcapabilities">SetCapabilities</a></li>
-<li><a class="reference internal" href="#suspend">Suspend</a></li>
-<li><a class="reference internal" href="#signals">Signals</a></li>
-<li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#bindmount">BindMount</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#error-sources">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#create">Create</a><ul>
+<li><a class="reference internal" href="#id2">Parameters</a></li>
+<li><a class="reference internal" href="#return-values">Return Values</a></li>
+<li><a class="reference internal" href="#id3">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#destroy">Destroy</a><ul>
+<li><a class="reference internal" href="#id4">Parameters</a></li>
+<li><a class="reference internal" href="#id5">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#execute">Execute</a><ul>
+<li><a class="reference internal" href="#id6">Parameters</a></li>
+<li><a class="reference internal" href="#return-value">Return value</a></li>
+<li><a class="reference internal" href="#id7">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#list">List</a><ul>
+<li><a class="reference internal" href="#id8">Return value</a></li>
+<li><a class="reference internal" href="#id9">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listcapabilities">ListCapabilities</a><ul>
+<li><a class="reference internal" href="#id10">Return value</a></li>
+<li><a class="reference internal" href="#id11">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resume">Resume</a><ul>
+<li><a class="reference internal" href="#id12">Parameters</a></li>
+<li><a class="reference internal" href="#id13">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setcapabilities">SetCapabilities</a><ul>
+<li><a class="reference internal" href="#id14">Parameters</a></li>
+<li><a class="reference internal" href="#id15">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#suspend">Suspend</a><ul>
+<li><a class="reference internal" href="#id16">Parameters</a></li>
+<li><a class="reference internal" href="#id17">Error sources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#signals">Signals</a><ul>
+<li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a><ul>
+<li><a class="reference internal" href="#id18">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#introspection">Introspection</a></li>
 </ul>
 </li>
