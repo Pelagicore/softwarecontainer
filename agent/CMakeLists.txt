@@ -97,15 +97,6 @@ if (ENABLE_SYSTEM_BUS)
     install(FILES softwarecontainer-agent.conf DESTINATION "/etc/dbus-1/system.d")
 endif()
 
-# Install systemd configuration
-if (ENABLE_SYSTEMD)
-    set(SYSTEMD_CONFIGURATION_FILES_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/systemd/system")
-    configure_file(softwarecontainer-agent.service.in softwarecontainer-agent.service)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/softwarecontainer-agent.service
-            DESTINATION ${SYSTEMD_CONFIGURATION_FILES_DIR}
-    )
-endif()
-
 if (ENABLE_TEST)
     set(SOFTWARECONTAINERAGENT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(unit-test)
