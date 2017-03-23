@@ -1,0 +1,10 @@
+{
+    "version": "1",
+    "capabilities": [{
+        "name": "com.pelagicore.temperatureservice.gettemperature",
+        "gateways": [{
+            "id": "dbus",
+            "config": "This is not a json array"
+        }]
+    }]
+}

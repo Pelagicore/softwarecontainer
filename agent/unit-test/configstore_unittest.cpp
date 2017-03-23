@@ -42,16 +42,28 @@ public:
     std::string capNameD = "dummyCapD";
 
     /* The Service Manifests' (relative) file paths */
-    const std::string testDataDir   = std::string(TEST_DATA_DIR);
-    const std::string dirPath       = buildPath(testDataDir, "testDirectory");
-    const std::string errorDir      = buildPath(testDataDir, "fileErrorManifests");
-    const std::string onlyValidDir  = buildPath(testDataDir, "onlyValidManifests");
+    const std::string testDataDir        = std::string(TEST_DATA_DIR);
+    const std::string dirPath            = buildPath(testDataDir, "dirNoManifests");
+    const std::string onlyValidDir       = buildPath(testDataDir, "onlyValidManifests");
+    const std::string fileErrorDir       = buildPath(testDataDir, "fileErrorManifests");
+    const std::string parseErrorDir      = buildPath(testDataDir, "parseErrorManifests");
     const std::string manifestPath       = "CS_unittest_ServiceManifest.json";
     const std::string shortManifestPath  = "CS_unittest_short_ServiceManifest.json";
     const std::string evilManifest       = "CS_unittest_parseError.json";
     const std::string notJSONManifest    = "CS_unittest_fileExtensionIsNotJson.txt";
     const std::string notJSONManifest2   = "CS_unittest_fileIsNotJson.json";
     const std::string nonExistingPath    = "/home/aiuaiai/iuatxia";
+
+    // TODO: (thenor) Do not use files, write string to file
+    const std::string parseNoJsonObj        = "CS_unittest_parseErrorNoJsonObject.json";
+    const std::string parseOneCapNOK        = "CS_unittest_parseErrorOneCapNotOk.json";
+    const std::string parseCapNameNOK       = "CS_unittest_parseErrorCapNameNOK.json";
+    const std::string parseGWObjNOK         = "CS_unittest_parseErrorGWObjNOK.json";
+    const std::string parseGWNotArray       = "CS_unittest_parseErrorGWNotArray.json";
+    const std::string parseGWNotJson        = "CS_unittest_parseErrorGWNotJsonObject.json";
+    const std::string parseGWIdNOK          = "CS_unittest_parseErrorGWIdNOK.json";
+    const std::string parseGWConfigNOK      = "CS_unittest_parseErrorGWConfigNOK.json";
+    const std::string parseGWConfigNotArray = "CS_unittest_parseErrorGWConfigNotArray.json";
 };
 
 /* Constructing a BaseConfigStore with an empty file path should not throw an exception.
@@ -103,7 +115,8 @@ TEST_F(ConfigStoreTest, rootDirNotAllowed) {
  * should throw an exception of type ServiceManifestParseError.
  */
 TEST_F(ConfigStoreTest, fileExtensionIsNotJson) {
-    ASSERT_THROW(BaseConfigStore(buildPath(errorDir, notJSONManifest)), ServiceManifestParseError);
+    ASSERT_THROW(BaseConfigStore(buildPath(fileErrorDir, notJSONManifest)),
+                 ServiceManifestParseError);
 }
 
 /* Constructing a BaseConfigStore with a file path
@@ -112,7 +125,8 @@ TEST_F(ConfigStoreTest, fileExtensionIsNotJson) {
  * should throw an exception of type ServiceManifestParseError.
  */
 TEST_F(ConfigStoreTest, fileIsNotJsonFile) {
-    ASSERT_THROW(BaseConfigStore(buildPath(errorDir, notJSONManifest2)), ServiceManifestParseError);
+    ASSERT_THROW(BaseConfigStore(buildPath(fileErrorDir, notJSONManifest2)),
+                 ServiceManifestParseError);
 }
 
 /* Constructing a BaseConfigStore with a file path,
@@ -281,4 +295,83 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
     json_decref(expectedJson2);
     json_decref(expectedJson3);
     json_decref(retGWConfigs);
+}
+
+/*
+TEST_F(ConfigStoreTest, parseErrorNotJson) {
+    // Create a service manifest matching this error case
+    //  - "The Service Manifest does not contain a json object "
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseNoJsonObj)),
+                 ServiceManifestParseError);
+}
+*/
+
+TEST_F(ConfigStoreTest, parseErrorCapsObject) {
+    // Create a service manifest matching this error case
+    //  - "Could not parse the \"capability\" object in file: "
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseNoJsonObj)),
+                 CapabilityParseError);
+}
+
+
+// Parse caps
+/*
+TEST_F(ConfigStoreTest, parseErrorOneCapIsNotJson) {
+    // Create a service manifest matching this error case
+    //  - "A "capability" in the Service Manifest is not a json object"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseOneCapNOK)),
+                 CapabilityParseError);
+
+}
+*/
+
+TEST_F(ConfigStoreTest, parseErrorCapNameUnreadable) {
+    // Create a service manifest matching this error case
+    //  - "Could not read the name of the "capability" object"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseCapNameNOK)),
+                 CapabilityParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorGWElementUnreadable) {
+    // Create a service manifest matching this error case
+    //  - "Could not read the "gateway" objects in [capName]
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseGWObjNOK)),
+                 CapabilityParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorGWElementIsNotJson) {
+    // Create a service manifest matching this error case
+    //  - "The "gateway" object is not an array"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseGWNotArray)),
+                 CapabilityParseError);
+}
+
+
+/*
+TEST_F(ConfigStoreTest, parseErrorGWElementKeyIsNotJson) {
+    // Create a service manifest matching this error case
+    //  - "The \"gateway\" key in the Service Manifest is not a json object"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseGWNotJson)),
+                 CapabilityParseError);
+}
+*/
+TEST_F(ConfigStoreTest, parseErrorGWElementIdUnreadable) {
+    // Create a service manifest matching this error case
+    //  - "Could not read the ID of the \"gateway\" object in the Service Manifest"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseGWIdNOK)),
+                 CapabilityParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorGWElementConfigUnreadable) {
+    // Create a service manifest matching this error case
+    //  - "Could not read the \"gateway\" object's configuration element (gwID)"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseGWConfigNOK)),
+                 CapabilityParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorGWElementConfigIsNotJsonArray) {
+    // Create a service manifest matching this error case
+    //  - "The \"gateway\" object's configuration is not an array (gwID)"
+    ASSERT_THROW(BaseConfigStore(buildPath(parseErrorDir, parseGWConfigNotArray)),
+                 CapabilityParseError);
 }
