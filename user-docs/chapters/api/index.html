@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &#8212; softwarecontainer 0.18.0-000f357 2017-03-23 documentation</title>
+    <title>API &#8212; softwarecontainer 0.18.0-4724ed9 2017-03-23 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-000f357 2017-03-23',
+        VERSION:     '0.18.0-4724ed9 2017-03-23',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -56,6 +56,12 @@ object path and interface.</p>
 <li>Object Path: /com/pelagicore/SoftwareContainerAgent</li>
 <li>Interface: com.pelagicore.SoftwareContainerAgent</li>
 </ul>
+<div class="section" id="prerequisities">
+<h3>Prerequisities<a class="headerlink" href="#prerequisities" title="Permalink to this headline">¶</a></h3>
+<p>The prerequisities for each method describe what state the SoftwareContainer system needs to be in
+for a call to that method to be valid. For most methods, the only prerequisite is a successfully
+created container, which is the same as getting a container ID returned from the Create method.</p>
+</div>
 <div class="section" id="error-handling">
 <h3>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h3>
 <p>All methods in this API can and will return D-Bus errors on failure. All calls that don&#8217;t return a
@@ -75,10 +81,17 @@ created.</p>
 <div class="section" id="parameters">
 <h5>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 <li>pathInHost: <code class="docutils literal"><span class="pre">string</span></code> absolute path in the host.</li>
 <li>pathInContainer: <code class="docutils literal"><span class="pre">string</span></code> the absolute path to mount to in the container.</li>
 <li>readOnly: <code class="docutils literal"><span class="pre">bool</span></code> indicates whether the directory is read-only or not.</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h5>Prerequisities<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>A successful call to Create, such that it returned a container ID.</li>
+<li>The container is not suspended</li>
 </ul>
 </div>
 <div class="section" id="error-sources">
@@ -123,8 +136,8 @@ created.</p>
 <div class="section" id="create">
 <h4>Create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h4>
 <p>Creates a container with given configuration.</p>
-<div class="section" id="id2">
-<h5>Parameters<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id3">
+<h5>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>config: <code class="docutils literal"><span class="pre">string</span></code> config file in json format.</li>
 </ul>
@@ -139,8 +152,12 @@ created.</p>
 <li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> ID of created SoftwareContainer.</li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h5>Error sources<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id4">
+<h5>Prerequisities<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<p>None</p>
+</div>
+<div class="section" id="id5">
+<h5>Error sources<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt>Network setup issues</dt>
@@ -172,14 +189,20 @@ softwarecontainer-agent, since it does a cleanup of old containers on startup.</
 <h4>Destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h4>
 <p>Tears down all active gateways related to container and shuts down the container with all reserved
 sources.</p>
-<div class="section" id="id4">
-<h5>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id6">
+<h5>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h5>Error sources<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id7">
+<h5>Prerequisities<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>A successful call to Create, such that it returned a container ID.</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h5>Error sources<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>Invalid ID: No matching container exists.</li>
 <li>Invalid state: The container is not ready or is suspended</li>
@@ -204,10 +227,10 @@ If that does not work, one can try to use the LXC userspace tools <cite>lxc-stop
 <div class="section" id="execute">
 <span id="dbus-execute"></span><h4>Execute<a class="headerlink" href="#execute" title="Permalink to this headline">¶</a></h4>
 <p>Launches the specified application/code in the container.</p>
-<div class="section" id="id6">
-<h5>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id9">
+<h5>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 <li>commandLine: <code class="docutils literal"><span class="pre">string</span></code> the method to run in container.</li>
 <li>workDirectory: <code class="docutils literal"><span class="pre">string</span></code> path to working directory.</li>
 <li>outputFile: <code class="docutils literal"><span class="pre">string</span></code> output file to direct stdout.</li>
@@ -220,8 +243,16 @@ If that does not work, one can try to use the LXC userspace tools <cite>lxc-stop
 <li>pid: <code class="docutils literal"><span class="pre">int32</span></code> PID of process running in the container, as seen by the host.</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h5>Error sources<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id10">
+<h5>Prerequisities<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>A successful call to Create, such that it returned a container ID.</li>
+<li>The container is not suspended</li>
+<li>The workDirectory path has to exist inside the container.</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h5>Error sources<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>Invalid ID: No matching container exists.</li>
 <li>Bad state: The container is not ready or is suspended</li>
@@ -238,14 +269,18 @@ non-executables, or non-existing files. One would notice this however, by gettin
 <div class="section" id="list">
 <h4>List<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h4>
 <p>Returns a list of the current containers</p>
-<div class="section" id="id8">
-<h5>Return value<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id12">
+<h5>Return value<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>containers: <code class="docutils literal"><span class="pre">array&lt;int32&gt;</span></code> IDs for all containers</li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h5>Error sources<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id13">
+<h5>Prerequisities<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<p>None</p>
+</div>
+<div class="section" id="id14">
+<h5>Error sources<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h5>
 <p>None, this method only inspects the current state</p>
 </div>
 </div>
@@ -253,28 +288,39 @@ non-executables, or non-existing files. One would notice this however, by gettin
 <h4>ListCapabilities<a class="headerlink" href="#listcapabilities" title="Permalink to this headline">¶</a></h4>
 <p>Lists all capabilities that the user can apply. Note that this does not include the default
 capabilities, which are not listable.</p>
-<div class="section" id="id10">
-<h5>Return value<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id15">
+<h5>Return value<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>capabilities: <code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> all available capability names</li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h5>Error sources<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id16">
+<h5>Prerequisities<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h5>
+<p>None</p>
+</div>
+<div class="section" id="id17">
+<h5>Error sources<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h5>
 <p>None, this method only inspects the current state</p>
 </div>
 </div>
 <div class="section" id="resume">
 <h4>Resume<a class="headerlink" href="#resume" title="Permalink to this headline">¶</a></h4>
 <p>Resumes a suspended container</p>
-<div class="section" id="id12">
-<h5>Parameters<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id18">
+<h5>Parameters<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 </ul>
 </div>
-<div class="section" id="id13">
-<h5>Error sources<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id19">
+<h5>Prerequisities<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>A successful call to Create, such that it returned a container ID.</li>
+<li>The container is suspended</li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h5>Error sources<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>Invalid ID: No matching container exists.</li>
 <li>Bad state: The container is not suspended</li>
@@ -287,15 +333,22 @@ capabilities, which are not listable.</p>
 <h4>SetCapabilities<a class="headerlink" href="#setcapabilities" title="Permalink to this headline">¶</a></h4>
 <p>Applies the given list of capability names to the container. Capabilities are mapped to gateway
 configurations and applied to each gateway for which they map a configuration.</p>
-<div class="section" id="id14">
-<h5>Parameters<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id21">
+<h5>Parameters<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 <li>capabilities: <code class="docutils literal"><span class="pre">array&lt;string&gt;</span></code> of capability names</li>
 </ul>
 </div>
-<div class="section" id="id15">
-<h5>Error sources<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id22">
+<h5>Prerequisities<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>A successful call to Create, such that it returned a container ID.</li>
+<li>That the container is not suspended</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h5>Error sources<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>Invalid ID: No matching container exists.</li>
 <li>Bad state: The container is not ready</li>
@@ -316,14 +369,21 @@ configurations and applied to each gateway for which they map a configuration.</
 <div class="section" id="suspend">
 <h4>Suspend<a class="headerlink" href="#suspend" title="Permalink to this headline">¶</a></h4>
 <p>Suspends all execution inside a given container.</p>
-<div class="section" id="id16">
-<h5>Parameters<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id24">
+<h5>Parameters<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 </ul>
 </div>
-<div class="section" id="id17">
-<h5>Error sources<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id25">
+<h5>Prerequisities<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h5>
+<ul class="simple">
+<li>A successful call to Create, such that it returned a container ID.</li>
+<li>That the container is not suspended</li>
+</ul>
+</div>
+<div class="section" id="id26">
+<h5>Error sources<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
 <li>Invalid ID: No matching container exists.</li>
 <li>Bad state: The container is not ready, or is already suspended</li>
@@ -339,10 +399,10 @@ put in an invalid state.</p>
 <div class="section" id="processstatechanged">
 <h4>ProcessStateChanged<a class="headerlink" href="#processstatechanged" title="Permalink to this headline">¶</a></h4>
 <p>The D-Bus API sends signal when process state is changed. There are four values to be emitted.</p>
-<div class="section" id="id18">
-<h5>Parameters<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id27">
+<h5>Parameters<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h5>
 <ul class="simple">
-<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by CreateContainer method.</li>
+<li>containerID: <code class="docutils literal"><span class="pre">int32</span></code> The ID obtained by Create method.</li>
 <li>processID: <code class="docutils literal"><span class="pre">uint32</span></code> Pocess ID of container.</li>
 <li>isRunning: <code class="docutils literal"><span class="pre">bool</span></code> Whether the process is running or not.</li>
 <li>exitCode: <code class="docutils literal"><span class="pre">uint32</span></code> exit code of Process.</li>
@@ -368,60 +428,70 @@ SoftwareContainerAgent D-Bus API can be observed.</p>
   <ul>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#d-bus-api">D-Bus API</a><ul>
+<li><a class="reference internal" href="#prerequisities">Prerequisities</a></li>
 <li><a class="reference internal" href="#error-handling">Error Handling</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#bindmount">BindMount</a><ul>
 <li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#id2">Prerequisities</a></li>
 <li><a class="reference internal" href="#error-sources">Error sources</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#create">Create</a><ul>
-<li><a class="reference internal" href="#id2">Parameters</a></li>
+<li><a class="reference internal" href="#id3">Parameters</a></li>
 <li><a class="reference internal" href="#return-values">Return Values</a></li>
-<li><a class="reference internal" href="#id3">Error sources</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#destroy">Destroy</a><ul>
-<li><a class="reference internal" href="#id4">Parameters</a></li>
+<li><a class="reference internal" href="#id4">Prerequisities</a></li>
 <li><a class="reference internal" href="#id5">Error sources</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#execute">Execute</a><ul>
+<li><a class="reference internal" href="#destroy">Destroy</a><ul>
 <li><a class="reference internal" href="#id6">Parameters</a></li>
+<li><a class="reference internal" href="#id7">Prerequisities</a></li>
+<li><a class="reference internal" href="#id8">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#execute">Execute</a><ul>
+<li><a class="reference internal" href="#id9">Parameters</a></li>
 <li><a class="reference internal" href="#return-value">Return value</a></li>
-<li><a class="reference internal" href="#id7">Error sources</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#list">List</a><ul>
-<li><a class="reference internal" href="#id8">Return value</a></li>
-<li><a class="reference internal" href="#id9">Error sources</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#listcapabilities">ListCapabilities</a><ul>
-<li><a class="reference internal" href="#id10">Return value</a></li>
+<li><a class="reference internal" href="#id10">Prerequisities</a></li>
 <li><a class="reference internal" href="#id11">Error sources</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#list">List</a><ul>
+<li><a class="reference internal" href="#id12">Return value</a></li>
+<li><a class="reference internal" href="#id13">Prerequisities</a></li>
+<li><a class="reference internal" href="#id14">Error sources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listcapabilities">ListCapabilities</a><ul>
+<li><a class="reference internal" href="#id15">Return value</a></li>
+<li><a class="reference internal" href="#id16">Prerequisities</a></li>
+<li><a class="reference internal" href="#id17">Error sources</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#resume">Resume</a><ul>
-<li><a class="reference internal" href="#id12">Parameters</a></li>
-<li><a class="reference internal" href="#id13">Error sources</a></li>
+<li><a class="reference internal" href="#id18">Parameters</a></li>
+<li><a class="reference internal" href="#id19">Prerequisities</a></li>
+<li><a class="reference internal" href="#id20">Error sources</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#setcapabilities">SetCapabilities</a><ul>
-<li><a class="reference internal" href="#id14">Parameters</a></li>
-<li><a class="reference internal" href="#id15">Error sources</a></li>
+<li><a class="reference internal" href="#id21">Parameters</a></li>
+<li><a class="reference internal" href="#id22">Prerequisities</a></li>
+<li><a class="reference internal" href="#id23">Error sources</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#suspend">Suspend</a><ul>
-<li><a class="reference internal" href="#id16">Parameters</a></li>
-<li><a class="reference internal" href="#id17">Error sources</a></li>
+<li><a class="reference internal" href="#id24">Parameters</a></li>
+<li><a class="reference internal" href="#id25">Prerequisities</a></li>
+<li><a class="reference internal" href="#id26">Error sources</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a class="reference internal" href="#signals">Signals</a><ul>
 <li><a class="reference internal" href="#processstatechanged">ProcessStateChanged</a><ul>
-<li><a class="reference internal" href="#id18">Parameters</a></li>
+<li><a class="reference internal" href="#id27">Parameters</a></li>
 </ul>
 </li>
 </ul>
