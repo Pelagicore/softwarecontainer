@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PulseAudio gateway &#8212; softwarecontainer 0.18.0-000f357 2017-03-23 documentation</title>
+    <title>systemd.service &#8212; softwarecontainer 0.18.0-000f357 2017-03-23 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -41,33 +41,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pulseaudio-gateway">
-<h1>PulseAudio gateway<a class="headerlink" href="#pulseaudio-gateway" title="Permalink to this headline">¶</a></h1>
-<p>The PulseAudio Gateway is used to provide access to the host system PulseAudio server.</p>
-<p>The gateway looks for the <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code> environment variable, which is assumed
-to be a socket, mounts the socket into the container, and sets the <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code> variable inside
-the container to the location of the mounted socket.</p>
-<p>If the pulseaudio server is not on a socket but on a network, then one should not use this gateway,
-but rather a combination of the network gateway (for access to the network resource) and the
-environment gateway (for setting <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code> to the appropriate URI).</p>
-<div class="section" id="id">
-<h2>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h2>
-<p>The ID used for the PulseAudio gateway is: <code class="docutils literal"><span class="pre">pulseaudio</span></code></p>
-</div>
-<div class="section" id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>Example configuration enabling audio:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
-    <span class="p">{</span> <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-<p>A malformed configuration or a configuration that sets audio to false will simply
-disable audio and in such case, the gateway will not connect to the PulseAudio
-server at all.</p>
-<p>The configuration can be set several times, but once it has been set to <code class="docutils literal"><span class="pre">true</span></code>
-it will retain its value.</p>
-</div>
+  <div class="section" id="systemd-service">
+<h1>systemd.service<a class="headerlink" href="#systemd-service" title="Permalink to this headline">¶</a></h1>
+<p>As it is mentioned in the <a class="reference internal" href="../getting-started/index.html#getting-started"><span class="std std-ref">Getting Started</span></a> section the user API is implemented by
+the SoftwareContainerAgent as a D-bus service. The API is used to start, configure, and control
+containers. Thus in order to use SoftwareContainer containers, the SoftwareContainerAgent should be
+run first. To be able to start the SoftwareContainerAgent and watch its process/system logs it would
+be wise decision to use it as a systemd service.</p>
+<p>systemd is an init system used in Linux distributions to bootstrap the user space. As of 2015, a large
+number of Linux distributions adopt systemd as their default init system. More information about this
+can be found <a class="reference external" href="https://www.freedesktop.org/wiki/Software/systemd/">in freedesktop systemd docs</a>.</p>
+<p>To add the agent to init system, the integrator should prepare a configuration file whose name ends
+in <code class="docutils literal"><span class="pre">.service</span></code>. This file encodes information about a process controlled and supervised by systemd.
+The <code class="docutils literal"><span class="pre">.service</span></code> files are generally kept in the <code class="docutils literal"><span class="pre">/lib/systemd/system</span></code> directory.</p>
+<p>There is a special syntax to prepare service files. More information about syntax can be found in
+<a class="reference external" href="https://www.freedesktop.org/software/systemd/man/systemd.service.html">freedesktop service unit configuration docs</a>
+with examples.</p>
 </div>
 
 
@@ -75,16 +64,7 @@ it will retain its value.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">PulseAudio gateway</a><ul>
-<li><a class="reference internal" href="#id">ID</a></li>
-<li><a class="reference internal" href="#configuration">Configuration</a></li>
-</ul>
-</li>
-</ul>
-<div class="relations">
+        <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
@@ -94,7 +74,7 @@ it will retain its value.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/chapters/gateways/10-pulse-gateway.rst.txt"
+      <li><a href="../../_sources/chapters/integration-guidelines/10-systemd-service.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -120,7 +100,7 @@ it will retain its value.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="../../_sources/chapters/gateways/10-pulse-gateway.rst.txt"
+      <a href="../../_sources/chapters/integration-guidelines/10-systemd-service.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

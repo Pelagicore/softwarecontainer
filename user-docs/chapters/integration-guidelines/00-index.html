@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-1621de3 2017-03-22 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-000f357 2017-03-23 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-1621de3 2017-03-22',
+        VERSION:     '0.18.0-000f357 2017-03-23',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -635,6 +635,23 @@ the container:</p>
 </div>
 </div>
 </div>
+<div class="section" id="systemd-service">
+<h2>systemd.service<a class="headerlink" href="#systemd-service" title="Permalink to this headline">¶</a></h2>
+<p>As it is mentioned in the <a class="reference internal" href="../getting-started/index.html#getting-started"><span class="std std-ref">Getting Started</span></a> section the user API is implemented by
+the SoftwareContainerAgent as a D-bus service. The API is used to start, configure, and control
+containers. Thus in order to use SoftwareContainer containers, the SoftwareContainerAgent should be
+run first. To be able to start the SoftwareContainerAgent and watch its process/system logs it would
+be wise decision to use it as a systemd service.</p>
+<p>systemd is an init system used in Linux distributions to bootstrap the user space. As of 2015, a large
+number of Linux distributions adopt systemd as their default init system. More information about this
+can be found <a class="reference external" href="https://www.freedesktop.org/wiki/Software/systemd/">in freedesktop systemd docs</a>.</p>
+<p>To add the agent to init system, the integrator should prepare a configuration file whose name ends
+in <code class="docutils literal"><span class="pre">.service</span></code>. This file encodes information about a process controlled and supervised by systemd.
+The <code class="docutils literal"><span class="pre">.service</span></code> files are generally kept in the <code class="docutils literal"><span class="pre">/lib/systemd/system</span></code> directory.</p>
+<p>There is a special syntax to prepare service files. More information about syntax can be found in
+<a class="reference external" href="https://www.freedesktop.org/software/systemd/man/systemd.service.html">freedesktop service unit configuration docs</a>
+with examples.</p>
+</div>
 </div>
 
 
@@ -678,6 +695,7 @@ the container:</p>
 <li><a class="reference internal" href="#id5">Example</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#systemd-service">systemd.service</a></li>
 </ul>
 </li>
 </ul>
