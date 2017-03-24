@@ -39,13 +39,19 @@ std::vector<json_t *> ServiceManifestFileLoader::loadContent()
         log_error() << errorMessage;
         throw ServiceManifestPathError(errorMessage);
     } else if (isDirectory(m_source)) {
-        log_debug() << "Path to service manifests is a dir";
+        log_debug() << "Path to service manifests is a directory";
         loadServiceManifestDir();
     } else if (isFile(m_source)) {
         log_debug() << "Path to service manifest is a file";
-        loadServiceManifestFile(m_source);
+        if (isJsonFile(m_source)) {
+            loadServiceManifestFile(m_source);
+        } else {
+            errorMessage = "Path to service manifest is not a json file";
+            log_debug() << errorMessage;
+            throw ServiceManifestPathError(errorMessage);
+        }
     } else {
-        errorMessage = "The path to the service manifest(s) is not a dir or file: \""
+        errorMessage = "The path to the service manifest(s) is not a directory or file: \""
             + m_source + "\"";
         log_error() << errorMessage;
         throw ServiceManifestPathError(errorMessage);
@@ -71,13 +77,6 @@ void ServiceManifestFileLoader::loadServiceManifestDir()
 
     for (std::string file : files) {
         std::string filePath = buildPath(m_source, file);
-
-        if (!isJsonFile(filePath)) {
-            errorMessage = "The file is not a json file: " + filePath;
-            log_debug() << errorMessage;
-            throw ServiceManifestParseError(errorMessage);
-        }
-
         loadServiceManifestFile(filePath);
     }
 }

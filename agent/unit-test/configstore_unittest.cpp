@@ -21,6 +21,7 @@
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
 #include "capability/servicemanifestloader.h"
+#include "capability/servicemanifestfileloader.h"
 
 #include <glibmm.h>
 
@@ -86,6 +87,12 @@ class ConfigStoreTest: public ::testing::Test
 public:
     LOG_DECLARE_CLASS_CONTEXT("TEST", "Tester");
     ConfigStoreTest() {}
+
+    const std::string testDataDir    = std::string(TEST_DATA_DIR);
+    const std::string errorDir       = buildPath(testDataDir, "fileErrorManifests");
+    const std::string notJsonFile    = "CS_unittest_fileExtensionIsNotJson.txt";
+    const std::string notJsonContent = "CS_unittest_fileIsNotJson.json";
+    const std::string rootNotJson    = "CS_unittest_rootIsNotJson.json";
 
     const std::string capNameGetTemp = "com.pelagicore.temperatureservice.gettemperature";
     const std::string capNameSetTemp = "com.pelagicore.temperatureservice.settemperature";
@@ -187,19 +194,6 @@ TEST_F(ConfigStoreTest, constructorFileOk2) {
     // log_debug() << longManifest;
     std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(longManifest));
     ASSERT_NO_THROW(BaseConfigStore(std::move(loader)));
-}
-
-/* Constructing a BaseConfigStore with a file path,
- * pointing at a Service Manifest which can not be parsed
- * due to that the Capability object is not a json array,
- * should throw an exception of type CapabilityParseError.
- */
-TEST_F(ConfigStoreTest, capabilitiesIsNotAJsonArray) {
-    const std::string capIsNotArray =
-        "{" + serviceManifestStart + "1234 }";
-
-    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(capIsNotArray));
-    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
 }
 
 /* Reading gateway configurations from a Service Manifest file
@@ -351,4 +345,178 @@ TEST_F(ConfigStoreTest, readConfigFetchCapMatchCombinedConfig) {
     json_decref(expectedJson2);
     json_decref(expectedJson3);
     json_decref(retGWConfigs);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Capability
+ * object is missing should throw an exception
+ * of type CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorCapsObject) {
+    const std::string manifest = "{\"version\" : \"1\"}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Capability
+ * object is not a json array should throw an exception
+ * of type CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorCapIsNotAJsonArray) {
+    const std::string manifest = "{" + serviceManifestStart + "1234 }";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Capability
+ * object doesn't have a "name" key should throw an exception
+ * of type CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorCapNameUnreadable) {
+    const std::string manifest = "{" + serviceManifestStart + "[{}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Gateway
+ * key is missing should throw an exception of type
+ * CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorGWElementUnreadable) {
+    const std::string manifest = "{" + serviceManifestStart + "[{\"name\" : \"test.cap\"}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Gateway object is
+ * not a json array should throw an exception of type
+ * CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorGWElementIsNotJsonArray) {
+    const std::string manifest = "{" + serviceManifestStart
+        + "[{\"name\" : \"test.cap\",\"gateways\": \"This is not a json array\"}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Gateway object
+ * does not have an ID key should throw an exception of type
+ * CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorGWElementIdUnreadable) {
+    const std::string manifest = "{" + serviceManifestStart
+        + "[{\"name\" : \"test.cap\",\"gateways\": [{}]}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Gateway object
+ * does not have a config key should throw an exception of
+ * type CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorGWElementConfigUnreadable) {
+    const std::string manifest = "{" + serviceManifestStart
+        + "[{\"name\" : \"test.cap\",\"gateways\": [{\"id\": \"dbus\"}]}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a Service Manifest
+ * which can not be parsed due to that the Gateway object
+ * does not have a config object which is a json array
+ * should throw an exception of type CapabilityParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorGWElementConfigIsNotJsonArray) {
+    const std::string manifest = "{" + serviceManifestStart
+        + "[{\"name\" : \"test.cap\",\"gateways\": [{\"id\": \"dbus\","
+        + "\"config\": \"This is not a json array\"}]}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+/* Constructing a BaseConfigStore with a file path
+ * pointing at a Service Manifest which can not be parsed
+ * due to that the file is not a json file
+ * should throw an exception of type ServiceManifestParseError.
+ */
+TEST_F(ConfigStoreTest, parseErrorFileIsNotJsonFile) {
+    const std::string filePath = buildPath(errorDir, notJsonContent);
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader(filePath));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), ServiceManifestParseError);
+}
+
+/* Constructing a FilteredConfigStore with a directory path,
+ * even if all files can not be parsed, should not throw an exception.
+ */
+TEST_F(ConfigStoreTest, constructorDirNoJsonFiles) {
+    // No Service Manifests, but ok dir
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader(""));
+    ASSERT_NO_THROW(FilteredConfigStore(std::move(loader)));
+}
+
+/* Constructing a BaseConfigStore with a directory path,
+ * when the directory does not exist, should throw an exception of type ServiceManifestPathError.
+ */
+TEST_F(ConfigStoreTest, pathErrorDirDoesNotExist) {
+    const std::string nonExistingPath = "/home/aiuaiai/iuatxia";
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader(nonExistingPath));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), ServiceManifestPathError);
+}
+
+/* Constructing a FilteredConfigStore with a directory path,
+ * when the directory is "/", should throw an exception of type ServiceManifestPathError.
+ */
+TEST_F(ConfigStoreTest, pathErrorRootDirNotAllowed) {
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader("/"));
+    ASSERT_THROW(FilteredConfigStore(std::move(loader)), ServiceManifestPathError);
+}
+
+/* Constructing a BaseConfigStore with a file path
+ * pointing at a Service Manifest which doesn't have the file extension "json"
+ * should throw an exception of type ServiceManifestPathError.
+ */
+TEST_F(ConfigStoreTest, pathErrorFileExtensionIsNotJson) {
+    const std::string filePath = buildPath(errorDir, notJsonFile);
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader(filePath));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), ServiceManifestPathError);
+}
+
+/* Constructing a BaseConfigStore with a directory path
+ * with Service Manifest which results in an error
+ * should throw an exception of type ServiceManifestPathError.
+ */
+TEST_F(ConfigStoreTest, pathErrorEvilDir) {
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader(errorDir));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), ServiceManifestParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorServiceManifestNotJson) {
+    // Create a service manifest matching this error case
+    //  - "The Service Manifest does not contain a json object "
+    const std::string filePath = buildPath(errorDir, rootNotJson);
+    std::unique_ptr<ServiceManifestFileLoader> loader(new ServiceManifestFileLoader(filePath));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), ServiceManifestParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorOneCapIsNotJson) {
+    // Create a service manifest matching this error case
+    //  - "A "capability" in the Service Manifest is not a json object"
+    const std::string manifest = "{" + serviceManifestStart + "[[],[],[]]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
+}
+
+TEST_F(ConfigStoreTest, parseErrorGWElementIsNotJson) {
+    // Create a service manifest matching this error case
+    //  - "The "gateway" object is not an array"
+    const std::string manifest = "{" + serviceManifestStart
+        + "[{\"name\" : \"test.cap\",\"gateways\": [[],[],[]]}]}";
+    std::unique_ptr<ServiceManifestStringLoader> loader(new ServiceManifestStringLoader(manifest));
+    ASSERT_THROW(BaseConfigStore(std::move(loader)), CapabilityParseError);
 }

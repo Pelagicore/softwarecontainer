@@ -1,7 +1,0 @@
-{
-    "version": "1",
-    "capabilities": {
-        "name": "com.pelagicore.temperatureservice.gettemperature",
-        "gateways": "dummyGW"
-    }
-}
