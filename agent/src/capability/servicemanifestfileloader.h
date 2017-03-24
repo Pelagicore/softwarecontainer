@@ -37,6 +37,15 @@ public:
     // Constructor just needs to init parent with the service manifest source string
     ServiceManifestFileLoader(const std::string &source);
 
+    /**
+     * @brief Loads the json content from the Service Manifest(s)
+     *
+     * @returns a vector of json_t representing the Service Manifest(s)
+     * @throws ServiceManifestPathError if the path to the file or dir
+     * is invalid
+     * @throws ServiceManifestParseError if parsing of one or more files
+     * is unsuccessful
+     */
     virtual std::vector<json_t *> loadContent() override;
 
 private:
@@ -44,7 +53,8 @@ private:
     /**
      * @brief Reads a directory and finds all json Service Manifest files.
      *
-     * @throws ServiceManifestPathError if the path to the Service Manifest(s) is not allowed
+     * @throws ServiceManifestPathError if the path to the Service Manifest(s)
+     * is not a valid json file or not a file or directory
      *
      */
     void loadServiceManifestDir();
@@ -56,8 +66,6 @@ private:
      * the gateways will be appended to the previously stored gatway list.
      *
      * @throws ServiceManifestParseError if parsing of the file is unsuccessful
-     * @throws CapabilityParseError if parsing of one or more Capabilities in file
-     * is unsuccessful
      *
      */
     void loadServiceManifestFile(const std::string &filePath);
@@ -65,8 +73,8 @@ private:
     /**
      * @brief Iterates through the files in the source and finds all json files.
      *
-     * @return a vector of all json files present in the directory, an empty list if no
-     * json files can be found in the directory
+     * @return a vector of all json files present in the directory, an empty
+     * list if no json files can be found in the directory
      */
     std::vector<std::string> fileList();
 
