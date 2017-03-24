@@ -306,7 +306,6 @@ class Container():
                                    env)
         return pid
 
-
     def get_bind_dir(self):
         """ Returns the path containing the bind mounted dir set previously
 
@@ -345,6 +344,8 @@ class Container():
         self.__bind_dir = data[Container.BIND_MOUNT_DIR]
         return container_id
 
+    def bindmount(self, hostpath, dirname, readonly):
+        return self.__bindmount(hostpath, dirname, readonly)
 
     def suspend(self):
         if self.__container_id is not None:

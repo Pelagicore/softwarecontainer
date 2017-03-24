@@ -127,7 +127,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
 
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
-    if(enableWriteBuffer) {
+    if(enableWriteBuffer && isDirectory(src)) {
         std::string upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
         std::string workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
         fstype.assign("overlay");
