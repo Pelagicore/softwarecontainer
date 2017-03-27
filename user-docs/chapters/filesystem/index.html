@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filesystems &#8212; softwarecontainer 0.18.0-4724ed9 2017-03-23 documentation</title>
+    <title>Filesystems &#8212; softwarecontainer 0.18.0-4ebc50a 2017-03-27 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-4724ed9 2017-03-23',
+        VERSION:     '0.18.0-4ebc50a 2017-03-27',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -155,6 +155,12 @@ filesystem. The <code class="docutils literal"><span class="pre">work</span></co
 <div><img alt="&quot;Description of OverlayFS layering&quot;" height="280" src="../../_images/blockdiag-c7e3f81b40a1869963a11505b1406f5478e6ef64.png" width="256" /></div><p>When the container is shutdown and the mountpoints are cleaned up, the
 upper filesystem is copied into the lower filesystem causing the filesystem
 changes performed during its runtime to be merged into the lower layers.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Non-directory types of files can not be mounted using overlayfs.</p>
+</div>
+<p>These will automatically fall back on using the default behavior of bind
+mounting the files into the filesystem of the container.</p>
 </div>
 </div>
 

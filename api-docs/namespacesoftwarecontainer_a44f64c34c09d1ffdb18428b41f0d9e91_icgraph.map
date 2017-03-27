@@ -1,10 +1,11 @@
 <map id="softwarecontainer::isDirectory" name="softwarecontainer::isDirectory">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="661,32,875,73"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="207,142,347,198"/>
-<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184" title="Indicates if gateways have been configured previously. " alt="" coords="416,294,613,350"/>
-<area shape="rect" id="node8" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="187,55,368,96"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="445,214,585,270"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_container.html#a25102e42007fb34a93d982b231ae6c78" title="Setup the container for startup. " alt="" coords="448,149,581,191"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_container.html#a67f48ee29e9294f4f42436e1297d34c7" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="701,221,835,263"/>
-<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="433,32,596,73"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a8f6b5cda214c9e412ab73313bc95d785" title="bindMount Bind mount a src directory to another position dst. " alt="" coords="207,122,347,178"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="661,86,875,128"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a35eb42bdace2695fb3e96cb84a535213" title="createDirectory Create a directory, and if successful append it to a list of dirs to be deleted in th..." alt="" coords="207,218,347,274"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184" title="Indicates if gateways have been configured previously. " alt="" coords="416,370,613,426"/>
+<area shape="rect" id="node9" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="187,57,368,98"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23" title="overlayMount Mount a directory with an overlay on top of it. " alt="" coords="445,290,585,346"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_container.html#a25102e42007fb34a93d982b231ae6c78" title="Setup the container for startup. " alt="" coords="448,225,581,266"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_container.html#a67f48ee29e9294f4f42436e1297d34c7" title="create Creates a new lxc_container and creates it with all the initialization. " alt="" coords="701,297,835,338"/>
+<area shape="rect" id="node10" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="433,57,596,98"/>
 </map>
