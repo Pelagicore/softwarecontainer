@@ -627,7 +627,7 @@ bool Container::bindMountInContainer(const std::string &pathInHost,
                 log_error() << "Could not create file " << tempPath;
                 return false;
             }
-            m_cleanupHandlers.push_back(new FileCleanUpHandler(tempPath));
+            m_cleanupHandlers.emplace_back(new FileCleanUpHandler(tempPath));
         }
     }
 
