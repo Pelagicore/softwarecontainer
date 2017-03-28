@@ -440,11 +440,14 @@ void SoftwareContainer::checkWorkspace()
     const std::string rootDir = m_config->sharedMountsDir();
     if (!isDirectory(rootDir)) {
         log_debug() << "Container root " << rootDir << " does not exist, trying to create";
-        if(!createDirectory(rootDir)) {
+        if(!m_create.createDirectory(rootDir)) {
+            m_create.rollBack();
             std::string message = "Failed to create container root directory";
             log_error() << message;
             throw SoftwareContainerError(message);
         }
+        m_create.clear();
+//      TODO: add filetoolkit cleanupHandler here
     }
 }
 

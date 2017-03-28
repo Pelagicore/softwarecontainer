@@ -28,6 +28,7 @@ set(HEADERS
     directorycleanuphandler.h
     filecleanuphandler.h
     mountcleanuphandler.h
+    createdir.h
     filetoolkitwithundo.h
     gatewayconfig.h
     signalconnectionshandler.h
@@ -37,6 +38,7 @@ add_library(softwarecontainercommon SHARED
     directorycleanuphandler.cpp
     filecleanuphandler.cpp
     jsonparser.cpp
+    createdir.cpp
     filetoolkitwithundo.cpp
     mountcleanuphandler.cpp
     overlaysynccleanuphandler.cpp
