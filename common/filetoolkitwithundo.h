@@ -119,7 +119,7 @@ protected:
      * @brief m_cleanupHandlers A vector of cleanupHandlers added during the lifetime of the
      *  FileToolKitWithUndo that will be run from the destructor.
      */
-    std::vector<CleanUpHandler *> m_cleanupHandlers;
+    std::vector<std::unique_ptr<CleanUpHandler>> m_cleanupHandlers;
 
     CreateDir m_create;
 };
