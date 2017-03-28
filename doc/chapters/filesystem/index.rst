@@ -133,6 +133,6 @@ When the container is shutdown and the mountpoints are cleaned up, the
 upper filesystem is copied into the lower filesystem causing the filesystem
 changes performed during its runtime to be merged into the lower layers.
 
-.. Note:: Non-directory types of files can not be mounted using overlayfs. 
-These will automatically fall back on using the default behavior of bind
-mounting the files into the filesystem of the container.
+.. Note:: Non-directory types of files can not be mounted using overlayfs.
+          These will automatically fall back on using the default behavior of 
+          bind mounting the files into the filesystem of the container.
