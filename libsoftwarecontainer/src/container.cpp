@@ -110,12 +110,14 @@ bool Container::initialize()
 {
     if (m_state < ContainerState::PREPARED) {
         std::string gatewayDir = gatewaysDir();
-        if (!createDirectory(gatewayDir)) {
+        if (!m_create.createDirectory(gatewayDir)) {
+            m_create.rollBack();
             log_error() << "Could not create gateway directory "
                         << gatewayDir << ": " << strerror(errno);
             return false;
         }
-
+        m_create.clear();
+//        TODO: add filetoolkit cleanupHandler here
         if (!createSharedMountPoint(gatewayDir)) {
             log_error() << "Could not create shared mount point for dir: " << gatewayDir;
             return false;
@@ -608,10 +610,13 @@ bool Container::bindMountInContainer(const std::string &pathInHost,
         log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
 
         log_debug() << "Creating folder : " << tempPath;
-        if (!createDirectory(tempPath)) {
+        if (!m_create.createDirectory(tempPath)) {
+            m_create.rollBack();
             log_error() << "Could not create folder " << tempPath;
             return false;
         }
+        m_create.clear();
+//        TODO :add filetoolkit cleanupHandler here
     } else {
         // This goes for sockets, fifos etc as well.
         log_debug() << "Path on host (" << pathInHost << ") is not a directory, "

@@ -52,44 +52,6 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
     }
 }
 
-bool FileToolkitWithUndo::createParentDirectory(const std::string &path)
-{
-    log_debug() << "Creating parent directories for " << path;
-    std::string parent = parentPath(path);
-
-    if (!createDirectory(parent)) {
-        log_error() << "Could not create directory " << parent;
-        return false;
-    }
-
-    return true;
-}
-
-bool FileToolkitWithUndo::createDirectory(const std::string &path)
-{
-    log_debug() << "createDirectory(" << path << ") called";
-    if (isDirectory(path)) {
-        return true;
-    }
-
-    if(!createParentDirectory(path)) {
-        log_error() << "Couldn't create parent directory for " << path;
-        return false;
-    }
-
-    if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-        log_error() << "Could not create directory " << path << ": " << strerror(errno);
-        return false;
-    }
-
-    if (!pathInList(path)) {
-        m_cleanupHandlers.push_back(new DirectoryCleanUpHandler(path));
-    }
-    log_debug() << "Created directory " << path;
-
-    return true;
-}
-
 std::string FileToolkitWithUndo::tempDir(std::string templ)
 {
     char *dir = const_cast<char*>(templ.c_str());
@@ -190,16 +152,18 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
     std::string fstype = "overlay";
     unsigned long flags = 0;
 
-    if (!createDirectory(lower)
-        || !createDirectory(upper)
-        || !createDirectory(work)
-        || !createDirectory(dst))
+    if (!m_create.createDirectory(lower)
+        || !m_create.createDirectory(upper)
+        || !m_create.createDirectory(work)
+        || !m_create.createDirectory(dst))
     {
+        m_create.rollBack();
         log_error() << "Failed to create lower/upper/work directory for overlayMount. lowerdir=" <<
                        lower << ", upperdir=" << upper << ", workdir=" << work;
         return false;
     }
-
+    m_create.clear();
+//   TODO: add filetoolkit cleanupHandler here
     std::string mountoptions = logging::StringBuilder() << "lowerdir=" << lower
                                                         << ",upperdir=" << upper
                                                         << ",workdir=" << work;

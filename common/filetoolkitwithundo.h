@@ -20,6 +20,7 @@
 #pragma once
 
 #include "cleanuphandler.h"
+#include "createdir.h"
 #include "softwarecontainer-common.h"
 
 namespace softwarecontainer {
@@ -103,16 +104,6 @@ protected:
     bool createSharedMountPoint(const std::string &path);
 
     /**
-     * @brief createDirectory Create a directory, and if successful append it
-     *  to a list of dirs to be deleted in the dtor. Since nestled dirs will
-     *  need to be deleted in reverse order to creation insert to the beginning
-     *  of the list.
-     * @param path Path of directory to be created
-     * @return true on success, false on failure
-     */
-    bool createDirectory(const std::string &path);
-
-    /**
      * @brief checks whether given path is already added to clean up handlers or not
      *
      * This function will be called only before adding new CleanUpHandler for FileCleanUpHandler
@@ -129,13 +120,8 @@ protected:
      *  FileToolKitWithUndo that will be run from the destructor.
      */
     std::vector<CleanUpHandler *> m_cleanupHandlers;
-private :
-    /**
-     * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
-     * @param path The directory path to be created.
-     * @return true on success, false on failure
-     */
-    bool createParentDirectory(const std::string &path);
+
+    CreateDir m_create;
 };
 
 } // namespace softwarecontainer
