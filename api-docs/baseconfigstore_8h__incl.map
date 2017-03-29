@@ -1,8 +1,9 @@
 <map id="agent/src/capability/baseconfigstore.h" name="agent/src/capability/baseconfigstore.h">
-<area shape="rect" id="node2" href="$softwarecontainer-common_8h_source.html" title="softwarecontainer&#45;common.h" alt="" coords="210,169,401,196"/>
-<area shape="rect" id="node8" href="$gatewayconfig_8h_source.html" title="gatewayconfig.h" alt="" coords="367,95,484,121"/>
-<area shape="rect" id="node13" href="$configstoreerror_8h_source.html" title="configstoreerror.h" alt="" coords="539,95,661,121"/>
-<area shape="rect" id="node14" href="$jsonparser_8h_source.html" title="jsonparser.h" alt="" coords="100,95,193,121"/>
-<area shape="rect" id="node3" href="$softwarecontainer-log_8h_source.html" title="softwarecontainer&#45;log.h" alt="" coords="5,244,163,271"/>
-<area shape="rect" id="node11" href="$softwarecontainererror_8h_source.html" title="softwarecontainererror.h" alt="" coords="527,169,689,196"/>
+<area shape="rect" id="node2" href="$softwarecontainer-common_8h_source.html" title="softwarecontainer&#45;common.h" alt="" coords="294,169,485,196"/>
+<area shape="rect" id="node8" href="$gatewayconfig_8h_source.html" title="gatewayconfig.h" alt="" coords="200,95,317,121"/>
+<area shape="rect" id="node13" href="$configstoreerror_8h_source.html" title="configstoreerror.h" alt="" coords="37,95,160,121"/>
+<area shape="rect" id="node14" href="$servicemanifestloader_8h_source.html" title="servicemanifestloader.h" alt="" coords="397,95,557,121"/>
+<area shape="rect" id="node15" href="$jsonparser_8h_source.html" title="jsonparser.h" alt="" coords="560,169,653,196"/>
+<area shape="rect" id="node3" href="$softwarecontainer-log_8h_source.html" title="softwarecontainer&#45;log.h" alt="" coords="508,244,665,271"/>
+<area shape="rect" id="node11" href="$softwarecontainererror_8h_source.html" title="softwarecontainererror.h" alt="" coords="5,169,168,196"/>
 </map>

@@ -1,5 +1,6 @@
 <map id="softwarecontainer::isFile" name="softwarecontainer::isFile">
-<area shape="rect" id="node2" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="187,5,368,47"/>
-<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="416,5,579,47"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="627,5,840,47"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_service_manifest_file_loader.html#a3e97e320f32a9767ca5a94426e5f520e" title="Loads the json content from the Service Manifest(s) " alt="" coords="189,5,365,61"/>
+<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="187,85,368,126"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="416,85,579,126"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="627,85,840,126"/>
 </map>

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-4ebc50a 2017-03-27</span>
+   &#160;<span id="projectnumber">0.18.0-64b3a9d 2017-03-29</span>
    </div>
   </td>
  </tr>
@@ -83,9 +83,9 @@ Inheritance diagram for softwarecontainer::BaseConfigStore:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8282adbe1ef33e910a51e748c25e3f26"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8282adbe1ef33e910a51e748c25e3f26"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BaseConfigStore</b> (const std::string &amp;filePath)</td></tr>
-<tr class="separator:a8282adbe1ef33e910a51e748c25e3f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a221eb2cc8b8b5818d81b6d246a545c3b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_base_config_store.html#a221eb2cc8b8b5818d81b6d246a545c3b">BaseConfigStore</a> (std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_service_manifest_loader.html">ServiceManifestLoader</a> &gt; loader)</td></tr>
+<tr class="memdesc:a221eb2cc8b8b5818d81b6d246a545c3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classsoftwarecontainer_1_1_base_config_store.html">BaseConfigStore</a> object and searches for Service Manifests (of file type json) in the input path, and stores the Capabilities' <a class="el" href="classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. ">Gateway</a> configurations.  <a href="#a221eb2cc8b8b5818d81b6d246a545c3b">More...</a><br /></td></tr>
+<tr class="separator:a221eb2cc8b8b5818d81b6d246a545c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -95,8 +95,47 @@ std::map&lt; std::string, <a class="el" href="classsoftwarecontainer_1_1_gateway
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="baseconfigstore_8h_source.html#l00036">36</a> of file <a class="el" href="baseconfigstore_8h_source.html">baseconfigstore.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<p>Definition at line <a class="el" href="baseconfigstore_8h_source.html#l00037">37</a> of file <a class="el" href="baseconfigstore_8h_source.html">baseconfigstore.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a221eb2cc8b8b5818d81b6d246a545c3b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">softwarecontainer::BaseConfigStore::BaseConfigStore </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classsoftwarecontainer_1_1_service_manifest_loader.html">ServiceManifestLoader</a> &gt;&#160;</td>
+          <td class="paramname"><em>loader</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new <a class="el" href="classsoftwarecontainer_1_1_base_config_store.html">BaseConfigStore</a> object and searches for Service Manifests (of file type json) in the input path, and stores the Capabilities' <a class="el" href="classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. ">Gateway</a> configurations. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_service_manifest_path_error.html" title="An error occured in ConfigStore relating to the path to the Service Manifest(s) ">ServiceManifestPathError</a></td><td>if the path to the json file(s) is incorrectly formatted or if the path is not allowed </td></tr>
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_service_manifest_parse_error.html" title="An error occured in ConfigStore when parsing a Service Manifest. ">ServiceManifestParseError</a></td><td>if parsing of the json fails </td></tr>
+    <tr><td class="paramname"><a class="el" href="classsoftwarecontainer_1_1_capability_parse_error.html" title="An error occured in ConfigStore when parsing a Capability in a Service Manifest. ">CapabilityParseError</a></td><td>if parsing of one or more Capabilities or <a class="el" href="classsoftwarecontainer_1_1_gateway.html" title="Gateway base class for SoftwareContainer. ">Gateway</a> objects is unsuccessful </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="baseconfigstore_8cpp_source.html#l00024">24</a> of file <a class="el" href="baseconfigstore_8cpp_source.html">baseconfigstore.cpp</a>.</p>
+
+<p>References <a class="el" href="jsonparser_8cpp_source.html#l00051">softwarecontainer::JSONParser::read()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    std::vector&lt;json_t *&gt; content = loader-&gt;loadContent();</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordflow">for</span> (json_t *serviceManifest : content) {</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        parseServiceManifest(serviceManifest);</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    }</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div></div><!-- fragment -->
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classsoftwarecontainer_1_1_base_config_store_a221eb2cc8b8b5818d81b6d246a545c3b_cgraph.svg" width="390" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>agent/src/capability/<a class="el" href="baseconfigstore_8h_source.html">baseconfigstore.h</a></li>
 <li>agent/src/capability/<a class="el" href="baseconfigstore_8cpp_source.html">baseconfigstore.cpp</a></li>
 </ul>
@@ -106,7 +145,7 @@ std::map&lt; std::string, <a class="el" href="classsoftwarecontainer_1_1_gateway
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_base_config_store.html">BaseConfigStore</a></li>
-    <li class="footer">Generated on Mon Mar 27 2017 08:55:57 for softwarecontainer by
+    <li class="footer">Generated on Wed Mar 29 2017 08:42:18 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

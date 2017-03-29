@@ -78,6 +78,8 @@ var namespacesoftwarecontainer =
     [ "PulseGateway", "classsoftwarecontainer_1_1_pulse_gateway.html", "classsoftwarecontainer_1_1_pulse_gateway" ],
     [ "RecursiveCopy", "classsoftwarecontainer_1_1_recursive_copy.html", "classsoftwarecontainer_1_1_recursive_copy" ],
     [ "RecursiveDelete", "classsoftwarecontainer_1_1_recursive_delete.html", "classsoftwarecontainer_1_1_recursive_delete" ],
+    [ "ServiceManifestFileLoader", "classsoftwarecontainer_1_1_service_manifest_file_loader.html", "classsoftwarecontainer_1_1_service_manifest_file_loader" ],
+    [ "ServiceManifestLoader", "classsoftwarecontainer_1_1_service_manifest_loader.html", "classsoftwarecontainer_1_1_service_manifest_loader" ],
     [ "ServiceManifestParseError", "classsoftwarecontainer_1_1_service_manifest_parse_error.html", "classsoftwarecontainer_1_1_service_manifest_parse_error" ],
     [ "ServiceManifestPathError", "classsoftwarecontainer_1_1_service_manifest_path_error.html", "classsoftwarecontainer_1_1_service_manifest_path_error" ],
     [ "SignalConnectionsHandler", "classsoftwarecontainer_1_1_signal_connections_handler.html", "classsoftwarecontainer_1_1_signal_connections_handler" ],
