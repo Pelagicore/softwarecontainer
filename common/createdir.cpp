@@ -37,7 +37,6 @@ bool CreateDir::createParentDirectory(const std::string path)
 
 bool CreateDir::createDirectory(const std::string path)
 {
-    log_debug() << "createDirectory(" << path << ") called";
     if (isDirectory(path)) {
         return true;
     }
@@ -52,20 +51,31 @@ bool CreateDir::createDirectory(const std::string path)
         return false;
     }
 
-    m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(path));
+    if (!pathInList(path)){
+        m_rollbackCleaners.emplace_back(new DirectoryCleanUpHandler(path));
+    }
     return true;
 }
 
 void CreateDir::clear()
 {
-    m_cleanupHandlers.clear();
+    m_rollbackCleaners.clear();
+    m_tempFileCleaners.clear();
 }
 
 bool CreateDir::rollBack()
 {
     bool success = true;
-    // Clean up all created directories
-    for (auto &cleanupHandler:m_cleanupHandlers) {
+    // Clean up created directories
+    for (auto &cleanupHandler:m_rollbackCleaners) {
+        if (!cleanupHandler->clean()) {
+            log_error() << cleanupHandler->queryName() << " could not be cleaned!";
+            success = false;
+        }
+    }
+
+    // Clean up created temp directories
+    for (auto &cleanupHandler:m_tempFileCleaners) {
         if (!cleanupHandler->clean()) {
             log_error() << cleanupHandler->queryName() << " could not be cleaned!";
             success = false;
@@ -76,5 +86,27 @@ bool CreateDir::rollBack()
     return success;
 }
 
+std::string CreateDir::tempDir(std::string templ)
+{
+    char *dir = const_cast<char*>(templ.c_str());
+    dir = mkdtemp(dir);
+    if (dir == nullptr) {
+        log_warning() << "Failed to create buffered Directory: " << strerror(errno);
+        return nullptr;
+    }
+
+    m_tempFileCleaners.emplace_back(new DirectoryCleanUpHandler(std::string(dir)));
+    return std::string(dir);
+}
+
+bool CreateDir::pathInList(const std::string path)
+{
+    for (auto &element : m_rollbackCleaners) {
+        if (element->queryName() == path) {
+            return true;
+        }
+    }
+    return false;
+}
 
 }

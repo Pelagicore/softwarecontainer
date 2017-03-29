@@ -117,7 +117,10 @@ bool Container::initialize()
             return false;
         }
         m_create.clear();
-//        TODO: add filetoolkit cleanupHandler here
+        if (!pathInList(gatewayDir)) {
+            m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(gatewayDir));
+        }
+
         if (!createSharedMountPoint(gatewayDir)) {
             log_error() << "Could not create shared mount point for dir: " << gatewayDir;
             return false;
@@ -600,13 +603,14 @@ bool Container::bindMountInContainer(const std::string &pathInHost,
     // Create a file to mount to in gateways
     std::string filePart = baseName(pathInContainer);
     std::string tempPath = buildPath(gatewaysDir(), filePart);
-
+    bool pathIsDirectory = false;
     //
     // If the path is a directory, we create the tempPath (which adds a cleanup handler).
     //
     // If it is a file, we touch the file and add a cleanup handler for it.
     //
     if (isDirectory(pathInHost)) {
+        pathIsDirectory = true;
         log_debug() << "Path on host (" << pathInHost << ") is directory, mounting as a directory";
 
         log_debug() << "Creating folder : " << tempPath;
@@ -615,8 +619,6 @@ bool Container::bindMountInContainer(const std::string &pathInHost,
             log_error() << "Could not create folder " << tempPath;
             return false;
         }
-        m_create.clear();
-//        TODO :add filetoolkit cleanupHandler here
     } else {
         // This goes for sockets, fifos etc as well.
         log_debug() << "Path on host (" << pathInHost << ") is not a directory, "
@@ -625,14 +627,40 @@ bool Container::bindMountInContainer(const std::string &pathInHost,
         if (!pathInList(tempPath)) {
             if (!touch(tempPath)) {
                 log_error() << "Could not create file " << tempPath;
+                m_create.rollBack();
                 return false;
             }
-            m_cleanupHandlers.emplace_back(new FileCleanUpHandler(tempPath));
         }
     }
 
-    return bindMountCore(pathInHost, pathInContainer, tempPath, readOnly);
+    if (!bindMountCore(pathInHost, pathInContainer, tempPath, readOnly)) {
+        // bindMountInContainer operation is not successful. Clean mounted tempPath.
+        MountCleanUpHandler rollback{tempPath};
+        rollback.clean();
+        // clean createdDirectories as well
+        m_create.rollBack();
+        return false;
+    }
 
+    // bindMountInContainer succeed. Add cleanup for mounted tempPath
+    if (pathIsDirectory) {
+        //Add clenuphandlers for created directories
+        if (!pathInList(tempPath)) {
+            m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(tempPath));
+        }
+
+        // Add cleanup handlers for temporary directories
+        for (auto &tempFileCleaner : m_create.m_tempFileCleaners) {
+            m_cleanupHandlers.emplace_back(std::move(tempFileCleaner));
+        }
+        // clear rollback history
+        m_create.clear();
+    } else {
+        // add cleanup for tempPath file
+        m_cleanupHandlers.emplace_back(new FileCleanUpHandler(tempPath));
+    }
+    m_cleanupHandlers.emplace_back(new MountCleanUpHandler(tempPath));
+    return true;
 }
 
 bool Container::bindMountCore(const std::string &pathInHost,

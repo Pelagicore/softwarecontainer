@@ -30,18 +30,18 @@
 
 using namespace softwarecontainer;
 
-class RecursiveCopyTest: public ::testing::Test
+class RecursiveCopyTest: public ::testing::Test, CreateDir
 {
 public:
     RecursiveCopyTest() { }
 
     void SetUp() override
     {
-        srcdir = ft.tempDir("/tmp/sc-recursivecopyTest-XXXXXX");
-        dstdir = ft.tempDir("/tmp/sc-recursivecopyTest-XXXXXX");
+        srcdir = cd.tempDir("/tmp/sc-recursivecopyTest-XXXXXX");
+        dstdir = cd.tempDir("/tmp/sc-recursivecopyTest-XXXXXX");
     }
 
-    FileToolkitWithUndo ft;
+    CreateDir cd;
     std::string srcdir;
     std::string dstdir;
 };
