@@ -447,7 +447,9 @@ void SoftwareContainer::checkWorkspace()
             throw SoftwareContainerError(message);
         }
         m_create.clear();
-//      TODO: add filetoolkit cleanupHandler here
+        if (!pathInList(rootDir)) {
+            m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(rootDir));
+        }
     }
 }
 

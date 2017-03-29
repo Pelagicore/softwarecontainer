@@ -37,13 +37,13 @@ public:
 
     void SetUp() override
     {
-        workdir = ft.tempDir("/tmp/sc-RecursiveDeleteTest-XXXXXX");
+        workdir = cd.tempDir("/tmp/sc-RecursiveDeleteTest-XXXXXX");
         testdir = buildPath(workdir, "testdir");
         createDir(testdir);
 
     }
 
-    FileToolkitWithUndo ft;
+    CreateDir cd;
     std::string testdir;
     std::string workdir;
 };

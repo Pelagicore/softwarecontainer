@@ -50,22 +50,6 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
     }
 }
 
-std::string FileToolkitWithUndo::tempDir(std::string templ)
-{
-    char *dir = const_cast<char*>(templ.c_str());
-    dir = mkdtemp(dir);
-    if (dir == nullptr) {
-        log_warning() << "Failed to create buffered Directory: " << strerror(errno);
-        return nullptr;
-    }
-
-    if (!pathInList(templ)) {
-        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(templ));
-    }
-
-    return std::string(dir);
-}
-
 bool FileToolkitWithUndo::bindMount(const std::string &src,
                                     const std::string &dst,
                                     const std::string &tmpContainerRoot,
@@ -161,7 +145,23 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
         return false;
     }
     m_create.clear();
-//   TODO: add filetoolkit cleanupHandler here
+    log_debug() << "adding mount points";
+    if (!pathInList(lower)) {
+        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(lower));
+    }
+
+    if (!pathInList(upper)) {
+        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(upper));
+    }
+
+    if (!pathInList(work)) {
+        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(work));
+    }
+
+    if (!pathInList(dst)) {
+        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(dst));
+    }
+
     std::string mountoptions = logging::StringBuilder() << "lowerdir=" << lower
                                                         << ",upperdir=" << upper
                                                         << ",workdir=" << work;
@@ -223,6 +223,7 @@ bool FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
 
 bool FileToolkitWithUndo::pathInList(const std::string path)
 {
+
     for (auto &element : m_cleanupHandlers) {
         if (element->queryName() == path) {
             return true;

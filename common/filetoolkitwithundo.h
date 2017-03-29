@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "cleanuphandler.h"
+#include "mountcleanuphandler.h"
 #include "createdir.h"
 #include "softwarecontainer-common.h"
 
@@ -47,15 +47,6 @@ public:
                    bool enableWriteBuffer=false);
 
 
-    /**
-     * @brief tempDir Creates a temporary directory at templatePath.
-     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
-     *  is destroyed.
-     * @param templ a template Path used to create the path of the temporary directory, including
-     *  XXXXXX which will be replaced with a unique ID for the temporary directory
-     * @return A string path pointing to the newly creted temporary directory.
-     */
-    std::string tempDir(std::string templatePath);
 protected:
     /*
      * @brief Writes to a file (and optionally create it)

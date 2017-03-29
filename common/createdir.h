@@ -48,6 +48,26 @@ public:
      *
      * */
     void clear();
+
+    /**
+     * @brief tempDir Creates a uniquely named temporary directory according to templatePath.
+     *
+     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
+     *  is destroyed.
+     *
+     * @param templ a template Path used to create the path of the temporary directory, including
+     *  XXXXXX which will be replaced with a unique ID for the temporary directory
+     *
+     * @return A string path pointing to the newly created temporary directory.
+     */
+    std::string tempDir(std::string templatePath);
+
+    /**
+     * @brief m_tempFileCleaners holds cleanup handler for each created temporary directory.
+     * The main purpose of this is to rollback in any errors while bind-mounting. On success
+     * m_tempFileCleaners will be moved to cleanup handlers of FileToolkitWithUndo
+     */
+    std::vector<std::unique_ptr<DirectoryCleanUpHandler>> m_tempFileCleaners;
 private :
     /**
      * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
@@ -57,10 +77,17 @@ private :
     bool createParentDirectory(const std::string path);
 
     /**
-     * @brief m_createDirectoryCleanupHandlers holds cleanup handler for each created driectory.
+     * @brief m_createDirectoryCleanupHandlers holds cleanup handler for each created directory.
      * The main purpose of this is to rollback in any errors.
      */
-    std::vector<std::unique_ptr<DirectoryCleanUpHandler>> m_cleanupHandlers;
+    std::vector<std::unique_ptr<DirectoryCleanUpHandler>> m_rollbackCleaners;
+
+    /**
+     * @brief checks whether path is already added to m_cleanupHandlers or not
+     * @param a string path name to check
+     * @return true if the path is already exist, false otherwise
+     */
+    bool pathInList(const std::string path);
 };
 
 }
