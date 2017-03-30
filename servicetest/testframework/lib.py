@@ -380,14 +380,22 @@ class SoftwareContainerAgentHandler():
                  config_path=None,
                  caps_dir=None,
                  default_caps_dir=None,
-                 check_connection=True):
+                 check_connection=True,
+                 exec_prefix=None):
         if log_file_path is None:
             self.__log_file = subprocess.STDOUT
         else:
-            self.__log_file = open(log_file_path, "w")
+            if os.path.exists(log_file_path):
+                os.unlink(log_file_path)
+            self.__log_file = open(log_file_path, "a")
 
         # Applying arguments to the softwarecontainer-agent call
         cmd = ["softwarecontainer-agent"]
+        if exec_prefix is not None:
+            cmd = [exec_prefix, "softwarecontainer-agent"]
+            self.__exec_prefix = True
+        else:
+            self.__exec_prefix = False
         if caps_dir is not None:
             cmd += ['--manifest-dir', caps_dir]
         if default_caps_dir is not None:
@@ -412,7 +420,11 @@ class SoftwareContainerAgentHandler():
             # Wait for the softwarecontainerStarted message to appear on the
             # msgQueue, this is evoked when softwarecontainer-agent is ready to
             # perform work. If we timeout tear down what we have started so far.
-            while self.__rec.msg_queue().get(block=True, timeout=3) != "softwarecontainerStarted":
+            if self.__exec_prefix:
+                timeout = 10
+            else:
+                timeout = 3
+            while self.__rec.msg_queue().get(block=True, timeout=timeout) != "softwarecontainerStarted":
                 pass
         except Queue.Empty as e:
             self.terminate()
