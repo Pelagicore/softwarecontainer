@@ -108,6 +108,7 @@ std::string FileToolkitWithUndo::tempDir(std::string templ)
 
 bool FileToolkitWithUndo::bindMount(const std::string &src,
                                     const std::string &dst,
+                                    const std::string &tmpContainerRoot,
                                     bool readOnly,
                                     bool enableWriteBuffer)
 {
@@ -128,8 +129,17 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
     if(enableWriteBuffer && isDirectory(src)) {
-        std::string upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
-        std::string workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
+        std::string upperDir , workDir;
+
+        // In case the tmpContainerRoot is set to nothing we need to create a
+        // good bindmount directory.
+        if (tmpContainerRoot == "") {
+            upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
+            workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
+        } else {
+            upperDir = tempDir(tmpContainerRoot + "/bindmount-upper-XXXXXX");
+            workDir = tempDir(tmpContainerRoot + "/bindmount-work-XXXXXX");
+        }
         fstype.assign("overlay");
 
         std::ostringstream os;

@@ -41,6 +41,7 @@ public:
      */
     bool bindMount(const std::string &src,
                    const std::string &dst,
+                   const std::string &tmpContainerRoot,
                    bool readOnly,
                    bool enableWriteBuffer=false);
 

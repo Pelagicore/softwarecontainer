@@ -646,7 +646,11 @@ bool Container::bindMountCore(const std::string &pathInHost,
     }
 
     // Bind mount to /gateways
-    if (!bindMount(pathInHost, tempDirInContainerOnHost, readonly, m_enableWriteBuffer)) {
+    if (!bindMount(pathInHost,
+                   tempDirInContainerOnHost,
+                   m_containerRoot + m_id,
+                   readonly,
+                   m_enableWriteBuffer)) {
         log_error() << "Could not bind mount " << pathInHost << " to " << tempDirInContainerOnHost;
         return false;
     }

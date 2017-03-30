@@ -421,6 +421,9 @@ class SoftwareContainerAgentHandler():
             # msgQueue, this is evoked when softwarecontainer-agent is ready to
             # perform work. If we timeout tear down what we have started so far.
             if self.__exec_prefix:
+                # If an exec prefix was attached to this process we need a longer timeout as the
+                # exec prefix may cause the execution of softwarecontainer to take a longer time.
+                # This is true for example with the strace tests.
                 timeout = 10
             else:
                 timeout = 3
