@@ -189,9 +189,9 @@ bool Container::create()
     m_rootFSPath = buildPath(s_LXCRoot, containerID, "rootfs");
 
     if (m_enableWriteBuffer) {
-        const std::string rootFSPathLower = m_containerRoot + m_id + "-lower";
-        const std::string rootFSPathUpper = m_containerRoot + m_id + "-upper";
-        const std::string rootFSPathWork  = m_containerRoot + m_id + "-work";
+        const std::string rootFSPathLower = m_containerRoot + m_id + "/rootfs-lower";
+        const std::string rootFSPathUpper = m_containerRoot + m_id + "/rootfs-upper";
+        const std::string rootFSPathWork  = m_containerRoot + m_id + "/rootfs-work";
 
         overlayMount(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);
         log_debug() << "Write buffer enabled, lowerdir=" << rootFSPathLower
