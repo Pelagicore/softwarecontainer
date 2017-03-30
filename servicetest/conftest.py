@@ -119,6 +119,11 @@ def agent_without_checks(request):
         with open(config_file_location, "w") as fh:
             fh.write(config_file.config_as_string())
 
+    if "agent_exec_prefix" in request.module.__dict__:
+        exec_prefix = request.module.agent_exec_prefix()
+    else:
+        exec_prefix = None
+
     # Introspect the consuming module for what service manifests to use.
     # TODO: Perhaps this should be optionally on the class-level as well?
     standard_manifest_location = None
@@ -147,7 +152,8 @@ def agent_without_checks(request):
                                                   config_file_location,
                                                   standard_manifest_location,
                                                   default_manifest_location,
-                                                  auto_check_connection)
+                                                  auto_check_connection,
+                                                  exec_prefix)
     # Give it some time to start
     time.sleep(1)
 
