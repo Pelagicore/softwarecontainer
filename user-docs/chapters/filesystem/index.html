@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filesystems &#8212; softwarecontainer 0.18.0-64b3a9d 2017-03-29 documentation</title>
+    <title>Filesystems &#8212; softwarecontainer 0.18.0-d5e00f9 2017-03-30 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-64b3a9d 2017-03-29',
+        VERSION:     '0.18.0-d5e00f9 2017-03-30',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -157,10 +157,10 @@ upper filesystem is copied into the lower filesystem causing the filesystem
 changes performed during its runtime to be merged into the lower layers.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Non-directory types of files can not be mounted using overlayfs.</p>
+<p class="last">Non-directory types of files can not be mounted using overlayfs.
+These will automatically fall back on using the default behavior of
+bind mounting the files into the filesystem of the container.</p>
 </div>
-<p>These will automatically fall back on using the default behavior of bind
-mounting the files into the filesystem of the container.</p>
 </div>
 </div>
 
