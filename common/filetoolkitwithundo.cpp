@@ -145,7 +145,7 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
         return false;
     }
     m_create.clear();
-    log_debug() << "adding mount points";
+
     if (!pathInList(lower)) {
         m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(lower));
     }

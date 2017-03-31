@@ -18,6 +18,8 @@
  */
 
 #include "createdir.h"
+#include "softwarecontainererror.h"
+
 #include <sys/stat.h>
 
 namespace softwarecontainer {
@@ -91,8 +93,9 @@ std::string CreateDir::tempDir(std::string templ)
     char *dir = const_cast<char*>(templ.c_str());
     dir = mkdtemp(dir);
     if (dir == nullptr) {
-        log_warning() << "Failed to create buffered Directory: " << strerror(errno);
-        return nullptr;
+        std::string message = "Failed to create buffered Directory: " + std::string(strerror(errno));
+        log_warning() << message;
+        throw SoftwareContainerError(message);
     }
 
     m_tempFileCleaners.emplace_back(new DirectoryCleanUpHandler(std::string(dir)));
