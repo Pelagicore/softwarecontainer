@@ -21,7 +21,6 @@
 #include <filetoolkitwithundo.h>
 #include <recursivecopy.h>
 
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <unistd.h>
 #include <fstream>

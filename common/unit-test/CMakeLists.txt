@@ -27,6 +27,7 @@ set(TEST_LIBRARY_DEPENDENCIES
 
 set(TEST_FILES
     softwarecontainer-common_unittest.cpp
+    createdir_unittest.cpp
     recursivecopy_unittest.cpp
     recursivedelete_unittest.cpp
     unittest_common_helpers.cpp

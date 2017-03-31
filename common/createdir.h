@@ -58,6 +58,7 @@ public:
      * @param templ a template Path used to create the path of the temporary directory, including
      *  XXXXXX which will be replaced with a unique ID for the temporary directory
      *
+     * @throws SoftwareContainerError if template path is not appropriate.
      * @return A string path pointing to the newly created temporary directory.
      */
     std::string tempDir(std::string templatePath);
