@@ -72,7 +72,9 @@ bool DBusGatewayInstance::readConfigElement(const json_t *element)
 
     // TODO: This should really be done with exceptions instead and json_t* as return type.
     if (!parser.parseDBusConfig(element, typeStr, m_busConfig)) {
-        log_error() << "Failed to parse DBus configuration element";
+        // This might also mean that only one of session or system bus config parsing failed
+        // so this is not a fatal error
+        log_warning() << "Failed to parse DBus configuration element";
         return false;
     }
 

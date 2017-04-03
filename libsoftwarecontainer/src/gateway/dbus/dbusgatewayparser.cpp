@@ -30,7 +30,7 @@ bool DBusGatewayParser::parseDBusConfig(const json_t *element,
     json_t *configExists = json_object_get(element, key);
     if (nullptr == configExists) {
         // This is not a fatal error - not providing the key for one of the buses is OK.
-        log_error() << key << " was not found in config.";
+        log_warning() << key << " was not found in config.";
         return false;
     }
 
