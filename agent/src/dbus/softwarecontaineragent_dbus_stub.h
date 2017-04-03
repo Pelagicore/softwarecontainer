@@ -11,9 +11,10 @@ namespace pelagicore {
 class SoftwareContainerAgent {
 public:
     SoftwareContainerAgent ();
-    void connect (Gio::DBus::BusType, std::string);
 
 protected:
+    void connect (Gio::DBus::BusType, std::string);
+
     virtual void List (
         const SoftwareContainerAgentMessageHelper msg) = 0;
 
@@ -91,14 +92,23 @@ protected:
            const Glib::ustring& property_name,
            const Glib::VariantBase& value);
 
-private:
-bool emitSignal(const std::string& propName, Glib::VariantBase& value);
+    /*
+     * We emit these signals when we have a lost/acquired a name on dbus,
+     * so that subclasses of this class can bind slots to these signals.
+     */
+    sigc::signal<void, std::string> name_lost;
+    sigc::signal<void, std::string> name_acquired;
+    sigc::signal<void, std::string> object_not_registered;
 
-guint connectionId, registeredId;
-Glib::RefPtr<Gio::DBus::NodeInfo> introspection_data;
-Glib::RefPtr<Gio::DBus::Connection> m_connection;
-std::string m_objectPath;
-std::string m_interfaceName;
+private:
+    bool emitSignal(const std::string& propName, Glib::VariantBase& value);
+
+    guint connectionId;
+    guint registeredId;
+    Glib::RefPtr<Gio::DBus::NodeInfo> introspection_data;
+    Glib::RefPtr<Gio::DBus::Connection> m_connection;
+    std::string m_objectPath;
+    std::string m_interfaceName;
 };
 }// pelagicore
 }// com

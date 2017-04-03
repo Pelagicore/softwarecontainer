@@ -25,13 +25,35 @@ SoftwareContainerAgentAdaptor::~SoftwareContainerAgentAdaptor()
 {
 }
 
-SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(::softwarecontainer::SoftwareContainerAgent &agent, bool useSessionBus) :
-    com::pelagicore::SoftwareContainerAgent(), m_agent(agent)
+SoftwareContainerAgentAdaptor::SoftwareContainerAgentAdaptor(
+    Glib::RefPtr<Glib::MainLoop> &mainLoop,
+    ::softwarecontainer::SoftwareContainerAgent &agent,
+    bool useSessionBus) :
+        com::pelagicore::SoftwareContainerAgent(),
+        m_mainLoop(mainLoop),
+        m_agent(agent)
 {
     std::string agentBusName = "com.pelagicore.SoftwareContainerAgent";
     Gio::DBus::BusType busType = useSessionBus ? Gio::DBus::BUS_TYPE_SESSION
                                                : Gio::DBus::BUS_TYPE_SYSTEM;
+
+    name_lost.connect(sigc::mem_fun(this, &SoftwareContainerAgentAdaptor::onDBusError));
+    name_acquired.connect(sigc::mem_fun(this, &SoftwareContainerAgentAdaptor::onDBusNameAcquired));
+    object_not_registered.connect(
+        sigc::mem_fun(this, &SoftwareContainerAgentAdaptor::onDBusError)
+    );
     connect(busType, agentBusName);
+}
+
+void SoftwareContainerAgentAdaptor::onDBusError(std::string message)
+{
+    log_error() << "Fatal D-Bus error: " << message;
+    m_mainLoop->quit();
+}
+
+void SoftwareContainerAgentAdaptor::onDBusNameAcquired(std::string name)
+{
+    log_info() << "Name " << name << " aquired on D-Bus";
 }
 
 void SoftwareContainerAgentAdaptor::List(SoftwareContainerAgentMessageHelper msg)

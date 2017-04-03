@@ -22,6 +22,7 @@ import subprocess
 import os
 import signal
 import shutil
+import time
 
 from testframework import SoftwareContainerAgentHandler
 
@@ -33,7 +34,7 @@ PACKAGE_ROOT = os.path.dirname(os.path.abspath(__file__))
 os.sys.path.insert(0, PACKAGE_ROOT)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="class")
 def dbus_launch():
     """ Setting up dbus environement variables for session bus """
     p = subprocess.Popen('dbus-launch', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -46,24 +47,69 @@ def dbus_launch():
     # The DBUS_SESSION_BUS_PID is set to sp[1] in the last loop iteration above...
     os.kill(int(sp[1]), signal.SIGKILL)
 
+@pytest.fixture(scope="class")
+def assert_no_session_bus():
+    """ Makes sure there is no session bus running in the environment for the test.
 
-@pytest.fixture(scope="module")
-def agent(request):
+        This is done by backuping any existing dbus session vars in the environment, and then
+        unsetting them. They are being reset in the teardown stage of this fixture.
+    """
+    address_var = "DBUS_SESSION_BUS_ADDRESS"
+    pid_var = "DBUS_SESSION_BUS_PID"
+    old_address = None
+    old_pid = None
+    if address_var in os.environ:
+        old_address = os.environ[address_var]
+        os.environ[address_var] = None
+
+    if pid_var in os.environ:
+        old_pid = os.environ[pid_var]
+        os.environ[pid_var] = None
+
+    yield
+
+    if old_address is not None:
+        os.environ[address_var] = old_address
+    if old_pid is not None:
+        os.environ[pid_var] = old_pid
+
+@pytest.fixture(scope="class")
+def agent(request, agent_without_checks):
+    """ Start the Agent, check that it can connect to dbus and doesn't die (for example, because of
+        bad config or command-line args, and then return an interface to it.
+    """
+
+    # This is the only difference between the start of the agent and this, that we do some checking.
+    agent_without_checks.check_connection()
+    yield agent_without_checks
+
+@pytest.fixture(scope="class")
+def agent_without_checks(request):
     """ Start the Agent and return an interface to it.
 
         This fixture requires the test module to have a function named 'logfile_path'
         on the module level.
+
+        This does not check if the agent gets connected to dbus, or if it dies because of bad
+        configuration or command-line args. Use the "agent" fixture for that
     """
     # Introspect the consuming module for the logfile path. The scope of this
     # fixture means the module is received through the 'request' parameter
-    # and thus the path should be defined on the module level.
+    # and thus the path can be defined on the module level.
     logfile_path = request.module.logfile_path()
 
-    # Set up and use a config file, if one is given in the test module
+    # Introspect the consuming class or module for the config file location. To avoid having to
+    # write new modules for all config file changes, this fixture is on a class-level, so one can
+    # give the config file on either class level OR module level, depending on one's needs.
+    config_file = None
     config_file_location = None
-    if "agent_config" in request.module.__dict__:
+
+    if request.cls.__dict__ is not None and "agent_config" in request.cls.__dict__:
+        config_file = request.cls.agent_config()
+    elif "agent_config" in request.module.__dict__:
         config_file = request.module.agent_config()
 
+    if config_file is not None:
         config_file_location = config_file.path()
         config_parent_dir = os.path.dirname(config_file_location)
 
@@ -73,7 +119,8 @@ def agent(request):
         with open(config_file_location, "w") as fh:
             fh.write(config_file.config_as_string())
 
-    # Set up and create the service manifests to be used with the calling test module
+    # Introspect the consuming module for what service manifests to use.
+    # TODO: Perhaps this should be optionally on the class-level as well?
     standard_manifest_location = None
     default_manifest_location = None
 
@@ -94,17 +141,22 @@ def agent(request):
             with open(service_manifest_file, "w") as fh:
                 fh.write(manifest.json_as_string())
 
+    # Start the agent handler
+    auto_check_connection = False
     agent_handler = SoftwareContainerAgentHandler(logfile_path,
                                                   config_file_location,
                                                   standard_manifest_location,
-                                                  default_manifest_location)
+                                                  default_manifest_location,
+                                                  auto_check_connection)
+    # Give it some time to start
+    time.sleep(1)
 
-    # Return the setup agent to the consuming test
+    # Return control to the test code
     yield agent_handler
 
-    # Do fixture teardown
+    # Shutdown the agent as part of the teardown of this fixture.
     agent_handler.terminate()
-
+    time.sleep(0.5)
 
 @pytest.fixture(scope="module")
 def testhelper(request):

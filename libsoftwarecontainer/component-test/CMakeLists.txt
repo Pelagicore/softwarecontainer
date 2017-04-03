@@ -39,7 +39,6 @@ endmacro()
 
 add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_componenttest.cpp)
 add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_componenttest.cpp)
-add_gateway_test(ENABLE_DEVICENODEGATEWAY devicenodegateway_componenttest.cpp)
 add_gateway_test(ENABLE_FILEGATEWAY filegateway_componenttest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY netlink_componenttest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY networkgateway_componenttest.cpp)

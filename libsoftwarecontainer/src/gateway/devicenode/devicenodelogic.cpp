@@ -18,61 +18,39 @@
  */
 
 #include "devicenodelogic.h"
+#include "devicenodegateway.h"
 
 namespace softwarecontainer {
 
-std::vector<DeviceNodeParser::Device>::iterator
-DeviceNodeLogic::findDeviceByName(const std::string name)
+std::shared_ptr<Device> DeviceNodeLogic::findDeviceByName(const std::string name)
 {
-    std::vector<DeviceNodeParser::Device>::iterator item =
+    std::vector<std::shared_ptr<Device>>::iterator item =
             std::find_if(m_devList.begin(), m_devList.end(),
-            [&] (DeviceNodeParser::Device const &d) { return d.name == name; });
+            [&] (std::shared_ptr<Device> const &d) { return d->getName() == name; });
 
-    return item;
+    return (item == std::end(m_devList)) ? nullptr : *item;
 }
 
-bool DeviceNodeLogic::updateDeviceList(DeviceNodeParser::Device dev)
+bool DeviceNodeLogic::updateDeviceList(Device &dev)
 {
-    auto item = findDeviceByName(dev.name);
+    auto item = findDeviceByName(dev.getName());
 
-    if (item == std::end(m_devList)) {
-        m_devList.push_back(dev);
+    if (item == nullptr) {
+        auto newDevice = std::make_shared<Device>(dev);
+        m_devList.push_back(std::move(newDevice));
     } else {
-        if ((item->major == dev.major) && (item->major == dev.minor)) {
-            item->mode = calculateDeviceMode(item->mode, dev.mode);
-        } else {
-            //Unexpected behavior : a device has found with same name.
-            return false;
-        }
+        item->calculateDeviceMode(dev.getMode());
     }
 
     return true;
 }
 
-const std::vector<DeviceNodeParser::Device> &DeviceNodeLogic::getDevList()
+const std::vector<std::shared_ptr<Device>> &DeviceNodeLogic::getDevList()
 {
     return m_devList;
 }
 
 
-int DeviceNodeLogic::calculateDeviceMode(const int storedMode, const int appliedMode)
-{
-    int mode = storedMode;
 
-    if (storedMode != appliedMode) {
-        //apply more permissive option for owner
-        ((appliedMode / 100) >= (storedMode / 100)) ?
-                mode = (appliedMode / 100) * 100 : mode = (storedMode / 100) * 100;
-        //apply more permissive option for group
-        (((appliedMode / 10) % 10) >= ((storedMode / 10) % 10)) ?
-                mode += (((appliedMode / 10) % 10) * 10) : mode += (((storedMode / 10) % 10) * 10);
-        //apply more permissive option for others
-        ((appliedMode % 10) >= (storedMode % 10)) ?
-                mode += (appliedMode % 10) :  mode += (storedMode % 10);
-
-    }
-
-    return mode;
-}
 
 } // namespace softwarecontainer

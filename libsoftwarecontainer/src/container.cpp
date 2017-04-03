@@ -189,14 +189,14 @@ bool Container::create()
     m_rootFSPath = buildPath(s_LXCRoot, containerID, "rootfs");
 
     if (m_enableWriteBuffer) {
-        const std::string rootFSPathLower = m_rootFSPath + "-lower";
-        const std::string rootFSPathUpper = m_rootFSPath + "-upper";
-        const std::string rootFSPathWork  = m_rootFSPath + "-work";
+        const std::string rootFSPathLower = m_containerRoot + m_id + "-lower";
+        const std::string rootFSPathUpper = m_containerRoot + m_id + "-upper";
+        const std::string rootFSPathWork  = m_containerRoot + m_id + "-work";
 
         overlayMount(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);
-        log_debug() << "Write buffer enabled, lower=" << rootFSPathLower
-                    << ", upper=" << rootFSPathUpper
-                    << ", work=" << rootFSPathWork
+        log_debug() << "Write buffer enabled, lowerdir=" << rootFSPathLower
+                    << ", upperdir=" << rootFSPathUpper
+                    << ", workdir=" << rootFSPathWork
                     << ", dst=" << m_rootFSPath;
     } else {
         log_debug() << "WriteBuffer disabled, dst=" << m_rootFSPath;
@@ -539,8 +539,19 @@ bool Container::destroy(unsigned int timeout)
     }
 
     if (m_state >= ContainerState::STARTED) {
-        if(!shutdown(timeout)) {
+        if (!shutdown(timeout)) {
             log_error() << "Could not shutdown container. Aborting destroy";
+            return false;
+        }
+    }
+
+
+    // The container can not be destroyed unless the rootfs is unmounted
+    if (m_enableWriteBuffer)
+    {
+        log_debug() << "Unmounting the overlay rootfs";
+        if(-1 == umount(m_rootFSPath.c_str())) {
+            log_error() << "Unmounting the overlay rootfs failed: " << strerror(errno);
             return false;
         }
     }
@@ -757,7 +768,7 @@ bool Container::remountReadOnlyInContainer(const std::string &path)
 bool Container::mountDevice(const std::string &pathInHost)
 {
     if(!ensureContainerRunning()) {
-        log_error() << "Container is not running or in bad state, can't mount device";
+        log_error() << "Container is not running or in bad state, can't mount device: " << pathInHost;
         return false;
     }
     log_debug() << "Mounting device in container : " << pathInHost;
@@ -843,11 +854,6 @@ std::string Container::gatewaysDirInContainer() const
 std::string Container::gatewaysDir() const
 {
     return buildPath(m_containerRoot, id(), GATEWAYS_PATH);
-}
-
-const std::string &Container::rootFS() const
-{
-    return m_rootFSPath;
 }
 
 } // namespace softwarecontainer

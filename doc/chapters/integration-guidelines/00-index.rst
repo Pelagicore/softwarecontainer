@@ -18,9 +18,14 @@ Below follows information about what SoftwareContainer assumes about the host sy
 IPC mechanisms and examples of configuration and usage.
 
 .. include:: 10-service-manifests.rst
+
+.. _network-setup:
 .. include:: 10-network-setup.rst
+
 .. include:: 10-wayland-setup.rst
 .. include:: 10-the-launcher.rst
 .. include:: 10-traffic-shaping.rst
 .. include:: 10-shared-memory.rst
+.. include:: 10-write-buffers.rst
+.. include:: 10-systemd-service.rst
 

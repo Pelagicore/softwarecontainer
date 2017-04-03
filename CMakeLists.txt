@@ -40,11 +40,6 @@ set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
 
-execute_process(COMMAND "/usr/bin/git" "rev-parse" "--short" "HEAD" OUTPUT_VARIABLE REVISION_RAW)
-
-string(REPLACE "\n" "" REVISION "${REVISION_RAW}")
-string(TIMESTAMP DATE "%Y-%m-%d")
-
 #
 # Find dependencies, and include them etc
 #
@@ -235,6 +230,7 @@ if(ENABLE_COVERAGE)
     add_coverage("CoverageUnitTest" "${CMAKE_BINARY_DIR}/run-unit-tests.py")
 endif(ENABLE_COVERAGE)
 
+
 #
 # Network related options
 #
@@ -283,10 +279,35 @@ if(ENABLE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
+
+#
+# Build dbus-proxy if D-Bus Gateway is enabled
+#
+# dbus-proxy is a completely separate cmake project. In order to reduce the
+# risk of unwanted interaction between the SoftwareContainer and dbus-proxy
+# cmake setup, we add dbus-proxy using the ExternalProject module to isolate it.
+#
+# It does require some workarounds. When using ExternalProject, by default,
+# the dbus-proxy would install when building (and not when installing) SC,
+# and thus require permissions that are unusual when just building. For this
+# reason, we install dbus-proxy locally in the build tree and add an install
+# target to install it when SC is installed.
+if(ENABLE_DBUSGATEWAY)
+    include(ExternalProject)
+
+    ExternalProject_Add(dbus-proxy
+        PREFIX ${CMAKE_BINARY_DIR}/dbus-proxy
+        SOURCE_DIR ${PROJECT_SOURCE_DIR}/dbus-proxy
+        CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/dbus-proxy"
+    )
+
+    install(PROGRAMS ${CMAKE_BINARY_DIR}/dbus-proxy/bin/dbus-proxy DESTINATION bin)
+endif()
+
+
 message("")
 message("")
 message(STATUS "SUMMARY OF CONFIGURATION")
 message("")
 feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features")
 feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features and options")
-

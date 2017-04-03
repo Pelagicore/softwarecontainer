@@ -32,7 +32,6 @@ public:
 
     virtual ~ContainerAbstractInterface() {};
     virtual const char *id() const = 0;
-    virtual const std::string &rootFS() const = 0;
 
     virtual bool initialize() = 0;
     virtual bool create() = 0;
@@ -49,7 +48,6 @@ public:
     virtual bool destroy(unsigned int timeout) = 0;
 
     virtual bool mountDevice(const std::string &pathInHost) = 0;
-    virtual bool createSymLink(const std::string &source, const std::string &destination) = 0;
 
     /**
      * @brief Tries to bind mount a path from host to container

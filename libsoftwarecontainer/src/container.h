@@ -154,11 +154,6 @@ public:
 
     bool mountDevice(const std::string &pathInHost);
 
-    bool createSymLink(const std::string &source, const std::string &destination)
-    {
-        return FileToolkitWithUndo::createSymLink(source, destination);
-    }
-
     /**
      * @brief Calls shutdown, and then destroys the container
      */
@@ -215,7 +210,6 @@ public:
     const char *id() const;
     std::string gatewaysDirInContainer() const;
     std::string gatewaysDir() const;
-    const std::string &rootFS() const;
 
     bool setEnvironmentVariable(const std::string &var, const std::string &val);
 

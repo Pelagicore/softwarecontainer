@@ -26,7 +26,7 @@ class DefaultConfigStore : public BaseConfigStore
 {
     LOG_DECLARE_CLASS_CONTEXT("DCS", "DefaultConfigStore");
 public:
-    DefaultConfigStore(const std::string &path);
+    DefaultConfigStore(std::unique_ptr<ServiceManifestLoader> loader);
     ~DefaultConfigStore();
 
     GatewayConfiguration configs();

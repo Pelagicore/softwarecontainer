@@ -26,6 +26,7 @@ require File.join(thisDir, 'cookbook/host-system-config/vagrant-reload/plugin.rb
 
 Vagrant.configure(2) do |config|
     config.vm.box = "ubuntu/xenial64"
+    config.vm.boot_timeout = 1200
 
     # Common names for network adapters
     config.vm.network "public_network", bridge: [ "eth0", "eth1", "em1" ]
@@ -42,6 +43,9 @@ Vagrant.configure(2) do |config|
     # Sync the repo root with this path in the VM
     config.vm.synced_folder "./", "/home/ubuntu/softwarecontainer/", create: true
 
+    # Fix the tty for the root user
+    config.vm.provision "shell", privileged: true, path: "cookbook/system-config/fix-tty.sh"
+
     # Workaround for some bad network stacks
     config.vm.provision "shell", privileged: false, path: "cookbook/utils/keepalive.sh"
     
@@ -49,11 +53,11 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", path: "cookbook/system-config/systemd-network-startup-timeout.sh"
 
     # Use apt-cacher on our apt cache server
-    if ENV['APT_CACHE_SERVER'] then
-        config.vm.provision "shell",
-            args: [ENV['APT_CACHE_SERVER']],
-            path: "cookbook/system-config/apt-cacher.sh"
-    end
+#    if ENV['APT_CACHE_SERVER'] then
+#        config.vm.provision "shell",
+#            args: [ENV['APT_CACHE_SERVER']],
+#            path: "cookbook/system-config/apt-cacher.sh"
+#    end
 
     # Make sure we have a fresh list from the package server
     config.vm.provision "shell", inline: "apt-get update"
@@ -98,12 +102,6 @@ Vagrant.configure(2) do |config|
         env: {"SRC_DIR" => "ivi-logging", 
               "WIPE_SRC_DIR" => "yes",
               "GIT_REPO" => "https://github.com/Pelagicore/ivi-logging.git"},
-        path: "cookbook/build/cmake-git-builder.sh"
-
-    config.vm.provision "shell", privileged: false,
-        env: {"SRC_DIR" => "dbus-proxy",
-              "GIT_REPO" => "https://github.com/Pelagicore/dbus-proxy.git",
-              "WIPE_SRC_DIR" => "yes"},
         path: "cookbook/build/cmake-git-builder.sh"
 
 end

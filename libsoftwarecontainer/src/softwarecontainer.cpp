@@ -214,6 +214,7 @@ bool SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
         json_t *config = gwConfig.config(gatewayId);
         if (config != nullptr) {
             log_debug() << "Configuring gateway: " << gatewayId;
+            log_debug() << json_dumps(config, JSON_INDENT(4));
             try {
                 if (!gateway->setConfig(config)) {
                     log_error() << "Failed to apply gateway configuration";

@@ -35,6 +35,7 @@
 
 #include "capability/filteredconfigstore.h"
 #include "capability/defaultconfigstore.h"
+#include "capability/servicemanifestloader.h"
 #include "config/config.h"
 #include "containeroptions/containeroptionparser.h"
 #include "softwarecontainerfactory.h"

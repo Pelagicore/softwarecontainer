@@ -32,6 +32,17 @@ GatewayConfiguration::GatewayConfiguration(const GatewayConfiguration &gwConf)
     }
 }
 
+GatewayConfiguration& GatewayConfiguration::operator=(const GatewayConfiguration &gwConf)
+{
+    // We need to indicate our intention to use the json data later by incref-ing it
+    m_configMap = gwConf.m_configMap;
+    for (auto item : m_configMap) {
+        json_incref(item.second);
+    }
+
+    return *this;
+}
+
 GatewayConfiguration::~GatewayConfiguration()
 {
     for (auto &it : m_configMap) {
@@ -77,8 +88,8 @@ bool GatewayConfiguration::append(const std::string &id, json_t *sourceArray)
         }
         json_decref(backupArray);
     } else {
-        m_configMap[id] = sourceArray;
-        json_incref(sourceArray);
+        m_configMap[id] = json_deep_copy(sourceArray);
+        // we do not need to decref the sourceArray since we did a deep copy
     }
 
     return true;

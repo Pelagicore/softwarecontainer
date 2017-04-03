@@ -17,7 +17,7 @@
 
 set(DEVICENODE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/devicenodegateway.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/devicenodeparser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/devicenode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/devicenodelogic.cpp
     PARENT_SCOPE
 )

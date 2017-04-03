@@ -17,30 +17,8 @@
  * For further information see LICENSE
  */
 
-#pragma once
+#include <fstream>
 
-#include "softwarecontainer-common.h"
-#include "jsonparser.h"
-
-namespace softwarecontainer {
-
-class DeviceNodeParser
-{
-    LOG_DECLARE_CLASS_CONTEXT("DNGP", "Device node gateway parser");
-
-public:
-    struct Device
-    {
-        std::string name;
-        int major;
-        int minor;
-        int mode;
-    };
-
-    bool parseDeviceNodeGatewayConfiguration(const json_t *element, Device &result);
-
-private:
-    bool checkBoolSet(const bool &value, std::string errorMessage);
-};
-
-} // namespace softwarecontainer
+void createFile(std::string dst, std::string val="abcdefg123");
+void createDir(std::string dst);
+bool checkContent(std::string dst, std::string val);

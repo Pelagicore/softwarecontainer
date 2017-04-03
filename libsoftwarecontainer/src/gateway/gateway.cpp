@@ -21,11 +21,30 @@
 
 namespace softwarecontainer {
 
+
+Gateway::Gateway(const std::string &id,
+                 std::shared_ptr<ContainerAbstractInterface> container,
+                 bool isDynamic) :
+    m_id(id),
+    m_container(container),
+    m_isDynamic(isDynamic),
+    m_state(GatewayState::CREATED)
+{
+}
+
+std::string Gateway::id() const
+{
+    return m_id;
+}
+
 bool Gateway::setConfig(const json_t *config)
 {
-    if (m_state == GatewayState::ACTIVATED) {
-        log_error() << "Can not configure a gateway that is already activated: " << id();
-        throw GatewayError("Gateway already activated");
+    if (GatewayState::ACTIVATED == m_state && !m_isDynamic) {
+        std::string message = "Can not configure a gateway that is already activated "
+                              "if the gateway does not support dynamic behavior. "
+                              "Gateway ID: " + id();
+        log_error() << message;
+        throw GatewayError(message);
     }
 
     if (!json_is_array(config)) {
@@ -46,7 +65,7 @@ bool Gateway::setConfig(const json_t *config)
         }
 
         if (!readConfigElement(element)) {
-            log_error() << "Could not read config element";
+            log_warning() << "Could not read config element";
             return false;
         }
     }
@@ -56,14 +75,19 @@ bool Gateway::setConfig(const json_t *config)
 }
 
 bool Gateway::activate() {
-    if (m_state == GatewayState::ACTIVATED) {
-        log_error() << "Activate was called on a gateway which was already activated: " << id();
-        throw GatewayError("Gateway already activated");
+    if (GatewayState::ACTIVATED == m_state && !m_isDynamic) {
+        std::string message =  "Can not activate a gateway that is already activated "
+                               "if the gateway does not support dynamic behavior. "
+                               "Gateway ID: " + id();
+        log_error() << message;
+        throw GatewayError(message);
     }
 
-    if (m_state != GatewayState::CONFIGURED) {
-        log_error() << "Activate was called on a gateway which is not in configured state: " << id();
-        throw GatewayError("Gateway is not configured");
+    if (GatewayState::CONFIGURED != m_state) {
+        std::string message = "Activate was called on a gateway which is not in configured state. "
+                              "Gateway ID: " + id();
+        log_error() << message;
+        throw GatewayError(message);
     }
 
     if (!activateGateway()) {
@@ -76,9 +100,10 @@ bool Gateway::activate() {
 }
 
 bool Gateway::teardown() {
-    if (m_state != GatewayState::ACTIVATED) {
-        log_error() << "Teardown called on non-activated gateway: " << id();
-        throw GatewayError("Gateway not previosly activated");
+    if (GatewayState::ACTIVATED != m_state) {
+        std::string message = "Teardown called on non-activated gateway. Gateway ID:  " + id();
+        log_error() << message;
+        throw GatewayError(message);
     }
 
     if (!teardownGateway()) {

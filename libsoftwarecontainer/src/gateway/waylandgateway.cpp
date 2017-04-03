@@ -30,8 +30,9 @@ constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
 
 WaylandGateway::WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container) :
-    Gateway(ID, container),
-    m_enabled(false)
+    Gateway(ID, container, true /*this GW is dynamic*/),
+    m_enabled(false),
+    m_activatedOnce(false)
 {
 }
 
@@ -62,6 +63,15 @@ bool WaylandGateway::activateGateway()
         return true;
     }
 
+    /* If we are enabled and have been activated once already, we shouldn't do anything more
+       since bind-mounting again would fail and the whitelisting principle means
+       that we never need to do more than what is already done in this state, e.g.
+       'enabled' is the most permissive state. */
+    if (m_enabled && m_activatedOnce) {
+        log_info() << "Ignoring redundant activation";
+        return true;
+    }
+
     bool hasWayland = false;
     std::string dir = Glib::getenv(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, hasWayland);
     if (!hasWayland) {
@@ -82,6 +92,9 @@ bool WaylandGateway::activateGateway()
 
     std::string socketDir = parentPath(pathInContainer);
     container->setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, socketDir);
+
+    m_activatedOnce = true;
+
     return true;
 }
 

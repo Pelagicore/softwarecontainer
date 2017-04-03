@@ -111,9 +111,8 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
                                     bool readOnly,
                                     bool enableWriteBuffer)
 {
-    unsigned long flags = MS_BIND;
+    unsigned long flags =  0;
     std::string fstype;
-    const void *data = nullptr;
     int mountRes;
 
     if (!existsInFileSystem(src)) {
@@ -121,21 +120,28 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         return false;
     }
 
+    if (!existsInFileSystem(dst)) {
+        log_error() << dst << " does not exist on the host, can not bindMount";
+        return false;
+    }
+
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
-    if(enableWriteBuffer) {
+    if(enableWriteBuffer && isDirectory(src)) {
         std::string upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
         std::string workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
         fstype.assign("overlay");
 
         std::ostringstream os;
         os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
-        data = os.str().c_str();
 
         log_debug() << "enableWriteBuffer, config: " << os.str();
 
-        mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, data);
+        mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, os.str().c_str());
+        log_debug() << "mountRes: " << mountRes;
     } else {
+        const void *data = nullptr;
+        flags = MS_BIND;
         mountRes = mount(src.c_str(), dst.c_str(), fstype.c_str(), flags, data);
     }
 
@@ -148,7 +154,9 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         return false;
     }
 
-    if (readOnly) {
+    if (readOnly && !enableWriteBuffer) {
+        const void *data = nullptr;
+
         flags = MS_REMOUNT | MS_RDONLY | MS_BIND;
 
         log_debug() << "Re-mounting read-only" << src << " in "
@@ -170,15 +178,15 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
                                        const std::string &dst)
 {
     std::string fstype = "overlay";
-    unsigned long flags = MS_BIND;
+    unsigned long flags = 0;
 
     if (!createDirectory(lower)
         || !createDirectory(upper)
         || !createDirectory(work)
         || !createDirectory(dst))
     {
-        log_error() << "Failed to create lower/upper/work directory for overlayMount. lower=" <<
-                       lower << ", upper=" << upper << ", work=" << work;
+        log_error() << "Failed to create lower/upper/work directory for overlayMount. lowerdir=" <<
+                       lower << ", upperdir=" << upper << ", workdir=" << work;
         return false;
     }
 
@@ -269,27 +277,6 @@ void FileToolkitWithUndo::markFileForDeletion(const std::string &path)
     if (!pathInList(path)) {
         m_cleanupHandlers.push_back(new FileCleanUpHandler(path));
     }
-}
-
-bool FileToolkitWithUndo::createSymLink(const std::string &source,
-                                        const std::string &destination)
-{
-    log_debug() << "creating symlink " << source << " pointing to " << destination;
-
-    createDirectory(parentPath(source));
-
-    if (symlink(destination.c_str(), source.c_str()) == 0) {
-        if (!pathInList(source)) {
-            m_cleanupHandlers.push_back(new FileCleanUpHandler(source));
-        }
-        log_debug() << "Successfully created symlink from " << source << " to " << destination;
-    } else {
-        log_error() << "Error creating symlink " << destination
-                    << " pointing to " << source << ". Error: "
-                    << strerror(errno);
-        return false;
-    }
-    return true;
 }
 
 } // namespace softwarecontainer

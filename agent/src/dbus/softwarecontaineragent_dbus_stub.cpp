@@ -62,27 +62,34 @@ Glib::ustring interfaceXml0 = R"XML_DELIMITER(
 </node>
 )XML_DELIMITER";
 
-com::pelagicore::SoftwareContainerAgent::SoftwareContainerAgent() : connectionId(0), registeredId(0), m_objectPath("/com/pelagicore/SoftwareContainerAgent"), m_interfaceName("com.pelagicore.SoftwareContainerAgent") {
-
-    ProcessStateChanged_signal.connect(sigc::mem_fun(this, &SoftwareContainerAgent::ProcessStateChanged_emitter));
-
+com::pelagicore::SoftwareContainerAgent::SoftwareContainerAgent() :
+    connectionId(0),
+    registeredId(0),
+    m_objectPath("/com/pelagicore/SoftwareContainerAgent"),
+    m_interfaceName("com.pelagicore.SoftwareContainerAgent")
+{
+    ProcessStateChanged_signal.connect(
+        sigc::mem_fun(this, &SoftwareContainerAgent::ProcessStateChanged_emitter)
+    );
 }
-void com::pelagicore::SoftwareContainerAgent::connect (
+
+void com::pelagicore::SoftwareContainerAgent::connect(
     Gio::DBus::BusType busType,
     std::string name)
 {
     try {
-            introspection_data = Gio::DBus::NodeInfo::create_for_xml(interfaceXml0);
+        introspection_data = Gio::DBus::NodeInfo::create_for_xml(interfaceXml0);
     } catch(const Glib::Error& ex) {
-            g_warning("Unable to create introspection data: ");
-            g_warning(std::string(ex.what()).c_str());
-            g_warning("\n");
+        g_warning("Unable to create introspection data: %s \n", ex.what().c_str());
     }
-    connectionId = Gio::DBus::own_name(busType,
-                                       name,
-                                       sigc::mem_fun(this, &SoftwareContainerAgent::on_bus_acquired),
-                                       sigc::mem_fun(this, &SoftwareContainerAgent::on_name_acquired),
-                                       sigc::mem_fun(this, &SoftwareContainerAgent::on_name_lost));
+
+    connectionId = Gio::DBus::own_name(
+        busType,
+        name,
+        sigc::mem_fun(this, &SoftwareContainerAgent::on_bus_acquired),
+        sigc::mem_fun(this, &SoftwareContainerAgent::on_name_acquired),
+        sigc::mem_fun(this, &SoftwareContainerAgent::on_name_lost)
+    );
 }
 
 void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<Gio::DBus::Connection>& /* connection */,
@@ -98,6 +105,7 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
             List(
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("Create") == 0) {
             Glib::Variant<Glib::ustring > base_config;
             parameters.get_child(base_config, 0);
@@ -108,6 +116,7 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                 Glib::ustring(p_config),
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("Execute") == 0) {
             Glib::Variant<gint32 > base_containerID;
             parameters.get_child(base_containerID, 0);
@@ -142,6 +151,7 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                 SoftwareContainerAgentCommon::glibStringMapToStdStringMap(p_env),
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("Suspend") == 0) {
             Glib::Variant<gint32 > base_containerID;
             parameters.get_child(base_containerID, 0);
@@ -152,6 +162,7 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                 (p_containerID),
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("Resume") == 0) {
             Glib::Variant<gint32 > base_containerID;
             parameters.get_child(base_containerID, 0);
@@ -162,6 +173,7 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                 (p_containerID),
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("Destroy") == 0) {
             Glib::Variant<gint32 > base_containerID;
             parameters.get_child(base_containerID, 0);
@@ -172,6 +184,7 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                 (p_containerID),
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("BindMount") == 0) {
             Glib::Variant<gint32 > base_containerID;
             parameters.get_child(base_containerID, 0);
@@ -200,10 +213,12 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
                 (p_readOnly),
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("ListCapabilities") == 0) {
             ListCapabilities(
                 SoftwareContainerAgentMessageHelper(invocation));
         }
+
         if (method_name.compare("SetCapabilities") == 0) {
             Glib::Variant<gint32 > base_containerID;
             parameters.get_child(base_containerID, 0);
@@ -227,51 +242,51 @@ void com::pelagicore::SoftwareContainerAgent::on_method_call(const Glib::RefPtr<
     }
 }
 
-void com::pelagicore::SoftwareContainerAgent::on_interface_get_property(Glib::VariantBase& property,
-                      const Glib::RefPtr<Gio::DBus::Connection>& connection,
-                      const Glib::ustring& sender,
-                      const Glib::ustring& object_path,
-                      const Glib::ustring& interface_name,
-                      const Glib::ustring& property_name) {
-
+void com::pelagicore::SoftwareContainerAgent::on_interface_get_property(
+    Glib::VariantBase& /* property */,
+    const Glib::RefPtr<Gio::DBus::Connection>& /* connection */,
+    const Glib::ustring& /* sender */,
+    const Glib::ustring& /* object_path */,
+    const Glib::ustring& /* interface_name */,
+    const Glib::ustring& /* property_name */)
+{
 }
 
 bool com::pelagicore::SoftwareContainerAgent::on_interface_set_property(
-       const Glib::RefPtr<Gio::DBus::Connection>& connection,
-       const Glib::ustring& sender,
-       const Glib::ustring& object_path,
-       const Glib::ustring& interface_name,
-       const Glib::ustring& property_name,
-       const Glib::VariantBase& value) {
-
-
+    const Glib::RefPtr<Gio::DBus::Connection>& /* connection */,
+    const Glib::ustring& /* sender */,
+    const Glib::ustring& /* object_path */,
+    const Glib::ustring& /* interface_name */,
+    const Glib::ustring& /* property_name */,
+    const Glib::VariantBase& /* value */)
+{
     return true;
 }
 
-void com::pelagicore::SoftwareContainerAgent::ProcessStateChanged_emitter(gint32 containerID, guint32 processID, bool isRunning, guint32 exitCode) {
-            std::vector<Glib::VariantBase> paramsList;
+void com::pelagicore::SoftwareContainerAgent::ProcessStateChanged_emitter(
+    gint32 containerID,
+    guint32 processID,
+    bool isRunning,
+    guint32 exitCode)
+{
+    std::vector<Glib::VariantBase> paramsList;
+    paramsList.push_back(Glib::Variant<gint32 >::create((containerID)));;
+    paramsList.push_back(Glib::Variant<guint32 >::create((processID)));;
+    paramsList.push_back(Glib::Variant<bool >::create((isRunning)));;
+    paramsList.push_back(Glib::Variant<guint32 >::create((exitCode)));;
 
-paramsList.push_back(Glib::Variant<gint32 >::create((containerID)));;
+    m_connection->emit_signal(
+        "/com/pelagicore/SoftwareContainerAgent",
+        "com.pelagicore.SoftwareContainerAgent",
+        "ProcessStateChanged",
+        Glib::ustring(),
+        Glib::Variant<std::vector<Glib::VariantBase> >::create_tuple(paramsList));
+}
 
-
-paramsList.push_back(Glib::Variant<guint32 >::create((processID)));;
-
-
-paramsList.push_back(Glib::Variant<bool >::create((isRunning)));;
-
-
-paramsList.push_back(Glib::Variant<guint32 >::create((exitCode)));;
-
-m_connection->emit_signal(
-              "/com/pelagicore/SoftwareContainerAgent",
-              "com.pelagicore.SoftwareContainerAgent",
-              "ProcessStateChanged",
-              Glib::ustring(),
-              Glib::Variant<std::vector<Glib::VariantBase> >::create_tuple(paramsList));
-      }
-
-void com::pelagicore::SoftwareContainerAgent::on_bus_acquired(const Glib::RefPtr<Gio::DBus::Connection>& connection,
-                         const Glib::ustring& /* name */) {
+void com::pelagicore::SoftwareContainerAgent::on_bus_acquired(
+    const Glib::RefPtr<Gio::DBus::Connection>& connection,
+    const Glib::ustring& /* name */)
+{
     Gio::DBus::InterfaceVTable *interface_vtable =
           new Gio::DBus::InterfaceVTable(
                 sigc::mem_fun(this, &SoftwareContainerAgent::on_method_call),
@@ -282,19 +297,29 @@ void com::pelagicore::SoftwareContainerAgent::on_bus_acquired(const Glib::RefPtr
             introspection_data->lookup_interface("com.pelagicore.SoftwareContainerAgent"),
             *interface_vtable);
         m_connection = connection;
+    } catch(const Glib::Error& ex) {
+        object_not_registered.emit("Registration of object failed");
     }
-    catch(const Glib::Error& ex) {
-        g_warning("Registration of object failed");
-    }
-
-    return;
 }
-void com::pelagicore::SoftwareContainerAgent::on_name_acquired(const Glib::RefPtr<Gio::DBus::Connection>& /* connection */,
-                      const Glib::ustring& /* name */) {}
 
-void com::pelagicore::SoftwareContainerAgent::on_name_lost(const Glib::RefPtr<Gio::DBus::Connection>& connection,
-                  const Glib::ustring& /* name */) {}
+void com::pelagicore::SoftwareContainerAgent::on_name_acquired(
+    const Glib::RefPtr<Gio::DBus::Connection>& /* connection */,
+    const Glib::ustring &name)
+{
+    name_acquired.emit(name);
+}
 
+void com::pelagicore::SoftwareContainerAgent::on_name_lost(
+    const Glib::RefPtr<Gio::DBus::Connection> &connection,
+    const Glib::ustring &name)
+{
+    if (!connection) {
+        name_lost.emit("Unable to connect to the bus (is a bus running?)");
+    } else {
+        name_lost.emit("Unable to acquire the name " 
+                      + name + " on the bus (is another agent running?)");
+    }
+}
 
 bool com::pelagicore::SoftwareContainerAgent::emitSignal(const std::string& propName, Glib::VariantBase& value) {
     std::map<Glib::ustring, Glib::VariantBase> changedProps;

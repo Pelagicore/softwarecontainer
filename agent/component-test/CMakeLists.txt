@@ -36,6 +36,7 @@ set(SOFTWARECONTAINERAGENT_TEST_FILES
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/baseconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/defaultconfigstore.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/capability/filteredconfigstore.cpp
+    ${SOFTWARECONTAINERAGENT_DIR}/src/capability/servicemanifestfileloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/config.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/fileconfigloader.cpp
     ${SOFTWARECONTAINERAGENT_DIR}/src/config/mainconfigsource.cpp

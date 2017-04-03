@@ -27,6 +27,7 @@
 #include "softwarecontainer-common.h"
 #include "gatewayconfig.h"
 #include "configstoreerror.h"
+#include "servicemanifestloader.h"
 
 #include <jsonparser.h>
 
@@ -38,55 +39,32 @@ class BaseConfigStore
     LOG_DECLARE_CLASS_CONTEXT("BCS", "BaseConfigStore");
 
 public:
-    /*
+    /**
      * @brief Creates a new BaseConfigStore object and searches for Service Manifests
      * (of file type json) in the input path, and stores the Capabilities'
      * Gateway configurations.
      *
      * @throws ServiceManifestPathError if the path to the json file(s) is incorrectly formatted
      * or if the path is not allowed
-     * @throws ServiceManifestParseError if parsing of the json file(s) fails
+     * @throws ServiceManifestParseError if parsing of the json fails
      * @throws CapabilityParseError if parsing of one or more Capabilities or Gateway
-     *         Configurations in a file is unsuccessful
+     *         objects is unsuccessful
      */
-    BaseConfigStore(const std::string &filePath);
+    BaseConfigStore(std::unique_ptr<ServiceManifestLoader> loader);
 
 protected:
     std::map<std::string, GatewayConfiguration> m_capMap;
 
 private:
-
-    /**
-     * @brief Reads a directory and finds all json Service Manifest files
-     * and adds the capabilities to the internal storage.
-     * If a capability with the same name already exists in the storage
-     * the gateways will be appended to the previously stored gatway list.
-     *
-     * @throws ServiceManifestPathError if the path to the Service Manifest(s) is not allowed
-     *
-     */
-    void readCapsFromDir(const std::string &dirPath);
-
-    /**
-     * @brief Reads a Service Manifest file, of type json, and adds the
-     * capabilities to the internal storage.
-     * If a capability with the same name already exists in the storage
-     * the gateways will be appended to the previously stored gatway list.
-     *
-     * @throws ServiceManifestParseError if parsing of the file is unsuccessful
-     * @throws CapabilityParseError if parsing of one or more Capabilities in file
-     * is unsuccessful
-     *
-     */
-    void readCapsFromFile(const std::string &filePath);
-
     /**
      * @brief Parse a JSON object, which should be a JSON array, of capabilities
      * and saves them in the internal storage.
+     * If a capability with the same name already exists in the storage
+     * the gateways object will be appended to the previously stored gateway list.
      *
-     * @throws CapabilityParseError if parsing of Capabilites is unsuccessful
+     * @throws CapabilityParseError if parsing of the service manifest is unsuccessful
      */
-    void parseCapabilities(json_t *capabilities);
+    void parseServiceManifest(json_t *serviceManifest);
 
     /**
      * @brief Parse a JSON object, which should be a JSON array, of gateway configurations
@@ -95,24 +73,6 @@ private:
      * @throws CapabilityParseError if parsing of gateway configurations is unsuccessful
      */
     void parseGatewayConfigs(std::string capName, json_t *gateways);
-
-    /**
-     * @brief Iterates through the files in a directory and finds all json files.
-     *
-     * @param a string representation of the directory path
-     *
-     * @return a vector of all json files present in the directory, an empty list if no
-     * json files can be found in the directory
-     */
-    std::vector<std::string> fileList(const std::string &filePath);
-
-    /**
-     * @brief Checks if a file name ends in ".json"
-     *
-     * @return true/false
-     */
-    bool isJsonFile(const std::string &filename);
-
 };
 
 } // namespace softwarecontainer
