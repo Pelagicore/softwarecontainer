@@ -24,6 +24,25 @@
 
 namespace softwarecontainer {
 
+CreateDir::~CreateDir()
+{
+    bool success = true;
+
+    while (!m_rollbackCleaners.empty()) {
+        auto cuHandler = m_rollbackCleaners.back();
+        m_rollbackCleaners.pop_back();
+
+        if (!cuHandler.clean()) {
+            success = false;
+        }
+    }
+
+    if(!success) {
+        log_error() << "One or more cleanup handlers returned error status, please check the log";
+    }
+}
+
+
 bool CreateDir::createParentDirectory(const std::string path)
 {
     log_debug() << "Creating parent directories for " << path;
@@ -54,58 +73,29 @@ bool CreateDir::createDirectory(const std::string path)
     }
 
     if (!pathInList(path)){
-        m_rollbackCleaners.emplace_back(new DirectoryCleanUpHandler(path));
+        m_rollbackCleaners.emplace_back(path);
     }
     return true;
 }
 
-void CreateDir::clear()
-{
-    m_rollbackCleaners.clear();
-    m_tempFileCleaners.clear();
-}
-
-bool CreateDir::rollBack()
-{
-    bool success = true;
-    // Clean up created directories
-    for (auto &cleanupHandler:m_rollbackCleaners) {
-        if (!cleanupHandler->clean()) {
-            log_error() << cleanupHandler->queryName() << " could not be cleaned!";
-            success = false;
-        }
-    }
-
-    // Clean up created temp directories
-    for (auto &cleanupHandler:m_tempFileCleaners) {
-        if (!cleanupHandler->clean()) {
-            log_error() << cleanupHandler->queryName() << " could not be cleaned!";
-            success = false;
-        }
-    }
-
-    clear();
-    return success;
-}
-
-std::string CreateDir::tempDir(std::string templ)
+std::string CreateDir::createTempDirectoryFromTemplate(std::string templ)
 {
     char *dir = const_cast<char*>(templ.c_str());
     dir = mkdtemp(dir);
     if (dir == nullptr) {
-        std::string message = "Failed to create buffered Directory: " + std::string(strerror(errno));
+        std::string message = "Failed to create directory from template: " + std::string(strerror(errno));
         log_warning() << message;
         throw SoftwareContainerError(message);
     }
 
-    m_tempFileCleaners.emplace_back(new DirectoryCleanUpHandler(std::string(dir)));
+    m_rollbackCleaners.emplace_back(std::string(dir));
     return std::string(dir);
 }
 
 bool CreateDir::pathInList(const std::string path)
 {
     for (auto &element : m_rollbackCleaners) {
-        if (element->queryName() == path) {
+        if (element.queryName() == path) {
             return true;
         }
     }

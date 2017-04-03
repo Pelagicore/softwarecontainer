@@ -46,7 +46,7 @@ FileToolkitWithUndo::~FileToolkitWithUndo()
     }
 
     if(!success) {
-        log_error() << "One or more cleanup handlers returned error status, please check the log";
+        log_warning() << "One or more cleanup handlers returned error status, please check the log";
     }
 }
 
@@ -59,6 +59,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
     unsigned long flags =  0;
     std::string fstype;
     int mountRes;
+    std::unique_ptr<CreateDir> createDirInstance = std::unique_ptr<CreateDir>(new CreateDir());
 
     if (!existsInFileSystem(src)) {
         log_error() << src << " does not exist on the host, can not bindMount";
@@ -78,11 +79,11 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         // In case the tmpContainerRoot is set to nothing we need to create a
         // good bindmount directory.
         if (tmpContainerRoot == "") {
-            upperDir = tempDir("/tmp/sc-bindmount-upper-XXXXXX");
-            workDir = tempDir("/tmp/sc-bindmount-work-XXXXXX");
+            upperDir = createDirInstance->createTempDirectoryFromTemplate("/tmp/sc-bindmount-upper-XXXXXX");
+            workDir = createDirInstance->createTempDirectoryFromTemplate("/tmp/sc-bindmount-work-XXXXXX");
         } else {
-            upperDir = tempDir(tmpContainerRoot + "/bindmount-upper-XXXXXX");
-            workDir = tempDir(tmpContainerRoot + "/bindmount-work-XXXXXX");
+            upperDir = createDirInstance->createTempDirectoryFromTemplate(tmpContainerRoot + "/bindmount-upper-XXXXXX");
+            workDir = createDirInstance->createTempDirectoryFromTemplate(tmpContainerRoot + "/bindmount-work-XXXXXX");
         }
         fstype.assign("overlay");
 
@@ -101,7 +102,6 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
 
     if (mountRes == 0) {
         log_verbose() << "Bind-mounted folder " << src << " in " << dst;
-        m_cleanupHandlers.emplace_back(new MountCleanUpHandler(dst));
     } else {
         log_error() << "Could not mount into container: src=" << src
                     << " , dst=" << dst << " err=" << strerror(errno);
@@ -123,6 +123,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
             return false;
         }
     }
+    m_createDirList.push_back(std::move(createDirInstance));
     return true;
 }
 
@@ -133,33 +134,16 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
 {
     std::string fstype = "overlay";
     unsigned long flags = 0;
+    std::unique_ptr<CreateDir> createDirInstance = std::unique_ptr<CreateDir>(new CreateDir());
 
-    if (!m_create.createDirectory(lower)
-        || !m_create.createDirectory(upper)
-        || !m_create.createDirectory(work)
-        || !m_create.createDirectory(dst))
+    if (!createDirInstance->createDirectory(lower)
+        || !createDirInstance->createDirectory(upper)
+        || !createDirInstance->createDirectory(work)
+        || !createDirInstance->createDirectory(dst))
     {
-        m_create.rollBack();
         log_error() << "Failed to create lower/upper/work directory for overlayMount. lowerdir=" <<
                        lower << ", upperdir=" << upper << ", workdir=" << work;
         return false;
-    }
-    m_create.clear();
-
-    if (!pathInList(lower)) {
-        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(lower));
-    }
-
-    if (!pathInList(upper)) {
-        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(upper));
-    }
-
-    if (!pathInList(work)) {
-        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(work));
-    }
-
-    if (!pathInList(dst)) {
-        m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(dst));
     }
 
     std::string mountoptions = logging::StringBuilder() << "lowerdir=" << lower
@@ -171,13 +155,7 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
     if (mountRes == 0) {
         log_verbose() << "overlayMounted folder " << lower << " in " << dst;
         m_cleanupHandlers.emplace_back(new MountCleanUpHandler(dst));
-        if (!pathInList(upper)) {
-            m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(upper));
-        }
         m_cleanupHandlers.emplace_back(new OverlaySyncCleanupHandler(upper, lower));
-        if (!pathInList(work)) {
-            m_cleanupHandlers.emplace_back(new DirectoryCleanUpHandler(work));
-        }
     } else {
         log_error() << "Could not mount into container: upper=" << upper
                     << ",lower=" << lower
@@ -186,6 +164,7 @@ bool FileToolkitWithUndo::overlayMount(const std::string &lower,
         return false;
     }
 
+    m_createDirList.push_back(std::move(createDirInstance));
     return true;
 }
 

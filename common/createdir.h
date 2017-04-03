@@ -21,70 +21,60 @@
 
 namespace softwarecontainer {
 
+/**
+ * @brief The CreateDir class is responsible for creating new directories and removing them when it
+ * is necessary.
+ *
+ * This class is created as a helper to FileToolkitWithUndo class. It adds value to
+ * FileToolkitWithUndo class by creating rollback option on failures.
+ */
 class CreateDir {
     LOG_DECLARE_CLASS_CONTEXT("CD", "Create Directory");
 public:
+    ~CreateDir();
+
     /**
-     * @brief createDirectory Create a directory, and if successful append it
-     *  to a list of dirs to be deleted in the dtor. Since nestled dirs will
-     *  need to be deleted in reverse order to creation insert to the beginning
-     *  of the list.
+     * @brief createDirectory creates a directory according to given path.
+     * The directory will be removed when the object is destroyed.
+     *
      * @param path Path of directory to be created
      * @return true on success, false on failure
      */
     bool createDirectory(const std::string path);
 
     /**
-     * @brief rollBack calls clean method for all members of m_createDirectoryCleanupHandlers.
+     * @brief createTempDirectoryFromTemplate creates a uniquely named directory according to
+     * templatePath.
      *
-     * This function is created as a helper to callers of createDirectory functions. It is strongly
-     * recommended that this functions should be called if createDirectory function returns false.
+     * @warning The created directory will be destroyed when the object is destroyed
      *
-     * @return true on success, false on failure
-     */
-    bool rollBack();
-
-    /*@brief clear removes all elements from the m_createDirectoryCleanupHandlers
-     *
-     * */
-    void clear();
-
-    /**
-     * @brief tempDir Creates a uniquely named temporary directory according to templatePath.
-     *
-     * @warning The temporary path will be destroyed when the instance of FileToolkitWithUndo
-     *  is destroyed.
-     *
-     * @param templ a template Path used to create the path of the temporary directory, including
-     *  XXXXXX which will be replaced with a unique ID for the temporary directory
+     * @param templatePath is used to create the path of the temporary directory. The last six
+     * characters of template must be XXXXXX and these are replaced with a string that makes the
+     * directory name unique.
      *
      * @throws SoftwareContainerError if template path is not appropriate.
      * @return A string path pointing to the newly created temporary directory.
      */
-    std::string tempDir(std::string templatePath);
+    std::string createTempDirectoryFromTemplate(std::string templatePath);
 
-    /**
-     * @brief m_tempFileCleaners holds cleanup handler for each created temporary directory.
-     * The main purpose of this is to rollback in any errors while bind-mounting. On success
-     * m_tempFileCleaners will be moved to cleanup handlers of FileToolkitWithUndo
-     */
-    std::vector<std::unique_ptr<DirectoryCleanUpHandler>> m_tempFileCleaners;
 private :
     /**
      * @brief createParentDirectory Recursively tries to create the directory pointed to by path.
+     *
      * @param path The directory path to be created.
      * @return true on success, false on failure
      */
     bool createParentDirectory(const std::string path);
 
     /**
-     * @brief m_createDirectoryCleanupHandlers holds cleanup handler for each created directory.
-     * The main purpose of this is to rollback in any errors.
+     * @brief holds cleanup handler for each created directory.
+     * The main purpose of this is to rollback in any errors or when the object is
      */
-    std::vector<std::unique_ptr<DirectoryCleanUpHandler>> m_rollbackCleaners;
+    std::vector<DirectoryCleanUpHandler> m_rollbackCleaners;
 
     /**
-     * @brief checks whether path is already added to m_cleanupHandlers or not
+     * @brief checks whether path is already added to m_rollbackCleaners or not
+     *
      * @param a string path name to check
      * @return true if the path is already exist, false otherwise
      */
