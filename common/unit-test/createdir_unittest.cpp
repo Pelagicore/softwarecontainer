@@ -19,48 +19,62 @@
 
 #include "createdir.h"
 #include "softwarecontainererror.h"
+#include "softwarecontainer-common.h"
 
 #include <gtest/gtest.h>
 #include <sys/stat.h>
 
 using namespace softwarecontainer;
 
-class CreateDirTest: public ::testing::Test
+/*
+ * Verify creation of nested directories will not create an error
+ */
+TEST(CreateDirTest, createNestedDir)
 {
-public:
-
-    void SetUp() override
     {
+        CreateDir cd;
+        ASSERT_TRUE(cd.createDirectory("time/to/test/nested/directory/creation"));
     }
-
-    CreateDir cd;
-
-};
-
-
-TEST_F(CreateDirTest, createNestedDir)
-{
-    ASSERT_TRUE(cd.createDirectory("time/to/test/nested/directory/creation"));
-    ASSERT_TRUE(cd.rollBack());
+    ASSERT_FALSE(isDirectory("time/to/test/nested/directory/creation"));
 }
 
-TEST_F(CreateDirTest, createExistingDir)
+/*
+ * Verify creation of existing directory will not create an error
+ */
+TEST(CreateDirTest, createExistingDir)
 {
-    ASSERT_TRUE(cd.createDirectory("test/double/creation"));
-    ASSERT_TRUE(cd.createDirectory("test/double/creation"));
-    ASSERT_TRUE(cd.rollBack());
+    {
+        CreateDir cd;
+        ASSERT_TRUE(cd.createDirectory("test/double/creation"));
+        ASSERT_TRUE(cd.createDirectory("test/double/creation"));
+    }
+    ASSERT_FALSE(isDirectory("test/double/creation"));
 }
 
-TEST_F(CreateDirTest, DISABLED_creationError)
+/*
+ * Verify rollback mechanism works correctly
+ * This test is disabled due to current circumstances force unit tests to be run by root user
+ * It will be enabled again when that necessity is removed.
+ */
+TEST(CreateDirTest, DISABLED_creationError)
 {
-    ASSERT_TRUE(cd.createDirectory("/tmp/test/error/in/nested"));
-    chmod("/tmp/test/error/in/nested", 444);
-    ASSERT_FALSE(cd.createDirectory("/tmp/test/error/in/nested/directory/error"));
-    ASSERT_TRUE(cd.rollBack());
+    {
+        CreateDir cd;
+        ASSERT_TRUE(cd.createDirectory("/tmp/test/error/in/nested"));
+        chmod("/tmp/test/error/in/nested", 444);
+        ASSERT_FALSE(cd.createDirectory("/tmp/test/error/in/nested/directory/error"));
+    }
+    ASSERT_FALSE(isDirectory("/tmp/test/error/in/nested"));
 }
 
-TEST_F(CreateDirTest, tempError)
+/*
+ * Verify tempdir function works correctly
+ */
+TEST(CreateDirTest, tempError)
 {
-    EXPECT_THROW(cd.tempDir("tmp/sc-unappropriate/template"), SoftwareContainerError);
-    ASSERT_TRUE(cd.rollBack());
+    {
+        CreateDir cd;
+        EXPECT_THROW(cd.createTempDirectoryFromTemplate("tmp/sc-unappropriate/template"), SoftwareContainerError);
+    }
+    ASSERT_FALSE(isDirectory("tmp/sc-unappropriate/template"));
 }

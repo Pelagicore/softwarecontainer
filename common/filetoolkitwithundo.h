@@ -112,7 +112,11 @@ protected:
      */
     std::vector<std::unique_ptr<CleanUpHandler>> m_cleanupHandlers;
 
-    CreateDir m_create;
+    /**
+     * @brief m_createDirList A vector of CreateDir classes. This class handles directory cleaning
+     * operations when either interfered errors or when its destructor runs.
+     */
+    std::vector<std::unique_ptr<CreateDir>> m_createDirList;
 };
 
 } // namespace softwarecontainer

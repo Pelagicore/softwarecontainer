@@ -37,7 +37,7 @@ public:
 
     void SetUp() override
     {
-        workdir = cd.tempDir("/tmp/sc-RecursiveDeleteTest-XXXXXX");
+        workdir = cd.createTempDirectoryFromTemplate("/tmp/sc-RecursiveDeleteTest-XXXXXX");
         testdir = buildPath(workdir, "testdir");
         createDir(testdir);
 

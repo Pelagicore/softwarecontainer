@@ -36,8 +36,8 @@ public:
 
     void SetUp() override
     {
-        srcdir = cd.tempDir("/tmp/sc-recursivecopyTest-XXXXXX");
-        dstdir = cd.tempDir("/tmp/sc-recursivecopyTest-XXXXXX");
+        srcdir = cd.createTempDirectoryFromTemplate("/tmp/sc-recursivecopyTest-XXXXXX");
+        dstdir = cd.createTempDirectoryFromTemplate("/tmp/sc-recursivecopyTest-XXXXXX");
     }
 
     CreateDir cd;
