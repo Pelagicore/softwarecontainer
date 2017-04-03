@@ -65,7 +65,7 @@ bool Gateway::setConfig(const json_t *config)
         }
 
         if (!readConfigElement(element)) {
-            log_error() << "Could not read config element";
+            log_warning() << "Could not read config element";
             return false;
         }
     }
