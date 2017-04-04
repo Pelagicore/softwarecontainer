@@ -112,20 +112,17 @@ public:
     }
 };
 
-class HexFormatError : public CgroupsGatewayError
+class InvalidInputError : public CgroupsGatewayError
 {
 public:
-    HexFormatError():
-        CgroupsGatewayError("The given hex string was invalid")
+    InvalidInputError():
+        CgroupsGatewayError("The given value is invalid")
     {
     }
-
-    HexFormatError(const std::string &message):
+    InvalidInputError(const std::string &message):
         CgroupsGatewayError(message)
     {
     }
 };
-
-
 
 } // namespace softwarecontainer

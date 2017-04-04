@@ -88,6 +88,30 @@ INSTANTIATE_TEST_CASE_P(TestBadConfigs, CGroupsNegativeTest, ::testing::Values(
        \"value\": \"15Q\"\
      }",
 
+    // Value must be at least 2
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"1\"\
+     }",
+
+    // Too large number for cpu.shares, more than 64 bits
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"9223372036854775809\"\
+     }",
+
+    // Value must be at least 2
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"-1000\"\
+     }",
+
+    // Value must be an integer
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"abc\"\
+     }",
+
     // Value is wrong type
     "{\
         \"setting\": \"net_cls.classid\",\
@@ -117,9 +141,9 @@ INSTANTIATE_TEST_CASE_P(TestBadConfigs, CGroupsNegativeTest, ::testing::Values(
 
 /*
  * This data is fed to the PositiveTest
- */ 
+ */
 INSTANTIATE_TEST_CASE_P(TestGoodConfigs, CGroupsPositiveTest, ::testing::Values(
-    "{\ 
+    "{\
         \"value\": \"test\",\
         \"setting\": \"test\"\
      }",
@@ -129,7 +153,7 @@ INSTANTIATE_TEST_CASE_P(TestGoodConfigs, CGroupsPositiveTest, ::testing::Values(
        \"setting\": \"memory.limit_in_bytes\",\
        \"value\": \"1500\"\
      }",
-    
+
     // Value with proper suffix
     "{\
        \"setting\": \"memory.limit_in_bytes\",\
@@ -146,6 +170,24 @@ INSTANTIATE_TEST_CASE_P(TestGoodConfigs, CGroupsPositiveTest, ::testing::Values(
     "{\
        \"setting\": \"memory.limit_in_bytes\",\
        \"value\": \"15g\"\
+     }",
+
+    // Proper value for cpu.shares
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"250\"\
+     }",
+
+    // Proper value for cpu.shares, on lower limit
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"2\"\
+     }",
+
+    // Very big number for cpu.shares
+    "{\
+       \"setting\": \"cpu.shares\",\
+       \"value\": \"500000000\"\
      }",
 
     // Proper value for net_cls.classid
@@ -259,6 +301,18 @@ INSTANTIATE_TEST_CASE_P(CGroupsWhitelistParameters, CGroupsParserWhitelistTests,
             "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"127m\"}",
             "{\"setting\": \"memory.memsw.limit_in_bytes\", \"value\": \"12g\"}",
             "12884901888"
+        },
+        testWhitelist{
+            "cpu.shares",
+            "{\"setting\": \"cpu.shares\", \"value\": \"520\"}",
+            "{\"setting\": \"cpu.shares\", \"value\": \"800\"}",
+            "800"
+        },
+        testWhitelist{
+            "cpu.shares",
+            "{\"setting\": \"cpu.shares\", \"value\": \"3000\"}",
+            "{\"setting\": \"cpu.shares\", \"value\": \"1500\"}",
+            "3000"
         },
         testWhitelist{
             "unsupported.parameter",
