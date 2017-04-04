@@ -31,6 +31,7 @@ var namespacesoftwarecontainer =
     [ "ContainerOptionParser", "classsoftwarecontainer_1_1_container_option_parser.html", "classsoftwarecontainer_1_1_container_option_parser" ],
     [ "ContainerUtilityInterface", "classsoftwarecontainer_1_1_container_utility_interface.html", "classsoftwarecontainer_1_1_container_utility_interface" ],
     [ "ContainerUtilityInterfaceError", "classsoftwarecontainer_1_1_container_utility_interface_error.html", "classsoftwarecontainer_1_1_container_utility_interface_error" ],
+    [ "CreateDir", "classsoftwarecontainer_1_1_create_dir.html", "classsoftwarecontainer_1_1_create_dir" ],
     [ "DBusGateway", "classsoftwarecontainer_1_1_d_bus_gateway.html", "classsoftwarecontainer_1_1_d_bus_gateway" ],
     [ "DBusGatewayInstance", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html", "classsoftwarecontainer_1_1_d_bus_gateway_instance" ],
     [ "DBusGatewayParser", "classsoftwarecontainer_1_1_d_bus_gateway_parser.html", "classsoftwarecontainer_1_1_d_bus_gateway_parser" ],

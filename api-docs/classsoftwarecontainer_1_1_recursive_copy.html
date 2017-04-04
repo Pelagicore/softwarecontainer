@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-48e6d4d 2017-04-04</span>
+   &#160;<span id="projectnumber">0.18.0-78f1533 2017-04-04</span>
    </div>
   </td>
  </tr>
@@ -156,7 +156,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="recursivecopy_8cpp_source.html#l00072">72</a> of file <a class="el" href="recursivecopy_8cpp_source.html">recursivecopy.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00230">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
+<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00171">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">static</span> <a class="code" href="classsoftwarecontainer_1_1_recursive_copy.html#ae8f1795ba4b9523f1f1714ce8aca3965">RecursiveCopy</a> instance;</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> instance;</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div><div class="ttc" id="classsoftwarecontainer_1_1_recursive_copy_html_ae8f1795ba4b9523f1f1714ce8aca3965"><div class="ttname"><a href="classsoftwarecontainer_1_1_recursive_copy.html#ae8f1795ba4b9523f1f1714ce8aca3965">softwarecontainer::RecursiveCopy::RecursiveCopy</a></div><div class="ttdeci">RecursiveCopy(RecursiveCopy &amp;s)=delete</div><div class="ttdoc">Disallow copy and operator constructors. </div></div>
 </div><!-- fragment -->
 <p><div class="dynheader">
@@ -207,7 +207,7 @@ false on failure </dd></dl>
 
 <p>Definition at line <a class="el" href="recursivecopy_8cpp_source.html#l00078">78</a> of file <a class="el" href="recursivecopy_8cpp_source.html">recursivecopy.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00230">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
+<p>Referenced by <a class="el" href="overlaysynccleanuphandler_8cpp_source.html#l00032">softwarecontainer::OverlaySyncCleanupHandler::clean()</a>, and <a class="el" href="filetoolkitwithundo_8cpp_source.html#l00171">softwarecontainer::FileToolkitWithUndo::syncOverlayMount()</a>.</p>
 <div class="fragment"><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">bool</span> retval = <span class="keyword">true</span>;</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    m_copyLock.lock();</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    dstRoot.assign(dst);</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    srcRoot.assign(src);</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">if</span> (ftw(src.c_str(), copyFile, 20) != 0) {</div><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        log_error() &lt;&lt; <span class="stringliteral">&quot;Failed to recursively copy &quot;</span> &lt;&lt; src &lt;&lt; <span class="stringliteral">&quot; to &quot;</span> &lt;&lt; dst;</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        retval = <span class="keyword">false</span>;</div><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    m_copyLock.unlock();</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> retval;</div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div></div><!-- fragment -->
 <p><div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -229,7 +229,7 @@ Here is the caller graph for this function:</div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_recursive_copy.html">RecursiveCopy</a></li>
-    <li class="footer">Generated on Tue Apr 4 2017 07:55:56 for softwarecontainer by
+    <li class="footer">Generated on Tue Apr 4 2017 10:35:59 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

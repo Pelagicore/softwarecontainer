@@ -1,17 +1,20 @@
 <map id="agent/src/softwarecontainerfactory.h" name="agent/src/softwarecontainerfactory.h">
 <area shape="rect" id="node2" href="$softwarecontainer_8h_source.html" title="softwarecontainer.h" alt="" coords="923,80,1059,107"/>
-<area shape="rect" id="node10" href="$softwarecontainer-common_8h_source.html" title="softwarecontainer&#45;common.h" alt="" coords="1222,453,1413,480"/>
+<area shape="rect" id="node10" href="$softwarecontainer-common_8h_source.html" title="softwarecontainer&#45;common.h" alt="" coords="1303,453,1494,480"/>
 <area shape="rect" id="node20" href="$softwarecontainerconfig_8h_source.html" title="config/softwarecontainerconfig.h" alt="" coords="5,155,216,181"/>
 <area shape="rect" id="node3" href="$observableproperty_8h_source.html" title="observableproperty.h" alt="" coords="1265,155,1407,181"/>
-<area shape="rect" id="node6" href="$gatewayconfig_8h_source.html" title="gatewayconfig.h" alt="" coords="385,229,503,256"/>
-<area shape="rect" id="node15" href="$softwarecontainererror_8h_source.html" title="softwarecontainererror.h" alt="" coords="236,304,399,331"/>
+<area shape="rect" id="node6" href="$gatewayconfig_8h_source.html" title="gatewayconfig.h" alt="" coords="455,229,572,256"/>
+<area shape="rect" id="node15" href="$softwarecontainererror_8h_source.html" title="softwarecontainererror.h" alt="" coords="313,304,476,331"/>
 <area shape="rect" id="node17" href="$signalconnectionshandler_8h_source.html" title="signalconnectionshandler.h" alt="" coords="701,155,880,181"/>
-<area shape="rect" id="node21" href="$filetoolkitwithundo_8h_source.html" title="filetoolkitwithundo.h" alt="" coords="1371,304,1509,331"/>
-<area shape="rect" id="node23" href="$softwarecontainerabstractinterface_8h.html" title="Contains the softwarecontainer::SoftwareContainerAbstractInterface class. " alt="" coords="342,155,575,181"/>
-<area shape="rect" id="node24" href="$commandjob_8h_source.html" title="commandjob.h" alt="" coords="651,229,757,256"/>
-<area shape="rect" id="node31" href="$functionjob_8h_source.html" title="functionjob.h" alt="" coords="1401,229,1497,256"/>
-<area shape="rect" id="node11" href="$softwarecontainer-log_8h_source.html" title="softwarecontainer&#45;log.h" alt="" coords="1276,528,1433,555"/>
-<area shape="rect" id="node22" href="$cleanuphandler_8h_source.html" title="cleanuphandler.h" alt="" coords="1440,379,1560,405"/>
-<area shape="rect" id="node25" href="$jobabstract_8h_source.html" title="jobabstract.h" alt="" coords="1209,304,1306,331"/>
-<area shape="rect" id="node26" href="$executable_8h_source.html" title="executable.h" alt="" coords="1168,379,1264,405"/>
+<area shape="rect" id="node21" href="$filetoolkitwithundo_8h_source.html" title="filetoolkitwithundo.h" alt="" coords="1602,155,1739,181"/>
+<area shape="rect" id="node26" href="$softwarecontainerabstractinterface_8h.html" title="Contains the softwarecontainer::SoftwareContainerAbstractInterface class. " alt="" coords="393,155,626,181"/>
+<area shape="rect" id="node27" href="$commandjob_8h_source.html" title="commandjob.h" alt="" coords="605,229,712,256"/>
+<area shape="rect" id="node34" href="$functionjob_8h_source.html" title="functionjob.h" alt="" coords="1384,229,1480,256"/>
+<area shape="rect" id="node11" href="$softwarecontainer-log_8h_source.html" title="softwarecontainer&#45;log.h" alt="" coords="1519,528,1676,555"/>
+<area shape="rect" id="node22" href="$mountcleanuphandler_8h_source.html" title="mountcleanuphandler.h" alt="" coords="1606,304,1762,331"/>
+<area shape="rect" id="node24" href="$createdir_8h_source.html" title="createdir.h" alt="" coords="1776,229,1859,256"/>
+<area shape="rect" id="node23" href="$cleanuphandler_8h_source.html" title="cleanuphandler.h" alt="" coords="1589,379,1709,405"/>
+<area shape="rect" id="node25" href="$directorycleanuphandler_8h_source.html" title="directorycleanuphandler.h" alt="" coords="1787,304,1957,331"/>
+<area shape="rect" id="node28" href="$jobabstract_8h_source.html" title="jobabstract.h" alt="" coords="1323,304,1421,331"/>
+<area shape="rect" id="node29" href="$executable_8h_source.html" title="executable.h" alt="" coords="1281,379,1377,405"/>
 </map>
