@@ -178,7 +178,7 @@ def testhelper(request):
 
 def grep_for_dbus_proxy():
     """ Helper for 'assert_no_proxy' """
-    return os.system('ps -aux | grep dbus-proxy | grep -v "grep" | grep prefix-dbus- > /dev/null')
+    return os.popen('ps -aux | grep dbus-proxy | grep -v "grep"').read()
 
 
 @pytest.fixture(scope="function")
@@ -187,9 +187,9 @@ def assert_no_proxy():
 
         Do the check both on setup and teardown
     """
-    assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouldn't be"
+    assert "dbus-proxy" not in grep_for_dbus_proxy(), "dbus-proxy is alive when it shouldn't be"
     yield
-    assert grep_for_dbus_proxy() != 0, "dbus-proxy is alive when it shouldn't be"
+    assert "dbus-proxy" not in grep_for_dbus_proxy(), "dbus-proxy is alive when it shouldn't be"
 
 
 @pytest.fixture(scope="module")
