@@ -43,30 +43,26 @@ SoftwareContainer is composed of the following components:
 - glib
 - dbus
 - glibmm   (>=2.42.0)
-- dbus-c++ (>=0.9.0)
 - lxc      (>=2.0.0)
 - jansson  (>=2.6)
 
 ### Install build dependencies on Debian
 ```
 $ sudo apt-get install lxc lxc-dev libglib2.0-dev libglibmm-2.4 \
-                       libdbus-c++-dev libdbus-c++-1-0v5 libdbus-1-dev \
-                       libglibmm-2.4-dev libglibmm-2.4 \
+                       libdbus-1-dev \ libglibmm-2.4-dev libglibmm-2.4 \
                        libjansson-dev libjansson4
 ```
 
 ### Reasoning behind dependencies
-- Being a piece of software aimed towards the automotive industry, ivi-logging
-  is a useful logging tool, since it interfaces well with GENIVI DLT.
-- In order to be able to provide a simple IPC from clients/launchers, we chose
-  DBus as the IPC mechanism, as it is a proven solution that is de-facto
-  standard on most GNU/Linux systems.
-- Glibmm is used mainly for main loop purposes (dbus-c++ interfaces well with
-  it), but also for spawning of binaries (such as dbus-proxy).
-- jansson is a simple, reliable c library for parsing json data. We have used
-  jansson is other projects, but there is no deeper reasoning behind using
-  that specific library. We should probably move to a c++ library some time
-  in the future.
+- Being a piece of software aimed towards the automotive industry, ivi-logging is a useful logging
+  tool, since it interfaces well with GENIVI DLT.
+- In order to be able to provide a simple IPC from clients/launchers, we chose DBus as the IPC
+  mechanism, as it is a proven solution that is de-facto standard on most GNU/Linux systems.
+- Glibmm is used mainly for main loop purposes, for setting up the dbus service, and for spawning
+  binaries (such as dbus-proxy)
+- jansson is a simple, reliable c library for parsing json data. We have used jansson is other
+  projects, but there is no deeper reasoning behind using that specific library. We should probably
+  move to a c++ library some time in the future.
 
 ## Runtime dependencies
 - lxc
@@ -154,7 +150,7 @@ privileges. It will register itself onto the system bus, so no dbus magic is
 needed. Run it with `--help` to see runtime options.
 
 ## Why does it require root privileges?
-First, creating LXC containers requires root priveleges. Second, setting up a
+First, creating LXC containers requires root privileges. Second, setting up a
 network bridge using brctl and ifconfig/iptables typically also does require
 that.
 
