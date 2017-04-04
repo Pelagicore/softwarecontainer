@@ -51,7 +51,7 @@ SoftwareContainer is composed of the following components:
 ```
 $ sudo apt-get install lxc lxc-dev libglib2.0-dev libglibmm-2.4 \
                        libdbus-c++-dev libdbus-c++-1-0v5 libdbus-1-dev \
-                       libglibmm-2.4-dev libglibmm-2.4 lxc-dev \
+                       libglibmm-2.4-dev libglibmm-2.4 \
                        libjansson-dev libjansson4
 ```
 
