@@ -79,29 +79,50 @@ CONFIG_TEST_NETCLS = [
     {"setting": "net_cls.classid", "value": TEST_NETCLS_VALUE}
 ]
 
-test_cap_0 = Capability("test.cap.small.threshold",
+CPU_SHARES_LOW_VALUE = "2"
+CONFIG_CPU_SHARES_LOW_THRESHOLD = [
+    {"setting": "cpu.shares", "value": CPU_SHARES_LOW_VALUE}
+]
+
+CPU_SHARES_WHITELISTING_VALUE = "750"
+CONFIG_CPU_SHARES_WHITELISTING = [
+    {"setting": "cpu.shares", "value": "250"},
+    {"setting": "cpu.shares", "value": CPU_SHARES_WHITELISTING_VALUE}
+]
+
+cap_0 = Capability("test.cap.small.threshold",
                         [
                             {"id": "cgroups", "config": CONFIG_TEST_MEMORY_SMALL_THRESHOLD}
                         ])
 
-test_cap_1 = Capability("test.cap.memory.share",
+cap_1 = Capability("test.cap.memory.share",
                         [
                             {"id": "cgroups", "config": CONFIG_TEST_MEMORY_SHARE}
                         ])
 
-test_cap_2 = Capability("test.cap.memory.whitelist",
+cap_2 = Capability("test.cap.memory.whitelist",
                         [
                             {"id": "cgroups", "config": CONFIG_TEST_MEMORY_WHITELISTING}
                         ])
 
-test_cap_3 = Capability("test.cap.netcls",
+cap_3 = Capability("test.cap.netcls",
                         [
                             {"id": "cgroups", "config": CONFIG_TEST_NETCLS}
                         ])
 
+cap_4 = Capability("test.cap.cpu.shares.threshold",
+                   [
+                       {"id": "cgroups", "config": CONFIG_CPU_SHARES_LOW_THRESHOLD}
+                   ])
+
+cap_5 = Capability("test.cap.cpu.shares.whitelist",
+                   [
+                       {"id": "cgroups", "config": CONFIG_CPU_SHARES_WHITELISTING}
+                   ])
+
 manifest = StandardManifest(TESTOUTPUT_DIR,
                             "cgroup-test-manifest.json",
-                            [test_cap_0, test_cap_1, test_cap_2, test_cap_3])
+                            [cap_0, cap_1, cap_2, cap_3, cap_4, cap_5])
 
 
 def service_manifests():
@@ -212,5 +233,42 @@ class TestCGroupGateway(object):
             with open("/sys/fs/cgroup/net_cls/lxc/" + containerID + "/net_cls.classid", "r") as fh:
                 value = int(fh.read())
                 assert value == int(TEST_NETCLS_VALUE, base=16)
+        finally:
+            sc.terminate()
+
+    def test_cpu_shares_cgroup_set(self):
+        """ Test that cpu.shares gets set. Does not test CPU usage.
+        """
+
+        try:
+            sc = Container()
+            cid = sc.start(DATA)
+            containerID = "SC-" + str(cid)
+
+            sc.set_capabilities(["test.cap.cpu.shares.threshold"])
+
+            time.sleep(0.5)
+            with open("/sys/fs/cgroup/cpu/lxc/" + containerID + "/cpu.shares", "r") as fh:
+                value = int(fh.read())
+                assert value == int(CPU_SHARES_LOW_VALUE)
+        finally:
+            sc.terminate()
+
+    def test_cpu_shares_cgroup_whitelisting(self):
+        """ Test that whitelisting works when setting cpu.shares. Does not test CPU usage.
+        """
+
+        try:
+            sc = Container()
+            cid = sc.start(DATA)
+            containerID = "SC-" + str(cid)
+            sc.set_capabilities(["test.cap.cpu.shares.whitelist"])
+            most_permissive_value = int(CPU_SHARES_WHITELISTING_VALUE)
+
+            time.sleep(0.5)
+            with open("/sys/fs/cgroup/cpu/lxc/" + containerID + "/cpu.shares", "r") as fh:
+                value = int(fh.read())
+
+            assert value == most_permissive_value
         finally:
             sc.terminate()

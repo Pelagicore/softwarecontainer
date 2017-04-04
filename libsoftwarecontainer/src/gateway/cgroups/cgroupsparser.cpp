@@ -105,6 +105,35 @@ void CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
                 return;
             }
         }
+
+    } else if (("cpu.shares" == settingKey)) {
+        int newValue;
+        try {
+            newValue = std::stoi(settingValue);
+        } catch (std::out_of_range &err) {
+            std::string errorMessage = "The value for cpu.shares is too high";
+            log_error() << errorMessage;
+            throw InvalidInputError(errorMessage);
+        } catch (std::invalid_argument &err) {
+            std::string errorMessage = "The value for cpu.shares is not an integer";
+            log_error() << errorMessage;
+            throw InvalidInputError(errorMessage);
+        }
+
+        if (newValue < 2) {
+            std::string errorMessage = "Value of cpu.shares must be at least 2";
+            log_error() << errorMessage;
+            throw InvalidInputError(errorMessage);
+        }
+        // if the new value is smaller/equal to the old value, then we don't save the new value.
+        if (m_settings.count(settingKey) != 0) {
+            if (std::stoi(m_settings[settingKey]) >= newValue) {
+                return;
+            }
+        }
+        settingValue = std::to_string(newValue);
+        log_debug() << "Value for cpu.shares: " << settingValue;
+
     } else if ("net_cls.classid" == settingKey) {
         // Should be of format 0xAAAABBBB
         if (settingValue.find("0x") != 0 // Has to begin with 0x
@@ -113,7 +142,7 @@ void CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
         {
             std::string errorMessage = "net_cls.classid should be of form 0xAAAABBBB";
             log_error() << errorMessage;
-            throw HexFormatError(errorMessage);
+            throw InvalidInputError(errorMessage);
         }
 
         char *endPtr = NULL;
@@ -121,7 +150,7 @@ void CGroupsParser::parseCGroupsGatewayConfiguration(const json_t *element)
         if (0 == hexedValue || ULONG_MAX == hexedValue || ((endPtr != NULL) && *endPtr != '\0')) {
             std::string errorMessage = "Could not parse all of net_cls.classid value as hex string";
             log_error() << errorMessage;
-            throw HexFormatError(errorMessage);
+            throw InvalidInputError(errorMessage);
         }
 
     } else {
