@@ -74,4 +74,24 @@ to e.g. ``/tmp/test``, the varaiable value would now be set to ``/tmp/test:/some
 If ``SOME_ENVIRONMENT_VARIABLE`` had not been previously set, the value would now be
 set to ``:/some/path``.
 
+Important Note
+--------------
 
+Environment variables are internally stored as an array of pointers to strings in Linux based
+systems. This array is terminated by a NULL pointer. Each name and value pairs are matched with "="
+sign and stored together. For instance the first example configuration above will be stored as
+``SOME_ENVIRONMENT_VARIABLE=SOME_VALUE`` in environment table. Thus, please note that it would be
+necessary to **refrain from setting environment variable names or values anything that includes**
+
+- the equal sign ``'='``
+- embedded NULL characters ``'\0'``.
+
+Setting some particular variables may cause unexpected behavior on SoftwareContainer and applications
+running in a container. **Please be very cautious when you are setting following variables**
+
+- XDG_RUNTIME_DIR
+- DBUS_SESSION_BUS_ADDRESS
+- DBUS_SYSTEM_BUS_ADDRESS
+- PULSE_SERVER
+- HOME
+- PATH
