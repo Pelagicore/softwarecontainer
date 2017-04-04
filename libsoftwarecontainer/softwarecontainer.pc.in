@@ -6,6 +6,6 @@ includedir=${prefix}/include
 Name: softwarecontainer
 Description: SoftwareContainer
 Version: @VERSION@
-Requires: lxc glibmm-2.4 ivi-logging dbus-c++-glib-1 jansson
+Requires: lxc glibmm-2.4 ivi-logging jansson
 Libs: -lsoftwarecontainer -lsoftwarecontainercommon @DEVELOPMENT_LIBRARY_PATH@ -L${libdir} 
 Cflags: -std=c++11 @DEVELOPMENT_INCLUDE_PATH@ -I${includedir}/softwarecontainer -I${libdir}/softwarecontainer
