@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Traffic Shaping &#8212; softwarecontainer 0.18.0-ef3c649 2017-04-05 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.18.0-ef3c649 2017-04-05',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="traffic-shaping">
+<h1>Traffic Shaping<a class="headerlink" href="#traffic-shaping" title="Permalink to this headline">¶</a></h1>
+<p>Linux offers a very rich set of tools for managing and manipulating the transmission of packets.
+Those tools can be used to manage and shape traffic on SoftwareContainer.</p>
+<p>The Linux network routing, firewalling and traffic control subsystem is very powerful and flexible
+and have grown to be a very mature stack of tools. To glance those solutions the linux
+documentation project would be very good resource to start. Please check
+<a class="reference external" href="http://www.tldp.org/HOWTO/html_single/Traffic-Control-HOWTO/#intro">TLDP</a>
+for documentation on the concepts of traffic control in Linux. <a class="reference external" href="http://lartc.org/howto/">Linux Advanced Routing &amp; Traffic Control</a>
+is another good source that presents deep information about the topic.</p>
+<p>Even though there are many ways of shaping the traffic, what we describe here is to give brief information
+with examples about one particular way of shaping network traffic of a container to prevent possible
+network starvation scenarios.</p>
+<p>This can be done via the network classifier cgroup. The network classifier cgroup provides an interface
+to tag network packets with a class identifier. It is possible to make each SoftwareContainer produce
+network packages with different class id using different capabilities to set network classifier cgroup.
+This way <code class="docutils literal"><span class="pre">tc</span></code> can be used to assign different priorities to packets from different cgroups.</p>
+<p>The network classifier cgroup is supported to mark network packages by the <a class="reference internal" href="../gateways/00-index.html#cgroups-gateway"><span class="std std-ref">CGroups gateway</span></a>.</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example way of marking network packages belonging to a container. The example aims to create
+a SoftwareContainer, configure its related gateways to mark packages and finally present a small howto
+about shaping traffic on host.</p>
+<p>Create a service manifest to let container send/receive files on network and mark network classifier
+cgroup. Then add this manifest to default manifest folder :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test.cap.netcls&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;setting&quot;</span><span class="p">:</span> <span class="s2">&quot;net_cls.classid&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0x100001&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;cgroups&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;network.accept-ping&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;OUTGOING&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="s2">&quot;icmp&quot;</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                        <span class="s2">&quot;udp&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;tcp&quot;</span>
+                                    <span class="p">]</span>
+                                <span class="p">}</span>
+                            <span class="p">]</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;INCOMING&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;allow&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="s2">&quot;icmp&quot;</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;protocols&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                        <span class="s2">&quot;udp&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;tcp&quot;</span>
+                                    <span class="p">]</span>
+                                <span class="p">}</span>
+                            <span class="p">]</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;network&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then, from the build directory, run the agent:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">-</span><span class="n">E</span> <span class="n">softwarecontainer</span><span class="o">-</span><span class="n">agent</span>
+</pre></div>
+</div>
+<p>Next, we will start a new container:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">Create</span> \
+<span class="s1">&#39;[{&quot;enableWriteBuffer&quot;: false}]&#39;</span>
+
+</pre></div>
+</div>
+<p>Now we can set our prepared capabilities to mark network packages :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
+<span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="nb">object</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">pelagicore</span><span class="o">/</span><span class="n">SoftwareContainerAgent</span> \
+<span class="o">--</span><span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span><span class="o">.</span><span class="n">SetCapabilities</span> \
+<span class="mi">0</span> \
+<span class="s2">&quot;[&#39;network.accept-ping&#39;,</span>
+<span class="s1">&#39;test.cap.netcls&#39;</span><span class="p">]</span><span class="s2">&quot;</span>
+
+</pre></div>
+</div>
+<p>In this stage every network package within the container SC-0 will be marked with class id 0x100001. This
+means every network package from this container will be marked with major class ID value 10 and minor
+class ID value 1. So it is wise to configure traffic shaping with <code class="docutils literal"><span class="pre">tc</span></code> (please check <a class="reference external" href="http://www.tldp.org/HOWTO/html_single/Traffic-Control-HOWTO/#components">tc components</a>
+for more information about tc) according to indicated class IDs in the host :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">tc</span> <span class="n">qdisc</span> <span class="n">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">root</span> <span class="n">handle</span> <span class="mi">10</span><span class="p">:</span> <span class="n">htb</span>
+<span class="n">sudo</span> <span class="n">tc</span> <span class="k">class</span> <span class="nc">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">parent</span> <span class="mi">10</span><span class="p">:</span> <span class="n">classid</span> <span class="mi">10</span><span class="p">:</span><span class="mi">1</span> <span class="n">htb</span> <span class="n">rate</span> <span class="mi">1</span><span class="n">mbit</span>
+<span class="n">sudo</span> <span class="n">tc</span> <span class="nb">filter</span> <span class="n">add</span> <span class="n">dev</span> <span class="n">eth0</span> <span class="n">parent</span> <span class="mi">10</span><span class="p">:</span> <span class="n">protocol</span> <span class="n">ip</span> <span class="n">prio</span> <span class="mi">10</span> <span class="n">handle</span> <span class="mi">1</span><span class="p">:</span> <span class="n">cgroup</span>
+</pre></div>
+</div>
+<p>With this setup SC-0 can consume only up to 1 mbit bitrate. For more information and examples it is
+suggested to visit following</p>
+<ul class="simple">
+<li><a class="reference external" href="http://lartc.org/howto/lartc.qdisc.filters.html">http://lartc.org/howto/lartc.qdisc.filters.html</a></li>
+<li><a class="reference external" href="http://www.tldp.org/HOWTO/html_single/Traffic-Control-HOWTO/">http://www.tldp.org/HOWTO/html_single/Traffic-Control-HOWTO/</a></li>
+<li><a class="reference external" href="https://www.kernel.org/doc/Documentation/cgroup-v1/net_cls.txt">https://www.kernel.org/doc/Documentation/cgroup-v1/net_cls.txt</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Traffic Shaping</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/integration-guidelines/10-traffic-shaping.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/chapters/integration-guidelines/10-traffic-shaping.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

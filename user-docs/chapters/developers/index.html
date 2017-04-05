@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developer guidelines &#8212; softwarecontainer 0.18.0-ef3c649 2017-04-05 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.18.0-ef3c649 2017-04-05',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SoftwareContainer using LXC" href="../lxc/index.html" />
+    <link rel="prev" title="Filesystems" href="../filesystem/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="developer-guidelines">
+<span id="developers"></span><h1>Developer guidelines<a class="headerlink" href="#developer-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the internal structure of SoftwareContainer, and the major design considerations.</p>
+<p>The intended reader is a developer who wants to understand and work with the internals of SoftwareContainer,
+or anyone who simply wants a better insight for e.g. troubleshooting.</p>
+<p>There is also some documentation of interest in the <a class="reference internal" href="../filesystem/index.html#filesystems"><span class="std std-ref">Filesystems</span></a> chapter
+regarding filesystems in the container.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">The diagrams in this chapter do not differ between sync and async calls, should be fixed</p>
+</div>
+<div class="section" id="design-principles">
+<h2>Design principles<a class="headerlink" href="#design-principles" title="Permalink to this headline">¶</a></h2>
+<p>This section describes some major design considerations and principles mostly related to the
+internals of SC and configuration formats.</p>
+<div class="section" id="gateways">
+<h3>Gateways<a class="headerlink" href="#gateways" title="Permalink to this headline">¶</a></h3>
+<p>Gateway configs needs to be possible to extend in the future. In practice, this means that it
+should be possible to add new json objects to the root object without breaking current parsing
+of the config, or requiring unnecessary re-writes of existing integrated configs that are not affected
+by such addition.</p>
+<p>Configs should have version indicated as part of the content, so SC could perform checks and adapt
+to the format for compatibility reasons.</p>
+<p>This has implications on the json structure, e.g. it sometimes adds some redundancy to the structure.
+It also means that the parsing might not always be as efficient as it could be, as the objects need
+to be iterated to find, compared to getting values by keys already in the first level of nesting.</p>
+</div>
+</div>
+<div class="section" id="important-internal-interfaces">
+<h2>Important internal interfaces<a class="headerlink" href="#important-internal-interfaces" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="interface-softwarecontainer-h">
+<h3>Interface: softwarecontainer.h<a class="headerlink" href="#interface-softwarecontainer-h" title="Permalink to this headline">¶</a></h3>
+<p>The Agent uses <code class="docutils literal"><span class="pre">softwarecontainer.h</span></code> to manage the lifecycle of container instances, e.g. creation and
+destruction. The interface provides access to the underlying <code class="docutils literal"><span class="pre">ContainerAbstractInterface</span></code> which users can
+utilize to access the container interface. The interface is implemented by <code class="docutils literal"><span class="pre">SoftwareContainer</span></code>.</p>
+<p>Below is a diagram showing the interaction between the user <cite>Agent</cite> and the interfaces <code class="docutils literal"><span class="pre">SoftwareContainer</span></code>
+subsequently uses:</p>
+<div><svg height="720" viewBox="0 0 844 720" width="844" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc />
+  <rect fill="rgb(0,0,0)" height="644" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
+  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="71" />
+  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="116" />
+  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="161" />
+  <rect fill="rgb(0,0,0)" height="421" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="206" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="236" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="296" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="356" />
+  <rect fill="rgb(0,0,0)" height="15" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="416" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="537" />
+  <polygon fill="rgb(0,0,0)" points="723,409 823,409 831,417 831,424 723,424 723,409" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <polygon fill="rgb(0,0,0)" points="435,484 535,484 543,492 543,499 435,499 435,484" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <polygon fill="rgb(0,0,0)" points="723,530 823,530 831,538 831,545 723,545 723,530" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="643" y="11" />
+  <path d="M 128 45 L 128 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="644" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
+  <path d="M 320 45 L 320 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="316" y="65" />
+  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="316" y="110" />
+  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="316" y="155" />
+  <rect fill="moccasin" height="421" stroke="rgb(0,0,0)" width="8" x="316" y="200" />
+  <path d="M 512 45 L 512 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="230" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="290" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="350" />
+  <path d="M 704 45 L 704 725" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="15" stroke="rgb(0,0,0)" width="8" x="700" y="410" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="531" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="128" y="31">Agent</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="102" x="320" y="31">SoftwareContainer</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="126" x="512" y="24">ContainerAbstractInte</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="512" y="37">rface</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="704" y="31">Gateway</text>
+  <path d="M 136 65 L 312 65" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,61 312,65 304,69" stroke="rgb(0,0,0)" />
+  <path d="M 136 80 L 312 80" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,76 136,80 144,84" stroke="rgb(0,0,0)" />
+  <path d="M 136 110 L 312 110" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,106 312,110 304,114" stroke="rgb(0,0,0)" />
+  <path d="M 136 125 L 312 125" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,121 136,125 144,129" stroke="rgb(0,0,0)" />
+  <path d="M 136 155 L 312 155" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,151 312,155 304,159" stroke="rgb(0,0,0)" />
+  <path d="M 136 170 L 312 170" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,166 136,170 144,174" stroke="rgb(0,0,0)" />
+  <path d="M 136 200 L 312 200" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,196 312,200 304,204" stroke="rgb(0,0,0)" />
+  <path d="M 328 230 L 504 230" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,226 504,230 496,234" stroke="rgb(0,0,0)" />
+  <path d="M 328 260 L 504 260" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,256 328,260 336,264" stroke="rgb(0,0,0)" />
+  <path d="M 328 290 L 504 290" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,286 504,290 496,294" stroke="rgb(0,0,0)" />
+  <path d="M 328 320 L 504 320" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,316 328,320 336,324" stroke="rgb(0,0,0)" />
+  <path d="M 328 350 L 504 350" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,346 504,350 496,354" stroke="rgb(0,0,0)" />
+  <path d="M 328 380 L 504 380" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,376 328,380 336,384" stroke="rgb(0,0,0)" />
+  <path d="M 328 410 L 696 410" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,406 696,410 688,414" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="720,403 820,403 828,411 828,418 720,418 720,403" stroke="rgb(0,0,0)" />
+  <path d="M 820 403 L 820 411" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 820 411 L 828 411" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="770" y="416">multiple calls</text>
+  <path d="M 328 425 L 696 425" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,421 328,425 336,429" stroke="rgb(0,0,0)" />
+  <path d="M 328 485 L 416 485" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 485 L 416 501" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 501 L 328 501" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="336,497 328,501 336,505" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="432,478 532,478 540,486 540,493 432,493 432,478" stroke="rgb(0,0,0)" />
+  <path d="M 532 478 L 532 486" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 532 486 L 540 486" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="482" y="491">multiple calls</text>
+  <path d="M 328 531 L 696 531" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,527 696,531 688,535" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="720,524 820,524 828,532 828,539 720,539 720,524" stroke="rgb(0,0,0)" />
+  <path d="M 820 524 L 820 532" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 820 532 L 828 532" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="770" y="537">multiple calls</text>
+  <path d="M 328 561 L 696 561" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,557 328,561 336,565" stroke="rgb(0,0,0)" />
+  <path d="M 136 621 L 312 621" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,617 136,621 144,625" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="155" y="63">new()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="96" x="188" y="108">setContainerID()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="120" x="200" y="153">setMainLoopContext()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="158" y="198">init()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="368" y="228">initialize()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="258">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="356" y="288">create()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="318">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="353" y="348">start()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="378">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="347" y="408">new()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="364" y="483">addGateway()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="374" y="529">setContainer()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="619">bool</text>
+  <path d="M 40 668 L 349 668" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 40 672 L 349 672" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 483 668 L 792 668" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 483 672 L 792 672" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(208,208,208)" height="19" stroke="rgb(0,0,0)" width="134" x="349" y="661" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="416" y="676">further events here</text>
+</svg>
+</div>
+</div>
+<div class="section" id="interface-containerabstractinterface-h">
+<h3>Interface: containerabstractinterface.h<a class="headerlink" href="#interface-containerabstractinterface-h" title="Permalink to this headline">¶</a></h3>
+<p>The abstract class <code class="docutils literal"><span class="pre">ContainerAbstractInterface</span></code> is the abstraction of the underlying container technology.
+The design intention is to have this interface container technology agnostic. The design is intended to:</p>
+<ul class="simple">
+<li>Separate the higher level APIs and interfaces from the details of the container implementation.</li>
+<li>Allow easier integration of other container technologies.</li>
+<li>Isolate container implementation and domain specific details to enter the higher level code.</li>
+</ul>
+<p>This is currently implemented by the LXC specific <code class="docutils literal"><span class="pre">Container</span></code> in <cite>container.h</cite>.</p>
+<p>Below is a diagram showing the <cite>initialize</cite>, <cite>create</cite>, and <cite>start</cite> sequence focussing on the
+<code class="docutils literal"><span class="pre">ContainerAbstractInterface</span></code> implementation <code class="docutils literal"><span class="pre">Container</span></code>:</p>
+<div><svg height="522" viewBox="0 0 640 522" width="640" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc />
+  <rect fill="rgb(0,0,0)" height="446" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
+  <rect fill="rgb(0,0,0)" height="148" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="71" />
+  <rect fill="rgb(0,0,0)" height="135" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="249" />
+  <rect fill="rgb(0,0,0)" height="75" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="414" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="279" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="11" />
+  <path d="M 128 45 L 128 527" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="446" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
+  <path d="M 320 45 L 320 527" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="148" stroke="rgb(0,0,0)" width="8" x="316" y="65" />
+  <rect fill="moccasin" height="135" stroke="rgb(0,0,0)" width="8" x="316" y="243" />
+  <rect fill="moccasin" height="75" stroke="rgb(0,0,0)" width="8" x="316" y="408" />
+  <path d="M 512 45 L 512 527" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="273" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="102" x="128" y="31">SoftwareContainer</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="54" x="320" y="31">Container</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="512" y="31">liblxc</text>
+  <path d="M 136 65 L 312 65" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,61 312,65 304,69" stroke="rgb(0,0,0)" />
+  <path d="M 328 108 L 416 108" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 108 L 416 124" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 124 L 328 124" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="336,120 328,124 336,128" stroke="rgb(0,0,0)" />
+  <path d="M 328 167 L 416 167" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 167 L 416 183" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 183 L 328 183" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="336,179 328,183 336,187" stroke="rgb(0,0,0)" />
+  <path d="M 136 213 L 312 213" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,209 136,213 144,217" stroke="rgb(0,0,0)" />
+  <path d="M 136 243 L 312 243" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,239 312,243 304,247" stroke="rgb(0,0,0)" />
+  <path d="M 328 273 L 504 273" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,269 504,273 496,277" stroke="rgb(0,0,0)" />
+  <path d="M 328 303 L 504 303" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,299 328,303 336,307" stroke="rgb(0,0,0)" />
+  <path d="M 136 378 L 312 378" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,374 136,378 144,382" stroke="rgb(0,0,0)" />
+  <path d="M 136 408 L 312 408" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,404 312,408 304,412" stroke="rgb(0,0,0)" />
+  <path d="M 136 483 L 312 483" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,479 136,483 144,487" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="72" x="176" y="63">initialize()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="102" x="379" y="100">createDirectory()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="108" x="382" y="152">createSharedMountP</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="36" x="346" y="165">oint()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="211">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="48" x="164" y="241">create()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="389" y="271">lxc_container_new()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="96" x="456" y="301">container_struct</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="376">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="161" y="406">start()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="481">bool</text>
+  <path d="M 40 335 L 202 335" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 40 339 L 202 339" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 438 335 L 600 335" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 438 339 L 600 339" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(208,208,208)" height="19" stroke="rgb(0,0,0)" width="236" x="202" y="328" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="216" x="320" y="343">various operations on the lxc struct</text>
+  <path d="M 40 440 L 202 440" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 40 444 L 202 444" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 438 440 L 600 440" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 438 444 L 600 444" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(208,208,208)" height="19" stroke="rgb(0,0,0)" width="236" x="202" y="433" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="216" x="320" y="448">various operations on the lxc struct</text>
+</svg>
+</div>
+</div>
+<div class="section" id="interface-gateway-h">
+<h3>Interface: gateway.h<a class="headerlink" href="#interface-gateway-h" title="Permalink to this headline">¶</a></h3>
+<p>All gateway implementations must inherit <code class="docutils literal"><span class="pre">Gateway</span></code> and implement the pure virtual methods. The
+rationale and design intention for isolating gateway specific knowledge to respective gateway is to:</p>
+<ul class="simple">
+<li>Allow gateways to have a flexible config structure and content to more easily suit their purpose.</li>
+<li>Separate maintenance between gateways, e.g. updating the config and implementation of one will not
+propagate to the others.</li>
+<li>Consistent interface towards the user of the class so there are no ripple effects into SoftwareContainer.</li>
+</ul>
+<p>SoftwareContainer sets the configuration on the interface of this base class, and the derived classes are then called
+internally to do their specific parsing and application of the configs.</p>
+<p>SoftwareContainer also queries the gateways about state and e.g. activates the gateway when it has been configured.</p>
+<p>Below diagram show the major events during the configuration and activation sequence initiated by the Agent:</p>
+<div><svg height="434" viewBox="0 0 832 434" width="832" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc />
+  <rect fill="rgb(0,0,0)" height="358" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="71" />
+  <rect fill="rgb(0,0,0)" height="358" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="71" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="101" />
+  <rect fill="rgb(0,0,0)" height="90" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="161" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="281" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="341" />
+  <rect fill="rgb(0,0,0)" height="30" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="191" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="11" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="643" y="11" />
+  <path d="M 128 45 L 128 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="358" stroke="rgb(0,0,0)" width="8" x="124" y="65" />
+  <path d="M 320 45 L 320 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="358" stroke="rgb(0,0,0)" width="8" x="316" y="65" />
+  <path d="M 512 45 L 512 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="95" />
+  <rect fill="moccasin" height="90" stroke="rgb(0,0,0)" width="8" x="508" y="155" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="275" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="508" y="335" />
+  <path d="M 704 45 L 704 439" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="30" stroke="rgb(0,0,0)" width="8" x="700" y="185" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="30" x="128" y="31">Agent</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="102" x="320" y="31">SoftwareContainer</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="42" x="512" y="31">Gateway</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="5" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="90" x="704" y="31">derived-gateway</text>
+  <path d="M 136 65 L 312 65" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,61 312,65 304,69" stroke="rgb(0,0,0)" />
+  <path d="M 328 95 L 504 95" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,91 504,95 496,99" stroke="rgb(0,0,0)" />
+  <path d="M 328 125 L 504 125" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,121 328,125 336,129" stroke="rgb(0,0,0)" />
+  <path d="M 328 155 L 504 155" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,151 504,155 496,159" stroke="rgb(0,0,0)" />
+  <path d="M 520 185 L 696 185" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="688,181 696,185 688,189" stroke="rgb(0,0,0)" />
+  <path d="M 520 215 L 696 215" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="528,211 520,215 528,219" stroke="rgb(0,0,0)" />
+  <path d="M 328 245 L 504 245" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,241 328,245 336,249" stroke="rgb(0,0,0)" />
+  <path d="M 328 275 L 504 275" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,271 504,275 496,279" stroke="rgb(0,0,0)" />
+  <path d="M 328 305 L 504 305" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,301 328,305 336,309" stroke="rgb(0,0,0)" />
+  <path d="M 328 335 L 504 335" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,331 504,335 496,339" stroke="rgb(0,0,0)" />
+  <path d="M 328 365 L 504 365" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="336,361 328,365 336,369" stroke="rgb(0,0,0)" />
+  <path d="M 232 395 L 312 395" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="240,391 232,395 240,399" stroke="rgb(0,0,0)" />
+  <path d="M 208 387 L 224 403" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 208 403 L 224 387" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="90" x="185" y="63">startGateways()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="344" y="93">id()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="12" x="498" y="123">ID</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="365" y="153">setConfig()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="114" x="581" y="183">readConfigElement()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="684" y="213">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="243">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="84" x="374" y="273">isConfigured()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="303">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="60" x="362" y="333">activate()</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="492" y="363">bool</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="24" x="300" y="393">void</text>
+</svg>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Developer guidelines</a><ul>
+<li><a class="reference internal" href="#design-principles">Design principles</a><ul>
+<li><a class="reference internal" href="#gateways">Gateways</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#important-internal-interfaces">Important internal interfaces</a><ul>
+<li><a class="reference internal" href="#interface-softwarecontainer-h">Interface: softwarecontainer.h</a></li>
+<li><a class="reference internal" href="#interface-containerabstractinterface-h">Interface: containerabstractinterface.h</a></li>
+<li><a class="reference internal" href="#interface-gateway-h">Interface: gateway.h</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../filesystem/index.html" title="previous chapter">Filesystems</a></li>
+      <li>Next: <a href="../lxc/index.html" title="next chapter">SoftwareContainer using LXC</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/developers/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/chapters/developers/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

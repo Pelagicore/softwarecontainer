@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PulseAudio gateway &#8212; softwarecontainer 0.18.0-ef3c649 2017-04-05 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.18.0-ef3c649 2017-04-05',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pulseaudio-gateway">
+<h1>PulseAudio gateway<a class="headerlink" href="#pulseaudio-gateway" title="Permalink to this headline">¶</a></h1>
+<p>The PulseAudio Gateway is used to provide access to the host system PulseAudio server.</p>
+<p>The gateway looks for the <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code> environment variable, which is assumed
+to be a socket, mounts the socket into the container, and sets the <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code> variable inside
+the container to the location of the mounted socket.</p>
+<p>If the pulseaudio server is not on a socket but on a network, then one should not use this gateway,
+but rather a combination of the network gateway (for access to the network resource) and the
+environment gateway (for setting <code class="docutils literal"><span class="pre">PULSE_SERVER</span></code> to the appropriate URI).</p>
+<div class="section" id="id">
+<h2>ID<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h2>
+<p>The ID used for the PulseAudio gateway is: <code class="docutils literal"><span class="pre">pulseaudio</span></code></p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Example configuration enabling audio:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span> <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A malformed configuration or a configuration that sets audio to false will simply
+disable audio and in such case, the gateway will not connect to the PulseAudio
+server at all.</p>
+<p>The configuration can be set several times, but once it has been set to <code class="docutils literal"><span class="pre">true</span></code>
+it will retain its value.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PulseAudio gateway</a><ul>
+<li><a class="reference internal" href="#id">ID</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/gateways/10-pulse-gateway.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/chapters/gateways/10-pulse-gateway.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

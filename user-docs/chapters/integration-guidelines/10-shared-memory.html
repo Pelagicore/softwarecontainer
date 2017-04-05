@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Working with shared memory in containers &#8212; softwarecontainer 0.18.0-ef3c649 2017-04-05 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.18.0-ef3c649 2017-04-05',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="working-with-shared-memory-in-containers">
+<h1>Working with shared memory in containers<a class="headerlink" href="#working-with-shared-memory-in-containers" title="Permalink to this headline">¶</a></h1>
+<p>There are two main types of shared memory in Linux systems: POSIX shm and SysV IPC. POSIX shm
+generally assumes that a there is a tmpfs mounted on <code class="docutils literal"><span class="pre">/dev/shm</span></code> where one can handle the shared
+memory objects, which are accessed through its own family of API calls. POSIX shm is not
+namespace-aware.</p>
+<p>SysV IPC uses mechanisms built-in to the kernel (internally it uses a tmpfs as well, but it is
+hidden). Among other things, SysV IPC supports shared memory, and is namespace-aware.</p>
+<div class="section" id="how-to-use-this-inside-containers">
+<h2>How to use this inside containers?<a class="headerlink" href="#how-to-use-this-inside-containers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="posix-shm">
+<h3>POSIX SHM<a class="headerlink" href="#posix-shm" title="Permalink to this headline">¶</a></h3>
+<p>Using POSIX SHM requires you to have <code class="docutils literal"><span class="pre">/dev/shm</span></code> inside the container. To accomplish this, one
+simply has to mount it, which should be done through the <a class="reference internal" href="../gateways/00-index.html#file-gateway"><span class="std std-ref">File gateway</span></a>.</p>
+</div>
+<div class="section" id="sysv-ipc">
+<h3>SysV IPC<a class="headerlink" href="#sysv-ipc" title="Permalink to this headline">¶</a></h3>
+<p>There is currently no easy way to, with the LXC API, stay in the same IPC namespace when creating a
+new container. It is equally hard to attach to an existing IPC namespace (for example, one to use to
+share data between host and container) when the container is already set up.</p>
+<p>It is however possible, when using the <code class="docutils literal"><span class="pre">attach()</span></code> API call on the LXC container, to specify not to
+enter a new IPC namespace, so it is indeed possible to share memory between host and container when
+running a specific command. This would only be local to that command or application, and not to the
+whole container. The init process and any other processes running inside the container that are not
+instructed to share their IPC namespace would still live in a separate IPC namespace. This method is
+however not implemented in SoftwareContainer, so currently any calls to <code class="docutils literal"><span class="pre">attach()</span></code> from
+SoftwareContainer will always enter new namespaces (including the IPC namespace), as this is the
+default behavior in LXC.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Working with shared memory in containers</a><ul>
+<li><a class="reference internal" href="#how-to-use-this-inside-containers">How to use this inside containers?</a><ul>
+<li><a class="reference internal" href="#posix-shm">POSIX SHM</a></li>
+<li><a class="reference internal" href="#sysv-ipc">SysV IPC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/integration-guidelines/10-shared-memory.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/chapters/integration-guidelines/10-shared-memory.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

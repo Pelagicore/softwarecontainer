@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Service manifests &#8212; softwarecontainer 0.18.0-ef3c649 2017-04-05 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.18.0-ef3c649 2017-04-05',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Gateways" href="../gateways/00-index.html" />
+    <link rel="prev" title="Configuration" href="../configuration/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="service-manifests">
+<span id="id1"></span><h1>Service manifests<a class="headerlink" href="#service-manifests" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes the format, structure, and some of the content in
+the service manifests.</p>
+<p>For information about how to work with the manifest files, e.g. where to
+install them, and how they are used in the overall context etc.,
+see <a class="reference internal" href="../integration-guidelines/00-index.html#integration-guidelines"><span class="std std-ref">Integration guidelines</span></a>.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Service manifests are JSON files mapping capabilities to gateway
+configurations. In other words, service manifests describe what
+exact gateway configurations are needed to configure the relevant
+gateways for a specific service in order to realize a capability.
+The service manifests typically contain the definitions of all the capabilities
+relevant for a service, although it is possible to split the definitions
+over multiple files if needed.</p>
+<p>For example, a platform might have a capability <cite>com.acme.SomeResource</cite>
+defined. This capability requires access to service <cite>A</cite>. Service <cite>A</cite>
+will then need to deploy a service manifest which contains all gateway
+configurations needed for the <cite>com.acme.SomeResource</cite> capability.</p>
+<p>A service manifest might also contain gateway configurations for more
+than one capability.</p>
+<p>More than one service might be needed to realize a capability, meaning that
+each relevant service would need to be integrated in the above mentioned way.
+For example, if the capability <cite>com.acme.SomeResource</cite> also requires access
+to service <cite>B</cite> as well as <cite>A</cite>, both the services needs to deploy service
+manifests and provide their respective gateway configurations needed to
+realize the capability.</p>
+</div>
+<div class="section" id="manifest-format">
+<h2>Manifest format<a class="headerlink" href="#manifest-format" title="Permalink to this headline">¶</a></h2>
+<p>A service manifest is a text file containing JSON. It is required to define
+a version, and an array &#8220;capabilities&#8221; which contains a
+&#8220;name&#8221; key with the capability name as value, and a &#8220;gateways&#8221; key which
+contains an array of objects each defining a gateway configuration identified
+with a gateway ID.</p>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>This section describes a full service manifest, and then goes through each part
+separately in more detail.</p>
+<div class="section" id="full-manifest">
+<h4>Full manifest<a class="headerlink" href="#full-manifest" title="Permalink to this headline">¶</a></h4>
+<p>Below is an example of a service manifest:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+   <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+       <span class="p">{</span>
+           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span>
+                   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+                       <span class="p">{</span>
+                           <span class="s2">&quot;config-part1&quot;</span><span class="p">:</span> <span class="p">[]</span>
+                       <span class="p">},</span>
+                       <span class="p">{</span>
+                           <span class="s2">&quot;config-part2&quot;</span><span class="p">:</span> <span class="p">[</span>
+                               <span class="p">{</span>
+                                   <span class="s2">&quot;config-element1&quot;</span><span class="p">:</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span>
+                                   <span class="s2">&quot;config-element2&quot;</span><span class="p">:</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span>
+                                   <span class="s2">&quot;config-element3&quot;</span><span class="p">:</span> <span class="s2">&quot;optionA&quot;</span><span class="p">,</span>
+                                   <span class="s2">&quot;config-element4&quot;</span><span class="p">:</span> <span class="s2">&quot;optionB&quot;</span>
+                               <span class="p">}</span>
+                           <span class="p">]</span>
+                       <span class="p">}</span>
+                   <span class="p">]</span>
+               <span class="p">},</span>
+               <span class="p">{</span>
+                   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-2&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
+               <span class="p">}</span>
+           <span class="p">]</span>
+       <span class="p">},</span>
+       <span class="p">{</span>
+           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.acme.AnotherResource&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+               <span class="p">{</span>
+                   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[]</span>
+               <span class="p">}</span>
+           <span class="p">]</span>
+       <span class="p">}</span>
+   <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="breakdown-into-parts">
+<h4>Breakdown into parts<a class="headerlink" href="#breakdown-into-parts" title="Permalink to this headline">¶</a></h4>
+<p>In the above manifest, there is a list of <cite>capabilities</cite> objects defined by the <code class="docutils literal"><span class="pre">capabilities</span></code> key:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Each <cite>capability</cite> object has the keys <code class="docutils literal"><span class="pre">name</span></code> and <code class="docutils literal"><span class="pre">gateways</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.acme.SomeResource&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gateways&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="o">...</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where the <code class="docutils literal"><span class="pre">name</span></code> key has the capability name as value, and the <code class="docutils literal"><span class="pre">gateways</span></code> key has a list of objects
+associating gateway IDs with gateway configs:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-gateway-id-1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="o">...</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where the <code class="docutils literal"><span class="pre">config</span></code> key contains gateway configuration. The exact value of the <code class="docutils literal"><span class="pre">config</span></code> key,
+is described for each gateway, see <a class="reference internal" href="../gateways/00-index.html#gateways"><span class="std std-ref">Gateways</span></a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Service manifests</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#manifest-format">Manifest format</a><ul>
+<li><a class="reference internal" href="#example">Example</a><ul>
+<li><a class="reference internal" href="#full-manifest">Full manifest</a></li>
+<li><a class="reference internal" href="#breakdown-into-parts">Breakdown into parts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../configuration/index.html" title="previous chapter">Configuration</a></li>
+      <li>Next: <a href="../gateways/00-index.html" title="next chapter">Gateways</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/chapters/service-manifests/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Pelagicore AB.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/chapters/service-manifests/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
