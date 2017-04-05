@@ -37,7 +37,6 @@ macro(add_gateway_test GATEWAY_FLAG FILENAME)
     endif()
 endmacro()
 
-add_gateway_test(ENABLE_CGROUPSGATEWAY cgroupsgateway_componenttest.cpp)
 add_gateway_test(ENABLE_DBUSGATEWAY dbusgateway_componenttest.cpp)
 add_gateway_test(ENABLE_FILEGATEWAY filegateway_componenttest.cpp)
 add_gateway_test(ENABLE_NETWORKGATEWAY netlink_componenttest.cpp)
