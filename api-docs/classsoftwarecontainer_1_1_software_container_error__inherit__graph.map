@@ -12,7 +12,7 @@
 <area shape="rect" id="node26" href="$classsoftwarecontainer_1_1_network_gateway_error.html" title="softwarecontainer::\lNetworkGatewayError" alt="" coords="385,1181,535,1223"/>
 <area shape="rect" id="node28" href="$classsoftwarecontainer_1_1_software_container_agent_error.html" title="An error occured in SoftwareContainerAgent. " alt="" coords="364,1247,556,1288"/>
 <area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_bad_suffix_error.html" title="softwarecontainer::\lBadSuffixError" alt="" coords="627,5,760,47"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_hex_format_error.html" title="softwarecontainer::\lHexFormatError" alt="" coords="627,71,760,112"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_invalid_input_error.html" title="softwarecontainer::\lInvalidInputError" alt="" coords="627,71,760,112"/>
 <area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_j_son_error.html" title="softwarecontainer::\lJSonError" alt="" coords="627,136,760,177"/>
 <area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_limit_range_error.html" title="softwarecontainer::\lLimitRangeError" alt="" coords="627,201,760,243"/>
 <area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_config_dependency_error.html" title="softwarecontainer::\lConfigDependencyError" alt="" coords="613,267,774,308"/>

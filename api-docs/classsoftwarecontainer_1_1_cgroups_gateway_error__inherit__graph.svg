@@ -31,10 +31,10 @@
 </g>
 <!-- Node5 -->
 <g id="node5" class="node"><title>Node5</title>
-<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_hex_format_error.html" target="_top" xlink:title="softwarecontainer::\lHexFormatError">
+<g id="a_node5"><a xlink:href="classsoftwarecontainer_1_1_invalid_input_error.html" target="_top" xlink:title="softwarecontainer::\lInvalidInputError">
 <polygon fill="white" stroke="black" points="418,-98.5 418,-128.5 518,-128.5 518,-98.5 418,-98.5"/>
 <text text-anchor="start" x="426" y="-116.5" font-family="Helvetica,sans-Serif" font-size="10.00">softwarecontainer::</text>
-<text text-anchor="middle" x="468" y="-105.5" font-family="Helvetica,sans-Serif" font-size="10.00">HexFormatError</text>
+<text text-anchor="middle" x="468" y="-105.5" font-family="Helvetica,sans-Serif" font-size="10.00">InvalidInputError</text>
 </a>
 </g>
 </g>
