@@ -61,7 +61,12 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
     m_config(std::move(config)),
     m_previouslyConfigured(false)
 {
-    checkWorkspace();
+    m_containerRoot = buildPath(m_config->sharedMountsDir(), "SC-" + std::to_string(id));
+    checkContainerRoot(m_containerRoot);
+    if (m_config->enableWriteBuffer()) {
+        tmpfsMount(m_containerRoot, 100485760);
+    }
+
 #ifdef ENABLE_NETWORKGATEWAY
     checkNetworkSettings();
 #endif // ENABLE_NETWORKGATEWAY
@@ -69,9 +74,11 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
     m_container = std::shared_ptr<ContainerAbstractInterface>(
         new Container("SC-" + std::to_string(id),
                       m_config->containerConfigPath(),
-                      m_config->sharedMountsDir(),
+                      m_containerRoot,
                       m_config->enableWriteBuffer(),
                       m_config->containerShutdownTimeout()));
+
+
 
     if(!init()) {
         throw SoftwareContainerError("Could not initialize SoftwareContainer, container ID: "
@@ -435,9 +442,8 @@ bool SoftwareContainer::previouslyConfigured()
     return m_previouslyConfigured;
 }
 
-void SoftwareContainer::checkWorkspace()
+void SoftwareContainer::checkContainerRoot(std::string rootDir)
 {
-    const std::string rootDir = m_config->sharedMountsDir();
     if (!isDirectory(rootDir)) {
         log_debug() << "Container root " << rootDir << " does not exist, trying to create";
         std::unique_ptr<CreateDir> createDirInstance = std::unique_ptr<CreateDir>(new CreateDir());
@@ -448,6 +454,9 @@ void SoftwareContainer::checkWorkspace()
         }
 
         m_createDirList.push_back(std::move(createDirInstance));
+    }
+    if (!isDirectoryEmpty(rootDir)) {
+        log_warning() << "Container Root " << rootDir << " is not empty.";
     }
 }
 

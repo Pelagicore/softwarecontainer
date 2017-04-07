@@ -46,6 +46,14 @@ public:
                    bool readOnly,
                    bool enableWriteBuffer=false);
 
+    /**
+     * @brief tmpfsMount Mount a tmpfs in the dst path and limit size of the
+     *  tmpfs to maxSize
+     * @param dst The destination to mount a tmpfs on
+     * @param maxSize The max size of the tmpfs being mounted
+     * @return
+     */
+    bool tmpfsMount(const std::string dst, const int maxSize);
 
 protected:
     /*
