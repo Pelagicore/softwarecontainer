@@ -83,7 +83,7 @@ void ContainerUtilityInterface::checkWorkspace()
     const std::string rootDir = m_config->getStringValue("SoftwareContainer", "shared-mounts-dir");
     if (!isDirectory(rootDir)) {
         log_debug() << "Container root " << rootDir << " does not exist, trying to create";
-        std::unique_ptr<CreateDir> createDirInstance{new CreateDir()};
+        std::unique_ptr<CreateDir> createDirInstance(new CreateDir());
         if(!createDirInstance->createDirectory(rootDir)) {
             std::string message = "Failed to create container root directory";
             log_error() << message;
