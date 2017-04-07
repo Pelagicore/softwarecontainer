@@ -190,9 +190,9 @@ bool Container::create()
     m_rootFSPath = buildPath(s_LXCRoot, containerID, "rootfs");
 
     if (m_enableWriteBuffer) {
-        const std::string rootFSPathLower = m_containerRoot + m_id + "/rootfs-lower";
-        const std::string rootFSPathUpper = m_containerRoot + m_id + "/rootfs-upper";
-        const std::string rootFSPathWork  = m_containerRoot + m_id + "/rootfs-work";
+        const std::string rootFSPathLower = m_containerRoot + "/rootfs-lower";
+        const std::string rootFSPathUpper = m_containerRoot + "/rootfs-upper";
+        const std::string rootFSPathWork  = m_containerRoot + "/rootfs-work";
 
         overlayMount(rootFSPathLower, rootFSPathUpper, rootFSPathWork, m_rootFSPath);
         log_debug() << "Write buffer enabled, lowerdir=" << rootFSPathLower
@@ -663,7 +663,7 @@ bool Container::bindMountCore(const std::string &pathInHost,
     // Bind mount to /gateways
     if (!bindMount(pathInHost,
                    tempDirInContainerOnHost,
-                   m_containerRoot + m_id,
+                   m_containerRoot,
                    readonly,
                    m_enableWriteBuffer)) {
         log_error() << "Could not bind mount " << pathInHost << " to " << tempDirInContainerOnHost;
@@ -872,7 +872,7 @@ std::string Container::gatewaysDirInContainer() const
 
 std::string Container::gatewaysDir() const
 {
-    return buildPath(m_containerRoot, id(), GATEWAYS_PATH);
+    return buildPath(m_containerRoot, GATEWAYS_PATH);
 }
 
 } // namespace softwarecontainer

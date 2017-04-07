@@ -21,6 +21,7 @@ import os
 import time
 import platform
 import socket
+import psutil
 
 from testframework import Container
 
@@ -199,6 +200,59 @@ class TestFileSystem(object):
             ca.terminate()
 
         server.close()
+
+        if os.path.exists(absoluteTestFile):
+            os.remove(absoluteTestFile)
+
+    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
+    @pytest.mark.parametrize("flag", [True, False])
+    def test_tmpfs_writebuffer_size(self, flag):
+        """ The SoftwareContainer will create a tmpfs in the location of the
+        containers temporary directory location if the write buffer is enabled.
+        Test that the tmpfs mounted in the containers temporary directory
+        structure works as expected.
+
+        Note: The filesystem is hard coded to 100MB at the time this test was
+        written, but will be configurable via the DATA field in a short while
+        """
+
+        absoluteTestFile = os.path.join("/tmp/container/SC-0/rootfs-upper", TESTFILE)
+
+        ca = Container()
+
+        if flag is True:
+            DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+        else:
+            DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+
+        try:
+            ca.start(DATA)
+
+            if flag is True:
+                partitions = psutil.disk_partitions(all=True)
+                interesting_partition = False
+                for part in partitions:
+                    if part.mountpoint == '/tmp/container/SC-0':
+                        interesting_partition = part
+                        break
+                assert interesting_partition is not False
+
+                with open(absoluteTestFile, "w") as f:
+                    f.write("w" * 95 * 1024 *1024)
+                assert os.path.getsize(absoluteTestFile) >= 94 * 1024 * 1024
+                assert os.path.getsize(absoluteTestFile) <= 96 * 1024 * 1024
+
+                with open(absoluteTestFile, "w") as f:
+                    with pytest.raises(IOError):
+                        f.write("w" * 105 * 1024 *1024)
+            else:
+                absoluteTestFile = os.path.join("/usr/var/lib/lxc/SC-0/rootfs", TESTFILE)
+                with open(absoluteTestFile, "w") as f:
+                    f.write("w" * 105 * 1024 * 1024)
+
+
+        finally:
+            ca.terminate()
 
         if os.path.exists(absoluteTestFile):
             os.remove(absoluteTestFile)

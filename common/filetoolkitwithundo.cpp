@@ -174,6 +174,35 @@ bool FileToolkitWithUndo::syncOverlayMount(const std::string &lower,
     return RecursiveCopy::getInstance().copy(upper, lower);
 }
 
+bool FileToolkitWithUndo::tmpfsMount(const std::string dst, const int maxSize)
+{
+    std::string fstype = "tmpfs";
+    unsigned long flags = 0;
+    std::unique_ptr<CreateDir> createDirInstance = std::unique_ptr<CreateDir>(new CreateDir());
+
+    if (!createDirInstance->createDirectory(dst)) {
+        log_error() << "Failed to create " << dst << " directory for tmpfs mount";
+        return false;
+    }
+
+    std::string mountoptions = logging::StringBuilder() << "size=" << maxSize;
+
+    bool directoryIsEmpty = isDirectoryEmpty(dst);
+
+    int mountRes = mount("tmpfs", dst.c_str(), fstype.c_str(), flags, mountoptions.c_str());
+
+    if (0 == mountRes) {
+        log_verbose() << "tmpfs mounted in " << dst;
+        m_cleanupHandlers.emplace_back(new MountCleanUpHandler(dst));
+    } else {
+        log_error() << "Could not mount tmpfs into directory: " << dst << " size=" << maxSize;
+        return false;
+    }
+
+    m_createDirList.push_back(std::move(createDirInstance));
+    return true;
+}
+
 bool FileToolkitWithUndo::createSharedMountPoint(const std::string &path)
 {
     auto mountRes = mount(path.c_str(), path.c_str(), "", MS_BIND, nullptr);
