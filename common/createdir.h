@@ -17,6 +17,8 @@
  * For further information see LICENSE
  */
 
+#pragma once
+
 #include "directorycleanuphandler.h"
 
 namespace softwarecontainer {
