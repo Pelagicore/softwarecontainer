@@ -19,9 +19,17 @@
 
 #include "containerutilityinterface.h"
 
+#include "softwarecontainer-common.h"
+#include "createdir.h"
+
+
 #include <lxc/lxccontainer.h>
 
 namespace softwarecontainer {
+ContainerUtilityInterface::ContainerUtilityInterface(std::shared_ptr<Config> config)
+    : m_config(std::move(config))
+{
+}
 
 void ContainerUtilityInterface::removeOldContainers()
 {
@@ -69,5 +77,22 @@ void ContainerUtilityInterface::removeOldContainers()
     delete containerList;
     delete containerNames;
 }
+
+void ContainerUtilityInterface::checkWorkspace()
+{
+    const std::string rootDir = m_config->getStringValue("SoftwareContainer", "shared-mounts-dir");
+    if (!isDirectory(rootDir)) {
+        log_debug() << "Container root " << rootDir << " does not exist, trying to create";
+        std::unique_ptr<CreateDir> createDirInstance{new CreateDir()};
+        if(!createDirInstance->createDirectory(rootDir)) {
+            std::string message = "Failed to create container root directory";
+            log_error() << message;
+            throw SoftwareContainerError(message);
+        }
+
+        m_createDirList.push_back(std::move(createDirInstance));
+    }
+}
+
 
 } //namespace

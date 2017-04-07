@@ -81,6 +81,7 @@ SoftwareContainerAgent::SoftwareContainerAgent(Glib::RefPtr<Glib::MainContext> m
     m_defaultConfigStore  = std::make_shared<DefaultConfigStore>(std::move(defaultLoader));
 
     m_containerUtility->removeOldContainers();
+    m_containerUtility->checkWorkspace();
 
     m_containerConfig = SoftwareContainerConfig(
 #ifdef ENABLE_NETWORKGATEWAY

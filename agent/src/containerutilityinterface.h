@@ -25,6 +25,10 @@
 
 #include "softwarecontainer-log.h"
 #include "softwarecontainererror.h"
+#include "config/config.h"
+#include "filetoolkitwithundo.h"
+
+#include <memory>
 
 namespace softwarecontainer {
 
@@ -61,15 +65,24 @@ protected:
  * This class contains utility functions
  */
 
-class ContainerUtilityInterface {
+class ContainerUtilityInterface : private FileToolkitWithUndo
+{
     LOG_DECLARE_CLASS_CONTEXT("CUI", "Container Utility Interface");
 public:
-    virtual ~ContainerUtilityInterface() {}
+    ContainerUtilityInterface(std::shared_ptr<Config> config);
+    ~ContainerUtilityInterface() {}
 
     /**
      * @brief This method cleans unused old containers before agent starts up
      */
-    virtual void removeOldContainers(void);
+    void removeOldContainers(void);
+    /**
+     * @brief Check that the workspace exists.
+     */
+    void checkWorkspace(void);
+
+private:
+    std::shared_ptr<Config> m_config;
 };
 
 } //namespace

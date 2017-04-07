@@ -105,7 +105,9 @@ public:
 class MockUtility : public ContainerUtilityInterface
 {
 public:
-
+    MockUtility(std::shared_ptr<Config> config) :
+        ContainerUtilityInterface(config)
+    {}
     MOCK_METHOD0(removeOldContainers, void());
 };
 
@@ -152,7 +154,7 @@ public:
         Glib::RefPtr<Glib::MainContext> mainContext = Glib::MainContext::get_default();
         testContainerInterface = std::shared_ptr<::testing::NiceMock<TestContainerInterface>> (new ::testing::NiceMock<TestContainerInterface>());
         factory = std::shared_ptr<SoftwareContainerFactory> (new TestFactory(testContainerInterface));
-        containerUtility = std::shared_ptr<::testing::NiceMock<MockUtility>> (new ::testing::NiceMock<MockUtility>());
+        containerUtility = std::shared_ptr<::testing::NiceMock<MockUtility>> (new ::testing::NiceMock<MockUtility>(config));
 
         sca = std::unique_ptr<SoftwareContainerAgent> (new SoftwareContainerAgent(mainContext, config, factory, containerUtility));
 
