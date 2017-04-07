@@ -62,9 +62,10 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
     m_previouslyConfigured(false)
 {
     m_containerRoot = buildPath(m_config->sharedMountsDir(), "SC-" + std::to_string(id));
+    m_tmpfsSize = 100485760;
     checkContainerRoot(m_containerRoot);
     if (m_config->enableWriteBuffer()) {
-        tmpfsMount(m_containerRoot, 100485760);
+        tmpfsMount(m_containerRoot, m_tmpfsSize);
     }
 
 #ifdef ENABLE_NETWORKGATEWAY

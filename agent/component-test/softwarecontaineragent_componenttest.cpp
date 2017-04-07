@@ -104,8 +104,8 @@ public:
                                                                   ConfigDependencies());
 
         try {
-            auto factory = std::make_shared<SoftwareContainerFactory> ();
-            auto utility = std::make_shared<ContainerUtilityInterface> (config);
+            auto factory = std::make_shared<SoftwareContainerFactory>();
+            auto utility = std::make_shared<ContainerUtilityInterface>(config);
             sca = std::make_shared<SoftwareContainerAgent>(m_context, config, factory, utility);
         }  catch(SoftwareContainerError &err) {
             log_error() << "Exception in software agent constructor";

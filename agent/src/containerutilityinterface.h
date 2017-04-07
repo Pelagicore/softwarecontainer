@@ -70,7 +70,7 @@ class ContainerUtilityInterface : private FileToolkitWithUndo
     LOG_DECLARE_CLASS_CONTEXT("CUI", "Container Utility Interface");
 public:
     ContainerUtilityInterface(std::shared_ptr<Config> config);
-    ~ContainerUtilityInterface() {}
+    virtual ~ContainerUtilityInterface() {}
 
     /**
      * @brief This method cleans unused old containers before agent starts up

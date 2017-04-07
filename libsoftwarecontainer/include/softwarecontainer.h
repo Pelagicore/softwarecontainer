@@ -347,6 +347,7 @@ private:
     std::unique_ptr<const SoftwareContainerConfig> m_config;
 
     std::string m_containerRoot;
+    unsigned int m_tmpfsSize;
 
     Glib::RefPtr<Glib::MainContext> m_mainLoopContext;
     SignalConnectionsHandler m_connections;
