@@ -41,20 +41,35 @@ CLIENT_MESSAGE_SIZE = 256
 
 
 class Service(dbus.service.Object):
-    def __init__(self, bus):
+
+    def __init__(self, bus, outdir):
+        self.__outdir = outdir
         self.__bus = bus
         name = dbus.service.BusName(BUS_NAME, bus=self.__bus)
         self.requests = 0
         dbus.service.Object.__init__(self, name, OPATH)
+        # Create file so tests can assume there is something there even
+        # if it's supposed to be empty
+        with open(self.__outdir + "/service_output", "w") as fh:
+            fh.write("")
 
     @dbus.service.method(IFACE, in_signature="s", out_signature="s")
     def Bounce(self, message):
         self.requests += 1
         return message
 
+    @dbus.service.method(IFACE, in_signature="s", out_signature="s")
+    def Ping(self, message):
+        print "Got a Ping: ", message
+        with open(self.__outdir + "/service_output", "w") as fh:
+            fh.write(message)
+        return message
+
 
 class Server(threading.Thread):
-    def __init__(self):
+
+    def __init__(self, outdir):
+        self.__outdir = outdir
         threading.Thread.__init__(self)
         self.__loop = GObject.MainLoop()
         self.service = None
@@ -62,7 +77,7 @@ class Server(threading.Thread):
     def run(self):
         connection = os.environ.get("DBUS_SESSION_BUS_ADDRESS")
         bus = dbus.bus.BusConnection(connection)
-        self.service = Service(bus)
+        self.service = Service(bus, self.__outdir)
         self.__loop.run()
 
     def wait_until_requests(self, multiplier=1, timeout=1):
@@ -96,20 +111,30 @@ class Client():
         self.bus = pydbus.SessionBus()
         self.good_resp = 0
         self.message_size = message_size
+        self.method = None
+        self.remote_object = None
 
-    def run(self):
-        self.good_resp = 0
-        alphab = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        inp = reduce(operator.add, [random.choice(alphab) for x in range(0, self.message_size - 37)])
-        remote_object = self.bus.get(BUS_NAME, OPATH)
+    def run(self, method=None):
+        self.method = method
+        self.remote_object = self.bus.get(BUS_NAME, OPATH)
+        if self.method == "Ping":
+            self.call_ping()
+        else:
+            self.good_resp = 0
+            alphab = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            inp = reduce(operator.add, [random.choice(alphab) for x in range(0, self.message_size - 37)])
 
-        for _ in range(0, NR_OF_REQUESTS):
-            ans = remote_object.Bounce(inp)
-            if inp == ans:
-                self.good_resp += 1
+            for _ in range(0, NR_OF_REQUESTS):
+                ans = self.remote_object.Bounce(inp)
+                if inp == ans:
+                    self.good_resp += 1
 
     def check_all_good_resp(self):
         return self.good_resp == NR_OF_REQUESTS
+
+    def call_ping(self):
+        print "Will call Ping"
+        self.remote_object.Ping("Hello")
 
 
 if __name__ == '__main__':
@@ -118,11 +143,17 @@ if __name__ == '__main__':
                         help='Run the dbusapp as "server" or "client"')
     parser.add_argument('--size', type=int, default=CLIENT_MESSAGE_SIZE,
                         help='Size of the messages sent by client')
+    parser.add_argument('--method', type=str, default=None,
+                        help='Method to call on service')
+    parser.add_argument('--outdir', type=str, default="testoutput/",
+                        help='Directory where to put output from service')
 
     args = parser.parse_args()
     if args.mode == "server":
-        r = Server()
+        r = Server(args.outdir)
         r.start()
     elif args.mode == "client":
+        print "Using mode 'client'"
+        print "method: ", args.method
         c = Client()
-        c.run()
+        c.run(method=args.method)

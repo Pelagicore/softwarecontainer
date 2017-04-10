@@ -107,7 +107,7 @@ private:
     pid_t m_pid = INVALID_PID;
 
     // STDIN for dbus-proxy instance
-    int m_infp = INVALID_FD;
+    int m_proxyStdin = INVALID_FD;
 
     virtual bool startDBusProxy(const std::vector<std::string> &commandVec, const std::vector<std::string> &envVec);
 
