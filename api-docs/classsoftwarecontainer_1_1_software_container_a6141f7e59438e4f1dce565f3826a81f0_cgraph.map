@@ -1,0 +1,4 @@
+<map id="softwarecontainer::SoftwareContainer::SoftwareContainer" name="softwarecontainer::SoftwareContainer::SoftwareContainer">
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a23627ceb25a3727f6288b2d1132c027c" title="tmpfsMount Mount a tmpfs in the dst path and limit size of the tmpfs to maxSize " alt="" coords="244,5,384,61"/>
+<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#acaa3372166baaae42d0d55577b99308e" title="isDirectoryEmpty Check if path is empty " alt="" coords="432,13,565,54"/>
+</map>

@@ -28,7 +28,6 @@ var hierarchy =
     ] ],
     [ "softwarecontainer::ConfigTypes", "classsoftwarecontainer_1_1_config_types.html", null ],
     [ "softwarecontainer::ContainerOptionParser", "classsoftwarecontainer_1_1_container_option_parser.html", null ],
-    [ "softwarecontainer::ContainerUtilityInterface", "classsoftwarecontainer_1_1_container_utility_interface.html", null ],
     [ "softwarecontainer::CreateDir", "classsoftwarecontainer_1_1_create_dir.html", null ],
     [ "softwarecontainer::DBusGatewayParser", "classsoftwarecontainer_1_1_d_bus_gateway_parser.html", null ],
     [ "softwarecontainer::Device", "classsoftwarecontainer_1_1_device.html", null ],
@@ -80,6 +79,7 @@ var hierarchy =
     [ "softwarecontainer::FileGatewayParser::FileSetting", "structsoftwarecontainer_1_1_file_gateway_parser_1_1_file_setting.html", null ],
     [ "softwarecontainer::FileToolkitWithUndo", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html", [
       [ "softwarecontainer::Container", "classsoftwarecontainer_1_1_container.html", null ],
+      [ "softwarecontainer::ContainerUtilityInterface", "classsoftwarecontainer_1_1_container_utility_interface.html", null ],
       [ "softwarecontainer::DeviceNodeGateway", "classsoftwarecontainer_1_1_device_node_gateway.html", null ],
       [ "softwarecontainer::SoftwareContainer", "classsoftwarecontainer_1_1_software_container.html", null ]
     ] ],

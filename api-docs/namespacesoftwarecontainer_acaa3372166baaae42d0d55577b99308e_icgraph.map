@@ -1,6 +1,9 @@
 <map id="softwarecontainer::isDirectoryEmpty" name="softwarecontainer::isDirectoryEmpty">
-<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_service_manifest_file_loader.html#a3e97e320f32a9767ca5a94426e5f520e" title="Loads the json content from the Service Manifest(s) " alt="" coords="189,5,365,61"/>
-<area shape="rect" id="node3" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="187,85,368,126"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="416,85,579,126"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="627,85,840,126"/>
+<area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_service_manifest_file_loader.html#a3e97e320f32a9767ca5a94426e5f520e" title="Loads the json content from the Service Manifest(s) " alt="" coords="197,5,373,61"/>
+<area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184" title="Indicates if gateways have been configured previously. " alt="" coords="187,85,384,141"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a23627ceb25a3727f6288b2d1132c027c" title="tmpfsMount Mount a tmpfs in the dst path and limit size of the tmpfs to maxSize " alt="" coords="215,165,355,221"/>
+<area shape="rect" id="node6" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="195,245,376,286"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_software_container.html#a6141f7e59438e4f1dce565f3826a81f0" title="Creates a new SoftwareContainer instance. " alt="" coords="432,165,623,221"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="446,245,609,286"/>
+<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="671,245,884,286"/>
 </map>

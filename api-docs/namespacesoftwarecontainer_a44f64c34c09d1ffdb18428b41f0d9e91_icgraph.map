@@ -1,9 +1,10 @@
 <map id="softwarecontainer::isDirectory" name="softwarecontainer::isDirectory">
 <area shape="rect" id="node2" href="$classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a97fda85bea6f756d0620927c920ce83b" title="bindMount Bind mount a src directory to another position dst. " alt="" coords="443,5,583,61"/>
 <area shape="rect" id="node3" href="$classsoftwarecontainer_1_1_container.html#ae5445d6a0c4b8b006ed38b3c01bb870c" title="Tries to bind mount a path from host to container. " alt="" coords="643,78,856,119"/>
-<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_create_dir.html#a5450e7097f1e4e1b88c3b55ab0ccae49" title="createDirectory creates a directory according to given path. " alt="" coords="198,137,373,178"/>
-<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_service_manifest_file_loader.html#a3e97e320f32a9767ca5a94426e5f520e" title="Loads the json content from the Service Manifest(s) " alt="" coords="197,201,373,257"/>
-<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184" title="Indicates if gateways have been configured previously. " alt="" coords="187,281,384,337"/>
-<area shape="rect" id="node7" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="195,361,376,402"/>
-<area shape="rect" id="node8" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="432,249,595,290"/>
+<area shape="rect" id="node4" href="$classsoftwarecontainer_1_1_container_utility_interface.html#a8498bf9774749f72a4a649f098fc64ec" title="Check that the workspace exists. " alt="" coords="204,136,367,192"/>
+<area shape="rect" id="node5" href="$classsoftwarecontainer_1_1_create_dir.html#a5450e7097f1e4e1b88c3b55ab0ccae49" title="createDirectory creates a directory according to given path. " alt="" coords="198,215,373,257"/>
+<area shape="rect" id="node6" href="$classsoftwarecontainer_1_1_service_manifest_file_loader.html#a3e97e320f32a9767ca5a94426e5f520e" title="Loads the json content from the Service Manifest(s) " alt="" coords="197,280,373,336"/>
+<area shape="rect" id="node7" href="$classsoftwarecontainer_1_1_software_container.html#aa699253aa7955f9d41c78324d5f49184" title="Indicates if gateways have been configured previously. " alt="" coords="187,360,384,416"/>
+<area shape="rect" id="node8" href="$namespacesoftwarecontainer.html#aee26a680bb2961627889d39c9f874b2c" title="waitForProcessTermination Waits for a process to terminate and then returns the status of the process..." alt="" coords="195,439,376,481"/>
+<area shape="rect" id="node9" href="$classsoftwarecontainer_1_1_container.html#a480d9a7d3a2c0ee9d1756a2bdfc29f59" title="synchronous version of execute " alt="" coords="432,287,595,329"/>
 </map>

@@ -2,6 +2,7 @@ var classsoftwarecontainer_1_1_file_toolkit_with_undo =
 [
     [ "~FileToolkitWithUndo", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a4cdc6cdc259ac82a9225cd968cff2396", null ],
     [ "bindMount", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a97fda85bea6f756d0620927c920ce83b", null ],
+    [ "tmpfsMount", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a23627ceb25a3727f6288b2d1132c027c", null ],
     [ "writeToFile", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ac31487a18f405c40a587b02d1aa96016", null ],
     [ "markFileForDeletion", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html#ac7252747de3ba727e34bc4211733f90a", null ],
     [ "overlayMount", "classsoftwarecontainer_1_1_file_toolkit_with_undo.html#a14711e649249d7f0b7e264c7d426ea23", null ],

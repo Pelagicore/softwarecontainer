@@ -19,6 +19,7 @@ var classsoftwarecontainer_1_1_device_node_gateway =
     [ "getContainer", "classsoftwarecontainer_1_1_device_node_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_device_node_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b", null ],
     [ "bindMount", "classsoftwarecontainer_1_1_device_node_gateway.html#a97fda85bea6f756d0620927c920ce83b", null ],
+    [ "tmpfsMount", "classsoftwarecontainer_1_1_device_node_gateway.html#a23627ceb25a3727f6288b2d1132c027c", null ],
     [ "writeToFile", "classsoftwarecontainer_1_1_device_node_gateway.html#ac31487a18f405c40a587b02d1aa96016", null ],
     [ "markFileForDeletion", "classsoftwarecontainer_1_1_device_node_gateway.html#ac7252747de3ba727e34bc4211733f90a", null ],
     [ "overlayMount", "classsoftwarecontainer_1_1_device_node_gateway.html#a14711e649249d7f0b7e264c7d426ea23", null ],
