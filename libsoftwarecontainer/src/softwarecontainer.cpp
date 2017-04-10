@@ -65,6 +65,9 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
     m_tmpfsSize = 100485760;
     checkContainerRoot(m_containerRoot);
     if (m_config->enableWriteBuffer()) {
+        if (m_config->enableTemporaryFileSystemWriteBuffers()) {
+            m_tmpfsSize = m_config->temporaryFileSystemSize();
+        }
         tmpfsMount(m_containerRoot, m_tmpfsSize);
     }
 

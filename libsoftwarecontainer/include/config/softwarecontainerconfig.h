@@ -62,6 +62,8 @@ public:
      * Setters for the values that are not part of the static configs
      */
     void setEnableWriteBuffer(bool enabledFlag);
+    void setEnableTemporaryFileSystemWriteBuffers(bool enabled);
+    void setTemporaryFileSystemSize(unsigned int size);
 
     /*
      * Getters for values that are set on creation only, i.e. these originate from the
@@ -85,6 +87,8 @@ public:
      * set after creation of this class, i.e. these can be set with setters
      */
     bool enableWriteBuffer() const;
+    bool enableTemporaryFileSystemWriteBuffers() const;
+    unsigned int temporaryFileSystemSize() const;
 
 private:
 #ifdef ENABLE_NETWORKGATEWAY
@@ -101,6 +105,8 @@ private:
     unsigned int m_containerShutdownTimeout;
 
     bool m_enableWriteBuffer;
+    bool m_enableTemporaryFileSystemWriteBuffers;
+    unsigned int m_temporaryFileSystemSize;
 };
 
 } // namespace softwarecontainer

@@ -136,3 +136,36 @@ changes performed during its runtime to be merged into the lower layers.
 .. Note:: Non-directory types of files can not be mounted using overlayfs.
           These will automatically fall back on using the default behavior of 
           bind mounting the files into the filesystem of the container.
+
+Temporary Filesystem
+====================
+
+The write buffers can be configured to use a separate temporary filesystem
+(``tmpfs``) which can be limited in size. The ``tmpfs`` is mounted on top of
+the containers temporary directory as soon as it's created and will remain
+there until the container is destroyed. All ``overlayfs`` mounts and temporary
+directories should be created inside this ``tmpfs`` mount.
+
+The ``size`` of the ``tmpfs`` can also be limited using an extra configuration
+option in the ``Create`` DBus call to the ``SoftwareContainerAgent``.
+An example configuration would look like this::
+
+    [{
+        "enableWriteBuffer": true,
+        "enableTemporaryFileSystemWriteBuffer": true,
+        "temporaryFileSystemSize": 10485760
+    }]
+
+The ``enableTemporaryFileSystemWriteBuffer`` setting enables the ``tmpfs``
+creation as described above, while the ``temporaryFileSystemSize`` variable
+sets the size of the ``tmpfs`` in bytes.
+
+.. Note:: The ``temporaryFileSystemSize`` parameter will not be parsed unless
+          the ``enableTemporaryFileSystemWriteBuffer`` parameter is ``true``.
+          The ``temporaryFileSystemSize`` is not required if the
+          ``enableTemporaryFileSystemWriteBuffer`` is set to ``false`` or not
+          added at all.
+
+.. Note:: The ``tmpfs`` is shared between the upper and work directories in 
+          ``overlayfs`` being mounted to the ``rootfs`` and all the 
+          directories being bindmounted into a single instance of a container.

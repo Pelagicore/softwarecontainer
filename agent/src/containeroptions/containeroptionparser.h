@@ -79,6 +79,8 @@ private:
     void readConfigElement(const json_t *element);
 
     std::unique_ptr<DynamicContainerOptions> m_options;
+
+    static constexpr int DEFAULT_TEMPORARY_FILESYSTEM_SIZE = 100 * 1024 * 1024;
 };
 
 } // namespace softwarecontainer

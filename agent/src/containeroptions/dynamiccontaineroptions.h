@@ -44,8 +44,32 @@ public:
     void setEnableWriteBuffer(bool enabled);
     bool enableWriteBuffer() const;
 
+    /**
+     * @brief Setter for the enableTemporaryFileSystemWriteBuffers variable used to tell the container
+     * if it shall mount a separate tmpfs on top of the temp directory
+     */
+    void setEnableTemporaryFileSystemWriteBuffers(bool enabled);
+    /**
+     * @brief Getter for the enableTemporaryFileSystemWriteBuffers variable
+     */
+    bool enableTemporaryFileSystemWriteBuffers() const;
+
+    /**
+     * @brief Setter for the temporaryFileSystemSize which is used to tell the system the size of the
+     * tmpfs being mounted on the temp directory.
+     * @param size in bytes of the filesystem
+     */
+    void setTemporaryFileSystemSize(unsigned int size);
+    /**
+     * @brief Getter for the temporaryFileSystemSize variable.
+     * @return the size
+     */
+    unsigned int temporaryFileSystemSize() const;
+
 private:
     bool m_enableWriteBuffer = false;
+    bool m_enableTemporaryFileSystemWriteBuffers = false;
+    unsigned int m_temporaryFileSystemSize;
 };
 
 } // namespace softwarecontainer
