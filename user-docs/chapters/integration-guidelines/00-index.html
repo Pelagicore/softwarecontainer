@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-ece2952 2017-04-06 documentation</title>
+    <title>Integration guidelines &#8212; softwarecontainer 0.18.0-120841b 2017-04-10 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-ece2952 2017-04-06',
+        VERSION:     '0.18.0-120841b 2017-04-10',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,18 +45,19 @@
             
   <div class="section" id="integration-guidelines">
 <span id="id1"></span><h1>Integration guidelines<a class="headerlink" href="#integration-guidelines" title="Permalink to this headline">¶</a></h1>
-<p>This chapter describes the workflow, major tasks and concepts involved in integrating SoftwareContainer
-into a platform. A brief summary of the general steps involved:</p>
+<p>This chapter describes the workflow, major tasks and concepts involved in integrating
+SoftwareContainer into a platform. A brief summary of the general steps involved:</p>
 <ol class="arabic simple">
-<li>Setting up the various IPC mechanisms, that should be reachable from inside containers, on the host system.</li>
+<li>Setting up the various IPC mechanisms, that should be reachable from inside containers, on the
+host system.</li>
 <li>Writing service manifests for capabilities of the platform.</li>
 <li>Integrating a launcher that interact with SoftwareContainer.</li>
 </ol>
-<p>Note that SoftwareContainer as a project is split into multiple sub-components, and while it is possible to
-use e.g. the container library directly, these guidelines assumes the integration point is the complete
-component.</p>
-<p>Below follows information about what SoftwareContainer assumes about the host system when handling different
-IPC mechanisms and examples of configuration and usage.</p>
+<p>Note that SoftwareContainer as a project is split into multiple sub-components, and while it is
+possible to use e.g. the container library directly, these guidelines assumes the integration point
+is the complete component.</p>
+<p>Below follows information about what SoftwareContainer assumes about the host system when handling
+different IPC mechanisms and examples of configuration and usage.</p>
 <div class="section" id="service-manifests">
 <h2>Service manifests<a class="headerlink" href="#service-manifests" title="Permalink to this headline">¶</a></h2>
 <p>For details about format and content of service manifests, see <a class="reference internal" href="../service-manifests/index.html#service-manifests"><span class="std std-ref">Service manifests</span></a>
@@ -652,6 +653,13 @@ The <code class="docutils literal"><span class="pre">.service</span></code> file
 <a class="reference external" href="https://www.freedesktop.org/software/systemd/man/systemd.service.html">freedesktop service unit configuration docs</a>
 with examples.</p>
 </div>
+<div class="section" id="resource-management-in-containers">
+<h2>Resource Management in containers<a class="headerlink" href="#resource-management-in-containers" title="Permalink to this headline">¶</a></h2>
+<p>Resource Management can be configured for containers by using the <code class="docutils literal"><span class="pre">cpu.shares</span></code>
+CGroup setting.
+This results in that the CPU time available to all containers will be distributed according
+to the values specified for each container.</p>
+</div>
 </div>
 
 
@@ -696,6 +704,7 @@ with examples.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#systemd-service">systemd.service</a></li>
+<li><a class="reference internal" href="#resource-management-in-containers">Resource Management in containers</a></li>
 </ul>
 </li>
 </ul>
