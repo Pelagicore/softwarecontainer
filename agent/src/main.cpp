@@ -216,8 +216,8 @@ int main(int argc, char **argv)
         std::shared_ptr<Config> config = std::make_shared<Config>(std::move(configSources),
                                                                   ConfigDefinition::mandatory(),
                                                                   ConfigDependencies());
-        auto factory = std::make_shared<SoftwareContainerFactory> ();
-        auto utility = std::make_shared<ContainerUtilityInterface> (config);
+        auto factory = std::make_shared<SoftwareContainerFactory>();
+        auto utility = std::make_shared<ContainerUtilityInterface>(config);
 
         // Create the actual agent
         ::softwarecontainer::SoftwareContainerAgent agent(mainContext, config, factory, utility);
