@@ -25,6 +25,7 @@ namespace softwarecontainer {
 Gateway::Gateway(const std::string &id,
                  std::shared_ptr<ContainerAbstractInterface> container,
                  bool isDynamic) :
+    m_activatedOnce(false),
     m_id(id),
     m_container(container),
     m_isDynamic(isDynamic),
@@ -100,7 +101,10 @@ bool Gateway::activate() {
 }
 
 bool Gateway::teardown() {
-    if (GatewayState::ACTIVATED != m_state) {
+    /* At this point, a gateway should either be in state ACTIVATED if it is non-dynamic, or
+       if it is dynamic it should have been activated at least once before.
+     */
+    if (GatewayState::ACTIVATED != m_state && !m_activatedOnce) {
         std::string message = "Teardown called on non-activated gateway. Gateway ID:  " + id();
         log_error() << message;
         throw GatewayError(message);
@@ -113,6 +117,11 @@ bool Gateway::teardown() {
 
     // Return to a state of nothingness
     m_state = GatewayState::CREATED;
+
+    /* Since we have been torn down, we should not be considered to have been
+       activated any more. */
+    m_activatedOnce = false;
+
     return true;
 }
 
@@ -129,6 +138,13 @@ bool Gateway::isConfigured()
 
 bool Gateway::isActivated()
 {
+    // For dynamic gateways it's only relevant to know if it has been activated
+    // at least once, the current state is not important
+    if (m_isDynamic) {
+        return m_activatedOnce;
+    }
+
+    // For non-dynamic gateways, the current state is the only relevant info
     return m_state >= GatewayState::ACTIVATED;
 }
 

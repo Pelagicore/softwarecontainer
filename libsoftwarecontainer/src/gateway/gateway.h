@@ -139,6 +139,9 @@ public:
 
     /**
      * @brief Is the gateway activated or not?
+     *
+     * Dynamic gateways will return true if they have been activated at least
+     * once. Non-dynamic gateways will return true if they are in state ACTIVATED
      */
     virtual bool isActivated();
 
@@ -169,10 +172,21 @@ protected:
     virtual bool activateGateway() = 0;
     virtual bool teardownGateway() = 0;
 
+    /*
+     * Dynamic gateways must set this to true the first time they are activated.
+     * This is used by this class to keep track of this, but it should also be expected
+     * that inheriting gateway implementations to use this member to keep
+     * track of this state as well.
+     */
+    bool m_activatedOnce;
+
 private:
     std::string m_id;
     std::shared_ptr<ContainerAbstractInterface> m_container;
+
+    // Dynamic gateways must set this on initialization to enable dynamic behavior
     bool m_isDynamic;
+
     GatewayState m_state;
 
 };

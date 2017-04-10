@@ -213,7 +213,7 @@ bool SoftwareContainer::configureGateways(const GatewayConfiguration &gwConfig)
 
         json_t *config = gwConfig.config(gatewayId);
         if (config != nullptr) {
-            log_debug() << "Configuring gateway: " << gatewayId;
+            log_debug() << "Configuring gateway: \"" << gatewayId << "\"";
             log_debug() << json_dumps(config, JSON_INDENT(4));
             try {
                 if (!gateway->setConfig(config)) {
@@ -243,6 +243,8 @@ bool SoftwareContainer::activateGateways()
 
         try {
             if (gateway->isConfigured()) {
+                log_debug() << "Activating gateway: \"" << gatewayId << "\"";
+
                 if (!gateway->activate()) {
                     log_error() << "Failed to activate gateway \"" << gatewayId << "\"";
                     return false;
@@ -349,6 +351,7 @@ bool SoftwareContainer::shutdownGateways()
     bool status = true;
     for (auto &gateway : m_gateways) {
         if (gateway->isActivated()) {
+            log_debug() << "Tearing down gateway: \"" << gateway->id() << "\"";
             if (!gateway->teardown()) {
                 log_warning() << "Could not tear down gateway cleanly: " << gateway->id();
                 status = false;
