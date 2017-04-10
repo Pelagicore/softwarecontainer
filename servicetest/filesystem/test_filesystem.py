@@ -49,7 +49,8 @@ DATA = {
 }
 
 
-@pytest.mark.usefixtures("create_testoutput_dir", "dbus_launch", "agent", "assert_no_proxy")
+@pytest.mark.usefixtures("create_testoutput_dir", "dbus_launch", "agent",
+                         "assert_no_proxy")
 class TestFileSystem(object):
     """ This suite should do some basic testing of the Filesystem within the
         containers and that the whole chain is working properly.
@@ -58,18 +59,18 @@ class TestFileSystem(object):
     @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
     @pytest.mark.parametrize("flag", [True, False])
     def test_write_buffer_flag(self, flag):
-        """
-        Test if the write buffer flag works as expected, if the flag is enabled
-        files should not be written directly to the underlying file system. If
-        it is disabled, files should be written directly to the file system
+        """ Test if the write buffer flag works as expected, if the flag is
+            enabled files should not be written directly to the underlying
+            file system. If it is disabled, files should be written directly
+            to the file system
 
-        :TODO: If the system doesn't have overlayfs and enableWriteBuffer is
-        enabled, this test will work anyways since we fail to mount the fs
-        containing fileapp.py, hence failing to create lala.txt, and hence the
-        file isn't available after running the create process.
+            :TODO: If the system doesn't have overlayfs and enableWriteBuffer
+            is enabled, this test will work anyways since we fail to mount the
+            fs containing fileapp.py, hence failing to create lala.txt, and
+            hence the file isn't available after running the create process.
 
-        A way of getting process exit value from the container would be
-        very nice.
+            A way of getting process exit value from the container would be
+            very nice.
         """
         absoluteTestFile = os.path.join(CURRENT_DIR, TESTFILE)
 
@@ -205,52 +206,76 @@ class TestFileSystem(object):
             os.remove(absoluteTestFile)
 
     @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
-    @pytest.mark.parametrize("flag", [True, False])
-    def test_tmpfs_writebuffer_size(self, flag):
+    def test_tmpfs_writebuffer_size_enabled(self):
         """ The SoftwareContainer will create a tmpfs in the location of the
-        containers temporary directory location if the write buffer is enabled.
-        Test that the tmpfs mounted in the containers temporary directory
-        structure works as expected.
+            containers temporary directory location if the write buffer is
+            enabled. Test that the tmpfs mounted in the containers temporary
+            directory structure works as expected.
 
-        Note: The filesystem is hard coded to 100MB at the time this test was
-        written, but will be configurable via the DATA field in a short while
+            Note: The filesystem is hard coded to 100MB at the time this test
+            was written, but will be configurable via the DATA field in a
+            short while.
         """
 
-        absoluteTestFile = os.path.join("/tmp/container/SC-0/rootfs-upper", TESTFILE)
+        absoluteTestFile = os.path.join("/tmp/container/SC-0/rootfs-upper",
+                                        TESTFILE)
 
         ca = Container()
 
-        if flag is True:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
-        else:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
 
         try:
             ca.start(DATA)
 
-            if flag is True:
-                partitions = psutil.disk_partitions(all=True)
-                interesting_partition = False
-                for part in partitions:
-                    if part.mountpoint == '/tmp/container/SC-0':
-                        interesting_partition = part
-                        break
-                assert interesting_partition is not False
+            partitions = psutil.disk_partitions(all=True)
+            interesting_partition = False
+            for part in partitions:
+                if part.mountpoint == '/tmp/container/SC-0':
+                    interesting_partition = part
+                    break
+            assert interesting_partition is not False
 
-                with open(absoluteTestFile, "w") as f:
-                    f.write("w" * 95 * 1024 *1024)
-                assert os.path.getsize(absoluteTestFile) >= 94 * 1024 * 1024
-                assert os.path.getsize(absoluteTestFile) <= 96 * 1024 * 1024
+            with open(absoluteTestFile, "w") as f:
+                f.write("w" * 95 * 1024 * 1024)
 
-                with open(absoluteTestFile, "w") as f:
-                    with pytest.raises(IOError):
-                        f.write("w" * 105 * 1024 *1024)
-            else:
-                absoluteTestFile = os.path.join("/usr/var/lib/lxc/SC-0/rootfs", TESTFILE)
-                with open(absoluteTestFile, "w") as f:
+            assert os.path.getsize(absoluteTestFile) >= 94 * 1024 * 1024
+            assert os.path.getsize(absoluteTestFile) <= 96 * 1024 * 1024
+
+            with open(absoluteTestFile, "w") as f:
+                with pytest.raises(IOError):
                     f.write("w" * 105 * 1024 * 1024)
+        finally:
+            ca.terminate()
 
+        if os.path.exists(absoluteTestFile):
+            os.remove(absoluteTestFile)
 
+    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
+    def test_tmpfs_writebuffer_size_disabled(self):
+        """ The SoftwareContainer will create a tmpfs in the location of the
+            containers temporary directory location if the write buffer is
+            enabled. Test that the tmpfs mounted in the containers temporary
+            directory structure works as expected.
+
+            Note: The filesystem is hard coded to 100MB at the time this test
+            was written, but will be configurable via the DATA field in a
+            short while
+        """
+
+        absoluteTestFile = os.path.join("/tmp/container/SC-0/rootfs-upper",
+                                        TESTFILE)
+
+        ca = Container()
+
+        DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+
+        try:
+            ca.start(DATA)
+
+            absoluteTestFile = os.path.join("/usr/var/lib/lxc/SC-0/rootfs",
+                                            TESTFILE)
+            with open(absoluteTestFile, "w") as f:
+                f.write("w" * 105 * 1024 * 1024)
         finally:
             ca.terminate()
 

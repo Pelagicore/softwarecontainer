@@ -79,8 +79,6 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
                       m_config->enableWriteBuffer(),
                       m_config->containerShutdownTimeout()));
 
-
-
     if(!init()) {
         throw SoftwareContainerError("Could not initialize SoftwareContainer, container ID: "
                                      + std::to_string(id));
