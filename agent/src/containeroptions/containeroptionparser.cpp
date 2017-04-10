@@ -23,6 +23,7 @@
 
 namespace softwarecontainer {
 
+
 ContainerOptionParser::ContainerOptionParser() :
     m_options(new DynamicContainerOptions())
 {
@@ -36,14 +37,37 @@ void ContainerOptionParser::readConfigElement(const json_t *element)
         throw ContainerOptionParseError(errorMessage);
     }
 
-    bool wo = false;
-    if(!JSONParser::read(element, "enableWriteBuffer", wo)) {
+    bool enableWriteBuffer = false;
+    if(!JSONParser::read(element, "enableWriteBuffer", enableWriteBuffer)) {
         std::string errorMessage("Could not parse config due to: 'enableWriteBuffer' not found.");
         log_error() << errorMessage;
         throw ContainerOptionParseError(errorMessage);
     }
 
-    m_options->setEnableWriteBuffer(wo);
+    m_options->setEnableWriteBuffer(enableWriteBuffer);
+
+    if (enableWriteBuffer == true) {
+        bool enableTemporaryFilesystemWriteBuffer = false;
+        if(!JSONParser::read(element,
+                             "enableTemporaryFileSystemWriteBuffer",
+                             enableTemporaryFilesystemWriteBuffer))
+        {
+            log_warn() << "Could not parse config due to: 'enableTemporaryFilesystemWriteBuffer' not found.";
+        }
+        m_options->setEnableTemporaryFileSystemWriteBuffers(enableTemporaryFilesystemWriteBuffer);
+
+        if (enableTemporaryFilesystemWriteBuffer) {
+            int temporaryFileSystemSize = DEFAULT_TEMPORARY_FILESYSTEM_SIZE;
+            if(!JSONParser::read(element,
+                                 "temporaryFileSystemSize",
+                                 temporaryFileSystemSize))
+            {
+                log_error() << "Could not parse config due to: 'temporaryFileSystemSize' not found.";
+            }
+            m_options->setTemporaryFileSystemSize(temporaryFileSystemSize);
+        }
+    }
+
 }
 
 std::unique_ptr<DynamicContainerOptions> ContainerOptionParser::parse(const std::string &config)

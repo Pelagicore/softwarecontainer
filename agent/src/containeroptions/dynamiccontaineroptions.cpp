@@ -40,4 +40,24 @@ bool DynamicContainerOptions::enableWriteBuffer() const
     return m_enableWriteBuffer;
 }
 
+void DynamicContainerOptions::setEnableTemporaryFileSystemWriteBuffers(bool enabled)
+{
+    m_enableTemporaryFileSystemWriteBuffers = enabled;
+}
+
+bool DynamicContainerOptions::enableTemporaryFileSystemWriteBuffers() const
+{
+    return m_enableTemporaryFileSystemWriteBuffers;
+}
+
+void DynamicContainerOptions::setTemporaryFileSystemSize(unsigned int size)
+{
+    m_temporaryFileSystemSize = size;
+}
+
+unsigned int DynamicContainerOptions::temporaryFileSystemSize() const
+{
+    return m_temporaryFileSystemSize;
+}
+
 } // namespace softwarecontainer

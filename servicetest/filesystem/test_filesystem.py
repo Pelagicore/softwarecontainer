@@ -22,6 +22,7 @@ import time
 import platform
 import socket
 import psutil
+from dbus.exceptions import DBusException
 
 from testframework import Container
 
@@ -47,6 +48,8 @@ DATA = {
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
 }
+
+TenMB = 10485760
 
 
 @pytest.mark.usefixtures("create_testoutput_dir", "dbus_launch", "agent",
@@ -212,35 +215,43 @@ class TestFileSystem(object):
             enabled. Test that the tmpfs mounted in the containers temporary
             directory structure works as expected.
 
-            Note: The filesystem is hard coded to 100MB at the time this test
-            was written, but will be configurable via the DATA field in a
-            short while.
+            Note: The filesystem is defaults to 100MB, but is be configurable
+            via the DATA field. This tests the default value.
         """
 
-        absoluteTestFile = os.path.join("/tmp/container/SC-0/rootfs-upper",
-                                        TESTFILE)
+        absoluteTestFile = None
 
         ca = Container()
 
         DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
 
         try:
-            ca.start(DATA)
+            id = ca.start(DATA)
+
+            absoluteTestFile = os.path.join("/tmp/container/SC-" + str(id) +
+                                            "/rootfs-upper",
+                                            TESTFILE)
 
             partitions = psutil.disk_partitions(all=True)
             interesting_partition = False
             for part in partitions:
-                if part.mountpoint == '/tmp/container/SC-0':
+                if part.mountpoint == '/tmp/container/SC-' + str(id):
                     interesting_partition = part
                     break
             assert interesting_partition is not False
 
+            # Try to write 95 megabytes, this should be possible since the
+            # default size of the tmpfs is 100 megabyte.
             with open(absoluteTestFile, "w") as f:
                 f.write("w" * 95 * 1024 * 1024)
 
+            # Make sure the file is between 94 and 96 megabyte (exact size
+            # may vary depending on platform, blocksize etc)
             assert os.path.getsize(absoluteTestFile) >= 94 * 1024 * 1024
             assert os.path.getsize(absoluteTestFile) <= 96 * 1024 * 1024
 
+            # Try to write a file that is too large for the filesystem (105
+            # megabytes). This should fail with an IOError.
             with open(absoluteTestFile, "w") as f:
                 with pytest.raises(IOError):
                     f.write("w" * 105 * 1024 * 1024)
@@ -251,29 +262,159 @@ class TestFileSystem(object):
             os.remove(absoluteTestFile)
 
     @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
-    def test_tmpfs_writebuffer_size_disabled(self):
+    def test_tmpfs_writebuffer_size_enabled_10mb(self):
         """ The SoftwareContainer will create a tmpfs in the location of the
             containers temporary directory location if the write buffer is
             enabled. Test that the tmpfs mounted in the containers temporary
             directory structure works as expected.
 
-            Note: The filesystem is hard coded to 100MB at the time this test
-            was written, but will be configurable via the DATA field in a
-            short while
+            This test will create a 10 MB tmpfs which will be tested that it
+            behaves as expected. Files larger than 10MB can not be written and
+            files smaller than 9MB can be written.
         """
 
-        absoluteTestFile = os.path.join("/tmp/container/SC-0/rootfs-upper",
-                                        TESTFILE)
+        absoluteTestFile = None
+
+        ca = Container()
+
+        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true, \
+                                "enableTemporaryFileSystemWriteBuffer": true,\
+                                "temporaryFileSystemSize": ' + str(TenMB) + '}]'
+        try:
+            id = ca.start(DATA)
+            absoluteTestFile = os.path.join("/tmp/container/SC-" + str(id) +
+                                            "/rootfs-upper",
+                                            TESTFILE)
+            partitions = psutil.disk_partitions(all=True)
+            interesting_partition = False
+            for part in partitions:
+                if part.mountpoint == '/tmp/container/SC-' + str(id):
+                    interesting_partition = part
+                    break
+            assert interesting_partition is not False
+
+            # Write a 9 MB file and make sure it is in the right size area (due
+            # to how filesystems works, it may be a bit bigger or smaller so
+            # exact comparison is not possible)
+            with open(absoluteTestFile, "w") as f:
+                f.write("w" * 9 * 1024 * 1024)
+
+            # As mentioned exact comparison is not possible, so approximately
+            # right at least....
+            assert os.path.getsize(absoluteTestFile) >= 8 * 1024 * 1024
+            assert os.path.getsize(absoluteTestFile) <= 10 * 1024 * 1024
+
+            # Try to write a file that is too big and it should raise an
+            # IOError exception.
+            with open(absoluteTestFile, "w") as f:
+                with pytest.raises(IOError):
+                    f.write("w" * 105 * 1024 * 1024)
+        finally:
+            ca.terminate()
+
+        if os.path.exists(absoluteTestFile):
+            os.remove(absoluteTestFile)
+
+    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
+    def test_tmpfs_writebuffer_size_missing_size_config(self):
+        """ This test will test various bad configuration combinations and
+            make sure that SoftwareContainerAgent behaves as expected when
+            the bad configuration is sent to it.
+
+            This tests that the container is created even if the size parameter
+            is missing from the configuration.
+        """
+        ca = Container()
+
+        absoluteTestFile = None
+
+        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true, \
+                               "enableTemporaryFileSystemWriteBuffer": true}]'
+
+        try:
+            id = ca.start(DATA)
+
+            absoluteTestFile = os.path.join("/tmp/container/SC-" + str(id) +
+                                            "/",
+                                            TESTFILE)
+
+            with open(absoluteTestFile, "w") as f:
+                f.write("w" * 95 * 1024 * 1024)
+
+            # Make sure the file is between 94 and 96 megabyte (exact size
+            # may vary depending on platform, blocksize etc)
+            assert os.path.getsize(absoluteTestFile) >= 94 * 1024 * 1024
+            assert os.path.getsize(absoluteTestFile) <= 96 * 1024 * 1024
+
+            # Try to write a file that is too large for the filesystem (105
+            # megabytes). This should fail with an IOError.
+            with open(absoluteTestFile, "w") as f:
+                with pytest.raises(IOError):
+                    f.write("w" * 105 * 1024 * 1024)
+        finally:
+            ca.terminate()
+
+    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
+    def test_tmpfs_writebuffer_size_missing_tmpfs_enable_flag(self):
+        """ This test will test various bad configuration combinations and
+            make sure that SoftwareContainerAgent behaves as expected when
+            the bad configuration is sent to it.
+
+            This run should work, but no temporary filesystem will be setup as
+            the enableTemporaryFileSystemWriteBuffer defaults to false and no
+            parsing will be performed on the temporaryFileSystemSize parameter.
+        """
+        ca = Container()
+
+        absoluteTestFile = None
+
+        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true, \
+                               "temporaryFileSystemSize": ' + str(TenMB) + '}]'
+
+        try:
+            id = ca.start(DATA)
+
+            absoluteTestFile = os.path.join("/tmp/container/SC-" + str(id) +
+                                            "/",
+                                            TESTFILE)
+
+            with open(absoluteTestFile, "w") as f:
+                f.write("w" * 95 * 1024 * 1024)
+
+            # Make sure the file is between 94 and 96 megabyte (exact size
+            # may vary depending on platform, blocksize etc)
+            assert os.path.getsize(absoluteTestFile) >= 94 * 1024 * 1024
+            assert os.path.getsize(absoluteTestFile) <= 96 * 1024 * 1024
+
+            # Try to write a file that is too large for the filesystem (105
+            # megabytes). This should fail with an IOError.
+            with open(absoluteTestFile, "w") as f:
+                with pytest.raises(IOError):
+                    f.write("w" * 105 * 1024 * 1024)
+        finally:
+            ca.terminate()
+
+    @pytest.mark.xfail("platform.release() <= \"3.18.0\"")
+    def test_tmpfs_writebuffer_size_disabled(self):
+        """ The SoftwareContainer will create a tmpfs in the location of the
+            containers temporary directory location if the write buffer is
+            enabled. Test that the tmpfs mounted in the containers temporary
+            directory structure works as expected when the writebuffer is
+            disabled.
+        """
+
+        absoluteTestFile = None
 
         ca = Container()
 
         DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
 
         try:
-            ca.start(DATA)
-
-            absoluteTestFile = os.path.join("/usr/var/lib/lxc/SC-0/rootfs",
+            id = ca.start(DATA)
+            absoluteTestFile = os.path.join("/tmp/container/SC-" + str(id) +
+                                            "/",
                                             TESTFILE)
+
             with open(absoluteTestFile, "w") as f:
                 f.write("w" * 105 * 1024 * 1024)
         finally:
