@@ -18,5 +18,6 @@ var classsoftwarecontainer_1_1_environment_gateway =
     [ "isActivated", "classsoftwarecontainer_1_1_environment_gateway.html#ad7679d3dce9fe0e239f3614d6ee667c5", null ],
     [ "getContainer", "classsoftwarecontainer_1_1_environment_gateway.html#a6f0a60c9f29ea869916f7524085b3e5f", null ],
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_environment_gateway.html#ab048dec9bf64f292e2a9c7f10c3e784b", null ],
-    [ "ID", "classsoftwarecontainer_1_1_environment_gateway.html#a6211ab505eb9189c04e77e6709930422", null ]
+    [ "ID", "classsoftwarecontainer_1_1_environment_gateway.html#a6211ab505eb9189c04e77e6709930422", null ],
+    [ "m_activatedOnce", "classsoftwarecontainer_1_1_environment_gateway.html#a01952b4deb95ab07a0a87d656620ac52", null ]
 ];

@@ -27,6 +27,7 @@ var classsoftwarecontainer_1_1_device_node_gateway =
     [ "createSharedMountPoint", "classsoftwarecontainer_1_1_device_node_gateway.html#ae175c6d1e33a358cb015c851590518d5", null ],
     [ "pathInList", "classsoftwarecontainer_1_1_device_node_gateway.html#a44a19890b72a635b3134cb2a07fc0875", null ],
     [ "ID", "classsoftwarecontainer_1_1_device_node_gateway.html#adb1e0556c37262a3fc944421bdbb59b5", null ],
+    [ "m_activatedOnce", "classsoftwarecontainer_1_1_device_node_gateway.html#a01952b4deb95ab07a0a87d656620ac52", null ],
     [ "m_cleanupHandlers", "classsoftwarecontainer_1_1_device_node_gateway.html#ade7880379d8725ed233848bf6e59f4f2", null ],
     [ "m_createDirList", "classsoftwarecontainer_1_1_device_node_gateway.html#a02a41c3cb571b03e348b3937fa2b2bc0", null ]
 ];

@@ -24,5 +24,6 @@ var classsoftwarecontainer_1_1_d_bus_gateway_instance =
     [ "setEnvironmentVariable", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#ab048dec9bf64f292e2a9c7f10c3e784b", null ],
     [ "ID", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#ac30731fb9530640caee9be496d0507d6", null ],
     [ "SESSION_CONFIG", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a83a07944996f62bf5848ed58bffdccdb", null ],
-    [ "SYSTEM_CONFIG", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#aa23a54fda7935ae73c7378ba3e0b2fc8", null ]
+    [ "SYSTEM_CONFIG", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#aa23a54fda7935ae73c7378ba3e0b2fc8", null ],
+    [ "m_activatedOnce", "classsoftwarecontainer_1_1_d_bus_gateway_instance.html#a01952b4deb95ab07a0a87d656620ac52", null ]
 ];

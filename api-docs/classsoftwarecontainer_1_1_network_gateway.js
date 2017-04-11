@@ -23,5 +23,6 @@ var classsoftwarecontainer_1_1_network_gateway =
     [ "SUCCESS", "classsoftwarecontainer_1_1_network_gateway.html#a9de7ca96c5eb1c7e835fe94d857f0f82", null ],
     [ "NO_LINK", "classsoftwarecontainer_1_1_network_gateway.html#a80798a0acbcdfeffa076c732076fdc46", null ],
     [ "BAD_LINKUP", "classsoftwarecontainer_1_1_network_gateway.html#ae3f3660e21af137c111df3cac3a83a19", null ],
-    [ "BAD_LINKDOWN", "classsoftwarecontainer_1_1_network_gateway.html#ac388eb59cda9e4e03b44d0d65bb39686", null ]
+    [ "BAD_LINKDOWN", "classsoftwarecontainer_1_1_network_gateway.html#ac388eb59cda9e4e03b44d0d65bb39686", null ],
+    [ "m_activatedOnce", "classsoftwarecontainer_1_1_network_gateway.html#a01952b4deb95ab07a0a87d656620ac52", null ]
 ];
