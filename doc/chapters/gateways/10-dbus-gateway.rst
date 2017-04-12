@@ -8,7 +8,7 @@ The gateway will create a socket for the D-Bus connection being proxied.
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
 to use this socket when communicating with the outside D-Bus system.
-The gateway uses uses an external program ``dbus-proxy``, which is included
+The gateway uses an external program ``dbus-proxy``, which is included
 in SoftwareContainer as a submodule, for creation and communication over
 the proxied bus connection.
 
@@ -19,10 +19,25 @@ communication, and the application running within the container is
 expected to use these variables (probably by means of the binding used).
 
 The ``dbus-proxy`` does not modify the messages passed via D-Bus, it only provides a filter
-function.  This means that some filters may cause unwanted behaviour used in combination with
-dynamic interpretation of introspection data. For example, if introspection is configured to be
-allowed, the introspection data might contain interfaces and object paths that are not accessible
-for the application (unless the configuration also allowes everything on the connection).
+function to allow or disallow on the object path, interface, and method level.
+
+Method arguments are not filtered or inspected in any way. This is good to keep in mind
+in certain situations. For example, if an object implements the
+``org.freedesktop.DBus.Properties`` interface and the user calls ``GetAll("org.myinterface")``,
+the object might return properties for the ``org.myinterface`` interface even if that
+specific interface is not allowed by the configuration. This behavior depends on the service
+implementation, but the point is that the filtering will not be able to block the call to
+``GetAll`` based on the method argument.
+
+Introspection data is not modified to reflect the filtering rules. This means that some filters
+may cause unwanted behaviour used in combination with dynamic interpretation of introspection data.
+For example, if introspection is configured to be allowed, the introspection data might contain
+interfaces and object paths that are not accessible for the application (unless the configuration
+also allows everything on the connection).
+
+The ``dbus-proxy`` always allows the ``org.freedesktop.DBus`` interface, even if it is not
+specified in the gateway configuration. This means that methods like ``Hello``, ``ListNames``,
+etc., are always accessible.
 
 The gateway will not do any analysis of the configuration passed to it, but will pass this
 configuration along to ``dbus-proxy`` verbatim. This is to support future changes in the
