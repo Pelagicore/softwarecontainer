@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.18.0-c6d49ac 2017-04-13 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.18.0-1d87d96 2017-04-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-c6d49ac 2017-04-13',
+        VERSION:     '0.18.0-1d87d96 2017-04-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -165,12 +165,20 @@ objects, in the JSON sense.
 The currently supported configs are:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Disk writing buffer - on or off. Key: &#8220;enableWriteBuffer&#8221;, value: <code class="docutils literal"><span class="pre">true</span></code> for on or <code class="docutils literal"><span class="pre">false</span></code> for off.</li>
+<li>Disk writing buffer - on or off. Key: &#8220;enableWriteBuffer&#8221;, value: <code class="docutils literal"><span class="pre">true</span></code>
+for on or <code class="docutils literal"><span class="pre">false</span></code> for off.</li>
+<li>Temporary FileSystem buffers - on or off. Key:
+&#8220;enableTemporaryFileSystemWriteBuffer&#8221;, value <code class="docutils literal"><span class="pre">true</span></code> for on or <code class="docutils literal"><span class="pre">false</span></code>
+for off.</li>
+<li>Temporary FileSystem Size - integer. Key: &#8220;temporaryFileSystemSize&#8221;, value:
+Integer Size in bytes of the Temporary FileSystem Size.</li>
 </ul>
 </div></blockquote>
 <p>Example config JSON:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
-    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span>
+    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;enableTemporaryFileSystemWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;temporaryFileSystemSize&quot;</span><span class="p">:</span> <span class="mi">10485760</span>
 <span class="p">}]</span>
 </pre></div>
 </div>
@@ -183,6 +191,16 @@ options without breaking the API.</p>
 buffers consists of a RAM overlay on top of the existing <a class="reference internal" href="../filesystem/index.html#filesystems"><span class="std std-ref">filesystem</span></a>, and are
 synced to the underlying <a class="reference internal" href="../filesystem/index.html#filesystems"><span class="std std-ref">filesystem</span></a> on
 shutdown of the container.</p>
+<p>The <code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> is used to enable or disable the
+<code class="docutils literal"><span class="pre">tmpfs</span></code> being mounted on top of the containers temporary filesystem
+containing temporary files. This can be used to separate the containers from
+accidentally overcommitting and thereby denying service to any other containers
+currently running.</p>
+<p>The <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> is used to set the <code class="docutils literal"><span class="pre">RAM</span> <span class="pre">size</span></code> of the
+<code class="docutils literal"><span class="pre">tmpfs</span></code> being mounted on top of the containers temporary filesystem location.
+The variable is set in <code class="docutils literal"><span class="pre">bytes</span></code>. This will be shared between all the
+<code class="docutils literal"><span class="pre">upper</span></code> and <code class="docutils literal"><span class="pre">work</span></code> directories being mounted using <code class="docutils literal"><span class="pre">overlayfs</span></code> into a
+specific container.</p>
 </div>
 </div>
 <div class="section" id="working-with-containers">

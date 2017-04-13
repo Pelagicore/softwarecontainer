@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-c6d49ac 2017-04-13</span>
+   &#160;<span id="projectnumber">0.18.0-1d87d96 2017-04-13</span>
    </div>
   </td>
  </tr>
@@ -87,6 +87,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a88e960490be3166c4775bf3a227cc4ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88e960490be3166c4775bf3a227cc4ce"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnableWriteBuffer</b> (bool enabledFlag)</td></tr>
 <tr class="separator:a88e960490be3166c4775bf3a227cc4ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48aac239646c1937072f10f63ef9fb54"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a48aac239646c1937072f10f63ef9fb54"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnableTemporaryFileSystemWriteBuffers</b> (bool enabled)</td></tr>
+<tr class="separator:a48aac239646c1937072f10f63ef9fb54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18828b0b58827e08b09c3286fa97ef70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18828b0b58827e08b09c3286fa97ef70"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTemporaryFileSystemSize</b> (unsigned int size)</td></tr>
+<tr class="separator:a18828b0b58827e08b09c3286fa97ef70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61301234a0036fe3063841f82706e632"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61301234a0036fe3063841f82706e632"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>containerConfigPath</b> () const </td></tr>
 <tr class="separator:a61301234a0036fe3063841f82706e632"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,6 +105,12 @@ unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>containerShut
 <tr class="memitem:ae7d1ab47fecf06db8c59827491d4ca5c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7d1ab47fecf06db8c59827491d4ca5c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableWriteBuffer</b> () const </td></tr>
 <tr class="separator:ae7d1ab47fecf06db8c59827491d4ca5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc38ac165e431893f2fd7ac147b5b519"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc38ac165e431893f2fd7ac147b5b519"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableTemporaryFileSystemWriteBuffers</b> () const </td></tr>
+<tr class="separator:abc38ac165e431893f2fd7ac147b5b519"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf41ab9ee574edf7e04ae9c5330aeb5e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf41ab9ee574edf7e04ae9c5330aeb5e"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>temporaryFileSystemSize</b> () const </td></tr>
+<tr class="separator:adf41ab9ee574edf7e04ae9c5330aeb5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains all values that should be passed to <a class="el" href="classsoftwarecontainer_1_1_software_container.html" title="An abstraction of concrete container implementations. ">SoftwareContainer</a> on creation. </p>
@@ -116,7 +128,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableWriteBuffer</b>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_software_container_config.html">SoftwareContainerConfig</a></li>
-    <li class="footer">Generated on Thu Apr 13 2017 06:40:53 for softwarecontainer by
+    <li class="footer">Generated on Thu Apr 13 2017 13:21:40 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">softwarecontainer
-   &#160;<span id="projectnumber">0.18.0-c6d49ac 2017-04-13</span>
+   &#160;<span id="projectnumber">0.18.0-1d87d96 2017-04-13</span>
    </div>
   </td>
  </tr>
@@ -85,11 +85,109 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnableWriteBuffer<
 <tr class="memitem:af5fa2fc5e2e501401431ed3c83a187ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5fa2fc5e2e501401431ed3c83a187ea"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableWriteBuffer</b> () const </td></tr>
 <tr class="separator:af5fa2fc5e2e501401431ed3c83a187ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cc19f3673e504b8503650015435f88d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_dynamic_container_options.html#a4cc19f3673e504b8503650015435f88d">setEnableTemporaryFileSystemWriteBuffers</a> (bool enabled)</td></tr>
+<tr class="memdesc:a4cc19f3673e504b8503650015435f88d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for the enableTemporaryFileSystemWriteBuffers variable used to tell the container if it shall mount a separate tmpfs on top of the temp directory.  <a href="#a4cc19f3673e504b8503650015435f88d">More...</a><br /></td></tr>
+<tr class="separator:a4cc19f3673e504b8503650015435f88d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16fea675c5b9f4354ddfb77f8465696b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_dynamic_container_options.html#a16fea675c5b9f4354ddfb77f8465696b">enableTemporaryFileSystemWriteBuffers</a> () const </td></tr>
+<tr class="memdesc:a16fea675c5b9f4354ddfb77f8465696b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the enableTemporaryFileSystemWriteBuffers variable.  <a href="#a16fea675c5b9f4354ddfb77f8465696b">More...</a><br /></td></tr>
+<tr class="separator:a16fea675c5b9f4354ddfb77f8465696b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a68955656857aae3c5587d53f926830"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_dynamic_container_options.html#a4a68955656857aae3c5587d53f926830">setTemporaryFileSystemSize</a> (unsigned int size)</td></tr>
+<tr class="memdesc:a4a68955656857aae3c5587d53f926830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for the temporaryFileSystemSize which is used to tell the system the size of the tmpfs being mounted on the temp directory.  <a href="#a4a68955656857aae3c5587d53f926830">More...</a><br /></td></tr>
+<tr class="separator:a4a68955656857aae3c5587d53f926830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00bf3216eeddd33caf45f34c20dc4212"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsoftwarecontainer_1_1_dynamic_container_options.html#a00bf3216eeddd33caf45f34c20dc4212">temporaryFileSystemSize</a> () const </td></tr>
+<tr class="memdesc:a00bf3216eeddd33caf45f34c20dc4212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the temporaryFileSystemSize variable.  <a href="#a00bf3216eeddd33caf45f34c20dc4212">More...</a><br /></td></tr>
+<tr class="separator:a00bf3216eeddd33caf45f34c20dc4212"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="dynamiccontaineroptions_8h_source.html#l00028">28</a> of file <a class="el" href="dynamiccontaineroptions_8h_source.html">dynamiccontaineroptions.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a4cc19f3673e504b8503650015435f88d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void softwarecontainer::DynamicContainerOptions::setEnableTemporaryFileSystemWriteBuffers </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setter for the enableTemporaryFileSystemWriteBuffers variable used to tell the container if it shall mount a separate tmpfs on top of the temp directory. </p>
+
+<p>Definition at line <a class="el" href="dynamiccontaineroptions_8cpp_source.html#l00043">43</a> of file <a class="el" href="dynamiccontaineroptions_8cpp_source.html">dynamiccontaineroptions.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    m_enableTemporaryFileSystemWriteBuffers = enabled;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a16fea675c5b9f4354ddfb77f8465696b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool softwarecontainer::DynamicContainerOptions::enableTemporaryFileSystemWriteBuffers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getter for the enableTemporaryFileSystemWriteBuffers variable. </p>
+
+<p>Definition at line <a class="el" href="dynamiccontaineroptions_8cpp_source.html#l00048">48</a> of file <a class="el" href="dynamiccontaineroptions_8cpp_source.html">dynamiccontaineroptions.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">return</span> m_enableTemporaryFileSystemWriteBuffers;</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a4a68955656857aae3c5587d53f926830"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void softwarecontainer::DynamicContainerOptions::setTemporaryFileSystemSize </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setter for the temporaryFileSystemSize which is used to tell the system the size of the tmpfs being mounted on the temp directory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>in bytes of the filesystem </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="dynamiccontaineroptions_8cpp_source.html#l00053">53</a> of file <a class="el" href="dynamiccontaineroptions_8cpp_source.html">dynamiccontaineroptions.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;{</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    m_temporaryFileSystemSize = size;</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
+<a class="anchor" id="a00bf3216eeddd33caf45f34c20dc4212"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int softwarecontainer::DynamicContainerOptions::temporaryFileSystemSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getter for the temporaryFileSystemSize variable. </p>
+<dl class="section return"><dt>Returns</dt><dd>the size </dd></dl>
+
+<p>Definition at line <a class="el" href="dynamiccontaineroptions_8cpp_source.html#l00058">58</a> of file <a class="el" href="dynamiccontaineroptions_8cpp_source.html">dynamiccontaineroptions.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;{</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">return</span> m_temporaryFileSystemSize;</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>agent/src/containeroptions/<a class="el" href="dynamiccontaineroptions_8h_source.html">dynamiccontaineroptions.h</a></li>
 <li>agent/src/containeroptions/<a class="el" href="dynamiccontaineroptions_8cpp_source.html">dynamiccontaineroptions.cpp</a></li>
 </ul>
@@ -99,7 +197,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>enableWriteBuffer</b>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesoftwarecontainer.html">softwarecontainer</a></li><li class="navelem"><a class="el" href="classsoftwarecontainer_1_1_dynamic_container_options.html">DynamicContainerOptions</a></li>
-    <li class="footer">Generated on Thu Apr 13 2017 06:40:53 for softwarecontainer by
+    <li class="footer">Generated on Thu Apr 13 2017 13:21:39 for softwarecontainer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

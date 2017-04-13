@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filesystems &#8212; softwarecontainer 0.18.0-c6d49ac 2017-04-13 documentation</title>
+    <title>Filesystems &#8212; softwarecontainer 0.18.0-1d87d96 2017-04-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-c6d49ac 2017-04-13',
+        VERSION:     '0.18.0-1d87d96 2017-04-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -162,6 +162,41 @@ These will automatically fall back on using the default behavior of
 bind mounting the files into the filesystem of the container.</p>
 </div>
 </div>
+<div class="section" id="temporary-filesystem">
+<h2>Temporary Filesystem<a class="headerlink" href="#temporary-filesystem" title="Permalink to this headline">¶</a></h2>
+<p>The write buffers can be configured to use a separate temporary filesystem
+(<code class="docutils literal"><span class="pre">tmpfs</span></code>) which can be limited in size. The <code class="docutils literal"><span class="pre">tmpfs</span></code> is mounted on top of
+the containers temporary directory as soon as it&#8217;s created and will remain
+there until the container is destroyed. All <code class="docutils literal"><span class="pre">overlayfs</span></code> mounts and temporary
+directories should be created inside this <code class="docutils literal"><span class="pre">tmpfs</span></code> mount.</p>
+<p>The <code class="docutils literal"><span class="pre">size</span></code> of the <code class="docutils literal"><span class="pre">tmpfs</span></code> can also be limited using an extra configuration
+option in the <code class="docutils literal"><span class="pre">Create</span></code> DBus call to the <code class="docutils literal"><span class="pre">SoftwareContainerAgent</span></code>.
+An example configuration would look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
+    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;enableTemporaryFileSystemWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;temporaryFileSystemSize&quot;</span><span class="p">:</span> <span class="mi">10485760</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> setting enables the <code class="docutils literal"><span class="pre">tmpfs</span></code>
+creation as described above, while the <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> variable
+sets the size of the <code class="docutils literal"><span class="pre">tmpfs</span></code> in bytes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> parameter will not be parsed unless
+the <code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> parameter is <code class="docutils literal"><span class="pre">true</span></code>.
+The <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> is not required if the
+<code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> is set to <code class="docutils literal"><span class="pre">false</span></code> or not
+added at all.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">tmpfs</span></code> is shared between the upper and work directories in
+<code class="docutils literal"><span class="pre">overlayfs</span></code> being mounted to the <code class="docutils literal"><span class="pre">rootfs</span></code> and all the
+directories being bindmounted into a single instance of a container.</p>
+</div>
+</div>
 </div>
 
 
@@ -176,6 +211,7 @@ bind mounting the files into the filesystem of the container.</p>
 <li><a class="reference internal" href="#standard-filesystem">Standard filesystem</a></li>
 <li><a class="reference internal" href="#mountpoints">Mountpoints</a></li>
 <li><a class="reference internal" href="#write-buffered-filesystems">Write Buffered Filesystems</a></li>
+<li><a class="reference internal" href="#temporary-filesystem">Temporary Filesystem</a></li>
 </ul>
 </li>
 </ul>
