@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>D-Bus gateway &#8212; softwarecontainer 0.18.0-87edacf 2017-04-11 documentation</title>
+    <title>D-Bus gateway &#8212; softwarecontainer 0.18.0-c6d49ac 2017-04-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-87edacf 2017-04-11',
+        VERSION:     '0.18.0-c6d49ac 2017-04-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@ interfaces.</p>
 The socket will be placed in a directory accessible from within the
 container, and the applications running inside the container are expected
 to use this socket when communicating with the outside D-Bus system.
-The gateway uses uses an external program <code class="docutils literal"><span class="pre">dbus-proxy</span></code>, which is included
+The gateway uses an external program <code class="docutils literal"><span class="pre">dbus-proxy</span></code>, which is included
 in SoftwareContainer as a submodule, for creation and communication over
 the proxied bus connection.</p>
 <p>The gateway will also set the <code class="docutils literal"><span class="pre">DBUS_SESSION_BUS_ADDRESS</span></code> or
@@ -58,10 +58,22 @@ libdbus uses these variables to find the socket to use for D-Bus
 communication, and the application running within the container is
 expected to use these variables (probably by means of the binding used).</p>
 <p>The <code class="docutils literal"><span class="pre">dbus-proxy</span></code> does not modify the messages passed via D-Bus, it only provides a filter
-function.  This means that some filters may cause unwanted behaviour used in combination with
-dynamic interpretation of introspection data. For example, if introspection is configured to be
-allowed, the introspection data might contain interfaces and object paths that are not accessible
-for the application (unless the configuration also allowes everything on the connection).</p>
+function to allow or disallow on the object path, interface, and method level.</p>
+<p>Method arguments are not filtered or inspected in any way. This is good to keep in mind
+in certain situations. For example, if an object implements the
+<code class="docutils literal"><span class="pre">org.freedesktop.DBus.Properties</span></code> interface and the user calls <code class="docutils literal"><span class="pre">GetAll(&quot;org.myinterface&quot;)</span></code>,
+the object might return properties for the <code class="docutils literal"><span class="pre">org.myinterface</span></code> interface even if that
+specific interface is not allowed by the configuration. This behavior depends on the service
+implementation, but the point is that the filtering will not be able to block the call to
+<code class="docutils literal"><span class="pre">GetAll</span></code> based on the method argument.</p>
+<p>Introspection data is not modified to reflect the filtering rules. This means that some filters
+may cause unwanted behaviour used in combination with dynamic interpretation of introspection data.
+For example, if introspection is configured to be allowed, the introspection data might contain
+interfaces and object paths that are not accessible for the application (unless the configuration
+also allows everything on the connection).</p>
+<p>The <code class="docutils literal"><span class="pre">dbus-proxy</span></code> always allows the <code class="docutils literal"><span class="pre">org.freedesktop.DBus</span></code> interface, even if it is not
+specified in the gateway configuration. This means that methods like <code class="docutils literal"><span class="pre">Hello</span></code>, <code class="docutils literal"><span class="pre">ListNames</span></code>,
+etc., are always accessible.</p>
 <p>The gateway will not do any analysis of the configuration passed to it, but will pass this
 configuration along to <code class="docutils literal"><span class="pre">dbus-proxy</span></code> verbatim. This is to support future changes in the
 configuration format.</p>
