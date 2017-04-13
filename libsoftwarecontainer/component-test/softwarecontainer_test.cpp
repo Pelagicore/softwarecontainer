@@ -30,7 +30,7 @@ void SoftwareContainerGatewayTest::SetUp()
         new Container("SC-0",
                       config->containerConfigPath(),
                       config->sharedMountsDir(),
-                      config->enableWriteBuffer(),
+                      config->writeBufferEnabled(),
                       config->containerShutdownTimeout()
         )
     );

@@ -323,7 +323,7 @@ class Container():
 
             The user should pass a dict like e.g.:
             {
-                Container.CONFIG: "{enableWriteBuffer: false}",
+                Container.CONFIG: "{writeBufferEnabled: false}",
                 Container.HOST_PATH: my_path_string_variable,
                 Container.BIND_MOUNT_DIR: "app",
                 Container.READONLY: True

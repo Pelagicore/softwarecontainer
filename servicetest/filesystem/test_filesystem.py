@@ -43,7 +43,7 @@ def logfile_path():
     return CURRENT_DIR + "/test.log"
 
 DATA = {
-    Container.CONFIG: '[{"enableWriteBuffer": false}]',
+    Container.CONFIG: '[{"writeBufferEnabled": false}]',
     Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
@@ -67,7 +67,7 @@ class TestFileSystem(object):
             file system. If it is disabled, files should be written directly
             to the file system
 
-            :TODO: If the system doesn't have overlayfs and enableWriteBuffer
+            :TODO: If the system doesn't have overlayfs and writeBufferEnabled
             is enabled, this test will work anyways since we fail to mount the
             fs containing fileapp.py, hence failing to create lala.txt, and
             hence the file isn't available after running the create process.
@@ -81,9 +81,9 @@ class TestFileSystem(object):
             os.remove(absoluteTestFile)
         ca = Container()
         if flag is True:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": true}]'
         else:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": false}]'
 
         try:
             ca.start(DATA)
@@ -121,9 +121,9 @@ class TestFileSystem(object):
 
         ca = Container()
         if flag is True:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": true}]'
         else:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": false}]'
 
         try:
             ca.start(DATA)
@@ -153,9 +153,9 @@ class TestFileSystem(object):
 
         ca = Container()
         if flag is True:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": true}]'
         else:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": false}]'
 
         try:
             ca.start(DATA)
@@ -186,9 +186,9 @@ class TestFileSystem(object):
 
         ca = Container()
         if flag is True:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": true}]'
         else:
-            DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+            DATA[Container.CONFIG] = '[{"writeBufferEnabled": false}]'
 
         try:
             ca.start(DATA)
@@ -223,7 +223,7 @@ class TestFileSystem(object):
 
         ca = Container()
 
-        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+        DATA[Container.CONFIG] = '[{"writeBufferEnabled": true}]'
 
         try:
             id = ca.start(DATA)
@@ -277,8 +277,8 @@ class TestFileSystem(object):
 
         ca = Container()
 
-        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true, \
-                                "enableTemporaryFileSystemWriteBuffer": true,\
+        DATA[Container.CONFIG] = '[{"writeBufferEnabled": true, \
+                                "temporaryFileSystemWriteBufferEnabled": true,\
                                 "temporaryFileSystemSize": ' + str(TenMB) + '}]'
         try:
             id = ca.start(DATA)
@@ -328,8 +328,8 @@ class TestFileSystem(object):
 
         absoluteTestFile = None
 
-        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true, \
-                               "enableTemporaryFileSystemWriteBuffer": true}]'
+        DATA[Container.CONFIG] = '[{"writeBufferEnabled": true, \
+                               "temporaryFileSystemWriteBufferEnabled": true}]'
 
         try:
             id = ca.start(DATA)
@@ -361,14 +361,14 @@ class TestFileSystem(object):
             the bad configuration is sent to it.
 
             This run should work, but no temporary filesystem will be setup as
-            the enableTemporaryFileSystemWriteBuffer defaults to false and no
+            the temporaryFileSystemWriteBufferEnabled defaults to false and no
             parsing will be performed on the temporaryFileSystemSize parameter.
         """
         ca = Container()
 
         absoluteTestFile = None
 
-        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true, \
+        DATA[Container.CONFIG] = '[{"writeBufferEnabled": true, \
                                "temporaryFileSystemSize": ' + str(TenMB) + '}]'
 
         try:
@@ -407,7 +407,7 @@ class TestFileSystem(object):
 
         ca = Container()
 
-        DATA[Container.CONFIG] = '[{"enableWriteBuffer": false}]'
+        DATA[Container.CONFIG] = '[{"writeBufferEnabled": false}]'
 
         try:
             id = ca.start(DATA)

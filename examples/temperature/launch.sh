@@ -72,7 +72,7 @@ AGENTPREFIX="com.pelagicore.SoftwareContainerAgent"
 SC_CMD="dbus-send --${BUS} --print-reply --dest=$SCNAME $SCOBJPATH"
 
 # Create a new container
-$SC_CMD $AGENTPREFIX.Create string:'[{"enableWriteBuffer": false}]'
+$SC_CMD $AGENTPREFIX.Create string:'[{"writeBufferEnabled": false}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="int32:0"

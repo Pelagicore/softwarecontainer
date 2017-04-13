@@ -48,39 +48,39 @@ public:
  * Test a simple configuration and see that it's set to true
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceEnabled) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true}]"));
+    ASSERT_TRUE(m_options->writeBufferEnabled());
 }
 
 /*
  * Test a simple configuration and make sure that it works multiple times
  */
 TEST_F(ContainerOptionParserTest, parseManyTimes) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": false}]"));
-    ASSERT_FALSE(m_options->enableWriteBuffer());
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true}]"));
+    ASSERT_TRUE(m_options->writeBufferEnabled());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": false}]"));
+    ASSERT_FALSE(m_options->writeBufferEnabled());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true}]"));
+    ASSERT_TRUE(m_options->writeBufferEnabled());
 }
 
 /*
  * Test that the configuration is disabled if it's set to being disabled
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceDisabled) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": false}]"));
-    ASSERT_FALSE(m_options->enableWriteBuffer());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": false}]"));
+    ASSERT_FALSE(m_options->writeBufferEnabled());
 }
 
 /*
  * Parse a "good" configuration with all parts set in it
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceWithTmpfsAndSize) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true, \
-                    \"enableTemporaryFileSystemWriteBuffer\": true, \
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true, \
+                    \"temporaryFileSystemWriteBufferEnabled\": true, \
                     \"temporaryFileSystemSize\": 10485760}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
-    ASSERT_TRUE(m_options->enableTemporaryFileSystemWriteBuffers());
+    ASSERT_TRUE(m_options->writeBufferEnabled());
+    ASSERT_TRUE(m_options->temporaryFileSystemWriteBufferEnabled());
     ASSERT_EQ(m_options->temporaryFileSystemSize(), 10485760);
 }
 
@@ -89,22 +89,22 @@ TEST_F(ContainerOptionParserTest, parseConfigNiceWithTmpfsAndSize) {
  * should not be parsed in that case.
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceWithTmpfsDisabled) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true, \
-                    \"enableTemporaryFileSystemWriteBuffer\": false, \
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true, \
+                    \"temporaryFileSystemWriteBufferEnabled\": false, \
                     \"temporaryFileSystemSize\": 10485760}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
-    ASSERT_FALSE(m_options->enableTemporaryFileSystemWriteBuffers());
+    ASSERT_TRUE(m_options->writeBufferEnabled());
+    ASSERT_FALSE(m_options->temporaryFileSystemWriteBufferEnabled());
 }
 
 /*
  * Parse a "good" configuration with a smaller size.
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceTmpfsEnabledSmall) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true, \
-                    \"enableTemporaryFileSystemWriteBuffer\": true, \
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true, \
+                    \"temporaryFileSystemWriteBufferEnabled\": true, \
                     \"temporaryFileSystemSize\": 100}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
-    ASSERT_TRUE(m_options->enableTemporaryFileSystemWriteBuffers());
+    ASSERT_TRUE(m_options->writeBufferEnabled());
+    ASSERT_TRUE(m_options->temporaryFileSystemWriteBufferEnabled());
     ASSERT_EQ(m_options->temporaryFileSystemSize(), 100);
 }
 
@@ -112,11 +112,11 @@ TEST_F(ContainerOptionParserTest, parseConfigNiceTmpfsEnabledSmall) {
  * Parse a "good" configuration where everything is disabled.
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceDisabledWithExtraConfig) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": false, \
-                    \"enableTemporaryFileSystemWriteBuffer\": true, \
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": false, \
+                    \"temporaryFileSystemWriteBufferEnabled\": true, \
                     \"temporaryFileSystemSize\": 100}]"));
-    ASSERT_FALSE(m_options->enableWriteBuffer());
-    ASSERT_FALSE(m_options->enableTemporaryFileSystemWriteBuffers());
+    ASSERT_FALSE(m_options->writeBufferEnabled());
+    ASSERT_FALSE(m_options->temporaryFileSystemWriteBufferEnabled());
 }
 
 /*
@@ -138,28 +138,28 @@ TEST_F(ContainerOptionParserTest, parseConfigBadConfig) {
  * parses.
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceConfigMissingSize) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true, \
-                    \"enableTemporaryFileSystemWriteBuffer\": true}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
-    ASSERT_TRUE(m_options->enableTemporaryFileSystemWriteBuffers());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true, \
+                    \"temporaryFileSystemWriteBufferEnabled\": true}]"));
+    ASSERT_TRUE(m_options->writeBufferEnabled());
+    ASSERT_TRUE(m_options->temporaryFileSystemWriteBufferEnabled());
 }
 
 /*
  * Parse a "good" config where the tmpfs is disabled and missing size.
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceConfigTmpfsDisabledMissingSize) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true, \
-                    \"enableTemporaryFileSystemWriteBuffer\": false}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
-    ASSERT_FALSE(m_options->enableTemporaryFileSystemWriteBuffers());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true, \
+                    \"temporaryFileSystemWriteBufferEnabled\": false}]"));
+    ASSERT_TRUE(m_options->writeBufferEnabled());
+    ASSERT_FALSE(m_options->temporaryFileSystemWriteBufferEnabled());
 }
 
 /*
  * Parse a "good" config where enableTemporary... and size is missing
  */
 TEST_F(ContainerOptionParserTest, parseConfigNiceConfigMissingTmpfSConfig) {
-    ASSERT_NO_THROW(parse("[{\"enableWriteBuffer\": true}]"));
-    ASSERT_TRUE(m_options->enableWriteBuffer());
+    ASSERT_NO_THROW(parse("[{\"writeBufferEnabled\": true}]"));
+    ASSERT_TRUE(m_options->writeBufferEnabled());
 }
 
 /*
@@ -167,6 +167,6 @@ TEST_F(ContainerOptionParserTest, parseConfigNiceConfigMissingTmpfSConfig) {
  */
 TEST_F(ContainerOptionParserTest, parseConfigEvilConfig) {
     ASSERT_THROW(parse("[{\"WRONG_PARAM_NAME\": true}]"), ContainerOptionParseError);
-    ASSERT_FALSE(m_options->enableWriteBuffer());
+    ASSERT_FALSE(m_options->writeBufferEnabled());
 }
 

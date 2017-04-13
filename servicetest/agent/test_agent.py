@@ -47,7 +47,7 @@ def mounted_path_in_host():
     return CURRENT_DIR
 
 DATA = {
-    Container.CONFIG: '[{"enableWriteBuffer": false}]',
+    Container.CONFIG: '[{"writeBufferEnabled": false}]',
     Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False

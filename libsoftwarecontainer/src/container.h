@@ -75,13 +75,13 @@ public:
      * @param configFile Path to the configuration file (including the file name)
      * @param containerRoot A path to the root of the container, i.e. the base
      *  path to e.g. the configurations and application root
-     * @param enableWriteBuffer Enable RAM write buffers on top of rootfs
+     * @param writeBufferEnabled Enable RAM write buffers on top of rootfs
      * @param shutdownTimeout Timeout for shutdown of container.
      */
     Container(const std::string id,
               const std::string &configFile,
               const std::string &containerRoot,
-              bool enableWriteBuffer = false,
+              bool writeBufferEnabled = false,
               int shutdownTimeout = 1);
 
     ~Container();
@@ -261,7 +261,7 @@ private:
 
     std::string m_containerRoot;
 
-    bool m_enableWriteBuffer;
+    bool m_writeBufferEnabled;
 
     // All environment variables set by gateways
     EnvironmentVariables m_gatewayEnvironmentVariables;

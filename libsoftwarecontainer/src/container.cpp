@@ -75,12 +75,12 @@ void Container::init_lxc()
 Container::Container(const std::string id,
                      const std::string &configFile,
                      const std::string &containerRoot,
-                     bool enableWriteBuffer,
+                     bool writeBufferEnabled,
                      int shutdownTimeout) :
     m_configFile(configFile),
     m_id(id),
     m_containerRoot(containerRoot),
-    m_enableWriteBuffer(enableWriteBuffer),
+    m_writeBufferEnabled(writeBufferEnabled),
     m_shutdownTimeout(shutdownTimeout)
 {
     init_lxc();
@@ -189,7 +189,7 @@ bool Container::create()
     // File system stuff
     m_rootFSPath = buildPath(s_LXCRoot, containerID, "rootfs");
 
-    if (m_enableWriteBuffer) {
+    if (m_writeBufferEnabled) {
         const std::string rootFSPathLower = m_containerRoot + "/rootfs-lower";
         const std::string rootFSPathUpper = m_containerRoot + "/rootfs-upper";
         const std::string rootFSPathWork  = m_containerRoot + "/rootfs-work";
@@ -548,7 +548,7 @@ bool Container::destroy(unsigned int timeout)
 
 
     // The container can not be destroyed unless the rootfs is unmounted
-    if (m_enableWriteBuffer)
+    if (m_writeBufferEnabled)
     {
         log_debug() << "Unmounting the overlay rootfs";
         if(-1 == umount(m_rootFSPath.c_str())) {
@@ -665,7 +665,7 @@ bool Container::bindMountCore(const std::string &pathInHost,
                    tempDirInContainerOnHost,
                    m_containerRoot,
                    readonly,
-                   m_enableWriteBuffer)) {
+                   m_writeBufferEnabled)) {
         log_error() << "Could not bind mount " << pathInHost << " to " << tempDirInContainerOnHost;
         return false;
     }

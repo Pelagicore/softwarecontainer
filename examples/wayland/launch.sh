@@ -93,7 +93,7 @@ $SC_CMD org.freedesktop.DBus.Introspectable.Introspect
 $SC_CMD $AGENTPREFIX.Ping
 
 # Create a new container
-$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"enableWriteBuffer": false}]'
+$SC_CMD $AGENTPREFIX.CreateContainer string:'[{"writeBufferEnabled": false}]'
 
 # A few thing that we use for more or less every call below
 CONTAINERID="int32:0"

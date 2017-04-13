@@ -12,13 +12,13 @@ The following snippet will create a container where a write buffer will be
 created for all filesystems in that container::
 
     [{
-        "enableWriteBuffer": true
+        "writeBufferEnabled": true
     }]
 
 The following example will disable write buffers for all filesystems within 
 the container::
 
     [{
-        "enableWriteBuffer": false
+        "writeBufferEnabled": false
     }]
 

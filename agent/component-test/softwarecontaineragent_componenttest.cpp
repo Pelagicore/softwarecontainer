@@ -88,7 +88,7 @@ public:
                                      "service-manifest-dir = " + std::string(SERVICE_MANIFEST_DIR_TESTING) + "\n"
                                      "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING) + "\n";
 
-    const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
+    const std::string valid_config = "[{\"writeBufferEnabled\": false}]";
 
     void SetUp() override
     {
@@ -163,12 +163,12 @@ TEST_F(SoftwareContainerAgentTest, DeleteContainer) {
  *TBD: This test needs to be fixed, somethings going on in it.
 TEST_F(SoftwareContainerAgentTest, CreateContainerWithConf) {
     log_error() << "gobbles1";
-    ContainerID id = sca->createContainer("[{\"enableWriteBuffer\": true}]");
+    ContainerID id = sca->createContainer("[{\"writeBufferEnabled\": true}]");
     // This is actually only true if no other containers have been created
     // before this one. Might need to be fixed somehow.
     log_error() << "gobbles2";
     ASSERT_TRUE(id == 0);
-    ASSERT_TRUE(workspace->m_enableWriteBuffer == true);
+    ASSERT_TRUE(workspace->m_writeBufferEnabled == true);
 }
  */
 
