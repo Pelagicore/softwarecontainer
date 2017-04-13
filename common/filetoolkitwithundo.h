@@ -37,14 +37,14 @@ public:
      * @param src Path to mount from
      * @param dst Path to mount to
      * @param readOnly Make the bind mount destination read only
-     * @param enableWriteBuffer Enable write buffers on the bind mount.
+     * @param writeBufferEnabled Enable write buffers on the bind mount.
      * @return true on success, false on failure
      */
     bool bindMount(const std::string &src,
                    const std::string &dst,
                    const std::string &tmpContainerRoot,
                    bool readOnly,
-                   bool enableWriteBuffer=false);
+                   bool writeBufferEnabled=false);
 
     /**
      * @brief tmpfsMount Mount a tmpfs in the dst path and limit size of the

@@ -37,24 +37,24 @@ void ContainerOptionParser::readConfigElement(const json_t *element)
         throw ContainerOptionParseError(errorMessage);
     }
 
-    bool enableWriteBuffer = false;
-    if(!JSONParser::read(element, "enableWriteBuffer", enableWriteBuffer)) {
-        std::string errorMessage("Could not parse config due to: 'enableWriteBuffer' not found.");
+    bool writeBufferEnabled = false;
+    if(!JSONParser::read(element, "writeBufferEnabled", writeBufferEnabled)) {
+        std::string errorMessage("Could not parse config due to: 'writeBufferEnabled' not found.");
         log_error() << errorMessage;
         throw ContainerOptionParseError(errorMessage);
     }
 
-    m_options->setEnableWriteBuffer(enableWriteBuffer);
+    m_options->setWriteBufferEnabled(writeBufferEnabled);
 
-    if (enableWriteBuffer == true) {
+    if (writeBufferEnabled == true) {
         bool enableTemporaryFilesystemWriteBuffer = false;
         if(!JSONParser::read(element,
-                             "enableTemporaryFileSystemWriteBuffer",
+                             "temporaryFileSystemWriteBufferEnabled",
                              enableTemporaryFilesystemWriteBuffer))
         {
             log_warn() << "Could not parse config due to: 'enableTemporaryFilesystemWriteBuffer' not found.";
         }
-        m_options->setEnableTemporaryFileSystemWriteBuffers(enableTemporaryFilesystemWriteBuffer);
+        m_options->setTemporaryFileSystemWriteBufferEnabled(enableTemporaryFilesystemWriteBuffer);
 
         if (enableTemporaryFilesystemWriteBuffer) {
             int temporaryFileSystemSize = DEFAULT_TEMPORARY_FILESYSTEM_SIZE;

@@ -47,7 +47,7 @@ def logfile_path():
 # configurations to the Container helper. Tests that need to add, remove or
 # update entries can simply base their dict on this one for convenience.
 DATA = {
-    Container.CONFIG: '[{"enableWriteBuffer": false}]',
+    Container.CONFIG: '[{"writeBufferEnabled": false}]',
     Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False

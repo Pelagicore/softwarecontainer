@@ -86,8 +86,8 @@ public:
      * Getters for values that do not originate from the static configs and thus might be
      * set after creation of this class, i.e. these can be set with setters
      */
-    bool enableWriteBuffer() const;
-    bool enableTemporaryFileSystemWriteBuffers() const;
+    bool writeBufferEnabled() const;
+    bool temporaryFileSystemWriteBufferEnableds() const;
     unsigned int temporaryFileSystemSize() const;
 
 private:
@@ -104,8 +104,8 @@ private:
     std::string m_sharedMountsDir;
     unsigned int m_containerShutdownTimeout;
 
-    bool m_enableWriteBuffer;
-    bool m_enableTemporaryFileSystemWriteBuffers;
+    bool m_writeBufferEnabled;
+    bool m_temporaryFileSystemWriteBufferEnableds;
     unsigned int m_temporaryFileSystemSize;
 };
 

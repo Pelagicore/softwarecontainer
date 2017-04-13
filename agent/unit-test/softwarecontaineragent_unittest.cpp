@@ -136,7 +136,7 @@ public:
                                      "service-manifest-dir = " + std::string(SERVICE_MANIFEST_DIR_TESTING) + "\n"
                                      "default-service-manifest-dir = " + std::string(DEFAULT_SERVICE_MANIFEST_DIR_TESTING) + "\n";
 
-    const std::string valid_config = "[{\"enableWriteBuffer\": false}]";
+    const std::string valid_config = "[{\"writeBufferEnabled\": false}]";
 
     void SetUp() override
     {

@@ -47,7 +47,7 @@ def agent_exec_prefix():
     return "strace"
 
 DATA = {
-    Container.CONFIG: '[{"enableWriteBuffer": false}]',
+    Container.CONFIG: '[{"writeBufferEnabled": false}]',
     Container.BIND_MOUNT_DIR: "/gateways/app",
     Container.HOST_PATH: CURRENT_DIR,
     Container.READONLY: False
@@ -125,7 +125,7 @@ class TestFileSystemStrace(object):
             server.bind(absolute_test_file)
 
         ca = Container()
-        DATA[Container.CONFIG] = '[{"enableWriteBuffer": true}]'
+        DATA[Container.CONFIG] = '[{"writeBufferEnabled": true}]'
 
         try:
             ca.start(DATA)

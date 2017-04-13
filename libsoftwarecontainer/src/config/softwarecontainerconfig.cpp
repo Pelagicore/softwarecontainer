@@ -51,12 +51,12 @@ SoftwareContainerConfig::SoftwareContainerConfig(
 
 void SoftwareContainerConfig::setEnableWriteBuffer(bool enabledFlag)
 {
-    m_enableWriteBuffer = enabledFlag;
+    m_writeBufferEnabled = enabledFlag;
 }
 
 void SoftwareContainerConfig::setEnableTemporaryFileSystemWriteBuffers(bool enabled)
 {
-    m_enableTemporaryFileSystemWriteBuffers = enabled;
+    m_temporaryFileSystemWriteBufferEnableds = enabled;
 }
 
 void SoftwareContainerConfig::setTemporaryFileSystemSize(unsigned int size)
@@ -79,14 +79,14 @@ unsigned int SoftwareContainerConfig::containerShutdownTimeout() const
     return m_containerShutdownTimeout;
 }
 
-bool SoftwareContainerConfig::enableWriteBuffer() const
+bool SoftwareContainerConfig::writeBufferEnabled() const
 {
-    return m_enableWriteBuffer;
+    return m_writeBufferEnabled;
 }
 
-bool SoftwareContainerConfig::enableTemporaryFileSystemWriteBuffers() const
+bool SoftwareContainerConfig::temporaryFileSystemWriteBufferEnableds() const
 {
-    return m_enableTemporaryFileSystemWriteBuffers;
+    return m_temporaryFileSystemWriteBufferEnableds;
 }
 
 unsigned int SoftwareContainerConfig::temporaryFileSystemSize() const

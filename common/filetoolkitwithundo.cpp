@@ -54,7 +54,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
                                     const std::string &dst,
                                     const std::string &tmpContainerRoot,
                                     bool readOnly,
-                                    bool enableWriteBuffer)
+                                    bool writeBufferEnabled)
 {
     unsigned long flags =  0;
     std::string fstype;
@@ -73,7 +73,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
 
     log_debug() << "Bind-mounting " << src << " in " << dst << ", flags: " << flags;
 
-    if(enableWriteBuffer && isDirectory(src)) {
+    if(writeBufferEnabled && isDirectory(src)) {
         std::string upperDir , workDir;
 
         // In case the tmpContainerRoot is set to nothing we need to create a
@@ -90,7 +90,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         std::ostringstream os;
         os << "lowerdir=" << src << ",upperdir=" << upperDir << ",workdir=" << workDir;
 
-        log_debug() << "enableWriteBuffer, config: " << os.str();
+        log_debug() << "writeBufferEnabled, config: " << os.str();
 
         mountRes = mount("overlay", dst.c_str(), fstype.c_str(), flags, os.str().c_str());
         log_debug() << "mountRes: " << mountRes;
@@ -108,7 +108,7 @@ bool FileToolkitWithUndo::bindMount(const std::string &src,
         return false;
     }
 
-    if (readOnly && !enableWriteBuffer) {
+    if (readOnly && !writeBufferEnabled) {
         const void *data = nullptr;
 
         flags = MS_REMOUNT | MS_RDONLY | MS_BIND;

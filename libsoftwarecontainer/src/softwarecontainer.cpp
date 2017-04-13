@@ -64,8 +64,8 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
     m_containerRoot = buildPath(m_config->sharedMountsDir(), "SC-" + std::to_string(id));
     m_tmpfsSize = 100485760;
     checkContainerRoot(m_containerRoot);
-    if (m_config->enableWriteBuffer()) {
-        if (m_config->enableTemporaryFileSystemWriteBuffers()) {
+    if (m_config->writeBufferEnabled()) {
+        if (m_config->temporaryFileSystemWriteBufferEnableds()) {
             m_tmpfsSize = m_config->temporaryFileSystemSize();
         }
         tmpfsMount(m_containerRoot, m_tmpfsSize);
@@ -79,7 +79,7 @@ SoftwareContainer::SoftwareContainer(const ContainerID id,
         new Container("SC-" + std::to_string(id),
                       m_config->containerConfigPath(),
                       m_containerRoot,
-                      m_config->enableWriteBuffer(),
+                      m_config->writeBufferEnabled(),
                       m_config->containerShutdownTimeout()));
 
     if(!init()) {
