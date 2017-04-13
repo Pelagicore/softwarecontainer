@@ -9,7 +9,7 @@ var classsoftwarecontainer_1_1_software_container_config =
     [ "containerConfigPath", "classsoftwarecontainer_1_1_software_container_config.html#a61301234a0036fe3063841f82706e632", null ],
     [ "sharedMountsDir", "classsoftwarecontainer_1_1_software_container_config.html#ab90d896ea466bdc396244b457f9d3ae1", null ],
     [ "containerShutdownTimeout", "classsoftwarecontainer_1_1_software_container_config.html#a039972439b8a6d056caab38571627e92", null ],
-    [ "enableWriteBuffer", "classsoftwarecontainer_1_1_software_container_config.html#ae7d1ab47fecf06db8c59827491d4ca5c", null ],
-    [ "enableTemporaryFileSystemWriteBuffers", "classsoftwarecontainer_1_1_software_container_config.html#abc38ac165e431893f2fd7ac147b5b519", null ],
+    [ "writeBufferEnabled", "classsoftwarecontainer_1_1_software_container_config.html#a62ad48ddc12e602610257b52e2b0db21", null ],
+    [ "temporaryFileSystemWriteBufferEnableds", "classsoftwarecontainer_1_1_software_container_config.html#ac8b51a4bf0d09c8ad3d8d56d7ee18fd1", null ],
     [ "temporaryFileSystemSize", "classsoftwarecontainer_1_1_software_container_config.html#adf41ab9ee574edf7e04ae9c5330aeb5e", null ]
 ];

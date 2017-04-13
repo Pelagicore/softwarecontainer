@@ -84,7 +84,7 @@ Parameters
 
 Example config JSON::
 
-[{"enableWriteBuffer": true}]
+[{"writeBufferEnabled": true}]
 
 Return Values
 #############

@@ -84,13 +84,13 @@ for example. Enabling the write buffer will provide a layer of
 protection for the filesystem by only allowing a final write of the changes in
 the upper layer when the container is shutting down.
 
-To enable the write buffer, set the ``enableWriteBuffer`` option in the
+To enable the write buffer, set the ``writeBufferEnabled`` option in the
 ``com.pelagicore.SoftwareContainerAgent.Create(config)`` call.
 This is done using the config parameter in specific, for example, this JSON
 config::
 
     [{
-        "enableWriteBuffer": true
+        "writeBufferEnabled": true
     }]
 
 The underlying mechanism of the write buffer is the ``OverlayFS`` which mounts a
@@ -151,19 +151,19 @@ option in the ``Create`` DBus call to the ``SoftwareContainerAgent``.
 An example configuration would look like this::
 
     [{
-        "enableWriteBuffer": true,
-        "enableTemporaryFileSystemWriteBuffer": true,
+        "writeBufferEnabled": true,
+        "temporaryFileSystemWriteBufferEnabled": true,
         "temporaryFileSystemSize": 10485760
     }]
 
-The ``enableTemporaryFileSystemWriteBuffer`` setting enables the ``tmpfs``
+The ``temporaryFileSystemWriteBufferEnabled`` setting enables the ``tmpfs``
 creation as described above, while the ``temporaryFileSystemSize`` variable
 sets the size of the ``tmpfs`` in bytes.
 
 .. Note:: The ``temporaryFileSystemSize`` parameter will not be parsed unless
-          the ``enableTemporaryFileSystemWriteBuffer`` parameter is ``true``.
+          the ``temporaryFileSystemWriteBufferEnabled`` parameter is ``true``.
           The ``temporaryFileSystemSize`` is not required if the
-          ``enableTemporaryFileSystemWriteBuffer`` is set to ``false`` or not
+          ``temporaryFileSystemWriteBufferEnabled`` is set to ``false`` or not
           added at all.
 
 .. Note:: The ``tmpfs`` is shared between the upper and work directories in 

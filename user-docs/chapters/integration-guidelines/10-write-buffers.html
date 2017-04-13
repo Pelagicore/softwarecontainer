@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Write buffered filesystems &#8212; softwarecontainer 0.18.0-1d87d96 2017-04-13 documentation</title>
+    <title>Write buffered filesystems &#8212; softwarecontainer 0.18.0-e7ff12d 2017-04-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-1d87d96 2017-04-13',
+        VERSION:     '0.18.0-e7ff12d 2017-04-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -52,14 +52,14 @@ chapter.</p>
 <p>The following snippet will create a container where a write buffer will be
 created for all filesystems in that container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
-    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span>
+    <span class="s2">&quot;writeBufferEnabled&quot;</span><span class="p">:</span> <span class="n">true</span>
 <span class="p">}]</span>
 </pre></div>
 </div>
 <p>The following example will disable write buffers for all filesystems within
 the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
-    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="s2">&quot;writeBufferEnabled&quot;</span><span class="p">:</span> <span class="n">false</span>
 <span class="p">}]</span>
 </pre></div>
 </div>

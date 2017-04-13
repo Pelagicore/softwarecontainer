@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Filesystems &#8212; softwarecontainer 0.18.0-1d87d96 2017-04-13 documentation</title>
+    <title>Filesystems &#8212; softwarecontainer 0.18.0-e7ff12d 2017-04-13 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-1d87d96 2017-04-13',
+        VERSION:     '0.18.0-e7ff12d 2017-04-13',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -118,12 +118,12 @@ overly high number of writes leading to an early death of storage devices
 for example. Enabling the write buffer will provide a layer of
 protection for the filesystem by only allowing a final write of the changes in
 the upper layer when the container is shutting down.</p>
-<p>To enable the write buffer, set the <code class="docutils literal"><span class="pre">enableWriteBuffer</span></code> option in the
+<p>To enable the write buffer, set the <code class="docutils literal"><span class="pre">writeBufferEnabled</span></code> option in the
 <code class="docutils literal"><span class="pre">com.pelagicore.SoftwareContainerAgent.Create(config)</span></code> call.
 This is done using the config parameter in specific, for example, this JSON
 config:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
-    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span>
+    <span class="s2">&quot;writeBufferEnabled&quot;</span><span class="p">:</span> <span class="n">true</span>
 <span class="p">}]</span>
 </pre></div>
 </div>
@@ -173,21 +173,21 @@ directories should be created inside this <code class="docutils literal"><span c
 option in the <code class="docutils literal"><span class="pre">Create</span></code> DBus call to the <code class="docutils literal"><span class="pre">SoftwareContainerAgent</span></code>.
 An example configuration would look like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[{</span>
-    <span class="s2">&quot;enableWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-    <span class="s2">&quot;enableTemporaryFileSystemWriteBuffer&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;writeBufferEnabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;temporaryFileSystemWriteBufferEnabled&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
     <span class="s2">&quot;temporaryFileSystemSize&quot;</span><span class="p">:</span> <span class="mi">10485760</span>
 <span class="p">}]</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> setting enables the <code class="docutils literal"><span class="pre">tmpfs</span></code>
+<p>The <code class="docutils literal"><span class="pre">temporaryFileSystemWriteBufferEnabled</span></code> setting enables the <code class="docutils literal"><span class="pre">tmpfs</span></code>
 creation as described above, while the <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> variable
 sets the size of the <code class="docutils literal"><span class="pre">tmpfs</span></code> in bytes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> parameter will not be parsed unless
-the <code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> parameter is <code class="docutils literal"><span class="pre">true</span></code>.
+the <code class="docutils literal"><span class="pre">temporaryFileSystemWriteBufferEnabled</span></code> parameter is <code class="docutils literal"><span class="pre">true</span></code>.
 The <code class="docutils literal"><span class="pre">temporaryFileSystemSize</span></code> is not required if the
-<code class="docutils literal"><span class="pre">enableTemporaryFileSystemWriteBuffer</span></code> is set to <code class="docutils literal"><span class="pre">false</span></code> or not
+<code class="docutils literal"><span class="pre">temporaryFileSystemWriteBufferEnabled</span></code> is set to <code class="docutils literal"><span class="pre">false</span></code> or not
 added at all.</p>
 </div>
 <div class="admonition note">
