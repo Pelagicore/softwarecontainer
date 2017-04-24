@@ -67,6 +67,7 @@ Error sources
     * Could not create parent directories
     * Could not create the target directory (if mounting a directory)
     * Could not touch the target file (if mounting a file)
+    * The destination path already exists
 * Mount issues
     * Mount failed (:linuxman:`mount(2)` failed)
     * Couldn't move the mount
