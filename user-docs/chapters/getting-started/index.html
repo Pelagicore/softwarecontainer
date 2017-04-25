@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started &#8212; softwarecontainer 0.18.0-f7b8b24 2017-04-18 documentation</title>
+    <title>Getting started &#8212; softwarecontainer 0.18.0-00a0cca 2017-04-25 documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.18.0-f7b8b24 2017-04-18',
+        VERSION:     '0.18.0-00a0cca 2017-04-25',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -239,8 +239,10 @@ container.</p>
 
 </pre></div>
 </div>
-<p>The JSON string passed as argument to the <code class="docutils literal"><span class="pre">config</span></code> parameter is documented in the Container config section.</p>
-<p>The return value of Create is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.</p>
+<p>The JSON string passed as argument to the <code class="docutils literal"><span class="pre">config</span></code> parameter is documented in the Container
+config section.</p>
+<p>The return value of Create is the ID of the newly created container. This is used to identify
+the container when e.g. shutting it down.</p>
 <p>Bind mount a directory inside the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \
@@ -265,7 +267,7 @@ This is currently not supported.</li>
 </dd>
 </dl>
 <p>The method assumes the path <code class="docutils literal"><span class="pre">pathInHost</span></code> exists, so choose another path if it is more convenient.
-The result of the method is that the content of &#8216;/home/vagrant/softwarecontainer&#8217; will be
+The result of the method is that the content of <code class="docutils literal"><span class="pre">$HOME/softwarecontainer/</span></code> will be
 visible in the path <code class="docutils literal"><span class="pre">/app</span></code> inside the container. The actual location on the host can be found in
 <code class="docutils literal"><span class="pre">/tmp/container/SC-&lt;container</span> <span class="pre">ID&gt;/</span></code> where the created <code class="docutils literal"><span class="pre">app</span></code> directory will be.</p>
 <p>Launch something in the container:</p>
@@ -287,13 +289,14 @@ visible in the path <code class="docutils literal"><span class="pre">/app</span>
 <li><code class="docutils literal"><span class="pre">commandLine</span></code> - a string with the method to run at the method line insider the container.</li>
 <li><code class="docutils literal"><span class="pre">workingDirectory</span></code> - a string with a path to a directory which will be set as the working directory.</li>
 <li><code class="docutils literal"><span class="pre">outputFile</span></code> - a string with a path to where stdout will be directed from within the container.</li>
-<li><code class="docutils literal"><span class="pre">env</span></code> - a string:string dictionary with environment variables and values to be set in the container. These will override any variables with the same name previously set by the Environment gateway.</li>
+<li><code class="docutils literal"><span class="pre">env</span></code> - a string:string dictionary with environment variables and values to be set in the container.
+These will override any variables with the same name previously set by the Environment gateway.</li>
 </ul>
 </dd>
 </dl>
 <p>The method returns the PID of the process run inside the container.</p>
-<p>The above method call results in a file <code class="docutils literal"><span class="pre">hello</span></code> being created inside the conainer in <code class="docutils literal"><span class="pre">/app/</span></code>. This can
-also be seen in the bind mounted location <code class="docutils literal"><span class="pre">/home/vagrant/softwarecontainer/</span></code>.</p>
+<p>The above method call results in a file <code class="docutils literal"><span class="pre">hello</span></code> being created inside the conainer in <code class="docutils literal"><span class="pre">/app/</span></code>.
+This can also be seen in the bind mounted host location.</p>
 <p>Suspend the container:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gdbus</span> <span class="n">call</span> <span class="o">--</span><span class="n">system</span> \
 <span class="o">--</span><span class="n">dest</span> <span class="n">com</span><span class="o">.</span><span class="n">pelagicore</span><span class="o">.</span><span class="n">SoftwareContainerAgent</span> \

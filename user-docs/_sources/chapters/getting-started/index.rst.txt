@@ -133,9 +133,11 @@ Start a container:
 
 .. literalinclude:: examples/03_create_container.sh
 
-The JSON string passed as argument to the ``config`` parameter is documented in the Container config section.
+The JSON string passed as argument to the ``config`` parameter is documented in the Container
+config section.
 
-The return value of Create is the ID of the newly created container. This is used to identify the container when e.g. shutting it down.
+The return value of Create is the ID of the newly created container. This is used to identify
+the container when e.g. shutting it down.
 
 
 Bind mount a directory inside the container:
@@ -151,7 +153,7 @@ Parameters:
    This is currently not supported.
 
 The method assumes the path ``pathInHost`` exists, so choose another path if it is more convenient.
-The result of the method is that the content of '/home/vagrant/softwarecontainer' will be
+The result of the method is that the content of ``$HOME/softwarecontainer/`` will be
 visible in the path ``/app`` inside the container. The actual location on the host can be found in
 ``/tmp/container/SC-<container ID>/`` where the created ``app`` directory will be.
 
@@ -165,12 +167,13 @@ Parameters:
  * ``commandLine`` - a string with the method to run at the method line insider the container.
  * ``workingDirectory`` - a string with a path to a directory which will be set as the working directory.
  * ``outputFile`` - a string with a path to where stdout will be directed from within the container.
- * ``env`` - a string:string dictionary with environment variables and values to be set in the container. These will override any variables with the same name previously set by the Environment gateway.
+ * ``env`` - a string:string dictionary with environment variables and values to be set in the container.
+   These will override any variables with the same name previously set by the Environment gateway.
 
 The method returns the PID of the process run inside the container.
 
-The above method call results in a file ``hello`` being created inside the conainer in ``/app/``. This can
-also be seen in the bind mounted location ``/home/vagrant/softwarecontainer/``.
+The above method call results in a file ``hello`` being created inside the conainer in ``/app/``.
+This can also be seen in the bind mounted host location.
 
 Suspend the container:
 
