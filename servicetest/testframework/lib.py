@@ -336,13 +336,13 @@ class Container():
             Container.BIND_MOUNT_DIR - third argument to SoftwareContainerAgent::BindMount
             Container.READONLY - fourth argument to SoftwareContainerAgent::BindMount
         """
-        container_id = self.__create_container(data[Container.CONFIG])
+        self.__container_id = self.__create_container(data[Container.CONFIG])
 
         self.__bindmount(data[Container.HOST_PATH],
                          data[Container.BIND_MOUNT_DIR],
                          data[Container.READONLY])
         self.__bind_dir = data[Container.BIND_MOUNT_DIR]
-        return container_id
+        return self.__container_id
 
     def bindmount(self, hostpath, dirname, readonly):
         return self.__bindmount(hostpath, dirname, readonly)
