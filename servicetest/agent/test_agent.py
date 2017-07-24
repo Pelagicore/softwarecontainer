@@ -20,7 +20,10 @@ import pytest
 
 import os
 import time
+import subprocess
 # import lxc
+
+from enum import Enum
 
 from testframework import Container
 from testframework import SoftwareContainerAgentHandler
@@ -78,38 +81,96 @@ class TestNoSessionBus(object):
         time.sleep(0.5)
         assert not agent_without_checks.is_alive()
 
-@pytest.mark.usefixtures("create_testoutput_dir", "agent")
+@pytest.mark.usefixtures("create_testoutput_dir")
 class TestClearOldContainers(object):
     """ This test suite tests that SC cleans out old container, i.e.
         container related files left on the file system.
     """
 
-    def test_old_containers_cleanup(self):
-        """ The first goal of this test is to create a sitation where files from
-            a previous run of SC are left on the file system.
-            To be able to produce it a SC is started and after that
-            softwarecontainer-agent is killed.
+    def __create_lxc_container(self, container_name):
+        c = lxc.Container(container_name)
+        if c.defined or (not c.create("busybox", lxc.LXC_CREATE_QUIET)):
+            raise
+        else:
+            return c
 
-            The second phase of the test is to run SC again and make sure
-            it does not fail because of any files left from the previous run.
+    def __destroy_lxc_container(self, container):
+        if container.running:
+            if not container.shutdown(1) and not container.stop():
+                raise
+        if not container.destroy():
+            raise
+
+    class CON_TYPE(Enum):
+        SC = 'SC'
+        OTHER = 'OTHER'
+
+    @pytest.mark.parametrize("containers",[
+        # Only a bunch of SC containers
+        [CON_TYPE.SC],
+        [CON_TYPE.SC, CON_TYPE.SC],
+        [CON_TYPE.SC, CON_TYPE.SC, CON_TYPE.SC],
+        # Only a bunch of regular LXC containers
+        [CON_TYPE.OTHER],
+        [CON_TYPE.OTHER, CON_TYPE.OTHER],
+        [CON_TYPE.OTHER, CON_TYPE.OTHER, CON_TYPE.OTHER],
+        # Combinations of SC and regular LXC containers
+        [CON_TYPE.OTHER, CON_TYPE.SC, CON_TYPE.SC],
+        [CON_TYPE.SC, CON_TYPE.OTHER, CON_TYPE.SC],
+        [CON_TYPE.SC, CON_TYPE.SC, CON_TYPE.OTHER],
+        [CON_TYPE.OTHER, CON_TYPE.OTHER, CON_TYPE.SC],
+        [CON_TYPE.OTHER, CON_TYPE.SC, CON_TYPE.OTHER],
+        [CON_TYPE.SC, CON_TYPE.OTHER, CON_TYPE.OTHER]
+    ])
+    def test_old_containers_cleanup(self, containers):
+        """ We want to test that old SC containers, but no other containers,
+            are destroyed on startup of the agent. Since we have to start and
+            kill the agent manually here, we don't use the agent fixture.
         """
-        sc = Container()
-        container_id = sc.start(DATA)
-        os.system("pkill --signal SIGKILL -f softwarecontainer-agent")
-        time.sleep(0.5)
 
-        os.system("lxc-ls >> output")
-        with open("output", "r") as fh:
-            file_content = fh.readline()
-        file_content = file_content.strip()
-        assert file_content == ("SC-" + str(container_id))
-        os.remove("output")
-
+        # Start the agent and let it start up
         agent_handler = SoftwareContainerAgentHandler(logfile_path(), None, None)
         time.sleep(0.5)
-        os.system("lxc-ls >> output")
-        with open("output", "r") as fh:
-            file_content = fh.readline()
-        assert file_content == ""
-        agent_handler.terminate()
-        os.remove("output")
+
+        other_name = "agent-servicetest"
+        other_counter = 0
+        sc_containers = dict()
+        other_containers = []
+
+        try:
+            for contype in containers:
+                # Create an SC container
+                if contype == self.CON_TYPE.SC:
+                    sc = Container()
+                    container_id = sc.start(DATA)
+                    container_name = "SC-" + str(container_id)
+                    sc_containers[container_name] = sc
+                # Create just any LXC container
+                else:
+                    skipped_container = self.__create_lxc_container(other_name + str(other_counter))
+                    other_counter += 1
+                    other_containers.append(skipped_container)
+
+            # Kill SC-agent without cleanup
+            agent_handler.terminate(kill=True)
+            time.sleep(0.1)
+
+            existing_containers = lxc.list_containers()
+            assert len(existing_containers) == len(sc_containers) + len(other_containers)
+
+            # Start the agent and give it time to kill the created container
+            agent_handler = SoftwareContainerAgentHandler(logfile_path(), None, None)
+            time.sleep(0.5)
+
+            # Check the content of lxc-ls
+            existing_containers = lxc.list_containers()
+            assert len(existing_containers) == len(other_containers)
+
+        finally:
+            # Exit and cleanup
+            agent_handler.terminate()
+
+            # Remove all other LXC containers
+            for cont in other_containers:
+                self.__destroy_lxc_container(cont)
+

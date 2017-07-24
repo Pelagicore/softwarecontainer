@@ -22,8 +22,8 @@
 #include "softwarecontainer-common.h"
 #include "createdir.h"
 
-
 #include <lxc/lxccontainer.h>
+#include <regex>
 
 namespace softwarecontainer {
 ContainerUtilityInterface::ContainerUtilityInterface(std::shared_ptr<Config> config)
@@ -39,43 +39,54 @@ void ContainerUtilityInterface::removeOldContainers()
     const char *basePath = lxc_get_global_config_item("lxc.lxcpath");
     auto num = list_all_containers(basePath, &containerNames, &containerList);
 
-    if (0 == num) {
-        // there are no container residue. No need to run more.
-        delete containerList;
+    if (-1 == num) {
+        log_error() << "An error occurred while trying to get container list";
+        throw ContainerUtilityInterfaceError("An error occurred while trying to get container list");
+    } else if (0 == num) {
         delete containerNames;
+        delete containerList;
         return;
-    } else if (-1 == num) {
-        log_error() << "An error is occurred while trying to get deprecated container list";
-        throw ContainerUtilityInterfaceError("An error is occurred while trying to get container list");
     }
 
-    log_warning() << num << " unused deprecated containers found";
-    for (auto i = 0; i < num; i++) {
+    // Convert the list/names to a map for convenience
+    std::map<std::string, struct lxc_container *> containerMap;
+    for(int i=0; i<num; i++) {
+        std::string name = std::string(containerNames[i]);
         struct lxc_container *container = containerList[i];
-        log_debug() << "Deprecated container named " << containerNames[i] << " will be deleted";
+
+        containerMap[name] = container;
+        delete containerNames[i]; // We don't need this anymore
+    }
+    delete containerNames; // We don't need this anymore
+
+    for(const auto value : containerMap) {
+        std::string containerName = value.first;
+        struct lxc_container *container = value.second;
+
+        if (!std::regex_match(containerName, std::regex("SC-.*"))) {
+            log_debug() << "Found non-SC container " << containerName;
+            continue;
+        }
+
+        log_debug() << "Deprecated container named " << containerName << " will be deleted";
 
         if (container->is_running(container)) {
             bool success = container->stop(container);
             if (!success) {
-                std::string errorMsg = "Unable to stop deprecated container " +
-                                       std::string(containerNames[i]);
+                std::string errorMsg = "Unable to stop deprecated container " + containerName;
                 throw ContainerUtilityInterfaceError(errorMsg);
             }
         }
 
         bool success = container->destroy(container);
         if (!success) {
-            std::string errorMsg = "Unable to destroy deprecated container " +
-                                   std::string(containerNames[i]);
+            std::string errorMsg = "Unable to destroy deprecated container " + containerName;
             throw ContainerUtilityInterfaceError(errorMsg);
         }
 
-        log_debug() << "Deprecated container " << containerNames[i] << " is successfully destroyed";
-        delete container;
-        delete containerNames[i];
+        log_debug() << "Deprecated container " << containerName << " is successfully destroyed";
+        delete value.second; // Remove the lxc_container struct that we allocated
     }
-    delete containerList;
-    delete containerNames;
 }
 
 void ContainerUtilityInterface::checkWorkspace()
