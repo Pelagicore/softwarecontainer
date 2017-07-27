@@ -25,13 +25,12 @@
     use directly, while the Agent setup is provided more handlily by fixtures.
 """
 
-import dbus
 import json
 import threading
-import thread
-import Queue
+import queue
 import subprocess
-import dbus.mainloop.glib
+import dbus
+
 import os.path
 from gi.repository import GObject
 
@@ -408,9 +407,9 @@ class SoftwareContainerAgentHandler():
         self.__rec.wait_until_setup_is_done()
 
         # Starting softwarecontainer-agent
-        # TODO: This doesn't work if the user pass 'None' as log_file_path
-        assert log_file_path is not None
-        self.__agent = subprocess.Popen(cmd, stdout=self.__log_file, stderr=self.__log_file)
+        self.__agent = subprocess.Popen(cmd, stdout=self.__log_file, stderr=self.__log_file,
+                                        universal_newlines=True, close_fds=False,
+                                        restore_signals=False)
 
         if check_connection:
             self.check_connection()
@@ -429,7 +428,7 @@ class SoftwareContainerAgentHandler():
                 timeout = 3
             while self.__rec.msg_queue().get(block=True, timeout=timeout) != "softwarecontainerStarted":
                 pass
-        except Queue.Empty as e:
+        except queue.Empty as e:
             self.terminate()
             raise Exception("SoftwareContainer DBus interface not seen", e)
 
@@ -441,9 +440,12 @@ class SoftwareContainerAgentHandler():
     def is_alive(self):
         return self.__agent.poll() is None
 
-    def terminate(self):
+    def terminate(self, kill=False):
         if self.is_alive():
-            self.__agent.terminate()
+            if kill:
+                self.__agent.kill()
+            else:
+                self.__agent.terminate()
 
         self.__rec.terminate()
         self.__log_file.close()
@@ -457,8 +459,8 @@ class Receiver(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         GObject.threads_init()
-        self.__msg_queue = Queue.Queue()
-        self.lock = thread.allocate_lock()
+        self.__msg_queue = queue.Queue()
+        self.lock = threading.Lock()
         self.lock.acquire()
 
     def wait_until_setup_is_done(self):

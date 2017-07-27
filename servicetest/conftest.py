@@ -1,4 +1,3 @@
-
 # Copyright (C) 2016-2017 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -24,8 +23,16 @@ import signal
 import shutil
 import time
 
-from testframework import SoftwareContainerAgentHandler
+from .testframework import SoftwareContainerAgentHandler
 
+# If we catch signals here and raise errors when we get them, we can use the --pdb option in py.test
+# to drop to a debugger whenever it happens. This makes for easier debugging if something were to
+# actually crash.
+def signal_handler(signum, frame):
+    raise OSError("CAUGHT SIGNAL " + str(signum))
+
+signal.signal(signal.SIGTERM, signal_handler)
+signal.signal(signal.SIGINT, signal_handler)
 
 # Add this directory (the package root) to the sys.path so the imports
 # in the tests work, e.g. importing from 'testframework' to access helper
@@ -33,11 +40,10 @@ from testframework import SoftwareContainerAgentHandler
 PACKAGE_ROOT = os.path.dirname(os.path.abspath(__file__))
 os.sys.path.insert(0, PACKAGE_ROOT)
 
-
 @pytest.fixture(scope="class")
 def dbus_launch():
     """ Setting up dbus environement variables for session bus """
-    p = subprocess.Popen('dbus-launch', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen('dbus-launch', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
     for var in p.stdout:
         sp = var.split('=', 1)
         env_var = sp[0]

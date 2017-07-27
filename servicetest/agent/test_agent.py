@@ -1,4 +1,3 @@
-
 # Copyright (C) 2017 Pelagicore AB
 #
 # Permission to use, copy, modify, and/or distribute this software for
@@ -21,7 +20,7 @@ import pytest
 import os
 import time
 import subprocess
-# import lxc
+import lxc
 
 from enum import Enum
 

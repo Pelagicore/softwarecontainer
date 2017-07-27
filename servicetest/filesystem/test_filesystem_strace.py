@@ -22,7 +22,7 @@ import time
 import platform
 import socket
 import re
-import StringIO
+from io import StringIO
 
 
 from testframework import Container
@@ -80,8 +80,8 @@ def get_strace_created_files(buf):
     """
     files = list()
 
-    for line in StringIO.StringIO(buf):
-        print line
+    for line in StringIO(buf):
+        print(line)
         # Find all open("...", O_CREAT...) instances.
         if re.search('^open(.*)O_CREAT', line):
             p = re.compile('^open\(\"(.*)\",')
@@ -178,7 +178,7 @@ class TestFileSystemStrace(object):
 
         # Remove the fileset files from the files list
         for f in fileset:
-            files = filter(lambda a: a != f, files)
+            files = [a for a in files if a != f]
 
         # And assert that the list is empty. If anything is left, they are
         # created in a bad location.

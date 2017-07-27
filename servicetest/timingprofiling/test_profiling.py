@@ -93,7 +93,7 @@ def run_test(num_starts=3):
         for app in range(0, num_starts):
             """ Start numStarts apps in softwarecontainer.
             """
-            print "Start app " + str(app)
+            print("Start app {}".format(str(app)))
             container = Container()
 
             # A basic container configuration, content is not important for this test.
@@ -134,7 +134,7 @@ def get_python_point(log_file, point_name, match_number=1):
             match = match + 1
             if match == match_number:
                 return remove_ansi(string.split(line)[2])
-    print "Nothing found! " + point_name + " " + str(match_number)
+    print("Nothing found! {} {}".format(point_name, str(match_number)))
     return 0
 
 
@@ -145,9 +145,9 @@ def get_function_log(log_file, function_name, match_number=1):
         if re.search(function_name + " end", line):
             match = match + 1
             if match == match_number:
-                print line
+                print(line)
                 return remove_ansi(string.split(line)[6])
-    print "Nothing found! " + function_name + " " + str(match_number)
+    print("Nothing found! {} {}".format(function_name, str(match_number)))
     return 0
 
 
@@ -165,7 +165,7 @@ def get_log_point(log_file, point_name, match_number=1):
             match = match + 1
             if match == match_number:
                 return remove_ansi(string.split(line)[4])
-    print "Nothing found! " + point_name + " " + str(match_number)
+    print("Nothing found! {} {}".format(point_name, str(match_number)))
     return 0
 
 
@@ -185,7 +185,7 @@ def measure(log_file):
         return False
 
     for line in log_file:
-        print line
+        print(line)
 
     start = "softwareContainerStart"
     end = "dbusAvailable"

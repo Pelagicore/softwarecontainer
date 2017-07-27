@@ -180,7 +180,7 @@ class TestCGroupGateway(object):
                               " --do-allocate " +
                               str(memory_limitation))
 
-            # wait 5 seconds for previous operation to end
+            # wait 3 seconds for previous operation to end
             time.sleep(3)
 
             helper = CGroupHelper(CURRENT_DIR)
