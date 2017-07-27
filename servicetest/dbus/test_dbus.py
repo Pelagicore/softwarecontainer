@@ -29,7 +29,7 @@ from testframework import Container
 from testframework import Capability
 from testframework import StandardManifest
 
-import dbusapp
+from . import dbusapp
 
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -154,7 +154,7 @@ class TestDBus(object):
         """
         c = Container()
         service = subprocess.Popen([
-                                        "python",
+                                        "python3",
                                         CURRENT_DIR + "/dbusapp.py",
                                         "server",
                                         "--outdir",
@@ -188,7 +188,7 @@ class TestDBus(object):
         """
         c = Container()
         service = subprocess.Popen([
-                                        "python",
+                                        "python3",
                                         CURRENT_DIR + "/dbusapp.py",
                                         "server",
                                         "--outdir",
@@ -218,7 +218,8 @@ class TestDBus(object):
         finally:
             c.terminate()
             service.terminate()
- 
+
+    @pytest.mark.skip(reason="See reported issue about this")
     def test_query_in(self):
         """ Launch server in container and test if a client can communicate with it from the host system """
         for x in range(0, 10):
@@ -239,7 +240,7 @@ class TestDBus(object):
     def test_query_out(self):
         """ Launch client in container and test if it communicates out """
         for x in range(0, 10):
-            serv = dbusapp.Server()
+            serv = dbusapp.Server(output_dir())
             serv.start()
             ca = Container()
             try:

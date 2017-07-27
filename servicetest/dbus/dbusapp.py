@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright (C) 2016-2017 Pelagicore AB
 #
@@ -60,7 +60,7 @@ class Service(dbus.service.Object):
 
     @dbus.service.method(IFACE, in_signature="s", out_signature="s")
     def Ping(self, message):
-        print "Got a Ping: ", message
+        print("Got a Ping: {}".format(message))
         with open(self.__outdir + "/service_output", "w") as fh:
             fh.write(message)
         return message
@@ -122,7 +122,8 @@ class Client():
         else:
             self.good_resp = 0
             alphab = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            inp = reduce(operator.add, [random.choice(alphab) for x in range(0, self.message_size - 37)])
+            inpList = [ random.choice(alphab) for x in range(0, self.message_size - 37) ]
+            inp = ''.join(inpList)
 
             for _ in range(0, NR_OF_REQUESTS):
                 ans = self.remote_object.Bounce(inp)
@@ -133,7 +134,7 @@ class Client():
         return self.good_resp == NR_OF_REQUESTS
 
     def call_ping(self):
-        print "Will call Ping"
+        print("Will call Ping")
         self.remote_object.Ping("Hello")
 
 
@@ -153,7 +154,7 @@ if __name__ == '__main__':
         r = Server(args.outdir)
         r.start()
     elif args.mode == "client":
-        print "Using mode 'client'"
-        print "method: ", args.method
+        print("Using mode 'client'")
+        print("method: {}".format(args.method))
         c = Client()
         c.run(method=args.method)

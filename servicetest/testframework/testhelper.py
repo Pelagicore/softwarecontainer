@@ -52,7 +52,7 @@ def LOG(message):
     """ To avoid spammy output when needed we wrap the printouts
     """
     if VERBOSE is True:
-        print message
+        print(message)
 
 
 class Helper(object):
@@ -180,6 +180,7 @@ class CGroupHelper(Helper):
     """
     def __init__(self, file_base_path):
         Helper.__init__(self, file_base_path)
+        self.__result_file = os.path.join(file_base_path, "cgroup_result")
 
     # Below methods are executed inside container
     def allocate(self, size):
@@ -193,21 +194,23 @@ class CGroupHelper(Helper):
                 buffer = buffer + ('a' * step)
             except:
                 return False
-            os.system("echo " + str(len(buffer)) + " > cgroup_result")
+
+            with open(self.__result_file, "w") as f:
+                f.write(str(len(buffer)))
 
         return True
 
     # Below methods are executed on the host (in the tests)
     def remove_file(self):
         try:
-            os.remove(self._base_path + "/cgroup_result")
+            os.remove(self.__result_file)
         except:
             LOG("There is no file to remove")
 
     def result(self):
         file_content = None
-        with open("cgroup_result", "r") as fh:
-            file_content = fh.readline()
+        with open(self.__result_file, "r") as fh:
+            file_content = fh.read()
         return int(file_content)
 
 class CoreDumpHelper(Helper):
