@@ -441,7 +441,8 @@ class SoftwareContainerAgentHandler():
         return self.__agent.poll() is None
 
     def terminate(self, kill=False):
-        if self.is_alive():
+        while self.is_alive():
+#        if self.is_alive():
             if kill:
                 self.__agent.kill()
             else:
