@@ -133,8 +133,11 @@ class TestClearOldContainers(object):
 
         other_name = "agent-servicetest"
         other_counter = 0
-        sc_containers = dict()
+        sc_containers = 0
         other_containers = []
+
+        # Amount of containers prior to test start
+        initial_container_count = len(lxc.list_containers())
 
         try:
             for contype in containers:
@@ -143,7 +146,7 @@ class TestClearOldContainers(object):
                     sc = Container()
                     container_id = sc.start(DATA)
                     container_name = "SC-" + str(container_id)
-                    sc_containers[container_name] = sc
+                    sc_containers += 1
                 # Create just any LXC container
                 else:
                     skipped_container = self.__create_lxc_container(other_name + str(other_counter))
@@ -155,7 +158,7 @@ class TestClearOldContainers(object):
             time.sleep(0.1)
 
             existing_containers = lxc.list_containers()
-            assert len(existing_containers) == len(sc_containers) + len(other_containers)
+            assert len(existing_containers) == sc_containers + other_counter
 
             # Start the agent and give it time to kill the created container
             agent_handler = SoftwareContainerAgentHandler(logfile_path(), None, None)
@@ -163,7 +166,7 @@ class TestClearOldContainers(object):
 
             # Check the content of lxc-ls
             existing_containers = lxc.list_containers()
-            assert len(existing_containers) == len(other_containers)
+            assert len(existing_containers) == other_counter
 
         finally:
             # Exit and cleanup
@@ -173,3 +176,6 @@ class TestClearOldContainers(object):
             for cont in other_containers:
                 self.__destroy_lxc_container(cont)
 
+            # Make sure we have the same amount of containers after test end
+            existing_containers = lxc.list_containers()
+            assert len(existing_containers) == initial_container_count
