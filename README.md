@@ -12,9 +12,9 @@ Each container is configured using gateways, where each gateway has a scope of
 influence (network, dbus, files, pulseaudio, for example). The gateways get a
 configuration snippet from the Launcher which they will enforce.
 
-SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer.
-The documentation is avaliable at https://pelagicore.github.io/softwarecontainer/.
-Pelagicore maintainer: Tobias Olausson <tobias.olausson@pelagicore.com>.
+* SoftwareContainer is maintained at https://github.com/Pelagicore/softwarecontainer.
+* The documentation is avaliable at https://pelagicore.github.io/softwarecontainer/.
+* Pelagicore maintainer: Joakim Gross <JGross@luxoft.com>
 
 ## Sub-components
 SoftwareContainer is composed of the following components:
