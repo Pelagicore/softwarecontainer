@@ -141,8 +141,10 @@ vagrant up
 The vagrant machine can then be inspected by running `vagrant ssh`
 
 This will create an environment for building softwarecontainer, download all
-the requirements, build the ones necessary to build, build softwarecontainer,
-run unit tests and perform a clang code analysis run on the code.
+the requirements and build the ones necessary to build. It will not build
+softwarecontainer and/or run any tests however. This is left for the developer
+and/or build system to do. The instructions for building and testing etc is
+performed by the Jenkinsfile.
 
 # Running
 You normally only want to run the softwarecontainer-agent, which requires root
