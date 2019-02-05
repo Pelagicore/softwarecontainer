@@ -124,7 +124,7 @@ copy_configuration()
     rootfs=$2
 
     # Set some non-static mount points, the rest are already in the config file
-    echo "lxc.rootfs = $rootfs" >> $path/config
+    echo "lxc.rootfs.path = $rootfs" >> $path/config
     echo "lxc.mount.entry = ${CMAKE_INSTALL_PREFIX} $rootfs/${CMAKE_INSTALL_PREFIX} none ro,bind 0 0" >> $path/config
 
     # Bind-mount the necessary binaries into the container
@@ -172,8 +172,8 @@ fi
 # detect rootfs (either from contents in config, or by using $path
 if [ -z "$rootfs" ]; then
     config="$path/config"
-    if grep -q '^lxc.rootfs' $config 2>/dev/null ; then
-        rootfs=`grep 'lxc.rootfs =' $config | awk -F= '{ print $2 }'`
+    if grep -q '^lxc.rootfs.path' $config 2>/dev/null ; then
+        rootfs=`grep 'lxc.rootfs.path =' $config | awk -F: '{ print $2 }'`
     else
         rootfs=$path/rootfs
     fi
