@@ -71,7 +71,11 @@ $ sudo apt-get install lxc lxc-dev libglib2.0-dev libglibmm-2.4 \
 
 # Building
 Building and installing is simple:
+
+Update the submodules in softwarecontainer git repo to get dbus-proxy and vagrant cookbook modules
+
 ```
+$ git submodule update --init
 $ mkdir build
 $ cd build
 $ cmake ../
