@@ -35,7 +35,7 @@ include(Configs)
 # Set software version
 #
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 18)
+set(${PROJECT_NAME}_MINOR_VERSION 19)
 set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL})
 add_definitions(-DPACKAGE_VERSION="${VERSION}")
@@ -53,7 +53,7 @@ find_package(PkgConfig          REQUIRED)
 pkg_check_modules(IVILogging    REQUIRED ivi-logging>=1.3.0)
 pkg_check_modules(Glibmm        REQUIRED glibmm-2.4>=2.42.0)
 pkg_check_modules(Giomm         REQUIRED giomm-2.4>=2.42.0)
-pkg_check_modules(LXC           REQUIRED lxc>=2.0.0)
+pkg_check_modules(LXC           REQUIRED lxc>=3.1.0)
 pkg_check_modules(Jansson       REQUIRED jansson>=2.6)
 pkg_check_modules(sigc          REQUIRED sigc++-2.0)
 
