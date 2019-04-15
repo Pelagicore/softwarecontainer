@@ -25,5 +25,5 @@ fi
 # cd to the directory of this script.
 cd "$(dirname "$0")"
 
-py.test -v -k "not agent" --junit-xml=servicetest_result.xml
-py.test -v -k "agent" --junit-xml=agent_servicetest_result.xml
+py.test-3 -v -k "not agent" --junit-xml=servicetest_result.xml
+py.test-3 -v -k "agent" --junit-xml=agent_servicetest_result.xml
