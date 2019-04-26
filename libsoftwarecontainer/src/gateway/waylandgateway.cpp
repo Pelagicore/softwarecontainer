@@ -27,7 +27,7 @@ namespace softwarecontainer {
 // yield linker errors.
 constexpr const char *WaylandGateway::ENABLED_FIELD;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
-constexpr const char *WAYLAND_SOCKET_FILE_VARIABLE_NAME;
+constexpr const char *WaylandGateway::WAYLAND_SOCKET_FILE_VARIABLE_NAME;
 
 WaylandGateway::WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container) :
     Gateway(ID, container, true /*this GW is dynamic*/),
