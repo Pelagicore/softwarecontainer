@@ -31,7 +31,7 @@ class WaylandGateway :
 public:
     static constexpr const char *ID = "wayland";
     static constexpr const char *WAYLAND_RUNTIME_DIR_VARIABLE_NAME = "XDG_RUNTIME_DIR";
-    static constexpr const char *SOCKET_FILE_NAME = "wayland-0";
+    static constexpr const char *WAYLAND_SOCKET_FILE_VARIABLE_NAME = "WAYLAND_DISPLAY";
     static constexpr const char *ENABLED_FIELD = "enabled";
 
     WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container);
