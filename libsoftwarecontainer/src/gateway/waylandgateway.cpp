@@ -26,8 +26,8 @@ namespace softwarecontainer {
 // These lines are needed in order to define the fields, which otherwise would
 // yield linker errors.
 constexpr const char *WaylandGateway::ENABLED_FIELD;
-constexpr const char *WaylandGateway::SOCKET_FILE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
+constexpr const char *WAYLAND_SOCKET_FILE_VARIABLE_NAME;
 
 WaylandGateway::WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container) :
     Gateway(ID, container, true /*this GW is dynamic*/),
@@ -70,6 +70,12 @@ bool WaylandGateway::activateGateway()
     if (m_enabled && m_activatedOnce) {
         log_info() << "Ignoring redundant activation";
         return true;
+    }
+
+    std::string SOCKET_FILE_NAME = Glib::getenv(WAYLAND_SOCKET_FILE_VARIABLE_NAME);
+    if (SOCKET_FILE_NAME.empty()) {
+        log_error() << "Missing Wayland socket file name. " << WAYLAND_SOCKET_FILE_VARIABLE_NAME << " environment variable not set";
+        return false;
     }
 
     bool hasWayland = false;
