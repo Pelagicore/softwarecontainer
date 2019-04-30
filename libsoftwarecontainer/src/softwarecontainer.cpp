@@ -124,6 +124,10 @@ bool SoftwareContainer::init()
         return false;
     }
 
+#ifdef ENABLE_FILEGATEWAY
+    m_gateways.push_back( std::unique_ptr<Gateway>(new FileGateway(m_container)) );
+#endif
+
 #ifdef ENABLE_NETWORKGATEWAY
     try {
         m_gateways.push_back( std::unique_ptr<Gateway>(new NetworkGateway(
@@ -162,10 +166,6 @@ bool SoftwareContainer::init()
 
 #ifdef ENABLE_ENVGATEWAY
     m_gateways.push_back( std::unique_ptr<Gateway>(new EnvironmentGateway(m_container)) );
-#endif
-
-#ifdef ENABLE_FILEGATEWAY
-    m_gateways.push_back( std::unique_ptr<Gateway>(new FileGateway(m_container)) );
 #endif
 
     return true;
