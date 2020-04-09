@@ -202,12 +202,12 @@ class TestCGroupGateway(object):
             most_permissive_value = 1024 * 1024
 
             time.sleep(0.5)
-            with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.limit_in_bytes", "r") as fh:
+            with open("/sys/fs/cgroup/memory/lxc.payload/" + containerID + "/memory.limit_in_bytes", "r") as fh:
                 limit_in_bytes = int(fh.read())
 
             assert limit_in_bytes == most_permissive_value
             most_permissive_value = 10 * 1024 * 1024
-            with open("/sys/fs/cgroup/memory/lxc/" + containerID + "/memory.memsw.limit_in_bytes", "r") as fh:
+            with open("/sys/fs/cgroup/memory/lxc.payload/" + containerID + "/memory.memsw.limit_in_bytes", "r") as fh:
                 memsw_limit = int(fh.read())
 
             assert memsw_limit == most_permissive_value
@@ -230,7 +230,7 @@ class TestCGroupGateway(object):
             sc.set_capabilities(["test.cap.netcls"])
 
             time.sleep(0.5)
-            with open("/sys/fs/cgroup/net_cls/lxc/" + containerID + "/net_cls.classid", "r") as fh:
+            with open("/sys/fs/cgroup/net_cls/lxc.payload/" + containerID + "/net_cls.classid", "r") as fh:
                 value = int(fh.read())
                 assert value == int(TEST_NETCLS_VALUE, base=16)
         finally:
@@ -248,7 +248,7 @@ class TestCGroupGateway(object):
             sc.set_capabilities(["test.cap.cpu.shares.threshold"])
 
             time.sleep(0.5)
-            with open("/sys/fs/cgroup/cpu/lxc/" + containerID + "/cpu.shares", "r") as fh:
+            with open("/sys/fs/cgroup/cpu/lxc.payload/" + containerID + "/cpu.shares", "r") as fh:
                 value = int(fh.read())
                 assert value == int(CPU_SHARES_LOW_VALUE)
         finally:
@@ -266,7 +266,7 @@ class TestCGroupGateway(object):
             most_permissive_value = int(CPU_SHARES_WHITELISTING_VALUE)
 
             time.sleep(0.5)
-            with open("/sys/fs/cgroup/cpu/lxc/" + containerID + "/cpu.shares", "r") as fh:
+            with open("/sys/fs/cgroup/cpu/lxc.payload/" + containerID + "/cpu.shares", "r") as fh:
                 value = int(fh.read())
 
             assert value == most_permissive_value
