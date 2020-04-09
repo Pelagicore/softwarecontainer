@@ -98,7 +98,15 @@ public:
 
             log_debug() << "Wayland dir : " << waylandDir;
 
-            std::string socketPath = buildPath(waylandDir, WaylandGateway::SOCKET_FILE_NAME);
+            bool hasWaylandSocket = false;
+            std::string waylandSocketFileName = Glib::getenv(WaylandGateway::WAYLAND_SOCKET_FILE_VARIABLE_NAME,
+                                                             hasWaylandSocket);
+            if (!hasWaylandSocket) {
+                log_error() << "No wayland socket";
+                return ERROR;
+            }
+
+            std::string socketPath = buildPath(waylandDir, waylandSocketFileName);
             log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
 
             if (!isSocket(socketPath)) {
