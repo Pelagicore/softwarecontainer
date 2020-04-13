@@ -149,7 +149,7 @@ class TestCore(object):
                               )
 
             # Let the helper run a little
-            time.sleep(0.1)
+            time.sleep(0.5)
 
             # Check that a core was dumped, meaning there are more files in the core dump dir now
             coreFiles = os.listdir(coredump_path())

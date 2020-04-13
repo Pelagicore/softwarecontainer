@@ -147,6 +147,11 @@ class EnvironmentHelper(Helper):
         with open(self._base_path + "/" + self.__file_name(), "w") as fh:
             fh.write(json.dumps(data.data))
 
+    def clean(self):
+        file_path = os.path.join(self._base_path, self.ENV_VARS_FILE_NAME)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
     def get_env_vars(self):
         LOG("Getting all env vars")
         all_vars = os.environ

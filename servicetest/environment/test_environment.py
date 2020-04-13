@@ -65,12 +65,9 @@ def mounted_path_in_host():
 def clear_env_files(scope="function"):
     """ Removes the files used by the helper to avoid having false
         positives from previous test runs.
-
-        TODO: Should this be a method on the helper?
     """
-    file_path = os.path.join(TESTOUTPUT_DIR, EnvironmentHelper.ENV_VARS_FILE_NAME)
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    helper = EnvironmentHelper(TESTOUTPUT_DIR)
+    helper.clean()
 
 
 ##### Globals for setup and configuration of SC #####
@@ -456,7 +453,7 @@ class TestCapsBehaviorMultipleContainers(object):
             assert my_env_var_1 == "1" and my_env_var_2 == "2"
 
             # Make sure we remove the env file so that we don't get a cached version for sc2
-            clear_env_files()
+            helper.clean()
 
             # This cap should set only one env var in the container
             sc2.set_capabilities(["environment.test.cap.7"])

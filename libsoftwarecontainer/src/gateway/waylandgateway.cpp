@@ -29,6 +29,8 @@ constexpr const char *WaylandGateway::ENABLED_FIELD;
 constexpr const char *WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME;
 constexpr const char *WaylandGateway::WAYLAND_SOCKET_FILE_VARIABLE_NAME;
 
+static constexpr const char *DEFAULT_WAYLAND_SOCKET_FILE_NAME = "wayland-0";
+
 WaylandGateway::WaylandGateway(std::shared_ptr<ContainerAbstractInterface> container) :
     Gateway(ID, container, true /*this GW is dynamic*/),
     m_enabled(false),
@@ -72,10 +74,10 @@ bool WaylandGateway::activateGateway()
         return true;
     }
 
-    std::string SOCKET_FILE_NAME = Glib::getenv(WAYLAND_SOCKET_FILE_VARIABLE_NAME);
-    if (SOCKET_FILE_NAME.empty()) {
-        log_error() << "Missing Wayland socket file name. " << WAYLAND_SOCKET_FILE_VARIABLE_NAME << " environment variable not set";
-        return false;
+    std::string socketFileName = Glib::getenv(WAYLAND_SOCKET_FILE_VARIABLE_NAME);
+    if (socketFileName.empty()) {
+        log_warn() << "Missing Wayland socket file name. " << WAYLAND_SOCKET_FILE_VARIABLE_NAME << " environment variable not set. Using default filename '" << DEFAULT_WAYLAND_SOCKET_FILE_NAME;
+        socketFileName = DEFAULT_WAYLAND_SOCKET_FILE_NAME;
     }
 
     bool hasWayland = false;
@@ -88,8 +90,8 @@ bool WaylandGateway::activateGateway()
     std::shared_ptr<ContainerAbstractInterface> container = getContainer();
 
     log_info() << "enabling Wayland gateway. Socket dir:" << dir;
-    std::string pathInHost = buildPath(dir, SOCKET_FILE_NAME);
-    std::string pathInContainer = buildPath("/gateways", SOCKET_FILE_NAME);
+    std::string pathInHost = buildPath(dir, socketFileName);
+    std::string pathInContainer = buildPath("/gateways", socketFileName);
 
     if (!container->bindMountInContainer(pathInHost, pathInContainer, false)) {
         log_error() << "Could not bind mount the wayland socket into the container";
@@ -98,6 +100,7 @@ bool WaylandGateway::activateGateway()
 
     std::string socketDir = parentPath(pathInContainer);
     container->setEnvironmentVariable(WAYLAND_RUNTIME_DIR_VARIABLE_NAME, socketDir);
+    container->setEnvironmentVariable(WAYLAND_SOCKET_FILE_VARIABLE_NAME, socketFileName);
 
     m_activatedOnce = true;
 

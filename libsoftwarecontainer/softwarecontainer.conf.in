@@ -21,3 +21,5 @@ lxc.mount.entry = /lib lib none ro,bind 0 0
 # These are optional, as they may not exist in the host. If they exist
 # they will be bind mounted from host to container.
 lxc.mount.entry = /lib64 lib64 none ro,bind,optional 0 0
+
+lxc.apparmor.profile = unconfined
