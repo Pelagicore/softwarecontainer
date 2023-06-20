@@ -91,6 +91,8 @@ public:
             bool hasWayland = false;
             std::string waylandDir = Glib::getenv(WaylandGateway::WAYLAND_RUNTIME_DIR_VARIABLE_NAME,
                                                   hasWayland);
+            std::string socketFileName = Glib::getenv(WaylandGateway::WAYLAND_SOCKET_FILE_VARIABLE_NAME,
+                                                  hasWayland);
             if (!hasWayland) {
                 log_error() << "No wayland dir";
                 return ERROR;
@@ -98,7 +100,7 @@ public:
 
             log_debug() << "Wayland dir : " << waylandDir;
 
-            std::string socketPath = buildPath(waylandDir, WaylandGateway::SOCKET_FILE_NAME);
+            std::string socketPath = buildPath(waylandDir, socketFileName);
             log_debug() << "isSocket : " << socketPath << " " << isSocket(socketPath);
 
             if (!isSocket(socketPath)) {
