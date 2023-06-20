@@ -91,6 +91,9 @@ create_rootfs()
     cd $rootfs/bin || return 1
     COMMANDS=$($BUSYBOX --list)
     for COMMAND in $COMMANDS; do
+        if [ "$COMMAND" = "busybox" ]; then
+            continue
+        fi
         ln -s busybox $COMMAND
     done
 
